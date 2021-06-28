@@ -1,0 +1,38 @@
+bookdown::bs4_book:
+  css: css/style.css
+  theme:
+    primary: "#0C1480"
+  repo: https://github.com/keithmcnulty/peopleanalytics-regression-book
+  # includes:
+  #   in_header: [ga_script.html]
+bookdown::gitbook:
+  # includes:
+  #   in_header: [ga_script.html]
+  config:
+    toc:
+      collapse: section
+      before: |
+        <li><a href="./">Handbook of Regression Modeling in People Analytics</a></li>
+    sharing:
+      twitter: yes
+      linkedin: yes
+  css: css/style.css
+bookdown::pdf_book:
+  fontsize: 12pt
+  monofont: "Source Code Pro"
+  monofontoptions: "Scale=0.7"
+  includes:
+    in_header: latex/preamble.tex
+    before_body: latex/before_body.tex
+    after_body: latex/after_body.tex
+  keep_tex: true
+  dev: "cairo_pdf"
+  latex_engine: xelatex
+  pandoc_args: --top-level-division=chapter
+  toc_depth: 3
+  toc_unnumbered: no
+  toc_appendix: yes
+  quote_footer: ["\\VA{", "}{}"]
+  highlight_bw: false
+bookdown::epub_book:
+  stylesheet: css/style.css

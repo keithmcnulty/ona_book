@@ -1,0 +1,32 @@
+`r if (knitr::is_latex_output()) '\\mainmatter'`
+
+# Elementary Graph Theory {#graph-theory}
+
+When we think of a graph, we usually think of a diagram of dots and lines.  Indeed, as we have seen in the introduction to this book, the very concept of a graph came into existence in the 1600s when a mathematician tried to solve a problem diagramatically.   It makes sense that we think about graphs in this way, because it is intuitive, easy to communicate and in many cases a diagram helps us better address the problem we are solving. However, a diagram is only one way of describing a graph, and it is not particularly scalable.  It is easy to draw a diagram for a graph of a few nodes and edges like in our *Bridges of K&ouml;nigsberg* problem, but what if our problem involved thousands of nodes and millions of edges?  Most interesting graphs which we will want to study will be more complex in nature and will contain many hundreds or thousands of nodes and many more edges, and diagrams of graphs of that size are not always useful in helping us solve problems.  
+
+In this chapter we will look at the basic set-theoretic definition of a graph, and use it to understand different types of graphs and different ways of representing graphs.  By defining graphs in this way, we will be well prepared to construct and store them in programming languages like R and Python, or to store data in graph databases like Neo4J which we will study later in this book.  We will start by introducing the most general way of describing a graph mathematically, and we will then discuss how different types of graphs can be defined by placing more conditions on the most general definition.  We will then go on to look at the different options for how a known graph can be described, including edge lists and adjacency matrices.  Readers should not skip this chapter if they intend to fully understand the methods and procedures that will be introduced in later chapters.
+
+## General definition of a graph
+
+A graph $G$ consists of two sets.  The first set $V$ is known as the *vertex* set or *node* set.  The second set $E$ is known as the *edge* set, and consists of pairs of elements of $V$.  Given that a graph is made up of these two sets, we will often notate our graph as $G = (V, E)$.
+
+Let's use an example to illustrate this definition.  Let our vertex set be a set of people as follows:
+
+$$
+V = \{\mathrm{David}, \mathrm{Suraya}, \mathrm{Jane}, \mathrm{Zubin}\}
+$$
+
+Our edge set $E$ must contain pairs of elements of $V$.  Let's say that our edge set is determined by which of the four members of $V$ have worked together in the past.  You can notate this in many ways.  One example for how you may notate the edge set is the formal set-theoretic notation:
+
+$$
+E = \{\{\mathrm{David}, \mathrm{Zubin}\}, \{\mathrm{David}, \mathrm{Suraya}\}, \{\mathrm{Suraya}, \mathrm{Jane}\}, \{\mathrm{Jane}, \mathrm{Zubin}\}\}
+$$
+
+An alternative notation could also be used such as:
+
+$$
+E = \{\mathrm{David}\longleftrightarrow\mathrm{Zubin}, \mathrm{David}\longleftrightarrow\mathrm{Suraya}, \mathrm{Suraya}\longleftrightarrow\mathrm{Jane}, \mathrm{Jane}\longleftrightarrow\mathrm{Zubin} \}
+$$
+
+It doesn't really matter how you choose to notate the vertex and edges sets as long as your notation contains all of the information required to construct the graph.  In this book we will use the latter notation style, using arrow connectors to notate edges in a graph. 
+
