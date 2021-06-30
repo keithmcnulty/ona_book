@@ -10,23 +10,196 @@ In this chapter we will look at the basic set-theoretic definition of a graph, a
 
 A graph $G$ consists of two sets.  The first set $V$ is known as the *vertex* set or *node* set.  The second set $E$ is known as the *edge* set, and consists of pairs of elements of $V$.  Given that a graph is made up of these two sets, we will often notate our graph as $G = (V, E)$.
 
-Let's use an example to illustrate this definition.  Let our vertex set be a set of people as follows:
+Let's use an example to illustrate this definition.  Figure \@ref(fig:fourpeoplegraph) is a diagram of a graph $G_{\mathrm{work}}$ with four vertices representing four people.  An edge connects two vertices if and only if those two people have worked together.
+
+```{r fourpeoplegraph, echo = FALSE, fig.cap="Four people connected according to whether they have worked together"}
+library(igraph)
+library(ggraph)
+
+fourpeople <- data.frame(
+  from = c("David", "David", "David", "Jane", "Jane"),
+  to = c("Zubin", "Suraya", "Jane", "Zubin", "Suraya")
+) |> 
+  as.matrix()
+
+fourpeoplegraph <- igraph::graph_from_edgelist(fourpeople)
+
+ggraph(fourpeoplegraph) +
+  geom_edge_link(color = "blue") +
+  geom_node_point(size = 14, color = "pink") +
+  geom_node_text(aes(label = name)) +
+  theme_void()
+
+```
+
+
+
+
+Our vertex set $V$ for the graph $G_{\mathrm{work}}$ is:
 
 $$
 V = \{\mathrm{David}, \mathrm{Suraya}, \mathrm{Jane}, \mathrm{Zubin}\}
 $$
 
-Our edge set $E$ must contain pairs of elements of $V$.  Let's say that our edge set is determined by which of the four members of $V$ have worked together in the past.  You can notate this in many ways.  One example for how you may notate the edge set is the formal set-theoretic notation:
+Our edge set $E$ for the graph $G_{\mathrm{work}}$ must be notated as pairs of elements of the vertex set $V$.  You can notate this in many ways.  One example for how you may notate the edge set is the formal set-theoretic notation:
 
-$$
-E = \{\{\mathrm{David}, \mathrm{Zubin}\}, \{\mathrm{David}, \mathrm{Suraya}\}, \{\mathrm{Suraya}, \mathrm{Jane}\}, \{\mathrm{Jane}, \mathrm{Zubin}\}\}
-$$
+```{=latex}
+\begin{gather*}
+E = \{\{\mathrm{David}, \mathrm{Zubin}\}, \{\mathrm{David}, \mathrm{Suraya}\}, \{\mathrm{Suraya}, \mathrm{Jane}\}, \\
+\{\mathrm{Jane}, \mathrm{Zubin}\}, \{\mathrm{Jane}, \mathrm{Suraya}\}\}
+\end{gather*}
+```
 
 An alternative notation could also be used such as:
 
+```{=latex}
+\begin{gather*}
+E = \{\mathrm{David}\longleftrightarrow\mathrm{Zubin}, \mathrm{David}\longleftrightarrow\mathrm{Suraya}, \mathrm{Suraya}\longleftrightarrow\mathrm{Jane}, \\
+\mathrm{Jane}\longleftrightarrow\mathrm{Zubin},  \mathrm{Jane}\longleftrightarrow\mathrm{Suraya} \}
+\end{gather*}
+```
+
+
+It doesn't really matter how you choose to notate the vertex and edge sets as long as your notation contains all of the information required to construct the graph.  
+
+`r if (knitr::is_latex_output()) '<!--'`
+:::thinkahead
+**Thinking ahead:** If you already know how to load graphs in R or Python, you might want to take a look at a graph object now, and you will see how the object is structured and defined around the two set structure $G = (V, E)$.  For example in R, if you have the `igraph` and `igraphdata` packages installed and loaded, use `data(Koenigsberg)` to load the data for the *Bridges of K&ouml;nigsberg* graph.  Now take a look at the vertex set using `V(Koenigsberg)` or the edge set using `E(Koenigsberg)`.  
+:::
+`r if (knitr::is_latex_output()) '-->'`
+
+`r if (knitr::is_html_output()) '<!--'`
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Thinking ahead:} If you already know how to load graphs in R or Python, you might want to take a look at a graph object now, and you will see how the object is structured and defined around the two set structure \(G = (V, E)\).  For example in R, if you have the \texttt{igraph} and \texttt{igraphdata} packages installed and loaded, use \texttt{data(Koenigsberg)} to load the data for the \textit{Bridges of K\"{o}nigsberg} graph.  Now take a look at the vertex set using \texttt{V(Koenigsberg)} or the edge set using \texttt{E(Koenigsberg)}.  
+\end{minipage}
+}
+```
+`r if (knitr::is_html_output()) '-->'`
+
+The relationship that we are modeling using our edges in the graph $G_{\mathrm{work}}$ works in both directions.  If David has worked with Zubin, then we automatically conclude that Zubin has worked with David.  Therefore there is no need for direction in the edges of $G_{\mathrm{work}}$.  We call such a graph an *undirected* graph. In an undirected graph, the order of the nodes in each pair in the edge set $E$ is not relevant.  For example, $\mathrm{David}\longleftrightarrow\mathrm{Zubin}$ is the same as $\mathrm{Zubin}\longleftrightarrow\mathrm{David}$.
+
+A graph where direction is important is called a *directed* graph.  As an example, let's consider a graph $G_{\mathrm{manage}}$ with the same group of four people but where an edge exists between two people if and only if the first person is the manager of the second person, as in Figure \@ref(fig:fourpeoplemanage).
+
+```{r fourpeoplemanage, echo = FALSE, fig.cap="Four people connected according to whether one person manages another"}
+library(igraph)
+library(ggraph)
+
+fourpeoplemanage <- data.frame(
+  from = c("David", "David", "Suraya"),
+  to = c("Zubin", "Jane", "David")
+) |> 
+  as.matrix()
+
+fourpeoplemanagegraph <- igraph::graph_from_edgelist(fourpeoplemanage)
+
+ggraph(fourpeoplemanagegraph) +
+  geom_edge_link(arrow = arrow(length = unit(4, 'mm')),
+                 end_cap = circle(5, 'mm'),
+                 color = "blue") +
+  geom_node_point(size = 14, color = "pink") +
+  geom_node_text(aes(label = name)) +
+  theme_void()
+
+```
+
+Clearly, direction matters in this graph, and therefore we may wish to notate the edge set $E$ for $G_{\mathrm{manage}}$ as:
+
 $$
-E = \{\mathrm{David}\longleftrightarrow\mathrm{Zubin}, \mathrm{David}\longleftrightarrow\mathrm{Suraya}, \mathrm{Suraya}\longleftrightarrow\mathrm{Jane}, \mathrm{Jane}\longleftrightarrow\mathrm{Zubin} \}
+E = \{\mathrm{Suraya}\longrightarrow\mathrm{David}, \mathrm{David}\longrightarrow\mathrm{Zubin}, \mathrm{David}\longrightarrow\mathrm{Jane}\}
 $$
 
-It doesn't really matter how you choose to notate the vertex and edges sets as long as your notation contains all of the information required to construct the graph.  In this book we will use the latter notation style, using arrow connectors to notate edges in a graph. 
+Note that it is still possible in a directed graph for the edges to point in both directions.  While that is unlikely in the case of $G_{\mathrm{manage}}$ because the manager relationship usually only operates in one direction, imagine another graph $G_{\mathrm{like}}$ where an edge exists between two people if and only if the first person has listed the second person as someone they like.  It is perfectly possible for edges to exist in both directions between two vertices in a graph like this.  For example, it may be that Jane likes Zubin and Zubin likes Jane.  However, it is important to note that in such a graph, $\mathrm{Zubin}\longrightarrow\mathrm{Jane}$ and $\mathrm{Jane}\longrightarrow\mathrm{Zubin}$ are considered two *different* edges.
+
+`r if (knitr::is_latex_output()) '<!--'`
+:::thinkahead
+**Thinking ahead:** If you load a directed graph in R or Python, you should see that the edges are notated differently to an undirected graph.  As an example, again using `igraph` and `igraphdata` in R, load the `UKfaculty` graph using `data(UKfaculty)`.  Now look at its edges using `E(UKfaculty)` and compare to what you see for the `Koenigsberg` graph.  See the difference?  
+:::
+`r if (knitr::is_latex_output()) '-->'`
+
+`r if (knitr::is_html_output()) '<!--'`
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Thinking ahead:} If you load a directed graph in R or Python, you should see that the edges are notated differently to an undirected graph.  As an example, again using \texttt{igraph} and \texttt{igraphdata} in R, load the \texttt{UKfaculty} graph using \texttt{data(UKfaculty)}.  Now look at its edges using \texttt{E(UKfaculty)} and compare to what you saw for the \texttt{Koenigsberg} graph.  Do you see the difference?  
+\end{minipage}
+}
+```
+`r if (knitr::is_html_output()) '-->'`
+
+## Types of graphs
+
+Equipped with our general definition of a graph, we can now define different varieties of graph by adding or allowing certain conditions on the edges of a general graph.  There are many such varieties, but here are a few of the more common graph types.
+
+### Multigraphs
+
+A *multigraph* is a graph where multiple edges can occur between the same two vertices.  Usually this occurs because the edges are defining different kinds of relationships.  Travel routes are common examples of multigraphs, where each edge represents a different carrier.  For example, Figure \@ref(fig:multiflights) is a graph of flights between the San Francisco (SFO), Philadelphia (PHL) and Tucson (TUS) airports based on a data set from December 2010.  The graph is layered onto a map of the United States.  Philadelphia to Tucson is not a common route and is only offered by one carrier in one direction, while there are multiple carriers operating in both directions between Philadelphia and San Francisco and between San Francisco and Tucson.
+
+```{r multiflights, echo = FALSE, fig.cap = "Carrier routes operating between three US airports in December 2010"}
+library(igraph)
+library(igraphdata)
+library(dplyr)
+library(ggmap)
+subairports <- induced_subgraph(USairports, c("TUS", "SFO", "PHL"))
+
+
+airports <- V(subairports) |> names()
+coords <- geocode(airports)
+airports <- data.frame(airport=airports, coords)
+edgelist <- as_edgelist(subairports, names = TRUE) |> as.data.frame()
+colnames(edgelist) = c("From", "To")
+flights <- inner_join(edgelist, airports, by = c("From" = "airport"))
+flights <- inner_join(flights, airports, by = c("To" = "airport")) |> 
+  dplyr::filter(From != To)
+
+# Plot flight routes
+library(ggplot2)
+library(ggrepel)
+worldmap <- borders("state", colour="lightblue", fill="lightblue") # create a layer of borders
+
+ggplot() + 
+  worldmap +
+  geom_curve(data=flights, aes(x = lon.x[1], y = lat.x[1], xend = lon.y[1], yend = lat.y[1]), 
+             col = "black", size = 0.1, curvature = .05, arrow = arrow(length=unit(0.20,"cm"))) + 
+  geom_curve(data=flights, aes(x = lon.x[2], y = lat.x[2], xend = lon.y[2], yend = lat.y[2]), 
+             col = "black", size = 0.1, curvature = .1, arrow = arrow(length=unit(0.20,"cm"))) + 
+  geom_curve(data=flights, aes(x = lon.x[3], y = lat.x[3], xend = lon.y[3], yend = lat.y[3]), 
+             col = "black", size = 0.1, curvature = .15, arrow = arrow(length=unit(0.20,"cm"))) + 
+  geom_curve(data=flights, aes(x = lon.x[4], y = lat.x[4], xend = lon.y[4], yend = lat.y[4]), 
+             col = "black", size = 0.1, curvature = .2, arrow = arrow(length=unit(0.20,"cm"))) + 
+  geom_curve(data=flights, aes(x = lon.x[5], y = lat.x[5], xend = lon.y[5], yend = lat.y[5]), 
+             col = "black", size = 0.1, curvature = .05, arrow = arrow(length=unit(0.20,"cm"))) + 
+  geom_curve(data=flights, aes(x = lon.x[6], y = lat.x[6], xend = lon.y[6], yend = lat.y[6]), 
+             col = "black", size = 0.1, curvature = .1, arrow = arrow(length=unit(0.20,"cm"))) + 
+  geom_curve(data=flights, aes(x = lon.x[7], y = lat.x[7], xend = lon.y[7], yend = lat.y[7]), 
+             col = "black", size = 0.1, curvature = .15, arrow = arrow(length=unit(0.20,"cm"))) + 
+  geom_curve(data=flights, aes(x = lon.x[8], y = lat.x[8], xend = lon.y[8], yend = lat.y[8]), 
+             col = "black", size = 0.1, curvature = .2, arrow = arrow(length=unit(0.20,"cm"))) + 
+  geom_curve(data=flights, aes(x = lon.x[9], y = lat.x[9], xend = lon.y[9], yend = lat.y[9]), 
+             col = "black", size = 0.1, curvature = .05, arrow = arrow(length=unit(0.20,"cm"))) + 
+  geom_curve(data=flights, aes(x = lon.x[10], y = lat.x[10], xend = lon.y[10], yend = lat.y[10]), 
+             col = "black", size = 0.1, curvature = .1, arrow = arrow(length=unit(0.20,"cm"))) + 
+  geom_curve(data=flights, aes(x = lon.x[11], y = lat.x[11], xend = lon.y[11], yend = lat.y[11]), 
+             col = "black", size = 0.1, curvature = .15, arrow = arrow(length=unit(0.20,"cm"))) + 
+  geom_curve(data=flights, aes(x = lon.x[12], y = lat.x[12], xend = lon.y[12], yend = lat.y[12]), 
+             col = "black", size = 0.1, curvature = .2, arrow = arrow(length=unit(0.20,"cm"))) + 
+  geom_curve(data=flights, aes(x = lon.x[13], y = lat.x[13], xend = lon.y[13], yend = lat.y[13]), 
+             col = "black", size = 0.1, curvature = .2, arrow = arrow(length=unit(0.20,"cm"))) + 
+  geom_curve(data=flights, aes(x = lon.x[14], y = lat.x[14], xend = lon.y[14], yend = lat.y[14]), 
+             col = "black", size = 0.1, curvature = .05, arrow = arrow(length=unit(0.20,"cm"))) + 
+  geom_curve(data=flights, aes(x = lon.x[15], y = lat.x[15], xend = lon.y[15], yend = lat.y[15]), 
+             col = "black", size = 0.1, curvature = .05, arrow = arrow(length=unit(0.20,"cm"))) + 
+  geom_curve(data=flights, aes(x = lon.x[16], y = lat.x[16], xend = lon.y[16], yend = lat.y[16]), 
+             col = "black", size = 0.1, curvature = .1, arrow = arrow(length=unit(0.20,"cm"))) + 
+  geom_point(data=airports, aes(x = lon, y = lat), col = "blue", size = 2) + 
+  geom_text_repel(data=airports, aes(x = lon, y = lat, label = airport), col = "black", size = 4, segment.color = NA) + 
+  theme(panel.background = element_rect(fill="white"), 
+        axis.ticks = element_blank(),
+        axis.text = element_blank(),
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank()
+        )
+
+```
 
