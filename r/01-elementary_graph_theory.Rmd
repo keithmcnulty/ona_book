@@ -6,7 +6,7 @@ When we think of a graph, we usually think of a diagram of dots and lines.  Inde
 
 In this chapter we will look at the basic set-theoretic definition of a graph, and use it to understand different types of graphs and different ways of representing graphs.  By defining graphs in this way, we will be well prepared to construct and store them in programming languages like R and Python, or to store data in graph databases like Neo4J which we will study later in this book.  We will start by introducing the most general way of describing a graph mathematically, and we will then discuss how different types of graphs can be defined by placing more conditions on the most general definition.  We will then go on to look at the different options for how a known graph can be described, including edge lists and adjacency matrices.  Readers should not skip this chapter if they intend to fully understand the methods and procedures that will be introduced in later chapters.
 
-## General definition of a graph
+## General definition of a graph {#graph-def}
 
 A graph $G$ consists of two sets.  The first set $V$ is known as the *vertex* set or *node* set.  The second set $E$ is known as the *edge* set, and consists of pairs of elements of $V$.  Given that a graph is made up of these two sets, we will often notate our graph as $G = (V, E)$.
 
@@ -78,7 +78,7 @@ It doesn't really matter how you choose to notate the vertex and edge sets as lo
 ```
 `r if (knitr::is_html_output()) '-->'`
 
-The relationship that we are modeling using our edges in the graph $G_{\mathrm{work}}$ works in both directions.  If David has worked with Zubin, then we automatically conclude that Zubin has worked with David.  Therefore there is no need for direction in the edges of $G_{\mathrm{work}}$.  We call such a graph an *undirected* graph. In an undirected graph, the order of the nodes in each pair in the edge set $E$ is not relevant.  For example, $\mathrm{David}\longleftrightarrow\mathrm{Zubin}$ is the same as $\mathrm{Zubin}\longleftrightarrow\mathrm{David}$.
+The relationship that we are modeling using our edges in the graph $G_{\mathrm{work}}$ is undirected.  If David has worked with Zubin, then we automatically conclude that Zubin has worked with David.  Therefore there is no need for direction in the edges of $G_{\mathrm{work}}$.  We call such a graph an *undirected* graph. In an undirected graph, the order of the nodes in each pair in the edge set $E$ is not relevant.  For example, $\mathrm{David}\longleftrightarrow\mathrm{Zubin}$ is the same as $\mathrm{Zubin}\longleftrightarrow\mathrm{David}$.
 
 A graph where direction is important is called a *directed* graph.  As an example, let's consider a graph $G_{\mathrm{manage}}$ with the same group of four people but where an edge exists between two people if and only if the first person is the manager of the second person, as in Figure \@ref(fig:fourpeoplemanage).
 
@@ -132,7 +132,7 @@ Note that it is still possible in a directed graph for the edges to point in bot
 
 Equipped with our general definition of a graph, we can now define different varieties of graph by adding or allowing certain conditions on the edges of a general graph.  There are many such varieties, but here are a few of the more common graph types.
 
-### Multigraphs
+### Multigraphs {#multi}
 
 A *multigraph* is a graph where multiple edges can occur between the same two vertices.  Usually this occurs because the edges are defining different kinds of relationships.  Travel routes are common examples of multigraphs, where each edge represents a different carrier.  For example, Figure \@ref(fig:multiflights) is a graph of flights between the San Francisco (SFO), Philadelphia (PHL) and Tucson (TUS) airports based on a data set from December 2010.  The graph is layered onto a map of the United States.  Philadelphia to Tucson is not a common route and is only offered by one carrier in one direction, while there are multiple carriers operating in both directions between Philadelphia and San Francisco and between San Francisco and Tucson.
 
@@ -141,6 +141,8 @@ library(igraph)
 library(igraphdata)
 library(dplyr)
 library(ggmap)
+
+data(USairports)
 subairports <- induced_subgraph(USairports, c("TUS", "SFO", "PHL"))
 
 
@@ -203,3 +205,314 @@ ggplot() +
 
 ```
 
+Multigraphs are also commonly used when individuals or entities can be related to each other in different ways. For example, imagine if we were to combine our $G_{\mathrm{work}}$ and $G_{\mathrm{manage}}$ graphs from Section \@ref(graph-def) into one single directed graph depicting both 'worked with' and 'manages' relationships.  It might look like Figure \@ref(fig:gmulti).
+
+```{r gmulti, echo = FALSE, fig.cap="Graph depicting different types of relationships between individuals"}
+library(igraph)
+library(ggraph)
+
+fourpeoplecombined <- data.frame(
+  from = c("David", "Zubin", "David", "Suraya", "David", "Jane", "Jane", "Zubin", "Jane", "Suraya", "David", "David", "Suraya"),
+  to = c("Zubin", "David", "Suraya", "David", "Jane", "David", "Zubin", "Jane", "Suraya", "Jane", "Zubin", "Jane", "David")
+) |> 
+  as.matrix()
+
+fourpeoplecombinedgraph <- igraph::graph_from_edgelist(fourpeoplecombined)
+E(fourpeoplecombinedgraph)$Relationship = type = c(rep("worked with", 10), rep("manage", 3))
+
+ggraph(fourpeoplecombinedgraph) +
+  geom_edge_fan(arrow = arrow(length = unit(4, 'mm')),
+                 end_cap = circle(5, 'mm'),
+                 aes(color = Relationship)) +
+  geom_node_point(size = 14, color = "pink") +
+  geom_node_text(aes(label = name)) +
+  theme_void()
+
+```
+
+Many large graphs used in practice are multigraphs, as they are built to capture many different types of relationships between many different types of entities.  For example, a graph of an organizational network might contain vertices which represent individuals, organizational units and knowledge areas.  Multiple different types of relationships could exist between individuals (such as 'worked with', 'manages', 'published with'), between individuals and organizational units (such as 'member of' or 'leader of'), between individuals and knowledge areas (such as 'affiliated with' or 'expert in') and all sorts of other possibilities.  
+
+
+### Pseudographs
+
+Pseudographs are graphs which allow vertices to connect to themselves.  Pseudographs occur when certain edges depict relationships that can occur between the same vertex.  Imagine, for example, a graph $G_{\mathrm{coffee}}$ which takes our four characters from $G_{\mathrm{work}}$ in Section \@ref(graph-def) and depicts who buys coffee for whom.  If David goes to buy Zubin a coffee, there's a good chance he will also buy himself one in the process.  Thus, you can expect the following edge set:
+
+$$
+E = \{\mathrm{David}\longrightarrow\mathrm{Zubin}, \mathrm{David}\longrightarrow\mathrm{David}\}
+$$
+
+An example of where pseudographs frequently occur might be in the analysis of financial transactions.  Let's imagine that we have a graph of three verticies representing different companies A, B and C, where an edge represent a bank transfer from one company to another on a certain day.  If a company holds multiple bank accounts, such a graph might look something like Figure \@ref(fig:banktransfer). 
+
+```{r banktransfer, echo = FALSE, fig.cap = "Pseudograph representing bank transfers between three companies A, B and C"}
+library(igraph)
+library(ggraph)
+
+companytransfers <- data.frame(
+  from = c("A", "A", "B", "B"),
+  to = c("A", "B", "A", "C")
+) |> 
+  as.matrix()
+
+companytransfersgraph <- igraph::graph_from_edgelist(companytransfers)
+
+ggraph(companytransfersgraph, layout = 'kk') +
+  geom_edge_fan(arrow = arrow(length = unit(4, 'mm')),
+                 end_cap = circle(5, 'mm')) +
+  geom_node_point(size = 10, color = "pink") +
+  geom_edge_loop(arrow = arrow(length = unit(4, 'mm'))) +
+  geom_node_text(aes(label = name)) +
+  theme_void()
+
+```
+
+### Complete graphs
+
+A complete graph is a graph where all possible edges between vertices exist.  It is not possible to add any more edges to a complete graph.  Let's go back to our four characters in $G_\mathrm{work}$ form Section \@ref(graph-def).  You may notice that only one pair of these characters have not worked together.  Let's assume that we return a month later and update our graph, and it seems that Zubin and Suraya have now worked together.  This means our graph becomes a complete graph as depicted in Figure \@ref(fig:completework).
+
+```{r completework, echo = FALSE, fig.cap="Updated version of $G_\\mathrm{work}$ with one additional edge to make it a complete graph"}
+
+library(igraph)
+library(ggraph)
+
+fourpeople <- data.frame(
+  from = c("David", "David", "David", "Jane", "Jane", "Suraya"),
+  to = c("Zubin", "Suraya", "Jane", "Zubin", "Suraya", "Zubin")
+) |> 
+  as.matrix()
+
+fourpeoplegraph <- igraph::graph_from_edgelist(fourpeople)
+
+ggraph(fourpeoplegraph, layout = "kk") +
+  geom_edge_link(color = "blue") +
+  geom_node_point(size = 14, color = "pink") +
+  geom_node_text(aes(label = name)) +
+  theme_void()
+
+```
+
+Complete graphs are extremely rare and not very useful in practice, since if you already know that a relationship exists between every pair if vertices, there is not a lot of reason to examine your graph or put it to any practical use.  That said, in the field of Graph Theory, it can be important to prove that certain graphs are complete in order to support important theoretical results such as proving important theorems.
+
+### Trees
+
+Trees can be regarded as vertices connected by edges, and so trees are graphs.  For example, our graph $G_\mathrm{manage}$ in Section \@ref(graph-def) is a tree because it displays a hierarchical management structure between individuals.  For a graph to be characterized as a tree it needs to adhere to these conditions:
+
+1.  It is undirected
+2.  There is exactly one path between any pair of vertices
+
+Usually, trees are graphs that where the edges represent some sort of hierarchical or nested relationship.  Figure \@ref(fig:boybands) shows a tree graph of my favorite boy bands, where an edge indicates that the vertex below is a member of the vertex above.  It seems like five is the magic number for a great boy band.
+
+```{r boybands, echo = FALSE, fig.cap = "Membership of the exclusive class of the author's favourite boy bands can be represented as a tree graph"}
+bands <- data.frame(
+  from = c(rep("Best\nBoy Bands", 3), rep("Backstreet\nBoys", 5), 
+           rep("Boyzone", 5), rep("Take\nThat", 5)),
+  to = c("Backstreet\nBoys", "Boyzone", "Take\nThat", 
+         "Nick\nCarter", "Brian\nLitrell", "AJ\nMcLean", "Kevin\nRichardson", "Howie\nDorough",
+         "Ronan\nKeating", "Shane\nLynch", "Keith\nDuffy", "Mikey\nGraham", "Stephen\nGately",
+         "Robbie\nWilliams", "Gary\nBarlow", "Mark\nOwen", "Jason\nOrange", "Howard\nDonald"
+         )
+) |> 
+  as.matrix()
+
+bands <- igraph::graph_from_edgelist(bands)
+
+ggraph(bands, layout = "dendrogram") +
+  geom_edge_link(color = "blue") +
+  geom_node_point(color = "pink", size = 10) +
+  geom_node_text(aes(label = name), size = 2.5) +
+  theme_void()
+```
+
+## Vertex and Edge Properties
+
+In Section \@ref(graph-def) we learned that a graph $G = (V, E)$ consists of a vertex set $V$ and an edge set $E$.  These sets are the minimum components of a graph --- the vertices represent the entities in the graph and the edges represent the relationships between the entities.  
+
+We can enhance a graph to provide even richer information on the entities and on the relationships by giving our vertices and edges *properties*.  A vertex property provides more specific information about a vertex and an edge property provides more specific information about the relationship between two vertices.
+
+As an example, let's return to our directed graph in Figure \@ref(fig:banktransfer), which represents bank transfers between companies A, B, and C.  In this graph, we only know from the edges that transfers took place, but we do not know how much money was involved in each transfer, and in what currency the transfer was made.  If we wanted to capture this information, we could give each edge properties called 'amt' and 'cur' and store the transfer amount and currency in those edge properties.  Similarly, we don't know a great deal about the companies represented by the vertices.  Maybe we would like to know where they are located?  If so, we can create a vertex property called 'loc' and store the location in that vertex property.  
+
+Figure \@ref(fig:enhancedcompanytransfers) shows this enhanced graph with the vertex and edge properties added diagramatically.
+
+```{r enhancedcompanytransfers, echo = FALSE, fig.cap="Graph of bank transfers between companies A, B and C with additional information stored as vertex and edge properties"}
+
+library(igraph)
+library(ggraph)
+
+companytransfers <- data.frame(
+  from = c("A", "A", "B", "B"),
+  to = c("A", "B", "A", "C")
+) |> 
+  as.matrix()
+
+companytransfersgraph <- igraph::graph_from_edgelist(companytransfers)
+V(companytransfersgraph)$loc <- c("USA", "UK", "France")
+E(companytransfersgraph)$cur <- c("USD", "USD", "GBP", "GBP")
+E(companytransfersgraph)$amt <- c(150000, 570000, 230000, 175000)
+
+ggraph(companytransfersgraph, layout = 'kk') +
+  geom_edge_fan(aes(label = paste0("cur:", cur, ", amt:", amt)),
+                arrow = arrow(length = unit(2, 'mm')),
+                end_cap = circle(5, 'mm'),
+                angle_calc = "along",
+                label_dodge = unit(2.5, 'mm'),
+                label_size = 4
+                ) +
+  geom_node_point(size = 14, color = "pink") +
+  geom_edge_loop(aes(label = paste0("cur:", cur, ",\n amt:", amt)), arrow = arrow(length = unit(2, 'mm')), 
+                 label_size = 4, 
+                 angle_calc = "along",
+                 label_dodge = unit(7, 'mm')) +
+  geom_node_text(aes(label = paste0(name, " \n(loc:", loc, ")")), size = 3) +
+  theme_void()
+
+
+```
+
+
+Alternatively, we can notate properties as additional sets in our graph, ensuring that each entry is in the same order as the respective vertices or edges, as follows:
+
+$$
+\begin{aligned}
+G &= (V, E, V_\mathrm{loc}, E_\mathrm{cur}, E_\mathrm{amt}) \\
+V &= \{A, B, C\} \\
+E &= \{A \longrightarrow A, A \longrightarrow B, B \longrightarrow A, B \longrightarrow C\} \\
+V_\mathrm{loc} &= \{\mathrm{USA}, \mathrm{UK}, \mathrm{France}\} \\
+E_\mathrm{cur} &= \{\mathrm{USD}, \mathrm{USD}, \mathrm{GBP}, \mathrm{GBP}\} \\
+E_\mathrm{amt} &= \{150000, 570000, 230000, 175000\}
+\end{aligned}
+$$
+
+Note that the vertex property set $V_\mathrm{loc}$ has the same number of elements as $V$ and the associated properties appear in the same order as the vertices of $V$.  Note also a similar size and order for the edge property sets $E_\mathrm{cur}$ and $E_\mathrm{amt}$.   This notation system allows us to provide all the information we need in a reliable way for any number of vertex or edge properties.
+
+`r if (knitr::is_latex_output()) '<!--'`
+:::thinkahead
+**Thinking ahead:** Go and have a look at the *Bridges of K&ouml;nigsberg* graph using `data(Koenigsberg)` in R.  By typing `summary(Koenigsberg)` you should see some edge and vertex properties, listed as `attr`.  Vertex properties are listed as `v/c` and edge properties are listed as `e/c`.  For example, the edges - or bridges - each have names and you can access these by typing `E(Koenigsberg)$name`.  Hopefully you'll see that there are seven bridges.
+:::
+`r if (knitr::is_latex_output()) '-->'`
+
+`r if (knitr::is_html_output()) '<!--'`
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Thinking ahead:} Go and have a look at the \textit{Bridges of K\"{o}nigsberg} graph using \texttt{data(Koenigsberg)} in R.  By typing \texttt{summary(Koenigsberg)} you should see some edge and vertex properties, listed as \texttt{attr}.  Vertex properties are listed as \texttt{v/c} and edge properties are listed as \texttt{e/c}.  For example, the edges --- or bridges --- each have names and you can access these by typing \texttt{E(Koenigsberg)\$name}.  Hopefully you'll see that there are seven bridges.
+\end{minipage}
+}
+```
+`r if (knitr::is_html_output()) '-->'`
+
+## Representations of graphs
+
+So far in this chapter we have seen two common ways of representing a graph.  The first, and most well known way, is a diagram.  The second is as an algebraic structure consisting of a vertex set and and edge set $G = (V, E)$.  As we discussed at the beginning of this chapter, diagrams are useful for visualizing und understanding simple graphs, but less useful for storing graph data and working with large graphs.  When working with graphs in the field of data science, the two most common sources of graph data will be edge lists and adjacency matrices.  
+
+### Edge lists
+
+Quite simply an edge list is the edge set $E$ in our graph $G = (V, E)$.  If we don't care about *singletons* --- vertices not connected to any other vertices --- then out vertex set $V$ can be derived directly from $E$.  This means that the edge list is all that is needed to build a graph provided you are happy to ignore singletons.  It's common that an analyst is happy to ignore singletons because they are often only interested in the connections or relationships in the data.   Let's look at an example.
+
+Recall our edge set $E$ in the graph $G_\mathrm{work} = (V, E)$ from Section \@ref(graph-def):
+
+```{=latex}
+\begin{gather*}
+E = \{\mathrm{David}\longleftrightarrow\mathrm{Zubin}, \mathrm{David}\longleftrightarrow\mathrm{Suraya}, \mathrm{Suraya}\longleftrightarrow\mathrm{Jane}, \\
+\mathrm{Jane}\longleftrightarrow\mathrm{Zubin},  \mathrm{Jane}\longleftrightarrow\mathrm{Suraya} \}
+\end{gather*}
+```
+
+Since by definition each edge in $E$ must be a pair of vertices from $V$, and since we are not concerned about singletons (in fact we know they don't exist in this case), we can obtain the vertex set $V$ by simply listing the unique vertices from the pairs in $E$).  Therefore we can construct $V$ to be
+
+$$
+V = \{\mathrm{David}, \mathrm{Suraya}, \mathrm{Jane}, \mathrm{Zubin}\}
+$$
+
+and we now have obtained everything we need for our graph from the edgelist.
+
+Edgelists typically take the form of at two columns of data, usually labelled 'from' and 'to'.  Therefore our edgelist for $G_\mathrm{work}$ would look like Table \@ref(tab:workedgelist).
+
+```{r workedgelist, echo = FALSE}
+fourpeople <- data.frame(
+  from = c("David", "David", "David", "Jane", "Jane"),
+  to = c("Zubin", "Suraya", "Jane", "Zubin", "Suraya")
+)
+
+knitr::kable(fourpeople,
+             caption = "Edgelist for $G_\\mathrm{work}$")
+```
+
+`r if (knitr::is_latex_output()) '<!--'`
+:::thinkahead
+**Thinking ahead:** If you have the *Bridges of K&ouml;nigsberg* graph loaded in R, you can turn it into an edgelist easily.  Try `igraph::as_edgelist(Koenigsberg)` and see if you get the expected output.
+:::
+`r if (knitr::is_latex_output()) '-->'`
+
+`r if (knitr::is_html_output()) '<!--'`
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Thinking ahead:} If you have the \textit{Bridges of K\"{o}nigsberg} graph loaded, you can turn it into an edgelist easily.  Try \texttt{igraph::as\_edgelist(Koenigsberg)} and see if you get the expected output.
+\end{minipage}
+}
+```
+`r if (knitr::is_html_output()) '-->'`
+
+### Adjacency matrices
+
+An *adjacency matrix* is a square matrix with the vertices indexing the rows and columns, and where the $(i, j)$-th entry of the matrix represents number of edges from vertex $i$ to vertex $j$.  As an example, using our simple graph $G_\mathrm{work}$ again from Section \@ref(graph-def), the adjacency matrix would look like this:
+
+$$
+\begin{array}{ccccc}
+      & \mathrm{David} & \mathrm{Jane} & \mathrm{Zubin} & \mathrm{Suraya} \\
+      \mathrm{David} & 0 & 1 & 1 & 1\\
+      \mathrm{Jane} & 1 & 0 & 1 & 1 \\
+      \mathrm{Zubin} & 1 & 1 & 0 & 0 \\
+      \mathrm{Suraya} & 1 & 1 & 0 & 0 
+\end{array}
+$$
+Adjacency matrices are also commonly written in *sparse form*, without the use of zeros.  For example:
+
+$$
+\begin{array}{ccccc}
+      & \mathrm{David} & \mathrm{Jane} & \mathrm{Zubin} & \mathrm{Suraya} \\
+      \mathrm{David} & . & 1 & 1 & 1\\
+      \mathrm{Jane} & 1 & . & 1 & 1 \\
+      \mathrm{Zubin} & 1 & 1 & . & . \\
+      \mathrm{Suraya} & 1 & 1 & . & . 
+\end{array}
+$$
+
+An adjaceny matrix for an undirected graph like $G_\mathrm{work}$ is symmetrical on its diagonal, since the existence of an $(i,j)$ edge automatically implied the existence of a $(j, i)$ edge.   However, a directed graph may not have a symmetrical adjacency matrix.  Here is the adjacency matrix for our $G_\mathrm{manage}$ graph from Section \@ref(graph-def).
+
+
+$$
+\begin{array}{ccccc}
+      & \mathrm{David} & \mathrm{Jane} & \mathrm{Zubin} & \mathrm{Suraya} \\
+      \mathrm{David} & . & 1 & 1 & .\\
+      \mathrm{Jane} & . & . & . & . \\
+      \mathrm{Zubin} & . & . & . & . \\
+      \mathrm{Suraya} & 1 & . & . & . 
+\end{array}
+$$
+
+If a graph is a pseudograph, then the diagonal entries may be greater than zero, and multigraphs can have entries that are any non-negative integer.  Here is the adjacency matrix for our flight network graph in Section \@ref(multi):
+
+$$
+\begin{array}{cccc}
+      & \mathrm{SFO} & \mathrm{PHL} & \mathrm{TUS} \\
+      \mathrm{SFO} & . & 4 & 4 \\
+      \mathrm{PHL} & 5 & . & 1  \\
+      \mathrm{TUS} & 2 & . & . 
+\end{array}
+$$
+
+`r if (knitr::is_latex_output()) '<!--'`
+:::thinkahead
+**Thinking ahead:** Again, with the *Bridges of K&ouml;nigsberg* graph loaded in R, you can turn it into an adjacency matrix easily.  Try `igraph::as_adjacency_matrix(Koenigsberg)`.  Note the sparse form of the output matrix.  Now try this with the `USairports` graph if you'd like to see a larger adjacency matrix.
+:::
+`r if (knitr::is_latex_output()) '-->'`
+
+`r if (knitr::is_html_output()) '<!--'`
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Thinking ahead:} Again, with the \textit{Bridges of K\"{o}nigsberg} graph loaded, you can turn it into an adjacency matrix easily.  Try \texttt{igraph::as\_adjacency\_matrix(Koenigsberg)}. Note the sparse form of the output matrix.  Now try this with the \texttt{USairports} graph if you'd like to see a larger adjacency matrix.
+\end{minipage}
+}
+```
+`r if (knitr::is_html_output()) '-->'`
