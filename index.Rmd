@@ -4,6 +4,7 @@ subtitle: "With Examples in R and Python"
 author: "Keith McNulty"
 site: bookdown::bookdown_site
 always_allow_html: true
+new_session: true
 documentclass: krantz
 bibliography: r/book.bib
 fig-caption: yes
@@ -21,6 +22,11 @@ matplotlib$use("Agg", force = TRUE)
 if (knitr::is_latex_output()) {
   options(width = 100)
 }
+
+
+# set this next variable to false to avoid evaluating computationally heavy chunks
+eval_heavy_chunks <- FALSE
+
 # knitr::opts_chunk$set(dpi=300)
 
 # bookdown::render_book("index.Rmd", output_format = "bookdown::bs4_book", config_file = "_bookdown_bs4.yml")

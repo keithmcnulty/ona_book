@@ -512,13 +512,19 @@ and we now have obtained everything we need for our graph from the edgelist.
 Edgelists typically take the form of at two columns of data, usually labelled 'from' and 'to'.  Therefore our edgelist for $G_\mathrm{work}$ would look like Table \@ref(tab:workedgelist).
 
 ```{r workedgelist, echo = FALSE}
+library(kableExtra)
 fourpeople <- data.frame(
   from = c("David", "David", "David", "Jane", "Jane"),
   to = c("Zubin", "Suraya", "Jane", "Zubin", "Suraya")
 )
 
-knitr::kable(fourpeople,
-             caption = "Edgelist for $G_\\mathrm{work}$")
+if (knitr::is_latex_output()) {
+  knitr::kable(fourpeople, caption ="Edgelist for the $G_\\mathrm{work}$ graph") |> 
+  row_spec(0, bold = TRUE)
+} else {
+  knitr::kable(fourpeople, caption ="Edgelist for the $G_\\mathrm{work}$ graph")
+}
+
 ```
 
 `r if (knitr::is_latex_output()) '<!--'`
