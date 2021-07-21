@@ -304,5 +304,121 @@ In the absence of any information on layout, the `plot()` function in `igraph` w
 
 ### Plotting with `ggraph`
 
-The `ggraph` package is developed for those who enjoy working with the more general `ggplot2` package, which is a very popular plotting package in R.  As with `ggplot2`, it provides a grammar for building graph visualizations.  While the native capabilities of `igraph` will suffice in R for most static graph visualizations, `ggraph` could be considered an additional option for those who prefer to use it.  It also integrates well with `ggplot2` which allows further layers to be added to the graph visualization, such as geographic maps --- we will look at a nice example of this later in this section.
+The `ggraph` package is developed for those who enjoy working with the more general `ggplot2` package, which is a very popular plotting package in R.  To learn `ggplot2` as a foundational package, @ggplot2 is highly recommended.  As with `ggplot2`, `ggraph` provides a grammar for building graph visualizations.  While the native capabilities of `igraph` will suffice in R for most static graph visualizations, `ggraph` could be considered an additional option for those who prefer to use it.  It also integrates well with `ggplot2` which allows further layers to be added to the graph visualization, such as a greater variety of node shapes and the ability to layer networks onto geographic maps with relative ease --- we will look at a nice example of this later in this section.
 
+To build an elementary graph using `ggraph`, we start with an `igraph` object and a layout, and we then progressively add node and edge properties as well as themes and other layer if required.  To illustrate, let's generate a relatively basic visualization of our `karate` graph using `ggraph` as in Figure \@ref(fig:ggraph-basic-karate).  Note that its is customary to add the edges before the nodes so that the nodes are the top layer in the plot.
+
+```{r ggraph-basic-karate, fig.align = "center", fig.cap=if (knitr::is_html_output()) {"Elementary visualization of `karate` graph using `ggraph` and the Fruchterman-Reingold algorithm"} else {"Elementary visualization of \\texttt{karate} graph using \\texttt{ggraph} and the Fruchterman-Reingold algorithm"}}
+library(igraph)
+library(ggraph)
+
+# get karate edgelist
+karate_edgelist <- read.csv("https://ona-book.org/data/karate.csv")
+
+# create graph object
+karate <- igraph::graph_from_data_frame(karate_edgelist)
+
+# set seed for reproducibility
+set.seed(123)
+
+# visualise using ggraph with fr layout
+ggraph(karate, layout = "fr") +
+  geom_edge_link() +
+  geom_node_point() 
+  
+
+```
+
+This is not particularly appealing.  However, we can play with properties to improve the appearance, and we can move to a minimal theme to remove the grey background and add a title if we wish, as in Figure \@ref(fig:ggraph-nicer-karate).
+
+```{r ggraph-nicer-karate, fig.align = "center", fig.cap=if (knitr::is_html_output()) {"Improved visualization of `karate` graph using node and edge properties"} else {"Elementary visualization of \\texttt{karate} graph using node and edge properties"}}
+set.seed(123)
+ggraph(karate, layout = "fr") +
+   geom_edge_link(color = "grey", alpha = 0.5) + 
+  geom_node_point(color = "blue", size = 5) +
+  theme_void() + 
+  labs(title = "Zachary's Karate Club Network")
+```
+
+Like in `ggplot2`, if we want to associate a property of the nodes or edges with a property of the plot, we can use aesthetic mappings.  For example, let's give Mr Hi and John A the property of "leader" in our graph, and then ask `ggraph` to color the nodes by this property, as in Figure \@ref(fig:ggraph-leader-karate).
+
+```{r ggraph-leader-karate, fig.align = "center", fig.cap=if (knitr::is_html_output()) {"`karate` graph with `leader` property used as an aesthetic"} else {"\\texttt{karate} graph with \\texttt{leader} property used as an aesthetic"}}
+
+V(karate)$leader <- ifelse(V(karate)$name %in% c("Mr Hi", "John A"), 1, 0)
+
+set.seed(123)
+ggraph(karate, layout = "fr") +
+  geom_edge_link(color = "grey", alpha = 0.5) + 
+  geom_node_point(aes(color = as.factor(leader)), size = 5, show.legend = FALSE) +
+  theme_void() + 
+  labs(title = "Zachary's Karate Club Network")
+```
+
+As a further example of using `ggraph`, let's look at a dataset collected during a study of workplace interactions in France in 2015 (@Genois2018).  Load the `workfrance_edges` and `workfrance_vertices` data sets from the `onadata` package or download them from the internet^[https://ona-book.org/data/workfrance_edges.csv and https://ona-book.org/data/workfrance_vertices.csv].  In this study, employees of a company wore wearable devices to triangulate their location in the building, and edges were defined as any situation where two employees were sharing the same spatial location.  The edgelist contains `from` and `to` columns for the edges, as well as a `mins` column representing the total minutes spent co-located during the study^[This data set has been further processed from the original data set, including limiting the edges to those where the total mco-location time was at least 5 minutes.].  The vertex list contains data on the department of each employee ID.  We will create a basic visualization of this using `ggraph` in Figure \@ref(fig:workfrance-basic).
+
+```{r workfrance-basic, fig.align = "center", fig.cap="Connection of employees in a workplace as measured by spatial co-location"}
+
+# get edgelist with mins property
+workfrance_edgelist <- read.csv("data/workfrance_edges.csv")
+
+# get vertex set with dept property
+workfrance_vertices <- read.csv("data/workfrance_vertices.csv")
+
+# create undirected graph object
+workfrance <- igraph::graph_from_data_frame(
+  d = workfrance_edgelist,
+  vertices = workfrance_vertices,
+  directed = FALSE
+)
+
+# basic visualization
+set.seed(123)
+ggraph(workfrance, layout = "fr") +
+  geom_edge_link(color = "gray", alpha = 0.2) +
+  geom_node_point(color = "blue", size = 5) +
+  theme_void()
+```
+
+As it stands, this graph does not tell us much, but a couple of simple adjustments can change this.  First, we can adjust the thickness of the edges to reflect the total number of minutes spent meeting, which seems a reasonable measure of the 'strength' or 'weight' of the connection.  Second, we can color code the nodes by their department.  The result is Figure \@ref(fig:workfrance-additional).  We can now see clusters of highly connected employees mostly driven by their department. 
+
+```{r workfrance-additional, fig.align = "center", fig.cap="Connection of employees in a workplace with edge thickness weighted by minutes spent spatially co-located and vertices colored by department"}
+set.seed(123)
+ggraph(workfrance, layout = "fr") +
+  geom_edge_link(color = "gray", alpha = 0.2, aes(width = mins), 
+                 show.legend = FALSE) +
+  geom_node_point(aes(color = dept), size = 5) +
+  theme_void() +
+  labs(title = "Spatial co-location of employees in a workplace")
+```
+
+`r if (knitr::is_latex_output()) '<!--'`
+:::thinkahead
+**Thinking ahead:** The graph we have just created in Figure \@ref(fig:workfrance-additional) shows how we have detected a community segmentation of our vertices.  It's relatively clear that individuals in the same department are more likely to be connected.  Community segmentation is an important topic in Organizational Network Analysis which we will study later in this book.  It's not always straightforward to identify drivers of community in networks, but we will learn about a number of community detection algorithms which will segment the graph into different community groups.  As an example, Figure \@ref(fig:workfrance-louvain) shows the results of running the Louvain community detection algorithm on the `workfrance` graph with `mins` as the edge weights.  You can see that the communities detected are strongly alignd with the departments in Figure \@ref(fig:workfrance-additional).    
+:::
+`r if (knitr::is_latex_output()) '-->'`
+
+`r if (knitr::is_html_output()) '<!--'`
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Thinking ahead:} The graph we have just created in Figure \ref{fig:workfrance-additional} shows how we have detected a community segmentation of our vertices.  It's relatively clear that individuals in the same department are more likely to be connected.  Community segmentation is an important topic in Organizational Network Analysis which we will study later in this book.  It's not always straightforward to identify drivers of community in networks, but we will learn about a number of community detection algorithms which will segment the graph into different community groups.  As an example, Figure \ref{fig:workfrance-louvain} shows the results of running the Louvain community detection algorithm on the \texttt{workfrance} graph with \texttt{mins} as the edge weights.  You can see that the communities detected are strongly alignd with the departments in Figure \ref{fig:workfrance-additional}.   
+\end{minipage}
+}
+```
+`r if (knitr::is_html_output()) '-->'`
+
+```{r workfrance-louvain, echo = FALSE, fig.align = "center", fig.cap="Clusters of employees as detected by the Louvain community detection algorithm.  Note the cluster similarity of communities with the departments in the previous graph."}
+louv <- igraph::cluster_louvain(workfrance, weights = E(workfrance)$mins)
+V(workfrance)$community <- louv$membership
+
+set.seed(123)
+ggraph(workfrance, layout = "fr") +
+  geom_edge_link(color = "gray", alpha = 0.2, aes(width = mins), 
+                 show.legend = FALSE) +
+  geom_node_point(aes(color = as.factor(community)), size = 5) +
+  theme_void() +
+  labs(
+    color = "Community",
+    title = "Communities detected by the Louvain algorithm"
+  )
+```
