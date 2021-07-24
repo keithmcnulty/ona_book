@@ -354,15 +354,15 @@ ggraph(karate, layout = "fr") +
   labs(title = "Zachary's Karate Club Network")
 ```
 
-As a further example of using `ggraph`, let's look at a dataset collected during a study of workplace interactions in France in 2015 (@Genois2018).  Load the `workfrance_edges` and `workfrance_vertices` data sets from the `onadata` package or download them from the internet^[https://ona-book.org/data/workfrance_edges.csv and https://ona-book.org/data/workfrance_vertices.csv].  In this study, employees of a company wore wearable devices to triangulate their location in the building, and edges were defined as any situation where two employees were sharing the same spatial location.  The edgelist contains `from` and `to` columns for the edges, as well as a `mins` column representing the total minutes spent co-located during the study^[This data set has been further processed from the original data set, including limiting the edges to those where the total mco-location time was at least 5 minutes.].  The vertex list contains data on the department of each employee ID.  We will create a basic visualization of this using `ggraph` in Figure \@ref(fig:workfrance-basic).
+As a further example of using `ggraph`, let's look at a dataset collected during a study of workplace interactions in France in 2015 (@Genois2018).  Load the `workfrance_edgelist` and `workfrance_vertices` data sets from the `onadata` package or download them from the internet^[https://ona-book.org/data/workfrance_edgelist.csv and https://ona-book.org/data/workfrance_vertices.csv].  In this study, employees of a company wore wearable devices to triangulate their location in the building, and edges were defined as any situation where two employees were sharing the same spatial location.  The edgelist contains `from` and `to` columns for the edges, as well as a `mins` column representing the total minutes spent co-located during the study^[This data set has been further processed from the original data set, including limiting the edges to those where the total mco-location time was at least 5 minutes.].  The vertex list contains data on the department of each employee ID.  We will create a basic visualization of this using `ggraph` in Figure \@ref(fig:workfrance-basic).
 
 ```{r workfrance-basic, fig.align = "center", fig.cap="Connection of employees in a workplace as measured by spatial co-location"}
 
 # get edgelist with mins property
-workfrance_edgelist <- read.csv("data/workfrance_edges.csv")
+workfrance_edgelist <- read.csv("https://ona-book.org/data/workfrance_edgelist.csv")
 
 # get vertex set with dept property
-workfrance_vertices <- read.csv("data/workfrance_vertices.csv")
+workfrance_vertices <- read.csv("https://ona-book.org/data/workfrance_vertices.csv")
 
 # create undirected graph object
 workfrance <- igraph::graph_from_data_frame(
@@ -422,3 +422,84 @@ ggraph(workfrance, layout = "fr") +
     title = "Communities detected by the Louvain algorithm"
   )
 ```
+
+
+`ggraph` visualizations can work relatively easily with other graphics layers, allowing you to superimpose a graph onto other co-ordinate systems.  Let's look at an example of this at work.  Load the `londontube_edgelist` and `londontube_vertices` data sets from the `onadata` package or download them from the internet^[https://ona-book.org/data/londontube_edgelist.csv and https://ona-book.org/data/londontube_vertices.csv].  The vertex set is a list of London Tube Stations with an `id`, `name` and geographical co-ordinates `longitude` and `latitude`.
+
+```{r}
+# download and view london tube vertex data
+londontube_vertices <- read.csv("https://ona-book.org/data/londontube_vertices.csv")
+head(londontube_vertices)
+```
+The edge list represents `from` and `to` connections between stations, along with the name of the `line` and its official `linecolor` in hex code.
+
+```{r}
+# download and view london tube edge data
+londontube_edgelist <- read.csv("https://ona-book.org/data/londontube_edgelist.csv")
+head(londontube_edgelist)
+```
+
+We can easily create am `igraph` object from this data and then use `ggraph` to create a visualization using the `linecolor` as the edge color between stations, as in Figure \@ref(fig:non-geo-tube).
+
+```{r non-geo-tube, fig.align = "center", fig.cap = "Random graph visualization of the London Tube network graph with the edges colored by the different lines"}
+# create a set of distinct line names and lincolors to use
+lines <- londontube_edgelist |> 
+  dplyr::distinct(line, linecolor)
+
+# create graph object
+tubegraph <- igraph::graph_from_data_frame(d = londontube_edgelist, 
+                                           vertices = londontube_vertices,
+                                           directed = FALSE)
+
+# visualize tube graph using linecolors for edge color
+set.seed(123)
+ggraph(tubegraph) +
+  geom_node_point(color = "black", size = 1) +
+  geom_edge_link(aes(color = line), width = 1) +
+  scale_edge_color_manual(name = "Line",
+                          values = lines$linecolor) +
+  theme_void()
+```
+
+While it's great that we can do this so easily, it's a pretty confusing visualization for anyone who knows London.  The Circle Line doesn't look very circular, the Picadilly Line seems to he heading southeast instead of northeast.  In the west, the Metropolitan and Picadilly Lines seem to have swapped places.  Of course, this graph is not using geographical co-ordinates to plot its vertices.  
+
+We can change this by expanding our edgelist to include the latitudes and longitudes of the `from` and `to` stations in each edge, and then we can layer a map on this graph.  First, let's create those new longitude and latitude columns in the edgelist, and check it works.
+
+```{r}
+# we reorganize the edgelist to include longitude and latitude for start and end
+new_edgelist <- londontube_edgelist |> 
+  dplyr::inner_join(londontube_vertices |> 
+                      dplyr::select(id, latitude, longitude), 
+                    by = c("from" = "id")) |> 
+  dplyr::rename(lat_from = latitude, lon_from = longitude) |> 
+  dplyr::inner_join(londontube_vertices |> 
+                      dplyr::select(id, latitude, longitude), 
+                    by = c("to" = "id")) |> 
+  dplyr::rename(lat_to = latitude, lon_to = longitude)
+
+# view
+head(new_edgelist)
+
+```
+That looks like it worked.  Now we can use the `ggmap` package in R to layer a map of London on top of the base `ggraph` layer, and then use the various latitude and longitude columns to make our network geographically accurate, as in Figure \@ref(fig:geo-accurate-tube)^[A Google Maps API key is needed to use `ggmap` - see https://github.com/dkahle/ggmap for more information.].
+
+```{r geo-accurate-tube, fig.align = "center", fig.cap = "Geographically accurate London Tube Network"}
+# recreate graph object to capture additional edge data
+tubegraph <- igraph::graph_from_data_frame(d = new_edgelist, 
+                                           vertices = londontube_vertices,
+                                           directed = FALSE)
+
+# layer a London map
+library(ggmap)
+londonmap <- get_map(location = "London, UK", source = "google")
+
+ggmap(londonmap, base_layer = ggraph(tubegraph)) +
+  geom_node_point(aes(x = longitude, y = latitude), color = "black", size = 1) +
+  geom_edge_link(aes(x = lon_from, y = lat_from,
+                     xend = lon_to, yend = lat_to,
+                     color = line), width = 1) +
+  scale_edge_color_manual(name = "Line",
+                          values = lines$linecolor)
+```
+
+Figure \@ref(fig:geo-accurate-tube) looks like the everything is in the right place.  This kind of graphical layering can be extremely important when there is an inherent co-ordinate system lying behind the vertices of your graph and where none of the existing layout algorithms can recreate that co-ordinate system.
