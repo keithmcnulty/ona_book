@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>3 Visualizing Graphs | Handbook of Graphs and Networks in People Analytics</title>
+  <meta name="description" content="A technical manual of graphs, networks and their applications in the people and social sciences" />
+  <meta name="generator" content="bookdown 0.22.12 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="3 Visualizing Graphs | Handbook of Graphs and Networks in People Analytics" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://ona-book.org" />
+  
+  <meta property="og:description" content="A technical manual of graphs, networks and their applications in the people and social sciences" />
+  <meta name="github-repo" content="keithmcnulty/ona_book" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="3 Visualizing Graphs | Handbook of Graphs and Networks in People Analytics" />
+  <meta name="twitter:site" content="@dr_keithmcnulty" />
+  <meta name="twitter:description" content="A technical manual of graphs, networks and their applications in the people and social sciences" />
+  
+
+<meta name="author" content="Keith McNulty" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="working.html"/>
+
+<script src="libs/header-attrs-2.9.2/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<link href="libs/vis-4.20.1/vis.css" rel="stylesheet" />
+<script src="libs/vis-4.20.1/vis.min.js"></script>
+<script src="libs/visNetwork-binding-2.0.9/visNetwork.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Handbook of Regression Modeling in People Analytics</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduction</a></li>
+<li class="chapter" data-level="1" data-path="the-hidden-secrets-of-our-connected-world.html"><a href="the-hidden-secrets-of-our-connected-world.html"><i class="fa fa-check"></i><b>1</b> The Hidden Secrets of Our Connected World</a></li>
+<li class="chapter" data-level="2" data-path="working.html"><a href="working.html"><i class="fa fa-check"></i><b>2</b> Working With Graphs</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="working.html"><a href="working.html#elementary-graph-theory"><i class="fa fa-check"></i><b>2.1</b> Elementary Graph Theory</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="working.html"><a href="working.html#graph-def"><i class="fa fa-check"></i><b>2.1.1</b> General definition of a graph</a></li>
+<li class="chapter" data-level="2.1.2" data-path="working.html"><a href="working.html#graph-types"><i class="fa fa-check"></i><b>2.1.2</b> Types of graphs</a></li>
+<li class="chapter" data-level="2.1.3" data-path="working.html"><a href="working.html#vertex-edge-prop"><i class="fa fa-check"></i><b>2.1.3</b> Vertex and Edge Properties</a></li>
+<li class="chapter" data-level="2.1.4" data-path="working.html"><a href="working.html#rep-graphs"><i class="fa fa-check"></i><b>2.1.4</b> Representations of graphs</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="working.html"><a href="working.html#creating-graphs-in-r"><i class="fa fa-check"></i><b>2.2</b> Creating graphs in R</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="working.html"><a href="working.html#creating-a-graph-from-an-edgelist"><i class="fa fa-check"></i><b>2.2.1</b> Creating a graph from an edgelist</a></li>
+<li class="chapter" data-level="2.2.2" data-path="working.html"><a href="working.html#creating-a-graph-from-an-adjacency-matrix"><i class="fa fa-check"></i><b>2.2.2</b> Creating a graph from an adjacency matrix</a></li>
+<li class="chapter" data-level="2.2.3" data-path="working.html"><a href="working.html#creating-a-graph-from-a-dataframe"><i class="fa fa-check"></i><b>2.2.3</b> Creating a graph from a dataframe</a></li>
+<li class="chapter" data-level="2.2.4" data-path="working.html"><a href="working.html#adding-properties-to-the-vertices-and-edges"><i class="fa fa-check"></i><b>2.2.4</b> Adding properties to the vertices and edges</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="working.html"><a href="working.html#creating-graphs-in-python"><i class="fa fa-check"></i><b>2.3</b> Creating graphs in Python</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="working.html"><a href="working.html#creating-a-graph-from-an-edgelist-1"><i class="fa fa-check"></i><b>2.3.1</b> Creating a graph from an edgelist</a></li>
+<li class="chapter" data-level="2.3.2" data-path="working.html"><a href="working.html#python-graph-from-adjacency"><i class="fa fa-check"></i><b>2.3.2</b> Creating a graph from an adjacency matrix</a></li>
+<li class="chapter" data-level="2.3.3" data-path="working.html"><a href="working.html#adding-vertex-and-edge-properties-to-a-graph"><i class="fa fa-check"></i><b>2.3.3</b> Adding vertex and edge properties to a graph</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="working.html"><a href="working.html#learning-exercises"><i class="fa fa-check"></i><b>2.4</b> Learning exercises</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="working.html"><a href="working.html#discussion-questions"><i class="fa fa-check"></i><b>2.4.1</b> Discussion questions</a></li>
+<li class="chapter" data-level="2.4.2" data-path="working.html"><a href="working.html#data-exercises"><i class="fa fa-check"></i><b>2.4.2</b> Data exercises</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="viz-graphs.html"><a href="viz-graphs.html"><i class="fa fa-check"></i><b>3</b> Visualizing Graphs</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="viz-graphs.html"><a href="viz-graphs.html#visualizing-graphs-in-r"><i class="fa fa-check"></i><b>3.1</b> Visualizing graphs in R</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="viz-graphs.html"><a href="viz-graphs.html#native-plotting-igraph"><i class="fa fa-check"></i><b>3.1.1</b> Native plotting in <code>igraph</code></a></li>
+<li class="chapter" data-level="3.1.2" data-path="viz-graphs.html"><a href="viz-graphs.html#layouts"><i class="fa fa-check"></i><b>3.1.2</b> Graph layouts</a></li>
+<li class="chapter" data-level="3.1.3" data-path="viz-graphs.html"><a href="viz-graphs.html#plotting-with-ggraph"><i class="fa fa-check"></i><b>3.1.3</b> Plotting with <code>ggraph</code></a></li>
+<li class="chapter" data-level="3.1.4" data-path="viz-graphs.html"><a href="viz-graphs.html#interactive-graph-visualization-in-r"><i class="fa fa-check"></i><b>3.1.4</b> Interactive graph visualization in R</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Handbook of Graphs and Networks in People Analytics</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="viz-graphs" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Visualizing Graphs</h1>
+<p>Now that we have learned how to define and store graphs, it’s time to take a look at ways of visualizing them. As we noted in earlier chapters, visualization is an important tool that can make graphs and networks real to others. But visualizations are not always effective. Graphs can be laid out and visualized in many different ways, and only some of them will effectively communicate the inference or conclusion that the analyst is inviting others to draw about the phenomenon being represented in the graph.</p>
+<p>While a graph is made up of vertices and edges, there are many other factors that will impact how the graph appears. First, there are cosmetic matters of vertex size, edge thickness, whether or not vertices and edges are labelled, colored and so on. Second there are matters of layout — that is, where do we position vertices relative to each other in our visualization. As an example, recall our simple four vertex undirected graph <span class="math inline">\(G_\mathrm{work}\)</span> from Section <a href="working.html#graph-def">2.1.1</a>. Figure <a href="viz-graphs.html#fig:two-viz-gwork">3.1</a> shows two different ways of visualizing this graph, where we make different choices on vertex size and on graph layout<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:two-viz-gwork"></span>
+<img src="_main_files/figure-html/two-viz-gwork-1.png" alt="Two different ways of visualizing the $G_\mathrm{work}$ graph" width="672" />
+<p class="caption">
+Figure 3.1: Two different ways of visualizing the <span class="math inline">\(G_\mathrm{work}\)</span> graph
+</p>
+</div>
+<p>The choices of how to visualize a graph are wide and varied, and we will not be covering every single permutation and combination of cosmetics and layouts in the chapter. Instead, we will focus on learning how to control the most common options. This will equip the reader well not just for work we do later in this book, but also for when they need to visualize graphs they create as part of their work or study. We will also cover a variety of graph visualization programming package options in R, Python and further afield.</p>
+<p>In this chapter we will work with a relatively famous graph known as <em>Zachary’s karate club</em>. This graph originates from a piece of research on a karate club by a social anthropologist Wayne W. Zachary in the 1970s (<span class="citation"><a href="#ref-zachary" role="doc-biblioref">Zachary</a> (<a href="#ref-zachary" role="doc-biblioref">1977</a>)</span>), and is commonly used as an example of a social network in many teaching situations today. The graph contains 34 vertices representing different individuals or actors. The karate instructor is labelled as ‘Mr Hi.’ The club administrator is labelled as ‘John A.’ The other 32 actors are labelled Actor 2 thru Actor 33. Zachary studied the social interactions between the members outside the club meetings, and during his study a conflict arose in the club that eventually led to the group splitting into two - with one group forming a new club around the instructor Mr Hi and the other group dispersing to find new clubs or to give up karate completely. In this graph, an edge between two vertices means that the two individuals interacted socially outside the club.</p>
+<div id="visualizing-graphs-in-r" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Visualizing graphs in R</h2>
+<p>Let’s load the graph edgelist in R from the <code>onadata</code> package or from the internet<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a>, and check the first few rows.</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="viz-graphs.html#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get edgelist data as dataframe</span></span>
+<span id="cb59-2"><a href="viz-graphs.html#cb59-2" aria-hidden="true" tabindex="-1"></a>karate_edgelist <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://ona-book.org/data/karate.csv&quot;</span>)</span>
+<span id="cb59-3"><a href="viz-graphs.html#cb59-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-4"><a href="viz-graphs.html#cb59-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(karate_edgelist)</span></code></pre></div>
+<pre><code>##    from      to
+## 1 Mr Hi Actor 2
+## 2 Mr Hi Actor 3
+## 3 Mr Hi Actor 4
+## 4 Mr Hi Actor 5
+## 5 Mr Hi Actor 6
+## 6 Mr Hi Actor 7</code></pre>
+<p>Now let’s use our edgelist to create an undirected graph object in <code>igraph</code>.</p>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="viz-graphs.html#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(igraph)</span>
+<span id="cb61-2"><a href="viz-graphs.html#cb61-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-3"><a href="viz-graphs.html#cb61-3" aria-hidden="true" tabindex="-1"></a>(karate <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(karate_edgelist, </span>
+<span id="cb61-4"><a href="viz-graphs.html#cb61-4" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">directed =</span> <span class="cn">FALSE</span>))</span></code></pre></div>
+<pre><code>## IGRAPH 3cc290c UN-- 34 78 -- 
+## + attr: name (v/c)
+## + edges from 3cc290c (vertex names):
+##  [1] Mr Hi   --Actor 2  Mr Hi   --Actor 3  Mr Hi   --Actor 4  Mr Hi   --Actor 5  Mr Hi   --Actor 6  Mr Hi   --Actor 7 
+##  [7] Mr Hi   --Actor 8  Mr Hi   --Actor 9  Mr Hi   --Actor 11 Mr Hi   --Actor 12 Mr Hi   --Actor 13 Mr Hi   --Actor 14
+## [13] Mr Hi   --Actor 18 Mr Hi   --Actor 20 Mr Hi   --Actor 22 Mr Hi   --Actor 32 Actor 2 --Actor 3  Actor 2 --Actor 4 
+## [19] Actor 2 --Actor 8  Actor 2 --Actor 14 Actor 2 --Actor 18 Actor 2 --Actor 20 Actor 2 --Actor 22 Actor 2 --Actor 31
+## [25] Actor 3 --Actor 4  Actor 3 --Actor 8  Actor 3 --Actor 9  Actor 3 --Actor 10 Actor 3 --Actor 14 Actor 3 --Actor 28
+## [31] Actor 3 --Actor 29 Actor 3 --Actor 33 Actor 4 --Actor 8  Actor 4 --Actor 13 Actor 4 --Actor 14 Actor 5 --Actor 7 
+## [37] Actor 5 --Actor 11 Actor 6 --Actor 7  Actor 6 --Actor 11 Actor 6 --Actor 17 Actor 7 --Actor 17 Actor 9 --Actor 31
+## [43] Actor 9 --Actor 33 Actor 9 --John A   Actor 10--John A   Actor 14--John A   Actor 15--Actor 33 Actor 15--John A  
+## + ... omitted several edges</code></pre>
+<p>We can see that we have an undirected graph with 34 named vertices and 78 edges.</p>
+<div id="native-plotting-igraph" class="section level3" number="3.1.1">
+<h3><span class="header-section-number">3.1.1</span> Native plotting in <code>igraph</code></h3>
+<p>The <code>igraph</code> package allows simple plotting of graphs using the <code>plot()</code> function. The function works instantly with an <code>igraph</code> object, using default values for its various arguments. As a starting point, we will use all of the default values except for the layout of the graph. We will set the layout of the plot initially to be a random layout, which will randomly allocate the vertices to different positions. Figure <a href="viz-graphs.html#fig:basic-karate">3.2</a> shows this default plot for our <code>karate</code> network.</p>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="viz-graphs.html#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set seed for reproducibility</span></span>
+<span id="cb63-2"><a href="viz-graphs.html#cb63-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb63-3"><a href="viz-graphs.html#cb63-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-4"><a href="viz-graphs.html#cb63-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create random layout</span></span>
+<span id="cb63-5"><a href="viz-graphs.html#cb63-5" aria-hidden="true" tabindex="-1"></a>l <span class="ot">&lt;-</span> <span class="fu">layout_randomly</span>(karate)</span>
+<span id="cb63-6"><a href="viz-graphs.html#cb63-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-7"><a href="viz-graphs.html#cb63-7" aria-hidden="true" tabindex="-1"></a><span class="co"># plot with random layout</span></span>
+<span id="cb63-8"><a href="viz-graphs.html#cb63-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(karate, <span class="at">layout =</span> l)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:basic-karate"></span>
+<img src="_main_files/figure-html/basic-karate-1.png" alt="Basic default plot of `karate` network" width="672" />
+<p class="caption">
+Figure 3.2: Basic default plot of <code>karate</code> network
+</p>
+</div>
+<div class="thinkahead">
+<p><strong>Thinking ahead:</strong> The previous code chunk fixes the positioning of the vertices on our <code>karate</code> graph. By setting a random seed, we can ensure the same random numbers are generated each time so that this plot is repeatable and reproducible. Then the <code>random_layout()</code> function calculates random x and y coordinates for the vertices, and when we use it in the <code>plot()</code> function, it assigns those coordinates in the plot. As we learn about layouts later in the chapter, we will use this technique a lot. If you like, try playing around with other layouts now. A couple of examples are <code>layout_with_sugiyama()</code> and <code>layout_with_dh()</code>.</p>
+</div>
+<!--
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Thinking ahead:} The previous code chunk fixes the positioning of the vertices on our \texttt{karate} graph.  By setting a random seed, we can ensure the same random numbers are generated each time so that this plot is repeatable and reproducible.  Then the \texttt{random\_layout()} function calculates random x and y coordinates for the vertices, and when we use it in the \texttt{plot()} function, it assigns those coordinates in the plot.  As we learn about layouts later in the chapter, we will use this technique a lot.  If you like, try playing around with other layouts now.  A couple of examples are \texttt{layout\_with\_sugiyama()} and \texttt{layout\_with\_dh()}.   
+\end{minipage}
+}
+```
+-->
+<p>Looking at Figure <a href="viz-graphs.html#fig:basic-karate">3.2</a>, we note that the labeling of the vertices is somewhat obtrusive and unhelpful to the clarity of the graph. This will be a common problem with default graph plotting, and with large number of vertices the plot can turn into a messy cloud of overlapping labels.</p>
+<p>Vertex labels can be adjusted via properties of the vertices. The most common properties adjusted are as follows:</p>
+<ul>
+<li><code>label</code>: The text of the label</li>
+<li><code>label.family</code>: The font family to be used (default is ‘serif’)</li>
+<li><code>label.font</code>: The font style, where 1 is plain (default), 2 is bold, 3 is italic, 4 is bold and italic and 5 is symbol font</li>
+<li><code>label.cex</code>: The size of the label text</li>
+<li><code>label.color</code>: The color of the label text</li>
+<li><code>label.dist</code>: The distance of the label fron the vertex - 0 is centered on the vertex (default), 1 is beside the vertex</li>
+<li><code>label.degree</code>: The angle at which the label will display relative to the center of the vertex, in radians. The default is <code>-pi/4</code></li>
+</ul>
+<p>Let’s try to change the vertex labels so that they only display for Mr Hi and for John A. Let’s also change the size, color and font family of the labels. The output can be seen in Figure <a href="viz-graphs.html#fig:change-vlabels-karate">3.3</a></p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="viz-graphs.html#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="co"># only store a label if Mr Hi or John A</span></span>
+<span id="cb64-2"><a href="viz-graphs.html#cb64-2" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(karate)<span class="sc">$</span>label <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(karate)<span class="sc">$</span>name <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Mr Hi&quot;</span>, <span class="st">&quot;John A&quot;</span>),</span>
+<span id="cb64-3"><a href="viz-graphs.html#cb64-3" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">V</span>(karate)<span class="sc">$</span>name,</span>
+<span id="cb64-4"><a href="viz-graphs.html#cb64-4" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&quot;&quot;</span>)</span>
+<span id="cb64-5"><a href="viz-graphs.html#cb64-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-6"><a href="viz-graphs.html#cb64-6" aria-hidden="true" tabindex="-1"></a><span class="co"># change label font color, size and font family </span></span>
+<span id="cb64-7"><a href="viz-graphs.html#cb64-7" aria-hidden="true" tabindex="-1"></a><span class="co"># (selected font family needs to be installed on system)</span></span>
+<span id="cb64-8"><a href="viz-graphs.html#cb64-8" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(karate)<span class="sc">$</span>label.color <span class="ot">&lt;-</span> <span class="st">&quot;black&quot;</span></span>
+<span id="cb64-9"><a href="viz-graphs.html#cb64-9" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(karate)<span class="sc">$</span>label.cex <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
+<span id="cb64-10"><a href="viz-graphs.html#cb64-10" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(karate)<span class="sc">$</span>label.family <span class="ot">&lt;-</span> <span class="st">&quot;Lucinda Console&quot;</span></span>
+<span id="cb64-11"><a href="viz-graphs.html#cb64-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-12"><a href="viz-graphs.html#cb64-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(karate, <span class="at">layout =</span> l)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:change-vlabels-karate"></span>
+<img src="_main_files/figure-html/change-vlabels-karate-1.png" alt="Adjusting label appearance through changing vertex properties" width="672" />
+<p class="caption">
+Figure 3.3: Adjusting label appearance through changing vertex properties
+</p>
+</div>
+<p>Now that we have cleaned up the label situation, we may wish to change the appearance of the vertices. Here are the most commonly used vertex properties which allow this:</p>
+<ul>
+<li><code>size</code>: The size of the vertex</li>
+<li><code>color</code>: The fill color of the vertex</li>
+<li><code>frame.color</code>: The border color of the vertex</li>
+<li><code>shape</code>: The shape of the vertex - multiple shape options are supported including <code>circle</code>, <code>square</code>, <code>rectangle</code> and <code>none</code></li>
+</ul>
+<p>We may wish to use different vertex shapes and colors for our actors compared to Mr Hi and John A. This is how this would be done, with the results in Figure <a href="viz-graphs.html#fig:change-vertices-karate">3.4</a>.</p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="viz-graphs.html#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="co"># different colors and shapes for Mr Hi and and John A</span></span>
+<span id="cb65-2"><a href="viz-graphs.html#cb65-2" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(karate)<span class="sc">$</span>color <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(karate)<span class="sc">$</span>name <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Mr Hi&quot;</span>, <span class="st">&quot;John A&quot;</span>),</span>
+<span id="cb65-3"><a href="viz-graphs.html#cb65-3" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&quot;lightblue&quot;</span>, </span>
+<span id="cb65-4"><a href="viz-graphs.html#cb65-4" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&quot;pink&quot;</span>)</span>
+<span id="cb65-5"><a href="viz-graphs.html#cb65-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-6"><a href="viz-graphs.html#cb65-6" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(karate)<span class="sc">$</span>shape <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(karate)<span class="sc">$</span>name <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Mr Hi&quot;</span>, <span class="st">&quot;John A&quot;</span>),</span>
+<span id="cb65-7"><a href="viz-graphs.html#cb65-7" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&quot;square&quot;</span>, </span>
+<span id="cb65-8"><a href="viz-graphs.html#cb65-8" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&quot;circle&quot;</span>)</span>
+<span id="cb65-9"><a href="viz-graphs.html#cb65-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-10"><a href="viz-graphs.html#cb65-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-11"><a href="viz-graphs.html#cb65-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(karate, <span class="at">layout =</span> l)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:change-vertices-karate"></span>
+<img src="_main_files/figure-html/change-vertices-karate-1.png" alt="Adjusting vertex appearance through changing vertex properties" width="672" />
+<p class="caption">
+Figure 3.4: Adjusting vertex appearance through changing vertex properties
+</p>
+</div>
+<p>In a similar way, edges can be changed through adding or editing edge properties. Here are some common edge properties that are used to change the edges in an <code>igraph</code> plot:</p>
+<ul>
+<li><code>color</code>: The color of the edge</li>
+<li><code>width</code>: The width of the edge</li>
+<li><code>arrow.size</code>: The size of the arrow in a directed edge</li>
+<li><code>arrow.width</code>: The width of the arrow in a directed edge</li>
+<li><code>arrow.mode</code>: Whether edges should direct forward (<code>&gt;</code>), backward (<code>&lt;</code>) or both (<code>&lt;&gt;</code>)</li>
+<li><code>lty</code>: Line type of edges, with numerous options including <code>solid</code>, <code>dashed</code>, <code>dotted</code>, <code>dotdash</code> and <code>blank</code></li>
+<li><code>curved</code>: Specifies the amount of curvature to apply to the edge, with zero (default) as a straight edge, negative numbers bending clockwise and positive bending anti-clockwise</li>
+</ul>
+<p>Note that edges, like vertices, can also have <code>label</code> a label property and various label settings like <code>label.cex</code> and <code>label.family</code>. Let’s adjust our <code>karate</code> graph to have blue dashed edges, with the result in <a href="viz-graphs.html#fig:change-edges-karate">3.5</a>.</p>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="viz-graphs.html#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="co"># change color and linetype of all edges</span></span>
+<span id="cb66-2"><a href="viz-graphs.html#cb66-2" aria-hidden="true" tabindex="-1"></a><span class="fu">E</span>(karate)<span class="sc">$</span>color <span class="ot">&lt;-</span> <span class="st">&quot;blue&quot;</span></span>
+<span id="cb66-3"><a href="viz-graphs.html#cb66-3" aria-hidden="true" tabindex="-1"></a><span class="fu">E</span>(karate)<span class="sc">$</span>lty <span class="ot">&lt;-</span> <span class="st">&quot;dashed&quot;</span></span>
+<span id="cb66-4"><a href="viz-graphs.html#cb66-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-5"><a href="viz-graphs.html#cb66-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(karate, <span class="at">layout =</span> l)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:change-edges-karate"></span>
+<img src="_main_files/figure-html/change-edges-karate-1.png" alt="Adjusting edge appearance through changing edge properties" width="672" />
+<p class="caption">
+Figure 3.5: Adjusting edge appearance through changing edge properties
+</p>
+</div>
+<div class="thinkahead">
+<p><strong>Playing around:</strong> Usually, getting your graph looking the way you want take some trial and error and some playing around with its properties. Try further adjusting the <code>karate</code> graph using some of the other properties listed.</p>
+</div>
+<!--
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Thinking ahead:} Usually, getting your graph looking the way you want take some trial and error and some playing around with its properties.  Try further adjusting the \texttt{karate} graph using some of the other properties listed. 
+\end{minipage}
+}
+```
+-->
+</div>
+<div id="layouts" class="section level3" number="3.1.2">
+<h3><span class="header-section-number">3.1.2</span> Graph layouts</h3>
+<p>The layout of a graph determines the precise position of its vertices on a 2-dimensional plane or in 3-dimensional space. Layouts are themselves algorithms that calculate vertex positions based on properties of the graph. Different layouts work for different purposes, for example to visually identify communities in a graph, or just to make the graph look pleasant. In Section <a href="viz-graphs.html#native-plotting-igraph">3.1.1</a>, we used a random layout for our <code>karate</code> graph. Now let’s look at common alternative layouts. Layouts are used by multiple plotting packages, but we will explore them using <code>igraph</code> base plotting capabilities here.</p>
+<p>There are two ways to add a layout to a graph in <code>igraph</code>. If you want to keep the graph object separate from the layout, you can create the layout and use it as an argument in the <code>plot()</code> function, like we did for Figure <a href="viz-graphs.html#fig:basic-karate">3.2</a>. Alternatively, you can assign a layout to a graph object by making it a property of the graph. You should only do this if you intend to stick permanently with your chosen layout and do not intend to experiment. You can use the <code>add_layout_()</code> function to achieve this. For example, this would create a <code>karate</code> graph with a grid layout.</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="viz-graphs.html#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check whether existing karate graph has a layout property</span></span>
+<span id="cb67-2"><a href="viz-graphs.html#cb67-2" aria-hidden="true" tabindex="-1"></a>karate<span class="sc">$</span>layout</span></code></pre></div>
+<pre><code>## NULL</code></pre>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="viz-graphs.html#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co"># assign grid layout as a graph property</span></span>
+<span id="cb69-2"><a href="viz-graphs.html#cb69-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb69-3"><a href="viz-graphs.html#cb69-3" aria-hidden="true" tabindex="-1"></a>karate_grid <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">add_layout_</span>(karate, <span class="fu">on_grid</span>())</span>
+<span id="cb69-4"><a href="viz-graphs.html#cb69-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-5"><a href="viz-graphs.html#cb69-5" aria-hidden="true" tabindex="-1"></a><span class="co"># check a few lines of the &#39;layout&#39; property</span></span>
+<span id="cb69-6"><a href="viz-graphs.html#cb69-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(karate_grid<span class="sc">$</span>layout)</span></code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]    0    0
+## [2,]    1    0
+## [3,]    2    0
+## [4,]    3    0
+## [5,]    4    0
+## [6,]    5    0</code></pre>
+<p>We can see that our new graph object has a layout property. Note that running <code>add_layout_()</code> on a graph that already has a layout property will by default overwrite the previous layout unless you set the argument <code>overwrite = FALSE</code>.</p>
+<p>As well as the random layout demonstrated in Figure <a href="viz-graphs.html#fig:basic-karate">3.2</a>, common shape layouts include <code>as_star()</code>, <code>as_tree()</code>, <code>in_circle()</code>, <code>on_grid()</code> and <code>on_sphere()</code>. For example, Figure <a href="viz-graphs.html#fig:circle-karate">3.6</a> shows the circle layout for our <code>karate</code> network, and Figure <a href="viz-graphs.html#fig:sphere-karate">3.7</a> shows the sphere layout.</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="viz-graphs.html#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="co"># circle layout</span></span>
+<span id="cb71-2"><a href="viz-graphs.html#cb71-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb71-3"><a href="viz-graphs.html#cb71-3" aria-hidden="true" tabindex="-1"></a>circ <span class="ot">&lt;-</span> <span class="fu">layout_in_circle</span>(karate)</span>
+<span id="cb71-4"><a href="viz-graphs.html#cb71-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(karate, <span class="at">layout =</span> circ)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:circle-karate"></span>
+<img src="_main_files/figure-html/circle-karate-1.png" alt="Circle layout of the `karate` graph" width="672" />
+<p class="caption">
+Figure 3.6: Circle layout of the <code>karate</code> graph
+</p>
+</div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="viz-graphs.html#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sphere layout</span></span>
+<span id="cb72-2"><a href="viz-graphs.html#cb72-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb72-3"><a href="viz-graphs.html#cb72-3" aria-hidden="true" tabindex="-1"></a>sph <span class="ot">&lt;-</span> <span class="fu">layout_on_sphere</span>(karate)</span>
+<span id="cb72-4"><a href="viz-graphs.html#cb72-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(karate, <span class="at">layout =</span> sph)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:sphere-karate"></span>
+<img src="_main_files/figure-html/sphere-karate-1.png" alt="Sphere layout of the `karate` graph" width="672" />
+<p class="caption">
+Figure 3.7: Sphere layout of the <code>karate</code> graph
+</p>
+</div>
+<div class="thinkahead">
+<p><strong>Thinking ahead:</strong> Notice how the circle and sphere layouts position Mr Hi and John A very close to each other. This is an indication that the layout algorithms have established something in common between these two individuals based on the properties of the graph. This is something we will cover in a later chapter, but if you want to explore ahead, and you know how to, calculate some centrality measures for the vertices in the <code>karate</code> graph — for example degree centrality and betweenness centrality.</p>
+</div>
+<!--
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Thinking ahead:} Notice how the circle and sphere layouts position Mr Hi and John A very close to each other.  This is an indication that the layout algorithms have established something in common between these two individuals based on the properties of the graph.  This is something we will cover in a later chapter, but if you want to explore ahead, and you know how to, calculate some centrality measures for the vertices in the \texttt{karate} graph --- for example degree centrality and betweenness centrality. 
+\end{minipage}
+}
+```
+-->
+<p><em>Force-directed</em> graph layouts are extremely popular, as they are aesthetically pleasing and they help visualize communities of vertices quite effectively, especially in graphs with low to moderate edge-complexity. These algorithms emulate physical models like Hooke’s law to attract connected vertices together, while at the same time applying repelling forces to all pairs of vertices to try to keep as much space as possible between them. This calculation is an iterative process where vertex positions are recalculated again and again until equilibrium is reached<a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a>. The result is is usually a layout where connected vertices are closer together and where edge-length are approximately equal.</p>
+<p>For Zachary’s Karate Club study, which was a study of connection and community, we can imagine that a force-directed layout would be a good choice of visualization, and we will find that this is the case for many other network graphs we study. There are several different implementations of force directed algorithms available. Perhaps the most popular of these is the Fruchterman-Reingold algorithm. Figure <a href="viz-graphs.html#fig:fr-karate">3.8</a> shows our <code>karate</code> network with the layout generated by the Fruchterman-Reingold algorithm, and we can see clear communities in the karate club oriented around Mr Hi and John A..</p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="viz-graphs.html#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="co"># F-R algorithm</span></span>
+<span id="cb73-2"><a href="viz-graphs.html#cb73-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb73-3"><a href="viz-graphs.html#cb73-3" aria-hidden="true" tabindex="-1"></a>fr <span class="ot">&lt;-</span> <span class="fu">layout_with_fr</span>(karate)</span>
+<span id="cb73-4"><a href="viz-graphs.html#cb73-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(karate, <span class="at">layout =</span> fr)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:fr-karate"></span>
+<img src="_main_files/figure-html/fr-karate-1.png" alt="Force-directed layout of the `karate` graph according to the Fruchterman-Reingold algorithm" width="672" />
+<p class="caption">
+Figure 3.8: Force-directed layout of the <code>karate</code> graph according to the Fruchterman-Reingold algorithm
+</p>
+</div>
+<p>The Kamada-Kawai algorithm and the GEM algorithm are also commonly used force-directed algorithms and they produce similar types of community structures as in Figures <a href="viz-graphs.html#fig:kk-karate">3.9</a> and <a href="viz-graphs.html#fig:gem-karate">3.10</a> respectively.</p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="viz-graphs.html#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="do">## K-K algorithm</span></span>
+<span id="cb74-2"><a href="viz-graphs.html#cb74-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb74-3"><a href="viz-graphs.html#cb74-3" aria-hidden="true" tabindex="-1"></a>kk <span class="ot">&lt;-</span> <span class="fu">layout_with_kk</span>(karate)</span>
+<span id="cb74-4"><a href="viz-graphs.html#cb74-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(karate, <span class="at">layout =</span> kk)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:kk-karate"></span>
+<img src="_main_files/figure-html/kk-karate-1.png" alt="Force-directed layout of the `karate` graph according to the Kamada-Kawai algorithm" width="672" />
+<p class="caption">
+Figure 3.9: Force-directed layout of the <code>karate</code> graph according to the Kamada-Kawai algorithm
+</p>
+</div>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="viz-graphs.html#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="do">## GEM algorithm</span></span>
+<span id="cb75-2"><a href="viz-graphs.html#cb75-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb75-3"><a href="viz-graphs.html#cb75-3" aria-hidden="true" tabindex="-1"></a>gem <span class="ot">&lt;-</span> <span class="fu">layout_with_gem</span>(karate)</span>
+<span id="cb75-4"><a href="viz-graphs.html#cb75-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(karate, <span class="at">layout =</span> gem)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:gem-karate"></span>
+<img src="_main_files/figure-html/gem-karate-1.png" alt="Force-directed layout of the `karate` graph according to the GEM algorithm" width="672" />
+<p class="caption">
+Figure 3.10: Force-directed layout of the <code>karate</code> graph according to the GEM algorithm
+</p>
+</div>
+<p>As well as force-directed and shape=oriented layout algorithms, several alternative approaches to layout calculation are also available. <code>layout_with_dh()</code> uses a simulated annealing algorithm developed for nice graph drawing, and <code>layout_with_mds()</code> generates vertex coordinates through multi-dimensional scaling based on shortest path distance (which we will look at in a later chapter). <code>layout_with sugiyama()</code> is suitable for directed graphs and minimizes edge crossings by introducing bends on edges — the multigraph visualization in Figure <a href="working.html#fig:gmulti">2.4</a> was generated using the Sugiyama layout algorithm.</p>
+<p>Finally, there are three layout algorithms that are suited for large graphs with many thousands or even millions of edges. One of the biggest problems with visualizing large graphs is the potential for ‘hairballs’ — that is, clumps of connected nodes that are so dense they cannot be usefully visualized. <code>layout_with_lgl()</code> uses the Large Graph Layout algorithm which tries to identify clusters of vertices and position the clusters before positioning the individual vertices to minimize the chance of hairballs, while still adhering to the principles of force-directed networks. <code>layout_with_drl()</code> and <code>layout_with_graphopt()</code> uses efficient force-directed algorithms which scale well on large graphs.</p>
+<div class="thinkahead">
+<p><strong>Playing around:</strong> Try laying out the <code>karate</code> graph using these various algorithms and observe the different appearances. If you are interested in experimenting with a larger graph, and you have enough computing power that it won’t freeze your machine, load the <code>wikivote</code> edgelist from the <code>onadata</code> package, or download it from the internet<a href="#fn9" class="footnote-ref" id="fnref9"><sup>9</sup></a>. This network represents votes from Wikipedia members for other members to be made administrators. Create a directed graph object, and lay it out using <code>layout_with_graphopt()</code>. To help with your visualization, remove the vertex labels, set the node size to 0.5 and set the edge arrow size to 0.1. When you plot this, you should see a great example of a hairball, as in Figure <a href="viz-graphs.html#fig:hairball-example">3.11</a>.</p>
+</div>
+<!--
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Playing around:} Try laying out the \texttt{karate} graph using these various algorithms and observe the different appearances.  If you are interested in experimenting with a larger graph, and you have enough computing power that it won't freeze your machine, load the \texttt{wikivote} edgelist from the \texttt{onadata} package, or download it from the internet at \texttt{https://ona-book.org/data/wikivote.csv}.  This data set is taken from the Stanford University SNAP library of network data sets. It represents votes from Wikipedia members for other members to be made administrators.  Create a directed graph object, and lay it out using \texttt{layout\_with\_graphopt()}.  To help with your visualization, remove the vertex labels, set the node size to 0.5 and set the edge arrow size to 0.1. When you plot this, you should see a great example of a hairball, as in Figure \ref{fig:hairball-example}.  
+\end{minipage}
+}
+```
+-->
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:hairball-example"></span>
+<img src="_main_files/figure-html/hairball-example-1.png" alt="Example of a hairball generated by trying to visualize a large network of Wikipedia votes for administrators" width="672" />
+<p class="caption">
+Figure 3.11: Example of a hairball generated by trying to visualize a large network of Wikipedia votes for administrators
+</p>
+</div>
+<p>In the absence of any information on layout, the <code>plot()</code> function in <code>igraph</code> will choose an appropriate layout using a logic determined by <code>layout_nicely()</code>. If the graph already has a <code>layout</code> attribute, it will use this layout. Otherwise, if the vertices have <code>x</code> and <code>y</code> attributes, it will use these as vertex co-ordinates. Failing both of these, <code>layout_with_fr()</code> will be used if the graph has fewer than 1,000 vertices, and <code>layout_with_drl()</code> will be used if the graph has more than 1,000 vertices. Thus, the plot defaults to a form of force-directed layout unless the graph attributes suggest otherwise.</p>
+</div>
+<div id="plotting-with-ggraph" class="section level3" number="3.1.3">
+<h3><span class="header-section-number">3.1.3</span> Plotting with <code>ggraph</code></h3>
+<p>The <code>ggraph</code> package is developed for those who enjoy working with the more general <code>ggplot2</code> package, which is a very popular plotting package in R. To learn <code>ggplot2</code> as a foundational package, <span class="citation"><a href="#ref-ggplot2" role="doc-biblioref">Wickham</a> (<a href="#ref-ggplot2" role="doc-biblioref">2016</a>)</span> is highly recommended. As with <code>ggplot2</code>, <code>ggraph</code> provides a grammar for building graph visualizations. While the native capabilities of <code>igraph</code> will suffice in R for most static graph visualizations, <code>ggraph</code> could be considered an additional option for those who prefer to use it. It also integrates well with <code>ggplot2</code> which allows further layers to be added to the graph visualization, such as a greater variety of node shapes and the ability to layer networks onto geographic maps with relative ease — we will look at a nice example of this later in this section.</p>
+<p>To build an elementary graph using <code>ggraph</code>, we start with an <code>igraph</code> object and a layout, and we then progressively add node and edge properties as well as themes and other layer if required. To illustrate, let’s generate a relatively basic visualization of our <code>karate</code> graph using <code>ggraph</code> as in Figure <a href="viz-graphs.html#fig:ggraph-basic-karate">3.12</a>. Note that its is customary to add the edges before the nodes so that the nodes are the top layer in the plot.</p>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="viz-graphs.html#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(igraph)</span>
+<span id="cb76-2"><a href="viz-graphs.html#cb76-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggraph)</span>
+<span id="cb76-3"><a href="viz-graphs.html#cb76-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-4"><a href="viz-graphs.html#cb76-4" aria-hidden="true" tabindex="-1"></a><span class="co"># get karate edgelist</span></span>
+<span id="cb76-5"><a href="viz-graphs.html#cb76-5" aria-hidden="true" tabindex="-1"></a>karate_edgelist <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://ona-book.org/data/karate.csv&quot;</span>)</span>
+<span id="cb76-6"><a href="viz-graphs.html#cb76-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-7"><a href="viz-graphs.html#cb76-7" aria-hidden="true" tabindex="-1"></a><span class="co"># create graph object</span></span>
+<span id="cb76-8"><a href="viz-graphs.html#cb76-8" aria-hidden="true" tabindex="-1"></a>karate <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(karate_edgelist, <span class="at">directed =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb76-9"><a href="viz-graphs.html#cb76-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-10"><a href="viz-graphs.html#cb76-10" aria-hidden="true" tabindex="-1"></a><span class="co"># set seed for reproducibility</span></span>
+<span id="cb76-11"><a href="viz-graphs.html#cb76-11" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb76-12"><a href="viz-graphs.html#cb76-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-13"><a href="viz-graphs.html#cb76-13" aria-hidden="true" tabindex="-1"></a><span class="co"># visualise using ggraph with fr layout</span></span>
+<span id="cb76-14"><a href="viz-graphs.html#cb76-14" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(karate, <span class="at">layout =</span> <span class="st">&quot;fr&quot;</span>) <span class="sc">+</span></span>
+<span id="cb76-15"><a href="viz-graphs.html#cb76-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>() <span class="sc">+</span></span>
+<span id="cb76-16"><a href="viz-graphs.html#cb76-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>() </span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:ggraph-basic-karate"></span>
+<img src="_main_files/figure-html/ggraph-basic-karate-1.png" alt="Elementary visualization of `karate` graph using `ggraph` and the Fruchterman-Reingold algorithm" width="672" />
+<p class="caption">
+Figure 3.12: Elementary visualization of <code>karate</code> graph using <code>ggraph</code> and the Fruchterman-Reingold algorithm
+</p>
+</div>
+<p>This is not particularly appealing. However, we can play with properties to improve the appearance, and we can move to a minimal theme to remove the grey background and add a title if we wish, as in Figure <a href="viz-graphs.html#fig:ggraph-nicer-karate">3.13</a>.</p>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="viz-graphs.html#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb77-2"><a href="viz-graphs.html#cb77-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(karate, <span class="at">layout =</span> <span class="st">&quot;fr&quot;</span>) <span class="sc">+</span></span>
+<span id="cb77-3"><a href="viz-graphs.html#cb77-3" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span> </span>
+<span id="cb77-4"><a href="viz-graphs.html#cb77-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="at">color =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">size =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb77-5"><a href="viz-graphs.html#cb77-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span> </span>
+<span id="cb77-6"><a href="viz-graphs.html#cb77-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Zachary&#39;s Karate Club Network&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:ggraph-nicer-karate"></span>
+<img src="_main_files/figure-html/ggraph-nicer-karate-1.png" alt="Improved visualization of `karate` graph using node and edge properties" width="672" />
+<p class="caption">
+Figure 3.13: Improved visualization of <code>karate</code> graph using node and edge properties
+</p>
+</div>
+<p>Like in <code>ggplot2</code>, if we want to associate a property of the nodes or edges with a property of the plot, we can use aesthetic mappings. For example, let’s give Mr Hi and John A the property of “leader” in our graph, and then ask <code>ggraph</code> to color the nodes by this property, as in Figure <a href="viz-graphs.html#fig:ggraph-leader-karate">3.14</a>.</p>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="viz-graphs.html#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(karate)<span class="sc">$</span>leader <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(karate)<span class="sc">$</span>name <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Mr Hi&quot;</span>, <span class="st">&quot;John A&quot;</span>), <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb78-2"><a href="viz-graphs.html#cb78-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-3"><a href="viz-graphs.html#cb78-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb78-4"><a href="viz-graphs.html#cb78-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(karate, <span class="at">layout =</span> <span class="st">&quot;fr&quot;</span>) <span class="sc">+</span></span>
+<span id="cb78-5"><a href="viz-graphs.html#cb78-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span> </span>
+<span id="cb78-6"><a href="viz-graphs.html#cb78-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> <span class="fu">as.factor</span>(leader)), <span class="at">size =</span> <span class="dv">5</span>, <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb78-7"><a href="viz-graphs.html#cb78-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span> </span>
+<span id="cb78-8"><a href="viz-graphs.html#cb78-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Zachary&#39;s Karate Club Network&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:ggraph-leader-karate"></span>
+<img src="_main_files/figure-html/ggraph-leader-karate-1.png" alt="`karate` graph with `leader` property used as an aesthetic" width="672" />
+<p class="caption">
+Figure 3.14: <code>karate</code> graph with <code>leader</code> property used as an aesthetic
+</p>
+</div>
+<p>As a further example of using <code>ggraph</code>, let’s look at a dataset collected during a study of workplace interactions in France in 2015 (<span class="citation"><a href="#ref-Genois2018" role="doc-biblioref">G’enois and Barrat</a> (<a href="#ref-Genois2018" role="doc-biblioref">2018</a>)</span>). Load the <code>workfrance_edgelist</code> and <code>workfrance_vertices</code> data sets from the <code>onadata</code> package or download them from the internet<a href="#fn10" class="footnote-ref" id="fnref10"><sup>10</sup></a>. In this study, employees of a company wore wearable devices to triangulate their location in the building, and edges were defined as any situation where two employees were sharing the same spatial location. The edgelist contains <code>from</code> and <code>to</code> columns for the edges, as well as a <code>mins</code> column representing the total minutes spent co-located during the study<a href="#fn11" class="footnote-ref" id="fnref11"><sup>11</sup></a>. The vertex list contains data on the department of each employee ID. We will create a basic visualization of this using <code>ggraph</code> in Figure <a href="viz-graphs.html#fig:workfrance-basic">3.15</a>.</p>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="viz-graphs.html#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get edgelist with mins property</span></span>
+<span id="cb79-2"><a href="viz-graphs.html#cb79-2" aria-hidden="true" tabindex="-1"></a>workfrance_edgelist <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://ona-book.org/data/workfrance_edgelist.csv&quot;</span>)</span>
+<span id="cb79-3"><a href="viz-graphs.html#cb79-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb79-4"><a href="viz-graphs.html#cb79-4" aria-hidden="true" tabindex="-1"></a><span class="co"># get vertex set with dept property</span></span>
+<span id="cb79-5"><a href="viz-graphs.html#cb79-5" aria-hidden="true" tabindex="-1"></a>workfrance_vertices <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://ona-book.org/data/workfrance_vertices.csv&quot;</span>)</span>
+<span id="cb79-6"><a href="viz-graphs.html#cb79-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb79-7"><a href="viz-graphs.html#cb79-7" aria-hidden="true" tabindex="-1"></a><span class="co"># create undirected graph object</span></span>
+<span id="cb79-8"><a href="viz-graphs.html#cb79-8" aria-hidden="true" tabindex="-1"></a>workfrance <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(</span>
+<span id="cb79-9"><a href="viz-graphs.html#cb79-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">d =</span> workfrance_edgelist,</span>
+<span id="cb79-10"><a href="viz-graphs.html#cb79-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">vertices =</span> workfrance_vertices,</span>
+<span id="cb79-11"><a href="viz-graphs.html#cb79-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">directed =</span> <span class="cn">FALSE</span></span>
+<span id="cb79-12"><a href="viz-graphs.html#cb79-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb79-13"><a href="viz-graphs.html#cb79-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb79-14"><a href="viz-graphs.html#cb79-14" aria-hidden="true" tabindex="-1"></a><span class="co"># basic visualization</span></span>
+<span id="cb79-15"><a href="viz-graphs.html#cb79-15" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb79-16"><a href="viz-graphs.html#cb79-16" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(workfrance, <span class="at">layout =</span> <span class="st">&quot;fr&quot;</span>) <span class="sc">+</span></span>
+<span id="cb79-17"><a href="viz-graphs.html#cb79-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;gray&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb79-18"><a href="viz-graphs.html#cb79-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="at">color =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">size =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb79-19"><a href="viz-graphs.html#cb79-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:workfrance-basic"></span>
+<img src="_main_files/figure-html/workfrance-basic-1.png" alt="Connection of employees in a workplace as measured by spatial co-location" width="672" />
+<p class="caption">
+Figure 3.15: Connection of employees in a workplace as measured by spatial co-location
+</p>
+</div>
+<p>As it stands, this graph does not tell us much, but a couple of simple adjustments can change this. First, we can adjust the thickness of the edges to reflect the total number of minutes spent meeting, which seems a reasonable measure of the ‘strength’ or ‘weight’ of the connection. Second, we can color code the nodes by their department. The result is Figure <a href="viz-graphs.html#fig:workfrance-additional">3.16</a>. We can now see clusters of highly connected employees mostly driven by their department.</p>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="viz-graphs.html#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb80-2"><a href="viz-graphs.html#cb80-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(workfrance, <span class="at">layout =</span> <span class="st">&quot;fr&quot;</span>) <span class="sc">+</span></span>
+<span id="cb80-3"><a href="viz-graphs.html#cb80-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;gray&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="fu">aes</span>(<span class="at">width =</span> mins), </span>
+<span id="cb80-4"><a href="viz-graphs.html#cb80-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb80-5"><a href="viz-graphs.html#cb80-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> dept), <span class="at">size =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb80-6"><a href="viz-graphs.html#cb80-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb80-7"><a href="viz-graphs.html#cb80-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Spatial co-location of employees in a workplace&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:workfrance-additional"></span>
+<img src="_main_files/figure-html/workfrance-additional-1.png" alt="Connection of employees in a workplace with edge thickness weighted by minutes spent spatially co-located and vertices colored by department" width="672" />
+<p class="caption">
+Figure 3.16: Connection of employees in a workplace with edge thickness weighted by minutes spent spatially co-located and vertices colored by department
+</p>
+</div>
+<div class="thinkahead">
+<p><strong>Thinking ahead:</strong> The graph we have just created in Figure <a href="viz-graphs.html#fig:workfrance-additional">3.16</a> shows how we have detected a community segmentation of our vertices. It’s relatively clear that individuals in the same department are more likely to be connected. Community segmentation is an important topic in Organizational Network Analysis which we will study later in this book. It’s not always straightforward to identify drivers of community in networks, but we will learn about a number of community detection algorithms which will segment the graph into different community groups. As an example, Figure <a href="viz-graphs.html#fig:workfrance-louvain">3.17</a> shows the results of running the Louvain community detection algorithm on the <code>workfrance</code> graph with <code>mins</code> as the edge weights. You can see that the communities detected are strongly alignd with the departments in Figure <a href="viz-graphs.html#fig:workfrance-additional">3.16</a>.</p>
+</div>
+<!--
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Thinking ahead:} The graph we have just created in Figure \ref{fig:workfrance-additional} shows how we have detected a community segmentation of our vertices.  It's relatively clear that individuals in the same department are more likely to be connected.  Community segmentation is an important topic in Organizational Network Analysis which we will study later in this book.  It's not always straightforward to identify drivers of community in networks, but we will learn about a number of community detection algorithms which will segment the graph into different community groups.  As an example, Figure \ref{fig:workfrance-louvain} shows the results of running the Louvain community detection algorithm on the \texttt{workfrance} graph with \texttt{mins} as the edge weights.  You can see that the communities detected are strongly alignd with the departments in Figure \ref{fig:workfrance-additional}.   
+\end{minipage}
+}
+```
+-->
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:workfrance-louvain"></span>
+<img src="_main_files/figure-html/workfrance-louvain-1.png" alt="Clusters of employees as detected by the Louvain community detection algorithm.  Note the cluster similarity of communities with the departments in the previous graph." width="672" />
+<p class="caption">
+Figure 3.17: Clusters of employees as detected by the Louvain community detection algorithm. Note the cluster similarity of communities with the departments in the previous graph.
+</p>
+</div>
+<p><code>ggraph</code> visualizations can work relatively easily with other graphics layers, allowing you to superimpose a graph onto other co-ordinate systems. Let’s look at an example of this at work. Load the <code>londontube_edgelist</code> and <code>londontube_vertices</code> data sets from the <code>onadata</code> package or download them from the internet<a href="#fn12" class="footnote-ref" id="fnref12"><sup>12</sup></a>. The vertex set is a list of London Tube Stations with an <code>id</code>, <code>name</code> and geographical co-ordinates <code>longitude</code> and <code>latitude</code>.</p>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="viz-graphs.html#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="co"># download and view london tube vertex data</span></span>
+<span id="cb81-2"><a href="viz-graphs.html#cb81-2" aria-hidden="true" tabindex="-1"></a>londontube_vertices <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://ona-book.org/data/londontube_vertices.csv&quot;</span>)</span>
+<span id="cb81-3"><a href="viz-graphs.html#cb81-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(londontube_vertices)</span></code></pre></div>
+<pre><code>##   id         name latitude longitude
+## 1  1   Acton Town  51.5028   -0.2801
+## 2  2      Aldgate  51.5143   -0.0755
+## 3  3 Aldgate East  51.5154   -0.0726
+## 4  4   All Saints  51.5107   -0.0130
+## 5  5     Alperton  51.5407   -0.2997
+## 6  7        Angel  51.5322   -0.1058</code></pre>
+<p>The edge list represents <code>from</code> and <code>to</code> connections between stations, along with the name of the <code>line</code> and its official <code>linecolor</code> in hex code.</p>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="viz-graphs.html#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="co"># download and view london tube edge data</span></span>
+<span id="cb83-2"><a href="viz-graphs.html#cb83-2" aria-hidden="true" tabindex="-1"></a>londontube_edgelist <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://ona-book.org/data/londontube_edgelist.csv&quot;</span>)</span>
+<span id="cb83-3"><a href="viz-graphs.html#cb83-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(londontube_edgelist)</span></code></pre></div>
+<pre><code>##   from  to          line linecolor
+## 1   11 163 Bakerloo Line   #AE6017
+## 2   11 212 Bakerloo Line   #AE6017
+## 3   49  87 Bakerloo Line   #AE6017
+## 4   49 197 Bakerloo Line   #AE6017
+## 5   82 163 Bakerloo Line   #AE6017
+## 6   82 193 Bakerloo Line   #AE6017</code></pre>
+<p>We can easily create am <code>igraph</code> object from this data and then use <code>ggraph</code> to create a visualization using the <code>linecolor</code> as the edge color between stations, as in Figure <a href="viz-graphs.html#fig:non-geo-tube">3.18</a>.</p>
+<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb85-1"><a href="viz-graphs.html#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a set of distinct line names and lincolors to use</span></span>
+<span id="cb85-2"><a href="viz-graphs.html#cb85-2" aria-hidden="true" tabindex="-1"></a>lines <span class="ot">&lt;-</span> londontube_edgelist <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb85-3"><a href="viz-graphs.html#cb85-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">distinct</span>(line, linecolor)</span>
+<span id="cb85-4"><a href="viz-graphs.html#cb85-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb85-5"><a href="viz-graphs.html#cb85-5" aria-hidden="true" tabindex="-1"></a><span class="co"># create graph object</span></span>
+<span id="cb85-6"><a href="viz-graphs.html#cb85-6" aria-hidden="true" tabindex="-1"></a>tubegraph <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(<span class="at">d =</span> londontube_edgelist, </span>
+<span id="cb85-7"><a href="viz-graphs.html#cb85-7" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">vertices =</span> londontube_vertices,</span>
+<span id="cb85-8"><a href="viz-graphs.html#cb85-8" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">directed =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb85-9"><a href="viz-graphs.html#cb85-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb85-10"><a href="viz-graphs.html#cb85-10" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize tube graph using linecolors for edge color</span></span>
+<span id="cb85-11"><a href="viz-graphs.html#cb85-11" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb85-12"><a href="viz-graphs.html#cb85-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(tubegraph) <span class="sc">+</span></span>
+<span id="cb85-13"><a href="viz-graphs.html#cb85-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb85-14"><a href="viz-graphs.html#cb85-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="fu">aes</span>(<span class="at">color =</span> line), <span class="at">width =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb85-15"><a href="viz-graphs.html#cb85-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_edge_color_manual</span>(<span class="at">name =</span> <span class="st">&quot;Line&quot;</span>,</span>
+<span id="cb85-16"><a href="viz-graphs.html#cb85-16" aria-hidden="true" tabindex="-1"></a>                          <span class="at">values =</span> lines<span class="sc">$</span>linecolor) <span class="sc">+</span></span>
+<span id="cb85-17"><a href="viz-graphs.html#cb85-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:non-geo-tube"></span>
+<img src="_main_files/figure-html/non-geo-tube-1.png" alt="Random graph visualization of the London Tube network graph with the edges colored by the different lines" width="672" />
+<p class="caption">
+Figure 3.18: Random graph visualization of the London Tube network graph with the edges colored by the different lines
+</p>
+</div>
+<p>While it’s great that we can do this so easily, it’s a pretty confusing visualization for anyone who knows London. The Circle Line doesn’t look very circular, the Picadilly Line seems to he heading southeast instead of northeast. In the west, the Metropolitan and Picadilly Lines seem to have swapped places. Of course, this graph is not using geographical co-ordinates to plot its vertices.</p>
+<p>We can change this by expanding our edgelist to include the latitudes and longitudes of the <code>from</code> and <code>to</code> stations in each edge, and then we can layer a map on this graph. First, let’s create those new longitude and latitude columns in the edgelist, and check it works.</p>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="viz-graphs.html#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="co"># we reorganize the edgelist to include longitude and latitude for start and end</span></span>
+<span id="cb86-2"><a href="viz-graphs.html#cb86-2" aria-hidden="true" tabindex="-1"></a>new_edgelist <span class="ot">&lt;-</span> londontube_edgelist <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb86-3"><a href="viz-graphs.html#cb86-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">inner_join</span>(londontube_vertices <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb86-4"><a href="viz-graphs.html#cb86-4" aria-hidden="true" tabindex="-1"></a>                      dplyr<span class="sc">::</span><span class="fu">select</span>(id, latitude, longitude), </span>
+<span id="cb86-5"><a href="viz-graphs.html#cb86-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;from&quot;</span> <span class="ot">=</span> <span class="st">&quot;id&quot;</span>)) <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb86-6"><a href="viz-graphs.html#cb86-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="at">lat_from =</span> latitude, <span class="at">lon_from =</span> longitude) <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb86-7"><a href="viz-graphs.html#cb86-7" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">inner_join</span>(londontube_vertices <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb86-8"><a href="viz-graphs.html#cb86-8" aria-hidden="true" tabindex="-1"></a>                      dplyr<span class="sc">::</span><span class="fu">select</span>(id, latitude, longitude), </span>
+<span id="cb86-9"><a href="viz-graphs.html#cb86-9" aria-hidden="true" tabindex="-1"></a>                    <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;to&quot;</span> <span class="ot">=</span> <span class="st">&quot;id&quot;</span>)) <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb86-10"><a href="viz-graphs.html#cb86-10" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="at">lat_to =</span> latitude, <span class="at">lon_to =</span> longitude)</span>
+<span id="cb86-11"><a href="viz-graphs.html#cb86-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb86-12"><a href="viz-graphs.html#cb86-12" aria-hidden="true" tabindex="-1"></a><span class="co"># view</span></span>
+<span id="cb86-13"><a href="viz-graphs.html#cb86-13" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(new_edgelist)</span></code></pre></div>
+<pre><code>##   from  to          line linecolor lat_from lon_from  lat_to  lon_to
+## 1   11 163 Bakerloo Line   #AE6017  51.5226  -0.1571 51.5225 -0.1631
+## 2   11 212 Bakerloo Line   #AE6017  51.5226  -0.1571 51.5234 -0.1466
+## 3   49  87 Bakerloo Line   #AE6017  51.5080  -0.1247 51.5074 -0.1223
+## 4   49 197 Bakerloo Line   #AE6017  51.5080  -0.1247 51.5098 -0.1342
+## 5   82 163 Bakerloo Line   #AE6017  51.5199  -0.1679 51.5225 -0.1631
+## 6   82 193 Bakerloo Line   #AE6017  51.5199  -0.1679 51.5154 -0.1755</code></pre>
+<p>That looks like it worked. Now we can use the <code>ggmap</code> package in R to layer a map of London on top of the base <code>ggraph</code> layer, and then use the various latitude and longitude columns to make our network geographically accurate, as in Figure <a href="viz-graphs.html#fig:geo-accurate-tube">3.19</a><a href="#fn13" class="footnote-ref" id="fnref13"><sup>13</sup></a>.</p>
+<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="viz-graphs.html#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="co"># recreate graph object to capture additional edge data</span></span>
+<span id="cb88-2"><a href="viz-graphs.html#cb88-2" aria-hidden="true" tabindex="-1"></a>tubegraph <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(<span class="at">d =</span> new_edgelist, </span>
+<span id="cb88-3"><a href="viz-graphs.html#cb88-3" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">vertices =</span> londontube_vertices,</span>
+<span id="cb88-4"><a href="viz-graphs.html#cb88-4" aria-hidden="true" tabindex="-1"></a>                                           <span class="at">directed =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb88-5"><a href="viz-graphs.html#cb88-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb88-6"><a href="viz-graphs.html#cb88-6" aria-hidden="true" tabindex="-1"></a><span class="co"># layer a London map</span></span>
+<span id="cb88-7"><a href="viz-graphs.html#cb88-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggmap)</span>
+<span id="cb88-8"><a href="viz-graphs.html#cb88-8" aria-hidden="true" tabindex="-1"></a>londonmap <span class="ot">&lt;-</span> <span class="fu">get_map</span>(<span class="at">location =</span> <span class="st">&quot;London, UK&quot;</span>, <span class="at">source =</span> <span class="st">&quot;google&quot;</span>)</span>
+<span id="cb88-9"><a href="viz-graphs.html#cb88-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb88-10"><a href="viz-graphs.html#cb88-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggmap</span>(londonmap, <span class="at">base_layer =</span> <span class="fu">ggraph</span>(tubegraph)) <span class="sc">+</span></span>
+<span id="cb88-11"><a href="viz-graphs.html#cb88-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> longitude, <span class="at">y =</span> latitude), <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb88-12"><a href="viz-graphs.html#cb88-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="fu">aes</span>(<span class="at">x =</span> lon_from, <span class="at">y =</span> lat_from,</span>
+<span id="cb88-13"><a href="viz-graphs.html#cb88-13" aria-hidden="true" tabindex="-1"></a>                     <span class="at">xend =</span> lon_to, <span class="at">yend =</span> lat_to,</span>
+<span id="cb88-14"><a href="viz-graphs.html#cb88-14" aria-hidden="true" tabindex="-1"></a>                     <span class="at">color =</span> line), <span class="at">width =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb88-15"><a href="viz-graphs.html#cb88-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_edge_color_manual</span>(<span class="at">name =</span> <span class="st">&quot;Line&quot;</span>,</span>
+<span id="cb88-16"><a href="viz-graphs.html#cb88-16" aria-hidden="true" tabindex="-1"></a>                          <span class="at">values =</span> lines<span class="sc">$</span>linecolor)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:geo-accurate-tube"></span>
+<img src="_main_files/figure-html/geo-accurate-tube-1.png" alt="Geographically accurate London Tube Network" width="672" />
+<p class="caption">
+Figure 3.19: Geographically accurate London Tube Network
+</p>
+</div>
+<p>Figure <a href="viz-graphs.html#fig:geo-accurate-tube">3.19</a> looks like the everything is in the right place. This kind of graphical layering can be extremely important when there is an inherent co-ordinate system lying behind the vertices of your graph and where none of the existing layout algorithms can recreate that co-ordinate system.</p>
+</div>
+<div id="interactive-graph-visualization-in-r" class="section level3" number="3.1.4">
+<h3><span class="header-section-number">3.1.4</span> Interactive graph visualization in R</h3>
+<p>We have seen earlier how many large networks are too complicated to make sense of visually using static approaches such as the methods we have already reviewed in <code>igraph</code> or <code>ggraph</code>. Nevertheless, interactive visualizations of networks can be useful where there is an interest in visual exploration of particular vertices or small sub-networks, even when the overall network is visually complex. We will touch upon a couple of commonly used interactive graph visualization packages here, all of which use Javascript libraries behind the scenes to create the interactive visualizations.</p>
+<p><code>visNetwork</code> is a simple but effective package which uses <code>vis.js</code> API create HTML widgets containing interactive graph visualizations. It is fairly easily to use, with its main function <code>visNetwork()</code> taking a dataframe of node information and a dataframe of edge information, as well as a few other optional arguments. The columns in these dataframes are expected to have certain default column names. Vertices/nodes are expected to at least have an <code>id</code> column but can also contain:</p>
+<ul>
+<li><code>label</code>: the label of the vertex</li>
+<li><code>group</code>: the group of the vertex if there are groups</li>
+<li><code>value</code>: used to determine the size of the vertex</li>
+<li><code>title</code>: This will be used as a tooltip on mouseover</li>
+<li>other columns can be included to be passed to specific values/properties in the visualization, such as <code>color</code> or <code>shape</code>.</li>
+</ul>
+<p>The edge dataframe must contain a <code>from</code> and <code>to</code> column, and can also contain <code>label</code>, <code>value</code> and <code>title</code> to customize the edges as with the vertices, as well as other properties such as <code>arrows</code> or <code>dashes</code>.</p>
+<p>Interactive Figure <a href="viz-graphs.html#fig:gwork-visnetwork">3.20</a> is a very simple example of the <code>visNetwork</code> function at work using our <span class="math inline">\(G_\mathrm{work}\)</span> graph from Section <a href="working.html#graph-def">2.1.1</a>.</p>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="viz-graphs.html#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(visNetwork)</span>
+<span id="cb89-2"><a href="viz-graphs.html#cb89-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-3"><a href="viz-graphs.html#cb89-3" aria-hidden="true" tabindex="-1"></a>nodes <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb89-4"><a href="viz-graphs.html#cb89-4" aria-hidden="true" tabindex="-1"></a><span class="at">id =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>,</span>
+<span id="cb89-5"><a href="viz-graphs.html#cb89-5" aria-hidden="true" tabindex="-1"></a><span class="at">label =</span> <span class="fu">c</span>(<span class="st">&quot;David&quot;</span>, <span class="st">&quot;Zubin&quot;</span>, <span class="st">&quot;Suraya&quot;</span>, <span class="st">&quot;Jane&quot;</span>)</span>
+<span id="cb89-6"><a href="viz-graphs.html#cb89-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb89-7"><a href="viz-graphs.html#cb89-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-8"><a href="viz-graphs.html#cb89-8" aria-hidden="true" tabindex="-1"></a>edges <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb89-9"><a href="viz-graphs.html#cb89-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">from =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">4</span>),</span>
+<span id="cb89-10"><a href="viz-graphs.html#cb89-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">to =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
+<span id="cb89-11"><a href="viz-graphs.html#cb89-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb89-12"><a href="viz-graphs.html#cb89-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb89-13"><a href="viz-graphs.html#cb89-13" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb89-14"><a href="viz-graphs.html#cb89-14" aria-hidden="true" tabindex="-1"></a><span class="fu">visNetwork</span>(nodes, edges)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:gwork-visnetwork"></span>
+<div id="htmlwidget-2c91a99e85c6bc68af90" style="width:672px;height:480px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2c91a99e85c6bc68af90">{"x":{"nodes":{"id":[1,2,3,4],"label":["David","Zubin","Suraya","Jane"]},"edges":{"from":[1,1,1,4,4],"to":[2,3,4,2,3]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot"},"manipulation":{"enabled":false}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false},"byselection":{"enabled":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)"},"evals":[],"jsHooks":[]}</script>
+<p class="caption">
+Figure 3.20: Simple <code>visNetwork</code> rendering of the <span class="math inline">\(G_\mathrm{work}\)</span> graph
+</p>
+</div>
+<p>In fact, assuming that we are working with <code>igraph</code> objects, the easiest way to deploy <code>visNetwork</code> is to use the <code>visIgraph()</code> function, which takes an <code>igraph</code> object and restructures it behind the scenes to use the <code>vis.js</code> API, even inheriting whatever <code>igraph</code> layout you prefer. Let’s recreate our <code>karate</code> graph in <code>visNetwork</code>, as in Interactive Figure <a href="viz-graphs.html#fig:karate-visnetwork">3.21</a>.</p>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="viz-graphs.html#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(igraph)</span>
+<span id="cb90-2"><a href="viz-graphs.html#cb90-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggraph)</span>
+<span id="cb90-3"><a href="viz-graphs.html#cb90-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb90-4"><a href="viz-graphs.html#cb90-4" aria-hidden="true" tabindex="-1"></a><span class="co"># get karate edgelist</span></span>
+<span id="cb90-5"><a href="viz-graphs.html#cb90-5" aria-hidden="true" tabindex="-1"></a>karate_edgelist <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://ona-book.org/data/karate.csv&quot;</span>)</span>
+<span id="cb90-6"><a href="viz-graphs.html#cb90-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb90-7"><a href="viz-graphs.html#cb90-7" aria-hidden="true" tabindex="-1"></a><span class="co"># create graph object</span></span>
+<span id="cb90-8"><a href="viz-graphs.html#cb90-8" aria-hidden="true" tabindex="-1"></a>karate <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(karate_edgelist, <span class="at">directed =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb90-9"><a href="viz-graphs.html#cb90-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb90-10"><a href="viz-graphs.html#cb90-10" aria-hidden="true" tabindex="-1"></a><span class="co"># different colors and shapes for Mr Hi and and John A</span></span>
+<span id="cb90-11"><a href="viz-graphs.html#cb90-11" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(karate)<span class="sc">$</span>color <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(karate)<span class="sc">$</span>name <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Mr Hi&quot;</span>, <span class="st">&quot;John A&quot;</span>),</span>
+<span id="cb90-12"><a href="viz-graphs.html#cb90-12" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&quot;lightblue&quot;</span>, </span>
+<span id="cb90-13"><a href="viz-graphs.html#cb90-13" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&quot;pink&quot;</span>)</span>
+<span id="cb90-14"><a href="viz-graphs.html#cb90-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb90-15"><a href="viz-graphs.html#cb90-15" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(karate)<span class="sc">$</span>shape <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(karate)<span class="sc">$</span>name <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Mr Hi&quot;</span>, <span class="st">&quot;John A&quot;</span>),</span>
+<span id="cb90-16"><a href="viz-graphs.html#cb90-16" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&quot;square&quot;</span>, </span>
+<span id="cb90-17"><a href="viz-graphs.html#cb90-17" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&quot;circle&quot;</span>)</span>
+<span id="cb90-18"><a href="viz-graphs.html#cb90-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb90-19"><a href="viz-graphs.html#cb90-19" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize from igraph</span></span>
+<span id="cb90-20"><a href="viz-graphs.html#cb90-20" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb90-21"><a href="viz-graphs.html#cb90-21" aria-hidden="true" tabindex="-1"></a>visNetwork<span class="sc">::</span><span class="fu">visIgraph</span>(karate, <span class="at">layout =</span> <span class="st">&quot;layout_with_fr&quot;</span>) </span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:karate-visnetwork"></span>
+<div id="htmlwidget-f4acdbbe3467343ec6d3" style="width:672px;height:480px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-f4acdbbe3467343ec6d3">{"x":{"nodes":{"id":["Mr Hi","Actor 2","Actor 3","Actor 4","Actor 5","Actor 6","Actor 7","Actor 9","Actor 10","Actor 14","Actor 15","Actor 16","Actor 19","Actor 20","Actor 21","Actor 23","Actor 24","Actor 25","Actor 26","Actor 27","Actor 28","Actor 29","Actor 30","Actor 31","Actor 32","Actor 33","Actor 8","Actor 11","Actor 12","Actor 13","Actor 18","Actor 22","Actor 17","John A"],"color":["lightblue","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","lightblue"],"shape":["square","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","square"],"label":["Mr Hi","Actor 2","Actor 3","Actor 4","Actor 5","Actor 6","Actor 7","Actor 9","Actor 10","Actor 14","Actor 15","Actor 16","Actor 19","Actor 20","Actor 21","Actor 23","Actor 24","Actor 25","Actor 26","Actor 27","Actor 28","Actor 29","Actor 30","Actor 31","Actor 32","Actor 33","Actor 8","Actor 11","Actor 12","Actor 13","Actor 18","Actor 22","Actor 17","John A"],"x":[0.190687845068345,0.0132877862854588,-0.223134429099049,0.0250193071922982,0.556110756785596,0.699728575164583,0.703543257762113,-0.311180109543968,-0.517479094231182,-0.165645780729725,-0.867012120960171,-0.964326644979945,-0.802058180503033,-0.122989647824225,-0.96854498492282,-0.927366874662782,-0.670531699055899,-0.348627085968283,-0.511806391959486,-1,-0.449016697098456,-0.402542350435914,-0.838201634645628,-0.4087987278348,-0.309414497873656,-0.666559146735384,0.0971672273466904,0.550433139292149,0.413380485469321,0.255872949988716,0.321977448540886,0.347145371185161,1,-0.605668554953779],"y":[-0.213243973366882,-0.450176443356623,-0.275766508053284,-0.749913424759686,-0.209422991961298,-0.0352524907220172,-0.291722959380564,-0.163072229507381,-0.668687137277491,-0.472831066550723,-0.414124705908606,-0.0849551456309654,-0.607338049201286,-0.0235992545040055,-0.310158852587208,0.123859989316732,0.535848874256083,0.99607011845307,1,0.462220480380136,0.45960229597303,0.134334700697694,0.380421342145101,-0.41953791144505,0.374036529850743,-0.0905244335853638,-0.589041190340294,0.108480055292457,0.44073283230466,-1,-0.741735071827429,-0.483319233585932,-0.13933877174475,-0.0426704260189256]},"edges":{"from":["Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Actor 2","Actor 2","Actor 2","Actor 2","Actor 2","Actor 2","Actor 2","Actor 2","Actor 3","Actor 3","Actor 3","Actor 3","Actor 3","Actor 3","Actor 3","Actor 3","Actor 4","Actor 4","Actor 4","Actor 5","Actor 5","Actor 6","Actor 6","Actor 6","Actor 7","Actor 9","Actor 9","Actor 9","Actor 10","Actor 14","Actor 15","Actor 15","Actor 16","Actor 16","Actor 19","Actor 19","Actor 20","Actor 21","Actor 21","Actor 23","Actor 23","Actor 24","Actor 24","Actor 24","Actor 24","Actor 24","Actor 25","Actor 25","Actor 25","Actor 26","Actor 27","Actor 27","Actor 28","Actor 29","Actor 29","Actor 30","Actor 30","Actor 31","Actor 31","Actor 32","Actor 32","Actor 33"],"to":["Actor 2","Actor 3","Actor 4","Actor 5","Actor 6","Actor 7","Actor 8","Actor 9","Actor 11","Actor 12","Actor 13","Actor 14","Actor 18","Actor 20","Actor 22","Actor 32","Actor 3","Actor 4","Actor 8","Actor 14","Actor 18","Actor 20","Actor 22","Actor 31","Actor 4","Actor 8","Actor 9","Actor 10","Actor 14","Actor 28","Actor 29","Actor 33","Actor 8","Actor 13","Actor 14","Actor 7","Actor 11","Actor 7","Actor 11","Actor 17","Actor 17","Actor 31","Actor 33","John A","John A","John A","Actor 33","John A","Actor 33","John A","Actor 33","John A","John A","Actor 33","John A","Actor 33","John A","Actor 26","Actor 28","Actor 30","Actor 33","John A","Actor 26","Actor 28","Actor 32","Actor 32","Actor 30","John A","John A","Actor 32","John A","Actor 33","John A","Actor 33","John A","Actor 33","John A","John A"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":false},"physics":{"stabilization":false}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false},"byselection":{"enabled":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","igraphlayout":{"type":"square"}},"evals":[],"jsHooks":[]}</script>
+<p class="caption">
+Figure 3.21: <code>visNetwork</code> rendering of the basic <code>karate</code> graph using a force-directed layout
+</p>
+</div>
+<div class="thinkahead">
+<p><strong>Playing around:</strong> The <code>visNetwork</code> package allows you to take advantage of a ton of features in the <code>vis.js</code> API, including a wide range of graph customization, and the ability to make your graph editable or to add selector menu to search for specific nodes or groups of nodes. It’s worth experimenting with all the different capabilities. A thorough manual can be found at <a href="https://datastorm-open.github.io/visNetwork/" class="uri">https://datastorm-open.github.io/visNetwork/</a>. Why don’t you try to recreate the <code>workfrance</code> graph from this chapter in <code>visNetwork</code>?</p>
+</div>
+<!--
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Playing around:} The \texttt{visNetwork} package allows you to take advantage of a ton of features in the \texttt{vis.js} API, including a wide range of graph customization, and the ability to make your graph editable or to add selector menu to search for specific nodes or groups of nodes.  It's worth experimenting with all the different capabilities.  A thorough manual can be found at \\texttt{https://datastorm-open.github.io/visNetwork/}.  Why don't you try to recreate the \\texttt{workfrance} graph from this chapter in \\texttt{visNetwork}?
+\end{minipage}
+}
+```
+-->
+
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div class="csl-entry">
+G’enois, Mathieu, and Alain Barrat. 2018. <span>“Can Co-Location Be Used as a Proxy for Face-to-Face Contacts?”</span> <em>EPJ Data Science</em>.
+</div>
+<div class="csl-entry">
+Wickham, Hadley. 2016. <em><span class="nocase">ggplot2</span>: Elegant Graphics for Data Analysis</em>. <a href="https://ggplot2-book.org/">https://ggplot2-book.org/</a>.
+</div>
+<div class="csl-entry">
+Zachary, W. W. 1977. <span>“An Information Flow Model for Conflict and Fission in Small Groups.”</span> <em>Journal of Anthropological Research</em>.
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Genois2018" class="csl-entry">
+G’enois, Mathieu, and Alain Barrat. 2018. <span>“Can Co-Location Be Used as a Proxy for Face-to-Face Contacts?”</span> <em>EPJ Data Science</em>.
+</div>
+<div id="ref-ggplot2" class="csl-entry">
+Wickham, Hadley. 2016. <em><span class="nocase">ggplot2</span>: Elegant Graphics for Data Analysis</em>. <a href="https://ggplot2-book.org/">https://ggplot2-book.org/</a>.
+</div>
+<div id="ref-zachary" class="csl-entry">
+Zachary, W. W. 1977. <span>“An Information Flow Model for Conflict and Fission in Small Groups.”</span> <em>Journal of Anthropological Research</em>.
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="6">
+<li id="fn6"><p>The right hand visualization uses the degree centrality of the vertices to scale their size — we will learn about this later. The layouts are also different. The left hand visualization uses a grid layout while the right hand visualization uses a metric multidimensional scaling (MDS) layout.<a href="viz-graphs.html#fnref6" class="footnote-back">↩︎</a></p></li>
+<li id="fn7"><p><a href="https://ona-book.org/data/karate.csv" class="uri">https://ona-book.org/data/karate.csv</a><a href="viz-graphs.html#fnref7" class="footnote-back">↩︎</a></p></li>
+<li id="fn8"><p>Note that this means that the process is usuallu highly computationally expensive on large graphs and can easily freeze up your machine if you are not careful.<a href="viz-graphs.html#fnref8" class="footnote-back">↩︎</a></p></li>
+<li id="fn9"><p><a href="https://ona-book.org/data/wikivote.csv" class="uri">https://ona-book.org/data/wikivote.csv</a>. This data set is taken from the Stanford University SNAP library of network data sets<a href="viz-graphs.html#fnref9" class="footnote-back">↩︎</a></p></li>
+<li id="fn10"><p><a href="https://ona-book.org/data/workfrance_edgelist.csv" class="uri">https://ona-book.org/data/workfrance_edgelist.csv</a> and <a href="https://ona-book.org/data/workfrance_vertices.csv" class="uri">https://ona-book.org/data/workfrance_vertices.csv</a><a href="viz-graphs.html#fnref10" class="footnote-back">↩︎</a></p></li>
+<li id="fn11"><p>This data set has been further processed from the original data set, including limiting the edges to those where the total mco-location time was at least 5 minutes.<a href="viz-graphs.html#fnref11" class="footnote-back">↩︎</a></p></li>
+<li id="fn12"><p><a href="https://ona-book.org/data/londontube_edgelist.csv" class="uri">https://ona-book.org/data/londontube_edgelist.csv</a> and <a href="https://ona-book.org/data/londontube_vertices.csv" class="uri">https://ona-book.org/data/londontube_vertices.csv</a><a href="viz-graphs.html#fnref12" class="footnote-back">↩︎</a></p></li>
+<li id="fn13"><p>A Google Maps API key is needed to use <code>ggmap</code> - see <a href="https://github.com/dkahle/ggmap" class="uri">https://github.com/dkahle/ggmap</a> for more information.<a href="viz-graphs.html#fnref13" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="working.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": true,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "lunr",
+"options": null
+},
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

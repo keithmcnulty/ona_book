@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>3 Visualizing Graphs | Handbook of Graphs and Networks in People Analytics</title>
+<meta name="author" content="Keith McNulty">
+<meta name="description" content="Now that we have learned how to define and store graphs, it’s time to take a look at ways of visualizing them. As we noted in earlier chapters, visualization is an important tool that can make...">
+<meta name="generator" content="bookdown 0.22.12 with bs4_book()">
+<meta property="og:title" content="3 Visualizing Graphs | Handbook of Graphs and Networks in People Analytics">
+<meta property="og:type" content="book">
+<meta property="og:url" content="https://ona-book.org/viz-graphs.html">
+<meta property="og:description" content="Now that we have learned how to define and store graphs, it’s time to take a look at ways of visualizing them. As we noted in earlier chapters, visualization is an important tool that can make...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="3 Visualizing Graphs | Handbook of Graphs and Networks in People Analytics">
+<meta name="twitter:site" content="@dr_keithmcnulty">
+<meta name="twitter:description" content="Now that we have learned how to define and store graphs, it’s time to take a look at ways of visualizing them. As we noted in earlier chapters, visualization is an important tool that can make...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.9.2/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.5.1/tabs.js"></script><script src="libs/bs3compat-0.2.5.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script><link href="libs/vis-4.20.1/vis.css" rel="stylesheet">
+<script src="libs/vis-4.20.1/vis.min.js"></script><script src="libs/visNetwork-binding-2.0.9/visNetwork.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><link rel="stylesheet" href="css/style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="With Examples in R and Python">Handbook of Graphs and Networks in People Analytics</a>:
+        <small class="text-muted">With Examples in R and Python</small>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Introduction</a></li>
+<li><a class="" href="the-hidden-secrets-of-our-connected-world.html"><span class="header-section-number">1</span> The Hidden Secrets of Our Connected World</a></li>
+<li><a class="" href="working.html"><span class="header-section-number">2</span> Working With Graphs</a></li>
+<li><a class="active" href="viz-graphs.html"><span class="header-section-number">3</span> Visualizing Graphs</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/keithmcnulty/ona_book">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="viz-graphs" class="section level1" number="3">
+<h1>
+<span class="header-section-number">3</span> Visualizing Graphs<a class="anchor" aria-label="anchor" href="#viz-graphs"><i class="fas fa-link"></i></a>
+</h1>
+<p>Now that we have learned how to define and store graphs, it’s time to take a look at ways of visualizing them. As we noted in earlier chapters, visualization is an important tool that can make graphs and networks real to others. But visualizations are not always effective. Graphs can be laid out and visualized in many different ways, and only some of them will effectively communicate the inference or conclusion that the analyst is inviting others to draw about the phenomenon being represented in the graph.</p>
+<p>While a graph is made up of vertices and edges, there are many other factors that will impact how the graph appears. First, there are cosmetic matters of vertex size, edge thickness, whether or not vertices and edges are labelled, colored and so on. Second there are matters of layout — that is, where do we position vertices relative to each other in our visualization. As an example, recall our simple four vertex undirected graph <span class="math inline">\(G_\mathrm{work}\)</span> from Section <a href="working.html#graph-def">2.1.1</a>. Figure <a href="viz-graphs.html#fig:two-viz-gwork">3.1</a> shows two different ways of visualizing this graph, where we make different choices on vertex size and on graph layout<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;The right hand visualization uses the degree centrality of the vertices to scale their size — we will learn about this later. The layouts are also different. The left hand visualization uses a grid layout while the right hand visualization uses a metric multidimensional scaling (MDS) layout.&lt;/p&gt;"><sup>6</sup></a>.</p>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:two-viz-gwork"></span>
+<img src="_main_files/figure-html/two-viz-gwork-1.png" alt="Two different ways of visualizing the $G_\mathrm{work}$ graph" width="672"><p class="caption">
+Figure 3.1: Two different ways of visualizing the <span class="math inline">\(G_\mathrm{work}\)</span> graph
+</p>
+</div>
+<p>The choices of how to visualize a graph are wide and varied, and we will not be covering every single permutation and combination of cosmetics and layouts in the chapter. Instead, we will focus on learning how to control the most common options. This will equip the reader well not just for work we do later in this book, but also for when they need to visualize graphs they create as part of their work or study. We will also cover a variety of graph visualization programming package options in R, Python and further afield.</p>
+<p>In this chapter we will work with a relatively famous graph known as <em>Zachary’s karate club</em>. This graph originates from a piece of research on a karate club by a social anthropologist Wayne W. Zachary in the 1970s (<span class="citation"><a href="viz-graphs.html#ref-zachary" role="doc-biblioref">Zachary</a> (<a href="viz-graphs.html#ref-zachary" role="doc-biblioref">1977</a>)</span>), and is commonly used as an example of a social network in many teaching situations today. The graph contains 34 vertices representing different individuals or actors. The karate instructor is labelled as ‘Mr Hi.’ The club administrator is labelled as ‘John A.’ The other 32 actors are labelled Actor 2 thru Actor 33. Zachary studied the social interactions between the members outside the club meetings, and during his study a conflict arose in the club that eventually led to the group splitting into two - with one group forming a new club around the instructor Mr Hi and the other group dispersing to find new clubs or to give up karate completely. In this graph, an edge between two vertices means that the two individuals interacted socially outside the club.</p>
+<div id="visualizing-graphs-in-r" class="section level2" number="3.1">
+<h2>
+<span class="header-section-number">3.1</span> Visualizing graphs in R<a class="anchor" aria-label="anchor" href="#visualizing-graphs-in-r"><i class="fas fa-link"></i></a>
+</h2>
+<p>Let’s load the graph edgelist in R from the <code>onadata</code> package or from the internet<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://ona-book.org/data/karate.csv" class="uri"&gt;https://ona-book.org/data/karate.csv&lt;/a&gt;&lt;/p&gt;'><sup>7</sup></a>, and check the first few rows.</p>
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># get edgelist data as dataframe</span>
+<span class="va">karate_edgelist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"https://ona-book.org/data/karate.csv"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">karate_edgelist</span><span class="op">)</span></code></pre></div>
+<pre><code>##    from      to
+## 1 Mr Hi Actor 2
+## 2 Mr Hi Actor 3
+## 3 Mr Hi Actor 4
+## 4 Mr Hi Actor 5
+## 5 Mr Hi Actor 6
+## 6 Mr Hi Actor 7</code></pre>
+<p>Now let’s use our edgelist to create an undirected graph object in <code>igraph</code>.</p>
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://igraph.org">igraph</a></span><span class="op">)</span>
+
+<span class="op">(</span><span class="va">karate</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span><span class="va">karate_edgelist</span>, 
+                                         directed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code>## IGRAPH 1e7d33e UN-- 34 78 -- 
+## + attr: name (v/c)
+## + edges from 1e7d33e (vertex names):
+##  [1] Mr Hi   --Actor 2  Mr Hi   --Actor 3  Mr Hi   --Actor 4  Mr Hi   --Actor 5  Mr Hi   --Actor 6  Mr Hi   --Actor 7 
+##  [7] Mr Hi   --Actor 8  Mr Hi   --Actor 9  Mr Hi   --Actor 11 Mr Hi   --Actor 12 Mr Hi   --Actor 13 Mr Hi   --Actor 14
+## [13] Mr Hi   --Actor 18 Mr Hi   --Actor 20 Mr Hi   --Actor 22 Mr Hi   --Actor 32 Actor 2 --Actor 3  Actor 2 --Actor 4 
+## [19] Actor 2 --Actor 8  Actor 2 --Actor 14 Actor 2 --Actor 18 Actor 2 --Actor 20 Actor 2 --Actor 22 Actor 2 --Actor 31
+## [25] Actor 3 --Actor 4  Actor 3 --Actor 8  Actor 3 --Actor 9  Actor 3 --Actor 10 Actor 3 --Actor 14 Actor 3 --Actor 28
+## [31] Actor 3 --Actor 29 Actor 3 --Actor 33 Actor 4 --Actor 8  Actor 4 --Actor 13 Actor 4 --Actor 14 Actor 5 --Actor 7 
+## [37] Actor 5 --Actor 11 Actor 6 --Actor 7  Actor 6 --Actor 11 Actor 6 --Actor 17 Actor 7 --Actor 17 Actor 9 --Actor 31
+## [43] Actor 9 --Actor 33 Actor 9 --John A   Actor 10--John A   Actor 14--John A   Actor 15--Actor 33 Actor 15--John A  
+## + ... omitted several edges</code></pre>
+<p>We can see that we have an undirected graph with 34 named vertices and 78 edges.</p>
+<div id="native-plotting-igraph" class="section level3" number="3.1.1">
+<h3>
+<span class="header-section-number">3.1.1</span> Native plotting in <code>igraph</code><a class="anchor" aria-label="anchor" href="#native-plotting-igraph"><i class="fas fa-link"></i></a>
+</h3>
+<p>The <code>igraph</code> package allows simple plotting of graphs using the <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code> function. The function works instantly with an <code>igraph</code> object, using default values for its various arguments. As a starting point, we will use all of the default values except for the layout of the graph. We will set the layout of the plot initially to be a random layout, which will randomly allocate the vertices to different positions. Figure <a href="viz-graphs.html#fig:basic-karate">3.2</a> shows this default plot for our <code>karate</code> network.</p>
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># set seed for reproducibility</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+
+<span class="co"># create random layout</span>
+<span class="va">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/layout_randomly.html">layout_randomly</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span>
+
+<span class="co"># plot with random layout</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">karate</span>, layout <span class="op">=</span> <span class="va">l</span><span class="op">)</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:basic-karate"></span>
+<img src="_main_files/figure-html/basic-karate-1.png" alt="Basic default plot of `karate` network" width="672"><p class="caption">
+Figure 3.2: Basic default plot of <code>karate</code> network
+</p>
+</div>
+<div class="thinkahead">
+<p><strong>Thinking ahead:</strong> The previous code chunk fixes the positioning of the vertices on our <code>karate</code> graph. By setting a random seed, we can ensure the same random numbers are generated each time so that this plot is repeatable and reproducible. Then the <code>random_layout()</code> function calculates random x and y coordinates for the vertices, and when we use it in the <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code> function, it assigns those coordinates in the plot. As we learn about layouts later in the chapter, we will use this technique a lot. If you like, try playing around with other layouts now. A couple of examples are <code><a href="https://rdrr.io/pkg/igraph/man/layout_with_sugiyama.html">layout_with_sugiyama()</a></code> and <code><a href="https://rdrr.io/pkg/igraph/man/layout_with_dh.html">layout_with_dh()</a></code>.</p>
+</div>
+<!--
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Thinking ahead:} The previous code chunk fixes the positioning of the vertices on our \texttt{karate} graph.  By setting a random seed, we can ensure the same random numbers are generated each time so that this plot is repeatable and reproducible.  Then the \texttt{random\_layout()} function calculates random x and y coordinates for the vertices, and when we use it in the \texttt{plot()} function, it assigns those coordinates in the plot.  As we learn about layouts later in the chapter, we will use this technique a lot.  If you like, try playing around with other layouts now.  A couple of examples are \texttt{layout\_with\_sugiyama()} and \texttt{layout\_with\_dh()}.   
+\end{minipage}
+}
+```
+-->
+<p>Looking at Figure <a href="viz-graphs.html#fig:basic-karate">3.2</a>, we note that the labeling of the vertices is somewhat obtrusive and unhelpful to the clarity of the graph. This will be a common problem with default graph plotting, and with large number of vertices the plot can turn into a messy cloud of overlapping labels.</p>
+<p>Vertex labels can be adjusted via properties of the vertices. The most common properties adjusted are as follows:</p>
+<ul>
+<li>
+<code>label</code>: The text of the label</li>
+<li>
+<code>label.family</code>: The font family to be used (default is ‘serif’)</li>
+<li>
+<code>label.font</code>: The font style, where 1 is plain (default), 2 is bold, 3 is italic, 4 is bold and italic and 5 is symbol font</li>
+<li>
+<code>label.cex</code>: The size of the label text</li>
+<li>
+<code>label.color</code>: The color of the label text</li>
+<li>
+<code>label.dist</code>: The distance of the label fron the vertex - 0 is centered on the vertex (default), 1 is beside the vertex</li>
+<li>
+<code>label.degree</code>: The angle at which the label will display relative to the center of the vertex, in radians. The default is <code>-pi/4</code>
+</li>
+</ul>
+<p>Let’s try to change the vertex labels so that they only display for Mr Hi and for John A. Let’s also change the size, color and font family of the labels. The output can be seen in Figure <a href="viz-graphs.html#fig:change-vlabels-karate">3.3</a></p>
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># only store a label if Mr Hi or John A</span>
+<span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span><span class="op">$</span><span class="va">label</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span><span class="op">$</span><span class="va">name</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Mr Hi"</span>, <span class="st">"John A"</span><span class="op">)</span>,
+                          <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>,
+                          <span class="st">""</span><span class="op">)</span>
+
+<span class="co"># change label font color, size and font family </span>
+<span class="co"># (selected font family needs to be installed on system)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span><span class="op">$</span><span class="va">label.color</span> <span class="op">&lt;-</span> <span class="st">"black"</span>
+<span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span><span class="op">$</span><span class="va">label.cex</span> <span class="op">&lt;-</span> <span class="fl">0.5</span>
+<span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span><span class="op">$</span><span class="va">label.family</span> <span class="op">&lt;-</span> <span class="st">"Lucinda Console"</span>
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">karate</span>, layout <span class="op">=</span> <span class="va">l</span><span class="op">)</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:change-vlabels-karate"></span>
+<img src="_main_files/figure-html/change-vlabels-karate-1.png" alt="Adjusting label appearance through changing vertex properties" width="672"><p class="caption">
+Figure 3.3: Adjusting label appearance through changing vertex properties
+</p>
+</div>
+<p>Now that we have cleaned up the label situation, we may wish to change the appearance of the vertices. Here are the most commonly used vertex properties which allow this:</p>
+<ul>
+<li>
+<code>size</code>: The size of the vertex</li>
+<li>
+<code>color</code>: The fill color of the vertex</li>
+<li>
+<code>frame.color</code>: The border color of the vertex</li>
+<li>
+<code>shape</code>: The shape of the vertex - multiple shape options are supported including <code>circle</code>, <code>square</code>, <code>rectangle</code> and <code>none</code>
+</li>
+</ul>
+<p>We may wish to use different vertex shapes and colors for our actors compared to Mr Hi and John A. This is how this would be done, with the results in Figure <a href="viz-graphs.html#fig:change-vertices-karate">3.4</a>.</p>
+<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># different colors and shapes for Mr Hi and and John A</span>
+<span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span><span class="op">$</span><span class="va">color</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span><span class="op">$</span><span class="va">name</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Mr Hi"</span>, <span class="st">"John A"</span><span class="op">)</span>,
+                          <span class="st">"lightblue"</span>, 
+                          <span class="st">"pink"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span><span class="op">$</span><span class="va">shape</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span><span class="op">$</span><span class="va">name</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Mr Hi"</span>, <span class="st">"John A"</span><span class="op">)</span>,
+                          <span class="st">"square"</span>, 
+                          <span class="st">"circle"</span><span class="op">)</span>
+
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">karate</span>, layout <span class="op">=</span> <span class="va">l</span><span class="op">)</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:change-vertices-karate"></span>
+<img src="_main_files/figure-html/change-vertices-karate-1.png" alt="Adjusting vertex appearance through changing vertex properties" width="672"><p class="caption">
+Figure 3.4: Adjusting vertex appearance through changing vertex properties
+</p>
+</div>
+<p>In a similar way, edges can be changed through adding or editing edge properties. Here are some common edge properties that are used to change the edges in an <code>igraph</code> plot:</p>
+<ul>
+<li>
+<code>color</code>: The color of the edge</li>
+<li>
+<code>width</code>: The width of the edge</li>
+<li>
+<code>arrow.size</code>: The size of the arrow in a directed edge</li>
+<li>
+<code>arrow.width</code>: The width of the arrow in a directed edge</li>
+<li>
+<code>arrow.mode</code>: Whether edges should direct forward (<code><a href="https://rdrr.io/r/base/Comparison.html">&gt;</a></code>), backward (<code><a href="https://rdrr.io/r/base/Comparison.html">&lt;</a></code>) or both (<code>&lt;&gt;</code>)</li>
+<li>
+<code>lty</code>: Line type of edges, with numerous options including <code>solid</code>, <code>dashed</code>, <code>dotted</code>, <code>dotdash</code> and <code>blank</code>
+</li>
+<li>
+<code>curved</code>: Specifies the amount of curvature to apply to the edge, with zero (default) as a straight edge, negative numbers bending clockwise and positive bending anti-clockwise</li>
+</ul>
+<p>Note that edges, like vertices, can also have <code>label</code> a label property and various label settings like <code>label.cex</code> and <code>label.family</code>. Let’s adjust our <code>karate</code> graph to have blue dashed edges, with the result in <a href="viz-graphs.html#fig:change-edges-karate">3.5</a>.</p>
+<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># change color and linetype of all edges</span>
+<span class="fu"><a href="https://rdrr.io/pkg/igraph/man/E.html">E</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span><span class="op">$</span><span class="va">color</span> <span class="op">&lt;-</span> <span class="st">"blue"</span>
+<span class="fu"><a href="https://rdrr.io/pkg/igraph/man/E.html">E</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span><span class="op">$</span><span class="va">lty</span> <span class="op">&lt;-</span> <span class="st">"dashed"</span>
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">karate</span>, layout <span class="op">=</span> <span class="va">l</span><span class="op">)</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:change-edges-karate"></span>
+<img src="_main_files/figure-html/change-edges-karate-1.png" alt="Adjusting edge appearance through changing edge properties" width="672"><p class="caption">
+Figure 3.5: Adjusting edge appearance through changing edge properties
+</p>
+</div>
+<div class="thinkahead">
+<p><strong>Playing around:</strong> Usually, getting your graph looking the way you want take some trial and error and some playing around with its properties. Try further adjusting the <code>karate</code> graph using some of the other properties listed.</p>
+</div>
+<!--
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Thinking ahead:} Usually, getting your graph looking the way you want take some trial and error and some playing around with its properties.  Try further adjusting the \texttt{karate} graph using some of the other properties listed. 
+\end{minipage}
+}
+```
+-->
+</div>
+<div id="layouts" class="section level3" number="3.1.2">
+<h3>
+<span class="header-section-number">3.1.2</span> Graph layouts<a class="anchor" aria-label="anchor" href="#layouts"><i class="fas fa-link"></i></a>
+</h3>
+<p>The layout of a graph determines the precise position of its vertices on a 2-dimensional plane or in 3-dimensional space. Layouts are themselves algorithms that calculate vertex positions based on properties of the graph. Different layouts work for different purposes, for example to visually identify communities in a graph, or just to make the graph look pleasant. In Section <a href="viz-graphs.html#native-plotting-igraph">3.1.1</a>, we used a random layout for our <code>karate</code> graph. Now let’s look at common alternative layouts. Layouts are used by multiple plotting packages, but we will explore them using <code>igraph</code> base plotting capabilities here.</p>
+<p>There are two ways to add a layout to a graph in <code>igraph</code>. If you want to keep the graph object separate from the layout, you can create the layout and use it as an argument in the <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code> function, like we did for Figure <a href="viz-graphs.html#fig:basic-karate">3.2</a>. Alternatively, you can assign a layout to a graph object by making it a property of the graph. You should only do this if you intend to stick permanently with your chosen layout and do not intend to experiment. You can use the <code><a href="https://rdrr.io/pkg/igraph/man/add_layout_.html">add_layout_()</a></code> function to achieve this. For example, this would create a <code>karate</code> graph with a grid layout.</p>
+<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># check whether existing karate graph has a layout property</span>
+<span class="va">karate</span><span class="op">$</span><span class="va">layout</span></code></pre></div>
+<pre><code>## NULL</code></pre>
+<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># assign grid layout as a graph property</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<span class="va">karate_grid</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/add_layout_.html">add_layout_</a></span><span class="op">(</span><span class="va">karate</span>, <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/layout_on_grid.html">on_grid</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+
+<span class="co"># check a few lines of the 'layout' property</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">karate_grid</span><span class="op">$</span><span class="va">layout</span><span class="op">)</span></code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]    0    0
+## [2,]    1    0
+## [3,]    2    0
+## [4,]    3    0
+## [5,]    4    0
+## [6,]    5    0</code></pre>
+<p>We can see that our new graph object has a layout property. Note that running <code><a href="https://rdrr.io/pkg/igraph/man/add_layout_.html">add_layout_()</a></code> on a graph that already has a layout property will by default overwrite the previous layout unless you set the argument <code>overwrite = FALSE</code>.</p>
+<p>As well as the random layout demonstrated in Figure <a href="viz-graphs.html#fig:basic-karate">3.2</a>, common shape layouts include <code><a href="https://rdrr.io/pkg/igraph/man/layout_as_star.html">as_star()</a></code>, <code><a href="https://rdrr.io/pkg/igraph/man/layout_as_tree.html">as_tree()</a></code>, <code><a href="https://rdrr.io/pkg/igraph/man/layout_in_circle.html">in_circle()</a></code>, <code><a href="https://rdrr.io/pkg/igraph/man/layout_on_grid.html">on_grid()</a></code> and <code><a href="https://rdrr.io/pkg/igraph/man/layout_on_sphere.html">on_sphere()</a></code>. For example, Figure <a href="viz-graphs.html#fig:circle-karate">3.6</a> shows the circle layout for our <code>karate</code> network, and Figure <a href="viz-graphs.html#fig:sphere-karate">3.7</a> shows the sphere layout.</p>
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># circle layout</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<span class="va">circ</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/layout_in_circle.html">layout_in_circle</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">karate</span>, layout <span class="op">=</span> <span class="va">circ</span><span class="op">)</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:circle-karate"></span>
+<img src="_main_files/figure-html/circle-karate-1.png" alt="Circle layout of the `karate` graph" width="672"><p class="caption">
+Figure 3.6: Circle layout of the <code>karate</code> graph
+</p>
+</div>
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># sphere layout</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<span class="va">sph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/layout_on_sphere.html">layout_on_sphere</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">karate</span>, layout <span class="op">=</span> <span class="va">sph</span><span class="op">)</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:sphere-karate"></span>
+<img src="_main_files/figure-html/sphere-karate-1.png" alt="Sphere layout of the `karate` graph" width="672"><p class="caption">
+Figure 3.7: Sphere layout of the <code>karate</code> graph
+</p>
+</div>
+<div class="thinkahead">
+<p><strong>Thinking ahead:</strong> Notice how the circle and sphere layouts position Mr Hi and John A very close to each other. This is an indication that the layout algorithms have established something in common between these two individuals based on the properties of the graph. This is something we will cover in a later chapter, but if you want to explore ahead, and you know how to, calculate some centrality measures for the vertices in the <code>karate</code> graph — for example degree centrality and betweenness centrality.</p>
+</div>
+<!--
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Thinking ahead:} Notice how the circle and sphere layouts position Mr Hi and John A very close to each other.  This is an indication that the layout algorithms have established something in common between these two individuals based on the properties of the graph.  This is something we will cover in a later chapter, but if you want to explore ahead, and you know how to, calculate some centrality measures for the vertices in the \texttt{karate} graph --- for example degree centrality and betweenness centrality. 
+\end{minipage}
+}
+```
+-->
+<p><em>Force-directed</em> graph layouts are extremely popular, as they are aesthetically pleasing and they help visualize communities of vertices quite effectively, especially in graphs with low to moderate edge-complexity. These algorithms emulate physical models like Hooke’s law to attract connected vertices together, while at the same time applying repelling forces to all pairs of vertices to try to keep as much space as possible between them. This calculation is an iterative process where vertex positions are recalculated again and again until equilibrium is reached<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;Note that this means that the process is usuallu highly computationally expensive on large graphs and can easily freeze up your machine if you are not careful.&lt;/p&gt;"><sup>8</sup></a>. The result is is usually a layout where connected vertices are closer together and where edge-length are approximately equal.</p>
+<p>For Zachary’s Karate Club study, which was a study of connection and community, we can imagine that a force-directed layout would be a good choice of visualization, and we will find that this is the case for many other network graphs we study. There are several different implementations of force directed algorithms available. Perhaps the most popular of these is the Fruchterman-Reingold algorithm. Figure <a href="viz-graphs.html#fig:fr-karate">3.8</a> shows our <code>karate</code> network with the layout generated by the Fruchterman-Reingold algorithm, and we can see clear communities in the karate club oriented around Mr Hi and John A..</p>
+<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># F-R algorithm</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<span class="va">fr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/layout_with_fr.html">layout_with_fr</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">karate</span>, layout <span class="op">=</span> <span class="va">fr</span><span class="op">)</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:fr-karate"></span>
+<img src="_main_files/figure-html/fr-karate-1.png" alt="Force-directed layout of the `karate` graph according to the Fruchterman-Reingold algorithm" width="672"><p class="caption">
+Figure 3.8: Force-directed layout of the <code>karate</code> graph according to the Fruchterman-Reingold algorithm
+</p>
+</div>
+<p>The Kamada-Kawai algorithm and the GEM algorithm are also commonly used force-directed algorithms and they produce similar types of community structures as in Figures <a href="viz-graphs.html#fig:kk-karate">3.9</a> and <a href="viz-graphs.html#fig:gem-karate">3.10</a> respectively.</p>
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## K-K algorithm</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<span class="va">kk</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/layout_with_kk.html">layout_with_kk</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">karate</span>, layout <span class="op">=</span> <span class="va">kk</span><span class="op">)</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:kk-karate"></span>
+<img src="_main_files/figure-html/kk-karate-1.png" alt="Force-directed layout of the `karate` graph according to the Kamada-Kawai algorithm" width="672"><p class="caption">
+Figure 3.9: Force-directed layout of the <code>karate</code> graph according to the Kamada-Kawai algorithm
+</p>
+</div>
+<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## GEM algorithm</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<span class="va">gem</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/layout_with_gem.html">layout_with_gem</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">karate</span>, layout <span class="op">=</span> <span class="va">gem</span><span class="op">)</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:gem-karate"></span>
+<img src="_main_files/figure-html/gem-karate-1.png" alt="Force-directed layout of the `karate` graph according to the GEM algorithm" width="672"><p class="caption">
+Figure 3.10: Force-directed layout of the <code>karate</code> graph according to the GEM algorithm
+</p>
+</div>
+<p>As well as force-directed and shape=oriented layout algorithms, several alternative approaches to layout calculation are also available. <code><a href="https://rdrr.io/pkg/igraph/man/layout_with_dh.html">layout_with_dh()</a></code> uses a simulated annealing algorithm developed for nice graph drawing, and <code><a href="https://rdrr.io/pkg/igraph/man/layout_with_mds.html">layout_with_mds()</a></code> generates vertex coordinates through multi-dimensional scaling based on shortest path distance (which we will look at in a later chapter). <code>layout_with sugiyama()</code> is suitable for directed graphs and minimizes edge crossings by introducing bends on edges — the multigraph visualization in Figure <a href="working.html#fig:gmulti">2.4</a> was generated using the Sugiyama layout algorithm.</p>
+<p>Finally, there are three layout algorithms that are suited for large graphs with many thousands or even millions of edges. One of the biggest problems with visualizing large graphs is the potential for ‘hairballs’ — that is, clumps of connected nodes that are so dense they cannot be usefully visualized. <code><a href="https://rdrr.io/pkg/igraph/man/layout_with_lgl.html">layout_with_lgl()</a></code> uses the Large Graph Layout algorithm which tries to identify clusters of vertices and position the clusters before positioning the individual vertices to minimize the chance of hairballs, while still adhering to the principles of force-directed networks. <code><a href="https://rdrr.io/pkg/igraph/man/layout_with_drl.html">layout_with_drl()</a></code> and <code><a href="https://rdrr.io/pkg/igraph/man/layout_with_graphopt.html">layout_with_graphopt()</a></code> uses efficient force-directed algorithms which scale well on large graphs.</p>
+<div class="thinkahead">
+<p><strong>Playing around:</strong> Try laying out the <code>karate</code> graph using these various algorithms and observe the different appearances. If you are interested in experimenting with a larger graph, and you have enough computing power that it won’t freeze your machine, load the <code>wikivote</code> edgelist from the <code>onadata</code> package, or download it from the internet<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://ona-book.org/data/wikivote.csv" class="uri"&gt;https://ona-book.org/data/wikivote.csv&lt;/a&gt;. This data set is taken from the Stanford University SNAP library of network data sets&lt;/p&gt;'><sup>9</sup></a>. This network represents votes from Wikipedia members for other members to be made administrators. Create a directed graph object, and lay it out using <code><a href="https://rdrr.io/pkg/igraph/man/layout_with_graphopt.html">layout_with_graphopt()</a></code>. To help with your visualization, remove the vertex labels, set the node size to 0.5 and set the edge arrow size to 0.1. When you plot this, you should see a great example of a hairball, as in Figure <a href="viz-graphs.html#fig:hairball-example">3.11</a>.</p>
+</div>
+<!--
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Playing around:} Try laying out the \texttt{karate} graph using these various algorithms and observe the different appearances.  If you are interested in experimenting with a larger graph, and you have enough computing power that it won't freeze your machine, load the \texttt{wikivote} edgelist from the \texttt{onadata} package, or download it from the internet at \texttt{https://ona-book.org/data/wikivote.csv}.  This data set is taken from the Stanford University SNAP library of network data sets. It represents votes from Wikipedia members for other members to be made administrators.  Create a directed graph object, and lay it out using \texttt{layout\_with\_graphopt()}.  To help with your visualization, remove the vertex labels, set the node size to 0.5 and set the edge arrow size to 0.1. When you plot this, you should see a great example of a hairball, as in Figure \ref{fig:hairball-example}.  
+\end{minipage}
+}
+```
+-->
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:hairball-example"></span>
+<img src="_main_files/figure-html/hairball-example-1.png" alt="Example of a hairball generated by trying to visualize a large network of Wikipedia votes for administrators" width="672"><p class="caption">
+Figure 3.11: Example of a hairball generated by trying to visualize a large network of Wikipedia votes for administrators
+</p>
+</div>
+<p>In the absence of any information on layout, the <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code> function in <code>igraph</code> will choose an appropriate layout using a logic determined by <code><a href="https://rdrr.io/pkg/igraph/man/layout_nicely.html">layout_nicely()</a></code>. If the graph already has a <code>layout</code> attribute, it will use this layout. Otherwise, if the vertices have <code>x</code> and <code>y</code> attributes, it will use these as vertex co-ordinates. Failing both of these, <code><a href="https://rdrr.io/pkg/igraph/man/layout_with_fr.html">layout_with_fr()</a></code> will be used if the graph has fewer than 1,000 vertices, and <code><a href="https://rdrr.io/pkg/igraph/man/layout_with_drl.html">layout_with_drl()</a></code> will be used if the graph has more than 1,000 vertices. Thus, the plot defaults to a form of force-directed layout unless the graph attributes suggest otherwise.</p>
+</div>
+<div id="plotting-with-ggraph" class="section level3" number="3.1.3">
+<h3>
+<span class="header-section-number">3.1.3</span> Plotting with <code>ggraph</code><a class="anchor" aria-label="anchor" href="#plotting-with-ggraph"><i class="fas fa-link"></i></a>
+</h3>
+<p>The <code>ggraph</code> package is developed for those who enjoy working with the more general <code>ggplot2</code> package, which is a very popular plotting package in R. To learn <code>ggplot2</code> as a foundational package, <span class="citation"><a href="viz-graphs.html#ref-ggplot2" role="doc-biblioref">Wickham</a> (<a href="viz-graphs.html#ref-ggplot2" role="doc-biblioref">2016</a>)</span> is highly recommended. As with <code>ggplot2</code>, <code>ggraph</code> provides a grammar for building graph visualizations. While the native capabilities of <code>igraph</code> will suffice in R for most static graph visualizations, <code>ggraph</code> could be considered an additional option for those who prefer to use it. It also integrates well with <code>ggplot2</code> which allows further layers to be added to the graph visualization, such as a greater variety of node shapes and the ability to layer networks onto geographic maps with relative ease — we will look at a nice example of this later in this section.</p>
+<p>To build an elementary graph using <code>ggraph</code>, we start with an <code>igraph</code> object and a layout, and we then progressively add node and edge properties as well as themes and other layer if required. To illustrate, let’s generate a relatively basic visualization of our <code>karate</code> graph using <code>ggraph</code> as in Figure <a href="viz-graphs.html#fig:ggraph-basic-karate">3.12</a>. Note that its is customary to add the edges before the nodes so that the nodes are the top layer in the plot.</p>
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://igraph.org">igraph</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggraph.data-imaginist.com">ggraph</a></span><span class="op">)</span>
+
+<span class="co"># get karate edgelist</span>
+<span class="va">karate_edgelist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"https://ona-book.org/data/karate.csv"</span><span class="op">)</span>
+
+<span class="co"># create graph object</span>
+<span class="va">karate</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span><span class="va">karate_edgelist</span>, directed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+
+<span class="co"># set seed for reproducibility</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+
+<span class="co"># visualise using ggraph with fr layout</span>
+<span class="fu"><a href="https://ggraph.data-imaginist.com/reference/ggraph.html">ggraph</a></span><span class="op">(</span><span class="va">karate</span>, layout <span class="op">=</span> <span class="st">"fr"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_edge_link.html">geom_edge_link</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_point.html">geom_node_point</a></span><span class="op">(</span><span class="op">)</span> </code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:ggraph-basic-karate"></span>
+<img src="_main_files/figure-html/ggraph-basic-karate-1.png" alt="Elementary visualization of `karate` graph using `ggraph` and the Fruchterman-Reingold algorithm" width="672"><p class="caption">
+Figure 3.12: Elementary visualization of <code>karate</code> graph using <code>ggraph</code> and the Fruchterman-Reingold algorithm
+</p>
+</div>
+<p>This is not particularly appealing. However, we can play with properties to improve the appearance, and we can move to a minimal theme to remove the grey background and add a title if we wish, as in Figure <a href="viz-graphs.html#fig:ggraph-nicer-karate">3.13</a>.</p>
+<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<span class="fu"><a href="https://ggraph.data-imaginist.com/reference/ggraph.html">ggraph</a></span><span class="op">(</span><span class="va">karate</span>, layout <span class="op">=</span> <span class="st">"fr"</span><span class="op">)</span> <span class="op">+</span>
+   <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_edge_link.html">geom_edge_link</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"grey"</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_point.html">geom_node_point</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"blue"</span>, size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">theme_void</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Zachary's Karate Club Network"</span><span class="op">)</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:ggraph-nicer-karate"></span>
+<img src="_main_files/figure-html/ggraph-nicer-karate-1.png" alt="Improved visualization of `karate` graph using node and edge properties" width="672"><p class="caption">
+Figure 3.13: Improved visualization of <code>karate</code> graph using node and edge properties
+</p>
+</div>
+<p>Like in <code>ggplot2</code>, if we want to associate a property of the nodes or edges with a property of the plot, we can use aesthetic mappings. For example, let’s give Mr Hi and John A the property of “leader” in our graph, and then ask <code>ggraph</code> to color the nodes by this property, as in Figure <a href="viz-graphs.html#fig:ggraph-leader-karate">3.14</a>.</p>
+<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span><span class="op">$</span><span class="va">leader</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span><span class="op">$</span><span class="va">name</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Mr Hi"</span>, <span class="st">"John A"</span><span class="op">)</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<span class="fu"><a href="https://ggraph.data-imaginist.com/reference/ggraph.html">ggraph</a></span><span class="op">(</span><span class="va">karate</span>, layout <span class="op">=</span> <span class="st">"fr"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_edge_link.html">geom_edge_link</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"grey"</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_point.html">geom_node_point</a></span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">leader</span><span class="op">)</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">5</span>, show.legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">theme_void</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Zachary's Karate Club Network"</span><span class="op">)</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:ggraph-leader-karate"></span>
+<img src="_main_files/figure-html/ggraph-leader-karate-1.png" alt="`karate` graph with `leader` property used as an aesthetic" width="672"><p class="caption">
+Figure 3.14: <code>karate</code> graph with <code>leader</code> property used as an aesthetic
+</p>
+</div>
+<p>As a further example of using <code>ggraph</code>, let’s look at a dataset collected during a study of workplace interactions in France in 2015 (<span class="citation"><a href="viz-graphs.html#ref-Genois2018" role="doc-biblioref">G’enois and Barrat</a> (<a href="viz-graphs.html#ref-Genois2018" role="doc-biblioref">2018</a>)</span>). Load the <code>workfrance_edgelist</code> and <code>workfrance_vertices</code> data sets from the <code>onadata</code> package or download them from the internet<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://ona-book.org/data/workfrance_edgelist.csv" class="uri"&gt;https://ona-book.org/data/workfrance_edgelist.csv&lt;/a&gt; and &lt;a href="https://ona-book.org/data/workfrance_vertices.csv" class="uri"&gt;https://ona-book.org/data/workfrance_vertices.csv&lt;/a&gt;&lt;/p&gt;'><sup>10</sup></a>. In this study, employees of a company wore wearable devices to triangulate their location in the building, and edges were defined as any situation where two employees were sharing the same spatial location. The edgelist contains <code>from</code> and <code>to</code> columns for the edges, as well as a <code>mins</code> column representing the total minutes spent co-located during the study<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;This data set has been further processed from the original data set, including limiting the edges to those where the total mco-location time was at least 5 minutes.&lt;/p&gt;"><sup>11</sup></a>. The vertex list contains data on the department of each employee ID. We will create a basic visualization of this using <code>ggraph</code> in Figure <a href="viz-graphs.html#fig:workfrance-basic">3.15</a>.</p>
+<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># get edgelist with mins property</span>
+<span class="va">workfrance_edgelist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"https://ona-book.org/data/workfrance_edgelist.csv"</span><span class="op">)</span>
+
+<span class="co"># get vertex set with dept property</span>
+<span class="va">workfrance_vertices</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"https://ona-book.org/data/workfrance_vertices.csv"</span><span class="op">)</span>
+
+<span class="co"># create undirected graph object</span>
+<span class="va">workfrance</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>
+  d <span class="op">=</span> <span class="va">workfrance_edgelist</span>,
+  vertices <span class="op">=</span> <span class="va">workfrance_vertices</span>,
+  directed <span class="op">=</span> <span class="cn">FALSE</span>
+<span class="op">)</span>
+
+<span class="co"># basic visualization</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<span class="fu"><a href="https://ggraph.data-imaginist.com/reference/ggraph.html">ggraph</a></span><span class="op">(</span><span class="va">workfrance</span>, layout <span class="op">=</span> <span class="st">"fr"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_edge_link.html">geom_edge_link</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"gray"</span>, alpha <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_point.html">geom_node_point</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"blue"</span>, size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">theme_void</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:workfrance-basic"></span>
+<img src="_main_files/figure-html/workfrance-basic-1.png" alt="Connection of employees in a workplace as measured by spatial co-location" width="672"><p class="caption">
+Figure 3.15: Connection of employees in a workplace as measured by spatial co-location
+</p>
+</div>
+<p>As it stands, this graph does not tell us much, but a couple of simple adjustments can change this. First, we can adjust the thickness of the edges to reflect the total number of minutes spent meeting, which seems a reasonable measure of the ‘strength’ or ‘weight’ of the connection. Second, we can color code the nodes by their department. The result is Figure <a href="viz-graphs.html#fig:workfrance-additional">3.16</a>. We can now see clusters of highly connected employees mostly driven by their department.</p>
+<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<span class="fu"><a href="https://ggraph.data-imaginist.com/reference/ggraph.html">ggraph</a></span><span class="op">(</span><span class="va">workfrance</span>, layout <span class="op">=</span> <span class="st">"fr"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_edge_link.html">geom_edge_link</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"gray"</span>, alpha <span class="op">=</span> <span class="fl">0.2</span>, <span class="fu">aes</span><span class="op">(</span>width <span class="op">=</span> <span class="va">mins</span><span class="op">)</span>, 
+                 show.legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_point.html">geom_node_point</a></span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>color <span class="op">=</span> <span class="va">dept</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">theme_void</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">labs</span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Spatial co-location of employees in a workplace"</span><span class="op">)</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:workfrance-additional"></span>
+<img src="_main_files/figure-html/workfrance-additional-1.png" alt="Connection of employees in a workplace with edge thickness weighted by minutes spent spatially co-located and vertices colored by department" width="672"><p class="caption">
+Figure 3.16: Connection of employees in a workplace with edge thickness weighted by minutes spent spatially co-located and vertices colored by department
+</p>
+</div>
+<div class="thinkahead">
+<p><strong>Thinking ahead:</strong> The graph we have just created in Figure <a href="viz-graphs.html#fig:workfrance-additional">3.16</a> shows how we have detected a community segmentation of our vertices. It’s relatively clear that individuals in the same department are more likely to be connected. Community segmentation is an important topic in Organizational Network Analysis which we will study later in this book. It’s not always straightforward to identify drivers of community in networks, but we will learn about a number of community detection algorithms which will segment the graph into different community groups. As an example, Figure <a href="viz-graphs.html#fig:workfrance-louvain">3.17</a> shows the results of running the Louvain community detection algorithm on the <code>workfrance</code> graph with <code>mins</code> as the edge weights. You can see that the communities detected are strongly alignd with the departments in Figure <a href="viz-graphs.html#fig:workfrance-additional">3.16</a>.</p>
+</div>
+<!--
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Thinking ahead:} The graph we have just created in Figure \ref{fig:workfrance-additional} shows how we have detected a community segmentation of our vertices.  It's relatively clear that individuals in the same department are more likely to be connected.  Community segmentation is an important topic in Organizational Network Analysis which we will study later in this book.  It's not always straightforward to identify drivers of community in networks, but we will learn about a number of community detection algorithms which will segment the graph into different community groups.  As an example, Figure \ref{fig:workfrance-louvain} shows the results of running the Louvain community detection algorithm on the \texttt{workfrance} graph with \texttt{mins} as the edge weights.  You can see that the communities detected are strongly alignd with the departments in Figure \ref{fig:workfrance-additional}.   
+\end{minipage}
+}
+```
+-->
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:workfrance-louvain"></span>
+<img src="_main_files/figure-html/workfrance-louvain-1.png" alt="Clusters of employees as detected by the Louvain community detection algorithm.  Note the cluster similarity of communities with the departments in the previous graph." width="672"><p class="caption">
+Figure 3.17: Clusters of employees as detected by the Louvain community detection algorithm. Note the cluster similarity of communities with the departments in the previous graph.
+</p>
+</div>
+<p><code>ggraph</code> visualizations can work relatively easily with other graphics layers, allowing you to superimpose a graph onto other co-ordinate systems. Let’s look at an example of this at work. Load the <code>londontube_edgelist</code> and <code>londontube_vertices</code> data sets from the <code>onadata</code> package or download them from the internet<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://ona-book.org/data/londontube_edgelist.csv" class="uri"&gt;https://ona-book.org/data/londontube_edgelist.csv&lt;/a&gt; and &lt;a href="https://ona-book.org/data/londontube_vertices.csv" class="uri"&gt;https://ona-book.org/data/londontube_vertices.csv&lt;/a&gt;&lt;/p&gt;'><sup>12</sup></a>. The vertex set is a list of London Tube Stations with an <code>id</code>, <code>name</code> and geographical co-ordinates <code>longitude</code> and <code>latitude</code>.</p>
+<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># download and view london tube vertex data</span>
+<span class="va">londontube_vertices</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"https://ona-book.org/data/londontube_vertices.csv"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">londontube_vertices</span><span class="op">)</span></code></pre></div>
+<pre><code>##   id         name latitude longitude
+## 1  1   Acton Town  51.5028   -0.2801
+## 2  2      Aldgate  51.5143   -0.0755
+## 3  3 Aldgate East  51.5154   -0.0726
+## 4  4   All Saints  51.5107   -0.0130
+## 5  5     Alperton  51.5407   -0.2997
+## 6  7        Angel  51.5322   -0.1058</code></pre>
+<p>The edge list represents <code>from</code> and <code>to</code> connections between stations, along with the name of the <code>line</code> and its official <code>linecolor</code> in hex code.</p>
+<div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># download and view london tube edge data</span>
+<span class="va">londontube_edgelist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"https://ona-book.org/data/londontube_edgelist.csv"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">londontube_edgelist</span><span class="op">)</span></code></pre></div>
+<pre><code>##   from  to          line linecolor
+## 1   11 163 Bakerloo Line   #AE6017
+## 2   11 212 Bakerloo Line   #AE6017
+## 3   49  87 Bakerloo Line   #AE6017
+## 4   49 197 Bakerloo Line   #AE6017
+## 5   82 163 Bakerloo Line   #AE6017
+## 6   82 193 Bakerloo Line   #AE6017</code></pre>
+<p>We can easily create am <code>igraph</code> object from this data and then use <code>ggraph</code> to create a visualization using the <code>linecolor</code> as the edge color between stations, as in Figure <a href="viz-graphs.html#fig:non-geo-tube">3.18</a>.</p>
+<div class="sourceCode" id="cb85"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># create a set of distinct line names and lincolors to use</span>
+<span class="va">lines</span> <span class="op">&lt;-</span> <span class="va">londontube_edgelist</span> |&gt; 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span><span class="op">(</span><span class="va">line</span>, <span class="va">linecolor</span><span class="op">)</span>
+
+<span class="co"># create graph object</span>
+<span class="va">tubegraph</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>d <span class="op">=</span> <span class="va">londontube_edgelist</span>, 
+                                           vertices <span class="op">=</span> <span class="va">londontube_vertices</span>,
+                                           directed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+
+<span class="co"># visualize tube graph using linecolors for edge color</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<span class="fu"><a href="https://ggraph.data-imaginist.com/reference/ggraph.html">ggraph</a></span><span class="op">(</span><span class="va">tubegraph</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_point.html">geom_node_point</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"black"</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_edge_link.html">geom_edge_link</a></span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>color <span class="op">=</span> <span class="va">line</span><span class="op">)</span>, width <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/scale_edge_colour.html">scale_edge_color_manual</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Line"</span>,
+                          values <span class="op">=</span> <span class="va">lines</span><span class="op">$</span><span class="va">linecolor</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">theme_void</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:non-geo-tube"></span>
+<img src="_main_files/figure-html/non-geo-tube-1.png" alt="Random graph visualization of the London Tube network graph with the edges colored by the different lines" width="672"><p class="caption">
+Figure 3.18: Random graph visualization of the London Tube network graph with the edges colored by the different lines
+</p>
+</div>
+<p>While it’s great that we can do this so easily, it’s a pretty confusing visualization for anyone who knows London. The Circle Line doesn’t look very circular, the Picadilly Line seems to he heading southeast instead of northeast. In the west, the Metropolitan and Picadilly Lines seem to have swapped places. Of course, this graph is not using geographical co-ordinates to plot its vertices.</p>
+<p>We can change this by expanding our edgelist to include the latitudes and longitudes of the <code>from</code> and <code>to</code> stations in each edge, and then we can layer a map on this graph. First, let’s create those new longitude and latitude columns in the edgelist, and check it works.</p>
+<div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># we reorganize the edgelist to include longitude and latitude for start and end</span>
+<span class="va">new_edgelist</span> <span class="op">&lt;-</span> <span class="va">londontube_edgelist</span> |&gt; 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">inner_join</a></span><span class="op">(</span><span class="va">londontube_vertices</span> |&gt; 
+                      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">latitude</span>, <span class="va">longitude</span><span class="op">)</span>, 
+                    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"from"</span> <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span><span class="op">)</span> |&gt; 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>lat_from <span class="op">=</span> <span class="va">latitude</span>, lon_from <span class="op">=</span> <span class="va">longitude</span><span class="op">)</span> |&gt; 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">inner_join</a></span><span class="op">(</span><span class="va">londontube_vertices</span> |&gt; 
+                      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">latitude</span>, <span class="va">longitude</span><span class="op">)</span>, 
+                    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"to"</span> <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span><span class="op">)</span> |&gt; 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>lat_to <span class="op">=</span> <span class="va">latitude</span>, lon_to <span class="op">=</span> <span class="va">longitude</span><span class="op">)</span>
+
+<span class="co"># view</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">new_edgelist</span><span class="op">)</span></code></pre></div>
+<pre><code>##   from  to          line linecolor lat_from lon_from  lat_to  lon_to
+## 1   11 163 Bakerloo Line   #AE6017  51.5226  -0.1571 51.5225 -0.1631
+## 2   11 212 Bakerloo Line   #AE6017  51.5226  -0.1571 51.5234 -0.1466
+## 3   49  87 Bakerloo Line   #AE6017  51.5080  -0.1247 51.5074 -0.1223
+## 4   49 197 Bakerloo Line   #AE6017  51.5080  -0.1247 51.5098 -0.1342
+## 5   82 163 Bakerloo Line   #AE6017  51.5199  -0.1679 51.5225 -0.1631
+## 6   82 193 Bakerloo Line   #AE6017  51.5199  -0.1679 51.5154 -0.1755</code></pre>
+<p>That looks like it worked. Now we can use the <code>ggmap</code> package in R to layer a map of London on top of the base <code>ggraph</code> layer, and then use the various latitude and longitude columns to make our network geographically accurate, as in Figure <a href="viz-graphs.html#fig:geo-accurate-tube">3.19</a><a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;A Google Maps API key is needed to use &lt;code&gt;ggmap&lt;/code&gt; - see &lt;a href="https://github.com/dkahle/ggmap" class="uri"&gt;https://github.com/dkahle/ggmap&lt;/a&gt; for more information.&lt;/p&gt;'><sup>13</sup></a>.</p>
+<div class="sourceCode" id="cb88"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># recreate graph object to capture additional edge data</span>
+<span class="va">tubegraph</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>d <span class="op">=</span> <span class="va">new_edgelist</span>, 
+                                           vertices <span class="op">=</span> <span class="va">londontube_vertices</span>,
+                                           directed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+
+<span class="co"># layer a London map</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/dkahle/ggmap">ggmap</a></span><span class="op">)</span>
+<span class="va">londonmap</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ggmap/man/get_map.html">get_map</a></span><span class="op">(</span>location <span class="op">=</span> <span class="st">"London, UK"</span>, source <span class="op">=</span> <span class="st">"google"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/pkg/ggmap/man/ggmap.html">ggmap</a></span><span class="op">(</span><span class="va">londonmap</span>, base_layer <span class="op">=</span> <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/ggraph.html">ggraph</a></span><span class="op">(</span><span class="va">tubegraph</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_point.html">geom_node_point</a></span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">longitude</span>, y <span class="op">=</span> <span class="va">latitude</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"black"</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_edge_link.html">geom_edge_link</a></span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">lon_from</span>, y <span class="op">=</span> <span class="va">lat_from</span>,
+                     xend <span class="op">=</span> <span class="va">lon_to</span>, yend <span class="op">=</span> <span class="va">lat_to</span>,
+                     color <span class="op">=</span> <span class="va">line</span><span class="op">)</span>, width <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/scale_edge_colour.html">scale_edge_color_manual</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Line"</span>,
+                          values <span class="op">=</span> <span class="va">lines</span><span class="op">$</span><span class="va">linecolor</span><span class="op">)</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:geo-accurate-tube"></span>
+<img src="_main_files/figure-html/geo-accurate-tube-1.png" alt="Geographically accurate London Tube Network" width="672"><p class="caption">
+Figure 3.19: Geographically accurate London Tube Network
+</p>
+</div>
+<p>Figure <a href="viz-graphs.html#fig:geo-accurate-tube">3.19</a> looks like the everything is in the right place. This kind of graphical layering can be extremely important when there is an inherent co-ordinate system lying behind the vertices of your graph and where none of the existing layout algorithms can recreate that co-ordinate system.</p>
+</div>
+<div id="interactive-graph-visualization-in-r" class="section level3" number="3.1.4">
+<h3>
+<span class="header-section-number">3.1.4</span> Interactive graph visualization in R<a class="anchor" aria-label="anchor" href="#interactive-graph-visualization-in-r"><i class="fas fa-link"></i></a>
+</h3>
+<p>We have seen earlier how many large networks are too complicated to make sense of visually using static approaches such as the methods we have already reviewed in <code>igraph</code> or <code>ggraph</code>. Nevertheless, interactive visualizations of networks can be useful where there is an interest in visual exploration of particular vertices or small sub-networks, even when the overall network is visually complex. We will touch upon a couple of commonly used interactive graph visualization packages here, all of which use Javascript libraries behind the scenes to create the interactive visualizations.</p>
+<p><code>visNetwork</code> is a simple but effective package which uses <code>vis.js</code> API create HTML widgets containing interactive graph visualizations. It is fairly easily to use, with its main function <code><a href="https://rdrr.io/pkg/visNetwork/man/visNetwork.html">visNetwork()</a></code> taking a dataframe of node information and a dataframe of edge information, as well as a few other optional arguments. The columns in these dataframes are expected to have certain default column names. Vertices/nodes are expected to at least have an <code>id</code> column but can also contain:</p>
+<ul>
+<li>
+<code>label</code>: the label of the vertex</li>
+<li>
+<code>group</code>: the group of the vertex if there are groups</li>
+<li>
+<code>value</code>: used to determine the size of the vertex</li>
+<li>
+<code>title</code>: This will be used as a tooltip on mouseover</li>
+<li>other columns can be included to be passed to specific values/properties in the visualization, such as <code>color</code> or <code>shape</code>.</li>
+</ul>
+<p>The edge dataframe must contain a <code>from</code> and <code>to</code> column, and can also contain <code>label</code>, <code>value</code> and <code>title</code> to customize the edges as with the vertices, as well as other properties such as <code>arrows</code> or <code>dashes</code>.</p>
+<p>Interactive Figure <a href="viz-graphs.html#fig:gwork-visnetwork">3.20</a> is a very simple example of the <code>visNetwork</code> function at work using our <span class="math inline">\(G_\mathrm{work}\)</span> graph from Section <a href="working.html#graph-def">2.1.1</a>.</p>
+<div class="sourceCode" id="cb89"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://datastorm-open.github.io/visNetwork/">visNetwork</a></span><span class="op">)</span>
+
+<span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
+id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,
+label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"David"</span>, <span class="st">"Zubin"</span>, <span class="st">"Suraya"</span>, <span class="st">"Jane"</span><span class="op">)</span>
+<span class="op">)</span>
+
+<span class="va">edges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
+  from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">4</span>, <span class="fl">4</span><span class="op">)</span>,
+  to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>
+<span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/visNetwork/man/visNetwork.html">visNetwork</a></span><span class="op">(</span><span class="va">nodes</span>, <span class="va">edges</span><span class="op">)</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:gwork-visnetwork"></span>
+<div id="htmlwidget-90bfa43893a2d8eda041" style="width:672px;height:480px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-90bfa43893a2d8eda041">{"x":{"nodes":{"id":[1,2,3,4],"label":["David","Zubin","Suraya","Jane"]},"edges":{"from":[1,1,1,4,4],"to":[2,3,4,2,3]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot"},"manipulation":{"enabled":false}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false},"byselection":{"enabled":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)"},"evals":[],"jsHooks":[]}</script><p class="caption">
+Figure 3.20: Simple <code>visNetwork</code> rendering of the <span class="math inline">\(G_\mathrm{work}\)</span> graph
+</p>
+</div>
+<p>In fact, assuming that we are working with <code>igraph</code> objects, the easiest way to deploy <code>visNetwork</code> is to use the <code><a href="https://rdrr.io/pkg/visNetwork/man/visNetwork-igraph.html">visIgraph()</a></code> function, which takes an <code>igraph</code> object and restructures it behind the scenes to use the <code>vis.js</code> API, even inheriting whatever <code>igraph</code> layout you prefer. Let’s recreate our <code>karate</code> graph in <code>visNetwork</code>, as in Interactive Figure <a href="viz-graphs.html#fig:karate-visnetwork">3.21</a>.</p>
+<div class="sourceCode" id="cb90"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://igraph.org">igraph</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggraph.data-imaginist.com">ggraph</a></span><span class="op">)</span>
+
+<span class="co"># get karate edgelist</span>
+<span class="va">karate_edgelist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"https://ona-book.org/data/karate.csv"</span><span class="op">)</span>
+
+<span class="co"># create graph object</span>
+<span class="va">karate</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span><span class="va">karate_edgelist</span>, directed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+
+<span class="co"># different colors and shapes for Mr Hi and and John A</span>
+<span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span><span class="op">$</span><span class="va">color</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span><span class="op">$</span><span class="va">name</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Mr Hi"</span>, <span class="st">"John A"</span><span class="op">)</span>,
+                          <span class="st">"lightblue"</span>, 
+                          <span class="st">"pink"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span><span class="op">$</span><span class="va">shape</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span><span class="op">$</span><span class="va">name</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Mr Hi"</span>, <span class="st">"John A"</span><span class="op">)</span>,
+                          <span class="st">"square"</span>, 
+                          <span class="st">"circle"</span><span class="op">)</span>
+
+<span class="co"># visualize from igraph</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<span class="fu">visNetwork</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/visNetwork/man/visNetwork-igraph.html">visIgraph</a></span><span class="op">(</span><span class="va">karate</span>, layout <span class="op">=</span> <span class="st">"layout_with_fr"</span><span class="op">)</span> </code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:karate-visnetwork"></span>
+<div id="htmlwidget-0349e08474188736d854" style="width:672px;height:480px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-0349e08474188736d854">{"x":{"nodes":{"id":["Mr Hi","Actor 2","Actor 3","Actor 4","Actor 5","Actor 6","Actor 7","Actor 9","Actor 10","Actor 14","Actor 15","Actor 16","Actor 19","Actor 20","Actor 21","Actor 23","Actor 24","Actor 25","Actor 26","Actor 27","Actor 28","Actor 29","Actor 30","Actor 31","Actor 32","Actor 33","Actor 8","Actor 11","Actor 12","Actor 13","Actor 18","Actor 22","Actor 17","John A"],"color":["lightblue","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","lightblue"],"shape":["square","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","square"],"label":["Mr Hi","Actor 2","Actor 3","Actor 4","Actor 5","Actor 6","Actor 7","Actor 9","Actor 10","Actor 14","Actor 15","Actor 16","Actor 19","Actor 20","Actor 21","Actor 23","Actor 24","Actor 25","Actor 26","Actor 27","Actor 28","Actor 29","Actor 30","Actor 31","Actor 32","Actor 33","Actor 8","Actor 11","Actor 12","Actor 13","Actor 18","Actor 22","Actor 17","John A"],"x":[0.190687845068345,0.0132877862854588,-0.223134429099049,0.0250193071922982,0.556110756785596,0.699728575164583,0.703543257762113,-0.311180109543968,-0.517479094231182,-0.165645780729725,-0.867012120960171,-0.964326644979945,-0.802058180503033,-0.122989647824225,-0.96854498492282,-0.927366874662782,-0.670531699055899,-0.348627085968283,-0.511806391959486,-1,-0.449016697098456,-0.402542350435914,-0.838201634645628,-0.4087987278348,-0.309414497873656,-0.666559146735384,0.0971672273466904,0.550433139292149,0.413380485469321,0.255872949988716,0.321977448540886,0.347145371185161,1,-0.605668554953779],"y":[-0.213243973366882,-0.450176443356623,-0.275766508053284,-0.749913424759686,-0.209422991961298,-0.0352524907220172,-0.291722959380564,-0.163072229507381,-0.668687137277491,-0.472831066550723,-0.414124705908606,-0.0849551456309654,-0.607338049201286,-0.0235992545040055,-0.310158852587208,0.123859989316732,0.535848874256083,0.99607011845307,1,0.462220480380136,0.45960229597303,0.134334700697694,0.380421342145101,-0.41953791144505,0.374036529850743,-0.0905244335853638,-0.589041190340294,0.108480055292457,0.44073283230466,-1,-0.741735071827429,-0.483319233585932,-0.13933877174475,-0.0426704260189256]},"edges":{"from":["Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Actor 2","Actor 2","Actor 2","Actor 2","Actor 2","Actor 2","Actor 2","Actor 2","Actor 3","Actor 3","Actor 3","Actor 3","Actor 3","Actor 3","Actor 3","Actor 3","Actor 4","Actor 4","Actor 4","Actor 5","Actor 5","Actor 6","Actor 6","Actor 6","Actor 7","Actor 9","Actor 9","Actor 9","Actor 10","Actor 14","Actor 15","Actor 15","Actor 16","Actor 16","Actor 19","Actor 19","Actor 20","Actor 21","Actor 21","Actor 23","Actor 23","Actor 24","Actor 24","Actor 24","Actor 24","Actor 24","Actor 25","Actor 25","Actor 25","Actor 26","Actor 27","Actor 27","Actor 28","Actor 29","Actor 29","Actor 30","Actor 30","Actor 31","Actor 31","Actor 32","Actor 32","Actor 33"],"to":["Actor 2","Actor 3","Actor 4","Actor 5","Actor 6","Actor 7","Actor 8","Actor 9","Actor 11","Actor 12","Actor 13","Actor 14","Actor 18","Actor 20","Actor 22","Actor 32","Actor 3","Actor 4","Actor 8","Actor 14","Actor 18","Actor 20","Actor 22","Actor 31","Actor 4","Actor 8","Actor 9","Actor 10","Actor 14","Actor 28","Actor 29","Actor 33","Actor 8","Actor 13","Actor 14","Actor 7","Actor 11","Actor 7","Actor 11","Actor 17","Actor 17","Actor 31","Actor 33","John A","John A","John A","Actor 33","John A","Actor 33","John A","Actor 33","John A","John A","Actor 33","John A","Actor 33","John A","Actor 26","Actor 28","Actor 30","Actor 33","John A","Actor 26","Actor 28","Actor 32","Actor 32","Actor 30","John A","John A","Actor 32","John A","Actor 33","John A","Actor 33","John A","Actor 33","John A","John A"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":false},"physics":{"stabilization":false}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false},"byselection":{"enabled":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","igraphlayout":{"type":"square"}},"evals":[],"jsHooks":[]}</script><p class="caption">
+Figure 3.21: <code>visNetwork</code> rendering of the basic <code>karate</code> graph using a force-directed layout
+</p>
+</div>
+<div class="thinkahead">
+<p><strong>Playing around:</strong> The <code>visNetwork</code> package allows you to take advantage of a ton of features in the <code>vis.js</code> API, including a wide range of graph customization, and the ability to make your graph editable or to add selector menu to search for specific nodes or groups of nodes. It’s worth experimenting with all the different capabilities. A thorough manual can be found at <a href="https://datastorm-open.github.io/visNetwork/" class="uri">https://datastorm-open.github.io/visNetwork/</a>. Why don’t you try to recreate the <code>workfrance</code> graph from this chapter in <code>visNetwork</code>?</p>
+</div>
+<!--
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Playing around:} The \texttt{visNetwork} package allows you to take advantage of a ton of features in the \texttt{vis.js} API, including a wide range of graph customization, and the ability to make your graph editable or to add selector menu to search for specific nodes or groups of nodes.  It's worth experimenting with all the different capabilities.  A thorough manual can be found at \\texttt{https://datastorm-open.github.io/visNetwork/}.  Why don't you try to recreate the \\texttt{workfrance} graph from this chapter in \\texttt{visNetwork}?
+\end{minipage}
+}
+```
+-->
+
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-Genois2018" class="csl-entry">
+G’enois, Mathieu, and Alain Barrat. 2018. <span>“Can Co-Location Be Used as a Proxy for Face-to-Face Contacts?”</span> <em>EPJ Data Science</em>.
+</div>
+<div id="ref-ggplot2" class="csl-entry">
+Wickham, Hadley. 2016. <em><span class="nocase">ggplot2</span>: Elegant Graphics for Data Analysis</em>. <a href="https://ggplot2-book.org/">https://ggplot2-book.org/</a>.
+</div>
+<div id="ref-zachary" class="csl-entry">
+Zachary, W. W. 1977. <span>“An Information Flow Model for Conflict and Fission in Small Groups.”</span> <em>Journal of Anthropological Research</em>.
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="chapter-nav">
+<div class="prev"><a href="working.html"><span class="header-section-number">2</span> Working With Graphs</a></div>
+<div class="empty"></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#viz-graphs"><span class="header-section-number">3</span> Visualizing Graphs</a></li>
+<li>
+<a class="nav-link" href="#visualizing-graphs-in-r"><span class="header-section-number">3.1</span> Visualizing graphs in R</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#native-plotting-igraph"><span class="header-section-number">3.1.1</span> Native plotting in igraph</a></li>
+<li><a class="nav-link" href="#layouts"><span class="header-section-number">3.1.2</span> Graph layouts</a></li>
+<li><a class="nav-link" href="#plotting-with-ggraph"><span class="header-section-number">3.1.3</span> Plotting with ggraph</a></li>
+<li><a class="nav-link" href="#interactive-graph-visualization-in-r"><span class="header-section-number">3.1.4</span> Interactive graph visualization in R</a></li>
+</ul>
+</li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/keithmcnulty/ona_book/blob/master/r/03-visualizing_graphs.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/keithmcnulty/ona_book/edit/master/r/03-visualizing_graphs.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Handbook of Graphs and Networks in People Analytics</strong>: With Examples in R and Python" was written by Keith McNulty. </p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>
