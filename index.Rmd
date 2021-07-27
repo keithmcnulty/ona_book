@@ -18,8 +18,6 @@ twitter-handle: "dr_keithmcnulty"
 
 ```{r, echo = FALSE}
 library(reticulate)
-library(colorBlindness)
-options(ggplot2.discrete.fill = Blue2DarkRed18Steps)
 knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 matplotlib <- import("matplotlib")
 matplotlib$use("Agg", force = TRUE)
@@ -29,7 +27,7 @@ if (knitr::is_latex_output()) {
 }
 
 # set this next variable to false to avoid evaluating computationally heavy chunks
-eval_heavy_chunks <- FALSE
+eval_heavy_chunks <- TRUE
 
 # knitr::opts_chunk$set(dpi=300)
 
