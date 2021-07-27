@@ -518,7 +518,7 @@ We have seen earlier how many large networks are too complicated to make sense o
 
 The edge dataframe must contain a `from` and `to` column, and can also contain `label`, `value` and `title` to customize the edges as with the vertices, as well as other properties such as `arrows` or `dashes`.
 
-`r if (knitr::is_html_output()) {"Interactive"}` Figure \@ref(fig:gwork-visnetwork) is a very simple `r if (knitr::is_latex_output()) {"statically rendered"}` example of the `visNetwork` function at work using our $G_\mathrm{work}$ graph from Section \@ref(graph-def).
+`r if (knitr::is_html_output()) {"Interactive"}` Figure \@ref(fig:gwork-visnetwork) is a very simple `r if (knitr::is_latex_output()) {"statically rendered"}` example of the `visNetwork` function at work using our $G_\mathrm{work}$ graph from Section \@ref(graph-def).  Note that the `visLayout()` function can be used for various customizations, including passing a random seed variable to `vis.js` to ensure the same result.
 
 ```{r, eval = FALSE}
 library(visNetwork)
@@ -533,8 +533,8 @@ edges <- data.frame(
   to = c(2, 3, 4, 2, 3)
 )
 
-set.seed(123)
-visNetwork(nodes, edges)
+visNetwork(nodes, edges) |> 
+  visLayout(randomSeed = 123)
 
 
 ```
@@ -554,8 +554,8 @@ if (knitr::is_html_output()) {
     to = c(2, 3, 4, 2, 3)
   )
 
-  set.seed(123)
-  visNetwork::visNetwork(nodes, edges)
+  visNetwork::visNetwork(nodes, edges) |> 
+    visLayout(randomSeed = 123)
 } else {
   knitr::include_graphics("www/visualizing-graphs/gwork-visnetwork.png")
 }
@@ -587,13 +587,13 @@ V(karate)$shape <- ifelse(V(karate)$name %in% c("Mr Hi", "John A"),
                           "circle")
 
 # visualize from igraph
-set.seed(123)
-visNetwork::visIgraph(karate, layout = "layout_with_fr") 
+visNetwork::visIgraph(karate, layout = "layout_with_fr") |> 
+  visLayout(randomSeed = 123)
 ```
 
 
 
-```{r karate-visnetwork, echo = FALSE, fig.align = "center", fig.cap = if (knitr::is_html_output()) {"`visNetwork` rendering of the basic `karate` graph using a force-directed layout"} else {"\\texttt{visNetwork} rendering of the basic \\texttt{karate} graph using a force-directed layout"}, out.width = if (knitr::is_latex_output()) "80%"}
+```{r karate-visnetwork, echo = FALSE, fig.align = "center", fig.cap = if (knitr::is_html_output()) {"`visNetwork` rendering of the basic `karate` graph using a force-directed layout"} else {"\\texttt{visNetwork} rendering of the basic Karate graph using a force-directed layout"}, out.width = if (knitr::is_latex_output()) "80%"}
 
 if (knitr::is_html_output()) {
   library(igraph)
@@ -615,8 +615,8 @@ if (knitr::is_html_output()) {
                             "circle")
 
 # visualize from igraph
-set.seed(123)
-visNetwork::visIgraph(karate, layout = "layout_with_fr")
+visNetwork::visIgraph(karate, layout = "layout_with_fr") |> 
+  visLayout(randomSeed = 123)
 } else {
   knitr::include_graphics("www/visualizing-graphs/karate-visnetwork.png")
 }
@@ -625,7 +625,7 @@ visNetwork::visIgraph(karate, layout = "layout_with_fr")
 
 `r if (knitr::is_latex_output()) '<!--'`
 :::thinkahead
-**Playing around:** The `visNetwork` package allows you to take advantage of a ton of features in the `vis.js` API, including a wide range of graph customization, and the ability to make your graph editable or to add selector menu to search for specific nodes or groups of nodes.  It's worth experimenting with all the different capabilities.  A thorough manual can be found at https://datastorm-open.github.io/visNetwork/.  Why don't you try to recreate the `workfrance` graph from this chapter in `visNetwork`?
+**Playing around:** The `visNetwork` package allows you to take advantage of a ton of features in the `vis.js` API, including a wide range of graph customization, and the ability to make your graph editable or to add selector menu to search for specific nodes or groups of nodes.  It's worth experimenting with all the different capabilities.  A thorough manual can be found at [https://datastorm-open.github.io/visNetwork/](https://datastorm-open.github.io/visNetwork/).  Why don't you try to recreate the `workfrance` graph from this chapter in `visNetwork`?
 :::
 `r if (knitr::is_latex_output()) '-->'`
 
@@ -633,9 +633,191 @@ visNetwork::visIgraph(karate, layout = "layout_with_fr")
 ```{=latex}
 \colorbox{babyblueeyes}{
 \begin{minipage}{\textwidth}
-\textbf{Playing around:} The \texttt{visNetwork} package allows you to take advantage of a ton of features in the \texttt{vis.js} API, including a wide range of graph customization, and the ability to make your graph editable or to add selector menu to search for specific nodes or groups of nodes.  It's worth experimenting with all the different capabilities.  A thorough manual can be found at \\texttt{https://datastorm-open.github.io/visNetwork/}.  Why don't you try to recreate the \\texttt{workfrance} graph from this chapter in \\texttt{visNetwork}?
+\textbf{Playing around:} The \texttt{visNetwork} package allows you to take advantage of a ton of features in the \texttt{vis.js} API, including a wide range of graph customization, and the ability to make your graph editable or to add selector menu to search for specific nodes or groups of nodes.  It's worth experimenting with all the different capabilities.  A thorough manual can be found at \texttt{https://datastorm-open.github.io/visNetwork/}.  Why don't you try to recreate the \texttt{workfrance} graph from this chapter in \texttt{visNetwork}?
 \end{minipage}
 }
 ```
 `r if (knitr::is_html_output()) '-->'`
 
+The `networkD3` package creates responsive and interactive network visualizations using the `D3` javascript library, which has some beautiful options for common network layouts like force-directed or chord diagrams.
+
+To create a simple force-directed visualization based on an edgelist, use the `simpleNetwork()` function.  All this needs is simple dataframe where by default the first two columns represent the edgelist^[You can use the arguments in the `simpleNetwork()` function to define the Source and Target columns if they are not the first two columns].  Here is an example for the `karate` network, with `r if (knitr::is_latex_output()) {"a static image of"}` the result shown in `r if (knitr::is_html_output()) {"Interactive"}` Figure \@ref(fig:simple-networkD3).  Note that it is not possible to set a random seed with `networkD3`.
+
+```{r, eval = FALSE}
+library(networkD3)
+
+# get karate edgelist
+karate_edgelist <- read.csv("https://ona-book.org/data/karate.csv")
+  
+# visualize
+networkD3::simpleNetwork(karate_edgelist)
+  
+```
+
+```{r simple-networkD3, echo = FALSE, fig.align = "center", fig.cap = if (knitr::is_html_output()) {"Simple `networkD3` rendering of the Karate graph"} else {"Simple \\texttt{networkD3} rendering of the Karate graph"}, out.width = if (knitr::is_latex_output()) "80%"}
+library(networkD3)
+
+if (knitr::is_html_output()) {
+  # get karate edgelist
+  karate_edgelist <- read.csv("https://ona-book.org/data/karate.csv")
+  
+  # visualize
+  networkD3::simpleNetwork(karate_edgelist)
+  
+  
+} else {
+  knitr::include_graphics("www/visualizing-graphs/simple-networkD3.png")
+}
+```
+
+
+The `forceNetwork()` function allows greater levels of customization of the visualization.  This function requires an edgelist and a vertex set in a specific format.  However, we can use the function `igraph_to_networkD3()` to easily create a list containing what we need from an `igraph` object. In the next example, we recreate the graph in Figure \@ref(fig:simple-networkD3) but we put Mr Hi and John A into a different group, with `r if (knitr::is_latex_output()) {"a static image of"}` the result shown in `r if (knitr::is_html_output()) {"Interactive"}` Figure \@ref(fig:force-networkD3).  Note that node names only appear when nodes are clicked.
+
+```{r, eval = FALSE}
+# get karate edgelist
+karate_edgelist <- read.csv("https://ona-book.org/data/karate.csv")
+
+# create igraph object
+karate <- igraph::graph_from_data_frame(karate_edgelist, directed = FALSE)
+
+# give Mr Hi and John A a different group
+V(karate)$group <- ifelse(V(karate)$name %in% c("Mr Hi", "John A"), 1, 2)
+
+# translate to networkD3 - creates a list with links and nodes dfs
+# links have a source and target column and group if requested 
+netd3_list <- networkD3::igraph_to_networkD3(karate, 
+                                             group = V(karate)$group)
+
+# visualize
+networkD3::forceNetwork(
+  Links = netd3_list$links,
+  Nodes = netd3_list$nodes,
+  NodeID = "name",
+  Source = "source",
+  Target = "target",
+  Group = "group"
+)
+```
+
+```{r force-networkD3, echo = FALSE, fig.align = "center", fig.cap = if (knitr::is_html_output()) {"Force-directed `networkD3` rendering of the Karate graph"} else {"Force-directed \\texttt{networkD3} rendering of the Karate graph"}, out.width = if (knitr::is_latex_output()) "80%"}
+if (knitr::is_html_output()) {
+  # get karate edgelist
+  karate_edgelist <- read.csv("https://ona-book.org/data/karate.csv")
+  
+  # create igraph object
+  karate <- igraph::graph_from_data_frame(karate_edgelist, directed = FALSE)
+  
+  # give Mr Hi and John A a different group
+  V(karate)$group <- ifelse(V(karate)$name %in% c("Mr Hi", "John A"), 1, 2)
+  
+  # translate to networkD3 - creates a list with links and nodes dfs
+  # links have a source and target column and group if requested 
+  netd3_list <- networkD3::igraph_to_networkD3(karate, 
+                                               group = V(karate)$group)
+  
+  # visualize
+  networkD3::forceNetwork(
+    Links = netd3_list$links,
+    Nodes = netd3_list$nodes,
+    NodeID = "name",
+    Source = "source",
+    Target = "target",
+    Group = "group"
+  )
+  
+  
+} else {
+  knitr::include_graphics("www/visualizing-graphs/force-networkD3.png")
+}
+```
+
+Other types of `D3` network visualizations are also available  such as `chordNetwork()`, and `sankeyNetwork()`, with many of these more appropriate for data visualization purposes than for the exploration and analysis of networks.  As a quick example of using `sankeyNetwork()` to visualize data flows, load the `eu_referendum` dataset from the `onadata` package or download it from the internet^[https://ona-book.org/data/eu_referendum.csv].  This shows statistics on voting by region and area in the United Kingdom's 2017 referendum on membership of the European Union.  In this example, we will calculate the Leave and Remain votes by region and visualize them using `sankeyNetwork()`, with `r if (knitr::is_latex_output()) {"a static image of"}` the result shown in `r if (knitr::is_html_output()) {"Interactive"}` Figure \@ref(fig:eu-sankey). It is worth taking a look at the intermediate objects created by this code so you can better understand how to construct the `Nodes` and `Links` dataframes that are commonly expected by `networkD3` functions. 
+
+```{r, eval = FALSE}
+library(dplyr)
+library(networkD3)
+library(tidyr)
+
+# get data
+eu_referendum <- read.csv("https://ona-book.org/data/eu_referendum.csv")
+
+# aggregate by region
+results <- eu_referendum |>  
+  dplyr::group_by(Region) |> 
+  dplyr::summarise(Remain = sum(Remain), Leave = sum(Leave)) |> 
+  tidyr::pivot_longer( -Region, names_to = "result", values_to = "votes")
+
+# create unique regions, "Leave" and "Remain" for nodes dataframe
+regions <- unique(results$Region)
+nodes <- data.frame(node = c(0:13), 
+                  name = c(regions, "Leave", "Remain"))
+
+#create edges/links dataframe
+results <- results |> 
+  dplyr::inner_join(nodes, by = c("Region" = "name")) |> 
+  dplyr::inner_join(nodes, by = c("result" = "name"))
+
+links <- results[ , c("node.x", "node.y", "votes")]
+colnames(links) <- c("source", "target", "value")
+
+# visualize using sankeyNetwork
+networkD3::sankeyNetwork(
+  Links = links, Nodes = nodes, Source = 'source', Target = 'target', 
+  Value = 'value', NodeID = 'name', units = 'votes'
+)
+```
+
+
+```{r eu-sankey, echo = FALSE, fig.align = "center", fig.cap = if (knitr::is_html_output()) {"Visualization of regional vote flows in the UK's European Union Referendum in 2016 using `sankeyNetwork()`"} else {"Visualization of regional vote flows in the UK's European Union Referendum in 2016 using `sankeyNetwork()`"}, out.width = if (knitr::is_latex_output()) "80%"}
+if (knitr::is_html_output()) {
+  library(dplyr)
+  library(networkD3)
+  library(tidyr)
+  
+  # get data
+  eu_referendum <- read.csv("https://ona-book.org/data/eu_referendum.csv")
+  
+  # aggregate by region
+  results <- eu_referendum |>  
+    dplyr::group_by(Region) |> 
+    dplyr::summarise(Remain = sum(Remain), Leave = sum(Leave)) |> 
+    tidyr::pivot_longer( -Region, names_to = "result", values_to = "votes")
+  
+  # create unique regions, "Leave" and "Remain" for nodes dataframe
+  regions <- unique(results$Region)
+  nodes <- data.frame(node = c(0:13), 
+                    name = c(regions, "Leave", "Remain"))
+  
+  #create edges/links dataframe
+  results <- results |> 
+    dplyr::inner_join(nodes, by = c("Region" = "name")) |> 
+    dplyr::inner_join(nodes, by = c("result" = "name"))
+  
+  links <- results[ , c("node.x", "node.y", "votes")]
+  colnames(links) <- c("source", "target", "value")
+
+  # visualize using sankeyNetwork
+  networkD3::sankeyNetwork(
+    Links = links, Nodes = nodes, Source = 'source', Target = 'target', 
+    Value = 'value', NodeID = 'name', units = 'votes'
+  )
+} else {
+  knitr::include_graphics("www/visualizing-graphs/eu-sankey.png")
+}
+```
+
+`r if (knitr::is_latex_output()) '<!--'`
+:::thinkahead
+**Thinking ahead:** As we have shown in examples above the `networkD3` package offers useful, convenient ways for non-Javascript programmers to make use of many of the great capabilities of the D3 visualization library. See [https://christophergandrud.github.io/networkD3/](https://christophergandrud.github.io/networkD3/) for more examples. However, the package's customization potential is limited.  For those who can program in D3, the scope exists to create amazing interactive graph visualizations, with limitless customization potential.  In the more advanced chapters of this book we will look at an example of how to visualize a network of the characters in the TV show *Friends* by coding natively in Javascript.
+:::
+`r if (knitr::is_latex_output()) '-->'`
+
+`r if (knitr::is_html_output()) '<!--'`
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Thinking ahead:} As we have shown in examples above the \texttt{networkD3} package offers useful, convenient ways for non-Javascript programmers to make use of many of the great capabilities of the D3 visualization library. See \texttt{https://christophergandrud.github.io/networkD3/} for more examples. However, the package's customization potential is limited.  For those who can program in D3, the scope exists to create amazing interactive graph visualizations, with limitless customization potential.  In the more advanced chapters of this book we will look at an example of how to visualize a network of the characters in the TV show \textit{Friends} by coding natively in Javascript.
+\end{minipage}
+}
+```
+`r if (knitr::is_html_output()) '-->'`
