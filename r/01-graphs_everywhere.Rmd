@@ -1,3 +1,73 @@
 `r if (knitr::is_latex_output()) '\\mainmatter'`
 
 # Graphs everywhere!
+
+If you have ever been lucky enough to pay a visit to the vibrant Russian city of Kaliningrad on the Baltic coast, it's likely to have been a trip you remember.  An unusual exclave of the massive Russian Federation, you cannot get to the remainder of Russia from Kaliningrad over land without crossing through at least two other countries.  Things have landed this way, like they always do, because of the cards dealt by history. The strategic importance endowed to Kaliningrad owing to its prime coastal position placed it in the center of a tug-of-war, changing hands on numerous occasions over the centuries.  At the end of the Second World War as Stalin cast his eye over the ruins of Europe, he considered the city far too strategically important to be left in the hands of any other Eastern-bloc state, and so despite the physical separation it was duly deemed to be Russia's sovereign territory.    
+
+As you might expect, Kaliningrad has only been so named since it became part of the USSR in 1946.  Prior to this, and stretching back to the middle ages, it was known as K&ouml;nigsberg --- the King's Mountain --- named in honor of King Ottokar II.  Steeped in glorious and tragic history, the city is rich in museums, castles, cathedrals and monuments from its past.  But for mathematicians like me, K&ouml;nigsberg is perhaps best known for a simple, unassuming puzzle that occupied the minds of many a renaissance intellectual in the 17th century --- a problem which, it could be argued, laid the foundations for the highly connected world we live in today.
+
+K&ouml;nigsberg was (and still is, presumably) separated in two by the River Pregel.  As the Pregel breaks towards the Baltic sea, two islands form a part of the city.  This leads to a city comprised of four land masses.  The two mainland masses on either side of the river (known as Altstadt-Loebenicht and Vorstadt-Haberberg) and the two island land masses (Lomse and Kneiphof).  A total of seven bridges connected these land masses^[Only two of these bridges still survive today].  Figure \@ref(fig:koenigsberg) is a suitably historic map of the situation.  The island on the left is Kneiphof and the island on the right is Lomse.  The beautiful dress worn by the lady in the foreground of this picture is large enough so that one of the seven bridges is entirely covered by it, but you can see the other six.
+
+```{r koenigsberg, echo = FALSE, out.width="80%", fig.align = "center", fig.cap = if (knitr::is_html_output()) {"The Prussian city of K&ouml;nigsberg circa 1600"} else {'The Prussian city of K\\"{o}nigsberg circa 1600'}}
+knitr::include_graphics("www/graphs_everywhere/koenigsberg.png")
+```
+
+The puzzle went like this:  is it possible to devise a walk where you would set foot on all four land masses while crossing all seven bridges only once?  There was a strong hunch from trial and error that the answer was no --- the problem was how to prove this mathematically.  No effective techniques had yet been discovered to allow such a proof. 
+
+Leonhard Euler was an 18th century Swiss mathematician who spent the majority of his life in St Petersburg or Berlin.  A prolific original thinker, Euler is considered by many as the greatest mathematician of all time.  It is impossible to study mathematics even at high school without being constantly exposed to Euler's work.  He popularized the greek letter $\pi$ to denote Archimedes' constant ratio between the circumference and diameter of a circle, he formalized the letter $i$ to denote the imaginary number $\sqrt{-1}$ and he defined the exponential constant $e$ which is known as *Euler's number*.  Living between Prussia and Russia at the time of the problem of the Seven Bridges of K&ouml;nigsberg, he set about finding a solution, and the one he discovered is both a testament to the beauty of mathematical proof and the first use of the concept of a graph to solve a mathematical problem.
+
+The first thing Euler did - as any good mathematician will always do - is strip the problem of all its extraneous information and reduce it to its most minimal form.  The problem merely requires one to set foot on a land mass.  It is not concerned with what route one takes while on that land mass.  Therefore we can represent each of the four land masses as dots.  We can then draw lines between the dots to represent the bridges.  This, he reasoned, leads to a diagram like that in `r if (knitr::is_html_output()) "Interactive"` Figure \@ref(fig:euler-graph).  The picture can be drawn in infinitely many ways, but it will always be four dots connected by seven lines in the same configuration. `r if (knitr::is_html_output()) "If you like, move the nodes around to see what I mean."`
+
+```{r euler-graph, echo = FALSE, fig.align = "center", fig.cap= if (knitr::is_html_output()) {"A minimal representation of the *Seven Bridges of K&ouml;nigsberg* problem"} else {'A minimal representation of the \\textit{Seven Bridges of K\\"{o}nigsberg} problem'}, out.width = "80%"}
+
+if (knitr::is_html_output()) {
+  library(igraphdata)
+  library(visNetwork)
+  data("Koenigsberg")
+  
+  nodes <- data.frame(
+    id = V(Koenigsberg)$name, 
+    label =  V(Koenigsberg)$name
+  )
+  
+  edges = data.frame(
+    from = c(rep("Altstadt-Loebenicht", 3), rep("Kneiphof", 3), "Vorstadt-Haberberg"),
+    to = c(rep("Kneiphof", 2), rep("Lomse", 2), rep("Vorstadt-Haberberg", 2), "Lomse")
+  )
+  
+  visNetwork::visNetwork(nodes, edges) |> 
+    visLayout(randomSeed = 1)
+} else {
+  knitr::include_graphics("www/graphs_everywhere/euler-graph.png")
+}
+
+```
+
+First, Euler observed that if one starts their journey at a certain place and crosses all seven bridges once, there must have been eight total visits to places.  This is because we start at a place, and every time we cross a bridge, we add another place to our walk.  So if we cross seven bridges, we must visit eight places (including repeat visits to a place).  
+
+Euler then looked at any siuation where you have a place A connected to other places by an *odd number* of bridges.  If there was one bridge and it was crossed once, we would only be in place A once - either at the beginning or end of the journey.  If there were three bridges and all were crossed once, place A would have been visited twice no matter where we started.  If there were five bridges, place A would have been visited three times.  If there were $n$ bridges, place A would have been visited $(n+1)/2$ times.
+
+Now Euler calculated how many place visits this would mean for K&ouml;nigsberg. Since Kneiphof has five bridges to other places, if all were crossed once Kneiphof would have been visited 3 times.  The other three places each have three bridges connecting them, so any such walk would result in 2 visits to each place.  Adding all this up, this means that if a walk existed through all four places where every bridge was used only once, there must be nine total place visits.  Since this contradicts Euler's earlier observation that such a walk must involve only eight place visits, we must conclude that such a walk does not exist.
+
+Euler's proof was the first time a graph like the one in `r if (knitr::is_html_output()) "Interactive"` Figure \@ref(fig:euler-graph) was used to solve a problem.  The solution also involved concepts that would later become critical in the study of graphs.  Euler set up the places as *vertices* or *nodes* of the graph and he set up the bridges as *edges*.  The proof depends on a conclusion about the number of edges connected to a vertex, which later became known as the *degree* of a vertex.  The proof required the study of *walks* or *paths* through the graph.  The requirement that a walk could only use each edge once became known as an *Euler walk* and various algorithms exist today to calculate Euler walks for problems such as constructing DNA sequences from their fragments^[In fact, Euler extended his proof to consider any graph, and concluded that if an Euler walk exists in a graph, then the number of vertices with odd degree is either 0 or 2.  For a fascinating write up of Euler's original proof, see @paoletti].  Little was Euler to know the Pandora's Box he had opened.
+
+`r if (knitr::is_latex_output()) '<!--'`
+:::thinkahead
+**Thinking ahead:** If you know how to load a graph object into R or Python, you could try to load the `koenigsberg` data set from the `onadata` package or download it from the internet at https://ona-data.org/data/koenigsberg.csv and create a graph from it.  You could use your software to calculate the degrees of the vertices of the graph.  For example in R, if you have the data loaded into an `igraph` object, you can use `igraph::degree()` to get a vector showing you the degrees of each vertex.  There is even a package called `eulerian` in R which has a function `hasEulerianPath()` which determines whether an Euler walk exists in a given graph.  
+:::
+`r if (knitr::is_latex_output()) '-->'`
+
+`r if (knitr::is_html_output()) '<!--'`
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Thinking ahead:} If you know how to load a graph object into R or Python, you could try to load the \texttt{koenigsberg} data set from the \texttt{onadata} package or download it from the internet\footnote{\texttt{https://ona-data.org/data/koenigsberg.csv}} and create a graph from it.  You could use your software to calculate the degrees of the vertices of the graph.  For example in R, if you have the data loaded into an \texttt{igraph} object, you can use \texttt{igraph::degree()} to get a vector showing you the degrees of each vertex.  There is even a package called \texttt{eulerian} in R which has a function \texttt{hasEulerianPath()} which determines whether an Euler walk exists in a given graph.  
+\end{minipage}
+}
+```
+`r if (knitr::is_html_output()) '-->'`
+
+## Graphs and networks are all around us
+
+Graphs and networks have existed since long before Euler, and probably since the beginning of time itself.  They exist physically, such as in a spider's web, in the electrical wiring of your home or in the molecules that make up the world around us.  Since the time of Euler, graphs have also existed conceptually as the best way we can describe many complex systems.   
+
