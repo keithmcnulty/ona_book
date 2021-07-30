@@ -4,7 +4,7 @@
 
 If you have ever been lucky enough to pay a visit to the vibrant Russian city of Kaliningrad on the Baltic coast, it's likely to have been a trip you remember.  An unusual exclave of the massive Russian Federation, you cannot get to the remainder of Russia from Kaliningrad over land without crossing through at least two other countries.  Things have landed this way, like they always do, because of the cards dealt by history. The strategic importance endowed to Kaliningrad owing to its prime coastal position placed it in the center of a tug-of-war, changing hands on numerous occasions over the centuries.  At the end of the Second World War as Stalin cast his eye over the ruins of Europe, he considered the city far too strategically important to be left in the hands of any other Eastern-bloc state, and so despite the physical separation it was duly deemed to be Russia's sovereign territory.    
 
-As you might expect, Kaliningrad has only been so named since it became part of the USSR in 1946.  Prior to this, and stretching back to the middle ages, it was known as K&ouml;nigsberg --- the King's Mountain --- named in honor of King Ottokar II.  Steeped in glorious and tragic history, the city is rich in museums, castles, cathedrals and monuments from its past.  But for mathematicians like me, K&ouml;nigsberg is perhaps best known for a simple, unassuming puzzle that occupied the minds of many a renaissance intellectual in the 17th century --- a problem which, it could be argued, laid the foundations for the highly connected world we live in today.
+As you might expect, Kaliningrad has only been so named since it became part of the USSR in 1946.  Prior to this, and stretching back to the middle ages, it was known as K&ouml;nigsberg --- the King's Mountain --- named in honor of King Ottokar II.  Steeped in glorious and tragic history, the city is rich in museums, castles, cathedrals and monuments from its past.  But for mathematicians like me, K&ouml;nigsberg is perhaps best known for a simple, unassuming puzzle that occupied the minds of many a renaissance intellectual in the 17th and 18th centuries --- a problem which, it could be argued, laid the foundations for the highly connected world we live in today.
 
 K&ouml;nigsberg was (and still is, presumably) separated in two by the River Pregel.  As the Pregel breaks towards the Baltic sea, two islands form a part of the city.  This leads to a city comprised of four land masses.  The two mainland masses on either side of the river (known as Altstadt-Loebenicht and Vorstadt-Haberberg) and the two island land masses (Lomse and Kneiphof).  A total of seven bridges connected these land masses^[Only two of these bridges still survive today].  Figure \@ref(fig:koenigsberg) is a suitably historic map of the situation.  The island on the left is Kneiphof and the island on the right is Lomse.  The beautiful dress worn by the lady in the foreground of this picture is large enough so that one of the seven bridges is entirely covered by it, but you can see the other six.
 
@@ -53,7 +53,7 @@ Euler's proof was the first time a graph like the one in `r if (knitr::is_html_o
 
 `r if (knitr::is_latex_output()) '<!--'`
 :::thinkahead
-**Thinking ahead:** If you know how to load a graph object into R or Python, you could try to load the `koenigsberg` data set from the `onadata` package or download it from the internet at https://ona-data.org/data/koenigsberg.csv and create a graph from it.  You could use your software to calculate the degrees of the vertices of the graph.  For example in R, if you have the data loaded into an `igraph` object, you can use `igraph::degree()` to get a vector showing you the degrees of each vertex.  There is even a package called `eulerian` in R which has a function `hasEulerianPath()` which determines whether an Euler walk exists in a given graph.  
+**Thinking ahead:** If you know how to load a graph object into R or Python, you could try to load the `koenigsberg` data set from the `onadata` package or download it from the internet^[https://ona-data.org/data/koenigsberg.csv] and create a graph from it.  You could use your software to calculate the degrees of the vertices of the graph.  For example in R, if you have the data loaded into an `igraph` object, you can use `igraph::degree()` to get a vector showing you the degrees of each vertex.  There is even a package called `eulerian` in R which has a function `hasEulerianPath()` which determines whether an Euler walk exists in a given graph.  
 :::
 `r if (knitr::is_latex_output()) '-->'`
 
@@ -61,7 +61,7 @@ Euler's proof was the first time a graph like the one in `r if (knitr::is_html_o
 ```{=latex}
 \colorbox{babyblueeyes}{
 \begin{minipage}{\textwidth}
-\textbf{Thinking ahead:} If you know how to load a graph object into R or Python, you could try to load the \texttt{koenigsberg} data set from the \texttt{onadata} package or download it from the internet\footnote{\texttt{https://ona-data.org/data/koenigsberg.csv}} and create a graph from it.  You could use your software to calculate the degrees of the vertices of the graph.  For example in R, if you have the data loaded into an \texttt{igraph} object, you can use \texttt{igraph::degree()} to get a vector showing you the degrees of each vertex.  There is even a package called \texttt{eulerian} in R which has a function \texttt{hasEulerianPath()} which determines whether an Euler walk exists in a given graph.  
+\textbf{Thinking ahead:} If you know how to load a graph object into R or Python, you could try to load the \texttt{koenigsberg} data set from the \texttt{onadata} package or download it from the internet at \texttt{https://ona-data.org/data/koenigsberg.csv} and create a graph from it.  You could use your software to calculate the degrees of the vertices of the graph.  For example in R, if you have the data loaded into an \texttt{igraph} object, you can use \texttt{igraph::degree()} to get a vector showing you the degrees of each vertex.  There is even a package called \texttt{eulerian} in R which has a function \texttt{hasEulerianPath()} which determines whether an Euler walk exists in a given graph.  
 \end{minipage}
 }
 ```
@@ -81,7 +81,19 @@ Arguably, the area where graphs have impacted our day to day lives the most in r
 
 ## Graph theory in the analysis of people and groups
 
-In the social sciences and in the study of people and groups, the increasing prevalence of network data and the ability to analyze it using graph-theoretic methods have opened up rich and continuously developing veins of research that encompass both academic and enterprise settings.   
+In the social sciences and in the study of people and groups, the increasing prevalence of network data and the ability to analyze it using graph-theoretic methods have opened up rich and continuously developing veins of research that encompass both academic and enterprise settings.   Much of the work that is done can be grouped into a few different study areas.
+
+### The study of connection
+
+In most organizations, institutions and societal groups, connection is considered a critical facilitator of happiness, motivation, productivity and progress.  The psychological concept of *belongingness*, which describes a human need to connect, affiliate and be accepted by others, is an important element of Maslow's Hierarchy of Needs. Empirically, greater social connection has been associated with positive effects on mental and physical health, cognitive functioning, life expectancy and even wound healing (@holt-lunstad1).  Conversely, lack of connection --- or loneliness --- is of research interest because of its potential negative effects on mental wellbeing, productivity and workplace performance.  A meta-analytic review of the relationship between social relationships and mortality risk concluded that lack of social connection carries a higher risk of premature mortality than obesity (@holt-lunstad2).
+
+In workplace settings, economic, sociology and psychology practitioners and academics are showing an increasing amount of interest in connection and how it affects performance, productivity and employee retention.  Empirical research has demonstrated links between friendship at work and improved work engagement and productivity (@rath), and social interaction at work (whether work-related or otherwise) has been associated with improved outcomes (@olguin).  
+
+The ability to analyse connection in the workplace and in society-at-large will become increasingly important as we move further into the 21st century.  The variety of data that could represent connection is expanding.  Connection between people can now be defined by in person interaction, electronic transaction and even assumed connection through overlaps in geographic location or in work or personal activities. Strong analytic techniques will be necessary to support evidence-based practice, because not all measures of connection are meaningful to the outcomes being researched and, even when they have been shown to be meaningful, resulting interventions do not always have the expected effects (for example, a study by @feld demonstrated that deliberate attempts to increase interracial contact in American schools actually ended up causing greater racial segregation).
+
+### The study of information flow
+
+
 
 
 
