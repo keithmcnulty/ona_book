@@ -170,6 +170,7 @@ div.csl-indent {
 <li class="chapter" data-level="1" data-path="graphs-everywhere.html"><a href="graphs-everywhere.html"><i class="fa fa-check"></i><b>1</b> Graphs everywhere!</a>
 <ul>
 <li class="chapter" data-level="1.1" data-path="graphs-everywhere.html"><a href="graphs-everywhere.html#graphs-and-networks-are-all-around-us"><i class="fa fa-check"></i><b>1.1</b> Graphs and networks are all around us</a></li>
+<li class="chapter" data-level="1.2" data-path="graphs-everywhere.html"><a href="graphs-everywhere.html#graph-theory-in-the-analysis-of-people-and-groups"><i class="fa fa-check"></i><b>1.2</b> Graph theory in the analysis of people and groups</a></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="working.html"><a href="working.html"><i class="fa fa-check"></i><b>2</b> Working With Graphs</a>
 <ul>
@@ -561,9 +562,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <span id="cb3-5"><a href="working.html#cb3-5" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">directed =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <p>We now hove our <span class="math inline">\(G_\mathrm{work}\)</span> graph in memory. Before we go any further, let’s take a look at it.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="working.html#cb4-1" aria-hidden="true" tabindex="-1"></a>gwork</span></code></pre></div>
-<pre><code>## IGRAPH 99b93ab UN-- 4 5 -- 
+<pre><code>## IGRAPH 332ac0b UN-- 4 5 -- 
 ## + attr: name (v/c)
-## + edges from 99b93ab (vertex names):
+## + edges from 332ac0b (vertex names):
 ## [1] David --Zubin  David --Suraya David --Jane   Zubin --Jane   Suraya--Jane</code></pre>
 <p>Let’s start with the string <code>UN--</code> on the first line of the output. This string describes the type of graph this is. The letter <code>U</code> denotes an undirected graph, and <code>N</code> denotes a graph with named vertices. The two other properties, which we will discover later, are currently not present and so are represented by the dashes <code>--</code>. Next we have the number of vertices (4) and edges (5), followed by two further dashes.</p>
 <p>On the next line the attributes of the graph are listed. In this case there is just one attribute <code>name</code>, which is a vertex attribute — denoted by <code>(v/c)</code>. Finally the edges of the graph are given using the vertex names. Note that there is no direction to these edges, so they are denoted with <code>--</code>.</p>
@@ -576,9 +577,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <span id="cb6-6"><a href="working.html#cb6-6" aria-hidden="true" tabindex="-1"></a>gmanage_edgelist <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(gmanage_edgelist)</span>
 <span id="cb6-7"><a href="working.html#cb6-7" aria-hidden="true" tabindex="-1"></a>(gmanage <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_edgelist</span>(<span class="at">el =</span> gmanage_edgelist,</span>
 <span id="cb6-8"><a href="working.html#cb6-8" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">directed =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
-<pre><code>## IGRAPH b8754f2 DN-- 4 3 -- 
+<pre><code>## IGRAPH 7b4ef00 DN-- 4 3 -- 
 ## + attr: name (v/c)
-## + edges from b8754f2 (vertex names):
+## + edges from 7b4ef00 (vertex names):
 ## [1] Suraya-&gt;David David -&gt;Zubin David -&gt;Jane</code></pre>
 <p>We see a similar output to <code>gwork</code>, except we now have a directed graph, donated by <code>D</code> in the first line, and we see that the edges are now denoted with direction using<br />
 <code>-&gt;</code>.</p>
@@ -596,9 +597,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <span id="cb8-8"><a href="working.html#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">adjmatrix =</span> adj_flights,</span>
 <span id="cb8-9"><a href="working.html#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">mode =</span> <span class="st">&quot;directed&quot;</span></span>
 <span id="cb8-10"><a href="working.html#cb8-10" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
-<pre><code>## IGRAPH 8d91a1f DN-- 3 16 -- 
+<pre><code>## IGRAPH 77c1f29 DN-- 3 16 -- 
 ## + attr: name (v/c)
-## + edges from 8d91a1f (vertex names):
+## + edges from 77c1f29 (vertex names):
 ##  [1] SFO-&gt;PHL SFO-&gt;PHL SFO-&gt;PHL SFO-&gt;PHL SFO-&gt;TUS SFO-&gt;TUS SFO-&gt;TUS SFO-&gt;TUS PHL-&gt;SFO PHL-&gt;SFO PHL-&gt;SFO PHL-&gt;SFO PHL-&gt;SFO
 ## [14] PHL-&gt;TUS TUS-&gt;SFO TUS-&gt;SFO</code></pre>
 <p>We see the expected directed multigraph with 3 vertices and 4 edges. If we wish to use create the weighted graph in Figure <a href="working.html#fig:weightedflights">2.10</a>, we add <code>weighted = TRUE</code> to the arguments.</p>
@@ -608,9 +609,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <span id="cb10-4"><a href="working.html#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">mode =</span> <span class="st">&quot;directed&quot;</span>,</span>
 <span id="cb10-5"><a href="working.html#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">weighted =</span> <span class="cn">TRUE</span></span>
 <span id="cb10-6"><a href="working.html#cb10-6" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
-<pre><code>## IGRAPH 1a7e355 DNW- 3 5 -- 
+<pre><code>## IGRAPH d3f2841 DNW- 3 5 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from 1a7e355 (vertex names):
+## + edges from d3f2841 (vertex names):
 ## [1] SFO-&gt;PHL SFO-&gt;TUS PHL-&gt;SFO PHL-&gt;TUS TUS-&gt;SFO</code></pre>
 <p>We now see a graph with only 5 edges but we see the addition of <code>W</code> in our graph type, indicating a weighted graph and we also see a new edge property <code>weight</code>.</p>
 </div>
@@ -638,9 +639,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <span id="cb12-18"><a href="working.html#cb12-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">directed =</span> <span class="cn">FALSE</span>,</span>
 <span id="cb12-19"><a href="working.html#cb12-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">vertices =</span> vertex_df</span>
 <span id="cb12-20"><a href="working.html#cb12-20" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
-<pre><code>## IGRAPH 7b8b5e2 UN-- 7 8 -- 
+<pre><code>## IGRAPH e47e21d UN-- 7 8 -- 
 ## + attr: name (v/c)
-## + edges from 7b8b5e2 (vertex names):
+## + edges from e47e21d (vertex names):
 ## [1] David --Zubin  David --Suraya David --Jane   Zubin --Jane   Suraya--Jane   Sandra--Mae-Li Sandra--Jake   Mae-Li--Jake</code></pre>
 <div class="thinkahead">
 <p><strong>Playing around:</strong> The functions in this section are not the only functions in the <code>igraph</code> package that builds graphs from data, but they are by far the most commonly used ones. By typing <code>?graph_from</code> in your R console and looking at the functions that autocomplete, you can see some of the other functions that build graphs from data. Try playing around with them if you are curious.</p>
@@ -678,9 +679,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <span id="cb14-18"><a href="working.html#cb14-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">directed =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb14-19"><a href="working.html#cb14-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">vertices =</span> vertex_transfers</span>
 <span id="cb14-20"><a href="working.html#cb14-20" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
-<pre><code>## IGRAPH 9acc0ba DN-- 3 4 -- 
+<pre><code>## IGRAPH bd23a62 DN-- 3 4 -- 
 ## + attr: name (v/c), loc (v/c), cur (e/c), amt (e/n)
-## + edges from 9acc0ba (vertex names):
+## + edges from bd23a62 (vertex names):
 ## [1] A-&gt;A A-&gt;B B-&gt;A B-&gt;C</code></pre>
 <p>We see that the additional edge properties <code>cur</code> and <code>amt</code> and the vertex property <code>loc</code> have been included in the graph. The codes immediately following these properties represent the property type and the data type. We can see that <code>loc</code> is a vertex property of character type (<code>v/c</code>), <code>cur</code> is an edge property of character type (<code>e/c</code>) and <code>amt</code> is an edge property of numeric type (<code>e/n</code>).</p>
 <div class="thinkahead">
@@ -697,10 +698,10 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 -->
 <p>You can view the vertex and edge sets of a graph using the <code>V()</code> and <code>E()</code> functions respectively.</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="working.html#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(gtransfers)</span></code></pre></div>
-<pre><code>## + 3/3 vertices, named, from 9acc0ba:
+<pre><code>## + 3/3 vertices, named, from bd23a62:
 ## [1] A B C</code></pre>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="working.html#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">E</span>(gtransfers)</span></code></pre></div>
-<pre><code>## + 4/4 edges from 9acc0ba (vertex names):
+<pre><code>## + 4/4 edges from bd23a62 (vertex names):
 ## [1] A-&gt;A A-&gt;B B-&gt;A B-&gt;C</code></pre>
 <p>To see specific properties or attributes within the vertices or edges, the <code>$</code> operator can be used.</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="working.html#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(gtransfers)<span class="sc">$</span>name</span></code></pre></div>
@@ -726,18 +727,18 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <span id="cb24-16"><a href="working.html#cb24-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-17"><a href="working.html#cb24-17" aria-hidden="true" tabindex="-1"></a><span class="co"># view flightsgraph</span></span>
 <span id="cb24-18"><a href="working.html#cb24-18" aria-hidden="true" tabindex="-1"></a>flightsgraph</span></code></pre></div>
-<pre><code>## IGRAPH e9575fd DNW- 3 5 -- 
+<pre><code>## IGRAPH 0154bd3 DNW- 3 5 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from e9575fd (vertex names):
+## + edges from 0154bd3 (vertex names):
 ## [1] SFO-&gt;PHL SFO-&gt;TUS PHL-&gt;SFO PHL-&gt;TUS TUS-&gt;SFO</code></pre>
 <p>We see a weighted graph has been created by adding a <code>weight</code> property to the edges of an unweighted graph.</p>
 <p>A bipartite graph can be created by giving the vertices a <code>type</code> property according to the two disjoint sets of vertices. Let’s use our <span class="math inline">\(G_\mathrm{new}\)</span> bipartite graph again as an example, which we generated earlier as the <code>gnew</code> object. In our vertex set, the first four vertices are from organization A and the final three are from organization B.</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="working.html#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(gnew)<span class="sc">$</span>type <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">&quot;A&quot;</span>, <span class="dv">4</span>), <span class="fu">rep</span>(<span class="st">&quot;B&quot;</span>, <span class="dv">3</span>))</span>
 <span id="cb26-2"><a href="working.html#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-3"><a href="working.html#cb26-3" aria-hidden="true" tabindex="-1"></a>gnew</span></code></pre></div>
-<pre><code>## IGRAPH 7b8b5e2 UN-B 7 8 -- 
+<pre><code>## IGRAPH e47e21d UN-B 7 8 -- 
 ## + attr: name (v/c), type (v/c)
-## + edges from 7b8b5e2 (vertex names):
+## + edges from e47e21d (vertex names):
 ## [1] David --Zubin  David --Suraya David --Jane   Zubin --Jane   Suraya--Jane   Sandra--Mae-Li Sandra--Jake   Mae-Li--Jake</code></pre>
 <p>We can see that out graph <code>gnew</code> now has the final of the four graph types: <code>B</code> meaning bipartite.</p>
 <div class="thinkahead">
@@ -777,7 +778,7 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <pre><code>## [&#39;David&#39;, &#39;Jane&#39;, &#39;Zubin&#39;, &#39;Suraya&#39;]</code></pre>
 <div class="sourceCode" id="cb31"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a href="working.html#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(gwork.edges)</span></code></pre></div>
 <pre><code>## [(&#39;David&#39;, &#39;Zubin&#39;), (&#39;David&#39;, &#39;Suraya&#39;), (&#39;David&#39;, &#39;Jane&#39;), (&#39;Jane&#39;, &#39;Zubin&#39;), (&#39;Jane&#39;, &#39;Suraya&#39;)]</code></pre>
-<p>A graph can also be constructed from an edgelist in a Pandas DataFrame. By default the edgelist needs to have the columns <code>source</code> and <code>target</code><a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>.</p>
+<p>A graph can also be constructed from an edgelist in a Pandas DataFrame. By default the edgelist needs to have the columns <code>source</code> and <code>target</code><a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>.</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb33-1"><a href="working.html#cb33-1" aria-hidden="true" tabindex="-1"></a>gwork_edgelist<span class="op">=</span><span class="bu">dict</span>(</span>
 <span id="cb33-2"><a href="working.html#cb33-2" aria-hidden="true" tabindex="-1"></a>  source<span class="op">=</span>[<span class="st">&quot;David&quot;</span>, <span class="st">&quot;David&quot;</span>, <span class="st">&quot;David&quot;</span>, <span class="st">&quot;Jane&quot;</span>, <span class="st">&quot;Jane&quot;</span>],</span>
 <span id="cb33-3"><a href="working.html#cb33-3" aria-hidden="true" tabindex="-1"></a>  target<span class="op">=</span>[<span class="st">&quot;Zubin&quot;</span>, <span class="st">&quot;Suraya&quot;</span>, <span class="st">&quot;Jane&quot;</span>, <span class="st">&quot;Zubin&quot;</span>, <span class="st">&quot;Suraya&quot;</span>]</span>
@@ -929,14 +930,14 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 </div>
 <div id="data-exercises" class="section level3" number="2.4.2">
 <h3><span class="header-section-number">2.4.2</span> Data exercises</h3>
-<p>Load the <code>koenigsberg</code> edgelist from the <code>onadata</code> package or load it as a dataframe from the internet<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>. This is the edgelist for the Bridges of Königsberg problem we looked at in …</p>
+<p>Load the <code>koenigsberg</code> edgelist from the <code>onadata</code> package or load it as a dataframe from the internet<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>. This is the edgelist for the Bridges of Königsberg problem we looked at in …</p>
 <ol style="list-style-type: decimal">
 <li>Create a graph object using this edgelist. Ensure that it is undirected.</li>
 <li>By exploring the graph object you just created, determine how many vertices and edges are in this graph. Does this make sense given the original problem tackled by Euler?</li>
 <li>Obtain a list of the names of the vertices in this graph.</li>
 <li>Find a function or method in your graph package to create the adjacency matrix for this graph. Check the output to see if it makes sense.</li>
 </ol>
-<p>Load the <code>pizza</code> data set from the <code>onadata</code> package or load it as a dataframe from the internet<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>. This dataset represents requests made by Reddit users on a thread called <em>Random Acts of Pizza</em> (ROAP), and is part of a larger dataset used for research purposes<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>. The <code>from</code> column represents users who made requests for pizza and the <code>to</code> column represents users who responded to the request by giving pizza<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a>. Other columns represent the request ID and data on the requester at the time the request was made.</p>
+<p>Load the <code>pizza</code> data set from the <code>onadata</code> package or load it as a dataframe from the internet<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>. This dataset represents requests made by Reddit users on a thread called <em>Random Acts of Pizza</em> (ROAP), and is part of a larger dataset used for research purposes<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a>. The <code>from</code> column represents users who made requests for pizza and the <code>to</code> column represents users who responded to the request by giving pizza<a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a>. Other columns represent the request ID and data on the requester at the time the request was made.</p>
 <ol start="5" style="list-style-type: decimal">
 <li>Use an appropriate method to create a graph object using the <code>from</code> and <code>to</code> columns in this data set.</li>
 <li>Use the information contained in the graph object to determine how many pizza requests were fulfilled.</li>
@@ -952,12 +953,12 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 </div>
 <div class="footnotes">
 <hr />
-<ol start="3">
-<li id="fn3"><p>These columns can also be named differently and identified via the <code>source</code> and <code>target</code> arguments in the <code>from_pandas_edgelist()</code> function.<a href="working.html#fnref3" class="footnote-back">↩︎</a></p></li>
-<li id="fn4"><p><a href="https://ona-book.org/data/koenigsberg.csv" class="uri">https://ona-book.org/data/koenigsberg.csv</a><a href="working.html#fnref4" class="footnote-back">↩︎</a></p></li>
-<li id="fn5"><p><a href="https://ona-book.org/data/pizza.csv" class="uri">https://ona-book.org/data/pizza.csv</a><a href="working.html#fnref5" class="footnote-back">↩︎</a></p></li>
-<li id="fn6"><p><a href="https://cs.stanford.edu/~althoff/raop-dataset/altruistic_requests_icwsm.pdf" class="uri">https://cs.stanford.edu/~althoff/raop-dataset/altruistic_requests_icwsm.pdf</a><a href="working.html#fnref6" class="footnote-back">↩︎</a></p></li>
-<li id="fn7"><p>This data set is only a small subset of the full data set, which included many requests which were not fulfilled. As we all know, a free pizza is a rare thing<a href="working.html#fnref7" class="footnote-back">↩︎</a></p></li>
+<ol start="4">
+<li id="fn4"><p>These columns can also be named differently and identified via the <code>source</code> and <code>target</code> arguments in the <code>from_pandas_edgelist()</code> function.<a href="working.html#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p><a href="https://ona-book.org/data/koenigsberg.csv" class="uri">https://ona-book.org/data/koenigsberg.csv</a><a href="working.html#fnref5" class="footnote-back">↩︎</a></p></li>
+<li id="fn6"><p><a href="https://ona-book.org/data/pizza.csv" class="uri">https://ona-book.org/data/pizza.csv</a><a href="working.html#fnref6" class="footnote-back">↩︎</a></p></li>
+<li id="fn7"><p><a href="https://cs.stanford.edu/~althoff/raop-dataset/altruistic_requests_icwsm.pdf" class="uri">https://cs.stanford.edu/~althoff/raop-dataset/altruistic_requests_icwsm.pdf</a><a href="working.html#fnref7" class="footnote-back">↩︎</a></p></li>
+<li id="fn8"><p>This data set is only a small subset of the full data set, which included many requests which were not fulfilled. As we all know, a free pizza is a rare thing<a href="working.html#fnref8" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
