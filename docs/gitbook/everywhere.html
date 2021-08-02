@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>1 Graphs everywhere! | Handbook of Graphs and Networks in People Analytics</title>
+  <meta name="description" content="A technical manual of graphs, networks and their applications in the people and social sciences" />
+  <meta name="generator" content="bookdown 0.22.15 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="1 Graphs everywhere! | Handbook of Graphs and Networks in People Analytics" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://ona-book.org" />
+  <meta property="og:image" content="https://ona-book.org/www/cover/cover-ona.png" />
+  <meta property="og:description" content="A technical manual of graphs, networks and their applications in the people and social sciences" />
+  <meta name="github-repo" content="keithmcnulty/ona_book" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="1 Graphs everywhere! | Handbook of Graphs and Networks in People Analytics" />
+  <meta name="twitter:site" content="@dr_keithmcnulty" />
+  <meta name="twitter:description" content="A technical manual of graphs, networks and their applications in the people and social sciences" />
+  <meta name="twitter:image" content="https://ona-book.org/www/cover/cover-ona.png" />
+
+<meta name="author" content="Keith McNulty" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="r-intro.html"/>
+<script src="libs/header-attrs-2.9.5/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<link href="libs/vis-4.20.1/vis.css" rel="stylesheet" />
+<script src="libs/vis-4.20.1/vis.min.js"></script>
+<script src="libs/visNetwork-binding-2.0.9/visNetwork.js"></script>
+<script src="libs/d3-4.5.0/d3.min.js"></script>
+<script src="libs/forceNetwork-binding-0.4/forceNetwork.js"></script>
+<script src="libs/sankey-1/sankey.js"></script>
+<script src="libs/sankeyNetwork-binding-0.4/sankeyNetwork.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Handbook of Regression Modeling in People Analytics</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a></li>
+<li class="chapter" data-level="1" data-path="everywhere.html"><a href="everywhere.html"><i class="fa fa-check"></i><b>1</b> Graphs everywhere!</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="everywhere.html"><a href="everywhere.html#graphs-as-mathematical-models"><i class="fa fa-check"></i><b>1.1</b> Graphs as mathematical models</a></li>
+<li class="chapter" data-level="1.2" data-path="everywhere.html"><a href="everywhere.html#graph-theory-in-the-analysis-of-people-and-groups"><i class="fa fa-check"></i><b>1.2</b> Graph theory in the analysis of people and groups</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="everywhere.html"><a href="everywhere.html#the-study-of-connection"><i class="fa fa-check"></i><b>1.2.1</b> The study of connection</a></li>
+<li class="chapter" data-level="1.2.2" data-path="everywhere.html"><a href="everywhere.html#the-study-of-information-flow"><i class="fa fa-check"></i><b>1.2.2</b> The study of information flow</a></li>
+<li class="chapter" data-level="1.2.3" data-path="everywhere.html"><a href="everywhere.html#the-study-of-community-diversity-and-familiarity"><i class="fa fa-check"></i><b>1.2.3</b> The study of community, diversity and familiarity</a></li>
+<li class="chapter" data-level="1.2.4" data-path="everywhere.html"><a href="everywhere.html#the-study-of-importance-influence-and-attachment"><i class="fa fa-check"></i><b>1.2.4</b> The study of importance, influence and attachment</a></li>
+<li class="chapter" data-level="1.2.5" data-path="everywhere.html"><a href="everywhere.html#graphs-as-data-sources"><i class="fa fa-check"></i><b>1.2.5</b> Graphs as data sources</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="everywhere.html"><a href="everywhere.html#the-purpose-structure-and-organization-of-this-book"><i class="fa fa-check"></i><b>1.3</b> The purpose, structure and organization of this book</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="r-intro.html"><a href="r-intro.html"><i class="fa fa-check"></i><b>2</b> The Basics of the R Programming Language</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="r-intro.html"><a href="r-intro.html#what-is-r"><i class="fa fa-check"></i><b>2.1</b> What is R?</a></li>
+<li class="chapter" data-level="2.2" data-path="r-intro.html"><a href="r-intro.html#how-to-start-using-r"><i class="fa fa-check"></i><b>2.2</b> How to start using R</a></li>
+<li class="chapter" data-level="2.3" data-path="r-intro.html"><a href="r-intro.html#data-in-r"><i class="fa fa-check"></i><b>2.3</b> Data in R</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="r-intro.html"><a href="r-intro.html#data-types"><i class="fa fa-check"></i><b>2.3.1</b> Data types</a></li>
+<li class="chapter" data-level="2.3.2" data-path="r-intro.html"><a href="r-intro.html#homogeneous-data-structures"><i class="fa fa-check"></i><b>2.3.2</b> Homogeneous data structures</a></li>
+<li class="chapter" data-level="2.3.3" data-path="r-intro.html"><a href="r-intro.html#heterogeneous-data-structures"><i class="fa fa-check"></i><b>2.3.3</b> Heterogeneous data structures</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="r-intro.html"><a href="r-intro.html#working-with-dataframes"><i class="fa fa-check"></i><b>2.4</b> Working with dataframes</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="r-intro.html"><a href="r-intro.html#loading-and-tidying-data-in-dataframes"><i class="fa fa-check"></i><b>2.4.1</b> Loading and tidying data in dataframes</a></li>
+<li class="chapter" data-level="2.4.2" data-path="r-intro.html"><a href="r-intro.html#manipulating-dataframes"><i class="fa fa-check"></i><b>2.4.2</b> Manipulating dataframes</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="r-intro.html"><a href="r-intro.html#functions-packages-and-libraries"><i class="fa fa-check"></i><b>2.5</b> Functions, packages and libraries</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="r-intro.html"><a href="r-intro.html#using-functions"><i class="fa fa-check"></i><b>2.5.1</b> Using functions</a></li>
+<li class="chapter" data-level="2.5.2" data-path="r-intro.html"><a href="r-intro.html#help-with-functions"><i class="fa fa-check"></i><b>2.5.2</b> Help with functions</a></li>
+<li class="chapter" data-level="2.5.3" data-path="r-intro.html"><a href="r-intro.html#writing-your-own-functions"><i class="fa fa-check"></i><b>2.5.3</b> Writing your own functions</a></li>
+<li class="chapter" data-level="2.5.4" data-path="r-intro.html"><a href="r-intro.html#installing-packages"><i class="fa fa-check"></i><b>2.5.4</b> Installing packages</a></li>
+<li class="chapter" data-level="2.5.5" data-path="r-intro.html"><a href="r-intro.html#using-packages"><i class="fa fa-check"></i><b>2.5.5</b> Using packages</a></li>
+<li class="chapter" data-level="2.5.6" data-path="r-intro.html"><a href="r-intro.html#the-pipe-operator"><i class="fa fa-check"></i><b>2.5.6</b> The pipe operator</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="r-intro.html"><a href="r-intro.html#errors-warnings-and-messages"><i class="fa fa-check"></i><b>2.6</b> Errors, warnings and messages</a></li>
+<li class="chapter" data-level="2.7" data-path="r-intro.html"><a href="r-intro.html#plotting-and-graphing"><i class="fa fa-check"></i><b>2.7</b> Plotting and graphing</a>
+<ul>
+<li class="chapter" data-level="2.7.1" data-path="r-intro.html"><a href="r-intro.html#plotting-in-base-r"><i class="fa fa-check"></i><b>2.7.1</b> Plotting in base R</a></li>
+<li class="chapter" data-level="2.7.2" data-path="r-intro.html"><a href="r-intro.html#specialist-plotting-and-graphing-packages"><i class="fa fa-check"></i><b>2.7.2</b> Specialist plotting and graphing packages</a></li>
+</ul></li>
+<li class="chapter" data-level="2.8" data-path="r-intro.html"><a href="r-intro.html#documenting-your-work-using-r-markdown"><i class="fa fa-check"></i><b>2.8</b> Documenting your work using R Markdown</a></li>
+<li class="chapter" data-level="2.9" data-path="r-intro.html"><a href="r-intro.html#learning-exercises"><i class="fa fa-check"></i><b>2.9</b> Learning exercises</a>
+<ul>
+<li class="chapter" data-level="2.9.1" data-path="r-intro.html"><a href="r-intro.html#discussion-questions"><i class="fa fa-check"></i><b>2.9.1</b> Discussion questions</a></li>
+<li class="chapter" data-level="2.9.2" data-path="r-intro.html"><a href="r-intro.html#data-exercises"><i class="fa fa-check"></i><b>2.9.2</b> Data exercises</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="working.html"><a href="working.html"><i class="fa fa-check"></i><b>3</b> Working With Graphs</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="working.html"><a href="working.html#elementary-graph-theory"><i class="fa fa-check"></i><b>3.1</b> Elementary Graph Theory</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="working.html"><a href="working.html#graph-def"><i class="fa fa-check"></i><b>3.1.1</b> General definition of a graph</a></li>
+<li class="chapter" data-level="3.1.2" data-path="working.html"><a href="working.html#graph-types"><i class="fa fa-check"></i><b>3.1.2</b> Types of graphs</a></li>
+<li class="chapter" data-level="3.1.3" data-path="working.html"><a href="working.html#vertex-edge-prop"><i class="fa fa-check"></i><b>3.1.3</b> Vertex and Edge Properties</a></li>
+<li class="chapter" data-level="3.1.4" data-path="working.html"><a href="working.html#rep-graphs"><i class="fa fa-check"></i><b>3.1.4</b> Representations of graphs</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="working.html"><a href="working.html#creating-graphs-in-r"><i class="fa fa-check"></i><b>3.2</b> Creating graphs in R</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="working.html"><a href="working.html#creating-a-graph-from-an-edgelist"><i class="fa fa-check"></i><b>3.2.1</b> Creating a graph from an edgelist</a></li>
+<li class="chapter" data-level="3.2.2" data-path="working.html"><a href="working.html#creating-a-graph-from-an-adjacency-matrix"><i class="fa fa-check"></i><b>3.2.2</b> Creating a graph from an adjacency matrix</a></li>
+<li class="chapter" data-level="3.2.3" data-path="working.html"><a href="working.html#creating-a-graph-from-a-dataframe"><i class="fa fa-check"></i><b>3.2.3</b> Creating a graph from a dataframe</a></li>
+<li class="chapter" data-level="3.2.4" data-path="working.html"><a href="working.html#adding-properties-to-the-vertices-and-edges"><i class="fa fa-check"></i><b>3.2.4</b> Adding properties to the vertices and edges</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="working.html"><a href="working.html#creating-graphs-in-python"><i class="fa fa-check"></i><b>3.3</b> Creating graphs in Python</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="working.html"><a href="working.html#creating-a-graph-from-an-edgelist-1"><i class="fa fa-check"></i><b>3.3.1</b> Creating a graph from an edgelist</a></li>
+<li class="chapter" data-level="3.3.2" data-path="working.html"><a href="working.html#python-graph-from-adjacency"><i class="fa fa-check"></i><b>3.3.2</b> Creating a graph from an adjacency matrix</a></li>
+<li class="chapter" data-level="3.3.3" data-path="working.html"><a href="working.html#adding-vertex-and-edge-properties-to-a-graph"><i class="fa fa-check"></i><b>3.3.3</b> Adding vertex and edge properties to a graph</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="working.html"><a href="working.html#learning-exercises-1"><i class="fa fa-check"></i><b>3.4</b> Learning exercises</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="working.html"><a href="working.html#discussion-questions-1"><i class="fa fa-check"></i><b>3.4.1</b> Discussion questions</a></li>
+<li class="chapter" data-level="3.4.2" data-path="working.html"><a href="working.html#data-exercises-1"><i class="fa fa-check"></i><b>3.4.2</b> Data exercises</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="viz-graphs.html"><a href="viz-graphs.html"><i class="fa fa-check"></i><b>4</b> Visualizing Graphs</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="viz-graphs.html"><a href="viz-graphs.html#visualizing-graphs-in-r"><i class="fa fa-check"></i><b>4.1</b> Visualizing graphs in R</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="viz-graphs.html"><a href="viz-graphs.html#native-plotting-igraph"><i class="fa fa-check"></i><b>4.1.1</b> Native plotting in <code>igraph</code></a></li>
+<li class="chapter" data-level="4.1.2" data-path="viz-graphs.html"><a href="viz-graphs.html#layouts"><i class="fa fa-check"></i><b>4.1.2</b> Graph layouts</a></li>
+<li class="chapter" data-level="4.1.3" data-path="viz-graphs.html"><a href="viz-graphs.html#plotting-with-ggraph"><i class="fa fa-check"></i><b>4.1.3</b> Plotting with <code>ggraph</code></a></li>
+<li class="chapter" data-level="4.1.4" data-path="viz-graphs.html"><a href="viz-graphs.html#interactive-graph-visualization-in-r"><i class="fa fa-check"></i><b>4.1.4</b> Interactive graph visualization in R</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="viz-graphs.html"><a href="viz-graphs.html#visualizing-graphs-in-python"><i class="fa fa-check"></i><b>4.2</b> Visualizing graphs in Python</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="restructuring-data.html"><a href="restructuring-data.html"><i class="fa fa-check"></i><b>5</b> Restructuring Data For Use in Graphs</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Handbook of Graphs and Networks in People Analytics</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="everywhere" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Graphs everywhere!</h1>
+<p>If you have ever been lucky enough to pay a visit to the vibrant Russian city of Kaliningrad on the Baltic coast, it’s likely to have been a trip you remember. An unusual exclave of the massive Russian Federation, you cannot get to the remainder of Russia from Kaliningrad over land without crossing through at least two other countries. Things have landed this way, like they always do, because of the cards dealt by history. The strategic importance endowed to Kaliningrad owing to its prime coastal position placed it in the center of a tug-of-war, changing hands on numerous occasions over the centuries. At the end of the Second World War as Stalin cast his eye over the ruins of Europe, he considered the city far too strategically important to be left in the hands of any other Eastern-bloc state, and so despite the physical separation it was duly deemed to be Russia’s sovereign territory.</p>
+<p>As you might expect, Kaliningrad has only been so named since it became part of the USSR in 1946. Prior to this, and stretching back to the middle ages, it was known as Königsberg — the King’s Mountain — named in honor of King Ottokar II. Steeped in glorious and tragic history, the city is rich in museums, castles, cathedrals and monuments from its past. But for mathematicians like me, Königsberg is perhaps best known for a simple, unassuming puzzle that occupied the minds of many a renaissance intellectual in the 17th and 18th centuries — a problem which, it could be argued, laid the foundations for the highly connected world we live in today.</p>
+<p>Königsberg was (and still is, presumably) separated in two by the River Pregel. As the Pregel breaks towards the Baltic sea, two islands form a part of the city. This leads to a city comprised of four land masses. The two mainland masses on either side of the river (known as Altstadt-Loebenicht and Vorstadt-Haberberg) and the two island land masses (Lomse and Kneiphof). A total of seven bridges connected these land masses<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. Figure <a href="everywhere.html#fig:koenigsberg">1.1</a> is a suitably historic map of the situation. The island on the left is Kneiphof and the island on the right is Lomse. The beautiful dress worn by the lady in the foreground of this picture is large enough so that one of the seven bridges is entirely covered by it, but you can see the other six.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:koenigsberg"></span>
+<img src="www/graphs_everywhere/koenigsberg.png" alt="The Prussian city of K&amp;ouml;nigsberg circa 1600" width="80%" />
+<p class="caption">
+Figure 1.1: The Prussian city of Königsberg circa 1600
+</p>
+</div>
+<p>The puzzle went like this: is it possible to devise a walk where you would set foot on all four land masses while crossing all seven bridges only once? There was a strong hunch from trial and error that the answer was no — the problem was how to prove this mathematically. No effective techniques had yet been discovered to allow such a proof.</p>
+<p>Leonhard Euler was an 18th century Swiss mathematician who spent the majority of his life in St Petersburg or Berlin. A prolific original thinker, Euler is considered by many as the greatest mathematician of all time. It is impossible to study mathematics even at high school without being constantly exposed to Euler’s work. He popularized the greek letter <span class="math inline">\(\pi\)</span> to denote Archimedes’ constant ratio between the circumference and diameter of a circle, he formalized the letter <span class="math inline">\(i\)</span> to denote the imaginary number <span class="math inline">\(\sqrt{-1}\)</span> and he defined the exponential constant <span class="math inline">\(e\)</span> which is known as <em>Euler’s number</em>. Living between Prussia and Russia at the time of the problem of the Seven Bridges of Königsberg, he set about finding a solution, and the one he discovered is both a testament to the beauty of mathematical proof and the first use of the concept of a graph to solve a mathematical problem.</p>
+<p>The first thing Euler did - as any good mathematician will always do - is strip the problem of all its extraneous information and reduce it to its most minimal form. The problem merely requires one to set foot on a land mass. It is not concerned with what route one takes while on that land mass. Therefore we can represent each of the four land masses as dots. We can then draw lines between the dots to represent the bridges. This, he reasoned, leads to a diagram like that in Interactive Figure <a href="everywhere.html#fig:euler-graph">1.2</a>. The picture can be drawn in infinitely many ways, but it will always be four dots connected by seven lines in the same configuration. If you like, move the nodes around to see what I mean.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:euler-graph"></span>
+<div id="htmlwidget-dcff6110bc0a0d67a0a1" style="width:80%;height:480px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-dcff6110bc0a0d67a0a1">{"x":{"nodes":{"id":["Altstadt-Loebenicht","Kneiphof","Vorstadt-Haberberg","Lomse"],"label":["Altstadt-Loebenicht","Kneiphof","Vorstadt-Haberberg","Lomse"]},"edges":{"from":["Altstadt-Loebenicht","Altstadt-Loebenicht","Altstadt-Loebenicht","Kneiphof","Kneiphof","Kneiphof","Vorstadt-Haberberg"],"to":["Kneiphof","Kneiphof","Lomse","Lomse","Vorstadt-Haberberg","Vorstadt-Haberberg","Lomse"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot"},"manipulation":{"enabled":false},"layout":{"randomSeed":1}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false},"byselection":{"enabled":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)"},"evals":[],"jsHooks":[]}</script>
+<p class="caption">
+Figure 1.2: A minimal representation of the <em>Seven Bridges of Königsberg</em> problem
+</p>
+</div>
+<p>First, Euler observed that if one starts their journey at a certain place and crosses all seven bridges once, there must have been eight total visits to places. This is because we start at a place, and every time we cross a bridge, we add another place to our walk. So if we cross seven bridges, we must visit eight places (including repeat visits to a place).</p>
+<p>Euler then looked at any siuation where you have a place A connected to other places by an <em>odd number</em> of bridges. If there was one bridge and it was crossed once, we would only be in place A once - either at the beginning or end of the journey. If there were three bridges and all were crossed once, place A would have been visited twice no matter where we started. If there were five bridges, place A would have been visited three times. If there were <span class="math inline">\(n\)</span> bridges, place A would have been visited <span class="math inline">\((n+1)/2\)</span> times.</p>
+<p>Now Euler calculated how many place visits this would mean for Königsberg. Since Kneiphof has five bridges to other places, if all were crossed once Kneiphof would have been visited 3 times. The other three places each have three bridges connecting them, so any such walk would result in 2 visits to each place. Adding all this up, this means that if a walk existed through all four places where every bridge was used only once, there must be nine total place visits. Since this contradicts Euler’s earlier observation that such a walk must involve only eight place visits, we must conclude that such a walk does not exist.</p>
+<p>Euler’s proof was the first time a graph like the one in Interactive Figure <a href="everywhere.html#fig:euler-graph">1.2</a> was used to solve a problem. The solution also involved concepts that would later become critical in the study of graphs. Euler set up the places as <em>vertices</em> or <em>nodes</em> of the graph and he set up the bridges as <em>edges</em>. The proof depends on a conclusion about the number of edges connected to a vertex, which later became known as the <em>degree</em> of a vertex. The proof required the study of <em>walks</em> or <em>paths</em> through the graph. The requirement that a walk could only use each edge once became known as an <em>Euler walk</em> and various algorithms exist today to calculate Euler walks for problems such as constructing DNA sequences from their fragments<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>. Little was Euler to know the Pandora’s Box he had opened.</p>
+<div class="thinkahead">
+<p><strong>Thinking ahead:</strong> If you know how to load a graph object into R or Python, you could try to load the <code>koenigsberg</code> data set from the <code>onadata</code> package or download it from the internet<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> and create a graph from it. You could use your software to calculate the degrees of the vertices of the graph. For example in R, if you have the data loaded into an <code>igraph</code> object, you can use <code>igraph::degree()</code> to get a vector showing you the degrees of each vertex. There is even a package called <code>eulerian</code> in R which has a function <code>hasEulerianPath()</code> which determines whether an Euler walk exists in a given graph.</p>
+</div>
+<!--
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Thinking ahead:} If you know how to load a graph object into R or Python, you could try to load the \texttt{koenigsberg} data set from the \texttt{onadata} package or download it from the internet at \texttt{https://ona-data.org/data/koenigsberg.csv} and create a graph from it.  You could use your software to calculate the degrees of the vertices of the graph.  For example in R, if you have the data loaded into an \texttt{igraph} object, you can use \texttt{igraph::degree()} to get a vector showing you the degrees of each vertex.  There is even a package called \texttt{eulerian} in R which has a function \texttt{hasEulerianPath()} which determines whether an Euler walk exists in a given graph.  
+\end{minipage}
+}
+```
+-->
+<div id="graphs-as-mathematical-models" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> Graphs as mathematical models</h2>
+<p>Graphs and networks have existed since long before Euler, and probably since the beginning of time itself. They exist physically, such as in a spider’s web, in the electrical wiring of your home or in the molecules that make up the universe. Since the time of Euler, graphs have also existed conceptually as the best way we can describe many complex systems, and in this book we will focus on the use of graphs to describe complex systems related to people, groups, organizations or other societal constructs. Before we jump into our core topic, it is worth taking a few moments to appreciate how fundamental graphs are to both science and to everyday life by discussing a few examples of the practical use of graphs to solve problems.</p>
+<p>Whenever objects move physically through a network structure, it makes sense that graph theory will be of great use in solving problems of routing and optimization. An obvious example of this is whenever a route is planned on Google or Apple Maps, or on a SatNav system. When you search a driving route to a given destination, the underlying calculation involves streets and roads as edges and intersections as vertices. The fastest routes are calculated based on stored properties of the edges such as the road length, road speed limit and live traffic information. The underlying graphs are updated over time with edges switched on and off according to information on road closures<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>. It doesn’t just have to be road networks of course. Rail, air and other forms of transport networks make great use of graph theory. Maybe you are sitting on a train while reading this book, and if you are have a look around you for the route map you’ll see a graph right there. Essential public services such as the management of sewerage networks is an example of one of the less glamorous fields where graph theory is essential to operational calculations and decisions. If there is a sudden cold snap in a city and roads need to be de-iced, the problem of how to get around the city in an efficient way, saving resources by minimizing the route while still covering all the critical areas is one Euler would have loved.</p>
+<p>The objects that move through networks are often electronic in nature, such as bytes of code or electrical currents. National and local power grids are managed with the help of graph theory. Communications networks, telephone, satellite, cable, internet are all networks where nodes are connection points such as junctions or receiver points and edges can be visible in the form of underground or undersea cables or invisible in the form of signals sent through the air or into space.</p>
+<p>In the sciences, graphs are essential as models of biological, chemical or physical processes or phenomena. Chemical Graph Theory (CGT) deals with the applications of graph theory to molecular problems. In condensed matter physics, graph theory is essential in quantitatively modeling atomic structures. In biology and biochemistry, graphs are important in understanding the study of the spread of disease in epidemic models, in the study of genomics and DNA, in the neuroscientific modeling of brain functioning and in the ecological modeling of species migration. In the computational sciences, huge progress has been made in the storing of data thanks to databases that have a graph structure, and many of the latest algorithms used in Machine Learning operate through graph like structures like trees or neural networks. In linguistics, graphs have facilitated great advances in the study of natural language as the study of discrete words and phrases that are related to each other. The list goes on and on.</p>
+<p>Arguably, the area where graphs have impacted our day to day lives the most in recent decades, however, is in the development of online communities which depend on them. Social networks like Facebook, Twitter, LinkedIn, Instagram and countless others use graphs to connect people in ways that have changed many of our lives immeasurably. Friendships and acquaintances happen today between people who have never and often will never meet physically. Countless relationships, marriages and families have been brought into existence. Long lost families separated by adoption or abandonment have found each other again. Job opportunities have been created and filled. Individuals with common interests have been connected irrelevant of where they are located. The positives and negatives of this rapid and paradigm-shifting rise in social networking are vigorously debated, but what cannot be denied is that without graph theory they would not exist.</p>
+</div>
+<div id="graph-theory-in-the-analysis-of-people-and-groups" class="section level2" number="1.2">
+<h2><span class="header-section-number">1.2</span> Graph theory in the analysis of people and groups</h2>
+<p>In the social sciences and in the study of people and groups, the increasing prevalence of network data and the ability to analyze it using graph-theoretic methods have opened up rich and continuously developing veins of research that encompass both academic and enterprise settings. Much of the work that is done can be grouped into a few different study areas.</p>
+<div id="the-study-of-connection" class="section level3" number="1.2.1">
+<h3><span class="header-section-number">1.2.1</span> The study of connection</h3>
+<p>In most organizations, institutions and societal groups, connection is considered a critical facilitator of happiness, motivation, productivity and progress. The psychological concept of <em>belongingness</em>, which describes a human need to connect, affiliate and be accepted by others, is an important element of Maslow’s Hierarchy of Needs. Empirically, greater social connection has been associated with positive effects on mental and physical health, cognitive functioning, life expectancy and even wound healing (<span class="citation"><a href="#ref-holt-lunstad1" role="doc-biblioref">Julianne Holt-Lunstad</a> (<a href="#ref-holt-lunstad1" role="doc-biblioref">2018</a>)</span>). Conversely, lack of connection — or loneliness — is of research interest because of its potential negative effects on mental wellbeing, productivity and workplace performance. A meta-analytic review of the relationship between social relationships and mortality risk concluded that lack of social connection carries a higher risk of premature mortality than obesity (<span class="citation"><a href="#ref-holt-lunstad2" role="doc-biblioref">J. Holt-Lunstad et al.</a> (<a href="#ref-holt-lunstad2" role="doc-biblioref">2015</a>)</span>). In workplace settings, economic, sociology and psychology practitioners and academics are showing an increasing amount of interest in connection and how it affects performance, productivity and employee retention. Empirical research has demonstrated links between friendship at work and improved work engagement and productivity (<span class="citation"><a href="#ref-rath" role="doc-biblioref">Rath</a> (<a href="#ref-rath" role="doc-biblioref">2006</a>)</span>), and social interaction at work (whether work-related or otherwise) has been associated with improved outcomes (<span class="citation"><a href="#ref-olguin" role="doc-biblioref">Olguin et al.</a> (<a href="#ref-olguin" role="doc-biblioref">2009</a>)</span>).</p>
+<p>The ability to analyse connection in the workplace and in society-at-large will become increasingly important as we move further into the 21st century. The variety of data that could represent connection is expanding. Connection between people can now be defined by in person interaction, electronic transaction and even assumed connection through overlaps in geographic location or in work or personal activities. Strong analytic techniques will be necessary to support evidence-based practice, because not all measures of connection are meaningful to the outcomes being researched and, even when they have been shown to be meaningful, resulting interventions do not always have the expected effects (for example, a study by <span class="citation"><a href="#ref-feld" role="doc-biblioref">Feld and Carter</a> (<a href="#ref-feld" role="doc-biblioref">1998</a>)</span> demonstrated that deliberate attempts to increase interracial contact in American schools actually ended up causing greater racial segregation).</p>
+</div>
+<div id="the-study-of-information-flow" class="section level3" number="1.2.2">
+<h3><span class="header-section-number">1.2.2</span> The study of information flow</h3>
+<p>Communication of information between people has been fundamentally transformed by the digital age. Both potential reach and speed of transmission has been massively enabled by technology in the past two decades. General fascination with how messages can be sent through networks date from the earliest chain letters in the late 19th century (<span class="citation"><a href="#ref-chainlet" role="doc-biblioref">Solly</a> (<a href="#ref-chainlet" role="doc-biblioref">2020</a>)</span>), and those of us who are old enough may remember receiving letters in the mail asking to send message onwards to a specified number of individuals, and promising that this will generate thousands of replies within a few weeks. Figure <a href="everywhere.html#fig:texas-send-a-dime">1.3</a> is an example of one of these used as a way to generate money in Texas in 1935.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:texas-send-a-dime"></span>
+<img src="www/graphs_everywhere/send_a_dime.png" alt="Chain letter from Texas in 1935 (credit: Daniel W. VanArsdale)" width="80%" />
+<p class="caption">
+Figure 1.3: Chain letter from Texas in 1935 (credit: Daniel W. VanArsdale)
+</p>
+</div>
+<p>The study of the propagation of messages in networks has expanded greatly in the digital age, and has many purposes ranging from studying emergency alert strategies to the prevention of fraudulent activities or the defense against messaging that threatens public health or the course of criminal justice. Although this area of research is still in its infancy, models which are not dissimilar to those used in biology and epidemiology are employed (for example <span class="citation"><a href="#ref-hafnaoui" role="doc-biblioref">Hafnaoui, Nicolescu, and Beltrame</a> (<a href="#ref-hafnaoui" role="doc-biblioref">2019</a>)</span>). The likelihood of messages propagating can depend on the characteristics of the network, the nature of the message and the node which is propagating it (popularity, credibility), and the receptiveness of the onward nodes to the message, and of course the term ‘viral’ has entered our lexicon to describe rapid electronic message propagation in the last decade or so. The effect of message propagation on the development of networks is also of great research interest - for example, what nature and frequency of message propagation leads to rapid network growth?</p>
+<p>Research of this nature is mostly currently confined to academics working with social media data, but will become of increasing interest in the workplace. An increasing distributed workforce with lower level of geographic concentration will mean that organizations will need to more effectively manage important, urgent or time-sensitive communication with their workforce and this will require greater intelligence on how messages effectively propagate in their specific environments.</p>
+</div>
+<div id="the-study-of-community-diversity-and-familiarity" class="section level3" number="1.2.3">
+<h3><span class="header-section-number">1.2.3</span> The study of community, diversity and familiarity</h3>
+<p>Distance in a network — which we will define more precisely in later chapters — can be representative of likely familiarity between individuals, which allows for mathematical models to support the study of community and diversity. Algorithms for calculating distance and diameter in a network help determine how ‘tight’ groups are and allows some measurement of inter- and intra-group interaction. Community detection algorithms involve graph partitioning to help identify ‘pockets’ of highly connected individuals in large networks. This is of great interest in the field of sociology, but also has applications to other areas such as the study of common purchasing behaviors among customers, and the study of common interests among academics or writers (<span class="citation"><a href="#ref-lu" role="doc-biblioref">Lu, Wahlström, and Nehorai</a> (<a href="#ref-lu" role="doc-biblioref">2018</a>)</span>).</p>
+<p>Increasing focus on diversity as a positive influencer of organizational outcomes in recent years means that the ability to measure distance and identify community structures in networks will be of high utility, particularly in complex organizational structures. Use cases can range from highly strategic questions of organizational design to highly tactical questions of meeting attendance or group membership. Current trends away from physical co-location of employees and the rise of more virtual organizational structures will likely result in greater requirements for analysis of remote and electronic interaction in order to determine whether imposed structures genuinely reflect the way people work. Effective use of these techniques can even be valuable in the co-ordination of large professional or social events, where subgroups can be identified to maximize intra-group distance in order to better ensure a more diverse mix of employees in professional or social activities.</p>
+</div>
+<div id="the-study-of-importance-influence-and-attachment" class="section level3" number="1.2.4">
+<h3><span class="header-section-number">1.2.4</span> The study of importance, influence and attachment</h3>
+<p>While the concept of vertex/node importance or centrality has been a fundamental tenet of graph theory for a long time, the rise of social networks seems to have turbo-charged its relevance in research and analytics. The rise of the ‘influencer’ as a highly connected and influential member of a network has entered deeply into social consciousness in the past decade, and the study of how followership is generated through the forming of attachments between members of networks is one of the more rich veins of sociological research currently. The idea of preferential attachment or the <em>Matthew Effect</em> describes an accumulated advantage over time, where those with more attachment attract yet more<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>. It has been believed that social networks show similar properties to scale-free networks which obey a power law distribution of the degree of their vertices/nodes - see Figure <a href="everywhere.html#fig:power-law">1.4</a><a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>. In fact, the most recent research indicates that scale-free networks exist rarely and that social networks are at best weakly scale-free (<span class="citation"><a href="#ref-broido" role="doc-biblioref">Broido and Clauset</a> (<a href="#ref-broido" role="doc-biblioref">2019</a>)</span>).</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:power-law"></span>
+<img src="_main_files/figure-html/power-law-1.png" alt="Power law distribution of node degrees in a scale-free network for $\alpha = 2$, showing a small number of high degree vertices and a long tail of vertices with low degree" width="672" />
+<p class="caption">
+Figure 1.4: Power law distribution of node degrees in a scale-free network for <span class="math inline">\(\alpha = 2\)</span>, showing a small number of high degree vertices and a long tail of vertices with low degree
+</p>
+</div>
+<p>Of course, any organization, institution or place of work an be considered a social network and there will be individuals that command greater or less attachment according to their tenure, seniority, skills or general popularity. Understanding this in an organizational context can lead to insights about leadership and followership, and can help contribute to broader work in understanding the influence of followership on recruitment and on attrition. Different types of centrality such as degree, betweenness and closeness centrality can imply different roles of individuals in terms of their importance to the overall community.</p>
+<div class="thinkahead">
+<p><strong>Thinking ahead:</strong> If you know how to, load up the graph of Zachary’s Karate Club via the <code>onadata</code> package or by downloading the edgelist from the internet<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a>. See if you can find some functions to calculate the degree centrality, betweenness centrality, closeness centrality and eigenvector centrality of the various individuals in the network. If you compare the results you should discover that centrality can mean different things depending on how you define it.</p>
+</div>
+<!--
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Thinking ahead:} If you know how to, load up the graph of Zachary's Karate Club via the `onadata` package or by downloading the edgelist from the internet at \texttt{https://ona-book.org/data/karate}.  See if you can find some functions to calculate the degree centrality, betweenness centrality, closeness centrality and eigenvector centrality of the various individuals in the network.  If you compare the results you should discover that centrality can mean different things depending on how you define it.   
+\end{minipage}
+}
+```
+-->
+</div>
+<div id="graphs-as-data-sources" class="section level3" number="1.2.5">
+<h3><span class="header-section-number">1.2.5</span> Graphs as data sources</h3>
+<p>As use cases for network analytics mature, and as more and more organizations seek to understand their networks better, traditional rectangular-style databases will become increasingly challenging to work with. Consider a desire to analyze whether two salespeople in an organization are connected through serving the same customer in the same month. Depending on how data is currently stored in systems, this could easily end up being a lot more complicated and processing-heavy than it needs to be. Sales records may need to be joined to customer records which may then need to be rejoined back to sales data. This may need to be done repeatedly to eventually obtain the required view of the data. Traditional rectangular databases are stored to keep records of transactions, not of connections.</p>
+<p>Many organizations are turning to graph databases to store data about relationship and connections and to allow much faster query and calculation whenever the unit of analysis is connection. A graph database is designed to store information about connected objects like people or organizational units in its vertices, and information relationships in its edges. Such databases suit data that already comes in the form of a graph edgelist such as information on communication or interaction, but it is not uncommon to also transform other forms of data to be loaded into a graph database in order to query relationships rather than transactions in that data — we will look at examples of how to do this in Chapter <a href="restructuring-data.html#restructuring-data">5</a>. Social media engines and many knowledge based resources like Wikipedia are supported by graph databases, and these sorts of databases are also becoming more commonly found in enterprise settings. They have helped solve some high-profile problems. For example, the International Consortium of Investigative Journalists (ICIJ) used a graph database to load document metadata from the <em>Panama Papers</em> document leak, and stored in this format the metadata exposed various complex networks of offshore tax arrangements.</p>
+<p>All of the topics mentioned above will come up to a greater or lesser degree in the content of this book, and from time to time there will even be diversions into a few other use cases outside of the people analytics domain in order to help illustrate the broader applications of methods. As this book is intended to be more of a technical manual than a work of philosophy, we will be coming at this entire topic from the point of view of methodology and we will be focusing more on the <em>how</em> than the <em>why</em>, although some of the examples we use will clearly point to the motivation of the analysis and how the methodology can be useful in practice. Enthusiastic readers should not need my help in determining where these methods might be useful in their day-to-day work. They should be able to see this for themselves, and I expect this will become clearer to them as they work through the material chapter-by-chapter.</p>
+</div>
+</div>
+<div id="the-purpose-structure-and-organization-of-this-book" class="section level2" number="1.3">
+<h2><span class="header-section-number">1.3</span> The purpose, structure and organization of this book</h2>
+<p>This book is targeted at technical practitioners who need a thorough grounding in the storage, visualization and analysis of network data. It requires an elementary knowledge of the R or Python programming languages. As I am first and foremost an R programmer, most of the content of this book will be primarily demonstrated in R, but efforts have been made to ensure that Python implementations have been demonstrated wherever possible, albeit more briefly in most places. If you are a Python programmer, I would recommend that you are open to reading the sections that use R code as they will often help you build a better understanding of the work through the more thorough descriptions and discussions contained therein. If you have never programmed before, I have included as Chapter <a href="r-intro.html#r-intro">2</a> a very brief introductory tutorial of the R programming language, but I would strongly recommend looking further afield for a more thorough grounding — in particular <span class="citation"><a href="#ref-wickham" role="doc-biblioref">Wickham and Grolemund</a> (<a href="#ref-wickham" role="doc-biblioref">2016</a>)</span>. If you have been through a similar introductory chapter in my previous book (<span class="citation"><a href="#ref-mcnulty" role="doc-biblioref">McNulty</a> (<a href="#ref-mcnulty" role="doc-biblioref">2021</a>)</span>) and made good work of it, then you should not need to look at Chapter <a href="r-intro.html#r-intro">2</a> and you can proceed past it.</p>
+<p>If you are not a technical practitioner, this book can still be useful to you as it contains considerable detail on concepts, methods and use cases related to network analytics in organizations, and it gives guidance on the interpretation of network analysis and statistics. You will just need to be willing to tolerate the various code blocks that will appear as part of the technical instruction.</p>
+<p>Various downloadable data sets are used throughout this book, and in some cases I point to other sources of data outside the book for those who are interested in further exploration particularly of very large network data. Most chapters end with a set of discussion exercises and data exercises and I strongly encourage the reader to engage with in order to put their learning into practice. Often, it is through taking on these exercises that readers discover some of the common pitfalls of working with graph data structures, and better to learn these pitfalls now than to find out about them when the situation is higher stakes or more urgent.</p>
+<p>This chapter and the one following it can be considered preliminaries. From Chapter <a href="working.html#working">3</a> onwards, this book takes the following structure:</p>
+<ul>
+<li><p>Chapter 3 introduces the simple elements of graph theory including how to define a graph, the various types of graphs, vertex and edge properties and the ways in which a graph can be described mathematically. It then proceeds to demonstrate how to create graph objects in R or in Python and how to start working with them.</p></li>
+<li><p>Chapter 4 looks at the various options for how to visualize graphs in R and in Python. It goes through a variety of technical options for static and dynamic visualizations of graphs and how to customize the appearance of graphs for various purposes.</p></li>
+<li><p>Chapter 5 looks at how data can be transformed to be used in a graph structure, which is often an important elements of making grahs useful for analysis. Two important examples are used to illustrate how to transform rectangular data into an edgelist for a graph and how to scrape document information for use in graphs.</p></li>
+<li><p>Chapter 6 examines the topic of paths and distance in graphs, introduces other concepts such graph diameter, and demonstrates some common methods such as Dijkstra’s shortest path algorithm.</p></li>
+<li><p>Chapter 7 examines the topic of vertex importance and centrality in graphs. It discusses different types of centrality and their meaning and usefulness in a network analytics context, and it shows various methods for calculating and graphically illustrating centraility in graphs.</p></li>
+<li><p>Chapter 8 looks at community detection. It covers various options for how to identify communities in graphs, how to describe communities and how to illustrate them effectively.</p></li>
+<li><p>Chapter 9 deep dives into some common statistics used in analyzing networks, in particular related to similarity, assortativity and attachment.<br />
+</p></li>
+<li><p>Chapter 10 introduces the concept of graphs as databases and provides some examples of how to design and use graph databases for the purposes of network analytics. This can be considered an extension chapter for those who are interested.</p></li>
+<li><p>Chapter 11 demonstrates some advanced visualization options for graphs through using the Javascript D3 library in combination with some of the work done earlier in the book. This can also be considered an extension chapter for those who are interested.</p></li>
+<li><p>Chapter 12 is a set of practice exercises and data sets designed to give the reader an opportunity to put some of the learning from Chapters 3-9 into practice. These exercises are ideal for class assignment or project work.</p></li>
+</ul>
+
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-broido" class="csl-entry">
+Broido, Anna D., and Aaron Clauset. 2019. <span>“Scale-Free Networks Are Rare.”</span> <em>Nature Communications</em>. <a href="https://www.nature.com/articles/s41467-019-08746-5">https://www.nature.com/articles/s41467-019-08746-5</a>.
+</div>
+<div id="ref-feld" class="csl-entry">
+Feld, Scott L., and William C. Carter. 1998. <span>“When Desegregation Reduces Interracial Contact: A Class Size Paradox for Weak Ties.”</span> <em>American Journal of Sociology</em>.
+</div>
+<div id="ref-hafnaoui" class="csl-entry">
+Hafnaoui, Imane, Gabriela Nicolescu, and Giovanni Beltrame. 2019. <span>“Timing Information Propagation in Interactive Networks.”</span> <em>Scientific Reports</em>. <a href="https://www.nature.com/articles/s41598-019-40801-5">https://www.nature.com/articles/s41598-019-40801-5</a>.
+</div>
+<div id="ref-holt-lunstad2" class="csl-entry">
+Holt-Lunstad, J., T. B. Smith, M. Baker, T. Harris, and D. Stephenson. 2015. <span>“Loneliness and Social Isolation as Risk Factors for Mortality: A Meta-Analytic Review.”</span> <em>Perspect Psychol Sci J Assoc Psychol Sci.</em>
+</div>
+<div id="ref-holt-lunstad1" class="csl-entry">
+Holt-Lunstad, Julianne. 2018. <span>“Fostering Social Connection in the Workplace.”</span> <em>American Journam of Health Promotion</em>.
+</div>
+<div id="ref-lu" class="csl-entry">
+Lu, Zhenqi, Johan Wahlström, and Arye Nehorai. 2018. <span>“Community Detection in Complex Networks via Clique Conductance.”</span> <em>Scientific Reports</em>. <a href="https://www.nature.com/articles/s41598-018-23932-z">https://www.nature.com/articles/s41598-018-23932-z</a>.
+</div>
+<div id="ref-mcnulty" class="csl-entry">
+McNulty, Keith. 2021. <em>Handbook of Regression Modeling in People Analytics</em>. <a href="https://peopleanalytics-regression-book.org/">https://peopleanalytics-regression-book.org/</a>.
+</div>
+<div id="ref-olguin" class="csl-entry">
+Olguin, D., B. N. Waber, T. Kim, A. Mohan, K. Ara, and A. Pentland. 2009. <span>“Sensible Organizations: Technology and Methodology for Automatically Measuring Organizational Behavior.”</span> <em>IEEE Trans Syst Man Cybern</em>.
+</div>
+<div id="ref-paoletti" class="csl-entry">
+Paoletti, Teo. 2006. <span>“Leonard Euler’s Solution to the Konigsberg Bridge Problem.”</span> <em>Convergence</em>. <a href="https://www.maa.org/press/periodicals/convergence/leonard-eulers-solution-to-the-konigsberg-bridge-problem">https://www.maa.org/press/periodicals/convergence/leonard-eulers-solution-to-the-konigsberg-bridge-problem</a>.
+</div>
+<div id="ref-rath" class="csl-entry">
+Rath, Tom. 2006. <em>Vital Friends: The People You Can’t Afford to Live Without</em>.
+</div>
+<div id="ref-chainlet" class="csl-entry">
+Solly, Meilan. 2020. <span>“Before Chain Letters Swept the Internet, They Raised Funds for Orphans and Sent Messages from God.”</span> <em>Smithsonian Magazine</em>. <a href="https://www.smithsonianmag.com/history/chain-letters-swept-internet-they-raised-funds-orphans-and-conveyed-messages-god/">https://www.smithsonianmag.com/history/chain-letters-swept-internet-they-raised-funds-orphans-and-conveyed-messages-god/</a>.
+</div>
+<div id="ref-wickham" class="csl-entry">
+Wickham, Hadley, and Garrett Grolemund. 2016. <em>R for Data Science</em>. <a href="https://r4ds.had.co.nz/">https://r4ds.had.co.nz/</a>.
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="1">
+<li id="fn1"><p>Only two of these bridges still survive today<a href="everywhere.html#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>In fact, Euler extended his proof to consider any graph, and concluded that if an Euler walk exists in a graph, then the number of vertices with odd degree is either 0 or 2. For a fascinating write up of Euler’s original proof, see <span class="citation"><a href="#ref-paoletti" role="doc-biblioref">Paoletti</a> (<a href="#ref-paoletti" role="doc-biblioref">2006</a>)</span><a href="everywhere.html#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p><a href="https://ona-data.org/data/koenigsberg.csv" class="uri">https://ona-data.org/data/koenigsberg.csv</a><a href="everywhere.html#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>Such networks are known as <em>temporal networks</em><a href="everywhere.html#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p>So named because of a segment of the Gospel of Matthew in the New Testament: “For to every one who has will more be given, and he will have abundance; but from him who has not, even what he has will be taken away.”<a href="everywhere.html#fnref5" class="footnote-back">↩︎</a></p></li>
+<li id="fn6"><p>In a scale-free network the proportion of vertices/nodes of degree <span class="math inline">\(k\)</span> takes a shape similar to <span class="math inline">\(k^{-\alpha}\)</span> where usually <span class="math inline">\(2 &lt; \alpha &lt; 3\)</span><a href="everywhere.html#fnref6" class="footnote-back">↩︎</a></p></li>
+<li id="fn7"><p><a href="https://ona-book.org/data/karate" class="uri">https://ona-book.org/data/karate</a><a href="everywhere.html#fnref7" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="r-intro.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": true,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "lunr",
+"options": null
+},
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

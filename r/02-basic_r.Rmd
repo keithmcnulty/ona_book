@@ -1,0 +1,665 @@
+# The Basics of the R Programming Language {#r-intro}
+
+Most of the work in this book is implemented in the R statistical programming language which, along with Python, is one of the two languages that I use in my day-to-day statistical analysis.  Sample implementations in Python are also provided at various points in the book.  For those who wish to follow the method and theory without the implementations in this book, there is no need to read this chapter.  However, the style of this book is to use implementation to illustrate theory and practice, and so tolerance of many code blocks will be necessary as you read onward.
+
+For those who wish to simply replicate this work as quickly as possible, `r if (knitr::is_html_output()) {"they will be able to avail of the code block copying feature, which appears whenever you scroll over an input code block"} else {"full code is provided throughout this book by means of interspersed code blocks"}`.  Assuming all the required external packages have been installed, these code blocks should all be transportable and immediately usable.  In some parts of the book I have used graphics to illustrate a concept but I have hidden the underlying code as I did not consider it important to the learning objectives at that point.  Nevertheless there will be some who will want to see it, and if you are one of those the best place to go is the [Github repository](https://github.com/keithmcnulty/ona_book) for this book. 
+
+This chapter is for those who wish to learn the methods in this book but do not know how to use a programming language.  However, it is not intended to be a full tutorial on R.  There are many more qualified individuals and existing resources that would better serve that purpose---in particular I recommend @wickham.  It is recommended that you consult these resources and become comfortable with the basics of R before proceeding into the later chapters of this book.  However, acknowledging that many will want to dive in sooner rather than later, this chapter covers the absolute basics of R that will allow the uninitiated reader to proceed with at least some orientation.
+
+## What is R?
+
+`r if (knitr::is_latex_output()) '\\index{R!programming language}'`R is a programming language that was originally developed by and for statisticians, but in recent years its capabilities and the environments in which it is used have expanded greatly, with extensive use nowadays in academia and the public and private sectors.  There are many advantages to using a programming language like R.  Here are some:
+
+1.  It is completely free and open source.
+2.  It is faster and more efficient with memory than popular graphical user interface analytics tools.
+3.  It facilitates easier replication of analysis from person to person compared with many alternatives.
+4.  It has a large and growing global community of active users.
+5.  It has a large and rapidly growing universe of packages, which are all free and which provide the ability to do an extremely wide range of general and highly specialized tasks, statistical and otherwise.
+
+`r if (knitr::is_latex_output()) '\\index{Python!programming language}'`There is often heated debate about which tools are better for doing non-trivial statistical analysis.  I personally find that R provides the widest array of resources for those interested in statistics and inferential modeling, while Python has a more well-developed toolkit for predictive modeling and machine learning.  
+
+## How to start using R
+
+`r if (knitr::is_latex_output()) '\\index{R!installation and use}'`Just like most programming languages, R itself is an interpreter which receives input and returns output.  It is not very easy to use without an IDE.  An IDE is an *Integrated Development Environment*, which is a convenient user interface allowing an R programmer to do all their main tasks including writing and running R code, saving files, viewing data and plots, integrating code into documents and many other things.  By far the most popular IDE for R is RStudio.  An example of what the RStudio IDE looks like can be seen in Figure \@ref(fig:rstudio-ide). 
+
+```{r rstudio-ide, fig.cap="The RStudio IDE", fig.align="center", echo = FALSE, out.width = if (knitr::is_latex_output()) {"90%"}}
+if (knitr::is_html_output()) {
+  knitr::include_graphics("./www/basic-r/rstudio-windows.png")
+} else {
+  knitr::include_graphics("./www/basic-r/rstudio.png")
+}
+ 
+```
+
+To start using R, follow these steps:
+
+1.  Download and install the latest version of R from https://www.r-project.org/.  Ensure that the version suits your operating system.
+2.  Download the latest version of the RStudio IDE from https://rstudio.com/products/rstudio/ and view the video on that page to familiarize yourself with its features.  
+3.  Open RStudio and play around.
+
+The initial stages of using R can be challenging, mostly due to the need to become familiar with how R understands, stores and processes data. Extensive trial and error is a learning necessity.  Perseverance is important in these early stages, as well as an openness to seek help from others either in person or via online forums.
+
+## Data in R
+
+`r if (knitr::is_latex_output()) '\\index{R!data}'`As you start to do tasks involving data in R, you will generally want to store the things you create so that you can refer to them later.  Simply calculating something does not store it in R.  For example, a simple calculation like this can be performed easily:
+
+```{r}
+3 + 3
+```
+
+However, as soon as the calculation is complete, it is forgotten by R because the result hasn't been assigned anywhere.  To store something in your R session, you will assign it a name using the `<-` operator.  So I can assign my previous calculation to an object called `my_sum`, and this allows me to access the value at any time.
+
+```{r}
+# store the result
+my_sum <- 3 + 3
+# now I can work with it
+my_sum + 3
+```
+
+You will see above that you can comment your code by simply adding a `#` to the start of a line to ensure that the line is ignored by the interpreter.
+
+Note that assignment to an object does not result in the value being displayed.  To display the value, the name of the object must be typed, the `print()` command used or the command should be wrapped in parentheses.
+
+```{r}
+# show me the value of my_sum
+my_sum
+# assign my_sum + 3 to new_sum and show its value
+(new_sum <- my_sum + 3)
+```
+
+
+### Data types
+
+`r if (knitr::is_latex_output()) '\\index{R!data types}'`All data in R has an associated type, to reflect the wide range of data that R is able to work with.  The `typeof()` function can be used to see the type of a single scalar value. Let's look at the most common scalar data types.
+
+**Numeric data** can be in integer form or double (decimal) form.
+
+```{r}
+# integers can be signified by adding an 'L' to the end
+my_integer <- 1L  
+my_double <- 6.38
+typeof(my_integer)
+typeof(my_double)
+```
+
+**Character data** is text data surrounded by single or double quotes.
+
+```{r}
+my_character <- "THIS IS TEXT"
+typeof(my_character)
+```
+
+**Logical data** takes the form `TRUE` or `FALSE`.
+
+```{r}
+my_logical <- TRUE
+typeof(my_logical)
+```
+
+### Homogeneous data structures
+
+`r if (knitr::is_latex_output()) '\\index{R!vectors}'`**Vectors** are one-dimensional structures containing data of the same type and are notated by using `c()`. The type of the vector can also be viewed using the `typeof()` function, but the `str()` function can be used to display both the contents of the vector and its type.
+
+```{r}
+my_double_vector <- c(2.3, 6.8, 4.5, 65, 6)
+str(my_double_vector)
+```
+
+`r if (knitr::is_latex_output()) '\\index{R!categorical factors}'`Categorical data---which takes only a finite number of possible values---can be stored as a factor vector to make it easier to perform grouping and manipulation.
+
+```{r}
+categories <- factor(
+  c("A", "B", "C", "A", "C")
+)
+str(categories)
+```
+
+`r if (knitr::is_latex_output()) '\\index{R!ordered factors}'`If needed, the factors can be given order.
+
+```{r}
+# character vector 
+ranking <- c("Medium", "High", "Low")
+str(ranking)
+# turn it into an ordered factor
+ranking_factors <- ordered(
+  ranking, levels = c("Low", "Medium", "High")
+)
+str(ranking_factors)
+```
+
+The number of elements in a vector can be seen using the `length()` function.
+
+```{r}
+length(categories)
+```
+
+Simple numeric sequence vectors can be created using shorthand notation.
+
+```{r}
+(my_sequence <- 1:10)
+```
+
+`r if (knitr::is_latex_output()) '\\index{R!type coercion}'`If you try to mix data types inside a vector, it will usually result in *type coercion*, where one or more of the types are forced into a different type to ensure homogeneity. Often this means the vector will become a character vector.
+
+```{r}
+# numeric sequence vector
+vec <- 1:5
+str(vec)
+# create a new vector containing vec and the character "hello"
+new_vec <- c(vec, "hello")
+# numeric values have been coerced into their character equivalents
+str(new_vec)
+```
+
+But sometimes logical or factor types will be coerced to numeric.
+
+```{r}
+# attempt a mixed logical and numeric
+mix <- c(TRUE, 6)
+# logical has been converted to binary numeric (TRUE = 1)
+str(mix)
+# try to add a numeric to our previous categories factor vector
+new_categories <- c(categories, 1)
+# categories have been coerced to background integer representations
+str(new_categories)
+```
+
+`r if (knitr::is_latex_output()) '\\index{R!matrices}'`**Matrices** are two-dimensional data structures of the same type and are built from a vector by defining the number of rows and columns.  Data is read into the matrix down the columns, starting left and moving right.  Matrices are rarely used for non-numeric data types.
+
+```{r}
+# create a 2x2 matrix with the first four integers
+(m <- matrix(c(1, 2, 3, 4), nrow = 2, ncol = 2))
+```
+
+**Arrays** are n-dimensional data structures with the same data type and are not used extensively by most R users.
+
+### Heterogeneous data structures
+
+`r if (knitr::is_latex_output()) '\\index{R!lists}'`**Lists** are one-dimensional data structures that can take data of any type.
+
+```{r}
+my_list <- list(6, TRUE, "hello")
+str(my_list)
+```
+
+List elements can be any data type and any dimension.  Each element can be given a name.
+
+```{r}
+new_list <- list(
+  scalar = 6, 
+  vector = c("Hello", "Goodbye"), 
+  matrix = matrix(1:4, nrow = 2, ncol = 2)
+)
+str(new_list)
+```
+
+Named list elements can be accessed by using `$`.
+
+```{r}
+new_list$matrix
+```
+
+`r if (knitr::is_latex_output()) '\\index{R!dataframes}'`**Dataframes** are the most used data structure in R; they are effectively a named list of vectors of the same length, with each vector as a column.  As such, a dataframe is very similar in nature to a typical database table or spreadsheet.  
+
+```{r}
+# two vectors of different types but same length
+names <- c("John", "Ayesha")
+ages <- c(31, 24)
+# create a dataframe
+(df <- data.frame(names, ages))
+# get types of columns
+str(df)
+# get dimensions of df
+dim(df)
+```
+
+## Working with dataframes
+
+The dataframe is the most common data structure used by analysts in R, due to its similarity to data tables found in databases and spreadsheets.  We will work almost entirely with dataframes in this book, so let's get to know them.
+
+### Loading and tidying data in dataframes
+
+`r if (knitr::is_latex_output()) '\\index{R!loading data}'`To work with data in R, you usually need to pull it in from an outside source into a dataframe^[R also has some built-in data sets for testing and playing with.  For example, check out `mtcars` by typing it into the terminal, or type `data()` to see a full list of built-in data sets.].  R facilitates numerous ways of importing data from simple `.csv` files, from Excel files, from online sources or from databases.  Let's load a data set that we will use later---the `workfrance_edgelist` data set, which contains network information from an experiment in a French workplace conducted in 2015.  The `read.csv()` function can accept a URL address of the file if it is online.
+
+```{r}
+# url of data set 
+url <- "http://ona-book.org/data/workfrance_edgelist.csv"
+# load the data set and store it as a dataframe called workfrance_edges
+workfrance_edges <- read.csv(url)
+```
+
+We might not want to display this entire data set before knowing how big it is.  We can view the dimensions, and if it is too big to display, we can use the `head()` function to display just the first few rows.
+
+```{r}
+dim(workfrance_edges)
+```
+
+```{r}
+# hundreds of rows, so view first few
+head(workfrance_edges)
+```
+
+
+We can view a specific column by using `$`, and we can use square brackets to view a specific entry.   For example if we wanted to see the 6th entry of the `sales` column:
+
+```{r}
+workfrance_edges$to[6]
+```
+
+Alternatively, we can use a `[row, column]` index to get a specific entry in the dataframe.
+
+```{r}
+workfrance_edges[34, 3]
+```
+
+
+We can take a look at the data types using `str()`.
+
+```{r}
+str(workfrance_edges)
+```
+
+We can also see a statistical summary of each column using `summary()`, which tells us various statistics depending on the type of the column.
+
+```{r}
+summary(workfrance_edges)
+```
+
+`r if (knitr::is_latex_output()) '\\index{R!missing data}'`Note that there is no missing data in this dataframe.  Missing data is identified by a special `NA` value in R.  This should not be confused with `"NA"`, which is simply a character string.  
+
+Let's look at another data set: the `airquality` dataset, which is a record of some air quality measures taken in New York in 1973.  This is an in-built dataframe in R and therefore it simply exists in your R session without needing to load it.   The function `is.na()` will look at all values in a vector or dataframe and return `TRUE` or `FALSE` based on whether they are `NA` or not.  By adding these up using the `sum()` function, it will take `TRUE` as 1 and `FALSE` as 0, which effectively provides a count of missing data.
+
+```{r}
+sum(is.na(airquality))
+```
+
+In some cases, we might want to remove the rows of data that contain `NA`s.  The easiest way is to use the `complete.cases()` function, which identifies the rows that have no `NA`s, and then we can select those rows from the dataframe based on that condition.  Note that you can overwrite objects with the same name in R.
+
+```{r}
+airquality <- airquality[complete.cases(airquality), ]
+# confirm no NAs
+sum(is.na(airquality))
+```
+
+We can see the unique values of a vector or column using the `unique()` function.
+
+```{r}
+unique(airquality$Month)
+```
+
+If we need to change the type of a column in a dataframe, we can use the `as.numeric()`, `as.character()`, `as.logical()` or `as.factor()` functions.  For example, given that there are only five unique values for the `Month` column in `airquality`, we may want to convert it from its current integer form to a factor.
+
+```{r}
+airquality$Month <- as.factor(airquality$Month)
+str(airquality)
+```
+
+### Manipulating dataframes
+
+`r if (knitr::is_latex_output()) '\\index{R!subsetting dataframes}'`Dataframes can be subsetted to contain only rows that satisfy specific conditions.
+
+```{r}
+airquality_month5 <- subset(airquality, subset = Month == 5)
+head(airquality)
+```
+
+Note the use of `==`, which is used in many programming languages, to test for precise equality.  Similarly we can select columns based on inequalities (`>` for 'greater than'&zwj;, `<` for 'less than'&zwj;, `>=` for 'greater than or equal to'&zwj;, `<=` for 'less than or equal to'&zwj;, or `!=` for 'not equal to').  For example:
+
+```{r}
+(high_ozone <- subset(airquality, subset = Ozone >= 120))
+```
+
+To select specific columns use the `select` argument.
+
+```{r}
+airquality_ozone_wind <- subset(airquality, 
+                                 select = c("Ozone", "Wind"))
+head(airquality_ozone_wind)
+```
+
+`r if (knitr::is_latex_output()) '\\index{R!combining dataframes}'`Two dataframes with the same column names can be combined by their rows.
+
+```{r}
+low_ozone <- subset(airquality, subset = Ozone < 6)
+# bind the rows of low_sales and high_sales together
+low_and_high_ozone = rbind(low_ozone, high_ozone)
+low_and_high_ozone
+```
+
+Two dataframes with different column names can be combined by their columns.
+
+```{r}
+# two dataframes with two columns each
+airquality_ozone_wind <- subset(airquality, 
+                     select = c("Ozone", "Wind"))
+airquality_temp_day <- subset(airquality, 
+                        select = c("Temp", "Day"))
+# bind the columns to create a dataframe with four columns
+full_df <- cbind(airquality_ozone_wind, airquality_temp_day)
+head(full_df)
+```
+
+## Functions, packages and libraries
+
+In the code so far we have used a variety of functions.  For example `head()`, `subset()`, `rbind()`.  Functions are operations that take certain defined inputs and return an output.  Functions exist to perform common useful operations.
+
+### Using functions
+
+`r if (knitr::is_latex_output()) '\\index{R!functions}'`Functions usually take one or more arguments.  Often there are a large number of arguments that a function can take, but many are optional and not required to be specified by the user.  For example, the function `head()`, which displays the first rows of a dataframe^[It actually has a broader definition but is mostly used for showing the first rows of a dataframe.], has only one required argument `x`: the name of the dataframe.  A second argument is optional, `n`: the number of rows to display.  If `n` is not entered, it is assumed to have the default value `n = 6`.  
+
+When running a function, you can either specify the arguments by name or you can enter them in order without their names.  If you enter arguments without naming them, R expects the arguments to be entered in exactly the right order.
+
+```{r}
+# see the head of salespeople, with the default of six rows
+head(airquality)
+```
+
+```{r}
+# see fewer rows - arguments need to be in the right order if not named
+head(airquality, 3)
+```
+
+```{r}
+# or if you don't know the right order, 
+# name your arguments and you can put them in any order
+head(n = 3, x = airquality)
+```
+
+### Help with functions
+
+Most functions in R have excellent help documentation.  To get help on the `head()` function, type `help(head)` or `?head`.  This will display the results in the Help browser window in RStudio.  Alternatively you can open the Help browser window directly in RStudio and do a search there. An example of the browser results for `head()` is in Figure \@ref(fig:head-help).
+
+```{r head-help, fig.cap=if (knitr::is_latex_output()) {"Results of a search for the \\texttt{head()} function in the RStudio Help browser"} else {"Results of a search for the `head()` function in the RStudio Help browser"}, fig.align="center", echo = FALSE, out.width = if (knitr::is_latex_output()) {"90%"}}
+knitr::include_graphics("./www/basic-r/head-help-small.png")
+```
+
+The help page normally shows the following:
+
+* Description of the purpose of the function
+* Usage examples, so you can quickly see how it is used
+* Arguments list so you can see the names and order of arguments
+* Details or notes on further considerations on use
+* Expected value of the output (for example `head()` is expected to return a similar object to its first input `x`)
+* Examples to help orient you further (sometimes examples can be very abstract in nature and not so helpful to users)
+
+### Writing your own functions
+
+Functions are not limited to those that come packaged in R.  Users can write their own functions to perform tasks that are helpful to their objectives.  Experienced programmers in most languages subscribe to a principle called DRY (Don't Repeat Yourself).  Whenever a task needs to be done repeatedly, it is poor practice to write the same code numerous times. It makes more sense to write a function to do the task.  
+
+In this example, a simple function is written which generates a report on a dataframe:
+
+```{r}
+# create df_report function
+df_report <- function(df) {
+  paste("This dataframe contains", nrow(df), "rows and", 
+        ncol(df), "columns. There are", sum(is.na(df)), "NA entries.")
+}
+```
+
+We can test our function by using `airquality` data set.
+
+```{r}
+df_report(airquality)
+```
+
+### Installing packages
+
+`r if (knitr::is_latex_output()) '\\index{R!packages!installing}'`All the common functions that we have used so far exist in the base R installation.  However, the beauty of open source languages like R is that users can write their own functions or resources and release them to others via packages.  A package is an additional module that can be installed easily; it makes resources available which are not in the base R installation.  In this book we will be using functions from both base R and from popular and useful packages.  `r if (knitr::is_latex_output()) '\\index{R!packages!igraph@\\texttt{igraph}}'`As an example, a fundamental package which we will use in this book is the `igraph` package for constructing and analyzing graphs.  
+
+Before an external package can be used, it must be installed into your package library using `install.packages()`.  So to install `igraph`, type `install.packages("igraph")` into the console.  This will send R to the main internet repository for R packages (known as CRAN). It will find the right version of `igraph` for your operating system and download and install it into your package library.  If `igraph` needs other packages in order to work, it will also install these packages.  
+
+If you want to install more than one package, put the names of the packages inside a character vector---for example:
+
+```{r, eval = FALSE}
+my_packages <- c("igraph", "onadata")
+install.packages(my_packages)
+```
+
+Once you have installed a package, you can see what functions are available by calling for help on it, for example using `help(package = igraph)`.  `r if (knitr::is_latex_output()) '\\index{R!packages!onadata@\\texttt{onadata}}'`One package you may wish to install now is the `onadata` package, which contains all the data sets used in this book.  By installing and loading this package, all the data sets used in this book will be loaded into your R session and ready to work with.  If you do this, you can ignore the `read.csv()` commands later in the book, which download the data from the internet.
+
+### Using packages
+
+`r if (knitr::is_latex_output()) '\\index{R!packages!using}'`Once you have installed a package into your package library, to use it in your R session you need to load it using the  `library()` function. For example, to load `igraph` after installing it, use `library(igraph)`.  Often nothing will happen when you use this command, but rest assured the package has been loaded and you can start to use the functions inside it.  Sometimes when you load the package a series of messages will display, usually to make you aware of certain things that you need to keep in mind when using the package.  Note that whenever you see the `library()` command in this book, it is assumed that you have already installed the package in that command.  If you have not, the `library()` command will fail.
+
+Once a package is loaded from your library, you can use any of the functions inside it.  For example, the `degree()` function is not available before you load the `igraph` package but becomes available after it is loaded.  In this sense, functions 'belong' to packages.
+
+Problems can occur when you load packages that contain functions with the same name as functions that already exist in your R session.  Often the messages you see when loading a package will alert you to this.  When R is faced with a situation where a function exists in multiple packages you have loaded, R always defaults to the function in *the most recently loaded* package.  This may not always be what you intended.
+
+One way to completely avoid this issue is to get in the habit of *namespacing* your functions.  To namespace, you simply use `package::function()`, so to safely call `degree()` from `igraph`, you use `igraph::degree()`.  Most of the time in this book when a function is being called from a package outside base R, I use namespacing to call that function.  This should help avoid confusion about which packages are being used for which functions.
+
+### The pipe operator
+
+`r if (knitr::is_latex_output()) '\\index{R!pipe operator}'`Even in the most elementary briefing about R, it is very difficult to ignore the pipe operator.  The pipe operator makes code more natural to read and write and reduces the typical computing problem of many nested operations inside parentheses.  
+
+As an example, imagine we wanted to do the following two operations in one command:
+
+1. Subset `airquality` to only the `Ozone` values of those with `Temp` less than 60
+2. Take the mean of those values
+
+Rememering that we have already removed rows with `NA` values from `airquality`, one way to do this is:
+
+```{r}
+mean(subset(airquality$Ozone, subset = airquality$Temp < 60))
+```
+
+This is nested and needs to be read from the inside out in order to align with the instructions.  The pipe operator `|>` takes the command that comes before it and places it inside the function that follows it (by default as the first unnamed argument). This reduces complexity and allows you to follow the logic more clearly.
+
+```{r}
+# use the pipe operator to lay out the steps more logically
+airquality$Ozone |> 
+  subset(subset = airquality$Temp < 60) |> 
+  mean() 
+```
+
+The pipe operator is very widely used because it helps to make code more readable, it reduces complexity, and it helps orient around a common 'grammar' for the manipulation of data.  The pipe operator helps you structure your code more clearly around nouns (objects), verbs (functions) and adverbs (arguments of functions).  `r if (knitr::is_latex_output()) '\\index{R!packages!tidyverse@\\texttt{tidyverse}}'`One of the most developed sets of packages in R that follows these principles is the `tidyverse` family of packages, which I encourage you to explore^[Note that in this book I am using the 'native pipe' operator which was introduced to R as of Version 4.1.0.  If you are using a prior version of R, or if you have old habits you would like to stick with, you can use the prior pipe operator that is only available when it is loaded as part of the `magrittr` or `dplyr` packages, and which is notated as `%>%`].
+
+## Errors, warnings and messages
+
+As I mentioned earlier in this chapter, getting familiar with R can be frustrating at the beginning if you have never programmed before.  You can expect to regularly see messages, warnings or errors in response to your commands.  I encourage you to regard these as your friend rather than your enemy.  It is very tempting to take the latter approach when you are starting out, but over time I hope you will appreciate some wisdom from my words.
+
+`r if (knitr::is_latex_output()) '\\index{R!errors}'`*Errors* are serious problems which usually result in the halting of your code and a failure to return your requested output.  They usually come with an indication of the source of the error, and these can sometimes be easy to understand and sometimes frustratingly vague and abstract.  For example, an easy-to-understand error is:
+
+```{r, eval = FALSE}
+subset(airquality, subset = Temp = 78)
+```
+
+```
+Error: unexpected '=' in "subset(salespeople, subset = sales ="
+```
+
+This helps you see that you have used `Temp = 720` as a condition to subset your data, when you should have used `Temp == 720` for precise equality.
+
+A much more challenging error to understand is:
+
+```{r, eval = FALSE}
+head[airquality]
+```
+```
+Error in head[salespeople] : object of type 'closure' is not subsettable
+```
+
+When first faced with an error that you can't understand, try not to get frustrated and proceed in the knowledge that it usually can be fixed easily and quickly.  Often the problem is much more obvious than you think, and if not, there is still a 99% likelihood that others have made this error and you can read about it online.  The first step is to take a look at your code to see if you can spot what you did wrong.  In this case, you may see that you have used square brackets `[]` instead of parentheses `()` when calling your `head()` function.  If you cannot see what is wrong, the next step is to ask a colleague or do an internet search with the text of the error message you receive, or to consult online forums like https://stackoverflow.com.  The more experienced you become, the easier it is to interpret error messages.
+
+`r if (knitr::is_latex_output()) '\\index{R!warnings}'`*Warnings* are less serious and usually alert you to something that you might be overlooking and which could indicate a problem with the output.  In many cases you can ignore warnings, but sometimes they are an important reminder to go back and edit your code.  For example, you may run a model which doesn't converge, and while this does not stop R from returning results, it is also very useful for you to know that it didn't converge.  
+
+`r if (knitr::is_latex_output()) '\\index{R!messages}'`*Messages* are pieces of information that may or may not be useful to you at a particular point in time.  Sometimes you will receive messages when you load a package from your library.  Sometimes messages will keep you up to date on the progress of a process that is taking a long time to execute.   
+
+## Plotting and graphing
+
+As you might expect in a well-developed programming language, there are numerous ways to plot and graph information in R.  If you are doing exploratory data analysis on fairly simple data and you don't need to worry about pretty appearance or formatting, the built-in plot capabilities of base R are fine.  If you need a pretty appearance, more precision, color coding or even 3D graphics or animation, there are also specialized plotting and graphing packages for these purposes.  In general when working interactively in RStudio, graphical output will be rendered in the Plots pane, where you can copy it or save it as an image.
+
+### Plotting in base R
+
+`r if (knitr::is_latex_output()) '\\index{R!scatter plots}'`The simplest plot function in base R is `plot()`.  This performs basic X-Y plotting.  As an example, this code will generate a scatter plot of `Ozone` against `Temp` in the `airquality` data set, with the results displayed in Figure \@ref(fig:basicscatter).  Note the use of the arguments `main`, `xlab` and `ylab` for customizing the axis labels and title for the plot.
+
+```{r basicscatter, fig.cap=if (knitr::is_latex_output()) {"Simple scatterplot of \\texttt{Ozone} against \\texttt{Temp} in the \\texttt{airquality} data set"} else {"Simple scatterplot of `Ozone` against `Temp` in the `airquality` data set"}, fig.align = "center", out.width = if (knitr::is_latex_output()) {"90%"}}
+# scatter plot of ozone against temp
+plot(x = airquality$Temp, y = airquality$Ozone,
+     xlab = "Temperature (F)", ylab = "Ozone",
+     main = "Scatterplot of Ozone vs Temperature")
+```
+
+`r if (knitr::is_latex_output()) '\\index{R!histograms}'`Histograms of data can be generated using the `hist()` function.  This command will generate a histogram of `Ozone` as displayed in Figure \@ref(fig:basichist).  Note the use of `breaks` to customize how the bars appear.
+
+```{r basichist, fig.cap=if (knitr::is_latex_output()) {"Simple histogram of \\texttt{Ozone} in the \\texttt{airquality} data set"} else {"Simple histogram of `Ozone` in the `airquality` data set"}, fig.align = "center", out.width = if (knitr::is_latex_output()) {"90%"}}
+# histogram of ozone
+hist(airquality$Ozone, breaks = 10,
+     xlab = "Ozone levels", 
+     main = "Histogram of Ozone Levels")
+```
+
+`r if (knitr::is_latex_output()) '\\index{R!box and whisker plots}'`Box and whisker plots are excellent ways to see the distribution of a variable, and can be grouped against another variable to see bivariate patterns.  For example, this command will show a box and whisker plot of `Ozone` grouped against `Month`, with the output shown in Figure \@ref(fig:basicbox).  Note the use of the `formula` and `data` notation here to define the variable we are interested in and how we want it grouped.  
+
+```{r basicbox, fig.cap=if (knitr::is_latex_output()) {"Simple box plot of \\texttt{Ozone} grouped against \\texttt{Month} in the \\texttt{airquality} data set"} else {"Simple box plot of `Ozone` grouped against `Month` in the `airquality` data set"}, fig.align = "center", out.width = if (knitr::is_latex_output()) {"90%"}}
+# box plot of Ozone by Month
+boxplot(formula = Ozone ~ Month, data = airquality,
+        xlab = "Month", ylab = "Ozone levels",
+        main = "Boxplot of Ozone Levels by Month")
+```
+
+These are among the most common plots used for data exploration purposes.  They are examples of a wider range of plotting and graphing functions available in base R, such as line plots, bar plots and other varieties which you may see later in this book.
+
+### Specialist plotting and graphing packages
+
+`r if (knitr::is_latex_output()) '\\index{R!packages!ggplot2@\\texttt{ggplot2}}'`By far the most commonly used specialist plotting and graphing package in R is `ggplot2`.  `ggplot2` allows the flexible construction of a very wide range of charts and graphs, but uses a very specific command grammar which can take some getting used to.  However, once learned, `ggplot2` can be an extremely powerful tool.  Later in this book we will make a lot of references to `ggplot2` and some of its extension packages like `ggmap` and `ggraph`.  A great learning resource for `ggplot2` is @ggplot2.  Here are some examples of how to recreate the plots from the previous section in `ggplot2` using its layered graphics grammar.
+
+To start graphing, the `ggplot()` function usually requires a data set.  You can also define some aesthetic mappings in this initial function, which associate a feature of the chart with an element of the data.  Any such aesthetic mappings are inherited by later commands in the layering.  In this case, we use the `airquality` data set, we define our `x` and `y` aesthetics and we then use `geom_point()` to draw a scatter plot with some visual customization.  We also use a theme command to obtain a preset look for our chart - in this case a minimal look - and we customize our title and axis labels.  The result is in Figure \@ref(fig:ggplot-scatter).
+
+```{r ggplot-scatter, fig.cap=if (knitr::is_latex_output()) {"Simple scatter plot of \\texttt{Ozone} against \\texttt{Temp} in the \\texttt{airquality} data set using \\texttt{ggplot2}"} else {"Simple scatter plot of `Ozone` against `Temp` in the `airquality` data set using `ggplot2`"}, fig.align = "center", out.width = if (knitr::is_latex_output()) {"90%"}}
+library(ggplot2)
+
+# create scatter of Ozone vs Temp in airquality data set
+ggplot(data = airquality, aes(x = Temp, y = Ozone)) +
+  geom_point(color = "pink", shape = "diamond", size = 3) +
+  theme_minimal() +
+  labs(title = "Scatterplot of Ozone vs Temperature",
+       x = "Temperature (F)")
+
+```
+
+To create our histogram of Ozone readings. we use a similar approach with the result in Figure \@ref(fig:ggplot-hist).
+
+```{r ggplot-hist, fig.cap=if (knitr::is_latex_output()) {"Simple histogram of \\texttt{Ozone} in the \\texttt{airquality} data set using \\texttt{ggplot2}"} else {"Simple histogram of `Ozone` in the `airquality` data set using `ggplot2`"}, fig.align = "center", out.width = if (knitr::is_latex_output()) {"90%"}}
+# create histogram of Ozone
+ggplot(data = airquality, aes(x = Ozone)) +
+  geom_histogram(bins = 10, fill = "lightblue", color = "pink") +
+  theme_minimal() + 
+  labs(title = "Histogram of Ozone Levels",
+       x = "Ozone levels", 
+       y = "Frequency")
+
+```
+
+And finally, we create our box and whisker plot using the same principles, with the result in \@ref(fig:ggplot-box).
+
+```{r ggplot-box, fig.cap=if (knitr::is_latex_output()) {"Simple boxplot of \\texttt{Ozone} against \\texttt{Month} in the \\texttt{airquality} data set using \\texttt{ggplot2}"} else {"Simple boxplot of `Ozone` against `Month` in the `airquality` data set using `ggplot2`"}, fig.align = "center", out.width = if (knitr::is_latex_output()) {"90%"}}
+# create boxplot of Ozone by Month
+ggplot(data = airquality, aes(x = Month, y = Ozone)) +
+  geom_boxplot(fill = "lightblue", color = "pink") +
+  theme_minimal() +
+  labs(title = "Boxplot of Ozone Levels by Month",
+       y = "Ozone levels")
+
+
+```
+
+
+## Documenting your work using R Markdown
+
+`r if (knitr::is_latex_output()) '\\index{R!R Markdown}'`For anyone performing any sort of analysis using a statistical programming language, appropriate documentation and reproducibility of the work is essential to its success and longevity.  If your code is not easily obtained or run by others, it is likely to have a very limited impact and lifetime.  Learning how to create integrated documents that contain both text and code is critical to providing access to your code and narration of your work.  
+
+R Markdown is a package which allows you to create integrated documents containing both formatted text and executed code.  It is, in my opinion, one of the best resources available currently for this purpose. This entire book has been created using R Markdown. You can start an R Markdown document in RStudio by installing the `rmarkdown` package and then opening a new R Markdown document file, which will have the suffix `.Rmd`.
+
+R Markdown documents always start with a particular heading type called a YAML header, which contains overall information on the document you are creating.  Care must be taken with the precise formatting of the YAML header, as it is sensitive to spacing and indentation.  Usually a basic YAML header is created for you in RStudio when you start a new `.Rmd` file.  Here is an example.
+
+```
+---
+title: "My new document"
+author: "Keith McNulty"
+date: "25/01/2021"
+output: html_document
+---
+```
+
+The `output` part of this header has numerous options, but the most commonly used are `html_document`, which generates your document as a web page, and `pdf_document`, which generates your document as a PDF using the open source `LaTeX` software package.  If you wish to create PDF documents you will need to have a version of `LaTeX` installed on your system.  One R package that can do this for you easily is the `tinytex` package.  The function `install_tinytex()` from this package will install a minimal version of `LaTeX` which is fine for most purposes.
+
+R Markdown allows you to build a formatted document using many shorthand formatting commands.  Here are a few examples of how to format headings and place web links or images in your document:
+
+```
+# My top heading
+This section is about this general topic.
+## My first sub heading 
+To see more information on this sub-topic visit [here](https://my.web.link).
+## My second sub heading
+Here is a nice picture about this sub-topic.
+![](path/to/image)
+```
+
+Code can be written and executed and the results displayed inline using backticks.  For example, recalling out `workfrance_edges` dataset from earlier and writing 
+
+```{r, echo = FALSE}
+workfrance_edges <- read.csv(url)
+```
+
+````
+`r`r ''` nrow(workfrance_edges)`
+````
+
+inline will display `r nrow(workfrance_edges)` in the final document.  Entire code blocks can be included and executed by using triple-backticks.  The following code block:
+
+````
+```{r}`r ''`
+# show the first few rows of workfrance_edges
+head(workfrance_edges)
+```
+````
+
+will display this output:
+
+```{r, echo = FALSE}
+head(workfrance_edges)
+```
+
+The `{}` wrapping allows you to specify different languages for your code chunk.  For example, if you wanted to run Python code instead of R code you can use `{python}`.  It also allows you to set options for the code chunk display separated by commas.  For example, if you want the results of your code to be displayed, but without the code itself being displayed, you can use `{r, echo = FALSE}`.
+
+The process of compiling your R Markdown code to produce a document is known as 'knitting'. To create a knitted document, you simply need to click on the 'Knit' button in RStudio that appears above your R Markdown code.  
+
+If you are not familiar with R Markdown, I strongly encourage you to learn it alongside R and to challenge yourself to write up any practice exercises you take on in this book using R Markdown.  Useful cheat sheets and reference guides for R Markdown formatting and commands are available through the Cheatsheets section of the Help menu in RStudio.  I also recommend @rmarkdown for a really thorough instruction and reference guide.
+
+
+## Learning exercises
+
+### Discussion questions
+
+1.  Describe the following data types:  numeric, character, logical, factor.
+2.  Why is a vector known as a homogeneous data structure?
+3.  Give an example of a heterogeneous data structure in R.
+4.  What is the difference between `NA` and `"NA"`?
+5.  What operator is used to return named elements of a list and named columns of a dataframe?
+6.  Describe some functions that are used to manipulate dataframes.
+7.  What is a package and how do you install and use a new package?
+8.  Describe what is meant by 'namespacing' and why it might be useful.
+9.  What is the pipe operator, and why is it popular in R?
+10. What is the difference between an error and a warning in R?
+11.  Name some simple plotting functions in base R.
+12.  What is R Markdown, and why is it useful to someone performing analysis using programming languages?
+
+
+### Data exercises
+
+1.  Create a character vector called `my_names` that contains all your first, middle and last names as elements. Calculate the length of `my_names`.
+2.  Create a second numeric vector called `which` which corresponds to `my_names`. The entries should be the position of each name in the order of your full name.  Verify that it has the same length as `my_names`.
+3.  Create a dataframe called `names`, which consists of the two vectors `my_names` and `which` as columns.  Calculate the dimensions of `names`.
+4.  Create a new dataframe `new_names` with the `which` column converted to character type.  Verify that your command worked using `str()`.
+5.  `r if (knitr::is_latex_output()) '\\index{data sets!ugtests@\\texttt{ugtests}}'`Load the `ugtests` data set via the `peopleanalyticsdata` package or download it from the internet^[http://peopleanalytics-regression-book.org/data/ugtests.csv].  Calculate the dimensions of `ugtests` and view the first three rows only. 
+6.  View a statistical summary of all of the columns of `ugtests`.  Determine if there are any missing values.
+7.  View the subset of `ugtests` for values of `Yr1` greater than 50.
+8.  Install and load the package `dplyr`.  Look up the help for the `filter()` function in this package and try to use it to repeat the task in the previous question.
+9.  Write code to find the mean of the `Yr1` test scores for all those who achieved `Yr3` test scores greater than 100.  Round this mean to the nearest integer.
+10. Familiarize yourself with the two functions `filter()` and `pull()` from `dplyr`.  Use these functions to try to do the same calculation in the previous question using a single unbroken piped command.  Be sure to namespace where necessary.
+11.  Create a scatter plot using the `ugtests` data with `Final` scores on the $y$ axis and `Yr3` scores on the $x$ axis.
+12.  Create your own 5-level grading logic and use it to create a new `finalgrade` column in the `ugtests` data set with grades 1--5 of increasing attainment based on the `Final` score in `ugtests`.  Generate a histogram of this `finalgrade` column.
+13.  Using your new `ugtests` data with the extra column from the previous exercise, create a box plot of `Yr3` scores grouped by `finalgrade`.
+14.  Knit all of your answers to these exercises into an R Markdown document.  Create one version that displays your code and answers, and another that just displays the answers.
+
+

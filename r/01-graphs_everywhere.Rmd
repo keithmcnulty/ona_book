@@ -1,6 +1,6 @@
 `r if (knitr::is_latex_output()) '\\mainmatter'`
 
-# Graphs everywhere!
+# Graphs everywhere! {#everywhere}
 
 If you have ever been lucky enough to pay a visit to the vibrant Russian city of Kaliningrad on the Baltic coast, it's likely to have been a trip you remember.  An unusual exclave of the massive Russian Federation, you cannot get to the remainder of Russia from Kaliningrad over land without crossing through at least two other countries.  Things have landed this way, like they always do, because of the cards dealt by history. The strategic importance endowed to Kaliningrad owing to its prime coastal position placed it in the center of a tug-of-war, changing hands on numerous occasions over the centuries.  At the end of the Second World War as Stalin cast his eye over the ruins of Europe, he considered the city far too strategically important to be left in the hands of any other Eastern-bloc state, and so despite the physical separation it was duly deemed to be Russia's sovereign territory.    
 
@@ -67,7 +67,7 @@ Euler's proof was the first time a graph like the one in `r if (knitr::is_html_o
 ```
 `r if (knitr::is_html_output()) '-->'`
 
-## Graphs and networks are all around us
+## Graphs as mathematical models
 
 Graphs and networks have existed since long before Euler, and probably since the beginning of time itself.  They exist physically, such as in a spider's web, in the electrical wiring of your home or in the molecules that make up the universe.  Since the time of Euler, graphs have also existed conceptually as the best way we can describe many complex systems, and in this book we will focus on the use of graphs to describe complex systems related to people, groups, organizations or other societal constructs.  Before we jump into our core topic, it is worth taking a few moments to appreciate how fundamental graphs are to both science and to everyday life by discussing a few examples of the practical use of graphs to solve problems.   
 
@@ -85,16 +85,95 @@ In the social sciences and in the study of people and groups, the increasing pre
 
 ### The study of connection
 
-In most organizations, institutions and societal groups, connection is considered a critical facilitator of happiness, motivation, productivity and progress.  The psychological concept of *belongingness*, which describes a human need to connect, affiliate and be accepted by others, is an important element of Maslow's Hierarchy of Needs. Empirically, greater social connection has been associated with positive effects on mental and physical health, cognitive functioning, life expectancy and even wound healing (@holt-lunstad1).  Conversely, lack of connection --- or loneliness --- is of research interest because of its potential negative effects on mental wellbeing, productivity and workplace performance.  A meta-analytic review of the relationship between social relationships and mortality risk concluded that lack of social connection carries a higher risk of premature mortality than obesity (@holt-lunstad2).
-
-In workplace settings, economic, sociology and psychology practitioners and academics are showing an increasing amount of interest in connection and how it affects performance, productivity and employee retention.  Empirical research has demonstrated links between friendship at work and improved work engagement and productivity (@rath), and social interaction at work (whether work-related or otherwise) has been associated with improved outcomes (@olguin).  
+In most organizations, institutions and societal groups, connection is considered a critical facilitator of happiness, motivation, productivity and progress.  The psychological concept of *belongingness*, which describes a human need to connect, affiliate and be accepted by others, is an important element of Maslow's Hierarchy of Needs. Empirically, greater social connection has been associated with positive effects on mental and physical health, cognitive functioning, life expectancy and even wound healing (@holt-lunstad1).  Conversely, lack of connection --- or loneliness --- is of research interest because of its potential negative effects on mental wellbeing, productivity and workplace performance.  A meta-analytic review of the relationship between social relationships and mortality risk concluded that lack of social connection carries a higher risk of premature mortality than obesity (@holt-lunstad2).  In workplace settings, economic, sociology and psychology practitioners and academics are showing an increasing amount of interest in connection and how it affects performance, productivity and employee retention.  Empirical research has demonstrated links between friendship at work and improved work engagement and productivity (@rath), and social interaction at work (whether work-related or otherwise) has been associated with improved outcomes (@olguin).  
 
 The ability to analyse connection in the workplace and in society-at-large will become increasingly important as we move further into the 21st century.  The variety of data that could represent connection is expanding.  Connection between people can now be defined by in person interaction, electronic transaction and even assumed connection through overlaps in geographic location or in work or personal activities. Strong analytic techniques will be necessary to support evidence-based practice, because not all measures of connection are meaningful to the outcomes being researched and, even when they have been shown to be meaningful, resulting interventions do not always have the expected effects (for example, a study by @feld demonstrated that deliberate attempts to increase interracial contact in American schools actually ended up causing greater racial segregation).
 
 ### The study of information flow
 
+Communication of information between people has been fundamentally transformed by the digital age. Both potential reach and speed of transmission has been massively enabled by technology in the past two decades.  General fascination with how messages can be sent through networks date from the earliest chain letters in the late 19th century (@chainlet), and those of us who are old enough may remember receiving letters in the mail asking to send message onwards to a specified number of individuals, and promising that this will generate thousands of replies within a few weeks.  Figure \@ref(fig:texas-send-a-dime) is an example of one of these used as a way to generate money in Texas in 1935.
+
+```{r texas-send-a-dime, echo = FALSE, fig.align = "center", fig.cap="Chain letter from Texas in 1935 (credit: Daniel W. VanArsdale)", out.width="80%"}
+knitr::include_graphics("www/graphs_everywhere/send_a_dime.png")
+```
+
+The study of the propagation of messages in networks has expanded greatly in the digital age, and has many purposes ranging from studying emergency alert strategies to the prevention of fraudulent activities or the defense against messaging that threatens public health or the course of criminal justice. Although this area of research is still in its infancy, models which are not dissimilar to those used in biology and epidemiology are employed (for example @hafnaoui). The likelihood of messages propagating can depend on the characteristics of the network, the nature of the message and the node which is propagating it (popularity, credibility), and the receptiveness of the onward nodes to the message, and of course the term 'viral' has entered our lexicon to describe rapid electronic message propagation in the last decade or so.  The effect of message propagation on the development of networks is also of great research interest - for example, what nature and frequency of message propagation leads to rapid network growth?
+
+Research of this nature is mostly currently confined to academics working with social media data, but will become of increasing interest in the workplace.  An increasing distributed workforce with lower level of geographic concentration will mean that organizations will need to more effectively manage important, urgent or time-sensitive communication with their workforce and this will require greater intelligence on how messages effectively propagate in their specific environments.
+
+### The study of community, diversity and familiarity 
+
+Distance in a network --- which we will define more precisely in later chapters --- can be representative of likely familiarity between individuals, which allows for mathematical models to support the study of community and diversity.  Algorithms for calculating distance and diameter in a network help determine how 'tight' groups are and allows some measurement of inter- and intra-group interaction.  Community detection algorithms involve graph partitioning to help identify 'pockets' of highly connected individuals in large networks.  This is of great interest in the field of sociology, but also has applications to other areas such as the study of common purchasing behaviors among customers, and the study of common interests among academics or writers (@lu).     
+
+Increasing focus on diversity as a positive influencer of organizational outcomes in recent years means that the ability to measure distance and identify community structures in networks will be of high utility, particularly in complex organizational structures.  Use cases can range from highly strategic questions of organizational design to highly tactical questions of meeting attendance or group membership. Current trends away from physical co-location of employees and the rise of more virtual organizational structures will likely result in greater requirements for analysis of remote and electronic interaction in order to determine whether imposed structures genuinely reflect the way people work.  Effective use of these techniques can even be valuable in the co-ordination of large professional or social events, where subgroups can be identified to maximize intra-group distance in order to better ensure a more diverse mix of employees in professional or social activities. 
+
+### The study of importance, influence and attachment
+
+While the concept of vertex/node importance or centrality has been a fundamental tenet of graph theory for a long time, the rise of social networks seems to have turbo-charged its relevance in research and analytics.  The rise of the 'influencer' as a highly connected and influential member of a network has entered deeply into social consciousness in the past decade, and the study of how followership is generated through the forming of attachments between members of networks is one of the more rich veins of sociological research currently.  The idea of preferential attachment or the *Matthew Effect* describes an accumulated advantage over time, where those with more attachment attract yet more^[So named because of a segment of the Gospel of Matthew in the New Testament: "For to every one who has will more be given, and he will have abundance; but from him who has not, even what he has will be taken away."]. It has been believed that social networks show similar properties to scale-free networks which obey a power law distribution of the degree of their vertices/nodes - see Figure \@ref(fig:power-law)^[In a scale-free network the proportion of vertices/nodes of degree $k$ takes a shape similar to $k^{-\alpha}$ where usually $2 < \alpha < 3$].  In fact, the most recent research indicates that scale-free networks exist rarely and that social networks are at best weakly scale-free (@broido).
 
 
+```{r power-law, echo = FALSE, fig.align = "center", fig.cap = "Power law distribution of node degrees in a scale-free network for $\\alpha = 2$, showing a small number of high degree vertices and a long tail of vertices with low degree"}
 
+library(ggplot2)
+library(latex2exp)
 
+ggplot() +
+  xlim(c(0, 5)) +
+  geom_function(fun = function(x) {x^(-2)}, color = "lightblue", size = 2) +
+  theme_minimal() +
+  theme(axis.ticks = element_blank(),
+        axis.text = element_blank()) +
+  labs(x = "Degree of vertex",
+       y = "Proportion of vertices") +
+  annotate("text", x = 0.5, y = 400, label = TeX("$P(x) = x^{-2}$"), parse = TRUE)
+```
+
+Of course, any organization, institution or place of work an be considered a social network and there will be individuals that command greater or less attachment according to their tenure, seniority, skills or general popularity.  Understanding this in an organizational context can lead to insights about leadership and followership, and can help contribute to broader work in understanding the influence of followership on recruitment and on attrition.  Different types of centrality such as degree, betweenness and closeness centrality can imply different roles of individuals in terms of their importance to the overall community.
+
+`r if (knitr::is_latex_output()) '<!--'`
+:::thinkahead
+**Thinking ahead:** If you know how to, load up the graph of Zachary's Karate Club via the `onadata` package or by downloading the edgelist from the internet^[https://ona-book.org/data/karate].  See if you can find some functions to calculate the degree centrality, betweenness centrality, closeness centrality and eigenvector centrality of the various individuals in the network.  If you compare the results you should discover that centrality can mean different things depending on how you define it.   
+:::
+`r if (knitr::is_latex_output()) '-->'`
+
+`r if (knitr::is_html_output()) '<!--'`
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Thinking ahead:} If you know how to, load up the graph of Zachary's Karate Club via the `onadata` package or by downloading the edgelist from the internet at \texttt{https://ona-book.org/data/karate}.  See if you can find some functions to calculate the degree centrality, betweenness centrality, closeness centrality and eigenvector centrality of the various individuals in the network.  If you compare the results you should discover that centrality can mean different things depending on how you define it.   
+\end{minipage}
+}
+```
+`r if (knitr::is_html_output()) '-->'`
+
+### Graphs as data sources
+
+As use cases for network analytics mature, and as more and more organizations seek to understand their networks better, traditional rectangular-style databases will become increasingly challenging to work with.  Consider a desire to analyze whether two salespeople in an organization are connected through serving the same customer in the same month.   Depending on how data is currently stored in systems, this could easily end up being a lot more complicated and processing-heavy than it needs to be. Sales records may need to be joined to customer records which may then need to be rejoined back to sales data.  This may need to be done repeatedly to eventually obtain the required view of the data.  Traditional rectangular databases are stored to keep records of transactions, not of connections.
+
+Many organizations are turning to graph databases to store data about relationship and connections and to allow much faster query and calculation whenever the unit of analysis is connection.  A graph database is designed to store information about connected objects like people or organizational units in its vertices, and information relationships in its edges.  Such databases suit data that already comes in the form of a graph edgelist such as information on communication or interaction, but it is not uncommon to also transform other forms of data to be loaded into a graph database in order to query relationships rather than transactions in that data --- we will look at examples of how to do this in Chapter \@ref(restructuring-data).  Social media engines and many knowledge based resources like Wikipedia are supported by graph databases, and these sorts of databases are also becoming more commonly found in enterprise settings.  They have helped solve some high-profile problems.  For example, the International Consortium of Investigative Journalists (ICIJ) used a graph database to load document metadata from the *Panama Papers* document leak, and stored in this format the metadata exposed various complex networks of offshore tax arrangements.
+
+All of the topics mentioned above will come up to a greater or lesser degree in the content of this book, and from time to time there will even be diversions into a few other use cases outside of the people analytics domain in order to help illustrate the broader applications of methods.   As this book is intended to be more of a technical manual than a work of philosophy, we will be coming at this entire topic from the point of view of methodology and we will be focusing more on the *how* than the *why*, although some of the examples we use will clearly point to the motivation of the analysis and how the methodology can be useful in practice.  Enthusiastic readers should not need my help in determining where these methods might be useful in their day-to-day work.  They should be able to see this for themselves, and I expect this will become clearer to them as they work through the material chapter-by-chapter. 
+
+## The purpose, structure and organization of this book
+
+This book is targeted at technical practitioners who need a thorough grounding in the storage, visualization and analysis of network data.  It requires an elementary knowledge of the R or Python programming languages.  As I am first and foremost an R programmer, most of the content of this book will be primarily demonstrated in R, but efforts have been made to ensure that Python implementations have been demonstrated wherever possible, albeit more briefly in most places.  If you are a Python programmer, I would recommend that you are open to reading the sections that use R code as they will often help you build a better understanding of the work through the more thorough descriptions and discussions contained therein.  If you have never programmed before, I have included as Chapter \@ref(r-intro) a very brief introductory tutorial of the R programming language, but I would strongly recommend looking further afield for a more thorough grounding --- in particular @wickham.  If you have been through a similar introductory chapter in my previous book (@mcnulty) and made good work of it, then you should not need to look at Chapter \@ref(r-intro) and you can proceed past it.
+
+If you are not a technical practitioner, this book can still be useful to you as it contains considerable detail on concepts, methods and use cases related to network analytics in organizations, and it gives guidance on the interpretation of network analysis and statistics.  You will just need to be willing to tolerate the various code blocks that will appear as part of the technical instruction.
+
+Various downloadable data sets are used throughout this book, and in some cases I point to other sources of data outside the book for those who are interested in further exploration particularly of very large network data.  Most chapters end with a set of discussion exercises and data exercises and I strongly encourage the reader to engage with in order to put their learning into practice.  Often, it is through taking on these exercises that readers discover some of the common pitfalls of working with graph data structures, and better to learn these pitfalls now than to find out about them when the situation is higher stakes or more urgent.  
+
+This chapter and the one following it can be considered preliminaries.  From Chapter \@ref(working) onwards, this book takes the following structure:
+
+* Chapter 3 introduces the simple elements of graph theory including how to define a graph, the various types of graphs, vertex and edge properties and the ways in which a graph can be described mathematically.  It then proceeds to demonstrate how to create graph objects in R or in Python and how to start working with them.
+* Chapter 4 looks at the various options for how to visualize graphs in R and in Python.  It goes through a variety of technical options for static and dynamic visualizations of graphs and how to customize the appearance of graphs for various purposes.
+* Chapter 5 looks at how data can be transformed to be used in a graph structure, which is often an important elements of making grahs useful for analysis.  Two important examples are used to illustrate how to transform rectangular data into an edgelist for a graph and how to scrape document information for use in graphs.
+* Chapter 6 examines the topic of paths and distance in graphs, introduces other concepts such graph diameter, and demonstrates some common methods such as Dijkstra's shortest path algorithm.
+* Chapter 7 examines the topic of vertex importance and centrality in graphs.  It discusses different types of centrality and their meaning and usefulness in a network analytics context, and it shows various methods for calculating and graphically illustrating centraility in graphs.
+* Chapter 8 looks at community detection.  It covers various options for how to identify communities in graphs, how to describe communities and how to illustrate them effectively.
+* Chapter 9 deep dives into some common statistics used in analyzing networks, in particular related to similarity, assortativity and attachment.  
+* Chapter 10 introduces the concept of graphs as databases and provides some examples of how to design and use graph databases for the purposes of network analytics.  This can be considered an extension chapter for those who are interested.
+* Chapter 11 demonstrates some advanced visualization options for graphs through using the Javascript D3 library in combination with some of the work done earlier in the book.  This can also be considered an extension chapter for those who are interested.
+`r if (knitr::is_latex_output()) '<!--'`
+* Chapter 12 is a set of practice exercises and data sets designed to give the reader an opportunity to put some of the learning from Chapters 3-9 into practice.  These exercises are ideal for class assignment or project work.
+`r if (knitr::is_latex_output()) '-->'`
 
