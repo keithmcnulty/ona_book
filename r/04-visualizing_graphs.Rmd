@@ -817,3 +817,95 @@ if (knitr::is_html_output()) {
 `r if (knitr::is_html_output()) '-->'`
 
 ## Visualizing graphs in Python
+
+We will look at two approaches to graph visualization in Python.  First we will look at static graph plotting via the  `networkx` and `matplotlib` packages.  Then we will look at interactive plotting via the `pyvis` packages. As in the previous section we will work with Zachary's Karate Club to demonstrate most of the visualization options.  Let's load and create that graph object now.
+
+```{python}
+import pandas as pd
+import networkx as nx
+
+# get edgelist as Pandas DataFrame
+karate_edgelist = pd.read_csv("https://ona-book.org/data/karate.csv")
+
+# create graph from Pandas DataFrame
+karate = nx.from_pandas_edgelist(karate_edgelist, 
+source = 'from', target = 'to')
+```
+
+### Static visualizations using `networkx` and `matplotlib`
+
+The `draw()` function in `networkx` provides a basic visualization of a graph using `matplotlib` using a force-directed "spring" layout, as can be seen in \@ref(fig:py-karate-basic).  Remember also to set a seed to ensure reproducibility of the visualization.
+
+```{python py-karate-basic, fig.align = "center", fig.cap = "Basic static visualization of Karate network", out.width = if (knitr::is_latex_output()) {"90%"}, dev = "png", dev.args = list(type = "cairo-png")}
+import numpy as np
+from matplotlib import pyplot as plt
+
+# set seed for reproducibility
+np.random.seed(123)
+
+nx.draw(karate)
+plt.show()
+```
+
+The `draw_networkx()` function has a much wider range of options for customizing the appearance of graphs.  For example, we can change the color of all or specific nodes or edges, or label specific nodes but not others, such as in Figure \@ref(fig:py-karate-additional).
+
+```{python py-karate-additional, fig.align = "center", fig.cap = "Static visualization of Karate network with adjustments to color and labeling", out.width = if (knitr::is_latex_output()) {"90%"}, dev = "png", dev.args = list(type = "cairo-png")}
+# set seed for reproducibility
+np.random.seed(123)
+
+# create dict with labels only for Mr Hi and John A
+node = list(karate.nodes)
+labels = [i if i == "Mr Hi" or i == "John A" else "" for i in karate.nodes]
+nodelabels = dict(zip(node, labels))
+
+# create color list
+colors = ["lightblue" if i == "Mr Hi" or i == "John A" else "pink" 
+for i in karate.nodes]
+
+nx.draw_networkx(karate, labels = nodelabels, node_color = colors, 
+edge_color = "grey")
+plt.show()
+
+```
+
+A limited selection of layouts is available and can be applied to the static visualization.  For example, this is how to apply a circular layout, with the output in Figure \@ref(fig:py-karate-circ).
+
+```{python py-karate-circ, fig.align = "center", fig.cap = "Static visualization of Karate network with circular layout", out.width = if (knitr::is_latex_output()) {"90%"}, dev = "png", dev.args = list(type = "cairo-png")}
+# set seed for reproducibility
+np.random.seed(123)
+
+# circular layout
+nx.draw_circular(karate, labels = nodelabels, node_color = colors, 
+edge_color = "grey")
+plt.show()
+
+```
+
+This is how to apply a Kamada-Kawai force-directed layout, with the output in Figure \@ref(fig:py-karate-shell).  Note that some layout algorithms like Kamada-Kawai make use of the `scipy` package and therefore this will need to be installed in your Python environment.
+
+```{python py-karate-shell, fig.align = "center", fig.cap = "Static visualization of Karate network with Kamada-Kawai force-directed layout", out.width = if (knitr::is_latex_output()) {"90%"}, dev = "png", dev.args = list(type = "cairo-png")}
+# set seed for reproducibility
+np.random.seed(123)
+
+# circular layout
+nx.draw_kamada_kawai(karate, labels = nodelabels, node_color = colors, 
+edge_color = "grey")
+plt.show()
+
+```
+
+`r if (knitr::is_latex_output()) '<!--'`
+:::thinkahead
+**Playing around:** The visual capabilities of `networkx` in Python are more limited than `igraph` or `ggraph` in R, but there still are a range of ways to customize your visualization.  Try making further changes to the visualizations shown in this section by trying different layouts or by looking at the range of arguments that can be adjusted in the `draw_networkx()` function.  You can look up more details on all this at https://networkx.org/documentation/stable/reference/drawing.html.
+:::
+`r if (knitr::is_latex_output()) '-->'`
+
+`r if (knitr::is_html_output()) '<!--'`
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Playing around:} The visual capabilities of \texttt{networkx} in Python are more limited than \texttt{igraph} or \texttt{ggraph} in R, but there still are a range of ways to customize your visualization.  Try making further changes to the visualizations shown in this section by trying different layouts or by looking at the range of arguments that can be adjusted in the \texttt{draw_networkx()} function.  You can look up more details on all this at \texttt{https://networkx.org/documentation/stable/reference/drawing.html}.
+\end{minipage}
+}
+```
+`r if (knitr::is_html_output()) '-->'`
