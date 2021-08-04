@@ -834,9 +834,9 @@ source = 'from', target = 'to')
 
 ### Static visualizations using `networkx` and `matplotlib`
 
-The `draw()` function in `networkx` provides a basic visualization of a graph using `matplotlib` using a force-directed "spring" layout, as can be seen in \@ref(fig:py-karate-basic).  Remember also to set a seed to ensure reproducibility of the visualization.
+The `draw()` function in `networkx` provides a basic visualization of a graph using `matplotlib` using a force-directed "spring" layout, as can be seen in Figure \@ref(fig:pykaratebasic).  Remember also to set a seed to ensure reproducibility of the visualization.
 
-```{python py-karate-basic, fig.align = "center", fig.cap = "Basic static visualization of Karate network", out.width = if (knitr::is_latex_output()) {"90%"}, dev = "png", dev.args = list(type = "cairo-png")}
+```{python pykaratebasic, fig.align = "center", fig.cap = "Basic static visualization of Karate network", out.width = if (knitr::is_latex_output()) {"90%"}, dev = "png", dev.args = list(type = "cairo-png")}
 import numpy as np
 from matplotlib import pyplot as plt
 
@@ -847,9 +847,9 @@ nx.draw(karate)
 plt.show()
 ```
 
-The `draw_networkx()` function has a much wider range of options for customizing the appearance of graphs.  For example, we can change the color of all or specific nodes or edges, or label specific nodes but not others, such as in Figure \@ref(fig:py-karate-additional).
+The `draw_networkx()` function has a much wider range of options for customizing the appearance of graphs.  For example, we can change the color of all or specific nodes or edges, or label specific nodes but not others, such as in Figure \@ref(fig:pykarateadditional).
 
-```{python py-karate-additional, fig.align = "center", fig.cap = "Static visualization of Karate network with adjustments to color and labeling", out.width = if (knitr::is_latex_output()) {"90%"}, dev = "png", dev.args = list(type = "cairo-png")}
+```{python pykarateadditional, fig.align = "center", fig.cap = "Static visualization of Karate network with adjustments to color and labeling", out.width = if (knitr::is_latex_output()) {"90%"}, dev = "png", dev.args = list(type = "cairo-png")}
 # set seed for reproducibility
 np.random.seed(123)
 
@@ -868,9 +868,9 @@ plt.show()
 
 ```
 
-A limited selection of layouts is available and can be applied to the static visualization.  For example, this is how to apply a circular layout, with the output in Figure \@ref(fig:py-karate-circ).
+A limited selection of layouts is available and can be applied to the static visualization.  For example, this is how to apply a circular layout, with the output in Figure \@ref(fig:pykaratecirc).
 
-```{python py-karate-circ, fig.align = "center", fig.cap = "Static visualization of Karate network with circular layout", out.width = if (knitr::is_latex_output()) {"90%"}, dev = "png", dev.args = list(type = "cairo-png")}
+```{python pykaratecirc, fig.align = "center", fig.cap = "Static visualization of Karate network with circular layout", out.width = if (knitr::is_latex_output()) {"90%"}, dev = "png", dev.args = list(type = "cairo-png")}
 # set seed for reproducibility
 np.random.seed(123)
 
@@ -881,9 +881,9 @@ plt.show()
 
 ```
 
-This is how to apply a Kamada-Kawai force-directed layout, with the output in Figure \@ref(fig:py-karate-shell).  Note that some layout algorithms like Kamada-Kawai make use of the `scipy` package and therefore this will need to be installed in your Python environment.
+This is how to apply a Kamada-Kawai force-directed layout, with the output in Figure \@ref(fig:pykarateshell).  Note that some layout algorithms like Kamada-Kawai make use of the `scipy` package and therefore this will need to be installed in your Python environment.
 
-```{python py-karate-shell, fig.align = "center", fig.cap = "Static visualization of Karate network with Kamada-Kawai force-directed layout", out.width = if (knitr::is_latex_output()) {"90%"}, dev = "png", dev.args = list(type = "cairo-png")}
+```{python pykarateshell, fig.align = "center", fig.cap = "Static visualization of Karate network with Kamada-Kawai force-directed layout", out.width = if (knitr::is_latex_output()) {"90%"}, dev = "png", dev.args = list(type = "cairo-png")}
 # set seed for reproducibility
 np.random.seed(123)
 
@@ -904,8 +904,146 @@ plt.show()
 ```{=latex}
 \colorbox{babyblueeyes}{
 \begin{minipage}{\textwidth}
-\textbf{Playing around:} The visual capabilities of \texttt{networkx} in Python are more limited than \texttt{igraph} or \texttt{ggraph} in R, but there still are a range of ways to customize your visualization.  Try making further changes to the visualizations shown in this section by trying different layouts or by looking at the range of arguments that can be adjusted in the \texttt{draw_networkx()} function.  You can look up more details on all this at \texttt{https://networkx.org/documentation/stable/reference/drawing.html}.
+\textbf{Playing around:} The visual capabilities of \texttt{networkx} in Python are more limited than \texttt{igraph} or \texttt{ggraph} in R, but there still are a range of ways to customize your visualization.  Try making further changes to the visualizations shown in this section by trying different layouts or by looking at the range of arguments that can be adjusted in the \texttt{draw\_networkx()} function.  You can look up more details on all this at \texttt{https://networkx.org/documentation/stable/reference/drawing.html}.
 \end{minipage}
 }
 ```
 `r if (knitr::is_html_output()) '-->'`
+
+### Dynamic visualization using `networkx` and `pyvis`
+
+Similar to the `visNetwork` package in R, the `pyvis` package provides an API allowing the creation of dynamic graphs using the `vis.js` Javascript library.  As you will mostly be creating graph objects using `networkx`, the easiest way to use `pyvis` is to take advantage of its `networkx` integration.
+
+To visualize a `networkx` graph using `pyvis`, start by creating a `Network()` class and then use the `from_nx()` method to import the `networkx` object.  The `show()` method will render a dynamic plot.  `r if (knitr::is_latex_output()) "Figure \\@ref(fig:pykaratevisbasicr) shows a static image of the output"`.
+
+```{python, eval = FALSE}
+from pyvis.network import Network
+
+# create pyvis Network object
+net = Network(height = "500px", width = "600px", notebook = True)
+
+# import karate graph
+net.from_nx(karate)
+net.show('out1.html')
+```
+
+
+```{python, eval = knitr::is_html_output(), echo = FALSE, fig.align = "center", fig.cap = "Simple dynamic visualization of Karate graph using `pyvis` and `networkx`", out.width="80%"}
+from pyvis.network import Network
+
+# create pyvis Network object
+net = Network(height = "500px", width = "600px", notebook = True)
+
+# import karate graph
+net.from_nx(karate)
+net.show('out1.html')
+```
+
+
+
+```{r pykaratevisbasicr, eval = knitr::is_latex_output(), echo = FALSE, fig.align = "center", fig.cap = "Simple dynamic visualization of Karate graph using \\texttt{pyvis} and \\texttt{networkx}", out.width = "80%"}
+knitr::include_graphics("www/visualizing-graphs/pykaratevisbasic.png")
+```
+
+
+`pyvis` expects specific names for the visual properties of nodes and edges, for example `color` and `size`.  If these named properties are added to the nodes and edges Dicts of the `networkx` object, they will be passed to `pyvis`. `r if (knitr::is_latex_output()) "Figure \\@ref(fig:pykaratevisadditionalr) shows a static image of the output"`.
+
+```{python, eval = FALSE}
+# adjust colors
+for i in karate.nodes:
+  karate.nodes[i]['size'] = 20 if i == "Mr Hi" or i == "John A" else 10
+  karate.nodes[i]['color'] = "lightblue" if i == "Mr Hi" or i == "John A" else "pink" 
+
+# create edge color
+for i in karate.edges:
+  karate.edges[i]['color'] = "grey"
+  
+# create pyvis Network object
+net = Network(height = "500px", width = "600px", notebook = True)
+  
+# import from networkx to pyvis and display
+net.from_nx(karate)
+net.show('out2.html')
+```
+
+
+```{python, eval = knitr::is_html_output(), echo = FALSE, fig.align = "center", fig.cap = "Adjusted dynamic visualization of Karate graph using `pyvis` and `networkx`", out.width="80%"}
+# adjust colors
+for i in karate.nodes:
+  karate.nodes[i]['size'] = 20 if i == "Mr Hi" or i == "John A" else 10
+  karate.nodes[i]['color'] = "lightblue" if i == "Mr Hi" or i == "John A" else "pink" 
+
+# create edge color
+for i in karate.edges:
+  karate.edges[i]['color'] = "grey"
+  
+# create pyvis Network object
+net = Network(height = "500px", width = "600px", notebook = True)
+  
+# import from networkx to pyvis and display
+net.from_nx(karate)
+net.show('out2.html')
+
+```
+
+
+
+```{r pykaratevisadditionalr, eval = knitr::is_latex_output(), echo = FALSE, fig.align = "center", fig.cap = "Adjusted dynamic visualization of Karate graph using \\texttt{pyvis} and \\texttt{networkx}", out.width = "80%"}
+knitr::include_graphics("www/visualizing-graphs/pykaratevisadditional.png")
+```
+
+
+`r if (knitr::is_latex_output()) '<!--'`
+:::thinkahead
+**Playing around:** Different UI controls can be added directly onto your `pyvis` visualizations using the `show_buttons()` method allowing you to experiment directly with the graph's look and feel.   For example, you can add buttons to experiment with the physics of the force-directed layout, or the node or edge properties.  This can be useful when you are experimenting with options.  You can learn more at the tutorial pages at https://pyvis.readthedocs.io/en/latest/.
+:::
+`r if (knitr::is_latex_output()) '-->'`
+
+`r if (knitr::is_html_output()) '<!--'`
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Playing around:} Different UI controls can be added directly onto your \texttt{pyvis} visualizations using the \texttt{show\_buttons()} method allowing you to experiment directly with the graph's look and feel.   For example, you can add buttons to experiment with the physics of the force-directed layout, or the node or edge properties.  This can be useful when you are experimenting with options.  You can learn more at the tutorial pages at \texttt{https://pyvis.readthedocs.io/en/latest/}.
+\end{minipage}
+}
+```
+`r if (knitr::is_html_output()) '-->'`
+
+
+## Learning exercises
+
+### Discussion questions
+
+1.  Why is visualization an important consideration when studying graphs?
+2.  Describe some ways a graph visualization can be adjusted to reflect different characteristics of the vertices.  For example, how might we represent more 'important' vertices visually? 
+3.  Describe some similar adjustments that could be made to the edges.
+4.  Describe some likely challenges with large graph visualization which may make it harder to draw conclusions from them.
+5.  What is the difference between a static and a dynamic visualization.  In what ways might dynamic visualization overcome some of the challenges associated with static large graph visualizations?
+6.  Choose your favorite programming language and list out some package options for how to visualize graphs in that language.
+7.  For each package option you listed, describe what kinds of graphs each package would be best suited for.
+8.  Describe what is meant by a graph layout.  
+9.  List some layout options which are available in the packages you selected for Questions 6 and 7.
+10. In you visualize the same graph twice using the same layout, in some cases the output may look different.  Why is this and what can be done to control it?
+
+### Data exercises
+
+Load the `madmen_vertices` and `madmen_edges` data sets from the `onadata` package or download them from the internet^[https://ona-book.org/data/madmen_vertices.csv and https://ona-book.org/data/madmen_edges.csv].  This represents a network of characters from the TV show *Mad Men* with two characters connected by an edge if they were involved in a romantic relationship together.
+
+1.  Create a graph object from these data sets.  
+2.  Create a basic visualization of the network using one of the methods from this chapter.
+3.  Adjust your visualization to distinguish between Male and Female characters.
+4.  Adjust your visualization to highlight the six main characters.
+5.  Adjust your visualization to differentiate between relationships where the characters were married or not married.
+6.  Experiment with different layouts.  Which one do you prefer and why?
+
+Now load the `schoolfriends_vertices` and `schoolfriends_edgelist` data sets from the `onadata` package or download them from the internet^[https://ona-book.org/data/schoolfriends_vertices.csv and https://ona-book.org/data/schoolfriends_edgelist.csv].  This data set represents friendships reported between schoolchildren in a high school in Marseille, France in 2013.  The vertex set provides the ID, class and gender of each child, and the edgelist has two types of relationship.  The first type is a reported friendship where the `from` ID reported the `to` ID as a friend.  The second type is a known Facebook friendship between the two IDs.
+
+7.  Create two different graph objects --- one for the reported friendship and the other for the Facebook friendship.  Why is one graph object different from the other?
+8.  Create a basic visualization of both graphs using a method of your choice.
+9.  Experiment with different layouts for your visualization.  Which one do you prefer and why?
+10.  Adjust both visualizations to differentiate the vertices by gender.  Which type of relationship is more likely to be gender-agnostic in your opinion?  Try the same question for class differentiation.
+
+
+
+
+

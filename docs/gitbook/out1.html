@@ -1,0 +1,108 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 600px;
+            height: 500px;
+            background-color: #ffffff;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"id": "Mr Hi", "label": "Mr Hi", "shape": "dot", "size": 10}, {"id": "Actor 2", "label": "Actor 2", "shape": "dot", "size": 10}, {"id": "Actor 3", "label": "Actor 3", "shape": "dot", "size": 10}, {"id": "Actor 4", "label": "Actor 4", "shape": "dot", "size": 10}, {"id": "Actor 5", "label": "Actor 5", "shape": "dot", "size": 10}, {"id": "Actor 6", "label": "Actor 6", "shape": "dot", "size": 10}, {"id": "Actor 7", "label": "Actor 7", "shape": "dot", "size": 10}, {"id": "Actor 8", "label": "Actor 8", "shape": "dot", "size": 10}, {"id": "Actor 9", "label": "Actor 9", "shape": "dot", "size": 10}, {"id": "Actor 11", "label": "Actor 11", "shape": "dot", "size": 10}, {"id": "Actor 12", "label": "Actor 12", "shape": "dot", "size": 10}, {"id": "Actor 13", "label": "Actor 13", "shape": "dot", "size": 10}, {"id": "Actor 14", "label": "Actor 14", "shape": "dot", "size": 10}, {"id": "Actor 18", "label": "Actor 18", "shape": "dot", "size": 10}, {"id": "Actor 20", "label": "Actor 20", "shape": "dot", "size": 10}, {"id": "Actor 22", "label": "Actor 22", "shape": "dot", "size": 10}, {"id": "Actor 32", "label": "Actor 32", "shape": "dot", "size": 10}, {"id": "Actor 31", "label": "Actor 31", "shape": "dot", "size": 10}, {"id": "Actor 10", "label": "Actor 10", "shape": "dot", "size": 10}, {"id": "Actor 28", "label": "Actor 28", "shape": "dot", "size": 10}, {"id": "Actor 29", "label": "Actor 29", "shape": "dot", "size": 10}, {"id": "Actor 33", "label": "Actor 33", "shape": "dot", "size": 10}, {"id": "Actor 17", "label": "Actor 17", "shape": "dot", "size": 10}, {"id": "John A", "label": "John A", "shape": "dot", "size": 10}, {"id": "Actor 25", "label": "Actor 25", "shape": "dot", "size": 10}, {"id": "Actor 26", "label": "Actor 26", "shape": "dot", "size": 10}, {"id": "Actor 24", "label": "Actor 24", "shape": "dot", "size": 10}, {"id": "Actor 15", "label": "Actor 15", "shape": "dot", "size": 10}, {"id": "Actor 16", "label": "Actor 16", "shape": "dot", "size": 10}, {"id": "Actor 19", "label": "Actor 19", "shape": "dot", "size": 10}, {"id": "Actor 21", "label": "Actor 21", "shape": "dot", "size": 10}, {"id": "Actor 23", "label": "Actor 23", "shape": "dot", "size": 10}, {"id": "Actor 30", "label": "Actor 30", "shape": "dot", "size": 10}, {"id": "Actor 27", "label": "Actor 27", "shape": "dot", "size": 10}]);
+        edges = new vis.DataSet([{"from": "Mr Hi", "to": "Actor 2", "weight": 1}, {"from": "Mr Hi", "to": "Actor 3", "weight": 1}, {"from": "Mr Hi", "to": "Actor 4", "weight": 1}, {"from": "Mr Hi", "to": "Actor 5", "weight": 1}, {"from": "Mr Hi", "to": "Actor 6", "weight": 1}, {"from": "Mr Hi", "to": "Actor 7", "weight": 1}, {"from": "Mr Hi", "to": "Actor 8", "weight": 1}, {"from": "Mr Hi", "to": "Actor 9", "weight": 1}, {"from": "Mr Hi", "to": "Actor 11", "weight": 1}, {"from": "Mr Hi", "to": "Actor 12", "weight": 1}, {"from": "Mr Hi", "to": "Actor 13", "weight": 1}, {"from": "Mr Hi", "to": "Actor 14", "weight": 1}, {"from": "Mr Hi", "to": "Actor 18", "weight": 1}, {"from": "Mr Hi", "to": "Actor 20", "weight": 1}, {"from": "Mr Hi", "to": "Actor 22", "weight": 1}, {"from": "Mr Hi", "to": "Actor 32", "weight": 1}, {"from": "Actor 2", "to": "Actor 3", "weight": 1}, {"from": "Actor 2", "to": "Actor 4", "weight": 1}, {"from": "Actor 2", "to": "Actor 8", "weight": 1}, {"from": "Actor 2", "to": "Actor 14", "weight": 1}, {"from": "Actor 2", "to": "Actor 18", "weight": 1}, {"from": "Actor 2", "to": "Actor 20", "weight": 1}, {"from": "Actor 2", "to": "Actor 22", "weight": 1}, {"from": "Actor 2", "to": "Actor 31", "weight": 1}, {"from": "Actor 3", "to": "Actor 4", "weight": 1}, {"from": "Actor 3", "to": "Actor 8", "weight": 1}, {"from": "Actor 3", "to": "Actor 9", "weight": 1}, {"from": "Actor 3", "to": "Actor 10", "weight": 1}, {"from": "Actor 3", "to": "Actor 14", "weight": 1}, {"from": "Actor 3", "to": "Actor 28", "weight": 1}, {"from": "Actor 3", "to": "Actor 29", "weight": 1}, {"from": "Actor 3", "to": "Actor 33", "weight": 1}, {"from": "Actor 4", "to": "Actor 8", "weight": 1}, {"from": "Actor 4", "to": "Actor 13", "weight": 1}, {"from": "Actor 4", "to": "Actor 14", "weight": 1}, {"from": "Actor 5", "to": "Actor 7", "weight": 1}, {"from": "Actor 5", "to": "Actor 11", "weight": 1}, {"from": "Actor 6", "to": "Actor 7", "weight": 1}, {"from": "Actor 6", "to": "Actor 11", "weight": 1}, {"from": "Actor 6", "to": "Actor 17", "weight": 1}, {"from": "Actor 7", "to": "Actor 17", "weight": 1}, {"from": "Actor 9", "to": "Actor 31", "weight": 1}, {"from": "Actor 9", "to": "Actor 33", "weight": 1}, {"from": "Actor 9", "to": "John A", "weight": 1}, {"from": "Actor 14", "to": "John A", "weight": 1}, {"from": "Actor 20", "to": "John A", "weight": 1}, {"from": "Actor 32", "to": "Actor 25", "weight": 1}, {"from": "Actor 32", "to": "Actor 26", "weight": 1}, {"from": "Actor 32", "to": "Actor 29", "weight": 1}, {"from": "Actor 32", "to": "Actor 33", "weight": 1}, {"from": "Actor 32", "to": "John A", "weight": 1}, {"from": "Actor 31", "to": "Actor 33", "weight": 1}, {"from": "Actor 31", "to": "John A", "weight": 1}, {"from": "Actor 10", "to": "John A", "weight": 1}, {"from": "Actor 28", "to": "Actor 24", "weight": 1}, {"from": "Actor 28", "to": "Actor 25", "weight": 1}, {"from": "Actor 28", "to": "John A", "weight": 1}, {"from": "Actor 29", "to": "John A", "weight": 1}, {"from": "Actor 33", "to": "Actor 15", "weight": 1}, {"from": "Actor 33", "to": "Actor 16", "weight": 1}, {"from": "Actor 33", "to": "Actor 19", "weight": 1}, {"from": "Actor 33", "to": "Actor 21", "weight": 1}, {"from": "Actor 33", "to": "Actor 23", "weight": 1}, {"from": "Actor 33", "to": "Actor 24", "weight": 1}, {"from": "Actor 33", "to": "Actor 30", "weight": 1}, {"from": "Actor 33", "to": "John A", "weight": 1}, {"from": "John A", "to": "Actor 15", "weight": 1}, {"from": "John A", "to": "Actor 16", "weight": 1}, {"from": "John A", "to": "Actor 19", "weight": 1}, {"from": "John A", "to": "Actor 21", "weight": 1}, {"from": "John A", "to": "Actor 23", "weight": 1}, {"from": "John A", "to": "Actor 24", "weight": 1}, {"from": "John A", "to": "Actor 27", "weight": 1}, {"from": "John A", "to": "Actor 30", "weight": 1}, {"from": "Actor 24", "to": "Actor 26", "weight": 1}, {"from": "Actor 24", "to": "Actor 30", "weight": 1}, {"from": "Actor 26", "to": "Actor 25", "weight": 1}, {"from": "Actor 30", "to": "Actor 27", "weight": 1}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": false,
+            "type": "continuous"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+	 
+        
+
+
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

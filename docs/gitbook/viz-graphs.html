@@ -257,6 +257,12 @@ div.csl-indent {
 <li class="chapter" data-level="4.2" data-path="viz-graphs.html"><a href="viz-graphs.html#visualizing-graphs-in-python"><i class="fa fa-check"></i><b>4.2</b> Visualizing graphs in Python</a>
 <ul>
 <li class="chapter" data-level="4.2.1" data-path="viz-graphs.html"><a href="viz-graphs.html#static-visualizations-using-networkx-and-matplotlib"><i class="fa fa-check"></i><b>4.2.1</b> Static visualizations using <code>networkx</code> and <code>matplotlib</code></a></li>
+<li class="chapter" data-level="4.2.2" data-path="viz-graphs.html"><a href="viz-graphs.html#dynamic-visualization-using-networkx-and-pyvis"><i class="fa fa-check"></i><b>4.2.2</b> Dynamic visualization using <code>networkx</code> and <code>pyvis</code></a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="viz-graphs.html"><a href="viz-graphs.html#learning-exercises-2"><i class="fa fa-check"></i><b>4.3</b> Learning exercises</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="viz-graphs.html"><a href="viz-graphs.html#discussion-questions-2"><i class="fa fa-check"></i><b>4.3.1</b> Discussion questions</a></li>
+<li class="chapter" data-level="4.3.2" data-path="viz-graphs.html"><a href="viz-graphs.html#data-exercises-2"><i class="fa fa-check"></i><b>4.3.2</b> Data exercises</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="restructuring-data.html"><a href="restructuring-data.html"><i class="fa fa-check"></i><b>5</b> Restructuring Data For Use in Graphs</a></li>
@@ -309,9 +315,9 @@ Figure 4.1: Two different ways of visualizing the <span class="math inline">\(G_
 <span id="cb170-2"><a href="viz-graphs.html#cb170-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb170-3"><a href="viz-graphs.html#cb170-3" aria-hidden="true" tabindex="-1"></a>(karate <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(karate_edgelist, </span>
 <span id="cb170-4"><a href="viz-graphs.html#cb170-4" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">directed =</span> <span class="cn">FALSE</span>))</span></code></pre></div>
-<pre><code>## IGRAPH 759d23c UN-- 34 78 -- 
+<pre><code>## IGRAPH 8d96c5c UN-- 34 78 -- 
 ## + attr: name (v/c)
-## + edges from 759d23c (vertex names):
+## + edges from 8d96c5c (vertex names):
 ##  [1] Mr Hi   --Actor 2  Mr Hi   --Actor 3  Mr Hi   --Actor 4  Mr Hi   --Actor 5  Mr Hi   --Actor 6  Mr Hi   --Actor 7 
 ##  [7] Mr Hi   --Actor 8  Mr Hi   --Actor 9  Mr Hi   --Actor 11 Mr Hi   --Actor 12 Mr Hi   --Actor 13 Mr Hi   --Actor 14
 ## [13] Mr Hi   --Actor 18 Mr Hi   --Actor 20 Mr Hi   --Actor 22 Mr Hi   --Actor 32 Actor 2 --Actor 3  Actor 2 --Actor 4 
@@ -783,8 +789,8 @@ Figure 4.19: Geographically accurate London Tube Network
 <span id="cb198-13"><a href="viz-graphs.html#cb198-13" aria-hidden="true" tabindex="-1"></a><span class="fu">visNetwork</span>(nodes, edges) <span class="sc">|</span><span class="er">&gt;</span> </span>
 <span id="cb198-14"><a href="viz-graphs.html#cb198-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visLayout</span>(<span class="at">randomSeed =</span> <span class="dv">123</span>)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:gwork-visnetwork"></span>
-<div id="htmlwidget-046031289cea06e80b33" style="width:672px;height:480px;" class="visNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-046031289cea06e80b33">{"x":{"nodes":{"id":[1,2,3,4],"label":["David","Zubin","Suraya","Jane"]},"edges":{"from":[1,1,1,4,4],"to":[2,3,4,2,3]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot"},"manipulation":{"enabled":false},"layout":{"randomSeed":123}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false},"byselection":{"enabled":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-77b8c2c8a1d9304ee81c" style="width:672px;height:480px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-77b8c2c8a1d9304ee81c">{"x":{"nodes":{"id":[1,2,3,4],"label":["David","Zubin","Suraya","Jane"]},"edges":{"from":[1,1,1,4,4],"to":[2,3,4,2,3]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot"},"manipulation":{"enabled":false},"layout":{"randomSeed":123}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false},"byselection":{"enabled":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)"},"evals":[],"jsHooks":[]}</script>
 <p class="caption">
 Figure 4.20: Simple <code>visNetwork</code> rendering of the <span class="math inline">\(G_\mathrm{work}\)</span> graph
 </p>
@@ -812,8 +818,8 @@ Figure 4.20: Simple <code>visNetwork</code> rendering of the <span class="math i
 <span id="cb199-20"><a href="viz-graphs.html#cb199-20" aria-hidden="true" tabindex="-1"></a>visNetwork<span class="sc">::</span><span class="fu">visIgraph</span>(karate, <span class="at">layout =</span> <span class="st">&quot;layout_with_fr&quot;</span>) <span class="sc">|</span><span class="er">&gt;</span> </span>
 <span id="cb199-21"><a href="viz-graphs.html#cb199-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visLayout</span>(<span class="at">randomSeed =</span> <span class="dv">123</span>)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:karate-visnetwork"></span>
-<div id="htmlwidget-814fc09d9e655b59e2cd" style="width:672px;height:480px;" class="visNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-814fc09d9e655b59e2cd">{"x":{"nodes":{"id":["Mr Hi","Actor 2","Actor 3","Actor 4","Actor 5","Actor 6","Actor 7","Actor 9","Actor 10","Actor 14","Actor 15","Actor 16","Actor 19","Actor 20","Actor 21","Actor 23","Actor 24","Actor 25","Actor 26","Actor 27","Actor 28","Actor 29","Actor 30","Actor 31","Actor 32","Actor 33","Actor 8","Actor 11","Actor 12","Actor 13","Actor 18","Actor 22","Actor 17","John A"],"color":["lightblue","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","lightblue"],"shape":["square","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","square"],"label":["Mr Hi","Actor 2","Actor 3","Actor 4","Actor 5","Actor 6","Actor 7","Actor 9","Actor 10","Actor 14","Actor 15","Actor 16","Actor 19","Actor 20","Actor 21","Actor 23","Actor 24","Actor 25","Actor 26","Actor 27","Actor 28","Actor 29","Actor 30","Actor 31","Actor 32","Actor 33","Actor 8","Actor 11","Actor 12","Actor 13","Actor 18","Actor 22","Actor 17","John A"],"x":[0.190687845068345,0.0132877862854588,-0.223134429099049,0.0250193071922982,0.556110756785596,0.699728575164583,0.703543257762113,-0.311180109543968,-0.517479094231182,-0.165645780729725,-0.867012120960171,-0.964326644979945,-0.802058180503033,-0.122989647824225,-0.96854498492282,-0.927366874662782,-0.670531699055899,-0.348627085968283,-0.511806391959486,-1,-0.449016697098456,-0.402542350435914,-0.838201634645628,-0.4087987278348,-0.309414497873656,-0.666559146735384,0.0971672273466904,0.550433139292149,0.413380485469321,0.255872949988716,0.321977448540886,0.347145371185161,1,-0.605668554953779],"y":[-0.213243973366882,-0.450176443356623,-0.275766508053284,-0.749913424759686,-0.209422991961298,-0.0352524907220172,-0.291722959380564,-0.163072229507381,-0.668687137277491,-0.472831066550723,-0.414124705908606,-0.0849551456309654,-0.607338049201286,-0.0235992545040055,-0.310158852587208,0.123859989316732,0.535848874256083,0.99607011845307,1,0.462220480380136,0.45960229597303,0.134334700697694,0.380421342145101,-0.41953791144505,0.374036529850743,-0.0905244335853638,-0.589041190340294,0.108480055292457,0.44073283230466,-1,-0.741735071827429,-0.483319233585932,-0.13933877174475,-0.0426704260189256]},"edges":{"from":["Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Actor 2","Actor 2","Actor 2","Actor 2","Actor 2","Actor 2","Actor 2","Actor 2","Actor 3","Actor 3","Actor 3","Actor 3","Actor 3","Actor 3","Actor 3","Actor 3","Actor 4","Actor 4","Actor 4","Actor 5","Actor 5","Actor 6","Actor 6","Actor 6","Actor 7","Actor 9","Actor 9","Actor 9","Actor 10","Actor 14","Actor 15","Actor 15","Actor 16","Actor 16","Actor 19","Actor 19","Actor 20","Actor 21","Actor 21","Actor 23","Actor 23","Actor 24","Actor 24","Actor 24","Actor 24","Actor 24","Actor 25","Actor 25","Actor 25","Actor 26","Actor 27","Actor 27","Actor 28","Actor 29","Actor 29","Actor 30","Actor 30","Actor 31","Actor 31","Actor 32","Actor 32","Actor 33"],"to":["Actor 2","Actor 3","Actor 4","Actor 5","Actor 6","Actor 7","Actor 8","Actor 9","Actor 11","Actor 12","Actor 13","Actor 14","Actor 18","Actor 20","Actor 22","Actor 32","Actor 3","Actor 4","Actor 8","Actor 14","Actor 18","Actor 20","Actor 22","Actor 31","Actor 4","Actor 8","Actor 9","Actor 10","Actor 14","Actor 28","Actor 29","Actor 33","Actor 8","Actor 13","Actor 14","Actor 7","Actor 11","Actor 7","Actor 11","Actor 17","Actor 17","Actor 31","Actor 33","John A","John A","John A","Actor 33","John A","Actor 33","John A","Actor 33","John A","John A","Actor 33","John A","Actor 33","John A","Actor 26","Actor 28","Actor 30","Actor 33","John A","Actor 26","Actor 28","Actor 32","Actor 32","Actor 30","John A","John A","Actor 32","John A","Actor 33","John A","Actor 33","John A","Actor 33","John A","John A"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":false},"physics":{"stabilization":false},"layout":{"randomSeed":123}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false},"byselection":{"enabled":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","igraphlayout":{"type":"square"}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-bef89862f5cf9b867188" style="width:672px;height:480px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-bef89862f5cf9b867188">{"x":{"nodes":{"id":["Mr Hi","Actor 2","Actor 3","Actor 4","Actor 5","Actor 6","Actor 7","Actor 9","Actor 10","Actor 14","Actor 15","Actor 16","Actor 19","Actor 20","Actor 21","Actor 23","Actor 24","Actor 25","Actor 26","Actor 27","Actor 28","Actor 29","Actor 30","Actor 31","Actor 32","Actor 33","Actor 8","Actor 11","Actor 12","Actor 13","Actor 18","Actor 22","Actor 17","John A"],"color":["lightblue","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","pink","lightblue"],"shape":["square","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","circle","square"],"label":["Mr Hi","Actor 2","Actor 3","Actor 4","Actor 5","Actor 6","Actor 7","Actor 9","Actor 10","Actor 14","Actor 15","Actor 16","Actor 19","Actor 20","Actor 21","Actor 23","Actor 24","Actor 25","Actor 26","Actor 27","Actor 28","Actor 29","Actor 30","Actor 31","Actor 32","Actor 33","Actor 8","Actor 11","Actor 12","Actor 13","Actor 18","Actor 22","Actor 17","John A"],"x":[0.190687845068345,0.0132877862854588,-0.223134429099049,0.0250193071922982,0.556110756785596,0.699728575164583,0.703543257762113,-0.311180109543968,-0.517479094231182,-0.165645780729725,-0.867012120960171,-0.964326644979945,-0.802058180503033,-0.122989647824225,-0.96854498492282,-0.927366874662782,-0.670531699055899,-0.348627085968283,-0.511806391959486,-1,-0.449016697098456,-0.402542350435914,-0.838201634645628,-0.4087987278348,-0.309414497873656,-0.666559146735384,0.0971672273466904,0.550433139292149,0.413380485469321,0.255872949988716,0.321977448540886,0.347145371185161,1,-0.605668554953779],"y":[-0.213243973366882,-0.450176443356623,-0.275766508053284,-0.749913424759686,-0.209422991961298,-0.0352524907220172,-0.291722959380564,-0.163072229507381,-0.668687137277491,-0.472831066550723,-0.414124705908606,-0.0849551456309654,-0.607338049201286,-0.0235992545040055,-0.310158852587208,0.123859989316732,0.535848874256083,0.99607011845307,1,0.462220480380136,0.45960229597303,0.134334700697694,0.380421342145101,-0.41953791144505,0.374036529850743,-0.0905244335853638,-0.589041190340294,0.108480055292457,0.44073283230466,-1,-0.741735071827429,-0.483319233585932,-0.13933877174475,-0.0426704260189256]},"edges":{"from":["Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Mr Hi","Actor 2","Actor 2","Actor 2","Actor 2","Actor 2","Actor 2","Actor 2","Actor 2","Actor 3","Actor 3","Actor 3","Actor 3","Actor 3","Actor 3","Actor 3","Actor 3","Actor 4","Actor 4","Actor 4","Actor 5","Actor 5","Actor 6","Actor 6","Actor 6","Actor 7","Actor 9","Actor 9","Actor 9","Actor 10","Actor 14","Actor 15","Actor 15","Actor 16","Actor 16","Actor 19","Actor 19","Actor 20","Actor 21","Actor 21","Actor 23","Actor 23","Actor 24","Actor 24","Actor 24","Actor 24","Actor 24","Actor 25","Actor 25","Actor 25","Actor 26","Actor 27","Actor 27","Actor 28","Actor 29","Actor 29","Actor 30","Actor 30","Actor 31","Actor 31","Actor 32","Actor 32","Actor 33"],"to":["Actor 2","Actor 3","Actor 4","Actor 5","Actor 6","Actor 7","Actor 8","Actor 9","Actor 11","Actor 12","Actor 13","Actor 14","Actor 18","Actor 20","Actor 22","Actor 32","Actor 3","Actor 4","Actor 8","Actor 14","Actor 18","Actor 20","Actor 22","Actor 31","Actor 4","Actor 8","Actor 9","Actor 10","Actor 14","Actor 28","Actor 29","Actor 33","Actor 8","Actor 13","Actor 14","Actor 7","Actor 11","Actor 7","Actor 11","Actor 17","Actor 17","Actor 31","Actor 33","John A","John A","John A","Actor 33","John A","Actor 33","John A","Actor 33","John A","John A","Actor 33","John A","Actor 33","John A","Actor 26","Actor 28","Actor 30","Actor 33","John A","Actor 26","Actor 28","Actor 32","Actor 32","Actor 30","John A","John A","Actor 32","John A","Actor 33","John A","Actor 33","John A","Actor 33","John A","John A"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","physics":false},"manipulation":{"enabled":false},"edges":{"smooth":false},"physics":{"stabilization":false},"layout":{"randomSeed":123}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false},"byselection":{"enabled":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)","igraphlayout":{"type":"square"}},"evals":[],"jsHooks":[]}</script>
 <p class="caption">
 Figure 4.21: <code>visNetwork</code> rendering of the basic <code>karate</code> graph using a force-directed layout
 </p>
@@ -840,8 +846,8 @@ Figure 4.21: <code>visNetwork</code> rendering of the basic <code>karate</code> 
 <span id="cb200-6"><a href="viz-graphs.html#cb200-6" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize</span></span>
 <span id="cb200-7"><a href="viz-graphs.html#cb200-7" aria-hidden="true" tabindex="-1"></a>networkD3<span class="sc">::</span><span class="fu">simpleNetwork</span>(karate_edgelist)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:simple-networkD3"></span>
-<div id="htmlwidget-c78e1608cbf8874fc09b" style="width:672px;height:480px;" class="forceNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-c78e1608cbf8874fc09b">{"x":{"links":{"source":[33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,10,10,10,10,10,10,10,10,21,21,21,21,21,21,21,21,26,26,26,27,27,28,28,28,29,31,31,31,0,4,5,5,6,6,9,9,11,12,12,14,14,15,15,15,15,15,16,16,16,17,18,18,19,20,20,22,22,23,23,24,24,25],"target":[10,21,26,27,28,29,30,31,1,2,3,4,8,11,13,24,21,26,30,4,8,11,13,23,26,30,31,0,4,19,20,25,30,3,4,29,1,29,1,7,7,23,25,32,32,32,25,32,25,32,25,32,32,25,32,25,32,17,19,22,25,32,17,19,24,24,22,32,32,24,32,25,32,25,32,25,32,32],"value":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],"colour":["#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666"]},"nodes":{"name":["Actor 10","Actor 11","Actor 12","Actor 13","Actor 14","Actor 15","Actor 16","Actor 17","Actor 18","Actor 19","Actor 2","Actor 20","Actor 21","Actor 22","Actor 23","Actor 24","Actor 25","Actor 26","Actor 27","Actor 28","Actor 29","Actor 3","Actor 30","Actor 31","Actor 32","Actor 33","Actor 4","Actor 5","Actor 6","Actor 7","Actor 8","Actor 9","John A","Mr Hi"],"group":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],"nodesize":[8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8]},"options":{"NodeID":"name","Group":"group","colourScale":"d3.scaleOrdinal(['#3182bd'])","fontSize":7,"fontFamily":"serif","clickTextSize":17.5,"linkDistance":50,"linkWidth":"'1.5px'.toString()","charge":-30,"opacity":0.6,"zoom":false,"legend":false,"arrows":false,"nodesize":true,"radiusCalculation":"d.nodesize","bounded":false,"opacityNoHover":1,"clickAction":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-587834bc152e8ab363df" style="width:672px;height:480px;" class="forceNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-587834bc152e8ab363df">{"x":{"links":{"source":[33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,10,10,10,10,10,10,10,10,21,21,21,21,21,21,21,21,26,26,26,27,27,28,28,28,29,31,31,31,0,4,5,5,6,6,9,9,11,12,12,14,14,15,15,15,15,15,16,16,16,17,18,18,19,20,20,22,22,23,23,24,24,25],"target":[10,21,26,27,28,29,30,31,1,2,3,4,8,11,13,24,21,26,30,4,8,11,13,23,26,30,31,0,4,19,20,25,30,3,4,29,1,29,1,7,7,23,25,32,32,32,25,32,25,32,25,32,32,25,32,25,32,17,19,22,25,32,17,19,24,24,22,32,32,24,32,25,32,25,32,25,32,32],"value":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],"colour":["#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666"]},"nodes":{"name":["Actor 10","Actor 11","Actor 12","Actor 13","Actor 14","Actor 15","Actor 16","Actor 17","Actor 18","Actor 19","Actor 2","Actor 20","Actor 21","Actor 22","Actor 23","Actor 24","Actor 25","Actor 26","Actor 27","Actor 28","Actor 29","Actor 3","Actor 30","Actor 31","Actor 32","Actor 33","Actor 4","Actor 5","Actor 6","Actor 7","Actor 8","Actor 9","John A","Mr Hi"],"group":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],"nodesize":[8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8]},"options":{"NodeID":"name","Group":"group","colourScale":"d3.scaleOrdinal(['#3182bd'])","fontSize":7,"fontFamily":"serif","clickTextSize":17.5,"linkDistance":50,"linkWidth":"'1.5px'.toString()","charge":-30,"opacity":0.6,"zoom":false,"legend":false,"arrows":false,"nodesize":true,"radiusCalculation":"d.nodesize","bounded":false,"opacityNoHover":1,"clickAction":null}},"evals":[],"jsHooks":[]}</script>
 <p class="caption">
 Figure 4.22: Simple <code>networkD3</code> rendering of the Karate graph
 </p>
@@ -871,8 +877,8 @@ Figure 4.22: Simple <code>networkD3</code> rendering of the Karate graph
 <span id="cb201-22"><a href="viz-graphs.html#cb201-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">Group =</span> <span class="st">&quot;group&quot;</span></span>
 <span id="cb201-23"><a href="viz-graphs.html#cb201-23" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:force-networkD3"></span>
-<div id="htmlwidget-cec48ec3d84ce4aced7c" style="width:672px;height:480px;" class="forceNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-cec48ec3d84ce4aced7c">{"x":{"links":{"source":[2,4,0,5,0,3,0,3,1,2,0,6,5,1,0,0,1,0,0,1,17,16,17,2,16,2,1,0,19,16,1,7,0,17,18,21,16,14,10,12,24,22,11,2,7,15,23,1,0,2,0,0,0,4,5,0,1,3,2,0,2,8,9,20,10,21,11,25,12,16,24,14,19,13,23,7,15,22],"target":[8,27,27,27,28,29,29,9,9,9,9,32,32,30,30,1,13,13,31,31,18,18,20,20,20,21,2,2,22,22,23,23,24,24,24,24,25,25,25,25,25,25,25,25,25,25,25,3,3,3,4,5,6,6,6,26,26,26,26,7,7,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33],"colour":["#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666"]},"nodes":{"name":["Mr Hi","Actor 2","Actor 3","Actor 4","Actor 5","Actor 6","Actor 7","Actor 9","Actor 10","Actor 14","Actor 15","Actor 16","Actor 19","Actor 20","Actor 21","Actor 23","Actor 24","Actor 25","Actor 26","Actor 27","Actor 28","Actor 29","Actor 30","Actor 31","Actor 32","Actor 33","Actor 8","Actor 11","Actor 12","Actor 13","Actor 18","Actor 22","Actor 17","John A"],"group":[1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1]},"options":{"NodeID":"name","Group":"group","colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":7,"fontFamily":"serif","clickTextSize":17.5,"linkDistance":50,"linkWidth":"function(d) { return Math.sqrt(d.value); }","charge":-30,"opacity":0.6,"zoom":false,"legend":false,"arrows":false,"nodesize":false,"radiusCalculation":" Math.sqrt(d.nodesize)+6","bounded":false,"opacityNoHover":0,"clickAction":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-09c824cd0d044780091e" style="width:672px;height:480px;" class="forceNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-09c824cd0d044780091e">{"x":{"links":{"source":[2,4,0,5,0,3,0,3,1,2,0,6,5,1,0,0,1,0,0,1,17,16,17,2,16,2,1,0,19,16,1,7,0,17,18,21,16,14,10,12,24,22,11,2,7,15,23,1,0,2,0,0,0,4,5,0,1,3,2,0,2,8,9,20,10,21,11,25,12,16,24,14,19,13,23,7,15,22],"target":[8,27,27,27,28,29,29,9,9,9,9,32,32,30,30,1,13,13,31,31,18,18,20,20,20,21,2,2,22,22,23,23,24,24,24,24,25,25,25,25,25,25,25,25,25,25,25,3,3,3,4,5,6,6,6,26,26,26,26,7,7,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33],"colour":["#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666"]},"nodes":{"name":["Mr Hi","Actor 2","Actor 3","Actor 4","Actor 5","Actor 6","Actor 7","Actor 9","Actor 10","Actor 14","Actor 15","Actor 16","Actor 19","Actor 20","Actor 21","Actor 23","Actor 24","Actor 25","Actor 26","Actor 27","Actor 28","Actor 29","Actor 30","Actor 31","Actor 32","Actor 33","Actor 8","Actor 11","Actor 12","Actor 13","Actor 18","Actor 22","Actor 17","John A"],"group":[1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1]},"options":{"NodeID":"name","Group":"group","colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":7,"fontFamily":"serif","clickTextSize":17.5,"linkDistance":50,"linkWidth":"function(d) { return Math.sqrt(d.value); }","charge":-30,"opacity":0.6,"zoom":false,"legend":false,"arrows":false,"nodesize":false,"radiusCalculation":" Math.sqrt(d.nodesize)+6","bounded":false,"opacityNoHover":0,"clickAction":null}},"evals":[],"jsHooks":[]}</script>
 <p class="caption">
 Figure 4.23: Force-directed <code>networkD3</code> rendering of the Karate graph
 </p>
@@ -910,8 +916,8 @@ Figure 4.23: Force-directed <code>networkD3</code> rendering of the Karate graph
 <span id="cb202-30"><a href="viz-graphs.html#cb202-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">Value =</span> <span class="st">&#39;value&#39;</span>, <span class="at">NodeID =</span> <span class="st">&#39;name&#39;</span>, <span class="at">units =</span> <span class="st">&#39;votes&#39;</span></span>
 <span id="cb202-31"><a href="viz-graphs.html#cb202-31" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:eu-sankey"></span>
-<div id="htmlwidget-591768524ef93c01fb2d" style="width:672px;height:480px;" class="sankeyNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-591768524ef93c01fb2d">{"x":{"links":{"source":[0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11],"target":[13,12,13,12,13,12,13,12,13,12,13,12,13,12,13,12,13,12,13,12,13,12,13,12],"value":[1448616,1880367,1033036,1475479,2263519,1513232,562595,778103,1699020,1966925,440707,349442,1661191,1018322,2391718,2567965,1503019,1669711,772347,854572,1207175,1755687,1158298,1580937]},"nodes":{"name":["East","East Midlands","London","North East","North West","Northern Ireland","Scotland","South East","South West","Wales","West Midlands","Yorkshire and The Humber","Leave","Remain"],"group":["East","East Midlands","London","North East","North West","Northern Ireland","Scotland","South East","South West","Wales","West Midlands","Yorkshire and The Humber","Leave","Remain"]},"options":{"NodeID":"name","NodeGroup":"name","LinkGroup":null,"colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":7,"fontFamily":null,"nodeWidth":15,"nodePadding":10,"units":"votes","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":32,"sinksRight":true}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-bc66a7aebf70a613d8e6" style="width:672px;height:480px;" class="sankeyNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-bc66a7aebf70a613d8e6">{"x":{"links":{"source":[0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11],"target":[13,12,13,12,13,12,13,12,13,12,13,12,13,12,13,12,13,12,13,12,13,12,13,12],"value":[1448616,1880367,1033036,1475479,2263519,1513232,562595,778103,1699020,1966925,440707,349442,1661191,1018322,2391718,2567965,1503019,1669711,772347,854572,1207175,1755687,1158298,1580937]},"nodes":{"name":["East","East Midlands","London","North East","North West","Northern Ireland","Scotland","South East","South West","Wales","West Midlands","Yorkshire and The Humber","Leave","Remain"],"group":["East","East Midlands","London","North East","North West","Northern Ireland","Scotland","South East","South West","Wales","West Midlands","Yorkshire and The Humber","Leave","Remain"]},"options":{"NodeID":"name","NodeGroup":"name","LinkGroup":null,"colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":7,"fontFamily":null,"nodeWidth":15,"nodePadding":10,"units":"votes","margin":{"top":null,"right":null,"bottom":null,"left":null},"iterations":32,"sinksRight":true}},"evals":[],"jsHooks":[]}</script>
 <p class="caption">
 Figure 4.24: Visualization of regional vote flows in the UK’s European Union Referendum in 2016 using <code>sankeyNetwork()</code>
 </p>
@@ -944,7 +950,7 @@ Figure 4.24: Visualization of regional vote flows in the UK’s European Union R
 <span id="cb203-9"><a href="viz-graphs.html#cb203-9" aria-hidden="true" tabindex="-1"></a>source <span class="op">=</span> <span class="st">&#39;from&#39;</span>, target <span class="op">=</span> <span class="st">&#39;to&#39;</span>)</span></code></pre></div>
 <div id="static-visualizations-using-networkx-and-matplotlib" class="section level3" number="4.2.1">
 <h3><span class="header-section-number">4.2.1</span> Static visualizations using <code>networkx</code> and <code>matplotlib</code></h3>
-<p>The <code>draw()</code> function in <code>networkx</code> provides a basic visualization of a graph using <code>matplotlib</code> using a force-directed “spring” layout, as can be seen in <a href="viz-graphs.html#fig:py-karate-basic">4.25</a>. Remember also to set a seed to ensure reproducibility of the visualization.</p>
+<p>The <code>draw()</code> function in <code>networkx</code> provides a basic visualization of a graph using <code>matplotlib</code> using a force-directed “spring” layout, as can be seen in Figure <a href="viz-graphs.html#fig:pykaratebasic">4.25</a>. Remember also to set a seed to ensure reproducibility of the visualization.</p>
 <div class="sourceCode" id="cb204"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb204-1"><a href="viz-graphs.html#cb204-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb204-2"><a href="viz-graphs.html#cb204-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
 <span id="cb204-3"><a href="viz-graphs.html#cb204-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -953,13 +959,13 @@ Figure 4.24: Visualization of regional vote flows in the UK’s European Union R
 <span id="cb204-6"><a href="viz-graphs.html#cb204-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb204-7"><a href="viz-graphs.html#cb204-7" aria-hidden="true" tabindex="-1"></a>nx.draw(karate)</span>
 <span id="cb204-8"><a href="viz-graphs.html#cb204-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:py-karate-basic"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:pykaratebasic"></span>
 <img src="_main_files/figure-html/unnamed-chunk-60-1.png" alt="Basic static visualization of Karate network" width="672" />
 <p class="caption">
 Figure 4.25: Basic static visualization of Karate network
 </p>
 </div>
-<p>The <code>draw_networkx()</code> function has a much wider range of options for customizing the appearance of graphs. For example, we can change the color of all or specific nodes or edges, or label specific nodes but not others, such as in Figure <a href="viz-graphs.html#fig:py-karate-additional">4.26</a>.</p>
+<p>The <code>draw_networkx()</code> function has a much wider range of options for customizing the appearance of graphs. For example, we can change the color of all or specific nodes or edges, or label specific nodes but not others, such as in Figure <a href="viz-graphs.html#fig:pykarateadditional">4.26</a>.</p>
 <div class="sourceCode" id="cb205"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb205-1"><a href="viz-graphs.html#cb205-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set seed for reproducibility</span></span>
 <span id="cb205-2"><a href="viz-graphs.html#cb205-2" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">123</span>)</span>
 <span id="cb205-3"><a href="viz-graphs.html#cb205-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -975,13 +981,13 @@ Figure 4.25: Basic static visualization of Karate network
 <span id="cb205-13"><a href="viz-graphs.html#cb205-13" aria-hidden="true" tabindex="-1"></a>nx.draw_networkx(karate, labels <span class="op">=</span> nodelabels, node_color <span class="op">=</span> colors, </span>
 <span id="cb205-14"><a href="viz-graphs.html#cb205-14" aria-hidden="true" tabindex="-1"></a>edge_color <span class="op">=</span> <span class="st">&quot;grey&quot;</span>)</span>
 <span id="cb205-15"><a href="viz-graphs.html#cb205-15" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:py-karate-additional"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:pykarateadditional"></span>
 <img src="_main_files/figure-html/unnamed-chunk-60-3.png" alt="Static visualization of Karate network with adjustments to color and labeling" width="672" />
 <p class="caption">
 Figure 4.26: Static visualization of Karate network with adjustments to color and labeling
 </p>
 </div>
-<p>A limited selection of layouts is available and can be applied to the static visualization. For example, this is how to apply a circular layout, with the output in Figure <a href="viz-graphs.html#fig:py-karate-circ">4.27</a>.</p>
+<p>A limited selection of layouts is available and can be applied to the static visualization. For example, this is how to apply a circular layout, with the output in Figure <a href="viz-graphs.html#fig:pykaratecirc">4.27</a>.</p>
 <div class="sourceCode" id="cb206"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb206-1"><a href="viz-graphs.html#cb206-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set seed for reproducibility</span></span>
 <span id="cb206-2"><a href="viz-graphs.html#cb206-2" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">123</span>)</span>
 <span id="cb206-3"><a href="viz-graphs.html#cb206-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -989,13 +995,13 @@ Figure 4.26: Static visualization of Karate network with adjustments to color an
 <span id="cb206-5"><a href="viz-graphs.html#cb206-5" aria-hidden="true" tabindex="-1"></a>nx.draw_circular(karate, labels <span class="op">=</span> nodelabels, node_color <span class="op">=</span> colors, </span>
 <span id="cb206-6"><a href="viz-graphs.html#cb206-6" aria-hidden="true" tabindex="-1"></a>edge_color <span class="op">=</span> <span class="st">&quot;grey&quot;</span>)</span>
 <span id="cb206-7"><a href="viz-graphs.html#cb206-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:py-karate-circ"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:pykaratecirc"></span>
 <img src="_main_files/figure-html/unnamed-chunk-60-5.png" alt="Static visualization of Karate network with circular layout" width="672" />
 <p class="caption">
 Figure 4.27: Static visualization of Karate network with circular layout
 </p>
 </div>
-<p>This is how to apply a Kamada-Kawai force-directed layout, with the output in Figure <a href="viz-graphs.html#fig:py-karate-shell">4.28</a>. Note that some layout algorithms like Kamada-Kawai make use of the <code>scipy</code> package and therefore this will need to be installed in your Python environment.</p>
+<p>This is how to apply a Kamada-Kawai force-directed layout, with the output in Figure <a href="viz-graphs.html#fig:pykarateshell">4.28</a>. Note that some layout algorithms like Kamada-Kawai make use of the <code>scipy</code> package and therefore this will need to be installed in your Python environment.</p>
 <div class="sourceCode" id="cb207"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb207-1"><a href="viz-graphs.html#cb207-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set seed for reproducibility</span></span>
 <span id="cb207-2"><a href="viz-graphs.html#cb207-2" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">123</span>)</span>
 <span id="cb207-3"><a href="viz-graphs.html#cb207-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1003,7 +1009,7 @@ Figure 4.27: Static visualization of Karate network with circular layout
 <span id="cb207-5"><a href="viz-graphs.html#cb207-5" aria-hidden="true" tabindex="-1"></a>nx.draw_kamada_kawai(karate, labels <span class="op">=</span> nodelabels, node_color <span class="op">=</span> colors, </span>
 <span id="cb207-6"><a href="viz-graphs.html#cb207-6" aria-hidden="true" tabindex="-1"></a>edge_color <span class="op">=</span> <span class="st">&quot;grey&quot;</span>)</span>
 <span id="cb207-7"><a href="viz-graphs.html#cb207-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:py-karate-shell"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:pykarateshell"></span>
 <img src="_main_files/figure-html/unnamed-chunk-60-7.png" alt="Static visualization of Karate network with Kamada-Kawai force-directed layout" width="672" />
 <p class="caption">
 Figure 4.28: Static visualization of Karate network with Kamada-Kawai force-directed layout
@@ -1016,11 +1022,109 @@ Figure 4.28: Static visualization of Karate network with Kamada-Kawai force-dire
 ```{=latex}
 \colorbox{babyblueeyes}{
 \begin{minipage}{\textwidth}
-\textbf{Playing around:} The visual capabilities of \texttt{networkx} in Python are more limited than \texttt{igraph} or \texttt{ggraph} in R, but there still are a range of ways to customize your visualization.  Try making further changes to the visualizations shown in this section by trying different layouts or by looking at the range of arguments that can be adjusted in the \texttt{draw_networkx()} function.  You can look up more details on all this at \texttt{https://networkx.org/documentation/stable/reference/drawing.html}.
+\textbf{Playing around:} The visual capabilities of \texttt{networkx} in Python are more limited than \texttt{igraph} or \texttt{ggraph} in R, but there still are a range of ways to customize your visualization.  Try making further changes to the visualizations shown in this section by trying different layouts or by looking at the range of arguments that can be adjusted in the \texttt{draw\_networkx()} function.  You can look up more details on all this at \texttt{https://networkx.org/documentation/stable/reference/drawing.html}.
 \end{minipage}
 }
 ```
 -->
+</div>
+<div id="dynamic-visualization-using-networkx-and-pyvis" class="section level3" number="4.2.2">
+<h3><span class="header-section-number">4.2.2</span> Dynamic visualization using <code>networkx</code> and <code>pyvis</code></h3>
+<p>Similar to the <code>visNetwork</code> package in R, the <code>pyvis</code> package provides an API allowing the creation of dynamic graphs using the <code>vis.js</code> Javascript library. As you will mostly be creating graph objects using <code>networkx</code>, the easiest way to use <code>pyvis</code> is to take advantage of its <code>networkx</code> integration.</p>
+<p>To visualize a <code>networkx</code> graph using <code>pyvis</code>, start by creating a <code>Network()</code> class and then use the <code>from_nx()</code> method to import the <code>networkx</code> object. The <code>show()</code> method will render a dynamic plot. .</p>
+<div class="sourceCode" id="cb208"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb208-1"><a href="viz-graphs.html#cb208-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyvis.network <span class="im">import</span> Network</span>
+<span id="cb208-2"><a href="viz-graphs.html#cb208-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb208-3"><a href="viz-graphs.html#cb208-3" aria-hidden="true" tabindex="-1"></a><span class="co"># create pyvis Network object</span></span>
+<span id="cb208-4"><a href="viz-graphs.html#cb208-4" aria-hidden="true" tabindex="-1"></a>net <span class="op">=</span> Network(height <span class="op">=</span> <span class="st">&quot;500px&quot;</span>, width <span class="op">=</span> <span class="st">&quot;600px&quot;</span>, notebook <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb208-5"><a href="viz-graphs.html#cb208-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb208-6"><a href="viz-graphs.html#cb208-6" aria-hidden="true" tabindex="-1"></a><span class="co"># import karate graph</span></span>
+<span id="cb208-7"><a href="viz-graphs.html#cb208-7" aria-hidden="true" tabindex="-1"></a>net.from_nx(karate)</span>
+<span id="cb208-8"><a href="viz-graphs.html#cb208-8" aria-hidden="true" tabindex="-1"></a>net.show(<span class="st">&#39;out1.html&#39;</span>)</span></code></pre></div>
+
+        <iframe
+            width="600px"
+            height="500px"
+            src="out1.html"
+            frameborder="0"
+            allowfullscreen
+        ></iframe>
+        
+<p><code>pyvis</code> expects specific names for the visual properties of nodes and edges, for example <code>color</code> and <code>size</code>. If these named properties are added to the nodes and edges Dicts of the <code>networkx</code> object, they will be passed to <code>pyvis</code>. .</p>
+<div class="sourceCode" id="cb209"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb209-1"><a href="viz-graphs.html#cb209-1" aria-hidden="true" tabindex="-1"></a><span class="co"># adjust colors</span></span>
+<span id="cb209-2"><a href="viz-graphs.html#cb209-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> karate.nodes:</span>
+<span id="cb209-3"><a href="viz-graphs.html#cb209-3" aria-hidden="true" tabindex="-1"></a>  karate.nodes[i][<span class="st">&#39;size&#39;</span>] <span class="op">=</span> <span class="dv">20</span> <span class="cf">if</span> i <span class="op">==</span> <span class="st">&quot;Mr Hi&quot;</span> <span class="kw">or</span> i <span class="op">==</span> <span class="st">&quot;John A&quot;</span> <span class="cf">else</span> <span class="dv">10</span></span>
+<span id="cb209-4"><a href="viz-graphs.html#cb209-4" aria-hidden="true" tabindex="-1"></a>  karate.nodes[i][<span class="st">&#39;color&#39;</span>] <span class="op">=</span> <span class="st">&quot;lightblue&quot;</span> <span class="cf">if</span> i <span class="op">==</span> <span class="st">&quot;Mr Hi&quot;</span> <span class="kw">or</span> i <span class="op">==</span> <span class="st">&quot;John A&quot;</span> <span class="cf">else</span> <span class="st">&quot;pink&quot;</span> </span>
+<span id="cb209-5"><a href="viz-graphs.html#cb209-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb209-6"><a href="viz-graphs.html#cb209-6" aria-hidden="true" tabindex="-1"></a><span class="co"># create edge color</span></span>
+<span id="cb209-7"><a href="viz-graphs.html#cb209-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> karate.edges:</span>
+<span id="cb209-8"><a href="viz-graphs.html#cb209-8" aria-hidden="true" tabindex="-1"></a>  karate.edges[i][<span class="st">&#39;color&#39;</span>] <span class="op">=</span> <span class="st">&quot;grey&quot;</span></span>
+<span id="cb209-9"><a href="viz-graphs.html#cb209-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb209-10"><a href="viz-graphs.html#cb209-10" aria-hidden="true" tabindex="-1"></a><span class="co"># create pyvis Network object</span></span>
+<span id="cb209-11"><a href="viz-graphs.html#cb209-11" aria-hidden="true" tabindex="-1"></a>net <span class="op">=</span> Network(height <span class="op">=</span> <span class="st">&quot;500px&quot;</span>, width <span class="op">=</span> <span class="st">&quot;600px&quot;</span>, notebook <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb209-12"><a href="viz-graphs.html#cb209-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb209-13"><a href="viz-graphs.html#cb209-13" aria-hidden="true" tabindex="-1"></a><span class="co"># import from networkx to pyvis and display</span></span>
+<span id="cb209-14"><a href="viz-graphs.html#cb209-14" aria-hidden="true" tabindex="-1"></a>net.from_nx(karate)</span>
+<span id="cb209-15"><a href="viz-graphs.html#cb209-15" aria-hidden="true" tabindex="-1"></a>net.show(<span class="st">&#39;out2.html&#39;</span>)</span></code></pre></div>
+
+        <iframe
+            width="600px"
+            height="500px"
+            src="out2.html"
+            frameborder="0"
+            allowfullscreen
+        ></iframe>
+        
+<div class="thinkahead">
+<p><strong>Playing around:</strong> Different UI controls can be added directly onto your <code>pyvis</code> visualizations using the <code>show_buttons()</code> method allowing you to experiment directly with the graph’s look and feel. For example, you can add buttons to experiment with the physics of the force-directed layout, or the node or edge properties. This can be useful when you are experimenting with options. You can learn more at the tutorial pages at <a href="https://pyvis.readthedocs.io/en/latest/" class="uri">https://pyvis.readthedocs.io/en/latest/</a>.</p>
+</div>
+<!--
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Playing around:} Different UI controls can be added directly onto your \texttt{pyvis} visualizations using the \texttt{show\_buttons()} method allowing you to experiment directly with the graph's look and feel.   For example, you can add buttons to experiment with the physics of the force-directed layout, or the node or edge properties.  This can be useful when you are experimenting with options.  You can learn more at the tutorial pages at \texttt{https://pyvis.readthedocs.io/en/latest/}.
+\end{minipage}
+}
+```
+-->
+</div>
+</div>
+<div id="learning-exercises-2" class="section level2" number="4.3">
+<h2><span class="header-section-number">4.3</span> Learning exercises</h2>
+<div id="discussion-questions-2" class="section level3" number="4.3.1">
+<h3><span class="header-section-number">4.3.1</span> Discussion questions</h3>
+<ol style="list-style-type: decimal">
+<li>Why is visualization an important consideration when studying graphs?</li>
+<li>Describe some ways a graph visualization can be adjusted to reflect different characteristics of the vertices. For example, how might we represent more ‘important’ vertices visually?</li>
+<li>Describe some similar adjustments that could be made to the edges.</li>
+<li>Describe some likely challenges with large graph visualization which may make it harder to draw conclusions from them.</li>
+<li>What is the difference between a static and a dynamic visualization. In what ways might dynamic visualization overcome some of the challenges associated with static large graph visualizations?</li>
+<li>Choose your favorite programming language and list out some package options for how to visualize graphs in that language.</li>
+<li>For each package option you listed, describe what kinds of graphs each package would be best suited for.</li>
+<li>Describe what is meant by a graph layout.<br />
+</li>
+<li>List some layout options which are available in the packages you selected for Questions 6 and 7.</li>
+<li>In you visualize the same graph twice using the same layout, in some cases the output may look different. Why is this and what can be done to control it?</li>
+</ol>
+</div>
+<div id="data-exercises-2" class="section level3" number="4.3.2">
+<h3><span class="header-section-number">4.3.2</span> Data exercises</h3>
+<p>Load the <code>madmen_vertices</code> and <code>madmen_edges</code> data sets from the <code>onadata</code> package or download them from the internet<a href="#fn27" class="footnote-ref" id="fnref27"><sup>27</sup></a>. This represents a network of characters from the TV show <em>Mad Men</em> with two characters connected by an edge if they were involved in a romantic relationship together.</p>
+<ol style="list-style-type: decimal">
+<li>Create a graph object from these data sets.<br />
+</li>
+<li>Create a basic visualization of the network using one of the methods from this chapter.</li>
+<li>Adjust your visualization to distinguish between Male and Female characters.</li>
+<li>Adjust your visualization to highlight the six main characters.</li>
+<li>Adjust your visualization to differentiate between relationships where the characters were married or not married.</li>
+<li>Experiment with different layouts. Which one do you prefer and why?</li>
+</ol>
+<p>Now load the <code>schoolfriends_vertices</code> and <code>schoolfriends_edgelist</code> data sets from the <code>onadata</code> package or download them from the internet<a href="#fn28" class="footnote-ref" id="fnref28"><sup>28</sup></a>. This data set represents friendships reported between schoolchildren in a high school in Marseille, France in 2013. The vertex set provides the ID, class and gender of each child, and the edgelist has two types of relationship. The first type is a reported friendship where the <code>from</code> ID reported the <code>to</code> ID as a friend. The second type is a known Facebook friendship between the two IDs.</p>
+<ol start="7" style="list-style-type: decimal">
+<li>Create two different graph objects — one for the reported friendship and the other for the Facebook friendship. Why is one graph object different from the other?</li>
+<li>Create a basic visualization of both graphs using a method of your choice.</li>
+<li>Experiment with different layouts for your visualization. Which one do you prefer and why?</li>
+<li>Adjust both visualizations to differentiate the vertices by gender. Which type of relationship is more likely to be gender-agnostic in your opinion? Try the same question for class differentiation.</li>
+</ol>
 
 </div>
 </div>
@@ -1050,6 +1154,8 @@ Zachary, W. W. 1977. <span>“An Information Flow Model for Conflict and Fission
 <li id="fn24"><p>A Google Maps API key is needed to use <code>ggmap</code> - see <a href="https://github.com/dkahle/ggmap" class="uri">https://github.com/dkahle/ggmap</a> for more information.<a href="viz-graphs.html#fnref24" class="footnote-back">↩︎</a></p></li>
 <li id="fn25"><p>You can use the arguments in the <code>simpleNetwork()</code> function to define the Source and Target columns if they are not the first two columns<a href="viz-graphs.html#fnref25" class="footnote-back">↩︎</a></p></li>
 <li id="fn26"><p><a href="https://ona-book.org/data/eu_referendum.csv" class="uri">https://ona-book.org/data/eu_referendum.csv</a><a href="viz-graphs.html#fnref26" class="footnote-back">↩︎</a></p></li>
+<li id="fn27"><p><a href="https://ona-book.org/data/madmen_vertices.csv" class="uri">https://ona-book.org/data/madmen_vertices.csv</a> and <a href="https://ona-book.org/data/madmen_edges.csv" class="uri">https://ona-book.org/data/madmen_edges.csv</a><a href="viz-graphs.html#fnref27" class="footnote-back">↩︎</a></p></li>
+<li id="fn28"><p><a href="https://ona-book.org/data/schoolfriends_vertices.csv" class="uri">https://ona-book.org/data/schoolfriends_vertices.csv</a> and <a href="https://ona-book.org/data/schoolfriends_edgelist.csv" class="uri">https://ona-book.org/data/schoolfriends_edgelist.csv</a><a href="viz-graphs.html#fnref28" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
