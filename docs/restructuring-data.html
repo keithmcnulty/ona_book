@@ -135,9 +135,9 @@
 <span class="op">(</span><span class="va">orgchart</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>
   d <span class="op">=</span> <span class="va">orgchart_edgelist</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH f81e4cc DN-- 8 7 -- 
+<pre><code>## IGRAPH 19aaa60 DN-- 8 7 -- 
 ## + attr: name (v/c)
-## + edges from f81e4cc (vertex names):
+## + edges from 19aaa60 (vertex names):
 ## [1] Andrew -&gt;Nancy    Andrew -&gt;Michael  Nancy  -&gt;Jane     Nancy  -&gt;Margaret Nancy  -&gt;Steve    Michael-&gt;Robert  
 ## [7] Michael-&gt;Laura</code></pre>
 <p>We now have a directed graph with named vertices, so this should be easy to plot. Let’s use <code>ggplot</code> with a dendrogram (tree) layout, as in Figure <a href="restructuring-data.html#fig:chinook-pretty">5.1</a>.</p>
@@ -264,8 +264,18 @@ Figure 5.2: Graph of Chinook customers connected to their sales reps
 Figure 5.3: Customer to customer network for Chinook based on customers sharing the same sales rep
 </p>
 </div>
-<div class="sourceCode" id="cb230"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">test_graph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/subgraph.html">induced_subgraph</a></span><span class="op">(</span><span class="va">customer_network</span>, vids <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
+<div class="thinkahead">
+<p><strong>Thinking ahead:</strong> Recall from Section <a href="working.html#graph-types">3.1.2</a> that a complete graph is a graph where every pair of vertices are connected by an edge. Can you see how it follows from the shape of the graph in Figure <a href="restructuring-data.html#fig:cust-rep">5.2</a> that when we transform the data to produce Figure <a href="restructuring-data.html#fig:cust-cust">5.3</a>, we expect to produce complete subgraphs? Can you also see how visually dense those complete subgraphs are? We will look at the measurement of density in graphs later, but a complete graph will alwqys have a density of 1.</p>
+</div>
+<!--
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Playing around:} Recall from Section \ref{graph-types} that a complete graph is a graph where every pair of vertices are connected by an edge.  Can you see how it follows from the shape of the graph in Figure \ref{fig:cust-rep} that when we transform the data to produce Figure \ref{fig:cust-cust}, we expect to produce complete subgraphs?  Can you also see how visually dense those complete subgraphs are?  We will look at the measurement of density in graphs later, but a complete graph will alwqys have a density of 1.
+\end{minipage}
+}
+```
+-->
 
 </div>
 </div>
