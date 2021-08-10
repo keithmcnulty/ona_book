@@ -1,1 +1,170 @@
 # Restructuring Data For Use in Graphs {#restructuring-data}
+
+So far we have learned how to define and visualize graphs to allow us to work with them.  But we have made a really big assumption in doing so.  We have assumed that the data we need to create our graph is always available in exactly the form in which we will need it.  Usually this is an edgelist or a set of dataframes of edges and vertices.  In reality, only certain types of data exist in this form by default.  Typically, electronic communication data will often --- though not always --- have a 'from' and 'to' structure because that is how communication works and because many of the underlying systems like email, calendar or other communication networks are already built on databases that have a graph-like structure.
+
+In reality, there are a lot of problems we may want to apply graph theory to problems where the data does not exist in an way that makes it easy to create a graph from it.  In these cases we will need to transform the data from its existing shape to graph-friendly shape --- a set of vertices and edges.
+
+There are two important considerations in transforming data into a graph-friendly structure. Both of these considerations depend on the problem you are trying to solve with the graph, as follows:
+
+1.  What entities am I interested in connecting?  These will be the vertices of your graph.  This could be a single entitiy type like a set of people, or it could be multiple entity types, such as connecting people to organizational units.  Complex graphs such as those in graph databases will have multiple entity types but in this chapter we will stick to one entity type in order to keep things simple.
+
+2.  How do I define the relationship between the vertices.  These will be the edges of your graph.  Again, there can be multiple relationship types, such as 'reports to' or 'works with', depending on how complex your graph needs to be.  
+
+In addition to these considerations, there are also questions of design in how you construct your graph.  This is because there is often more than one option for how you can model the entities and relationships you are interested in.  For example, imagine that you have two types of relationships where 'works with' means that two people have worked together on the same project and 'located with' means that two people are based in the same location.  One option for modeling these in a single graph is to have a single entity type (people) connected with edges that have a 'relationship type' property.  Another option is to have several entity types --- individuals, projects and locations --- as vertices, and to connect individuals to projects and locations using a single edge type that means 'is a member of'.   In the first option the relatonships are modeled directly, but in the second they are modeled indirectly.  Both may work equally well for the problem that is being solved by the graph, but one choice may be more useful or efficient than another.
+
+To be able to go about these sorts of transformations requires technical and data design skills and judgment.  There is no 'one size fits all' solution.  The transformations required and how you go about them depends a great deal on the context and the purpose of the work.  Nevertheless, in this chapter we will demonstrate two examples which reflect common situations where data needs to be transformed from a graph-unfriendly to a graph-friendly structure.  Working through these examples should illustrate a simple design process to follow and help demonstrate typical data transformation methods that could be applied in other common situations.
+
+In the first example, we will study a situation where data exists in traditional rectangular tables, but where we need to transform it in order to understand connections that we cannot understand directly from the tables themselves.  This is extremely common in practice and many organizations perform these sorts of transformations in order to populate graph databases from more traditional data sources.  In the second example, we will study how to extract information from documents in a way that helps us understand connections between entities in those documents.  This is another common situation that has strong applications in general, but has particular potential in the fields of law and crime investigation. Both these examples will be demonstrated in detail using R, and the last section of the chapter will provide guidance for performing similar transformations using Python.  
+
+## Transforming data in rectangular tables for use in graphs
+
+In this example we are going to use some simplified tables from the *Chinook* database - an open source database which contains records of the customers, employees and transactions of a music sales company.  We will be working with four simplified tables from this database which you can load from the `onadata` package now or download from the internet as follows:
+
+```{r}
+# download chinook database tables
+chinook_employees <- read.csv("https://ona-book.org/data/chinook_employees.csv")
+chinook_customers <- read.csv("https://ona-book.org/data/chinook_customers.csv")
+chinook_invoices <- read.csv("https://ona-book.org/data/chinook_invoices.csv")
+chinook_items <- read.csv("https://ona-book.org/data/chinook_items.csv")
+```
+
+### Creating a simple graph of the Chinook management hierarchy
+
+First, let's take a look at a simple example of a graph that already exists in this data.  Let's take a look at a few rows of the `chinook_employees` data set.
+
+```{r}
+head(chinook_employees)
+```
+
+We can see straight away that we can easily create a graph of the management relationships using this table.  In such a graph, we would have a single entity type (the employee) as the vertices and the management relationship ('is a manager of') as the edges.  For simplicity. let's use first names as vertex names.  By joining our data on itself, using `EmployeeId = ReportsTo`, we can create two columns with the first names of those in each management relationship.   
+
+```{r}
+# load dplyr for tidy manipulation in this chapter
+library(dplyr)
+
+# create edgelist
+(orgchart_edgelist <- chinook_employees |> 
+  dplyr::inner_join(chinook_employees, by = c("EmployeeId" = "ReportsTo")))
+```
+
+We can see that the `FirstName.x` is the manager and so should be the `from` column and the `Firstname.y` column should be the `to` column in our edgelist.  We should also remove rows were there is no edge.
+
+```{r}
+(orgchart_edgelist <- orgchart_edgelist |> 
+  dplyr::select(from = FirstName.x, to = FirstName.y)) |> 
+  dplyr::filter(!is.na(from) & !is.na(to))
+```
+
+Now we can create a directed `igraph` object using the 'is a manager of' relationship.
+
+```{r}
+library(igraph)
+
+# create orgchart graph
+(orgchart <- igraph::graph_from_data_frame(
+  d = orgchart_edgelist
+))
+
+```
+
+We now have a directed graph with named vertices, so this should be easy to plot.  Let's use `ggplot` with a dendrogram (tree) layout, as in Figure \@ref(fig:chinook-pretty).  
+
+
+```{r chinook-pretty, fig.align = "center", fig.cap = "Management hierarchy of Chinook as a tree"}
+library(ggraph)
+
+# create management structure as dendrogram (tree)
+ggraph(orgchart, layout = 'dendrogram') + 
+  geom_edge_elbow() +
+  geom_node_label(aes(label = name), fill = "lightblue") +
+  theme_void()
+```
+
+### Connecting customers through sales reps
+
+Let's now try to build a graph based an a slightly more complex definition of connection.  We are going to connect Chinook's customers based on whether or not they share the same support rep.  First, let's take a look at the `customers` table.
+
+```{r}
+head(chinook_customers)
+```
+
+We see a `SupportRepId` field which corresponds to the `EmployeeId` field in the `chinook_employees` table.  We can join these tables to get an edgelist of customers to support rep.  Let's also create full names for better reference.
+
+```{r}
+# create customer to support rep edgelist
+cust_reps <- chinook_customers |> 
+  dplyr::inner_join(chinook_employees, by = c("SupportRepId" = "EmployeeId")) |> 
+  dplyr::mutate(
+    CustomerName = paste(FirstName.x, LastName.x),
+    RepName = paste(FirstName.y, LastName.y)
+  ) |> 
+  dplyr::select(RepName, CustomerName, SupportRepId)
+
+head(cust_reps)
+```
+
+Now we have an option of creating two types of graphs.  First we could create a graph from the data as is, using the `CustomerName` and `RepName` as the edgelist, and where the relationship is 'is a customer of'.  Let's create that graph, and view it in Figure \@ref(fig:cust-rep).  We see a tripartite graph with a hub-and-spoke shape.
+
+```{r cust-rep, fig.align = "center", fig.cap="Graph of Chinook customers connected to their sales reps"}
+# create igraph
+cust_rep_graph <- igraph::graph_from_data_frame(
+  d = cust_reps
+)
+
+# create customer and rep property for vertices
+V(cust_rep_graph)$Type <- ifelse(
+  V(cust_rep_graph)$name %in% cust_reps$RepName,
+  "Rep",
+  "Customer"
+)
+
+ggraph(cust_rep_graph, layout = "fr") +
+  geom_edge_link(color = "grey", alpha = 0.3) +
+  geom_node_label(aes(color = Type, label = name), size = 2) +
+  theme_void()
+```
+
+Recall our original objective is to connect customers if they have the same support rep.  It is possible to use this graph to do this indirectly, applying the logic that customers are connected if there is a path between them in this graph.  However we may wish to ignore the support reps completely in our graph and make directed connections between customers if they share the same support rep.  To do this we need to do some further joining to our previous `cust_reps` data frame.
+
+If we join this dataframe back to our `chinook_customers` dataframe, we can get customer to customer connections via a common support rep as follows:
+
+```{r}
+cust_cust <- cust_reps |> 
+  dplyr::inner_join(chinook_customers, by = "SupportRepId") |> 
+  dplyr::mutate(Customer1 = CustomerName,
+                Customer2 = paste(FirstName, LastName)) |> 
+  dplyr::select(Customer1, Customer2, RepName)
+
+head(cust_cust)
+```
+Now we are not interested in creating a pseudograph where customers are connected to themselves, we regard edges with reverse order as the same.
+
+```{r}
+customer_network_edgelist <- cust_cust |> 
+  dplyr::filter(
+    Customer1 != Customer2
+  ) 
+
+head(customer_network_edgelist)
+```
+
+Now we have a network edgelist we can work with, with a `RepName` edge property to indicate which support rep connects the customers.  Note that relationships will appear in both directions in this dataset, but we can take care of that by choosing to represent them in an undirected graph.  Let's build and visualize the graph, as in \@ref(fig:cust-cust).  We see a tripartite graph consisting of three complete subgraphs with the edges color coded by the Support Rep.
+
+```{r cust-cust, fig.align="center", fig.cap = "Customer to customer network for Chinook based on customers sharing the same sales rep"}
+# create igraph object
+customer_network <- igraph::graph_from_data_frame(
+  d = customer_network_edgelist,
+  directed = FALSE
+)
+
+# visualize
+ggraph(customer_network) +
+  geom_edge_link(aes(color = RepName), alpha = 0.3) +
+  geom_node_point(color = "lightblue", size = 6) +
+  theme_void()
+```
+
+```{r}
+test_graph <- induced_subgraph(customer_network, vids = 1)
+
+```
