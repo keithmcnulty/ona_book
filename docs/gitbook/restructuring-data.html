@@ -265,7 +265,16 @@ div.csl-indent {
 <li class="chapter" data-level="4.3.2" data-path="viz-graphs.html"><a href="viz-graphs.html#data-exercises-2"><i class="fa fa-check"></i><b>4.3.2</b> Data exercises</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="restructuring-data.html"><a href="restructuring-data.html"><i class="fa fa-check"></i><b>5</b> Restructuring Data For Use in Graphs</a></li>
+<li class="chapter" data-level="5" data-path="restructuring-data.html"><a href="restructuring-data.html"><i class="fa fa-check"></i><b>5</b> Restructuring Data For Use in Graphs</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="restructuring-data.html"><a href="restructuring-data.html#transforming-data-in-rectangular-tables-for-use-in-graphs"><i class="fa fa-check"></i><b>5.1</b> Transforming data in rectangular tables for use in graphs</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="restructuring-data.html"><a href="restructuring-data.html#creating-a-simple-graph-of-the-chinook-management-hierarchy"><i class="fa fa-check"></i><b>5.1.1</b> Creating a simple graph of the Chinook management hierarchy</a></li>
+<li class="chapter" data-level="5.1.2" data-path="restructuring-data.html"><a href="restructuring-data.html#connecting-customers-through-sales-reps"><i class="fa fa-check"></i><b>5.1.2</b> Connecting customers through sales reps</a></li>
+<li class="chapter" data-level="5.1.3" data-path="restructuring-data.html"><a href="restructuring-data.html#connecting-customers-through-common-purchases"><i class="fa fa-check"></i><b>5.1.3</b> Connecting customers through common purchases</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="restructuring-data.html"><a href="restructuring-data.html#transforming-data-from-documents-for-use-in-graphs"><i class="fa fa-check"></i><b>5.2</b> Transforming data from documents for use in graphs</a></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -286,7 +295,344 @@ div.csl-indent {
             <section class="normal" id="section-">
 <div id="restructuring-data" class="section level1" number="5">
 <h1><span class="header-section-number">5</span> Restructuring Data For Use in Graphs</h1>
+<p>So far we have learned how to define and visualize graphs to allow us to work with them. But we have made a really big assumption in doing so. We have assumed that the data we need to create our graph is always available in exactly the form in which we will need it. Usually this is an edgelist or a set of dataframes of edges and vertices. In reality, only certain types of data exist in this form by default. Typically, electronic communication data will often — though not always — have a ‘from’ and ‘to’ structure because that is how communication works and because many of the underlying systems like email, calendar or other communication networks are already built on databases that have a graph-like structure.</p>
+<p>In reality, there are a lot of problems we may want to apply graph theory to problems where the data does not exist in an way that makes it easy to create a graph from it. In these cases we will need to transform the data from its existing shape to graph-friendly shape — a set of vertices and edges.</p>
+<p>There are two important considerations in transforming data into a graph-friendly structure. Both of these considerations depend on the problem you are trying to solve with the graph, as follows:</p>
+<ol style="list-style-type: decimal">
+<li><p>What entities am I interested in connecting? These will be the vertices of your graph. This could be a single entitiy type like a set of people, or it could be multiple entity types, such as connecting people to organizational units. Complex graphs such as those in graph databases will have multiple entity types but in this chapter we will stick to one entity type in order to keep things simple.</p></li>
+<li><p>How do I define the relationship between the vertices. These will be the edges of your graph. Again, there can be multiple relationship types, such as ‘reports to’ or ‘works with,’ depending on how complex your graph needs to be.</p></li>
+</ol>
+<p>In addition to these considerations, there are also questions of design in how you construct your graph. This is because there is often more than one option for how you can model the entities and relationships you are interested in. For example, imagine that you have two types of relationships where ‘works with’ means that two people have worked together on the same project and ‘located with’ means that two people are based in the same location. One option for modeling these in a single graph is to have a single entity type (people) connected with edges that have a ‘relationship type’ property. Another option is to have several entity types — individuals, projects and locations — as vertices, and to connect individuals to projects and locations using a single edge type that means ‘is a member of.’ In the first option the relatonships are modeled directly, but in the second they are modeled indirectly. Both may work equally well for the problem that is being solved by the graph, but one choice may be more useful or efficient than another.</p>
+<p>To be able to go about these sorts of transformations requires technical and data design skills and judgment. There is no ‘one size fits all’ solution. The transformations required and how you go about them depends a great deal on the context and the purpose of the work. Nevertheless, in this chapter we will demonstrate two examples which reflect common situations where data needs to be transformed from a graph-unfriendly to a graph-friendly structure. Working through these examples should illustrate a simple design process to follow and help demonstrate typical data transformation methods that could be applied in other common situations.</p>
+<p>In the first example, we will study a situation where data exists in traditional rectangular tables, but where we need to transform it in order to understand connections that we cannot understand directly from the tables themselves. This is extremely common in practice and many organizations perform these sorts of transformations in order to populate graph databases from more traditional data sources. In the second example, we will study how to extract information from documents in a way that helps us understand connections between entities in those documents. This is another common situation that has strong applications in general, but has particular potential in the fields of law and crime investigation. Both these examples will be demonstrated in detail using R, and the last section of the chapter will provide guidance for performing similar transformations using Python.</p>
+<div id="transforming-data-in-rectangular-tables-for-use-in-graphs" class="section level2" number="5.1">
+<h2><span class="header-section-number">5.1</span> Transforming data in rectangular tables for use in graphs</h2>
+<p>In this example we are going to use some simplified tables from the <em>Chinook</em> database - an open source database which contains records of the customers, employees and transactions of a music sales company. We will be working with four simplified tables from this database which you can load from the <code>onadata</code> package now or download from the internet as follows:</p>
+<div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb210-1"><a href="restructuring-data.html#cb210-1" aria-hidden="true" tabindex="-1"></a><span class="co"># download chinook database tables</span></span>
+<span id="cb210-2"><a href="restructuring-data.html#cb210-2" aria-hidden="true" tabindex="-1"></a>chinook_employees <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://ona-book.org/data/chinook_employees.csv&quot;</span>)</span>
+<span id="cb210-3"><a href="restructuring-data.html#cb210-3" aria-hidden="true" tabindex="-1"></a>chinook_customers <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://ona-book.org/data/chinook_customers.csv&quot;</span>)</span>
+<span id="cb210-4"><a href="restructuring-data.html#cb210-4" aria-hidden="true" tabindex="-1"></a>chinook_invoices <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://ona-book.org/data/chinook_invoices.csv&quot;</span>)</span>
+<span id="cb210-5"><a href="restructuring-data.html#cb210-5" aria-hidden="true" tabindex="-1"></a>chinook_items <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://ona-book.org/data/chinook_items.csv&quot;</span>)</span>
+<span id="cb210-6"><a href="restructuring-data.html#cb210-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb210-7"><a href="restructuring-data.html#cb210-7" aria-hidden="true" tabindex="-1"></a><span class="co"># set a seed for later visualizations</span></span>
+<span id="cb210-8"><a href="restructuring-data.html#cb210-8" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span></code></pre></div>
+<div id="creating-a-simple-graph-of-the-chinook-management-hierarchy" class="section level3" number="5.1.1">
+<h3><span class="header-section-number">5.1.1</span> Creating a simple graph of the Chinook management hierarchy</h3>
+<p>First, let’s take a look at a simple example of a graph that already exists in this data. Let’s take a look at a few rows of the <code>chinook_employees</code> data set.</p>
+<div class="sourceCode" id="cb211"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb211-1"><a href="restructuring-data.html#cb211-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(chinook_employees)</span></code></pre></div>
+<pre><code>##   EmployeeId FirstName LastName ReportsTo
+## 1          1    Andrew    Adams        NA
+## 2          2     Nancy  Edwards         1
+## 3          3      Jane  Peacock         2
+## 4          4  Margaret     Park         2
+## 5          5     Steve  Johnson         2
+## 6          6   Michael Mitchell         1</code></pre>
+<p>We can see straight away that we can easily create a graph of the management relationships using this table. In such a graph, we would have a single entity type (the employee) as the vertices and the management relationship (‘is a manager of’) as the edges. For simplicity. let’s use first names as vertex names. By joining our data on itself, using <code>EmployeeId = ReportsTo</code>, we can create two columns with the first names of those in each management relationship.</p>
+<div class="sourceCode" id="cb213"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb213-1"><a href="restructuring-data.html#cb213-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load dplyr for tidy manipulation in this chapter</span></span>
+<span id="cb213-2"><a href="restructuring-data.html#cb213-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb213-3"><a href="restructuring-data.html#cb213-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb213-4"><a href="restructuring-data.html#cb213-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create edgelist</span></span>
+<span id="cb213-5"><a href="restructuring-data.html#cb213-5" aria-hidden="true" tabindex="-1"></a>(orgchart_edgelist <span class="ot">&lt;-</span> chinook_employees <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb213-6"><a href="restructuring-data.html#cb213-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">inner_join</span>(chinook_employees, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;EmployeeId&quot;</span> <span class="ot">=</span> <span class="st">&quot;ReportsTo&quot;</span>)))</span></code></pre></div>
+<pre><code>##   EmployeeId FirstName.x LastName.x ReportsTo EmployeeId.y FirstName.y LastName.y
+## 1          1      Andrew      Adams        NA            2       Nancy    Edwards
+## 2          1      Andrew      Adams        NA            6     Michael   Mitchell
+## 3          2       Nancy    Edwards         1            3        Jane    Peacock
+## 4          2       Nancy    Edwards         1            4    Margaret       Park
+## 5          2       Nancy    Edwards         1            5       Steve    Johnson
+## 6          6     Michael   Mitchell         1            7      Robert       King
+## 7          6     Michael   Mitchell         1            8       Laura   Callahan</code></pre>
+<p>We can see that the <code>FirstName.x</code> is the manager and so should be the <code>from</code> column and the <code>Firstname.y</code> column should be the <code>to</code> column in our edgelist. We should also remove rows were there is no edge.</p>
+<div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb215-1"><a href="restructuring-data.html#cb215-1" aria-hidden="true" tabindex="-1"></a>(orgchart_edgelist <span class="ot">&lt;-</span> orgchart_edgelist <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb215-2"><a href="restructuring-data.html#cb215-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="at">from =</span> FirstName.x, <span class="at">to =</span> FirstName.y)) <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb215-3"><a href="restructuring-data.html#cb215-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(from) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(to))</span></code></pre></div>
+<pre><code>##      from       to
+## 1  Andrew    Nancy
+## 2  Andrew  Michael
+## 3   Nancy     Jane
+## 4   Nancy Margaret
+## 5   Nancy    Steve
+## 6 Michael   Robert
+## 7 Michael    Laura</code></pre>
+<p>Now we can create a directed <code>igraph</code> object using the ‘is a manager of’ relationship.</p>
+<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb217-1"><a href="restructuring-data.html#cb217-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(igraph)</span>
+<span id="cb217-2"><a href="restructuring-data.html#cb217-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb217-3"><a href="restructuring-data.html#cb217-3" aria-hidden="true" tabindex="-1"></a><span class="co"># create orgchart graph</span></span>
+<span id="cb217-4"><a href="restructuring-data.html#cb217-4" aria-hidden="true" tabindex="-1"></a>(orgchart <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(</span>
+<span id="cb217-5"><a href="restructuring-data.html#cb217-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">d =</span> orgchart_edgelist</span>
+<span id="cb217-6"><a href="restructuring-data.html#cb217-6" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
+<pre><code>## IGRAPH f199720 DN-- 8 7 -- 
+## + attr: name (v/c)
+## + edges from f199720 (vertex names):
+## [1] Andrew -&gt;Nancy    Andrew -&gt;Michael  Nancy  -&gt;Jane     Nancy  -&gt;Margaret Nancy  -&gt;Steve    Michael-&gt;Robert  
+## [7] Michael-&gt;Laura</code></pre>
+<p>We now have a directed graph with named vertices, so this should be easy to plot. Let’s use <code>ggplot</code> with a dendrogram (tree) layout, as in Figure <a href="restructuring-data.html#fig:chinook-pretty">5.1</a>.</p>
+<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb219-1"><a href="restructuring-data.html#cb219-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggraph)</span>
+<span id="cb219-2"><a href="restructuring-data.html#cb219-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb219-3"><a href="restructuring-data.html#cb219-3" aria-hidden="true" tabindex="-1"></a><span class="co"># create management structure as dendrogram (tree)</span></span>
+<span id="cb219-4"><a href="restructuring-data.html#cb219-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(orgchart, <span class="at">layout =</span> <span class="st">&#39;dendrogram&#39;</span>) <span class="sc">+</span> </span>
+<span id="cb219-5"><a href="restructuring-data.html#cb219-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_elbow</span>() <span class="sc">+</span></span>
+<span id="cb219-6"><a href="restructuring-data.html#cb219-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_label</span>(<span class="fu">aes</span>(<span class="at">label =</span> name), <span class="at">fill =</span> <span class="st">&quot;lightblue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb219-7"><a href="restructuring-data.html#cb219-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:chinook-pretty"></span>
+<img src="_main_files/figure-html/chinook-pretty-1.png" alt="Management hierarchy of Chinook as a tree" width="672" />
+<p class="caption">
+Figure 5.1: Management hierarchy of Chinook as a tree
+</p>
+</div>
+</div>
+<div id="connecting-customers-through-sales-reps" class="section level3" number="5.1.2">
+<h3><span class="header-section-number">5.1.2</span> Connecting customers through sales reps</h3>
+<p>Let’s now try to build a graph based an a slightly more complex definition of connection. We are going to connect Chinook’s customers based on whether or not they share the same support rep. First, let’s take a look at the <code>customers</code> table.</p>
+<div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb220-1"><a href="restructuring-data.html#cb220-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(chinook_customers)</span></code></pre></div>
+<pre><code>##   CustomerId FirstName    LastName SupportRepId
+## 1          1      Luís   Gonçalves            3
+## 2          2    Leonie      Köhler            5
+## 3          3  François    Tremblay            3
+## 4          4     Bjørn      Hansen            4
+## 5          5 František Wichterlová            4
+## 6          6    Helena        Holý            5</code></pre>
+<p>We see a <code>SupportRepId</code> field which corresponds to the <code>EmployeeId</code> field in the <code>chinook_employees</code> table. We can join these tables to get an edgelist of customers to support rep. Let’s also create full names for better reference.</p>
+<div class="sourceCode" id="cb222"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb222-1"><a href="restructuring-data.html#cb222-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create customer to support rep edgelist</span></span>
+<span id="cb222-2"><a href="restructuring-data.html#cb222-2" aria-hidden="true" tabindex="-1"></a>cust_reps <span class="ot">&lt;-</span> chinook_customers <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb222-3"><a href="restructuring-data.html#cb222-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">inner_join</span>(chinook_employees, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;SupportRepId&quot;</span> <span class="ot">=</span> <span class="st">&quot;EmployeeId&quot;</span>)) <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb222-4"><a href="restructuring-data.html#cb222-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb222-5"><a href="restructuring-data.html#cb222-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">CustomerName =</span> <span class="fu">paste</span>(FirstName.x, LastName.x),</span>
+<span id="cb222-6"><a href="restructuring-data.html#cb222-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">RepName =</span> <span class="fu">paste</span>(FirstName.y, LastName.y)</span>
+<span id="cb222-7"><a href="restructuring-data.html#cb222-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb222-8"><a href="restructuring-data.html#cb222-8" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(RepName, CustomerName, SupportRepId)</span>
+<span id="cb222-9"><a href="restructuring-data.html#cb222-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb222-10"><a href="restructuring-data.html#cb222-10" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cust_reps)</span></code></pre></div>
+<pre><code>##         RepName          CustomerName SupportRepId
+## 1  Jane Peacock        Luís Gonçalves            3
+## 2 Steve Johnson         Leonie Köhler            5
+## 3  Jane Peacock     François Tremblay            3
+## 4 Margaret Park          Bjørn Hansen            4
+## 5 Margaret Park František Wichterlová            4
+## 6 Steve Johnson           Helena Holý            5</code></pre>
+<p>Now we have an option of creating two types of graphs. First we could create a graph from the data as is, using the <code>CustomerName</code> and <code>RepName</code> as the edgelist, and where the relationship is ‘is a customer of.’ Let’s create that graph, and view it in Figure <a href="restructuring-data.html#fig:cust-rep">5.2</a>. We see a tripartite graph with a hub-and-spoke shape.</p>
+<div class="sourceCode" id="cb224"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb224-1"><a href="restructuring-data.html#cb224-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create igraph</span></span>
+<span id="cb224-2"><a href="restructuring-data.html#cb224-2" aria-hidden="true" tabindex="-1"></a>cust_rep_graph <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(</span>
+<span id="cb224-3"><a href="restructuring-data.html#cb224-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">d =</span> cust_reps</span>
+<span id="cb224-4"><a href="restructuring-data.html#cb224-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb224-5"><a href="restructuring-data.html#cb224-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb224-6"><a href="restructuring-data.html#cb224-6" aria-hidden="true" tabindex="-1"></a><span class="co"># create customer and rep property for vertices</span></span>
+<span id="cb224-7"><a href="restructuring-data.html#cb224-7" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(cust_rep_graph)<span class="sc">$</span>Type <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(</span>
+<span id="cb224-8"><a href="restructuring-data.html#cb224-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">V</span>(cust_rep_graph)<span class="sc">$</span>name <span class="sc">%in%</span> cust_reps<span class="sc">$</span>RepName,</span>
+<span id="cb224-9"><a href="restructuring-data.html#cb224-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Rep&quot;</span>,</span>
+<span id="cb224-10"><a href="restructuring-data.html#cb224-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Customer&quot;</span></span>
+<span id="cb224-11"><a href="restructuring-data.html#cb224-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb224-12"><a href="restructuring-data.html#cb224-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb224-13"><a href="restructuring-data.html#cb224-13" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(cust_rep_graph, <span class="at">layout =</span> <span class="st">&quot;fr&quot;</span>) <span class="sc">+</span></span>
+<span id="cb224-14"><a href="restructuring-data.html#cb224-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb224-15"><a href="restructuring-data.html#cb224-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_label</span>(<span class="fu">aes</span>(<span class="at">color =</span> Type, <span class="at">label =</span> name), <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb224-16"><a href="restructuring-data.html#cb224-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:cust-rep"></span>
+<img src="_main_files/figure-html/cust-rep-1.png" alt="Graph of Chinook customers connected to their sales reps" width="672" />
+<p class="caption">
+Figure 5.2: Graph of Chinook customers connected to their sales reps
+</p>
+</div>
+<p>Recall our original objective is to connect customers if they have the same support rep. It is possible to use this graph to do this indirectly, applying the logic that customers are connected if there is a path between them in this graph. However we may wish to ignore the support reps completely in our graph and make directed connections between customers if they share the same support rep. To do this we need to do some further joining to our previous <code>cust_reps</code> data frame.</p>
+<p>If we join this dataframe back to our <code>chinook_customers</code> dataframe, we can get customer to customer connections via a common support rep as follows:</p>
+<div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb225-1"><a href="restructuring-data.html#cb225-1" aria-hidden="true" tabindex="-1"></a>cust_cust <span class="ot">&lt;-</span> cust_reps <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb225-2"><a href="restructuring-data.html#cb225-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">inner_join</span>(chinook_customers, <span class="at">by =</span> <span class="st">&quot;SupportRepId&quot;</span>) <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb225-3"><a href="restructuring-data.html#cb225-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">Customer1 =</span> CustomerName,</span>
+<span id="cb225-4"><a href="restructuring-data.html#cb225-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">Customer2 =</span> <span class="fu">paste</span>(FirstName, LastName)) <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb225-5"><a href="restructuring-data.html#cb225-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(Customer1, Customer2, RepName)</span>
+<span id="cb225-6"><a href="restructuring-data.html#cb225-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb225-7"><a href="restructuring-data.html#cb225-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cust_cust)</span></code></pre></div>
+<pre><code>##        Customer1         Customer2      RepName
+## 1 Luís Gonçalves    Luís Gonçalves Jane Peacock
+## 2 Luís Gonçalves François Tremblay Jane Peacock
+## 3 Luís Gonçalves   Roberto Almeida Jane Peacock
+## 4 Luís Gonçalves Jennifer Peterson Jane Peacock
+## 5 Luís Gonçalves   Michelle Brooks Jane Peacock
+## 6 Luís Gonçalves         Tim Goyer Jane Peacock</code></pre>
+<p>Now we are not interested in creating a pseudograph where customers are connected to themselves, we regard edges with reverse order as the same.</p>
+<div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb227-1"><a href="restructuring-data.html#cb227-1" aria-hidden="true" tabindex="-1"></a>customer_network_edgelist <span class="ot">&lt;-</span> cust_cust <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb227-2"><a href="restructuring-data.html#cb227-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(</span>
+<span id="cb227-3"><a href="restructuring-data.html#cb227-3" aria-hidden="true" tabindex="-1"></a>    Customer1 <span class="sc">!=</span> Customer2</span>
+<span id="cb227-4"><a href="restructuring-data.html#cb227-4" aria-hidden="true" tabindex="-1"></a>  ) </span>
+<span id="cb227-5"><a href="restructuring-data.html#cb227-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb227-6"><a href="restructuring-data.html#cb227-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(customer_network_edgelist)</span></code></pre></div>
+<pre><code>##        Customer1         Customer2      RepName
+## 1 Luís Gonçalves François Tremblay Jane Peacock
+## 2 Luís Gonçalves   Roberto Almeida Jane Peacock
+## 3 Luís Gonçalves Jennifer Peterson Jane Peacock
+## 4 Luís Gonçalves   Michelle Brooks Jane Peacock
+## 5 Luís Gonçalves         Tim Goyer Jane Peacock
+## 6 Luís Gonçalves     Frank Ralston Jane Peacock</code></pre>
+<p>Now we have a network edgelist we can work with, with a <code>RepName</code> edge property to indicate which support rep connects the customers. Note that relationships will appear in both directions in this dataset, but we can take care of that by choosing to represent them in an undirected graph. Let’s build and visualize the graph, as in <a href="restructuring-data.html#fig:cust-cust">5.3</a>. We see a tripartite graph consisting of three complete subgraphs with the edges color coded by the Support Rep.</p>
+<div class="sourceCode" id="cb229"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb229-1"><a href="restructuring-data.html#cb229-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create igraph object</span></span>
+<span id="cb229-2"><a href="restructuring-data.html#cb229-2" aria-hidden="true" tabindex="-1"></a>customer_network <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(</span>
+<span id="cb229-3"><a href="restructuring-data.html#cb229-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">d =</span> customer_network_edgelist,</span>
+<span id="cb229-4"><a href="restructuring-data.html#cb229-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">directed =</span> <span class="cn">FALSE</span></span>
+<span id="cb229-5"><a href="restructuring-data.html#cb229-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb229-6"><a href="restructuring-data.html#cb229-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb229-7"><a href="restructuring-data.html#cb229-7" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize</span></span>
+<span id="cb229-8"><a href="restructuring-data.html#cb229-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(customer_network) <span class="sc">+</span></span>
+<span id="cb229-9"><a href="restructuring-data.html#cb229-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="fu">aes</span>(<span class="at">color =</span> RepName), <span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb229-10"><a href="restructuring-data.html#cb229-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="at">color =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="at">size =</span> <span class="dv">6</span>) <span class="sc">+</span></span>
+<span id="cb229-11"><a href="restructuring-data.html#cb229-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:cust-cust"></span>
+<img src="_main_files/figure-html/cust-cust-1.png" alt="Customer to customer network for Chinook based on customers sharing the same sales rep" width="672" />
+<p class="caption">
+Figure 5.3: Customer to customer network for Chinook based on customers sharing the same sales rep
+</p>
+</div>
+<div class="thinkahead">
+<p><strong>Thinking ahead:</strong> Recall from Section <a href="working.html#graph-types">3.1.2</a> that a complete graph is a graph where every pair of vertices are connected by an edge. Can you see how it follows from the shape of the graph in Figure <a href="restructuring-data.html#fig:cust-rep">5.2</a> that when we transform the data to produce Figure <a href="restructuring-data.html#fig:cust-cust">5.3</a>, we expect to produce complete subgraphs? Can you also see how visually dense those complete subgraphs are? We will look at the measurement of density in graphs later, but a complete graph will alwqys have a density of 1.</p>
+</div>
+<!--
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Playing around:} Recall from Section \ref{graph-types} that a complete graph is a graph where every pair of vertices are connected by an edge.  Can you see how it follows from the shape of the graph in Figure \ref{fig:cust-rep} that when we transform the data to produce Figure \ref{fig:cust-cust}, we expect to produce complete subgraphs?  Can you also see how visually dense those complete subgraphs are?  We will look at the measurement of density in graphs later, but a complete graph will alwqys have a density of 1.
+\end{minipage}
+}
+```
+-->
+</div>
+<div id="connecting-customers-through-common-purchases" class="section level3" number="5.1.3">
+<h3><span class="header-section-number">5.1.3</span> Connecting customers through common purchases</h3>
+<p>To illustrate a further layer of complexity in reshaping data for use in graphs, let’s imagine that we want to connect customers on the basis of them purchasing common products. We may wish to set some parameters to this relationship - for example a connection might be based on a minimum number of common products purchased, to give us flexibility around the definition of connection.</p>
+<p>To do this we will need to use three tables - <code>chinook_customers</code>, <code>chinook_invoices</code> and <code>chinook_items</code>. To associate a given customer with a purchased item, we will need to join all three of these tables together. Let’s take a quick look at the latter two.</p>
+<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb230-1"><a href="restructuring-data.html#cb230-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(chinook_invoices, <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>##   InvoiceId CustomerId
+## 1         1          2
+## 2         2          4
+## 3         3          8</code></pre>
+<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb232-1"><a href="restructuring-data.html#cb232-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(chinook_items, <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>##   InvoiceId TrackId
+## 1         1       2
+## 2         1       4
+## 3         2       6</code></pre>
+<p>We can regard the <code>TrackId</code> as an item, and using a couple of joins we can quickly match customers with items. It is possible that customers may have purchased the same item numerous times, but we are not interested in that for this work and so we just need the distinct customer and track pairings.</p>
+<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb234-1"><a href="restructuring-data.html#cb234-1" aria-hidden="true" tabindex="-1"></a>cust_item <span class="ot">&lt;-</span> chinook_customers <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb234-2"><a href="restructuring-data.html#cb234-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">inner_join</span>(chinook_invoices) <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb234-3"><a href="restructuring-data.html#cb234-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">inner_join</span>(chinook_items) <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb234-4"><a href="restructuring-data.html#cb234-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">CustName =</span> <span class="fu">paste</span>(FirstName, LastName)) <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb234-5"><a href="restructuring-data.html#cb234-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(CustName, TrackId) <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb234-6"><a href="restructuring-data.html#cb234-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">distinct</span>()</span>
+<span id="cb234-7"><a href="restructuring-data.html#cb234-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb234-8"><a href="restructuring-data.html#cb234-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cust_item, <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>##         CustName TrackId
+## 1 Luís Gonçalves    3247
+## 2 Luís Gonçalves    3248
+## 3 Luís Gonçalves     447</code></pre>
+<p>Similar to our previous example, we can now use this to create an undirected network with two vertex entities: customer and item.</p>
+<div class="sourceCode" id="cb236"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb236-1"><a href="restructuring-data.html#cb236-1" aria-hidden="true" tabindex="-1"></a><span class="co"># initiate graph object</span></span>
+<span id="cb236-2"><a href="restructuring-data.html#cb236-2" aria-hidden="true" tabindex="-1"></a>customer_item_network <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(</span>
+<span id="cb236-3"><a href="restructuring-data.html#cb236-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">d =</span> cust_item,</span>
+<span id="cb236-4"><a href="restructuring-data.html#cb236-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">directed =</span> <span class="cn">FALSE</span></span>
+<span id="cb236-5"><a href="restructuring-data.html#cb236-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb236-6"><a href="restructuring-data.html#cb236-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb236-7"><a href="restructuring-data.html#cb236-7" aria-hidden="true" tabindex="-1"></a><span class="co"># create vertex type</span></span>
+<span id="cb236-8"><a href="restructuring-data.html#cb236-8" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(customer_item_network)<span class="sc">$</span>Type <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(</span>
+<span id="cb236-9"><a href="restructuring-data.html#cb236-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">V</span>(customer_item_network)<span class="sc">$</span>name <span class="sc">%in%</span> cust_item<span class="sc">$</span>TrackId,</span>
+<span id="cb236-10"><a href="restructuring-data.html#cb236-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Item&quot;</span>,</span>
+<span id="cb236-11"><a href="restructuring-data.html#cb236-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Customer&quot;</span></span>
+<span id="cb236-12"><a href="restructuring-data.html#cb236-12" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>This is a big network, let’s visualize it simply, as in Figure <a href="restructuring-data.html#fig:cust-item-viz">5.4</a>.</p>
+<div class="sourceCode" id="cb237"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb237-1"><a href="restructuring-data.html#cb237-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(customer_item_network, <span class="at">layout =</span> <span class="st">&quot;fr&quot;</span>) <span class="sc">+</span></span>
+<span id="cb237-2"><a href="restructuring-data.html#cb237-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb237-3"><a href="restructuring-data.html#cb237-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> Type), <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb237-4"><a href="restructuring-data.html#cb237-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:cust-item-viz"></span>
+<img src="_main_files/figure-html/cust-item-viz-1.png" alt="Network connecting customers via items purchased" width="672" />
+<p class="caption">
+Figure 5.4: Network connecting customers via items purchased
+</p>
+</div>
+<p>We can see from looking at this graph that there are a large number of items that only one customer has purchased. Therefore the items themselves seem to be extraneous information for this particular use case. If we are not interested in the items themselves, we can instead creating the connections between customer directly. In a similar way to the previous problem, we can join the <code>cust_item</code> table on itself to connect customers based on common item purchases, and we should remove links between the same customer.</p>
+<div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb238-1"><a href="restructuring-data.html#cb238-1" aria-hidden="true" tabindex="-1"></a>cust_cust_itemjoin <span class="ot">&lt;-</span> cust_item <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb238-2"><a href="restructuring-data.html#cb238-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">inner_join</span>(cust_item, <span class="at">by =</span> <span class="st">&quot;TrackId&quot;</span>) <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb238-3"><a href="restructuring-data.html#cb238-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="at">CustName1 =</span> CustName.x, <span class="at">CustName2 =</span> CustName.y, TrackId) <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb238-4"><a href="restructuring-data.html#cb238-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(CustName1 <span class="sc">!=</span> CustName2)</span>
+<span id="cb238-5"><a href="restructuring-data.html#cb238-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb238-6"><a href="restructuring-data.html#cb238-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cust_cust_itemjoin)</span></code></pre></div>
+<pre><code>##        CustName1          CustName2 TrackId
+## 1 Luís Gonçalves     Edward Francis     449
+## 2 Luís Gonçalves Richard Cunningham    1157
+## 3 Luís Gonçalves Richard Cunningham    1169
+## 4 Luís Gonçalves      Astrid Gruber    2991
+## 5 Luís Gonçalves         Emma Jones     280
+## 6 Luís Gonçalves         Emma Jones     298</code></pre>
+<p>The issue with this data set is that it will count every instance of a common item purchase twicw, with the customers in opposite orders, and this is double counting. So we need to group the pairs of customers irrelevant of their order and ensure we don’t double up on items.</p>
+<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb240-1"><a href="restructuring-data.html#cb240-1" aria-hidden="true" tabindex="-1"></a>cust_item_network <span class="ot">&lt;-</span> cust_cust_itemjoin <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb240-2"><a href="restructuring-data.html#cb240-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(<span class="at">Cust1 =</span> <span class="fu">pmin</span>(CustName1, CustName2), <span class="at">Cust2 =</span> <span class="fu">pmax</span>(CustName1, CustName2)) <span class="sc">%&gt;%</span></span>
+<span id="cb240-3"><a href="restructuring-data.html#cb240-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">TrackId =</span> <span class="fu">unique</span>(TrackId), <span class="at">.groups =</span> <span class="st">&#39;drop&#39;</span>)</span>
+<span id="cb240-4"><a href="restructuring-data.html#cb240-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb240-5"><a href="restructuring-data.html#cb240-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cust_item_network)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 3
+##   Cust1          Cust2           TrackId
+##   &lt;chr&gt;          &lt;chr&gt;             &lt;int&gt;
+## 1 Aaron Mitchell Alexandre Rocha    2054
+## 2 Aaron Mitchell Bjørn Hansen       1626
+## 3 Aaron Mitchell Enrique Muñoz      2027
+## 4 Aaron Mitchell Hugh O&#39;Reilly      2018
+## 5 Aaron Mitchell Niklas Schröder     857
+## 6 Aaron Mitchell Phil Hughes        1822</code></pre>
+<p>If that worked we should see that the table <code>cust_cust_itemjoin</code> has twice as many rows as <code>cust_item_network</code>.</p>
+<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb242-1"><a href="restructuring-data.html#cb242-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(cust_cust_itemjoin)<span class="sc">/</span><span class="fu">nrow</span>(cust_item_network)</span></code></pre></div>
+<pre><code>## [1] 2</code></pre>
+<p>This looks good. So we now can count up how many common items each pair of customers purchased.</p>
+<div class="sourceCode" id="cb244"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb244-1"><a href="restructuring-data.html#cb244-1" aria-hidden="true" tabindex="-1"></a>cust_item_network <span class="ot">&lt;-</span> cust_item_network <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb244-2"><a href="restructuring-data.html#cb244-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">count</span>(Cust1, Cust2, <span class="at">name =</span> <span class="st">&quot;Items&quot;</span>) </span>
+<span id="cb244-3"><a href="restructuring-data.html#cb244-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb244-4"><a href="restructuring-data.html#cb244-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cust_item_network)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 3
+##   Cust1          Cust2           Items
+##   &lt;chr&gt;          &lt;chr&gt;           &lt;int&gt;
+## 1 Aaron Mitchell Alexandre Rocha     1
+## 2 Aaron Mitchell Bjørn Hansen        1
+## 3 Aaron Mitchell Enrique Muñoz       1
+## 4 Aaron Mitchell Hugh O&#39;Reilly       1
+## 5 Aaron Mitchell Niklas Schröder     1
+## 6 Aaron Mitchell Phil Hughes         1</code></pre>
+<p>We are ready to construct our graph, with <code>Items</code> as an edge property. We can visualize it with an edge color code indicating how many common items were purchased, as in Figure <a href="restructuring-data.html#fig:cust-items-coded">5.5</a>.</p>
+<div class="sourceCode" id="cb246"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb246-1"><a href="restructuring-data.html#cb246-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create undirected graph</span></span>
+<span id="cb246-2"><a href="restructuring-data.html#cb246-2" aria-hidden="true" tabindex="-1"></a>custtocust_network <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(</span>
+<span id="cb246-3"><a href="restructuring-data.html#cb246-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">d =</span> cust_item_network,</span>
+<span id="cb246-4"><a href="restructuring-data.html#cb246-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">directed =</span> <span class="cn">FALSE</span></span>
+<span id="cb246-5"><a href="restructuring-data.html#cb246-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb246-6"><a href="restructuring-data.html#cb246-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb246-7"><a href="restructuring-data.html#cb246-7" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize with edges color coded by no of items</span></span>
+<span id="cb246-8"><a href="restructuring-data.html#cb246-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(custtocust_network) <span class="sc">+</span></span>
+<span id="cb246-9"><a href="restructuring-data.html#cb246-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="fu">aes</span>(<span class="at">color =</span> Items), <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb246-10"><a href="restructuring-data.html#cb246-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="at">color =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="at">size =</span> <span class="dv">6</span>) <span class="sc">+</span></span>
+<span id="cb246-11"><a href="restructuring-data.html#cb246-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:cust-items-coded"></span>
+<img src="_main_files/figure-html/cust-items-coded-1.png" alt="Chinook customer to customer network based on common item purchases" width="672" />
+<p class="caption">
+Figure 5.5: Chinook customer to customer network based on common item purchases
+</p>
+</div>
+<p>If we wish, we can restrict the definition of connection. For example, we may define it as ‘purchased at least two items in common,’ as in Figure <a href="restructuring-data.html#fig:cust-item-two">5.6</a>. We can use the <code>subgraph()</code> function in <code>igraph</code> for this, and the result reveal a bipartite graph that looks quite symmetrical, indicating that there appear to be two independent groups of customers with who have some overlap purchasing behavior.</p>
+<div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb247-1"><a href="restructuring-data.html#cb247-1" aria-hidden="true" tabindex="-1"></a><span class="co"># select edges that have Item value of at least 2</span></span>
+<span id="cb247-2"><a href="restructuring-data.html#cb247-2" aria-hidden="true" tabindex="-1"></a>edges <span class="ot">&lt;-</span> <span class="fu">E</span>(custtocust_network)[<span class="fu">E</span>(custtocust_network)<span class="sc">$</span>Items <span class="sc">&gt;=</span> <span class="dv">2</span>]</span>
+<span id="cb247-3"><a href="restructuring-data.html#cb247-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb247-4"><a href="restructuring-data.html#cb247-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create subgraph using these edges</span></span>
+<span id="cb247-5"><a href="restructuring-data.html#cb247-5" aria-hidden="true" tabindex="-1"></a>two_item_graph <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">subgraph.edges</span>(custtocust_network, <span class="at">eids =</span> edges)</span>
+<span id="cb247-6"><a href="restructuring-data.html#cb247-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb247-7"><a href="restructuring-data.html#cb247-7" aria-hidden="true" tabindex="-1"></a><span class="co"># visualise</span></span>
+<span id="cb247-8"><a href="restructuring-data.html#cb247-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(two_item_graph) <span class="sc">+</span></span>
+<span id="cb247-9"><a href="restructuring-data.html#cb247-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb247-10"><a href="restructuring-data.html#cb247-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="at">color =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="at">size =</span> <span class="dv">6</span>) <span class="sc">+</span></span>
+<span id="cb247-11"><a href="restructuring-data.html#cb247-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:cust-item-two"></span>
+<img src="_main_files/figure-html/cust-item-two-1.png" alt="Chinook customer to customer network based at least two common items purchased" width="672" />
+<p class="caption">
+Figure 5.6: Chinook customer to customer network based at least two common items purchased
+</p>
+</div>
+</div>
+</div>
+<div id="transforming-data-from-documents-for-use-in-graphs" class="section level2" number="5.2">
+<h2><span class="header-section-number">5.2</span> Transforming data from documents for use in graphs</h2>
 
+</div>
 </div>
             </section>
 

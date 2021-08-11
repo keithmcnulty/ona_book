@@ -83,7 +83,10 @@
 <span class="va">chinook_employees</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"https://ona-book.org/data/chinook_employees.csv"</span><span class="op">)</span>
 <span class="va">chinook_customers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"https://ona-book.org/data/chinook_customers.csv"</span><span class="op">)</span>
 <span class="va">chinook_invoices</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"https://ona-book.org/data/chinook_invoices.csv"</span><span class="op">)</span>
-<span class="va">chinook_items</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"https://ona-book.org/data/chinook_items.csv"</span><span class="op">)</span></code></pre></div>
+<span class="va">chinook_items</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"https://ona-book.org/data/chinook_items.csv"</span><span class="op">)</span>
+
+<span class="co"># set a seed for later visualizations</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></code></pre></div>
 <div id="creating-a-simple-graph-of-the-chinook-management-hierarchy" class="section level3" number="5.1.1">
 <h3>
 <span class="header-section-number">5.1.1</span> Creating a simple graph of the Chinook management hierarchy<a class="anchor" aria-label="anchor" href="#creating-a-simple-graph-of-the-chinook-management-hierarchy"><i class="fas fa-link"></i></a>
@@ -135,9 +138,9 @@
 <span class="op">(</span><span class="va">orgchart</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>
   d <span class="op">=</span> <span class="va">orgchart_edgelist</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH 19aaa60 DN-- 8 7 -- 
+<pre><code>## IGRAPH c0e7d0a DN-- 8 7 -- 
 ## + attr: name (v/c)
-## + edges from 19aaa60 (vertex names):
+## + edges from c0e7d0a (vertex names):
 ## [1] Andrew -&gt;Nancy    Andrew -&gt;Michael  Nancy  -&gt;Jane     Nancy  -&gt;Margaret Nancy  -&gt;Steve    Michael-&gt;Robert  
 ## [7] Michael-&gt;Laura</code></pre>
 <p>We now have a directed graph with named vertices, so this should be easy to plot. Let’s use <code>ggplot</code> with a dendrogram (tree) layout, as in Figure <a href="restructuring-data.html#fig:chinook-pretty">5.1</a>.</p>
@@ -276,8 +279,160 @@ Figure 5.3: Customer to customer network for Chinook based on customers sharing 
 }
 ```
 -->
-
 </div>
+<div id="connecting-customers-through-common-purchases" class="section level3" number="5.1.3">
+<h3>
+<span class="header-section-number">5.1.3</span> Connecting customers through common purchases<a class="anchor" aria-label="anchor" href="#connecting-customers-through-common-purchases"><i class="fas fa-link"></i></a>
+</h3>
+<p>To illustrate a further layer of complexity in reshaping data for use in graphs, let’s imagine that we want to connect customers on the basis of them purchasing common products. We may wish to set some parameters to this relationship - for example a connection might be based on a minimum number of common products purchased, to give us flexibility around the definition of connection.</p>
+<p>To do this we will need to use three tables - <code>chinook_customers</code>, <code>chinook_invoices</code> and <code>chinook_items</code>. To associate a given customer with a purchased item, we will need to join all three of these tables together. Let’s take a quick look at the latter two.</p>
+<div class="sourceCode" id="cb230"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">chinook_invoices</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
+<pre><code>##   InvoiceId CustomerId
+## 1         1          2
+## 2         2          4
+## 3         3          8</code></pre>
+<div class="sourceCode" id="cb232"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">chinook_items</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
+<pre><code>##   InvoiceId TrackId
+## 1         1       2
+## 2         1       4
+## 3         2       6</code></pre>
+<p>We can regard the <code>TrackId</code> as an item, and using a couple of joins we can quickly match customers with items. It is possible that customers may have purchased the same item numerous times, but we are not interested in that for this work and so we just need the distinct customer and track pairings.</p>
+<div class="sourceCode" id="cb234"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">cust_item</span> <span class="op">&lt;-</span> <span class="va">chinook_customers</span> |&gt; 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">inner_join</a></span><span class="op">(</span><span class="va">chinook_invoices</span><span class="op">)</span> |&gt; 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">inner_join</a></span><span class="op">(</span><span class="va">chinook_items</span><span class="op">)</span> |&gt; 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>CustName <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">FirstName</span>, <span class="va">LastName</span><span class="op">)</span><span class="op">)</span> |&gt; 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">CustName</span>, <span class="va">TrackId</span><span class="op">)</span> |&gt; 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span><span class="op">(</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">cust_item</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
+<pre><code>##         CustName TrackId
+## 1 Luís Gonçalves    3247
+## 2 Luís Gonçalves    3248
+## 3 Luís Gonçalves     447</code></pre>
+<p>Similar to our previous example, we can now use this to create an undirected network with two vertex entities: customer and item.</p>
+<div class="sourceCode" id="cb236"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># initiate graph object</span>
+<span class="va">customer_item_network</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>
+  d <span class="op">=</span> <span class="va">cust_item</span>,
+  directed <span class="op">=</span> <span class="cn">FALSE</span>
+<span class="op">)</span>
+
+<span class="co"># create vertex type</span>
+<span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">customer_item_network</span><span class="op">)</span><span class="op">$</span><span class="va">Type</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">customer_item_network</span><span class="op">)</span><span class="op">$</span><span class="va">name</span> <span class="op">%in%</span> <span class="va">cust_item</span><span class="op">$</span><span class="va">TrackId</span>,
+  <span class="st">"Item"</span>,
+  <span class="st">"Customer"</span>
+<span class="op">)</span></code></pre></div>
+<p>This is a big network, let’s visualize it simply, as in Figure <a href="restructuring-data.html#fig:cust-item-viz">5.4</a>.</p>
+<div class="sourceCode" id="cb237"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://ggraph.data-imaginist.com/reference/ggraph.html">ggraph</a></span><span class="op">(</span><span class="va">customer_item_network</span>, layout <span class="op">=</span> <span class="st">"fr"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_edge_link.html">geom_edge_link</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"grey"</span>, alpha <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_point.html">geom_node_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="va">Type</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:cust-item-viz"></span>
+<img src="_main_files/figure-html/cust-item-viz-1.png" alt="Network connecting customers via items purchased" width="672"><p class="caption">
+Figure 5.4: Network connecting customers via items purchased
+</p>
+</div>
+<p>We can see from looking at this graph that there are a large number of items that only one customer has purchased. Therefore the items themselves seem to be extraneous information for this particular use case. If we are not interested in the items themselves, we can instead creating the connections between customer directly. In a similar way to the previous problem, we can join the <code>cust_item</code> table on itself to connect customers based on common item purchases, and we should remove links between the same customer.</p>
+<div class="sourceCode" id="cb238"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">cust_cust_itemjoin</span> <span class="op">&lt;-</span> <span class="va">cust_item</span> |&gt; 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">inner_join</a></span><span class="op">(</span><span class="va">cust_item</span>, by <span class="op">=</span> <span class="st">"TrackId"</span><span class="op">)</span> |&gt; 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span>CustName1 <span class="op">=</span> <span class="va">CustName.x</span>, CustName2 <span class="op">=</span> <span class="va">CustName.y</span>, <span class="va">TrackId</span><span class="op">)</span> |&gt; 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">CustName1</span> <span class="op">!=</span> <span class="va">CustName2</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">cust_cust_itemjoin</span><span class="op">)</span></code></pre></div>
+<pre><code>##        CustName1          CustName2 TrackId
+## 1 Luís Gonçalves     Edward Francis     449
+## 2 Luís Gonçalves Richard Cunningham    1157
+## 3 Luís Gonçalves Richard Cunningham    1169
+## 4 Luís Gonçalves      Astrid Gruber    2991
+## 5 Luís Gonçalves         Emma Jones     280
+## 6 Luís Gonçalves         Emma Jones     298</code></pre>
+<p>The issue with this data set is that it will count every instance of a common item purchase twicw, with the customers in opposite orders, and this is double counting. So we need to group the pairs of customers irrelevant of their order and ensure we don’t double up on items.</p>
+<div class="sourceCode" id="cb240"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">cust_item_network</span> <span class="op">&lt;-</span> <span class="va">cust_cust_itemjoin</span> |&gt; 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span>Cust1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">pmin</a></span><span class="op">(</span><span class="va">CustName1</span>, <span class="va">CustName2</span><span class="op">)</span>, Cust2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">pmax</a></span><span class="op">(</span><span class="va">CustName1</span>, <span class="va">CustName2</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>TrackId <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">TrackId</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">'drop'</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">cust_item_network</span><span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 3
+##   Cust1          Cust2           TrackId
+##   &lt;chr&gt;          &lt;chr&gt;             &lt;int&gt;
+## 1 Aaron Mitchell Alexandre Rocha    2054
+## 2 Aaron Mitchell Bjørn Hansen       1626
+## 3 Aaron Mitchell Enrique Muñoz      2027
+## 4 Aaron Mitchell Hugh O'Reilly      2018
+## 5 Aaron Mitchell Niklas Schröder     857
+## 6 Aaron Mitchell Phil Hughes        1822</code></pre>
+<p>If that worked we should see that the table <code>cust_cust_itemjoin</code> has twice as many rows as <code>cust_item_network</code>.</p>
+<div class="sourceCode" id="cb242"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">cust_cust_itemjoin</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">cust_item_network</span><span class="op">)</span></code></pre></div>
+<pre><code>## [1] 2</code></pre>
+<p>This looks good. So we now can count up how many common items each pair of customers purchased.</p>
+<div class="sourceCode" id="cb244"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">cust_item_network</span> <span class="op">&lt;-</span> <span class="va">cust_item_network</span> |&gt; 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">Cust1</span>, <span class="va">Cust2</span>, name <span class="op">=</span> <span class="st">"Items"</span><span class="op">)</span> 
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">cust_item_network</span><span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 3
+##   Cust1          Cust2           Items
+##   &lt;chr&gt;          &lt;chr&gt;           &lt;int&gt;
+## 1 Aaron Mitchell Alexandre Rocha     1
+## 2 Aaron Mitchell Bjørn Hansen        1
+## 3 Aaron Mitchell Enrique Muñoz       1
+## 4 Aaron Mitchell Hugh O'Reilly       1
+## 5 Aaron Mitchell Niklas Schröder     1
+## 6 Aaron Mitchell Phil Hughes         1</code></pre>
+<p>We are ready to construct our graph, with <code>Items</code> as an edge property. We can visualize it with an edge color code indicating how many common items were purchased, as in Figure <a href="restructuring-data.html#fig:cust-items-coded">5.5</a>.</p>
+<div class="sourceCode" id="cb246"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># create undirected graph</span>
+<span class="va">custtocust_network</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>
+  d <span class="op">=</span> <span class="va">cust_item_network</span>,
+  directed <span class="op">=</span> <span class="cn">FALSE</span>
+<span class="op">)</span>
+
+<span class="co"># visualize with edges color coded by no of items</span>
+<span class="fu"><a href="https://ggraph.data-imaginist.com/reference/ggraph.html">ggraph</a></span><span class="op">(</span><span class="va">custtocust_network</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_edge_link.html">geom_edge_link</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="va">Items</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_point.html">geom_node_point</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"lightblue"</span>, size <span class="op">=</span> <span class="fl">6</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:cust-items-coded"></span>
+<img src="_main_files/figure-html/cust-items-coded-1.png" alt="Chinook customer to customer network based on common item purchases" width="672"><p class="caption">
+Figure 5.5: Chinook customer to customer network based on common item purchases
+</p>
+</div>
+<p>If we wish, we can restrict the definition of connection. For example, we may define it as ‘purchased at least two items in common,’ as in Figure <a href="restructuring-data.html#fig:cust-item-two">5.6</a>. We can use the <code><a href="https://rdrr.io/pkg/igraph/man/subgraph.html">subgraph()</a></code> function in <code>igraph</code> for this, and the result reveal a bipartite graph that looks quite symmetrical, indicating that there appear to be two independent groups of customers with who have some overlap purchasing behavior.</p>
+<div class="sourceCode" id="cb247"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># select edges that have Item value of at least 2</span>
+<span class="va">edges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/E.html">E</a></span><span class="op">(</span><span class="va">custtocust_network</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/E.html">E</a></span><span class="op">(</span><span class="va">custtocust_network</span><span class="op">)</span><span class="op">$</span><span class="va">Items</span> <span class="op">&gt;=</span> <span class="fl">2</span><span class="op">]</span>
+
+<span class="co"># create subgraph using these edges</span>
+<span class="va">two_item_graph</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/subgraph.html">subgraph.edges</a></span><span class="op">(</span><span class="va">custtocust_network</span>, eids <span class="op">=</span> <span class="va">edges</span><span class="op">)</span>
+
+<span class="co"># visualise</span>
+<span class="fu"><a href="https://ggraph.data-imaginist.com/reference/ggraph.html">ggraph</a></span><span class="op">(</span><span class="va">two_item_graph</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_edge_link.html">geom_edge_link</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"grey"</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_point.html">geom_node_point</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"lightblue"</span>, size <span class="op">=</span> <span class="fl">6</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:cust-item-two"></span>
+<img src="_main_files/figure-html/cust-item-two-1.png" alt="Chinook customer to customer network based at least two common items purchased" width="672"><p class="caption">
+Figure 5.6: Chinook customer to customer network based at least two common items purchased
+</p>
+</div>
+</div>
+</div>
+<div id="transforming-data-from-documents-for-use-in-graphs" class="section level2" number="5.2">
+<h2>
+<span class="header-section-number">5.2</span> Transforming data from documents for use in graphs<a class="anchor" aria-label="anchor" href="#transforming-data-from-documents-for-use-in-graphs"><i class="fas fa-link"></i></a>
+</h2>
+
 </div>
 </div>
   <div class="chapter-nav">
@@ -291,8 +446,10 @@ Figure 5.3: Customer to customer network for Chinook based on customers sharing 
 <a class="nav-link" href="#transforming-data-in-rectangular-tables-for-use-in-graphs"><span class="header-section-number">5.1</span> Transforming data in rectangular tables for use in graphs</a><ul class="nav navbar-nav">
 <li><a class="nav-link" href="#creating-a-simple-graph-of-the-chinook-management-hierarchy"><span class="header-section-number">5.1.1</span> Creating a simple graph of the Chinook management hierarchy</a></li>
 <li><a class="nav-link" href="#connecting-customers-through-sales-reps"><span class="header-section-number">5.1.2</span> Connecting customers through sales reps</a></li>
+<li><a class="nav-link" href="#connecting-customers-through-common-purchases"><span class="header-section-number">5.1.3</span> Connecting customers through common purchases</a></li>
 </ul>
 </li>
+<li><a class="nav-link" href="#transforming-data-from-documents-for-use-in-graphs"><span class="header-section-number">5.2</span> Transforming data from documents for use in graphs</a></li>
 </ul>
 
       <div class="book-extra">

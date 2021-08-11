@@ -26,6 +26,9 @@ chinook_employees <- read.csv("https://ona-book.org/data/chinook_employees.csv")
 chinook_customers <- read.csv("https://ona-book.org/data/chinook_customers.csv")
 chinook_invoices <- read.csv("https://ona-book.org/data/chinook_invoices.csv")
 chinook_items <- read.csv("https://ona-book.org/data/chinook_items.csv")
+
+# set a seed for later visualizations
+set.seed(123)
 ```
 
 ### Creating a simple graph of the Chinook management hierarchy
@@ -179,3 +182,130 @@ ggraph(customer_network) +
 }
 ```
 `r if (knitr::is_html_output()) '-->'`
+
+### Connecting customers through common purchases
+
+To illustrate a further layer of complexity in reshaping data for use in graphs, let's imagine that we want to connect customers on the basis of them purchasing common products.  We may wish to set some parameters to this relationship - for example a connection might be based on a minimum number of common products purchased, to give us flexibility around the definition of connection.
+
+To do this we will need to use three tables - `chinook_customers`, `chinook_invoices` and `chinook_items`.  To associate a given customer with a purchased item, we will need to join all three of these tables together.  Let's take a quick look at the latter two.
+
+```{r}
+head(chinook_invoices, 3)
+```
+
+```{r}
+head(chinook_items, 3)
+```
+
+We can regard the `TrackId` as an item, and using a couple of joins we can quickly match customers with items.  It is possible that customers may have purchased the same item numerous times, but we are not interested in that for this work and so we just need the distinct customer and track pairings.
+
+```{r}
+cust_item <- chinook_customers |> 
+  dplyr::inner_join(chinook_invoices) |> 
+  dplyr::inner_join(chinook_items) |> 
+  dplyr::mutate(CustName = paste(FirstName, LastName)) |> 
+  dplyr::select(CustName, TrackId) |> 
+  dplyr::distinct()
+
+head(cust_item, 3)
+```
+
+Similar to our previous example, we can now use this to create an undirected network with two vertex entities: customer and item.
+
+```{r}
+# initiate graph object
+customer_item_network <- igraph::graph_from_data_frame(
+  d = cust_item,
+  directed = FALSE
+)
+
+# create vertex type
+V(customer_item_network)$Type <- ifelse(
+  V(customer_item_network)$name %in% cust_item$TrackId,
+  "Item",
+  "Customer"
+)
+
+```
+
+This is a big network, let's visualize it simply, as in Figure \@ref(fig:cust-item-viz).
+
+```{r cust-item-viz, fig.align = "center", fig.cap = "Network connecting customers via items purchased"}
+ggraph(customer_item_network, layout = "fr") +
+  geom_edge_link(color = "grey", alpha = 0.3) +
+  geom_node_point(aes(color = Type), size = 2) +
+  theme_void()
+```
+
+
+We can see from looking at this graph that there are a large number of items that only one customer has purchased.  Therefore the items themselves seem to be extraneous information for this particular use case.  If we are not interested in the items themselves, we can instead creating the connections between customer directly.  In a similar way to the previous problem, we can join the `cust_item` table on itself to connect customers based on common item purchases, and we should remove links between the same customer.
+
+```{r}
+cust_cust_itemjoin <- cust_item |> 
+  dplyr::inner_join(cust_item, by = "TrackId") |> 
+  dplyr::select(CustName1 = CustName.x, CustName2 = CustName.y, TrackId) |> 
+  dplyr::filter(CustName1 != CustName2)
+
+head(cust_cust_itemjoin)
+```
+
+The issue with this data set is that it will count every instance of a common item purchase twicw, with the customers in opposite orders, and this is double counting.  So we need to group the pairs of customers irrelevant of their order and ensure we don't double up on items.
+
+```{r}
+cust_item_network <- cust_cust_itemjoin |> 
+  dplyr::group_by(Cust1 = pmin(CustName1, CustName2), Cust2 = pmax(CustName1, CustName2)) %>%
+  summarise(TrackId = unique(TrackId), .groups = 'drop')
+
+head(cust_item_network)
+```
+
+If that worked we should see that the table `cust_cust_itemjoin` has twice as many rows as `cust_item_network`.  
+
+```{r}
+nrow(cust_cust_itemjoin)/nrow(cust_item_network)
+```
+
+This looks good.  So we now can count up how many common items each pair of customers purchased.
+
+```{r}
+cust_item_network <- cust_item_network |> 
+  dplyr::count(Cust1, Cust2, name = "Items") 
+
+head(cust_item_network)
+
+```
+
+We are ready to construct our graph, with `Items` as an edge property.  We can visualize it with an edge color code indicating how many common items were purchased, as in Figure \@ref(fig:cust-items-coded).
+
+```{r cust-items-coded, fig.align = "center", fig.cap = "Chinook customer to customer network based on common item purchases"}
+# create undirected graph
+custtocust_network <- igraph::graph_from_data_frame(
+  d = cust_item_network,
+  directed = FALSE
+)
+
+# visualize with edges color coded by no of items
+ggraph(custtocust_network) +
+  geom_edge_link(aes(color = Items), alpha = 0.5) +
+  geom_node_point(color = "lightblue", size = 6) +
+  theme_void()
+
+```
+
+If we wish, we can restrict the definition of connection.  For example, we may define it as 'purchased at least two items in common', as in Figure \@ref(fig:cust-item-two).  We can use the `subgraph()` function in `igraph` for this, and the result reveal a bipartite graph that looks quite symmetrical, indicating that there appear to be two independent groups of customers with who have some overlap purchasing behavior.
+
+```{r cust-item-two, fig.align = "center", fig.cap = "Chinook customer to customer network based at least two common items purchased"}
+# select edges that have Item value of at least 2
+edges <- E(custtocust_network)[E(custtocust_network)$Items >= 2]
+
+# create subgraph using these edges
+two_item_graph <- igraph::subgraph.edges(custtocust_network, eids = edges)
+
+# visualise
+ggraph(two_item_graph) +
+  geom_edge_link(color = "grey", alpha = 0.5) +
+  geom_node_point(color = "lightblue", size = 6) +
+  theme_void()
+```
+
+## Transforming data from documents for use in graphs
