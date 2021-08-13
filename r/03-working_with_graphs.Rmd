@@ -1003,7 +1003,7 @@ nx.set_edge_attributes(G = transfer, values = transfer_attributes)
 
 ```
 
-While this may look tedious and manual, as we move into adding common properties like node centrality or edge weight to graphs, we will find these to be easy to set because of built-in functions that automatically index their output by the vertices or edges.  For example, we have already seen in Section \@ref(python-graph-from-adjacency) that the function `from_numpy_matrix()` automatically sets a weight according to the number of edges when we set the argument `parallel_edges` to `False`.
+While this may look tedious and manual, as we move into adding common properties like node centrality or edge weight to graphs, we will find these to be easy to set because of built-in functions that automatically index their output by the vertices or edges.  For example, we have already seen in Section \@ref(python-graph-from-adjacency) that the function `from_numpy_matrix()` automatically sets a weight according to the number of edges when we set the argument `parallel_edges` to `False`.  Also, if you have edge properties as columns in your Pandas edgelist, you can automatically import them into your graph by setting `edge_attr = True` in the `from_pandas_edgelist()` function in `networkx`
 
 `r if (knitr::is_latex_output()) '<!--'`
 :::thinkahead

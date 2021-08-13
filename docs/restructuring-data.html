@@ -138,9 +138,9 @@
 <span class="op">(</span><span class="va">orgchart</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>
   d <span class="op">=</span> <span class="va">orgchart_edgelist</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH c0e7d0a DN-- 8 7 -- 
+<pre><code>## IGRAPH 9e7b23a DN-- 8 7 -- 
 ## + attr: name (v/c)
-## + edges from c0e7d0a (vertex names):
+## + edges from 9e7b23a (vertex names):
 ## [1] Andrew -&gt;Nancy    Andrew -&gt;Michael  Nancy  -&gt;Jane     Nancy  -&gt;Margaret Nancy  -&gt;Steve    Michael-&gt;Robert  
 ## [7] Michael-&gt;Laura</code></pre>
 <p>We now have a directed graph with named vertices, so this should be easy to plot. Let’s use <code>ggplot</code> with a dendrogram (tree) layout, as in Figure <a href="restructuring-data.html#fig:chinook-pretty">5.1</a>.</p>
@@ -280,9 +280,9 @@ Figure 5.3: Customer to customer network for Chinook based on customers sharing 
 ```
 -->
 </div>
-<div id="connecting-customers-through-common-purchases" class="section level3" number="5.1.3">
+<div id="common-purchases" class="section level3" number="5.1.3">
 <h3>
-<span class="header-section-number">5.1.3</span> Connecting customers through common purchases<a class="anchor" aria-label="anchor" href="#connecting-customers-through-common-purchases"><i class="fas fa-link"></i></a>
+<span class="header-section-number">5.1.3</span> Connecting customers through common purchases<a class="anchor" aria-label="anchor" href="#common-purchases"><i class="fas fa-link"></i></a>
 </h3>
 <p>To illustrate a further layer of complexity in reshaping data for use in graphs, let’s imagine that we want to connect customers on the basis of them purchasing common products. We may wish to set some parameters to this relationship - for example a connection might be based on a minimum number of common products purchased, to give us flexibility around the definition of connection.</p>
 <p>To do this we will need to use three tables - <code>chinook_customers</code>, <code>chinook_invoices</code> and <code>chinook_items</code>. To associate a given customer with a purchased item, we will need to join all three of these tables together. Let’s take a quick look at the latter two.</p>
@@ -427,6 +427,132 @@ Figure 5.6: Chinook customer to customer network based at least two common items
 </p>
 </div>
 </div>
+<div id="approaches-using-python" class="section level3" number="5.1.4">
+<h3>
+<span class="header-section-number">5.1.4</span> Approaches using Python<a class="anchor" aria-label="anchor" href="#approaches-using-python"><i class="fas fa-link"></i></a>
+</h3>
+<p>To illustrate similar approaches in Python, we will redo the work in Section <a href="restructuring-data.html#common-purchases">5.1.3</a> using Python. First we will download the various datasets.</p>
+<div class="sourceCode" id="cb248"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb248-1"><a href="restructuring-data.html#cb248-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb248-2"><a href="restructuring-data.html#cb248-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb248-3"><a href="restructuring-data.html#cb248-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb248-4"><a href="restructuring-data.html#cb248-4" aria-hidden="true" tabindex="-1"></a><span class="co"># download chinook database tables</span></span>
+<span id="cb248-5"><a href="restructuring-data.html#cb248-5" aria-hidden="true" tabindex="-1"></a>chinook_customers <span class="op">=</span> pd.read_csv(<span class="st">"https://ona-book.org/data/chinook_customers.csv"</span>)</span>
+<span id="cb248-6"><a href="restructuring-data.html#cb248-6" aria-hidden="true" tabindex="-1"></a>chinook_invoices <span class="op">=</span> pd.read_csv(<span class="st">"https://ona-book.org/data/chinook_invoices.csv"</span>)</span>
+<span id="cb248-7"><a href="restructuring-data.html#cb248-7" aria-hidden="true" tabindex="-1"></a>chinook_items <span class="op">=</span> pd.read_csv(<span class="st">"https://ona-book.org/data/chinook_items.csv"</span>)</span>
+<span id="cb248-8"><a href="restructuring-data.html#cb248-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb248-9"><a href="restructuring-data.html#cb248-9" aria-hidden="true" tabindex="-1"></a><span class="co"># set a seed for later visualizations</span></span>
+<span id="cb248-10"><a href="restructuring-data.html#cb248-10" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">123</span>)</span></code></pre></div>
+<p>Now we join the three tables together, create the FullName variable and ensure that we don’t have any duplicate relationships:</p>
+<div class="sourceCode" id="cb249"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb249-1"><a href="restructuring-data.html#cb249-1" aria-hidden="true" tabindex="-1"></a>joined_tables <span class="op">=</span> pd.merge(</span>
+<span id="cb249-2"><a href="restructuring-data.html#cb249-2" aria-hidden="true" tabindex="-1"></a>  chinook_customers,</span>
+<span id="cb249-3"><a href="restructuring-data.html#cb249-3" aria-hidden="true" tabindex="-1"></a>  chinook_invoices</span>
+<span id="cb249-4"><a href="restructuring-data.html#cb249-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb249-5"><a href="restructuring-data.html#cb249-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb249-6"><a href="restructuring-data.html#cb249-6" aria-hidden="true" tabindex="-1"></a>joined_tables <span class="op">=</span> pd.merge(joined_tables, chinook_items)</span>
+<span id="cb249-7"><a href="restructuring-data.html#cb249-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb249-8"><a href="restructuring-data.html#cb249-8" aria-hidden="true" tabindex="-1"></a>joined_tables[<span class="st">'FullName'</span>] <span class="op">=</span> joined_tables[<span class="st">'FirstName'</span>] <span class="op">+</span> <span class="st">' '</span> <span class="op">+</span> <span class="op">\</span></span>
+<span id="cb249-9"><a href="restructuring-data.html#cb249-9" aria-hidden="true" tabindex="-1"></a>joined_tables[<span class="st">'LastName'</span>]</span>
+<span id="cb249-10"><a href="restructuring-data.html#cb249-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb249-11"><a href="restructuring-data.html#cb249-11" aria-hidden="true" tabindex="-1"></a>cust_item_table <span class="op">=</span> joined_tables[[<span class="st">'FullName'</span>, <span class="st">'TrackId'</span>]].drop_duplicates()</span>
+<span id="cb249-12"><a href="restructuring-data.html#cb249-12" aria-hidden="true" tabindex="-1"></a>cust_item_table.head()</span></code></pre></div>
+<pre><code>##          FullName  TrackId
+## 0  Luís Gonçalves     3247
+## 1  Luís Gonçalves     3248
+## 2  Luís Gonçalves      447
+## 3  Luís Gonçalves      449
+## 4  Luís Gonçalves      451</code></pre>
+<p>Now we can create a graph of connections between customers and items and visualize it as in Figure <a href="restructuring-data.html#fig:custitempy">5.7</a>.</p>
+<div class="sourceCode" id="cb251"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb251-1"><a href="restructuring-data.html#cb251-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
+<span id="cb251-2"><a href="restructuring-data.html#cb251-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
+<span id="cb251-3"><a href="restructuring-data.html#cb251-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb251-4"><a href="restructuring-data.html#cb251-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create networkx object</span></span>
+<span id="cb251-5"><a href="restructuring-data.html#cb251-5" aria-hidden="true" tabindex="-1"></a>cust_item_network <span class="op">=</span> nx.from_pandas_edgelist(cust_item_table,</span>
+<span id="cb251-6"><a href="restructuring-data.html#cb251-6" aria-hidden="true" tabindex="-1"></a>source <span class="op">=</span> <span class="st">"FullName"</span>, target <span class="op">=</span> <span class="st">"TrackId"</span>)</span>
+<span id="cb251-7"><a href="restructuring-data.html#cb251-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb251-8"><a href="restructuring-data.html#cb251-8" aria-hidden="true" tabindex="-1"></a><span class="co"># color items differently to customers</span></span>
+<span id="cb251-9"><a href="restructuring-data.html#cb251-9" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> [<span class="st">"red"</span> <span class="cf">if</span> i <span class="kw">in</span> cust_item_table[<span class="st">'FullName'</span>].values <span class="cf">else</span> <span class="st">"green"</span></span>
+<span id="cb251-10"><a href="restructuring-data.html#cb251-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> cust_item_network.nodes]</span>
+<span id="cb251-11"><a href="restructuring-data.html#cb251-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb251-12"><a href="restructuring-data.html#cb251-12" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize</span></span>
+<span id="cb251-13"><a href="restructuring-data.html#cb251-13" aria-hidden="true" tabindex="-1"></a>nx.draw_networkx(cust_item_network, node_color <span class="op">=</span> colors, node_size <span class="op">=</span> <span class="dv">2</span>,</span>
+<span id="cb251-14"><a href="restructuring-data.html#cb251-14" aria-hidden="true" tabindex="-1"></a>edge_color <span class="op">=</span> <span class="st">"grey"</span>, with_labels <span class="op">=</span> <span class="va">False</span>)</span>
+<span id="cb251-15"><a href="restructuring-data.html#cb251-15" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:custitempy"></span>
+<img src="_main_files/figure-html/unnamed-chunk-60-1.png" alt="Visualization of the Chinook customer-to-item network" width="672"><p class="caption">
+Figure 5.7: Visualization of the Chinook customer-to-item network
+</p>
+</div>
+<p>Now to create the customer-to-customer network based on common item purchases, we do further joins on the data set, and remove connections between the same customer.</p>
+<div class="sourceCode" id="cb252"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb252-1"><a href="restructuring-data.html#cb252-1" aria-hidden="true" tabindex="-1"></a>cust_cust_table <span class="op">=</span> pd.merge(cust_item_table, cust_item_table,</span>
+<span id="cb252-2"><a href="restructuring-data.html#cb252-2" aria-hidden="true" tabindex="-1"></a>on <span class="op">=</span> <span class="st">"TrackId"</span>)</span>
+<span id="cb252-3"><a href="restructuring-data.html#cb252-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb252-4"><a href="restructuring-data.html#cb252-4" aria-hidden="true" tabindex="-1"></a>cust_cust_table.rename(</span>
+<span id="cb252-5"><a href="restructuring-data.html#cb252-5" aria-hidden="true" tabindex="-1"></a>  columns<span class="op">=</span>{<span class="st">'FullName_x'</span> :<span class="st">'CustName1'</span>, <span class="st">'FullName_y'</span> :<span class="st">'CustName2'</span>},</span>
+<span id="cb252-6"><a href="restructuring-data.html#cb252-6" aria-hidden="true" tabindex="-1"></a>  inplace<span class="op">=</span><span class="va">True</span></span>
+<span id="cb252-7"><a href="restructuring-data.html#cb252-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb252-8"><a href="restructuring-data.html#cb252-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb252-9"><a href="restructuring-data.html#cb252-9" aria-hidden="true" tabindex="-1"></a>cust_cust_table <span class="op">=</span> cust_cust_table[</span>
+<span id="cb252-10"><a href="restructuring-data.html#cb252-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">~</span>(cust_cust_table[<span class="st">'CustName1'</span>] <span class="op">==</span> cust_cust_table[<span class="st">'CustName2'</span>])</span>
+<span id="cb252-11"><a href="restructuring-data.html#cb252-11" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb252-12"><a href="restructuring-data.html#cb252-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb252-13"><a href="restructuring-data.html#cb252-13" aria-hidden="true" tabindex="-1"></a>cust_cust_table.head()</span></code></pre></div>
+<pre><code>##              CustName1  TrackId           CustName2
+## 4       Luís Gonçalves      449      Edward Francis
+## 5       Edward Francis      449      Luís Gonçalves
+## 11      Luís Gonçalves     1157  Richard Cunningham
+## 12  Richard Cunningham     1157      Luís Gonçalves
+## 17      Luís Gonçalves     1169  Richard Cunningham</code></pre>
+<p>Now we can drop duplicates based on the <code>TrackId</code>, count the items by pair of customers, and we will have our final edgelist:</p>
+<div class="sourceCode" id="cb254"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb254-1"><a href="restructuring-data.html#cb254-1" aria-hidden="true" tabindex="-1"></a>cust_cust_table <span class="op">=</span> cust_cust_table.drop_duplicates(<span class="st">'TrackId'</span>)</span>
+<span id="cb254-2"><a href="restructuring-data.html#cb254-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb254-3"><a href="restructuring-data.html#cb254-3" aria-hidden="true" tabindex="-1"></a>cust_cust_table <span class="op">=</span> cust_cust_table.groupby([<span class="st">'CustName1'</span>, <span class="st">'CustName2'</span>], </span>
+<span id="cb254-4"><a href="restructuring-data.html#cb254-4" aria-hidden="true" tabindex="-1"></a>as_index <span class="op">=</span> <span class="va">False</span>).TrackId.nunique()</span>
+<span id="cb254-5"><a href="restructuring-data.html#cb254-5" aria-hidden="true" tabindex="-1"></a>cust_cust_table.rename(columns <span class="op">=</span> {<span class="st">'TrackId'</span>: <span class="st">'Items'</span>}, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb254-6"><a href="restructuring-data.html#cb254-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb254-7"><a href="restructuring-data.html#cb254-7" aria-hidden="true" tabindex="-1"></a>cust_cust_table.head()</span></code></pre></div>
+<pre><code>##          CustName1        CustName2  Items
+## 0   Aaron Mitchell    Enrique Muñoz      1
+## 1   Aaron Mitchell    Hugh O'Reilly      1
+## 2   Aaron Mitchell  Niklas Schröder      1
+## 3   Aaron Mitchell      Phil Hughes      1
+## 4  Alexandre Rocha   Aaron Mitchell      1</code></pre>
+<p>Now we are ready to create and visualize our customer-to-customer network, as in Figure <a href="restructuring-data.html#fig:custcustpy">5.8</a>.</p>
+<div class="sourceCode" id="cb256"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb256-1"><a href="restructuring-data.html#cb256-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create networkx object</span></span>
+<span id="cb256-2"><a href="restructuring-data.html#cb256-2" aria-hidden="true" tabindex="-1"></a>cust_cust_network <span class="op">=</span> nx.from_pandas_edgelist(cust_cust_table,</span>
+<span id="cb256-3"><a href="restructuring-data.html#cb256-3" aria-hidden="true" tabindex="-1"></a>source <span class="op">=</span> <span class="st">"CustName1"</span>, target <span class="op">=</span> <span class="st">"CustName2"</span>, edge_attr <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb256-4"><a href="restructuring-data.html#cb256-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb256-5"><a href="restructuring-data.html#cb256-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb256-6"><a href="restructuring-data.html#cb256-6" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize</span></span>
+<span id="cb256-7"><a href="restructuring-data.html#cb256-7" aria-hidden="true" tabindex="-1"></a>nx.draw_networkx(cust_cust_network, node_color <span class="op">=</span> <span class="st">"lightblue"</span>,</span>
+<span id="cb256-8"><a href="restructuring-data.html#cb256-8" aria-hidden="true" tabindex="-1"></a>edge_color <span class="op">=</span> <span class="st">"grey"</span>, with_labels <span class="op">=</span> <span class="va">False</span>)</span>
+<span id="cb256-9"><a href="restructuring-data.html#cb256-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:custcustpy"></span>
+<img src="_main_files/figure-html/unnamed-chunk-60-3.png" alt="Visualization of the Chinook customer-to-customer network based on common item purchases" width="672"><p class="caption">
+Figure 5.8: Visualization of the Chinook customer-to-customer network based on common item purchases
+</p>
+</div>
+<p>And if we wish to restrict connections to two or more common item purchases, we can create a subgraph based on the number of items, as in Figure <a href="restructuring-data.html#fig:twoitempy">5.9</a>.</p>
+<div class="sourceCode" id="cb257"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb257-1"><a href="restructuring-data.html#cb257-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get edges with items &gt;= 2</span></span>
+<span id="cb257-2"><a href="restructuring-data.html#cb257-2" aria-hidden="true" tabindex="-1"></a>twoitem_edges <span class="op">=</span> [i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">list</span>(cust_cust_network.edges) <span class="cf">if</span> </span>
+<span id="cb257-3"><a href="restructuring-data.html#cb257-3" aria-hidden="true" tabindex="-1"></a>cust_cust_network.edges[i][<span class="st">'Items'</span>] <span class="op">&gt;=</span> <span class="dv">2</span>]</span>
+<span id="cb257-4"><a href="restructuring-data.html#cb257-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb257-5"><a href="restructuring-data.html#cb257-5" aria-hidden="true" tabindex="-1"></a><span class="co"># create subgraph</span></span>
+<span id="cb257-6"><a href="restructuring-data.html#cb257-6" aria-hidden="true" tabindex="-1"></a>twoitem_network <span class="op">=</span> cust_cust_network.edge_subgraph(twoitem_edges) </span>
+<span id="cb257-7"><a href="restructuring-data.html#cb257-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb257-8"><a href="restructuring-data.html#cb257-8" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize in K-K layout</span></span>
+<span id="cb257-9"><a href="restructuring-data.html#cb257-9" aria-hidden="true" tabindex="-1"></a>layout <span class="op">=</span> nx.kamada_kawai_layout(twoitem_network)</span>
+<span id="cb257-10"><a href="restructuring-data.html#cb257-10" aria-hidden="true" tabindex="-1"></a>nx.draw_networkx(twoitem_network, node_color <span class="op">=</span> <span class="st">"lightblue"</span>,</span>
+<span id="cb257-11"><a href="restructuring-data.html#cb257-11" aria-hidden="true" tabindex="-1"></a>edge_color <span class="op">=</span> <span class="st">"grey"</span>, with_labels <span class="op">=</span> <span class="va">False</span>, pos <span class="op">=</span> layout)</span>
+<span id="cb257-12"><a href="restructuring-data.html#cb257-12" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:twoitempy"></span>
+<img src="_main_files/figure-html/unnamed-chunk-60-5.png" alt="Visualization of the Chinook customer-to-customer network based on at least two item purchases" width="672"><p class="caption">
+Figure 5.9: Visualization of the Chinook customer-to-customer network based on at least two item purchases
+</p>
+</div>
+</div>
 </div>
 <div id="transforming-data-from-documents-for-use-in-graphs" class="section level2" number="5.2">
 <h2>
@@ -446,7 +572,8 @@ Figure 5.6: Chinook customer to customer network based at least two common items
 <a class="nav-link" href="#transforming-data-in-rectangular-tables-for-use-in-graphs"><span class="header-section-number">5.1</span> Transforming data in rectangular tables for use in graphs</a><ul class="nav navbar-nav">
 <li><a class="nav-link" href="#creating-a-simple-graph-of-the-chinook-management-hierarchy"><span class="header-section-number">5.1.1</span> Creating a simple graph of the Chinook management hierarchy</a></li>
 <li><a class="nav-link" href="#connecting-customers-through-sales-reps"><span class="header-section-number">5.1.2</span> Connecting customers through sales reps</a></li>
-<li><a class="nav-link" href="#connecting-customers-through-common-purchases"><span class="header-section-number">5.1.3</span> Connecting customers through common purchases</a></li>
+<li><a class="nav-link" href="#common-purchases"><span class="header-section-number">5.1.3</span> Connecting customers through common purchases</a></li>
+<li><a class="nav-link" href="#approaches-using-python"><span class="header-section-number">5.1.4</span> Approaches using Python</a></li>
 </ul>
 </li>
 <li><a class="nav-link" href="#transforming-data-from-documents-for-use-in-graphs"><span class="header-section-number">5.2</span> Transforming data from documents for use in graphs</a></li>

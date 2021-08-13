@@ -183,7 +183,7 @@ ggraph(customer_network) +
 ```
 `r if (knitr::is_html_output()) '-->'`
 
-### Connecting customers through common purchases
+### Connecting customers through common purchases {#common-purchases}
 
 To illustrate a further layer of complexity in reshaping data for use in graphs, let's imagine that we want to connect customers on the basis of them purchasing common products.  We may wish to set some parameters to this relationship - for example a connection might be based on a minimum number of common products purchased, to give us flexibility around the definition of connection.
 
@@ -307,5 +307,122 @@ ggraph(two_item_graph) +
   geom_node_point(color = "lightblue", size = 6) +
   theme_void()
 ```
+
+### Approaches using Python
+
+To illustrate similar approaches in Python, we will redo the work in Section \@ref(common-purchases) using Python.  First we will download the various datasets.
+
+```{python}
+import pandas as pd
+import numpy as np
+
+# download chinook database tables
+chinook_customers = pd.read_csv("https://ona-book.org/data/chinook_customers.csv")
+chinook_invoices = pd.read_csv("https://ona-book.org/data/chinook_invoices.csv")
+chinook_items = pd.read_csv("https://ona-book.org/data/chinook_items.csv")
+
+# set a seed for later visualizations
+np.random.seed(123)
+```
+
+Now we join the three tables together, create the FullName variable and ensure that we don't have any duplicate relationships:
+
+```{python}
+joined_tables = pd.merge(
+  chinook_customers,
+  chinook_invoices
+)
+
+joined_tables = pd.merge(joined_tables, chinook_items)
+
+joined_tables['FullName'] = joined_tables['FirstName'] + ' ' + \
+joined_tables['LastName']
+
+cust_item_table = joined_tables[['FullName', 'TrackId']].drop_duplicates()
+cust_item_table.head()
+```
+
+Now we can create a graph of connections between customers and items and visualize it as in Figure \@ref(fig:custitempy).
+
+```{python custitempy, fig.align = "center", fig.cap = "Visualization of the Chinook customer-to-item network", out.width = if (knitr::is_latex_output()) {"90%"}, dev = "png", dev.args = list(type = "cairo-png")}
+import networkx as nx
+from matplotlib import pyplot as plt
+
+# create networkx object
+cust_item_network = nx.from_pandas_edgelist(cust_item_table,
+source = "FullName", target = "TrackId")
+
+# color items differently to customers
+colors = ["red" if i in cust_item_table['FullName'].values else "green"
+for i in cust_item_network.nodes]
+
+# visualize
+nx.draw_networkx(cust_item_network, node_color = colors, node_size = 2,
+edge_color = "grey", with_labels = False)
+plt.show()
+```
+
+Now to create the customer-to-customer network based on common item purchases, we do further joins on the data set, and remove connections between the same customer.
+
+```{python}
+cust_cust_table = pd.merge(cust_item_table, cust_item_table,
+on = "TrackId")
+
+cust_cust_table.rename(
+  columns={'FullName_x' :'CustName1', 'FullName_y' :'CustName2'},
+  inplace=True
+)
+
+cust_cust_table = cust_cust_table[
+  ~(cust_cust_table['CustName1'] == cust_cust_table['CustName2'])
+]
+
+cust_cust_table.head()
+```
+
+Now we can drop duplicates based on the `TrackId`, count the items by pair of customers, and we will have our final edgelist:
+
+```{python}
+cust_cust_table = cust_cust_table.drop_duplicates('TrackId')
+
+cust_cust_table = cust_cust_table.groupby(['CustName1', 'CustName2'], 
+as_index = False).TrackId.nunique()
+cust_cust_table.rename(columns = {'TrackId': 'Items'}, inplace = True)
+
+cust_cust_table.head()
+```
+
+Now we are ready to create and visualize our customer-to-customer network, as in Figure \@ref(fig:custcustpy).
+
+```{python custcustpy, fig.align = "center", fig.cap = "Visualization of the Chinook customer-to-customer network based on common item purchases", out.width = if (knitr::is_latex_output()) {"90%"}, dev = "png", dev.args = list(type = "cairo-png")}
+# create networkx object
+cust_cust_network = nx.from_pandas_edgelist(cust_cust_table,
+source = "CustName1", target = "CustName2", edge_attr = True)
+
+
+# visualize
+nx.draw_networkx(cust_cust_network, node_color = "lightblue",
+edge_color = "grey", with_labels = False)
+plt.show()
+
+```
+
+And if we wish to restrict connections to two or more common item purchases, we can create a subgraph based on the number of items, as in Figure \@ref(fig:twoitempy).
+
+```{python twoitempy,  fig.align = "center", fig.cap = "Visualization of the Chinook customer-to-customer network based on at least two item purchases", out.width = if (knitr::is_latex_output()) {"90%"}, dev = "png", dev.args = list(type = "cairo-png")}
+# get edges with items >= 2
+twoitem_edges = [i for i in list(cust_cust_network.edges) if 
+cust_cust_network.edges[i]['Items'] >= 2]
+
+# create subgraph
+twoitem_network = cust_cust_network.edge_subgraph(twoitem_edges) 
+
+# visualize in K-K layout
+layout = nx.kamada_kawai_layout(twoitem_network)
+nx.draw_networkx(twoitem_network, node_color = "lightblue",
+edge_color = "grey", with_labels = False, pos = layout)
+plt.show()
+```
+
 
 ## Transforming data from documents for use in graphs
