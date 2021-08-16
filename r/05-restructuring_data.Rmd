@@ -426,3 +426,218 @@ plt.show()
 
 
 ## Transforming data from documents for use in graphs
+
+In this example, we will look at how to extract information that sits in semi-structured documents and convert it to a graph-like shape to allow us to understand connections between actors or entities in those documents. Semi-structured documents are documents which have a certain expected format through which we can reliably identify important actors or entities.  These could be legal contracts, financial statements or other types of structured forms.  Through extracting entities from these documents, we can identify important relationships between them, such as co-publishing, financial transactions or contractual obligations.   
+
+To illustrate this we will show how to extract information from a TV script in a way where we can determine which characters have spoken in the same scene together, and then use this information to create a network of TV characters.  We will use an episode script from the hit TV comedy show *Friends*.  A full set of scripts from all episodes of *Friends* can be found online at `https://fangj.github.io/friends/`, and later in this book we will be working with a substantial network for characters from the entire series.  For this exercise, however, we will keep it simple and just focus on the character network from the first episode.  The script of the first episode can be found at `https://fangj.github.io/friends/season/0101.html`.
+
+### Scraping the character and scene data
+
+First we will look at how to obtain a list of numbered scenes and the characters in each scene, through 'scraping' these details from the online script.  To help us with this we will use the `rvest` R package, which is designed for scraping information from web pages.
+
+Let’s take a look at the web code for Season 1 Episode 1. You can do this by opening the script webpage in Google Chrome and then pressing CMD+Option+C (or Ctrl+Shift+C in Windows) to open the Elements Console where you can view the HTML code of the page side-by-side with the page itself.
+
+One of the things we can see immediately is that most of the words that precede a colon are of interest to us. In fact, most of them are character names that say something in a scene. We also see that lines that contain the string "Scene:" are pretty reliable indicators of scene boundaries.
+
+The first thing we probably want to do get this HTML code in a list or vector of nodes which represent the different pieces of formatting and text in the document. Since this will contain the separated lines spoken by each character, this will be really helpful for us to work from. So let's download the HTML code, break it into nodes so that we have a nice tidy vector of script content.
+
+```{r}
+library(rvest)
+
+url_string <- "https://fangj.github.io/friends/season/0101.html"
+
+nodes <- xml2::read_html(url_string) %>% 
+      xml2::as_list() %>% 
+      unlist()
+
+head(nodes)
+```
+
+This has generated a character vector that contains a lot of different split out parts of the script, but most importantly it contains the lines from the script, for example:
+
+```{r}
+nodes[16]
+```
+
+Now, to generate something useful for our task, we need to create a vector that contains the word 'New Scene' if the line represents the beginning of a scene, and the name of the character if the line represents something spoken by a character. This will be the best format for what we want to do.
+
+The first thing we will need to do is swap any text string containing "Scene:" to the string "New Scene". We can do this quite simply using an `ifelse()` on the nodes vector, where we use `grepl()` to identify which entries are in nodes that contain the string "Scene:".
+
+```{r}
+# swap lines containing the string 'Scene:' with 'New Scene' 
+nodes_newscene <- ifelse(grepl("Scene:", nodes), "New Scene", nodes)
+
+# check that there are at least a few 'New Scene' entries now
+sum(nodes_newscene == "New Scene")
+```
+
+That worked nicely. Now, you might also have noticed that for dialogue purposes, character names precede a colon at the beginning of a line. So that might be a nice way to extract the names of characters with speaking parts in a scene (although it might give us a few other things that have preceded colons in the script also, but we can deal with that later).
+
+So what we will do is use regular expression syntax (regex) to tell R that we are looking for anything at the beginning of a line preceding a colon. We will use a lookahead regex string as follows: `^[A-Za-z]+(?=:)`.
+
+Let’s look at that string and make sure we know what it means. The `^[A-Za-z]+` component means ‘find any sub-string of alphabetic text of any length at the beginning of a string’. The part in parentheses is known as a lookahead --- it means look ahead of that sub-string of text and find a colon as the next character. This is therefore instructing R to find any string of alphabetic text at the start of a line that precedes a colon and return it. If we use the R package `stringr` and its function `str_extract()` with this regex syntax, it will go through every entry of the `nodes` vector and transform it to just the first string of text found before a colon. If no such string is found it will return an NA value. This is great for us because we know that, for the purpose of dialogue, characters names are always at the start of nodes, so we certainly won’t miss any if we just take the first instance in each line. We should also, for safety, not mess with the scene breaks we have put into our vector.
+
+```{r}
+library(stringr)
+
+# outside of 'New Scene' tags extract anything before : in every line 
+nodes_char <- ifelse(nodes_newscene != "New Scene", 
+                     stringr::str_extract(nodes_newscene, "^[A-Za-z]+(?=:)"), 
+                     nodes_newscene)
+
+# check a sample
+set.seed(123)
+nodes_char[sample(30)]
+```
+
+So this is working, but we have more cleaning to do. For example, we will want to get rid of the `NA` values. We also notice that there are some preamble lines which usually contain the word “by” and we can see that strings in brackets like `(Note` seems to have been extracted. We can create a bunch of special cleaning commands to get rid of these if we don’t want them^[The cleaning commands here work for this specific episode, but they would need to be expanded to be used on more episodes to take into account any unpredictable formatting in the scripts]. 
+
+```{r}
+# remove NAs
+nodes_char_clean1 <- nodes_char[!is.na(nodes_char)] 
+
+# remove entries with "by" or "(" or "all" irrelevant of the case
+nodes_char_clean2 <- nodes_char_clean1[
+  !grepl("by|\\(|all", tolower(nodes_char_clean1))
+] 
+
+# check 
+nodes_char_clean2[sample(20)]
+```
+
+Let’s assume our cleaning is done and we have a nice vector that contains either the names of characters that are speaking lines in the episode or “New Scene” to indicate that we are crossing a scene boundary. We now just need to convert this vector into a simple dataframe with two columns for scene and character.  We already have our character lists, so we really just need to iterate through our nodes vector and for each entry, count the number of previous occurrences of “New Scene” and add one. 
+
+```{r}
+# number each scene by counting previous "New Scene" entries and adding 1
+scene_count <- c()
+
+for (i in 1:length(nodes_char_clean2)) {
+  scene_count[i] <- sum(grepl("New Scene", nodes_char_clean2[1:i])) + 1
+}
+```
+
+Then we can finalize our dataframe by putting our two vectors together and removing any repeated characters in the same scene. We can also correct for situations where the script starts with a New Scene and we can consistently format our character names to title case, to account for different case typing.
+
+```{r}
+library(dplyr)
+
+results <- data.frame(scene = scene_count, character = nodes_char_clean2) %>% 
+    dplyr::filter(character != "New Scene") %>% 
+    dplyr::distinct(scene, character) %>% 
+    dplyr::mutate(
+      scene = scene - min(scene) + 1, # set first scene number to 1
+      character = character %>% 
+        tolower() %>% 
+        tools::toTitleCase()
+    ) # title case
+
+# check the first ten rows
+head(results, 10)
+
+```
+
+### Creating an edgelist from the scraped data
+
+Now we have scraped the data on which characters have spoken in each numbered scene, we can now try ot build an edgelist between characters based on whether they have both spoken in the same scene.  We can also consider adding a weight to each edge based on the number of scenes in which both characters have spoken.
+
+To do this, we will need to generate a set of unique pairs from the list of characters in each scene.  To illustrate, let's look at the characters in Scene 11:
+
+```{r}
+(scene11_chars <- results |> 
+  dplyr::filter(scene == 11) |> 
+  dplyr::pull(character))
+```
+
+The unique pairs from this scene are formed by starting with the first character in the list and pairing with each of those that follow, then starting with the second and pairing with each that follows, and so on until the final pair is formed from the second-to-last and last elements of the list.  So for Scene 11 our unique pairs would be:
+
+* **Rachel pairs:** Rachel-Chandler, Rachel-Joey, Rachel-Monica, Rachel-Paul
+* **Chandler pairs:** Chandler-Joey, Chandler-Monica, Chandler-Paul
+* **Joey pairs:** Joey-Monica, Joey-Paul
+* **Monica pairs**: Monica-Paul
+
+So we should write a function called `unique_pairs()` which accepts a character vector of arbitrary length and forms pairs progressively in this way.  Then we can apply this function to every scene.
+
+```{r}
+unique_pairs <- function(char_vector = NULL) {
+  # ensure unique entries
+  vector <- as.character(unique(char_vector))
+  # create from-to column dataframe
+  df <- data.frame(char1 = character(), 
+                   char2 = character(), 
+                   stringsAsFactors = FALSE)
+  # iterate over each entry to form pairs
+  if (length(vector) > 1) {
+    for (i in 1:(length(vector) - 1)) {
+      char1 <- rep(vector[i], length(vector) - i) 
+      char2 <- vector[(i + 1): length(vector)] 
+      
+      df <- df %>% 
+        dplyr::bind_rows(
+          data.frame(char1 = char1, 
+                     char2 = char2, 
+                     stringsAsFactors = FALSE) 
+        )
+    }
+  }
+  #return result
+  df
+}
+```
+
+Now let's test our new function on the Scene 11 characters:
+
+```{r}
+unique_pairs(scene11_chars)
+```
+
+That looks right.  Now we can easily generate our edgelist from this episode by applying our new function to each scene.
+
+```{r}
+# run unique_pairs by scene
+friends_ep101 <- results |> 
+  dplyr::group_by(scene) |> 
+  dplyr::summarise(unique_pairs(character)) |> 
+  dplyr::ungroup()
+
+# check
+head(friends_ep101)
+```
+
+This looks like it worked.  Now we can just count the number of time each distinct pair occurs in order to get our edge weights (making sure to ignore the order of the characters).
+
+```{r}
+# create weight as count of scenes 
+friends_ep101_edgelist <- friends_ep101 |> 
+  dplyr::select(-scene) |> 
+  dplyr::mutate(from = pmin(char1, char2), to = pmax(char1, char2)) |> 
+  dplyr::count(from, to, name = "weight")
+
+# check
+head(friends_ep101_edgelist)
+
+```
+
+
+We can now use this edgelist to create an undirected network graph for the first episode of *Friends*.  First we will create an `igraph` object and then we will visualize it using edge thickness based on weights, as in Figure \@ref(fig:friends-ep1-network).
+
+```{r friends-ep1-network, fig.align = "center", fig.cap = "Visualization of the network of characters in Episode 1 of Friends, based on characters speaking in the same scene together"}
+# create igraph object
+friends_ep1_network <- igraph::graph_from_data_frame(
+  d = friends_ep101_edgelist,
+  directed = FALSE
+)
+
+# visualize
+ggraph(friends_ep1_network) +
+  geom_edge_link(aes(edge_width = weight), color = "grey", alpha = 0.5) +
+  geom_node_label(aes(label = name), color = "blue") +
+  theme_void()
+```
+
+### Approaches in Python
+
+## Learning exercises
+
+### Discussion questions
+
+### Data exercises

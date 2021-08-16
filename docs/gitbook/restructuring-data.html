@@ -274,7 +274,17 @@ div.csl-indent {
 <li class="chapter" data-level="5.1.3" data-path="restructuring-data.html"><a href="restructuring-data.html#common-purchases"><i class="fa fa-check"></i><b>5.1.3</b> Connecting customers through common purchases</a></li>
 <li class="chapter" data-level="5.1.4" data-path="restructuring-data.html"><a href="restructuring-data.html#approaches-using-python"><i class="fa fa-check"></i><b>5.1.4</b> Approaches using Python</a></li>
 </ul></li>
-<li class="chapter" data-level="5.2" data-path="restructuring-data.html"><a href="restructuring-data.html#transforming-data-from-documents-for-use-in-graphs"><i class="fa fa-check"></i><b>5.2</b> Transforming data from documents for use in graphs</a></li>
+<li class="chapter" data-level="5.2" data-path="restructuring-data.html"><a href="restructuring-data.html#transforming-data-from-documents-for-use-in-graphs"><i class="fa fa-check"></i><b>5.2</b> Transforming data from documents for use in graphs</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="restructuring-data.html"><a href="restructuring-data.html#scraping-the-character-and-scene-data"><i class="fa fa-check"></i><b>5.2.1</b> Scraping the character and scene data</a></li>
+<li class="chapter" data-level="5.2.2" data-path="restructuring-data.html"><a href="restructuring-data.html#creating-an-edgelist-from-the-scraped-data"><i class="fa fa-check"></i><b>5.2.2</b> Creating an edgelist from the scraped data</a></li>
+<li class="chapter" data-level="5.2.3" data-path="restructuring-data.html"><a href="restructuring-data.html#approaches-in-python"><i class="fa fa-check"></i><b>5.2.3</b> Approaches in Python</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="restructuring-data.html"><a href="restructuring-data.html#learning-exercises-3"><i class="fa fa-check"></i><b>5.3</b> Learning exercises</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="restructuring-data.html"><a href="restructuring-data.html#discussion-questions-3"><i class="fa fa-check"></i><b>5.3.1</b> Discussion questions</a></li>
+<li class="chapter" data-level="5.3.2" data-path="restructuring-data.html"><a href="restructuring-data.html#data-exercises-3"><i class="fa fa-check"></i><b>5.3.2</b> Data exercises</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
@@ -362,9 +372,9 @@ div.csl-indent {
 <span id="cb217-4"><a href="restructuring-data.html#cb217-4" aria-hidden="true" tabindex="-1"></a>(orgchart <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(</span>
 <span id="cb217-5"><a href="restructuring-data.html#cb217-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">d =</span> orgchart_edgelist</span>
 <span id="cb217-6"><a href="restructuring-data.html#cb217-6" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
-<pre><code>## IGRAPH e7878c1 DN-- 8 7 -- 
+<pre><code>## IGRAPH 44bba02 DN-- 8 7 -- 
 ## + attr: name (v/c)
-## + edges from e7878c1 (vertex names):
+## + edges from 44bba02 (vertex names):
 ## [1] Andrew -&gt;Nancy    Andrew -&gt;Michael  Nancy  -&gt;Jane     Nancy  -&gt;Margaret Nancy  -&gt;Steve    Michael-&gt;Robert  
 ## [7] Michael-&gt;Laura</code></pre>
 <p>We now have a directed graph with named vertices, so this should be easy to plot. Let’s use <code>ggplot</code> with a dendrogram (tree) layout, as in Figure <a href="restructuring-data.html#fig:chinook-pretty">5.1</a>.</p>
@@ -756,8 +766,238 @@ Figure 5.9: Visualization of the Chinook customer-to-customer network based on a
 </div>
 <div id="transforming-data-from-documents-for-use-in-graphs" class="section level2" number="5.2">
 <h2><span class="header-section-number">5.2</span> Transforming data from documents for use in graphs</h2>
+<p>In this example, we will look at how to extract information that sits in semi-structured documents and convert it to a graph-like shape to allow us to understand connections between actors or entities in those documents. Semi-structured documents are documents which have a certain expected format through which we can reliably identify important actors or entities. These could be legal contracts, financial statements or other types of structured forms. Through extracting entities from these documents, we can identify important relationships between them, such as co-publishing, financial transactions or contractual obligations.</p>
+<p>To illustrate this we will show how to extract information from a TV script in a way where we can determine which characters have spoken in the same scene together, and then use this information to create a network of TV characters. We will use an episode script from the hit TV comedy show <em>Friends</em>. A full set of scripts from all episodes of <em>Friends</em> can be found online at <code>https://fangj.github.io/friends/</code>, and later in this book we will be working with a substantial network for characters from the entire series. For this exercise, however, we will keep it simple and just focus on the character network from the first episode. The script of the first episode can be found at <code>https://fangj.github.io/friends/season/0101.html</code>.</p>
+<div id="scraping-the-character-and-scene-data" class="section level3" number="5.2.1">
+<h3><span class="header-section-number">5.2.1</span> Scraping the character and scene data</h3>
+<p>First we will look at how to obtain a list of numbered scenes and the characters in each scene, through ‘scraping’ these details from the online script. To help us with this we will use the <code>rvest</code> R package, which is designed for scraping information from web pages.</p>
+<p>Let’s take a look at the web code for Season 1 Episode 1. You can do this by opening the script webpage in Google Chrome and then pressing CMD+Option+C (or Ctrl+Shift+C in Windows) to open the Elements Console where you can view the HTML code of the page side-by-side with the page itself.</p>
+<p>One of the things we can see immediately is that most of the words that precede a colon are of interest to us. In fact, most of them are character names that say something in a scene. We also see that lines that contain the string “Scene:” are pretty reliable indicators of scene boundaries.</p>
+<p>The first thing we probably want to do get this HTML code in a list or vector of nodes which represent the different pieces of formatting and text in the document. Since this will contain the separated lines spoken by each character, this will be really helpful for us to work from. So let’s download the HTML code, break it into nodes so that we have a nice tidy vector of script content.</p>
+<div class="sourceCode" id="cb258"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb258-1"><a href="restructuring-data.html#cb258-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rvest)</span>
+<span id="cb258-2"><a href="restructuring-data.html#cb258-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb258-3"><a href="restructuring-data.html#cb258-3" aria-hidden="true" tabindex="-1"></a>url_string <span class="ot">&lt;-</span> <span class="st">&quot;https://fangj.github.io/friends/season/0101.html&quot;</span></span>
+<span id="cb258-4"><a href="restructuring-data.html#cb258-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb258-5"><a href="restructuring-data.html#cb258-5" aria-hidden="true" tabindex="-1"></a>nodes <span class="ot">&lt;-</span> xml2<span class="sc">::</span><span class="fu">read_html</span>(url_string) <span class="sc">%&gt;%</span> </span>
+<span id="cb258-6"><a href="restructuring-data.html#cb258-6" aria-hidden="true" tabindex="-1"></a>      xml2<span class="sc">::</span><span class="fu">as_list</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb258-7"><a href="restructuring-data.html#cb258-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">unlist</span>()</span>
+<span id="cb258-8"><a href="restructuring-data.html#cb258-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb258-9"><a href="restructuring-data.html#cb258-9" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(nodes)</span></code></pre></div>
+<pre><code>##                                                          html.head.title 
+##  &quot;The One Where Monica Gets a New Roomate (The Pilot-The Uncut Version)&quot; 
+##                                                               html.body1 
+##                                                                   &quot;\n\n&quot; 
+##                                                             html.body.h1 
+## &quot;The One Where Monica Gets a New Roommate (The Pilot-The Uncut Version)&quot; 
+##                                                               html.body3 
+##                                                                   &quot;\n\n&quot; 
+##                                                           html.body.font 
+##                                                                   &quot;\n\n&quot; 
+##                                                         html.body.font.p 
+##                               &quot;Written by: Marta Kauffman &amp; David Crane&quot;</code></pre>
+<p>This has generated a character vector that contains a lot of different split out parts of the script, but most importantly it contains the lines from the script, for example:</p>
+<div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb260-1"><a href="restructuring-data.html#cb260-1" aria-hidden="true" tabindex="-1"></a>nodes[<span class="dv">16</span>]</span></code></pre></div>
+<pre><code>##                                                       html.body.font.p 
+## &quot;[Scene: Central Perk, Chandler, Joey, Phoebe, and Monica are there.]&quot;</code></pre>
+<p>Now, to generate something useful for our task, we need to create a vector that contains the word ‘New Scene’ if the line represents the beginning of a scene, and the name of the character if the line represents something spoken by a character. This will be the best format for what we want to do.</p>
+<p>The first thing we will need to do is swap any text string containing “Scene:” to the string “New Scene.” We can do this quite simply using an <code>ifelse()</code> on the nodes vector, where we use <code>grepl()</code> to identify which entries are in nodes that contain the string “Scene:”</p>
+<div class="sourceCode" id="cb262"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb262-1"><a href="restructuring-data.html#cb262-1" aria-hidden="true" tabindex="-1"></a><span class="co"># swap lines containing the string &#39;Scene:&#39; with &#39;New Scene&#39; </span></span>
+<span id="cb262-2"><a href="restructuring-data.html#cb262-2" aria-hidden="true" tabindex="-1"></a>nodes_newscene <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">grepl</span>(<span class="st">&quot;Scene:&quot;</span>, nodes), <span class="st">&quot;New Scene&quot;</span>, nodes)</span>
+<span id="cb262-3"><a href="restructuring-data.html#cb262-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb262-4"><a href="restructuring-data.html#cb262-4" aria-hidden="true" tabindex="-1"></a><span class="co"># check that there are at least a few &#39;New Scene&#39; entries now</span></span>
+<span id="cb262-5"><a href="restructuring-data.html#cb262-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(nodes_newscene <span class="sc">==</span> <span class="st">&quot;New Scene&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] 15</code></pre>
+<p>That worked nicely. Now, you might also have noticed that for dialogue purposes, character names precede a colon at the beginning of a line. So that might be a nice way to extract the names of characters with speaking parts in a scene (although it might give us a few other things that have preceded colons in the script also, but we can deal with that later).</p>
+<p>So what we will do is use regular expression syntax (regex) to tell R that we are looking for anything at the beginning of a line preceding a colon. We will use a lookahead regex string as follows: <code>^[A-Za-z]+(?=:)</code>.</p>
+<p>Let’s look at that string and make sure we know what it means. The <code>^[A-Za-z]+</code> component means ‘find any sub-string of alphabetic text of any length at the beginning of a string.’ The part in parentheses is known as a lookahead — it means look ahead of that sub-string of text and find a colon as the next character. This is therefore instructing R to find any string of alphabetic text at the start of a line that precedes a colon and return it. If we use the R package <code>stringr</code> and its function <code>str_extract()</code> with this regex syntax, it will go through every entry of the <code>nodes</code> vector and transform it to just the first string of text found before a colon. If no such string is found it will return an NA value. This is great for us because we know that, for the purpose of dialogue, characters names are always at the start of nodes, so we certainly won’t miss any if we just take the first instance in each line. We should also, for safety, not mess with the scene breaks we have put into our vector.</p>
+<div class="sourceCode" id="cb264"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb264-1"><a href="restructuring-data.html#cb264-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
+<span id="cb264-2"><a href="restructuring-data.html#cb264-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb264-3"><a href="restructuring-data.html#cb264-3" aria-hidden="true" tabindex="-1"></a><span class="co"># outside of &#39;New Scene&#39; tags extract anything before : in every line </span></span>
+<span id="cb264-4"><a href="restructuring-data.html#cb264-4" aria-hidden="true" tabindex="-1"></a>nodes_char <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(nodes_newscene <span class="sc">!=</span> <span class="st">&quot;New Scene&quot;</span>, </span>
+<span id="cb264-5"><a href="restructuring-data.html#cb264-5" aria-hidden="true" tabindex="-1"></a>                     stringr<span class="sc">::</span><span class="fu">str_extract</span>(nodes_newscene, <span class="st">&quot;^[A-Za-z]+(?=:)&quot;</span>), </span>
+<span id="cb264-6"><a href="restructuring-data.html#cb264-6" aria-hidden="true" tabindex="-1"></a>                     nodes_newscene)</span>
+<span id="cb264-7"><a href="restructuring-data.html#cb264-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb264-8"><a href="restructuring-data.html#cb264-8" aria-hidden="true" tabindex="-1"></a><span class="co"># check a sample</span></span>
+<span id="cb264-9"><a href="restructuring-data.html#cb264-9" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb264-10"><a href="restructuring-data.html#cb264-10" aria-hidden="true" tabindex="-1"></a>nodes_char[<span class="fu">sample</span>(<span class="dv">30</span>)]</span></code></pre></div>
+<pre><code>##  [1] NA          NA          NA          NA          NA          &quot;Monica&quot;    NA          NA          NA          NA         
+## [11] NA          &quot;Chandler&quot;  NA          NA          NA          NA          NA          NA          NA          NA         
+## [21] NA          NA          NA          &quot;Joey&quot;      &quot;Phoebe&quot;    NA          &quot;New Scene&quot; NA          NA          NA</code></pre>
+<p>So this is working, but we have more cleaning to do. For example, we will want to get rid of the <code>NA</code> values. We also notice that there are some preamble lines which usually contain the word “by” and we can see that strings in brackets like <code>(Note</code> seems to have been extracted. We can create a bunch of special cleaning commands to get rid of these if we don’t want them<a href="#fn29" class="footnote-ref" id="fnref29"><sup>29</sup></a>.</p>
+<div class="sourceCode" id="cb266"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb266-1"><a href="restructuring-data.html#cb266-1" aria-hidden="true" tabindex="-1"></a><span class="co"># remove NAs</span></span>
+<span id="cb266-2"><a href="restructuring-data.html#cb266-2" aria-hidden="true" tabindex="-1"></a>nodes_char_clean1 <span class="ot">&lt;-</span> nodes_char[<span class="sc">!</span><span class="fu">is.na</span>(nodes_char)] </span>
+<span id="cb266-3"><a href="restructuring-data.html#cb266-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb266-4"><a href="restructuring-data.html#cb266-4" aria-hidden="true" tabindex="-1"></a><span class="co"># remove entries with &quot;by&quot; or &quot;(&quot; or &quot;all&quot; irrelevant of the case</span></span>
+<span id="cb266-5"><a href="restructuring-data.html#cb266-5" aria-hidden="true" tabindex="-1"></a>nodes_char_clean2 <span class="ot">&lt;-</span> nodes_char_clean1[</span>
+<span id="cb266-6"><a href="restructuring-data.html#cb266-6" aria-hidden="true" tabindex="-1"></a>  <span class="sc">!</span><span class="fu">grepl</span>(<span class="st">&quot;by|</span><span class="sc">\\</span><span class="st">(|all&quot;</span>, <span class="fu">tolower</span>(nodes_char_clean1))</span>
+<span id="cb266-7"><a href="restructuring-data.html#cb266-7" aria-hidden="true" tabindex="-1"></a>] </span>
+<span id="cb266-8"><a href="restructuring-data.html#cb266-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb266-9"><a href="restructuring-data.html#cb266-9" aria-hidden="true" tabindex="-1"></a><span class="co"># check </span></span>
+<span id="cb266-10"><a href="restructuring-data.html#cb266-10" aria-hidden="true" tabindex="-1"></a>nodes_char_clean2[<span class="fu">sample</span>(<span class="dv">20</span>)]</span></code></pre></div>
+<pre><code>##  [1] &quot;Chandler&quot;  &quot;Monica&quot;    &quot;Chandler&quot;  &quot;Monica&quot;    &quot;Phoebe&quot;    &quot;Joey&quot;      &quot;Phoebe&quot;    &quot;Joey&quot;      &quot;Monica&quot;    &quot;Monica&quot;   
+## [11] &quot;Chandler&quot;  &quot;Chandler&quot;  &quot;New Scene&quot; &quot;Ross&quot;      &quot;Joey&quot;      &quot;Chandler&quot;  &quot;Joey&quot;      &quot;Chandler&quot;  &quot;Phoebe&quot;    &quot;Chandler&quot;</code></pre>
+<p>Let’s assume our cleaning is done and we have a nice vector that contains either the names of characters that are speaking lines in the episode or “New Scene” to indicate that we are crossing a scene boundary. We now just need to convert this vector into a simple dataframe with two columns for scene and character. We already have our character lists, so we really just need to iterate through our nodes vector and for each entry, count the number of previous occurrences of “New Scene” and add one.</p>
+<div class="sourceCode" id="cb268"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb268-1"><a href="restructuring-data.html#cb268-1" aria-hidden="true" tabindex="-1"></a><span class="co"># number each scene by counting previous &quot;New Scene&quot; entries and adding 1</span></span>
+<span id="cb268-2"><a href="restructuring-data.html#cb268-2" aria-hidden="true" tabindex="-1"></a>scene_count <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb268-3"><a href="restructuring-data.html#cb268-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb268-4"><a href="restructuring-data.html#cb268-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(nodes_char_clean2)) {</span>
+<span id="cb268-5"><a href="restructuring-data.html#cb268-5" aria-hidden="true" tabindex="-1"></a>  scene_count[i] <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">grepl</span>(<span class="st">&quot;New Scene&quot;</span>, nodes_char_clean2[<span class="dv">1</span><span class="sc">:</span>i])) <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb268-6"><a href="restructuring-data.html#cb268-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Then we can finalize our dataframe by putting our two vectors together and removing any repeated characters in the same scene. We can also correct for situations where the script starts with a New Scene and we can consistently format our character names to title case, to account for different case typing.</p>
+<div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb269-1"><a href="restructuring-data.html#cb269-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb269-2"><a href="restructuring-data.html#cb269-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb269-3"><a href="restructuring-data.html#cb269-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">scene =</span> scene_count, <span class="at">character =</span> nodes_char_clean2) <span class="sc">%&gt;%</span> </span>
+<span id="cb269-4"><a href="restructuring-data.html#cb269-4" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(character <span class="sc">!=</span> <span class="st">&quot;New Scene&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb269-5"><a href="restructuring-data.html#cb269-5" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">distinct</span>(scene, character) <span class="sc">%&gt;%</span> </span>
+<span id="cb269-6"><a href="restructuring-data.html#cb269-6" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb269-7"><a href="restructuring-data.html#cb269-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">scene =</span> scene <span class="sc">-</span> <span class="fu">min</span>(scene) <span class="sc">+</span> <span class="dv">1</span>, <span class="co"># set first scene number to 1</span></span>
+<span id="cb269-8"><a href="restructuring-data.html#cb269-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">character =</span> character <span class="sc">%&gt;%</span> </span>
+<span id="cb269-9"><a href="restructuring-data.html#cb269-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tolower</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb269-10"><a href="restructuring-data.html#cb269-10" aria-hidden="true" tabindex="-1"></a>        tools<span class="sc">::</span><span class="fu">toTitleCase</span>()</span>
+<span id="cb269-11"><a href="restructuring-data.html#cb269-11" aria-hidden="true" tabindex="-1"></a>    ) <span class="co"># title case</span></span>
+<span id="cb269-12"><a href="restructuring-data.html#cb269-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb269-13"><a href="restructuring-data.html#cb269-13" aria-hidden="true" tabindex="-1"></a><span class="co"># check the first ten rows</span></span>
+<span id="cb269-14"><a href="restructuring-data.html#cb269-14" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(results, <span class="dv">10</span>)</span></code></pre></div>
+<pre><code>##    scene character
+## 1      1    Monica
+## 2      1      Joey
+## 3      1  Chandler
+## 4      1    Phoebe
+## 5      1      Ross
+## 6      1    Rachel
+## 7      1  Waitress
+## 8      2    Monica
+## 9      2  Chandler
+## 10     2      Ross</code></pre>
+</div>
+<div id="creating-an-edgelist-from-the-scraped-data" class="section level3" number="5.2.2">
+<h3><span class="header-section-number">5.2.2</span> Creating an edgelist from the scraped data</h3>
+<p>Now we have scraped the data on which characters have spoken in each numbered scene, we can now try ot build an edgelist between characters based on whether they have both spoken in the same scene. We can also consider adding a weight to each edge based on the number of scenes in which both characters have spoken.</p>
+<p>To do this, we will need to generate a set of unique pairs from the list of characters in each scene. To illustrate, let’s look at the characters in Scene 11:</p>
+<div class="sourceCode" id="cb271"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb271-1"><a href="restructuring-data.html#cb271-1" aria-hidden="true" tabindex="-1"></a>(scene11_chars <span class="ot">&lt;-</span> results <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb271-2"><a href="restructuring-data.html#cb271-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(scene <span class="sc">==</span> <span class="dv">11</span>) <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb271-3"><a href="restructuring-data.html#cb271-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">pull</span>(character))</span></code></pre></div>
+<pre><code>## [1] &quot;Rachel&quot;   &quot;Chandler&quot; &quot;Joey&quot;     &quot;Monica&quot;   &quot;Paul&quot;</code></pre>
+<p>The unique pairs from this scene are formed by starting with the first character in the list and pairing with each of those that follow, then starting with the second and pairing with each that follows, and so on until the final pair is formed from the second-to-last and last elements of the list. So for Scene 11 our unique pairs would be:</p>
+<ul>
+<li><strong>Rachel pairs:</strong> Rachel-Chandler, Rachel-Joey, Rachel-Monica, Rachel-Paul</li>
+<li><strong>Chandler pairs:</strong> Chandler-Joey, Chandler-Monica, Chandler-Paul</li>
+<li><strong>Joey pairs:</strong> Joey-Monica, Joey-Paul</li>
+<li><strong>Monica pairs</strong>: Monica-Paul</li>
+</ul>
+<p>So we should write a function called <code>unique_pairs()</code> which accepts a character vector of arbitrary length and forms pairs progressively in this way. Then we can apply this function to every scene.</p>
+<div class="sourceCode" id="cb273"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb273-1"><a href="restructuring-data.html#cb273-1" aria-hidden="true" tabindex="-1"></a>unique_pairs <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">char_vector =</span> <span class="cn">NULL</span>) {</span>
+<span id="cb273-2"><a href="restructuring-data.html#cb273-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ensure unique entries</span></span>
+<span id="cb273-3"><a href="restructuring-data.html#cb273-3" aria-hidden="true" tabindex="-1"></a>  vector <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="fu">unique</span>(char_vector))</span>
+<span id="cb273-4"><a href="restructuring-data.html#cb273-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create from-to column dataframe</span></span>
+<span id="cb273-5"><a href="restructuring-data.html#cb273-5" aria-hidden="true" tabindex="-1"></a>  df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">char1 =</span> <span class="fu">character</span>(), </span>
+<span id="cb273-6"><a href="restructuring-data.html#cb273-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">char2 =</span> <span class="fu">character</span>(), </span>
+<span id="cb273-7"><a href="restructuring-data.html#cb273-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb273-8"><a href="restructuring-data.html#cb273-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># iterate over each entry to form pairs</span></span>
+<span id="cb273-9"><a href="restructuring-data.html#cb273-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(vector) <span class="sc">&gt;</span> <span class="dv">1</span>) {</span>
+<span id="cb273-10"><a href="restructuring-data.html#cb273-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>(<span class="fu">length</span>(vector) <span class="sc">-</span> <span class="dv">1</span>)) {</span>
+<span id="cb273-11"><a href="restructuring-data.html#cb273-11" aria-hidden="true" tabindex="-1"></a>      char1 <span class="ot">&lt;-</span> <span class="fu">rep</span>(vector[i], <span class="fu">length</span>(vector) <span class="sc">-</span> i) </span>
+<span id="cb273-12"><a href="restructuring-data.html#cb273-12" aria-hidden="true" tabindex="-1"></a>      char2 <span class="ot">&lt;-</span> vector[(i <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span> <span class="fu">length</span>(vector)] </span>
+<span id="cb273-13"><a href="restructuring-data.html#cb273-13" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb273-14"><a href="restructuring-data.html#cb273-14" aria-hidden="true" tabindex="-1"></a>      df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> </span>
+<span id="cb273-15"><a href="restructuring-data.html#cb273-15" aria-hidden="true" tabindex="-1"></a>        dplyr<span class="sc">::</span><span class="fu">bind_rows</span>(</span>
+<span id="cb273-16"><a href="restructuring-data.html#cb273-16" aria-hidden="true" tabindex="-1"></a>          <span class="fu">data.frame</span>(<span class="at">char1 =</span> char1, </span>
+<span id="cb273-17"><a href="restructuring-data.html#cb273-17" aria-hidden="true" tabindex="-1"></a>                     <span class="at">char2 =</span> char2, </span>
+<span id="cb273-18"><a href="restructuring-data.html#cb273-18" aria-hidden="true" tabindex="-1"></a>                     <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>) </span>
+<span id="cb273-19"><a href="restructuring-data.html#cb273-19" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb273-20"><a href="restructuring-data.html#cb273-20" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb273-21"><a href="restructuring-data.html#cb273-21" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb273-22"><a href="restructuring-data.html#cb273-22" aria-hidden="true" tabindex="-1"></a>  <span class="co">#return result</span></span>
+<span id="cb273-23"><a href="restructuring-data.html#cb273-23" aria-hidden="true" tabindex="-1"></a>  df</span>
+<span id="cb273-24"><a href="restructuring-data.html#cb273-24" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Now let’s test our new function on the Scene 11 characters:</p>
+<div class="sourceCode" id="cb274"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb274-1"><a href="restructuring-data.html#cb274-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique_pairs</span>(scene11_chars)</span></code></pre></div>
+<pre><code>##       char1    char2
+## 1    Rachel Chandler
+## 2    Rachel     Joey
+## 3    Rachel   Monica
+## 4    Rachel     Paul
+## 5  Chandler     Joey
+## 6  Chandler   Monica
+## 7  Chandler     Paul
+## 8      Joey   Monica
+## 9      Joey     Paul
+## 10   Monica     Paul</code></pre>
+<p>That looks right. Now we can easily generate our edgelist from this episode by applying our new function to each scene.</p>
+<div class="sourceCode" id="cb276"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb276-1"><a href="restructuring-data.html#cb276-1" aria-hidden="true" tabindex="-1"></a><span class="co"># run unique_pairs by scene</span></span>
+<span id="cb276-2"><a href="restructuring-data.html#cb276-2" aria-hidden="true" tabindex="-1"></a>friends_ep101 <span class="ot">&lt;-</span> results <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb276-3"><a href="restructuring-data.html#cb276-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(scene) <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb276-4"><a href="restructuring-data.html#cb276-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="fu">unique_pairs</span>(character)) <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb276-5"><a href="restructuring-data.html#cb276-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">ungroup</span>()</span>
+<span id="cb276-6"><a href="restructuring-data.html#cb276-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb276-7"><a href="restructuring-data.html#cb276-7" aria-hidden="true" tabindex="-1"></a><span class="co"># check</span></span>
+<span id="cb276-8"><a href="restructuring-data.html#cb276-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(friends_ep101)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 3
+##   scene char1  char2   
+##   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;   
+## 1     1 Monica Joey    
+## 2     1 Monica Chandler
+## 3     1 Monica Phoebe  
+## 4     1 Monica Ross    
+## 5     1 Monica Rachel  
+## 6     1 Monica Waitress</code></pre>
+<p>This looks like it worked. Now we can just count the number of time each distinct pair occurs in order to get our edge weights (making sure to ignore the order of the characters).</p>
+<div class="sourceCode" id="cb278"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb278-1"><a href="restructuring-data.html#cb278-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create weight as count of scenes </span></span>
+<span id="cb278-2"><a href="restructuring-data.html#cb278-2" aria-hidden="true" tabindex="-1"></a>friends_ep101_edgelist <span class="ot">&lt;-</span> friends_ep101 <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb278-3"><a href="restructuring-data.html#cb278-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>scene) <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb278-4"><a href="restructuring-data.html#cb278-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">from =</span> <span class="fu">pmin</span>(char1, char2), <span class="at">to =</span> <span class="fu">pmax</span>(char1, char2)) <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb278-5"><a href="restructuring-data.html#cb278-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">count</span>(from, to, <span class="at">name =</span> <span class="st">&quot;weight&quot;</span>)</span>
+<span id="cb278-6"><a href="restructuring-data.html#cb278-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb278-7"><a href="restructuring-data.html#cb278-7" aria-hidden="true" tabindex="-1"></a><span class="co"># check</span></span>
+<span id="cb278-8"><a href="restructuring-data.html#cb278-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(friends_ep101_edgelist)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 3
+##   from     to       weight
+##   &lt;chr&gt;    &lt;chr&gt;     &lt;int&gt;
+## 1 Chandler Customer      1
+## 2 Chandler Joey          8
+## 3 Chandler Monica        6
+## 4 Chandler Paul          2
+## 5 Chandler Phoebe        5
+## 6 Chandler Rachel        6</code></pre>
+<p>We can now use this edgelist to create an undirected network graph for the first episode of <em>Friends</em>. First we will create an <code>igraph</code> object and then we will visualize it using edge thickness based on weights, as in Figure <a href="restructuring-data.html#fig:friends-ep1-network">5.10</a>.</p>
+<div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb280-1"><a href="restructuring-data.html#cb280-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create igraph object</span></span>
+<span id="cb280-2"><a href="restructuring-data.html#cb280-2" aria-hidden="true" tabindex="-1"></a>friends_ep1_network <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(</span>
+<span id="cb280-3"><a href="restructuring-data.html#cb280-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">d =</span> friends_ep101_edgelist,</span>
+<span id="cb280-4"><a href="restructuring-data.html#cb280-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">directed =</span> <span class="cn">FALSE</span></span>
+<span id="cb280-5"><a href="restructuring-data.html#cb280-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb280-6"><a href="restructuring-data.html#cb280-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb280-7"><a href="restructuring-data.html#cb280-7" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize</span></span>
+<span id="cb280-8"><a href="restructuring-data.html#cb280-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(friends_ep1_network) <span class="sc">+</span></span>
+<span id="cb280-9"><a href="restructuring-data.html#cb280-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="fu">aes</span>(<span class="at">edge_width =</span> weight), <span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb280-10"><a href="restructuring-data.html#cb280-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_label</span>(<span class="fu">aes</span>(<span class="at">label =</span> name), <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb280-11"><a href="restructuring-data.html#cb280-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:friends-ep1-network"></span>
+<img src="_main_files/figure-html/friends-ep1-network-1.png" alt="Visualization of the network of characters in Episode 1 of Friends, based on characters speaking in the same scene together" width="672" />
+<p class="caption">
+Figure 5.10: Visualization of the network of characters in Episode 1 of Friends, based on characters speaking in the same scene together
+</p>
+</div>
+</div>
+<div id="approaches-in-python" class="section level3" number="5.2.3">
+<h3><span class="header-section-number">5.2.3</span> Approaches in Python</h3>
+</div>
+</div>
+<div id="learning-exercises-3" class="section level2" number="5.3">
+<h2><span class="header-section-number">5.3</span> Learning exercises</h2>
+<div id="discussion-questions-3" class="section level3" number="5.3.1">
+<h3><span class="header-section-number">5.3.1</span> Discussion questions</h3>
+</div>
+<div id="data-exercises-3" class="section level3" number="5.3.2">
+<h3><span class="header-section-number">5.3.2</span> Data exercises</h3>
 
 </div>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="29">
+<li id="fn29"><p>The cleaning commands here work for this specific episode, but they would need to be expanded to be used on more episodes to take into account any unpredictable formatting in the scripts<a href="restructuring-data.html#fnref29" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
             </section>
 

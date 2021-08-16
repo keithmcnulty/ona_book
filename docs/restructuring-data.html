@@ -144,9 +144,9 @@
 <span class="op">(</span><span class="va">orgchart</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>
   d <span class="op">=</span> <span class="va">orgchart_edgelist</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH 696b1e5 DN-- 8 7 -- 
+<pre><code>## IGRAPH cd11fdd DN-- 8 7 -- 
 ## + attr: name (v/c)
-## + edges from 696b1e5 (vertex names):
+## + edges from cd11fdd (vertex names):
 ## [1] Andrew -&gt;Nancy    Andrew -&gt;Michael  Nancy  -&gt;Jane     Nancy  -&gt;Margaret Nancy  -&gt;Steve    Michael-&gt;Robert  
 ## [7] Michael-&gt;Laura</code></pre>
 <p>We now have a directed graph with named vertices, so this should be easy to plot. Let’s use <code>ggplot</code> with a dendrogram (tree) layout, as in Figure <a href="restructuring-data.html#fig:chinook-pretty">5.1</a>.</p>
@@ -564,9 +564,263 @@ Figure 5.9: Visualization of the Chinook customer-to-customer network based on a
 <h2>
 <span class="header-section-number">5.2</span> Transforming data from documents for use in graphs<a class="anchor" aria-label="anchor" href="#transforming-data-from-documents-for-use-in-graphs"><i class="fas fa-link"></i></a>
 </h2>
+<p>In this example, we will look at how to extract information that sits in semi-structured documents and convert it to a graph-like shape to allow us to understand connections between actors or entities in those documents. Semi-structured documents are documents which have a certain expected format through which we can reliably identify important actors or entities. These could be legal contracts, financial statements or other types of structured forms. Through extracting entities from these documents, we can identify important relationships between them, such as co-publishing, financial transactions or contractual obligations.</p>
+<p>To illustrate this we will show how to extract information from a TV script in a way where we can determine which characters have spoken in the same scene together, and then use this information to create a network of TV characters. We will use an episode script from the hit TV comedy show <em>Friends</em>. A full set of scripts from all episodes of <em>Friends</em> can be found online at <code>https://fangj.github.io/friends/</code>, and later in this book we will be working with a substantial network for characters from the entire series. For this exercise, however, we will keep it simple and just focus on the character network from the first episode. The script of the first episode can be found at <code>https://fangj.github.io/friends/season/0101.html</code>.</p>
+<div id="scraping-the-character-and-scene-data" class="section level3" number="5.2.1">
+<h3>
+<span class="header-section-number">5.2.1</span> Scraping the character and scene data<a class="anchor" aria-label="anchor" href="#scraping-the-character-and-scene-data"><i class="fas fa-link"></i></a>
+</h3>
+<p>First we will look at how to obtain a list of numbered scenes and the characters in each scene, through ‘scraping’ these details from the online script. To help us with this we will use the <code>rvest</code> R package, which is designed for scraping information from web pages.</p>
+<p>Let’s take a look at the web code for Season 1 Episode 1. You can do this by opening the script webpage in Google Chrome and then pressing CMD+Option+C (or Ctrl+Shift+C in Windows) to open the Elements Console where you can view the HTML code of the page side-by-side with the page itself.</p>
+<p>One of the things we can see immediately is that most of the words that precede a colon are of interest to us. In fact, most of them are character names that say something in a scene. We also see that lines that contain the string “Scene:” are pretty reliable indicators of scene boundaries.</p>
+<p>The first thing we probably want to do get this HTML code in a list or vector of nodes which represent the different pieces of formatting and text in the document. Since this will contain the separated lines spoken by each character, this will be really helpful for us to work from. So let’s download the HTML code, break it into nodes so that we have a nice tidy vector of script content.</p>
+<div class="sourceCode" id="cb258"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rvest.tidyverse.org/">rvest</a></span><span class="op">)</span>
+
+<span class="va">url_string</span> <span class="op">&lt;-</span> <span class="st">"https://fangj.github.io/friends/season/0101.html"</span>
+
+<span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu">xml2</span><span class="fu">::</span><span class="fu"><a href="http://xml2.r-lib.org/reference/read_xml.html">read_html</a></span><span class="op">(</span><span class="va">url_string</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+      <span class="fu">xml2</span><span class="fu">::</span><span class="fu"><a href="http://xml2.r-lib.org/reference/as_list.html">as_list</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+      <span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">nodes</span><span class="op">)</span></code></pre></div>
+<pre><code>##                                                          html.head.title 
+##  "The One Where Monica Gets a New Roomate (The Pilot-The Uncut Version)" 
+##                                                               html.body1 
+##                                                                   "\n\n" 
+##                                                             html.body.h1 
+## "The One Where Monica Gets a New Roommate (The Pilot-The Uncut Version)" 
+##                                                               html.body3 
+##                                                                   "\n\n" 
+##                                                           html.body.font 
+##                                                                   "\n\n" 
+##                                                         html.body.font.p 
+##                               "Written by: Marta Kauffman &amp; David Crane"</code></pre>
+<p>This has generated a character vector that contains a lot of different split out parts of the script, but most importantly it contains the lines from the script, for example:</p>
+<div class="sourceCode" id="cb260"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">nodes</span><span class="op">[</span><span class="fl">16</span><span class="op">]</span></code></pre></div>
+<pre><code>##                                                       html.body.font.p 
+## "[Scene: Central Perk, Chandler, Joey, Phoebe, and Monica are there.]"</code></pre>
+<p>Now, to generate something useful for our task, we need to create a vector that contains the word ‘New Scene’ if the line represents the beginning of a scene, and the name of the character if the line represents something spoken by a character. This will be the best format for what we want to do.</p>
+<p>The first thing we will need to do is swap any text string containing “Scene:” to the string “New Scene.” We can do this quite simply using an <code><a href="https://rdrr.io/r/base/ifelse.html">ifelse()</a></code> on the nodes vector, where we use <code><a href="https://rdrr.io/r/base/grep.html">grepl()</a></code> to identify which entries are in nodes that contain the string “Scene:”</p>
+<div class="sourceCode" id="cb262"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># swap lines containing the string 'Scene:' with 'New Scene' </span>
+<span class="va">nodes_newscene</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span><span class="op">(</span><span class="st">"Scene:"</span>, <span class="va">nodes</span><span class="op">)</span>, <span class="st">"New Scene"</span>, <span class="va">nodes</span><span class="op">)</span>
+
+<span class="co"># check that there are at least a few 'New Scene' entries now</span>
+<span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">nodes_newscene</span> <span class="op">==</span> <span class="st">"New Scene"</span><span class="op">)</span></code></pre></div>
+<pre><code>## [1] 15</code></pre>
+<p>That worked nicely. Now, you might also have noticed that for dialogue purposes, character names precede a colon at the beginning of a line. So that might be a nice way to extract the names of characters with speaking parts in a scene (although it might give us a few other things that have preceded colons in the script also, but we can deal with that later).</p>
+<p>So what we will do is use regular expression syntax (regex) to tell R that we are looking for anything at the beginning of a line preceding a colon. We will use a lookahead regex string as follows: <code>^[A-Za-z]+(?=:)</code>.</p>
+<p>Let’s look at that string and make sure we know what it means. The <code>^[A-Za-z]+</code> component means ‘find any sub-string of alphabetic text of any length at the beginning of a string.’ The part in parentheses is known as a lookahead — it means look ahead of that sub-string of text and find a colon as the next character. This is therefore instructing R to find any string of alphabetic text at the start of a line that precedes a colon and return it. If we use the R package <code>stringr</code> and its function <code><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract()</a></code> with this regex syntax, it will go through every entry of the <code>nodes</code> vector and transform it to just the first string of text found before a colon. If no such string is found it will return an NA value. This is great for us because we know that, for the purpose of dialogue, characters names are always at the start of nodes, so we certainly won’t miss any if we just take the first instance in each line. We should also, for safety, not mess with the scene breaks we have put into our vector.</p>
+<div class="sourceCode" id="cb264"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://stringr.tidyverse.org">stringr</a></span><span class="op">)</span>
+
+<span class="co"># outside of 'New Scene' tags extract anything before : in every line </span>
+<span class="va">nodes_char</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">nodes_newscene</span> <span class="op">!=</span> <span class="st">"New Scene"</span>, 
+                     <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">nodes_newscene</span>, <span class="st">"^[A-Za-z]+(?=:)"</span><span class="op">)</span>, 
+                     <span class="va">nodes_newscene</span><span class="op">)</span>
+
+<span class="co"># check a sample</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<span class="va">nodes_char</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">30</span><span class="op">)</span><span class="op">]</span></code></pre></div>
+<pre><code>##  [1] NA          NA          NA          NA          NA          "Monica"    NA          NA          NA          NA         
+## [11] NA          "Chandler"  NA          NA          NA          NA          NA          NA          NA          NA         
+## [21] NA          NA          NA          "Joey"      "Phoebe"    NA          "New Scene" NA          NA          NA</code></pre>
+<p>So this is working, but we have more cleaning to do. For example, we will want to get rid of the <code>NA</code> values. We also notice that there are some preamble lines which usually contain the word “by” and we can see that strings in brackets like <code>(Note</code> seems to have been extracted. We can create a bunch of special cleaning commands to get rid of these if we don’t want them<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;The cleaning commands here work for this specific episode, but they would need to be expanded to be used on more episodes to take into account any unpredictable formatting in the scripts&lt;/p&gt;"><sup>29</sup></a>.</p>
+<div class="sourceCode" id="cb266"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># remove NAs</span>
+<span class="va">nodes_char_clean1</span> <span class="op">&lt;-</span> <span class="va">nodes_char</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">nodes_char</span><span class="op">)</span><span class="op">]</span> 
+
+<span class="co"># remove entries with "by" or "(" or "all" irrelevant of the case</span>
+<span class="va">nodes_char_clean2</span> <span class="op">&lt;-</span> <span class="va">nodes_char_clean1</span><span class="op">[</span>
+  <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span><span class="op">(</span><span class="st">"by|\\(|all"</span>, <span class="fu"><a href="https://rdrr.io/r/base/chartr.html">tolower</a></span><span class="op">(</span><span class="va">nodes_char_clean1</span><span class="op">)</span><span class="op">)</span>
+<span class="op">]</span> 
+
+<span class="co"># check </span>
+<span class="va">nodes_char_clean2</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span><span class="op">]</span></code></pre></div>
+<pre><code>##  [1] "Chandler"  "Monica"    "Chandler"  "Monica"    "Phoebe"    "Joey"      "Phoebe"    "Joey"      "Monica"    "Monica"   
+## [11] "Chandler"  "Chandler"  "New Scene" "Ross"      "Joey"      "Chandler"  "Joey"      "Chandler"  "Phoebe"    "Chandler"</code></pre>
+<p>Let’s assume our cleaning is done and we have a nice vector that contains either the names of characters that are speaking lines in the episode or “New Scene” to indicate that we are crossing a scene boundary. We now just need to convert this vector into a simple dataframe with two columns for scene and character. We already have our character lists, so we really just need to iterate through our nodes vector and for each entry, count the number of previous occurrences of “New Scene” and add one.</p>
+<div class="sourceCode" id="cb268"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># number each scene by counting previous "New Scene" entries and adding 1</span>
+<span class="va">scene_count</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">)</span>
+
+<span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">nodes_char_clean2</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">scene_count</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span><span class="op">(</span><span class="st">"New Scene"</span>, <span class="va">nodes_char_clean2</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span>
+<span class="op">}</span></code></pre></div>
+<p>Then we can finalize our dataframe by putting our two vectors together and removing any repeated characters in the same scene. We can also correct for situations where the script starts with a New Scene and we can consistently format our character names to title case, to account for different case typing.</p>
+<div class="sourceCode" id="cb269"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
+
+<span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>scene <span class="op">=</span> <span class="va">scene_count</span>, character <span class="op">=</span> <span class="va">nodes_char_clean2</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">character</span> <span class="op">!=</span> <span class="st">"New Scene"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span><span class="op">(</span><span class="va">scene</span>, <span class="va">character</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
+      scene <span class="op">=</span> <span class="va">scene</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">scene</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span>, <span class="co"># set first scene number to 1</span>
+      character <span class="op">=</span> <span class="va">character</span> <span class="op">%&gt;%</span> 
+        <span class="fu"><a href="https://rdrr.io/r/base/chartr.html">tolower</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+        <span class="fu">tools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/tools/toTitleCase.html">toTitleCase</a></span><span class="op">(</span><span class="op">)</span>
+    <span class="op">)</span> <span class="co"># title case</span>
+
+<span class="co"># check the first ten rows</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">results</span>, <span class="fl">10</span><span class="op">)</span></code></pre></div>
+<pre><code>##    scene character
+## 1      1    Monica
+## 2      1      Joey
+## 3      1  Chandler
+## 4      1    Phoebe
+## 5      1      Ross
+## 6      1    Rachel
+## 7      1  Waitress
+## 8      2    Monica
+## 9      2  Chandler
+## 10     2      Ross</code></pre>
+</div>
+<div id="creating-an-edgelist-from-the-scraped-data" class="section level3" number="5.2.2">
+<h3>
+<span class="header-section-number">5.2.2</span> Creating an edgelist from the scraped data<a class="anchor" aria-label="anchor" href="#creating-an-edgelist-from-the-scraped-data"><i class="fas fa-link"></i></a>
+</h3>
+<p>Now we have scraped the data on which characters have spoken in each numbered scene, we can now try ot build an edgelist between characters based on whether they have both spoken in the same scene. We can also consider adding a weight to each edge based on the number of scenes in which both characters have spoken.</p>
+<p>To do this, we will need to generate a set of unique pairs from the list of characters in each scene. To illustrate, let’s look at the characters in Scene 11:</p>
+<div class="sourceCode" id="cb271"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="op">(</span><span class="va">scene11_chars</span> <span class="op">&lt;-</span> <span class="va">results</span> |&gt; 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">scene</span> <span class="op">==</span> <span class="fl">11</span><span class="op">)</span> |&gt; 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op">(</span><span class="va">character</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code>## [1] "Rachel"   "Chandler" "Joey"     "Monica"   "Paul"</code></pre>
+<p>The unique pairs from this scene are formed by starting with the first character in the list and pairing with each of those that follow, then starting with the second and pairing with each that follows, and so on until the final pair is formed from the second-to-last and last elements of the list. So for Scene 11 our unique pairs would be:</p>
+<ul>
+<li>
+<strong>Rachel pairs:</strong> Rachel-Chandler, Rachel-Joey, Rachel-Monica, Rachel-Paul</li>
+<li>
+<strong>Chandler pairs:</strong> Chandler-Joey, Chandler-Monica, Chandler-Paul</li>
+<li>
+<strong>Joey pairs:</strong> Joey-Monica, Joey-Paul</li>
+<li>
+<strong>Monica pairs</strong>: Monica-Paul</li>
+</ul>
+<p>So we should write a function called <code>unique_pairs()</code> which accepts a character vector of arbitrary length and forms pairs progressively in this way. Then we can apply this function to every scene.</p>
+<div class="sourceCode" id="cb273"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">unique_pairs</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">char_vector</span> <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">{</span>
+  <span class="co"># ensure unique entries</span>
+  <span class="va">vector</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">char_vector</span><span class="op">)</span><span class="op">)</span>
+  <span class="co"># create from-to column dataframe</span>
+  <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>char1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">character</a></span><span class="op">(</span><span class="op">)</span>, 
+                   char2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">character</a></span><span class="op">(</span><span class="op">)</span>, 
+                   stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+  <span class="co"># iterate over each entry to form pairs</span>
+  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">vector</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span> <span class="op">{</span>
+    <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">vector</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+      <span class="va">char1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="va">vector</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">vector</span><span class="op">)</span> <span class="op">-</span> <span class="va">i</span><span class="op">)</span> 
+      <span class="va">char2</span> <span class="op">&lt;-</span> <span class="va">vector</span><span class="op">[</span><span class="op">(</span><span class="va">i</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span><span class="op">:</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">vector</span><span class="op">)</span><span class="op">]</span> 
+      
+      <span class="va">df</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op">%&gt;%</span> 
+        <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html">bind_rows</a></span><span class="op">(</span>
+          <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>char1 <span class="op">=</span> <span class="va">char1</span>, 
+                     char2 <span class="op">=</span> <span class="va">char2</span>, 
+                     stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> 
+        <span class="op">)</span>
+    <span class="op">}</span>
+  <span class="op">}</span>
+  <span class="co">#return result</span>
+  <span class="va">df</span>
+<span class="op">}</span></code></pre></div>
+<p>Now let’s test our new function on the Scene 11 characters:</p>
+<div class="sourceCode" id="cb274"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">unique_pairs</span><span class="op">(</span><span class="va">scene11_chars</span><span class="op">)</span></code></pre></div>
+<pre><code>##       char1    char2
+## 1    Rachel Chandler
+## 2    Rachel     Joey
+## 3    Rachel   Monica
+## 4    Rachel     Paul
+## 5  Chandler     Joey
+## 6  Chandler   Monica
+## 7  Chandler     Paul
+## 8      Joey   Monica
+## 9      Joey     Paul
+## 10   Monica     Paul</code></pre>
+<p>That looks right. Now we can easily generate our edgelist from this episode by applying our new function to each scene.</p>
+<div class="sourceCode" id="cb276"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># run unique_pairs by scene</span>
+<span class="va">friends_ep101</span> <span class="op">&lt;-</span> <span class="va">results</span> |&gt; 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">scene</span><span class="op">)</span> |&gt; 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span><span class="fu">unique_pairs</span><span class="op">(</span><span class="va">character</span><span class="op">)</span><span class="op">)</span> |&gt; 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span>
+
+<span class="co"># check</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">friends_ep101</span><span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 3
+##   scene char1  char2   
+##   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;   
+## 1     1 Monica Joey    
+## 2     1 Monica Chandler
+## 3     1 Monica Phoebe  
+## 4     1 Monica Ross    
+## 5     1 Monica Rachel  
+## 6     1 Monica Waitress</code></pre>
+<p>This looks like it worked. Now we can just count the number of time each distinct pair occurs in order to get our edge weights (making sure to ignore the order of the characters).</p>
+<div class="sourceCode" id="cb278"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># create weight as count of scenes </span>
+<span class="va">friends_ep101_edgelist</span> <span class="op">&lt;-</span> <span class="va">friends_ep101</span> |&gt; 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">scene</span><span class="op">)</span> |&gt; 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">pmin</a></span><span class="op">(</span><span class="va">char1</span>, <span class="va">char2</span><span class="op">)</span>, to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">pmax</a></span><span class="op">(</span><span class="va">char1</span>, <span class="va">char2</span><span class="op">)</span><span class="op">)</span> |&gt; 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">from</span>, <span class="va">to</span>, name <span class="op">=</span> <span class="st">"weight"</span><span class="op">)</span>
+
+<span class="co"># check</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">friends_ep101_edgelist</span><span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 3
+##   from     to       weight
+##   &lt;chr&gt;    &lt;chr&gt;     &lt;int&gt;
+## 1 Chandler Customer      1
+## 2 Chandler Joey          8
+## 3 Chandler Monica        6
+## 4 Chandler Paul          2
+## 5 Chandler Phoebe        5
+## 6 Chandler Rachel        6</code></pre>
+<p>We can now use this edgelist to create an undirected network graph for the first episode of <em>Friends</em>. First we will create an <code>igraph</code> object and then we will visualize it using edge thickness based on weights, as in Figure <a href="restructuring-data.html#fig:friends-ep1-network">5.10</a>.</p>
+<div class="sourceCode" id="cb280"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># create igraph object</span>
+<span class="va">friends_ep1_network</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>
+  d <span class="op">=</span> <span class="va">friends_ep101_edgelist</span>,
+  directed <span class="op">=</span> <span class="cn">FALSE</span>
+<span class="op">)</span>
+
+<span class="co"># visualize</span>
+<span class="fu"><a href="https://ggraph.data-imaginist.com/reference/ggraph.html">ggraph</a></span><span class="op">(</span><span class="va">friends_ep1_network</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_edge_link.html">geom_edge_link</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>edge_width <span class="op">=</span> <span class="va">weight</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"grey"</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_text.html">geom_node_label</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">name</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:friends-ep1-network"></span>
+<img src="_main_files/figure-html/friends-ep1-network-1.png" alt="Visualization of the network of characters in Episode 1 of Friends, based on characters speaking in the same scene together" width="672"><p class="caption">
+Figure 5.10: Visualization of the network of characters in Episode 1 of Friends, based on characters speaking in the same scene together
+</p>
+</div>
+</div>
+<div id="approaches-in-python" class="section level3" number="5.2.3">
+<h3>
+<span class="header-section-number">5.2.3</span> Approaches in Python<a class="anchor" aria-label="anchor" href="#approaches-in-python"><i class="fas fa-link"></i></a>
+</h3>
+</div>
+</div>
+<div id="learning-exercises-3" class="section level2" number="5.3">
+<h2>
+<span class="header-section-number">5.3</span> Learning exercises<a class="anchor" aria-label="anchor" href="#learning-exercises-3"><i class="fas fa-link"></i></a>
+</h2>
+<div id="discussion-questions-3" class="section level3" number="5.3.1">
+<h3>
+<span class="header-section-number">5.3.1</span> Discussion questions<a class="anchor" aria-label="anchor" href="#discussion-questions-3"><i class="fas fa-link"></i></a>
+</h3>
+</div>
+<div id="data-exercises-3" class="section level3" number="5.3.2">
+<h3>
+<span class="header-section-number">5.3.2</span> Data exercises<a class="anchor" aria-label="anchor" href="#data-exercises-3"><i class="fas fa-link"></i></a>
+</h3>
 
 </div>
 </div>
+</div>
+
   <div class="chapter-nav">
 <div class="prev"><a href="viz-graphs.html"><span class="header-section-number">4</span> Visualizing Graphs</a></div>
 <div class="next"><a href="paths-and-distance-in-networks.html"><span class="header-section-number">6</span> Paths and Distance in Networks</a></div>
@@ -582,7 +836,19 @@ Figure 5.9: Visualization of the Chinook customer-to-customer network based on a
 <li><a class="nav-link" href="#approaches-using-python"><span class="header-section-number">5.1.4</span> Approaches using Python</a></li>
 </ul>
 </li>
-<li><a class="nav-link" href="#transforming-data-from-documents-for-use-in-graphs"><span class="header-section-number">5.2</span> Transforming data from documents for use in graphs</a></li>
+<li>
+<a class="nav-link" href="#transforming-data-from-documents-for-use-in-graphs"><span class="header-section-number">5.2</span> Transforming data from documents for use in graphs</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#scraping-the-character-and-scene-data"><span class="header-section-number">5.2.1</span> Scraping the character and scene data</a></li>
+<li><a class="nav-link" href="#creating-an-edgelist-from-the-scraped-data"><span class="header-section-number">5.2.2</span> Creating an edgelist from the scraped data</a></li>
+<li><a class="nav-link" href="#approaches-in-python"><span class="header-section-number">5.2.3</span> Approaches in Python</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#learning-exercises-3"><span class="header-section-number">5.3</span> Learning exercises</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#discussion-questions-3"><span class="header-section-number">5.3.1</span> Discussion questions</a></li>
+<li><a class="nav-link" href="#data-exercises-3"><span class="header-section-number">5.3.2</span> Data exercises</a></li>
+</ul>
+</li>
 </ul>
 
       <div class="book-extra">
