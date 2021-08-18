@@ -144,9 +144,9 @@
 <span class="op">(</span><span class="va">orgchart</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>
   d <span class="op">=</span> <span class="va">orgchart_edgelist</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH cd11fdd DN-- 8 7 -- 
+<pre><code>## IGRAPH 919e456 DN-- 8 7 -- 
 ## + attr: name (v/c)
-## + edges from cd11fdd (vertex names):
+## + edges from 919e456 (vertex names):
 ## [1] Andrew -&gt;Nancy    Andrew -&gt;Michael  Nancy  -&gt;Jane     Nancy  -&gt;Margaret Nancy  -&gt;Steve    Michael-&gt;Robert  
 ## [7] Michael-&gt;Laura</code></pre>
 <p>We now have a directed graph with named vertices, so this should be easy to plot. Let’s use <code>ggplot</code> with a dendrogram (tree) layout, as in Figure <a href="restructuring-data.html#fig:chinook-pretty">5.1</a>.</p>
@@ -560,9 +560,9 @@ Figure 5.9: Visualization of the Chinook customer-to-customer network based on a
 </div>
 </div>
 </div>
-<div id="transforming-data-from-documents-for-use-in-graphs" class="section level2" number="5.2">
+<div id="doc-transform" class="section level2" number="5.2">
 <h2>
-<span class="header-section-number">5.2</span> Transforming data from documents for use in graphs<a class="anchor" aria-label="anchor" href="#transforming-data-from-documents-for-use-in-graphs"><i class="fas fa-link"></i></a>
+<span class="header-section-number">5.2</span> Transforming data from documents for use in graphs<a class="anchor" aria-label="anchor" href="#doc-transform"><i class="fas fa-link"></i></a>
 </h2>
 <p>In this example, we will look at how to extract information that sits in semi-structured documents and convert it to a graph-like shape to allow us to understand connections between actors or entities in those documents. Semi-structured documents are documents which have a certain expected format through which we can reliably identify important actors or entities. These could be legal contracts, financial statements or other types of structured forms. Through extracting entities from these documents, we can identify important relationships between them, such as co-publishing, financial transactions or contractual obligations.</p>
 <p>To illustrate this we will show how to extract information from a TV script in a way where we can determine which characters have spoken in the same scene together, and then use this information to create a network of TV characters. We will use an episode script from the hit TV comedy show <em>Friends</em>. A full set of scripts from all episodes of <em>Friends</em> can be found online at <code>https://fangj.github.io/friends/</code>, and later in this book we will be working with a substantial network for characters from the entire series. For this exercise, however, we will keep it simple and just focus on the character network from the first episode. The script of the first episode can be found at <code>https://fangj.github.io/friends/season/0101.html</code>.</p>
@@ -579,6 +579,7 @@ Figure 5.9: Visualization of the Chinook customer-to-customer network based on a
 
 <span class="va">url_string</span> <span class="op">&lt;-</span> <span class="st">"https://fangj.github.io/friends/season/0101.html"</span>
 
+<span class="co"># installing rvest also installs xml2</span>
 <span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu">xml2</span><span class="fu">::</span><span class="fu"><a href="http://xml2.r-lib.org/reference/read_xml.html">read_html</a></span><span class="op">(</span><span class="va">url_string</span><span class="op">)</span> <span class="op">%&gt;%</span> 
       <span class="fu">xml2</span><span class="fu">::</span><span class="fu"><a href="http://xml2.r-lib.org/reference/as_list.html">as_list</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
       <span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="op">)</span>
@@ -611,30 +612,31 @@ Figure 5.9: Visualization of the Chinook customer-to-customer network based on a
 <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">nodes_newscene</span> <span class="op">==</span> <span class="st">"New Scene"</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 15</code></pre>
 <p>That worked nicely. Now, you might also have noticed that for dialogue purposes, character names precede a colon at the beginning of a line. So that might be a nice way to extract the names of characters with speaking parts in a scene (although it might give us a few other things that have preceded colons in the script also, but we can deal with that later).</p>
-<p>So what we will do is use regular expression syntax (regex) to tell R that we are looking for anything at the beginning of a line preceding a colon. We will use a lookahead regex string as follows: <code>^[A-Za-z]+(?=:)</code>.</p>
-<p>Let’s look at that string and make sure we know what it means. The <code>^[A-Za-z]+</code> component means ‘find any sub-string of alphabetic text of any length at the beginning of a string.’ The part in parentheses is known as a lookahead — it means look ahead of that sub-string of text and find a colon as the next character. This is therefore instructing R to find any string of alphabetic text at the start of a line that precedes a colon and return it. If we use the R package <code>stringr</code> and its function <code><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract()</a></code> with this regex syntax, it will go through every entry of the <code>nodes</code> vector and transform it to just the first string of text found before a colon. If no such string is found it will return an NA value. This is great for us because we know that, for the purpose of dialogue, characters names are always at the start of nodes, so we certainly won’t miss any if we just take the first instance in each line. We should also, for safety, not mess with the scene breaks we have put into our vector.</p>
+<p>So what we will do is use regular expression syntax (regex) to tell R that we are looking for anything at the beginning of a line preceding a colon. We will use a lookahead regex string as follows: <code>^[A-Za-z ]+(?=:)</code>.</p>
+<p>Let’s look at that string and make sure we know what it means. The <code>^[A-Za-z ]+</code> component means ‘find any sub-string of alphabetic text of any length including spaces at the beginning of a string.’ The part in parentheses is known as a lookahead — it means look ahead of that sub-string of text and find a colon as the next character. This is therefore instructing R to find any string of alphabetic text at the start of a line that precedes a colon and return it. If we use the R package <code>stringr</code> and its function <code><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract()</a></code> with this regex syntax, it will go through every entry of the <code>nodes</code> vector and transform it to just the first string of text found before a colon. If no such string is found it will return an NA value. This is great for us because we know that, for the purpose of dialogue, characters names are always at the start of nodes, so we certainly won’t miss any if we just take the first instance in each line. We should also, for safety, not mess with the scene breaks we have put into our vector.</p>
 <div class="sourceCode" id="cb264"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://stringr.tidyverse.org">stringr</a></span><span class="op">)</span>
 
 <span class="co"># outside of 'New Scene' tags extract anything before : in every line </span>
 <span class="va">nodes_char</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">nodes_newscene</span> <span class="op">!=</span> <span class="st">"New Scene"</span>, 
-                     <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">nodes_newscene</span>, <span class="st">"^[A-Za-z]+(?=:)"</span><span class="op">)</span>, 
+                     <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">nodes_newscene</span>, <span class="st">"^[A-Za-z ]+(?=:)"</span><span class="op">)</span>, 
                      <span class="va">nodes_newscene</span><span class="op">)</span>
 
 <span class="co"># check a sample</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
 <span class="va">nodes_char</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">30</span><span class="op">)</span><span class="op">]</span></code></pre></div>
-<pre><code>##  [1] NA          NA          NA          NA          NA          "Monica"    NA          NA          NA          NA         
-## [11] NA          "Chandler"  NA          NA          NA          NA          NA          NA          NA          NA         
-## [21] NA          NA          NA          "Joey"      "Phoebe"    NA          "New Scene" NA          NA          NA</code></pre>
-<p>So this is working, but we have more cleaning to do. For example, we will want to get rid of the <code>NA</code> values. We also notice that there are some preamble lines which usually contain the word “by” and we can see that strings in brackets like <code>(Note</code> seems to have been extracted. We can create a bunch of special cleaning commands to get rid of these if we don’t want them<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;The cleaning commands here work for this specific episode, but they would need to be expanded to be used on more episodes to take into account any unpredictable formatting in the scripts&lt;/p&gt;"><sup>29</sup></a>.</p>
+<pre><code>##  [1] NA           NA           NA           NA           NA           "Monica"     NA           NA           NA          
+## [10] NA           NA           "Chandler"   NA           NA           NA           NA           NA           NA          
+## [19] NA           NA           NA           NA           NA           "Joey"       "Phoebe"     NA           "New Scene" 
+## [28] NA           NA           "Written by"</code></pre>
+<p>So this is working, but we have more cleaning to do. For example, we will want to get rid of the <code>NA</code> values. We will also see if we take a look that there is a ‘character’ called ‘All’ which probably should not be in our network. We can also see phrases like ‘Written by’ which are not dialogue characters, and " and " which involves combinations of characters. So we can create special commands to remove any instances of these phrases<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;The limited cleaning commands here work for this specific episode, but they would need to be expanded to be used on more episodes to take into account any unpredictable formatting in the scripts. The reality of most scraping exercises is that some code has to be written to deal with exceptions.&lt;/p&gt;"><sup>29</sup></a>.</p>
 <div class="sourceCode" id="cb266"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># remove NAs</span>
 <span class="va">nodes_char_clean1</span> <span class="op">&lt;-</span> <span class="va">nodes_char</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">nodes_char</span><span class="op">)</span><span class="op">]</span> 
 
-<span class="co"># remove entries with "by" or "(" or "all" irrelevant of the case</span>
+<span class="co"># remove entries with "all", " and " or "by" irrelevant of the case</span>
 <span class="va">nodes_char_clean2</span> <span class="op">&lt;-</span> <span class="va">nodes_char_clean1</span><span class="op">[</span>
-  <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span><span class="op">(</span><span class="st">"by|\\(|all"</span>, <span class="fu"><a href="https://rdrr.io/r/base/chartr.html">tolower</a></span><span class="op">(</span><span class="va">nodes_char_clean1</span><span class="op">)</span><span class="op">)</span>
+  <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span><span class="op">(</span><span class="st">"all| and |by"</span>, <span class="fu"><a href="https://rdrr.io/r/base/chartr.html">tolower</a></span><span class="op">(</span><span class="va">nodes_char_clean1</span><span class="op">)</span><span class="op">)</span>
 <span class="op">]</span> 
 
 <span class="co"># check </span>
@@ -787,7 +789,8 @@ Figure 5.9: Visualization of the Chinook customer-to-customer network based on a
 
 <span class="co"># visualize</span>
 <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/ggraph.html">ggraph</a></span><span class="op">(</span><span class="va">friends_ep1_network</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_edge_link.html">geom_edge_link</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>edge_width <span class="op">=</span> <span class="va">weight</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"grey"</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_edge_link.html">geom_edge_link</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>edge_width <span class="op">=</span> <span class="va">weight</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"grey"</span>, alpha <span class="op">=</span> <span class="fl">0.5</span>,
+                 show.legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_text.html">geom_node_label</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">name</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <div class="figure" style="text-align: center">
@@ -801,6 +804,150 @@ Figure 5.10: Visualization of the network of characters in Episode 1 of Friends,
 <h3>
 <span class="header-section-number">5.2.3</span> Approaches in Python<a class="anchor" aria-label="anchor" href="#approaches-in-python"><i class="fas fa-link"></i></a>
 </h3>
+<p>To repeat the work in Section <a href="restructuring-data.html#doc-transform">5.2</a> in Python, we will use the <code>BeautifulSoup</code> package to scrape our web script of the first episode of <em>Friends</em>.</p>
+<div class="sourceCode" id="cb281"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb281-1"><a href="restructuring-data.html#cb281-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
+<span id="cb281-2"><a href="restructuring-data.html#cb281-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> bs4 <span class="im">import</span> BeautifulSoup</span>
+<span id="cb281-3"><a href="restructuring-data.html#cb281-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb281-4"><a href="restructuring-data.html#cb281-4" aria-hidden="true" tabindex="-1"></a>url<span class="op">=</span><span class="st">"https://fangj.github.io/friends/season/0101.html"</span></span>
+<span id="cb281-5"><a href="restructuring-data.html#cb281-5" aria-hidden="true" tabindex="-1"></a>script <span class="op">=</span> requests.get(url)</span>
+<span id="cb281-6"><a href="restructuring-data.html#cb281-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb281-7"><a href="restructuring-data.html#cb281-7" aria-hidden="true" tabindex="-1"></a><span class="co"># parse the html of the page</span></span>
+<span id="cb281-8"><a href="restructuring-data.html#cb281-8" aria-hidden="true" tabindex="-1"></a>friends_ep1 <span class="op">=</span> BeautifulSoup(script.text, <span class="st">"html.parser"</span>)</span></code></pre></div>
+<p>The object <code>friends_ep1</code> contains all the HTML code of the script web page. Now we need to look for the string <code>Scene:</code> and replace it with the the string <code>&lt;b&gt;New Scene:&lt;/b&gt;</code>. It should be clear soon why I am putting the replacement string in bold HTML tags.</p>
+<div class="sourceCode" id="cb282"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb282-1"><a href="restructuring-data.html#cb282-1" aria-hidden="true" tabindex="-1"></a>originalString <span class="op">=</span> <span class="st">"Scene:"</span></span>
+<span id="cb282-2"><a href="restructuring-data.html#cb282-2" aria-hidden="true" tabindex="-1"></a>replaceString <span class="op">=</span> <span class="st">"&lt;b&gt;New Scene:&lt;/b&gt;"</span></span>
+<span id="cb282-3"><a href="restructuring-data.html#cb282-3" aria-hidden="true" tabindex="-1"></a>friends_ep1_replace <span class="op">=</span> BeautifulSoup(<span class="bu">str</span>(friends_ep1).replace(originalString, </span>
+<span id="cb282-4"><a href="restructuring-data.html#cb282-4" aria-hidden="true" tabindex="-1"></a>replaceString))</span></code></pre></div>
+<p>Now we know from viewing the web page or inspecting the HTML code that the characters names who are speaking in scenes will be inside bold or strong tags, so firstly lets get everything that is in bold in the document, and then let’s match for any alphabetic string including spaces prior to a colon using regular expressions. This should include the <code>New Scene</code> tags that we created in the last step.</p>
+<div class="sourceCode" id="cb283"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb283-1"><a href="restructuring-data.html#cb283-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb283-2"><a href="restructuring-data.html#cb283-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb283-3"><a href="restructuring-data.html#cb283-3" aria-hidden="true" tabindex="-1"></a><span class="co"># find everything in bold tags with alpha preceding a colon</span></span>
+<span id="cb283-4"><a href="restructuring-data.html#cb283-4" aria-hidden="true" tabindex="-1"></a>searchstring <span class="op">=</span> re.<span class="bu">compile</span>(<span class="st">"^[A-Za-z ]+(?=:)"</span>)</span>
+<span id="cb283-5"><a href="restructuring-data.html#cb283-5" aria-hidden="true" tabindex="-1"></a>friends_ep1_bold <span class="op">=</span> friends_ep1_replace.find_all([<span class="st">'b'</span>, <span class="st">'strong'</span>], </span>
+<span id="cb283-6"><a href="restructuring-data.html#cb283-6" aria-hidden="true" tabindex="-1"></a>text <span class="op">=</span> searchstring)</span>
+<span id="cb283-7"><a href="restructuring-data.html#cb283-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb283-8"><a href="restructuring-data.html#cb283-8" aria-hidden="true" tabindex="-1"></a><span class="co"># extract the text and remove colons</span></span>
+<span id="cb283-9"><a href="restructuring-data.html#cb283-9" aria-hidden="true" tabindex="-1"></a>friends_ep1_list <span class="op">=</span> [friends_ep1_bold[i].text.replace(<span class="st">':'</span>, <span class="st">''</span>) </span>
+<span id="cb283-10"><a href="restructuring-data.html#cb283-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(friends_ep1_bold) <span class="op">-</span> <span class="dv">1</span>)]</span>
+<span id="cb283-11"><a href="restructuring-data.html#cb283-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb283-12"><a href="restructuring-data.html#cb283-12" aria-hidden="true" tabindex="-1"></a><span class="co"># check a sample</span></span>
+<span id="cb283-13"><a href="restructuring-data.html#cb283-13" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span>(friends_ep1_list)</span></code></pre></div>
+<pre><code>## {'Chandler', 'Frannie', 'Joey', 'Ross', 'Rachel', 'Phoebe', 'Waitress', 'Paul', 'Chandler ', 'Monica', 'New Scene', 'All', 'Customer', 'Priest on TV', 'Ross and Rachel', 'Monica '}</code></pre>
+<p>This looks promising - new we need to get rid of the ‘All’ and ’ and ’ entries.</p>
+<div class="sourceCode" id="cb285"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb285-1"><a href="restructuring-data.html#cb285-1" aria-hidden="true" tabindex="-1"></a>friends_ep1_list2<span class="op">=</span>[entry.strip() <span class="cf">for</span> entry <span class="kw">in</span> friends_ep1_list </span>
+<span id="cb285-2"><a href="restructuring-data.html#cb285-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"All"</span> <span class="kw">not</span> <span class="kw">in</span> entry <span class="kw">and</span> <span class="st">" and "</span> <span class="kw">not</span> <span class="kw">in</span> entry]</span>
+<span id="cb285-3"><a href="restructuring-data.html#cb285-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb285-4"><a href="restructuring-data.html#cb285-4" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span>(friends_ep1_list2)</span></code></pre></div>
+<pre><code>## {'Chandler', 'Frannie', 'Joey', 'Ross', 'Rachel', 'Phoebe', 'Waitress', 'Paul', 'Monica', 'New Scene', 'Customer', 'Priest on TV'}</code></pre>
+<p>Now we are ready ot organize our characters by scene. First we do a scene count, then we create a dataframe and obtain unique character lists by scene:</p>
+<div class="sourceCode" id="cb287"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb287-1"><a href="restructuring-data.html#cb287-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb287-2"><a href="restructuring-data.html#cb287-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb287-3"><a href="restructuring-data.html#cb287-3" aria-hidden="true" tabindex="-1"></a><span class="co"># number each scene by counting previous "New Scene" entries and adding 1</span></span>
+<span id="cb287-4"><a href="restructuring-data.html#cb287-4" aria-hidden="true" tabindex="-1"></a>scene_count <span class="op">=</span> []</span>
+<span id="cb287-5"><a href="restructuring-data.html#cb287-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb287-6"><a href="restructuring-data.html#cb287-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,<span class="bu">len</span>(friends_ep1_list2)):</span>
+<span id="cb287-7"><a href="restructuring-data.html#cb287-7" aria-hidden="true" tabindex="-1"></a>  scene_count.append(friends_ep1_list2[<span class="dv">0</span>:i<span class="op">+</span><span class="dv">1</span>].count(<span class="st">"New Scene"</span>))</span>
+<span id="cb287-8"><a href="restructuring-data.html#cb287-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb287-9"><a href="restructuring-data.html#cb287-9" aria-hidden="true" tabindex="-1"></a><span class="co"># create a pandas dataframe</span></span>
+<span id="cb287-10"><a href="restructuring-data.html#cb287-10" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> {<span class="st">'scene'</span>: scene_count, <span class="st">'character'</span>: friends_ep1_list2}</span>
+<span id="cb287-11"><a href="restructuring-data.html#cb287-11" aria-hidden="true" tabindex="-1"></a>scenes_df <span class="op">=</span> pd.DataFrame(df)</span>
+<span id="cb287-12"><a href="restructuring-data.html#cb287-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb287-13"><a href="restructuring-data.html#cb287-13" aria-hidden="true" tabindex="-1"></a><span class="co"># remove New Scene rows</span></span>
+<span id="cb287-14"><a href="restructuring-data.html#cb287-14" aria-hidden="true" tabindex="-1"></a>scenes_df <span class="op">=</span> scenes_df[scenes_df.character <span class="op">!=</span> <span class="st">"New Scene"</span>]</span>
+<span id="cb287-15"><a href="restructuring-data.html#cb287-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb287-16"><a href="restructuring-data.html#cb287-16" aria-hidden="true" tabindex="-1"></a><span class="co"># get unique characters by scene</span></span>
+<span id="cb287-17"><a href="restructuring-data.html#cb287-17" aria-hidden="true" tabindex="-1"></a>scenes <span class="op">=</span> scenes_df.groupby(<span class="st">'scene'</span>)[<span class="st">'character'</span>].unique()</span>
+<span id="cb287-18"><a href="restructuring-data.html#cb287-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb287-19"><a href="restructuring-data.html#cb287-19" aria-hidden="true" tabindex="-1"></a><span class="co"># check</span></span>
+<span id="cb287-20"><a href="restructuring-data.html#cb287-20" aria-hidden="true" tabindex="-1"></a>scenes.head()</span></code></pre></div>
+<pre><code>## scene
+## 1    [Monica, Joey, Chandler, Phoebe, Ross, Rachel,...
+## 2    [Monica, Chandler, Ross, Rachel, Phoebe, Joey,...
+## 3                                             [Phoebe]
+## 4                               [Ross, Joey, Chandler]
+## 5                                       [Monica, Paul]
+## Name: character, dtype: object</code></pre>
+<p>Now we need to create a function to find all unique pairs inside a scene character list:</p>
+<div class="sourceCode" id="cb289"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb289-1"><a href="restructuring-data.html#cb289-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np </span>
+<span id="cb289-2"><a href="restructuring-data.html#cb289-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb289-3"><a href="restructuring-data.html#cb289-3" aria-hidden="true" tabindex="-1"></a><span class="co"># define function</span></span>
+<span id="cb289-4"><a href="restructuring-data.html#cb289-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> unique_pairs(chars: <span class="bu">object</span>) <span class="op">-&gt;</span> pd.DataFrame:</span>
+<span id="cb289-5"><a href="restructuring-data.html#cb289-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># start with uniques</span></span>
+<span id="cb289-6"><a href="restructuring-data.html#cb289-6" aria-hidden="true" tabindex="-1"></a>  characters <span class="op">=</span> np.unique(chars)</span>
+<span id="cb289-7"><a href="restructuring-data.html#cb289-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create from-to list dataframe</span></span>
+<span id="cb289-8"><a href="restructuring-data.html#cb289-8" aria-hidden="true" tabindex="-1"></a>  char1 <span class="op">=</span> []</span>
+<span id="cb289-9"><a href="restructuring-data.html#cb289-9" aria-hidden="true" tabindex="-1"></a>  char2 <span class="op">=</span> []</span>
+<span id="cb289-10"><a href="restructuring-data.html#cb289-10" aria-hidden="true" tabindex="-1"></a>  df <span class="op">=</span> pd.DataFrame({<span class="st">'char1'</span>: char1, <span class="st">'char2'</span>: char2})</span>
+<span id="cb289-11"><a href="restructuring-data.html#cb289-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># iterate over each entry to form pairs</span></span>
+<span id="cb289-12"><a href="restructuring-data.html#cb289-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="bu">len</span>(characters) <span class="op">&gt;</span> <span class="dv">1</span>:</span>
+<span id="cb289-13"><a href="restructuring-data.html#cb289-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(characters) <span class="op">-</span> <span class="dv">1</span>):</span>
+<span id="cb289-14"><a href="restructuring-data.html#cb289-14" aria-hidden="true" tabindex="-1"></a>      char1 <span class="op">=</span> [characters[i]] <span class="op">*</span> (<span class="bu">len</span>(characters) <span class="op">-</span> i <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb289-15"><a href="restructuring-data.html#cb289-15" aria-hidden="true" tabindex="-1"></a>      char2 <span class="op">=</span> [characters[i] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(i <span class="op">+</span> <span class="dv">1</span>, <span class="bu">len</span>(characters))]</span>
+<span id="cb289-16"><a href="restructuring-data.html#cb289-16" aria-hidden="true" tabindex="-1"></a>      <span class="co"># append to dataframe</span></span>
+<span id="cb289-17"><a href="restructuring-data.html#cb289-17" aria-hidden="true" tabindex="-1"></a>      df2 <span class="op">=</span> pd.DataFrame({<span class="st">'char1'</span>: char1, <span class="st">'char2'</span>: char2})</span>
+<span id="cb289-18"><a href="restructuring-data.html#cb289-18" aria-hidden="true" tabindex="-1"></a>      df <span class="op">=</span> df.append(df2, ignore_index <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb289-19"><a href="restructuring-data.html#cb289-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> df</span>
+<span id="cb289-20"><a href="restructuring-data.html#cb289-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb289-21"><a href="restructuring-data.html#cb289-21" aria-hidden="true" tabindex="-1"></a><span class="co"># test on scene 11</span></span>
+<span id="cb289-22"><a href="restructuring-data.html#cb289-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb289-23"><a href="restructuring-data.html#cb289-23" aria-hidden="true" tabindex="-1"></a>unique_pairs(scenes[<span class="dv">11</span>])</span></code></pre></div>
+<pre><code>##       char1   char2
+## 0  Chandler    Joey
+## 1  Chandler  Monica
+## 2  Chandler    Paul
+## 3  Chandler  Rachel
+## 4      Joey  Monica
+## 5      Joey    Paul
+## 6      Joey  Rachel
+## 7    Monica    Paul
+## 8    Monica  Rachel
+## 9      Paul  Rachel</code></pre>
+<p>This looks right. Now we need to apply this to every scene and gather the results into one DataFrame.</p>
+<div class="sourceCode" id="cb291"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb291-1"><a href="restructuring-data.html#cb291-1" aria-hidden="true" tabindex="-1"></a><span class="co"># start DataFrame</span></span>
+<span id="cb291-2"><a href="restructuring-data.html#cb291-2" aria-hidden="true" tabindex="-1"></a>char1 <span class="op">=</span> []</span>
+<span id="cb291-3"><a href="restructuring-data.html#cb291-3" aria-hidden="true" tabindex="-1"></a>char2 <span class="op">=</span> []</span>
+<span id="cb291-4"><a href="restructuring-data.html#cb291-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb291-5"><a href="restructuring-data.html#cb291-5" aria-hidden="true" tabindex="-1"></a>edgelist_df <span class="op">=</span> pd.DataFrame({<span class="st">'char1'</span>: char1, <span class="st">'char2'</span>: char2})</span>
+<span id="cb291-6"><a href="restructuring-data.html#cb291-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb291-7"><a href="restructuring-data.html#cb291-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> scene <span class="kw">in</span> scenes:</span>
+<span id="cb291-8"><a href="restructuring-data.html#cb291-8" aria-hidden="true" tabindex="-1"></a>  df <span class="op">=</span> unique_pairs(scene)</span>
+<span id="cb291-9"><a href="restructuring-data.html#cb291-9" aria-hidden="true" tabindex="-1"></a>  edgelist_df <span class="op">=</span> edgelist_df.append(df, ignore_index <span class="op">=</span> <span class="va">True</span>)</span></code></pre></div>
+<p>Now we can order across the rows alphabetically count the occurrences of each unique character pair to get our edge weights:</p>
+<div class="sourceCode" id="cb292"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb292-1"><a href="restructuring-data.html#cb292-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sort each row alphabetically</span></span>
+<span id="cb292-2"><a href="restructuring-data.html#cb292-2" aria-hidden="true" tabindex="-1"></a>edgelist_df <span class="op">=</span> edgelist_df.sort_values(by <span class="op">=</span> [<span class="st">'char1'</span>, <span class="st">'char2'</span>])</span>
+<span id="cb292-3"><a href="restructuring-data.html#cb292-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb292-4"><a href="restructuring-data.html#cb292-4" aria-hidden="true" tabindex="-1"></a><span class="co"># count by unique pair</span></span>
+<span id="cb292-5"><a href="restructuring-data.html#cb292-5" aria-hidden="true" tabindex="-1"></a>edgelist <span class="op">=</span> edgelist_df.groupby([<span class="st">'char1'</span>, <span class="st">'char2'</span>]).<span class="op">\</span></span>
+<span id="cb292-6"><a href="restructuring-data.html#cb292-6" aria-hidden="true" tabindex="-1"></a><span class="bu">apply</span>(<span class="bu">len</span>).to_frame(<span class="st">"weight"</span>).reset_index()</span>
+<span id="cb292-7"><a href="restructuring-data.html#cb292-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb292-8"><a href="restructuring-data.html#cb292-8" aria-hidden="true" tabindex="-1"></a><span class="co"># check</span></span>
+<span id="cb292-9"><a href="restructuring-data.html#cb292-9" aria-hidden="true" tabindex="-1"></a>edgelist.head()</span></code></pre></div>
+<pre><code>##       char1     char2  weight
+## 0  Chandler  Customer       1
+## 1  Chandler      Joey       8
+## 2  Chandler    Monica       6
+## 3  Chandler      Paul       2
+## 4  Chandler    Phoebe       5</code></pre>
+<p>This is what we need to create and visualize our graph of Episode 1 of <em>Friends</em>, which can be seen in <a href="restructuring-data.html#fig:friends-graph-py">5.11</a> with the edge thickness determined by edge weight.</p>
+<div class="sourceCode" id="cb294"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb294-1"><a href="restructuring-data.html#cb294-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
+<span id="cb294-2"><a href="restructuring-data.html#cb294-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
+<span id="cb294-3"><a href="restructuring-data.html#cb294-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb294-4"><a href="restructuring-data.html#cb294-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create networkx object</span></span>
+<span id="cb294-5"><a href="restructuring-data.html#cb294-5" aria-hidden="true" tabindex="-1"></a>friends_ep1_network <span class="op">=</span> nx.from_pandas_edgelist(edgelist,</span>
+<span id="cb294-6"><a href="restructuring-data.html#cb294-6" aria-hidden="true" tabindex="-1"></a>source <span class="op">=</span> <span class="st">"char1"</span>, target <span class="op">=</span> <span class="st">"char2"</span>, edge_attr<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb294-7"><a href="restructuring-data.html#cb294-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb294-8"><a href="restructuring-data.html#cb294-8" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize with edge weight as edge width</span></span>
+<span id="cb294-9"><a href="restructuring-data.html#cb294-9" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">123</span>)</span>
+<span id="cb294-10"><a href="restructuring-data.html#cb294-10" aria-hidden="true" tabindex="-1"></a>weights <span class="op">=</span> <span class="bu">list</span>(nx.get_edge_attributes(friends_ep1_network, <span class="st">'weight'</span>).values())</span>
+<span id="cb294-11"><a href="restructuring-data.html#cb294-11" aria-hidden="true" tabindex="-1"></a>nx.draw_networkx(friends_ep1_network, node_color <span class="op">=</span> <span class="st">"lightblue"</span>, node_size <span class="op">=</span> <span class="dv">60</span>,</span>
+<span id="cb294-12"><a href="restructuring-data.html#cb294-12" aria-hidden="true" tabindex="-1"></a>edge_color <span class="op">=</span> <span class="st">"grey"</span>, with_labels <span class="op">=</span> <span class="va">True</span>, width <span class="op">=</span> np.array(weights))</span>
+<span id="cb294-13"><a href="restructuring-data.html#cb294-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:friends-graph-py"></span>
+<img src="_main_files/figure-html/unnamed-chunk-60-1.png" alt="Graph of Friends character network from Episode 1 with edge width indicating the number of shared scenes" width="672"><p class="caption">
+Figure 5.11: Graph of Friends character network from Episode 1 with edge width indicating the number of shared scenes
+</p>
+</div>
 </div>
 </div>
 <div id="learning-exercises-3" class="section level2" number="5.3">
@@ -811,6 +958,13 @@ Figure 5.10: Visualization of the network of characters in Episode 1 of Friends,
 <h3>
 <span class="header-section-number">5.3.1</span> Discussion questions<a class="anchor" aria-label="anchor" href="#discussion-questions-3"><i class="fas fa-link"></i></a>
 </h3>
+<ol style="list-style-type: decimal">
+<li>What kinds of data sources are most likely to already exist in a graph-friendly form? Why?</li>
+<li>What are the two most important things to define when you intend to transform data into a graph-friendly structure?</li>
+<li>Imagine that you are working in a global Law firm with a database that has three tables. One table lists employee location details including office and home address. A second table includes details on which clients each employee has been working for and what specialty areas they focus on with each client. A third table lists the education history of each employee including school and major/subject area. List out all the different ways you can think to turn this data into a network of employees.</li>
+<li>Pick one or two of your answers from Question 2 and write down two options for how to structure a graph for each of them. For one option, consider a graph where employees are the only vertices. Then consider a graph where there are at least two different entities as vertices. How might your edges be defined in each and would they have any properties?</li>
+<li>
+</ol>
 </div>
 <div id="data-exercises-3" class="section level3" number="5.3.2">
 <h3>
@@ -837,7 +991,7 @@ Figure 5.10: Visualization of the network of characters in Episode 1 of Friends,
 </ul>
 </li>
 <li>
-<a class="nav-link" href="#transforming-data-from-documents-for-use-in-graphs"><span class="header-section-number">5.2</span> Transforming data from documents for use in graphs</a><ul class="nav navbar-nav">
+<a class="nav-link" href="#doc-transform"><span class="header-section-number">5.2</span> Transforming data from documents for use in graphs</a><ul class="nav navbar-nav">
 <li><a class="nav-link" href="#scraping-the-character-and-scene-data"><span class="header-section-number">5.2.1</span> Scraping the character and scene data</a></li>
 <li><a class="nav-link" href="#creating-an-edgelist-from-the-scraped-data"><span class="header-section-number">5.2.2</span> Creating an edgelist from the scraped data</a></li>
 <li><a class="nav-link" href="#approaches-in-python"><span class="header-section-number">5.2.3</span> Approaches in Python</a></li>

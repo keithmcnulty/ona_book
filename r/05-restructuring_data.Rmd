@@ -425,7 +425,7 @@ plt.show()
 ```
 
 
-## Transforming data from documents for use in graphs
+## Transforming data from documents for use in graphs{#doc-transform}
 
 In this example, we will look at how to extract information that sits in semi-structured documents and convert it to a graph-like shape to allow us to understand connections between actors or entities in those documents. Semi-structured documents are documents which have a certain expected format through which we can reliably identify important actors or entities.  These could be legal contracts, financial statements or other types of structured forms.  Through extracting entities from these documents, we can identify important relationships between them, such as co-publishing, financial transactions or contractual obligations.   
 
@@ -446,6 +446,7 @@ library(rvest)
 
 url_string <- "https://fangj.github.io/friends/season/0101.html"
 
+# installing rvest also installs xml2
 nodes <- xml2::read_html(url_string) %>% 
       xml2::as_list() %>% 
       unlist()
@@ -473,16 +474,16 @@ sum(nodes_newscene == "New Scene")
 
 That worked nicely. Now, you might also have noticed that for dialogue purposes, character names precede a colon at the beginning of a line. So that might be a nice way to extract the names of characters with speaking parts in a scene (although it might give us a few other things that have preceded colons in the script also, but we can deal with that later).
 
-So what we will do is use regular expression syntax (regex) to tell R that we are looking for anything at the beginning of a line preceding a colon. We will use a lookahead regex string as follows: `^[A-Za-z]+(?=:)`.
+So what we will do is use regular expression syntax (regex) to tell R that we are looking for anything at the beginning of a line preceding a colon. We will use a lookahead regex string as follows: `^[A-Za-z ]+(?=:)`.
 
-Let’s look at that string and make sure we know what it means. The `^[A-Za-z]+` component means ‘find any sub-string of alphabetic text of any length at the beginning of a string’. The part in parentheses is known as a lookahead --- it means look ahead of that sub-string of text and find a colon as the next character. This is therefore instructing R to find any string of alphabetic text at the start of a line that precedes a colon and return it. If we use the R package `stringr` and its function `str_extract()` with this regex syntax, it will go through every entry of the `nodes` vector and transform it to just the first string of text found before a colon. If no such string is found it will return an NA value. This is great for us because we know that, for the purpose of dialogue, characters names are always at the start of nodes, so we certainly won’t miss any if we just take the first instance in each line. We should also, for safety, not mess with the scene breaks we have put into our vector.
+Let’s look at that string and make sure we know what it means. The `^[A-Za-z ]+` component means ‘find any sub-string of alphabetic text of any length including spaces at the beginning of a string’. The part in parentheses is known as a lookahead --- it means look ahead of that sub-string of text and find a colon as the next character. This is therefore instructing R to find any string of alphabetic text at the start of a line that precedes a colon and return it. If we use the R package `stringr` and its function `str_extract()` with this regex syntax, it will go through every entry of the `nodes` vector and transform it to just the first string of text found before a colon. If no such string is found it will return an NA value. This is great for us because we know that, for the purpose of dialogue, characters names are always at the start of nodes, so we certainly won’t miss any if we just take the first instance in each line. We should also, for safety, not mess with the scene breaks we have put into our vector.
 
 ```{r}
 library(stringr)
 
 # outside of 'New Scene' tags extract anything before : in every line 
 nodes_char <- ifelse(nodes_newscene != "New Scene", 
-                     stringr::str_extract(nodes_newscene, "^[A-Za-z]+(?=:)"), 
+                     stringr::str_extract(nodes_newscene, "^[A-Za-z ]+(?=:)"), 
                      nodes_newscene)
 
 # check a sample
@@ -490,15 +491,15 @@ set.seed(123)
 nodes_char[sample(30)]
 ```
 
-So this is working, but we have more cleaning to do. For example, we will want to get rid of the `NA` values. We also notice that there are some preamble lines which usually contain the word “by” and we can see that strings in brackets like `(Note` seems to have been extracted. We can create a bunch of special cleaning commands to get rid of these if we don’t want them^[The cleaning commands here work for this specific episode, but they would need to be expanded to be used on more episodes to take into account any unpredictable formatting in the scripts]. 
+So this is working, but we have more cleaning to do. For example, we will want to get rid of the `NA` values. We will also see if we take a look that there is a 'character' called 'All' which probably should not be in our network.  We can also see phrases like 'Written by' which are not dialogue characters, and " and " which involves combinations of characters.  So we can create special commands to remove any instances of these phrases^[The limited cleaning commands here work for this specific episode, but they would need to be expanded to be used on more episodes to take into account any unpredictable formatting in the scripts.  The reality of most scraping exercises is that some code has to be written to deal with exceptions.]. 
 
 ```{r}
 # remove NAs
 nodes_char_clean1 <- nodes_char[!is.na(nodes_char)] 
 
-# remove entries with "by" or "(" or "all" irrelevant of the case
+# remove entries with "all", " and " or "by" irrelevant of the case
 nodes_char_clean2 <- nodes_char_clean1[
-  !grepl("by|\\(|all", tolower(nodes_char_clean1))
+  !grepl("all| and |by", tolower(nodes_char_clean1))
 ] 
 
 # check 
@@ -629,15 +630,173 @@ friends_ep1_network <- igraph::graph_from_data_frame(
 
 # visualize
 ggraph(friends_ep1_network) +
-  geom_edge_link(aes(edge_width = weight), color = "grey", alpha = 0.5) +
+  geom_edge_link(aes(edge_width = weight), color = "grey", alpha = 0.5,
+                 show.legend = FALSE) +
   geom_node_label(aes(label = name), color = "blue") +
   theme_void()
 ```
 
 ### Approaches in Python
 
+To repeat the work in Section \@ref(doc-transform) in Python, we will use the `BeautifulSoup` package to scrape our web script of the first episode of *Friends*.
+
+```{python}
+import requests
+from bs4 import BeautifulSoup
+
+url="https://fangj.github.io/friends/season/0101.html"
+script = requests.get(url)
+
+# parse the html of the page
+friends_ep1 = BeautifulSoup(script.text, "html.parser")
+```
+
+The object `friends_ep1` contains all the HTML code of the script web page. Now we need to look for the string `Scene:` and replace it with the the string `<b>New Scene:</b>`.  It should be clear soon why I am putting the replacement string in bold HTML tags.
+
+```{python}
+originalString = "Scene:"
+replaceString = "<b>New Scene:</b>"
+friends_ep1_replace = BeautifulSoup(str(friends_ep1).replace(originalString, 
+replaceString))
+```
+Now we know from viewing the web page or inspecting the HTML code that the characters names who are speaking in scenes will be inside bold or strong tags, so firstly lets get everything that is in bold in the document, and then let's match for any alphabetic string including spaces prior to a colon using regular expressions.  This should include the `New Scene` tags that we created in the last step.
+
+```{python}
+import re
+
+# find everything in bold tags with alpha preceding a colon
+searchstring = re.compile("^[A-Za-z ]+(?=:)")
+friends_ep1_bold = friends_ep1_replace.find_all(['b', 'strong'], 
+text = searchstring)
+
+# extract the text and remove colons
+friends_ep1_list = [friends_ep1_bold[i].text.replace(':', '') 
+for i in range(0, len(friends_ep1_bold) - 1)]
+
+# check a sample
+set(friends_ep1_list)
+```
+
+This looks promising - new we need to get rid of the 'All' and ' and ' entries.
+
+```{python}
+friends_ep1_list2=[entry.strip() for entry in friends_ep1_list 
+if "All" not in entry and " and " not in entry]
+
+set(friends_ep1_list2)
+```
+
+Now we are ready ot organize our characters by scene.  First we do a scene count, then we create a dataframe and obtain unique character lists by scene:
+
+```{python}
+import pandas as pd
+
+# number each scene by counting previous "New Scene" entries and adding 1
+scene_count = []
+
+for i in range(0,len(friends_ep1_list2)):
+  scene_count.append(friends_ep1_list2[0:i+1].count("New Scene"))
+  
+# create a pandas dataframe
+df = {'scene': scene_count, 'character': friends_ep1_list2}
+scenes_df = pd.DataFrame(df)
+
+# remove New Scene rows
+scenes_df = scenes_df[scenes_df.character != "New Scene"]
+
+# get unique characters by scene
+scenes = scenes_df.groupby('scene')['character'].unique()
+
+# check
+scenes.head()
+```
+
+Now we need to create a function to find all unique pairs inside a scene character list:
+
+```{python}
+import numpy as np 
+
+# define function
+def unique_pairs(chars: object) -> pd.DataFrame:
+  # start with uniques
+  characters = np.unique(chars)
+  # create from-to list dataframe
+  char1 = []
+  char2 = []
+  df = pd.DataFrame({'char1': char1, 'char2': char2})
+  # iterate over each entry to form pairs
+  if len(characters) > 1:
+    for i in range(0, len(characters) - 1):
+      char1 = [characters[i]] * (len(characters) - i - 1)
+      char2 = [characters[i] for i in range(i + 1, len(characters))]
+      # append to dataframe
+      df2 = pd.DataFrame({'char1': char1, 'char2': char2})
+      df = df.append(df2, ignore_index = True)
+  return df
+
+# test on scene 11
+
+unique_pairs(scenes[11])
+```
+
+
+This looks right.  Now we need to apply this to every scene and gather the results into one DataFrame.
+
+```{python}
+# start DataFrame
+char1 = []
+char2 = []
+
+edgelist_df = pd.DataFrame({'char1': char1, 'char2': char2})
+
+for scene in scenes:
+  df = unique_pairs(scene)
+  edgelist_df = edgelist_df.append(df, ignore_index = True)
+```
+
+Now we can order across the rows alphabetically count the occurrences of each unique character pair to get our edge weights:
+
+```{python}
+# sort each row alphabetically
+edgelist_df = edgelist_df.sort_values(by = ['char1', 'char2'])
+
+# count by unique pair
+edgelist = edgelist_df.groupby(['char1', 'char2']).\
+apply(len).to_frame("weight").reset_index()
+
+# check
+edgelist.head()
+
+```
+
+This is what we need to create and visualize our graph of Episode 1 of *Friends*, which can be seen in \@ref(fig:friends-graph-py) with the edge thickness determined by edge weight.
+
+```{python friends-graph-py, fig.align = "center", fig.cap = "Graph of Friends character network from Episode 1 with edge width indicating the number of shared scenes", out.width = if (knitr::is_latex_output()) {"90%"}, dev = "png", dev.args = list(type = "cairo-png")}
+import networkx as nx
+from matplotlib import pyplot as plt
+
+# create networkx object
+friends_ep1_network = nx.from_pandas_edgelist(edgelist,
+source = "char1", target = "char2", edge_attr=True)
+
+# visualize with edge weight as edge width
+np.random.seed(123)
+weights = list(nx.get_edge_attributes(friends_ep1_network, 'weight').values())
+nx.draw_networkx(friends_ep1_network, node_color = "lightblue", node_size = 60,
+edge_color = "grey", with_labels = True, width = np.array(weights))
+plt.show()
+
+```
+
+
 ## Learning exercises
 
 ### Discussion questions
+
+1. What kinds of data sources are most likely to already exist in a graph-friendly form?  Why? 
+2. What are the two most important things to define when you intend to transform data into a graph-friendly structure?
+3.  Imagine that you are working in a global Law firm with a database that has three tables.  One table lists employee location details including office and home address.  A second table includes details on which clients each employee has been working for and what specialty areas they focus on with each client.  A third table lists the education history of each employee including school and major/subject area.  List out all the different ways you can think to turn this data into a network of employees. 
+4.  Pick one or two of your answers from Question 2 and write down two options for how to structure a graph for each of them.  For one option, consider a graph where employees are the only vertices.  Then consider a graph where there are at least two different entities as vertices.  How might your edges be defined in each and would they have any properties?
+5.    
 
 ### Data exercises
