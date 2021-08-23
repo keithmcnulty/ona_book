@@ -16,7 +16,7 @@ This chapter is for those who wish to learn the methods in this book but do not 
 4.  It has a large and growing global community of active users.
 5.  It has a large and rapidly growing universe of packages, which are all free and which provide the ability to do an extremely wide range of general and highly specialized tasks, statistical and otherwise.
 
-`r if (knitr::is_latex_output()) '\\index{Python!programming language}'`There is often heated debate about which tools are better for doing non-trivial statistical analysis.  I personally find that R provides the widest array of resources for those interested in statistics and inferential modeling, while Python has a more well-developed toolkit for predictive modeling and machine learning.  
+`r if (knitr::is_latex_output()) '\\index{Python!programming language}'`There is often heated debate about which tools are better for doing non-trivial statistical analysis.  I personally find that R provides the widest array of resources for those interested in statistical modeling, while Python has a better general-purpose toolkit and is particularly well kitted out for machine learning applications.  
 
 ## How to start using R
 
@@ -215,83 +215,83 @@ dim(df)
 
 ## Working with dataframes
 
-The dataframe is the most common data structure used by analysts in R, due to its similarity to data tables found in databases and spreadsheets.  We will work almost entirely with dataframes in this book, so let's get to know them.
+The dataframe is the most common data structure used by analysts in R, due to its similarity to data tables found in databases and spreadsheets.  We will work with dataframes a lot in this book, so let's get to know them.
 
 ### Loading and tidying data in dataframes
 
-`r if (knitr::is_latex_output()) '\\index{R!loading data}'`To work with data in R, you usually need to pull it in from an outside source into a dataframe^[R also has some built-in data sets for testing and playing with.  For example, check out `mtcars` by typing it into the terminal, or type `data()` to see a full list of built-in data sets.].  R facilitates numerous ways of importing data from simple `.csv` files, from Excel files, from online sources or from databases.  Let's load a data set that we will use later---the `workfrance_edgelist` data set, which contains network information from an experiment in a French workplace conducted in 2015.  The `read.csv()` function can accept a URL address of the file if it is online.
+`r if (knitr::is_latex_output()) '\\index{R!loading data}'`To work with data in R, you usually need to pull it in from an outside source into a dataframe^[R also has some built-in data sets for testing and playing with.  For example, later in this chapter we will use the built-in `airquality` data set to do some plotting.  You can see this data set simply by typing `airquality` into the terminal.  You can type `data()` to see a full list of built-in data sets.].  R facilitates numerous ways of importing data from simple `.csv` files, from Excel files, from online sources or from databases.  Let's load a data set that we will use later---the `chinook_employees` data set, which contains information on employees of a sales company.  The `read.csv()` function can accept a URL address of the file if it is online.
 
 ```{r}
 # url of data set 
-url <- "http://ona-book.org/data/workfrance_edgelist.csv"
+url <- "https://ona-book.org/data/chinook_employees.csv"
 # load the data set and store it as a dataframe called workfrance_edges
-workfrance_edges <- read.csv(url)
+chinook_employees <- read.csv(url)
 ```
 
 We might not want to display this entire data set before knowing how big it is.  We can view the dimensions, and if it is too big to display, we can use the `head()` function to display just the first few rows.
 
 ```{r}
-dim(workfrance_edges)
+dim(chinook_employees)
 ```
 
 ```{r}
-# hundreds of rows, so view first few
-head(workfrance_edges)
+# eight rows, lets view first six
+head(chinook_employees)
 ```
 
 
-We can view a specific column by using `$`, and we can use square brackets to view a specific entry.   For example if we wanted to see the 6th entry of the `sales` column:
+We can view a specific column by using `$`, and we can use square brackets to view a specific entry.   For example if we wanted to see the 6th entry of the `LastName` column:
 
 ```{r}
-workfrance_edges$to[6]
+chinook_employees$LastName[6]
 ```
 
 Alternatively, we can use a `[row, column]` index to get a specific entry in the dataframe.
 
 ```{r}
-workfrance_edges[34, 3]
+chinook_employees[4, 3]
 ```
 
 
 We can take a look at the data types using `str()`.
 
 ```{r}
-str(workfrance_edges)
+str(chinook_employees)
 ```
 
 We can also see a statistical summary of each column using `summary()`, which tells us various statistics depending on the type of the column.
 
 ```{r}
-summary(workfrance_edges)
+summary(chinook_employees)
 ```
 
-`r if (knitr::is_latex_output()) '\\index{R!missing data}'`Note that there is no missing data in this dataframe.  Missing data is identified by a special `NA` value in R.  This should not be confused with `"NA"`, which is simply a character string.  
-
-Let's look at another data set: the `airquality` dataset, which is a record of some air quality measures taken in New York in 1973.  This is an in-built dataframe in R and therefore it simply exists in your R session without needing to load it.   The function `is.na()` will look at all values in a vector or dataframe and return `TRUE` or `FALSE` based on whether they are `NA` or not.  By adding these up using the `sum()` function, it will take `TRUE` as 1 and `FALSE` as 0, which effectively provides a count of missing data.
+`r if (knitr::is_latex_output()) '\\index{R!missing data}'`Missing data in R is identified by a special `NA` value.  This should not be confused with `"NA"`, which is simply a character string.  The function `is.na()` will look at all values in a vector or dataframe and return `TRUE` or `FALSE` based on whether they are `NA` or not.  By adding these up using the `sum()` function, it will take `TRUE` as 1 and `FALSE` as 0, which effectively provides a count of missing data.
 
 ```{r}
-sum(is.na(airquality))
+sum(is.na(chinook_employees))
 ```
 
 In some cases, we might want to remove the rows of data that contain `NA`s.  The easiest way is to use the `complete.cases()` function, which identifies the rows that have no `NA`s, and then we can select those rows from the dataframe based on that condition.  Note that you can overwrite objects with the same name in R.
 
 ```{r}
-airquality <- airquality[complete.cases(airquality), ]
+# remove rows containing an NAs
+chinook_employees <- chinook_employees[complete.cases(chinook_employees), ]
+
 # confirm no NAs
-sum(is.na(airquality))
+sum(is.na(chinook_employees))
 ```
 
 We can see the unique values of a vector or column using the `unique()` function.
 
 ```{r}
-unique(airquality$Month)
+unique(chinook_employees$FirstName)
 ```
 
-If we need to change the type of a column in a dataframe, we can use the `as.numeric()`, `as.character()`, `as.logical()` or `as.factor()` functions.  For example, given that there are only five unique values for the `Month` column in `airquality`, we may want to convert it from its current integer form to a factor.
+If we need to change the type of a column in a dataframe, we can use the `as.numeric()`, `as.character()`, `as.logical()` or `as.factor()` functions.  For example, given that there are only seven unique values for the `FirstName` column in `chinook_employees`, we may want to convert it from its current character form to a factor.
 
 ```{r}
-airquality$Month <- as.factor(airquality$Month)
-str(airquality)
+chinook_employees$FirstName <- as.factor(chinook_employees$FirstName)
+str(chinook_employees)
 ```
 
 ### Manipulating dataframes
@@ -299,44 +299,40 @@ str(airquality)
 `r if (knitr::is_latex_output()) '\\index{R!subsetting dataframes}'`Dataframes can be subsetted to contain only rows that satisfy specific conditions.
 
 ```{r}
-airquality_month5 <- subset(airquality, subset = Month == 5)
-head(airquality)
+(chinook_employee_5 <- subset(chinook_employees, subset = EmployeeId == 5))
 ```
 
 Note the use of `==`, which is used in many programming languages, to test for precise equality.  Similarly we can select columns based on inequalities (`>` for 'greater than'&zwj;, `<` for 'less than'&zwj;, `>=` for 'greater than or equal to'&zwj;, `<=` for 'less than or equal to'&zwj;, or `!=` for 'not equal to').  For example:
 
 ```{r}
-(high_ozone <- subset(airquality, subset = Ozone >= 120))
+(chinook_employees_upto5 <- subset(chinook_employees, 
+                                   subset = EmployeeId <= 5))
 ```
 
 To select specific columns use the `select` argument.
 
 ```{r}
-airquality_ozone_wind <- subset(airquality, 
-                                 select = c("Ozone", "Wind"))
-head(airquality_ozone_wind)
+(chinook_employee_names <- subset(chinook_employees, 
+                                 select = c("FirstName", "LastName")))
 ```
 
 `r if (knitr::is_latex_output()) '\\index{R!combining dataframes}'`Two dataframes with the same column names can be combined by their rows.
 
 ```{r}
-low_ozone <- subset(airquality, subset = Ozone < 6)
-# bind the rows of low_sales and high_sales together
-low_and_high_ozone = rbind(low_ozone, high_ozone)
-low_and_high_ozone
+chinook_employee_7 <- subset(chinook_employees, subset =EmployeeId == 7)
+
+# bind the rows to chinook_employee_5
+(chinook_employee_5and7 = rbind(chinook_employee_5, chinook_employee_7))
 ```
 
 Two dataframes with different column names can be combined by their columns.
 
 ```{r}
-# two dataframes with two columns each
-airquality_ozone_wind <- subset(airquality, 
-                     select = c("Ozone", "Wind"))
-airquality_temp_day <- subset(airquality, 
-                        select = c("Temp", "Day"))
-# bind the columns to create a dataframe with four columns
-full_df <- cbind(airquality_ozone_wind, airquality_temp_day)
-head(full_df)
+chinook_reporting <- subset(chinook_employees, 
+                     select = c("EmployeeId", "ReportsTo"))
+
+# bind the columns to chinook_employee_names
+(full_df <- cbind(chinook_reporting, chinook_employee_names))
 ```
 
 ## Functions, packages and libraries
@@ -350,19 +346,19 @@ In the code so far we have used a variety of functions.  For example `head()`, `
 When running a function, you can either specify the arguments by name or you can enter them in order without their names.  If you enter arguments without naming them, R expects the arguments to be entered in exactly the right order.
 
 ```{r}
-# see the head of salespeople, with the default of six rows
-head(airquality)
+# see the head of chinook_employees, with the default of six rows
+head(chinook_employees)
 ```
 
 ```{r}
 # see fewer rows - arguments need to be in the right order if not named
-head(airquality, 3)
+head(chinook_employees, 3)
 ```
 
 ```{r}
 # or if you don't know the right order, 
 # name your arguments and you can put them in any order
-head(n = 3, x = airquality)
+head(n = 3, x = chinook_employees)
 ```
 
 ### Help with functions
@@ -396,10 +392,10 @@ df_report <- function(df) {
 }
 ```
 
-We can test our function by using `airquality` data set.
+We can test our function by using `chinook_employees` data set (remember that we removed a row containing an `NA` value earlier).
 
 ```{r}
-df_report(airquality)
+df_report(chinook_employees)
 ```
 
 ### Installing packages
@@ -411,7 +407,7 @@ Before an external package can be used, it must be installed into your package l
 If you want to install more than one package, put the names of the packages inside a character vector---for example:
 
 ```{r, eval = FALSE}
-my_packages <- c("igraph", "onadata")
+my_packages <- c("igraph", "ggraph")
 install.packages(my_packages)
 ```
 
@@ -433,25 +429,26 @@ One way to completely avoid this issue is to get in the habit of *namespacing* y
 
 As an example, imagine we wanted to do the following two operations in one command:
 
-1. Subset `airquality` to only the `Ozone` values of those with `Temp` less than 60
-2. Take the mean of those values
+1. Subset `chinook_employees` to only the `LastName` values of those with `EmployeeId` less than 5
+2. Convert those names to all upper case characters.
 
-Rememering that we have already removed rows with `NA` values from `airquality`, one way to do this is:
+Rememering that we have already removed rows with `NA` values from `chinook_employees`, one way to do this is:
 
 ```{r}
-mean(subset(airquality$Ozone, subset = airquality$Temp < 60))
+toupper(subset(chinook_employees$LastName, 
+               subset = chinook_employees$EmployeeId < 5))
 ```
 
-This is nested and needs to be read from the inside out in order to align with the instructions.  The pipe operator `|>` takes the command that comes before it and places it inside the function that follows it (by default as the first unnamed argument). This reduces complexity and allows you to follow the logic more clearly.
+This is nested and needs to be read from the inside out in order to align with the instructions.  The pipe operator `|>` takes the command that comes before it and places it inside the function that follows it (as the first unnamed argument). This reduces complexity and allows you to follow the logic more clearly.
 
 ```{r}
 # use the pipe operator to lay out the steps more logically
-airquality$Ozone |> 
-  subset(subset = airquality$Temp < 60) |> 
-  mean() 
+chinook_employees$LastName |> 
+  subset(subset = chinook_employees$EmployeeId < 5) |> 
+  toupper() 
 ```
 
-The pipe operator is very widely used because it helps to make code more readable, it reduces complexity, and it helps orient around a common 'grammar' for the manipulation of data.  The pipe operator helps you structure your code more clearly around nouns (objects), verbs (functions) and adverbs (arguments of functions).  `r if (knitr::is_latex_output()) '\\index{R!packages!tidyverse@\\texttt{tidyverse}}'`One of the most developed sets of packages in R that follows these principles is the `tidyverse` family of packages, which I encourage you to explore^[Note that in this book I am using the 'native pipe' operator which was introduced to R as of Version 4.1.0.  If you are using a prior version of R, or if you have old habits you would like to stick with, you can use the prior pipe operator that is only available when it is loaded as part of the `magrittr` or `dplyr` packages, and which is notated as `%>%`].
+The pipe operator is very widely used because it helps to make code more readable, it reduces complexity, and it helps orient around a common 'grammar' for the manipulation of data.  The pipe operator helps you structure your code more clearly around nouns (objects), verbs (functions) and adverbs (arguments of functions).  `r if (knitr::is_latex_output()) '\\index{R!packages!tidyverse@\\texttt{tidyverse}}'`One of the most developed sets of packages in R that follows these principles is the `tidyverse` family of packages, which I encourage you to explore^[Note that in this book I am using the 'native pipe' operator which was introduced into R as of Version 4.1.0.  If you are using a prior version of R, or if you have old habits you would like to stick with, you can use the prior pipe operator that is only available when it is loaded as part of the `magrittr` or `dplyr` packages, and which is notated as `%>%`].
 
 ## Errors, warnings and messages
 
@@ -460,19 +457,19 @@ As I mentioned earlier in this chapter, getting familiar with R can be frustrati
 `r if (knitr::is_latex_output()) '\\index{R!errors}'`*Errors* are serious problems which usually result in the halting of your code and a failure to return your requested output.  They usually come with an indication of the source of the error, and these can sometimes be easy to understand and sometimes frustratingly vague and abstract.  For example, an easy-to-understand error is:
 
 ```{r, eval = FALSE}
-subset(airquality, subset = Temp = 78)
+subset(chinook_employees, subset = EmployeeId = 5)
 ```
 
 ```
 Error: unexpected '=' in "subset(salespeople, subset = sales ="
 ```
 
-This helps you see that you have used `Temp = 720` as a condition to subset your data, when you should have used `Temp == 720` for precise equality.
+This helps you see that you have used `EmployeeId = 5` as a condition to subset your data, when you should have used `EmployeeId == 5` for precise equality.
 
 A much more challenging error to understand is:
 
 ```{r, eval = FALSE}
-head[airquality]
+head[chinook_employees]
 ```
 ```
 Error in head[salespeople] : object of type 'closure' is not subsettable
@@ -490,7 +487,7 @@ As you might expect in a well-developed programming language, there are numerous
 
 ### Plotting in base R
 
-`r if (knitr::is_latex_output()) '\\index{R!scatter plots}'`The simplest plot function in base R is `plot()`.  This performs basic X-Y plotting.  As an example, this code will generate a scatter plot of `Ozone` against `Temp` in the `airquality` data set, with the results displayed in Figure \@ref(fig:basicscatter).  Note the use of the arguments `main`, `xlab` and `ylab` for customizing the axis labels and title for the plot.
+`r if (knitr::is_latex_output()) '\\index{R!scatter plots}'`The simplest plot function in base R is `plot()`.  This performs basic X-Y plotting.  As an example, this code will generate a scatter plot of `Ozone` against `Temp` in the built-in `airquality` data set in R, with the results displayed in Figure \@ref(fig:basicscatter).  Note the use of the arguments `main`, `xlab` and `ylab` for customizing the axis labels and title for the plot.
 
 ```{r basicscatter, fig.cap=if (knitr::is_latex_output()) {"Simple scatterplot of \\texttt{Ozone} against \\texttt{Temp} in the \\texttt{airquality} data set"} else {"Simple scatterplot of `Ozone` against `Temp` in the `airquality` data set"}, fig.align = "center", out.width = if (knitr::is_latex_output()) {"90%"}}
 # scatter plot of ozone against temp
@@ -521,9 +518,9 @@ These are among the most common plots used for data exploration purposes.  They 
 
 ### Specialist plotting and graphing packages
 
-`r if (knitr::is_latex_output()) '\\index{R!packages!ggplot2@\\texttt{ggplot2}}'`By far the most commonly used specialist plotting and graphing package in R is `ggplot2`.  `ggplot2` allows the flexible construction of a very wide range of charts and graphs, but uses a very specific command grammar which can take some getting used to.  However, once learned, `ggplot2` can be an extremely powerful tool.  Later in this book we will make a lot of references to `ggplot2` and some of its extension packages like `ggmap` and `ggraph`.  A great learning resource for `ggplot2` is @ggplot2.  Here are some examples of how to recreate the plots from the previous section in `ggplot2` using its layered graphics grammar.
+`r if (knitr::is_latex_output()) '\\index{R!packages!ggplot2@\\texttt{ggplot2}}'`By far the most commonly used specialist plotting and graphing package in R is `ggplot2`.  `ggplot2` allows the flexible construction of a very wide range of charts and graphs, but uses a very specific command grammar which can take some getting used to.  However, once learned, `ggplot2` can be an extremely powerful tool.  Later in this book we will make a lot of references to `ggplot2` and some of its extension packages like `ggraph`.  A great learning resource for `ggplot2` is @ggplot2.  Here are some examples of how to recreate the plots from the previous section in `ggplot2` using its layered graphics grammar.
 
-To start graphing, the `ggplot()` function usually requires a data set.  You can also define some aesthetic mappings in this initial function, which associate a feature of the chart with an element of the data.  Any such aesthetic mappings are inherited by later commands in the layering.  In this case, we use the `airquality` data set, we define our `x` and `y` aesthetics and we then use `geom_point()` to draw a scatter plot with some visual customization.  We also use a theme command to obtain a preset look for our chart - in this case a minimal look - and we customize our title and axis labels.  The result is in Figure \@ref(fig:ggplot-scatter).
+To start graphing, the `ggplot()` function usually requires a data set.  You can also define some aesthetic mappings in this initial function, which associate a feature of the chart with an element of the data.  Any such aesthetic mappings are inherited by later commands in the layering.  In this case, we use the `airquality` data set, we define our `x` and `y` aesthetics and we then use `geom_point()` to draw a scatter plot with some visual customization.  We also use a theme command to obtain a preset look for our chart --- in this case a minimal look --- and we customize our title and axis labels.  The result is in Figure \@ref(fig:ggplot-scatter).
 
 ```{r ggplot-scatter, fig.cap=if (knitr::is_latex_output()) {"Simple scatter plot of \\texttt{Ozone} against \\texttt{Temp} in the \\texttt{airquality} data set using \\texttt{ggplot2}"} else {"Simple scatter plot of `Ozone` against `Temp` in the `airquality` data set using `ggplot2`"}, fig.align = "center", out.width = if (knitr::is_latex_output()) {"90%"}}
 library(ggplot2)
@@ -588,36 +585,38 @@ R Markdown allows you to build a formatted document using many shorthand formatt
 ```
 # My top heading
 This section is about this general topic.
+
 ## My first sub heading 
 To see more information on this sub-topic visit [here](https://my.web.link).
+
 ## My second sub heading
 Here is a nice picture about this sub-topic.
 ![](path/to/image)
 ```
 
-Code can be written and executed and the results displayed inline using backticks.  For example, recalling out `workfrance_edges` dataset from earlier and writing 
+Code can be written and executed and the results displayed inline using backticks.  For example, recalling our `chinook_employees` dataset from earlier and writing 
 
 ```{r, echo = FALSE}
-workfrance_edges <- read.csv(url)
+chinook_employees <- read.csv(url)
 ```
 
 ````
-`r`r ''` nrow(workfrance_edges)`
+`r`r ''` nrow(chinook_employees)`
 ````
 
-inline will display `r nrow(workfrance_edges)` in the final document.  Entire code blocks can be included and executed by using triple-backticks.  The following code block:
+inline will display `r nrow(chinook_employees)` in the final document^[This assumes the dataset has been loaded afresh without removing any data from it].  Entire code blocks can be included and executed by using triple-backticks.  The following code block:
 
 ````
 ```{r}`r ''`
-# show the first few rows of workfrance_edges
-head(workfrance_edges)
+# show the first three rows of chinook_employees
+head(chinook_employees, 3)
 ```
 ````
 
 will display this output:
 
 ```{r, echo = FALSE}
-head(workfrance_edges)
+head(chinook_employees, 3)
 ```
 
 The `{}` wrapping allows you to specify different languages for your code chunk.  For example, if you wanted to run Python code instead of R code you can use `{python}`.  It also allows you to set options for the code chunk display separated by commas.  For example, if you want the results of your code to be displayed, but without the code itself being displayed, you can use `{r, echo = FALSE}`.
@@ -651,15 +650,16 @@ If you are not familiar with R Markdown, I strongly encourage you to learn it al
 2.  Create a second numeric vector called `which` which corresponds to `my_names`. The entries should be the position of each name in the order of your full name.  Verify that it has the same length as `my_names`.
 3.  Create a dataframe called `names`, which consists of the two vectors `my_names` and `which` as columns.  Calculate the dimensions of `names`.
 4.  Create a new dataframe `new_names` with the `which` column converted to character type.  Verify that your command worked using `str()`.
-5.  `r if (knitr::is_latex_output()) '\\index{data sets!ugtests@\\texttt{ugtests}}'`Load the `ugtests` data set via the `peopleanalyticsdata` package or download it from the internet^[http://peopleanalytics-regression-book.org/data/ugtests.csv].  Calculate the dimensions of `ugtests` and view the first three rows only. 
-6.  View a statistical summary of all of the columns of `ugtests`.  Determine if there are any missing values.
-7.  View the subset of `ugtests` for values of `Yr1` greater than 50.
+5.  `r if (knitr::is_latex_output()) '\\index{data sets!ugtests@\\texttt{chinook_customers}}'`Load the `chinook_customers` data set via the `onadata` package or download it from the internet^[https://ona-book.org/data/chinook_customers.csv].  Calculate the dimensions of `chinook_customers` and view the first three rows only. 
+6.  View a statistical summary of all of the columns of `chinook_customers`.  Determine if there are any missing values.
+7.  View the subset of `chinook_customers` for values of `SupportRepId` equal to 3.
 8.  Install and load the package `dplyr`.  Look up the help for the `filter()` function in this package and try to use it to repeat the task in the previous question.
-9.  Write code to find the mean of the `Yr1` test scores for all those who achieved `Yr3` test scores greater than 100.  Round this mean to the nearest integer.
+9.  Write code to find the last name of the customer with the highest `CustomerId` where the `SupportRepId` is equal to 4.  Count the number of characters in this last name.
 10. Familiarize yourself with the two functions `filter()` and `pull()` from `dplyr`.  Use these functions to try to do the same calculation in the previous question using a single unbroken piped command.  Be sure to namespace where necessary.
-11.  Create a scatter plot using the `ugtests` data with `Final` scores on the $y$ axis and `Yr3` scores on the $x$ axis.
-12.  Create your own 5-level grading logic and use it to create a new `finalgrade` column in the `ugtests` data set with grades 1--5 of increasing attainment based on the `Final` score in `ugtests`.  Generate a histogram of this `finalgrade` column.
-13.  Using your new `ugtests` data with the extra column from the previous exercise, create a box plot of `Yr3` scores grouped by `finalgrade`.
-14.  Knit all of your answers to these exercises into an R Markdown document.  Create one version that displays your code and answers, and another that just displays the answers.
+11.  Create a scatter plot using the built-in `mtcars` dataset with data from the column named `mpg` plotted on the $y$ axis and data from the column named `hp` plotted on the $x$ axis.
+12.  Using the same `mtcars` dataset, convert the data in the `cyl` column to a factor with three levels.  Plot a histogram of the count of observations at each of the three `cyl` levels.
+13.  Create a box plot of `mpg` grouped by `cyl`.
+14.  If you used base plotting functions to answer questions 11-13, try to answer them again using the `ggplot2` package.  Experiment with different themes and colors.
+15.  Knit all of your answers to these exercises into an R Markdown document.  Create one version that displays your code and answers, and another that just displays the answers.
 
 

@@ -372,9 +372,9 @@ div.csl-indent {
 <span id="cb217-4"><a href="restructuring-data.html#cb217-4" aria-hidden="true" tabindex="-1"></a>(orgchart <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(</span>
 <span id="cb217-5"><a href="restructuring-data.html#cb217-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">d =</span> orgchart_edgelist</span>
 <span id="cb217-6"><a href="restructuring-data.html#cb217-6" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
-<pre><code>## IGRAPH c7a3f37 DN-- 8 7 -- 
+<pre><code>## IGRAPH b8086fd DN-- 8 7 -- 
 ## + attr: name (v/c)
-## + edges from c7a3f37 (vertex names):
+## + edges from b8086fd (vertex names):
 ## [1] Andrew -&gt;Nancy    Andrew -&gt;Michael  Nancy  -&gt;Jane     Nancy  -&gt;Margaret Nancy  -&gt;Steve    Michael-&gt;Robert  
 ## [7] Michael-&gt;Laura</code></pre>
 <p>We now have a directed graph with named vertices, so this should be easy to plot. Let’s use <code>ggplot</code> with a dendrogram (tree) layout, as in Figure <a href="restructuring-data.html#fig:chinook-pretty">5.1</a>.</p>
@@ -825,7 +825,7 @@ Figure 5.9: Visualization of the Chinook customer-to-customer network based on a
 ## [10] NA           NA           &quot;Chandler&quot;   NA           NA           NA           NA           NA           NA          
 ## [19] NA           NA           NA           NA           NA           &quot;Joey&quot;       &quot;Phoebe&quot;     NA           &quot;New Scene&quot; 
 ## [28] NA           NA           &quot;Written by&quot;</code></pre>
-<p>So this is working, but we have more cleaning to do. For example, we will want to get rid of the <code>NA</code> values. We will also see if we take a look that there is a ‘character’ called ‘All’ which probably should not be in our network. We can also see phrases like ‘Written by’ which are not dialogue characters, and " and " which involves combinations of characters. So we can create special commands to remove any instances of these phrases<a href="#fn29" class="footnote-ref" id="fnref29"><sup>29</sup></a>.</p>
+<p>So this is working, but we have more cleaning to do. For example, we will want to get rid of the <code>NA</code> values. We will also see if we take a look that there is a ‘character’ called ‘All’ which probably should not be in our network. We can also see phrases like ‘Written by’ which are not dialogue characters, and " and " which involves combinations of characters. So we can create special commands to remove any instances of these phrases<a href="#fn30" class="footnote-ref" id="fnref30"><sup>30</sup></a>.</p>
 <div class="sourceCode" id="cb266"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb266-1"><a href="restructuring-data.html#cb266-1" aria-hidden="true" tabindex="-1"></a><span class="co"># remove NAs</span></span>
 <span id="cb266-2"><a href="restructuring-data.html#cb266-2" aria-hidden="true" tabindex="-1"></a>nodes_char_clean1 <span class="ot">&lt;-</span> nodes_char[<span class="sc">!</span><span class="fu">is.na</span>(nodes_char)] </span>
 <span id="cb266-3"><a href="restructuring-data.html#cb266-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1149,8 +1149,8 @@ Figure 5.11: Graph of Friends character network from Episode 1 with edge width i
 </div>
 <div class="footnotes">
 <hr />
-<ol start="29">
-<li id="fn29"><p>The limited cleaning commands here work for this specific episode, but they would need to be expanded to be used on more episodes to take into account any unpredictable formatting in the scripts. The reality of most scraping exercises is that some code has to be written to deal with exceptions.<a href="restructuring-data.html#fnref29" class="footnote-back">↩︎</a></p></li>
+<ol start="30">
+<li id="fn30"><p>The limited cleaning commands here work for this specific episode, but they would need to be expanded to be used on more episodes to take into account any unpredictable formatting in the scripts. The reality of most scraping exercises is that some code has to be written to deal with exceptions.<a href="restructuring-data.html#fnref30" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>

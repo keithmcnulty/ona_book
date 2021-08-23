@@ -84,7 +84,7 @@
 <li>It has a large and growing global community of active users.</li>
 <li>It has a large and rapidly growing universe of packages, which are all free and which provide the ability to do an extremely wide range of general and highly specialized tasks, statistical and otherwise.</li>
 </ol>
-<p>There is often heated debate about which tools are better for doing non-trivial statistical analysis. I personally find that R provides the widest array of resources for those interested in statistics and inferential modeling, while Python has a more well-developed toolkit for predictive modeling and machine learning.</p>
+<p>There is often heated debate about which tools are better for doing non-trivial statistical analysis. I personally find that R provides the widest array of resources for those interested in statistical modeling, while Python has a better general-purpose toolkit and is particularly well kitted out for machine learning applications.</p>
 </div>
 <div id="how-to-start-using-r" class="section level2" number="2.2">
 <h2>
@@ -284,83 +284,83 @@ Figure 2.1: The RStudio IDE
 <h2>
 <span class="header-section-number">2.4</span> Working with dataframes<a class="anchor" aria-label="anchor" href="#working-with-dataframes"><i class="fas fa-link"></i></a>
 </h2>
-<p>The dataframe is the most common data structure used by analysts in R, due to its similarity to data tables found in databases and spreadsheets. We will work almost entirely with dataframes in this book, so let’s get to know them.</p>
+<p>The dataframe is the most common data structure used by analysts in R, due to its similarity to data tables found in databases and spreadsheets. We will work with dataframes a lot in this book, so let’s get to know them.</p>
 <div id="loading-and-tidying-data-in-dataframes" class="section level3" number="2.4.1">
 <h3>
 <span class="header-section-number">2.4.1</span> Loading and tidying data in dataframes<a class="anchor" aria-label="anchor" href="#loading-and-tidying-data-in-dataframes"><i class="fas fa-link"></i></a>
 </h3>
-<p>To work with data in R, you usually need to pull it in from an outside source into a dataframe<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;R also has some built-in data sets for testing and playing with. For example, check out &lt;code&gt;mtcars&lt;/code&gt; by typing it into the terminal, or type &lt;code&gt;data()&lt;/code&gt; to see a full list of built-in data sets.&lt;/p&gt;"><sup>8</sup></a>. R facilitates numerous ways of importing data from simple <code>.csv</code> files, from Excel files, from online sources or from databases. Let’s load a data set that we will use later—the <code>workfrance_edgelist</code> data set, which contains network information from an experiment in a French workplace conducted in 2015. The <code><a href="https://rdrr.io/r/utils/read.table.html">read.csv()</a></code> function can accept a URL address of the file if it is online.</p>
+<p>To work with data in R, you usually need to pull it in from an outside source into a dataframe<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;R also has some built-in data sets for testing and playing with. For example, later in this chapter we will use the built-in &lt;code&gt;airquality&lt;/code&gt; data set to do some plotting. You can see this data set simply by typing &lt;code&gt;airquality&lt;/code&gt; into the terminal. You can type &lt;code&gt;data()&lt;/code&gt; to see a full list of built-in data sets.&lt;/p&gt;"><sup>8</sup></a>. R facilitates numerous ways of importing data from simple <code>.csv</code> files, from Excel files, from online sources or from databases. Let’s load a data set that we will use later—the <code>chinook_employees</code> data set, which contains information on employees of a sales company. The <code><a href="https://rdrr.io/r/utils/read.table.html">read.csv()</a></code> function can accept a URL address of the file if it is online.</p>
 <div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># url of data set </span>
-<span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"http://ona-book.org/data/workfrance_edgelist.csv"</span>
+<span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://ona-book.org/data/chinook_employees.csv"</span>
 <span class="co"># load the data set and store it as a dataframe called workfrance_edges</span>
-<span class="va">workfrance_edges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span></code></pre></div>
+<span class="va">chinook_employees</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span></code></pre></div>
 <p>We might not want to display this entire data set before knowing how big it is. We can view the dimensions, and if it is too big to display, we can use the <code><a href="https://rdrr.io/r/utils/head.html">head()</a></code> function to display just the first few rows.</p>
 <div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">workfrance_edges</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 932   3</code></pre>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">chinook_employees</span><span class="op">)</span></code></pre></div>
+<pre><code>## [1] 8 4</code></pre>
 <div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># hundreds of rows, so view first few</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">workfrance_edges</span><span class="op">)</span></code></pre></div>
-<pre><code>##   from  to mins
-## 1    3 159    8
-## 2    3 253   14
-## 3    3 447   17
-## 4    3 498   10
-## 5    3 694    7
-## 6    3 751    7</code></pre>
-<p>We can view a specific column by using <code><a href="https://rdrr.io/r/base/Extract.html">$</a></code>, and we can use square brackets to view a specific entry. For example if we wanted to see the 6th entry of the <code>sales</code> column:</p>
+<code class="sourceCode R"><span class="co"># eight rows, lets view first six</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">chinook_employees</span><span class="op">)</span></code></pre></div>
+<pre><code>##   EmployeeId FirstName LastName ReportsTo
+## 1          1    Andrew    Adams        NA
+## 2          2     Nancy  Edwards         1
+## 3          3      Jane  Peacock         2
+## 4          4  Margaret     Park         2
+## 5          5     Steve  Johnson         2
+## 6          6   Michael Mitchell         1</code></pre>
+<p>We can view a specific column by using <code><a href="https://rdrr.io/r/base/Extract.html">$</a></code>, and we can use square brackets to view a specific entry. For example if we wanted to see the 6th entry of the <code>LastName</code> column:</p>
 <div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">workfrance_edges</span><span class="op">$</span><span class="va">to</span><span class="op">[</span><span class="fl">6</span><span class="op">]</span></code></pre></div>
-<pre><code>## [1] 751</code></pre>
+<code class="sourceCode R"><span class="va">chinook_employees</span><span class="op">$</span><span class="va">LastName</span><span class="op">[</span><span class="fl">6</span><span class="op">]</span></code></pre></div>
+<pre><code>## [1] "Mitchell"</code></pre>
 <p>Alternatively, we can use a <code>[row, column]</code> index to get a specific entry in the dataframe.</p>
 <div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">workfrance_edges</span><span class="op">[</span><span class="fl">34</span>, <span class="fl">3</span><span class="op">]</span></code></pre></div>
-<pre><code>## [1] 6</code></pre>
+<code class="sourceCode R"><span class="va">chinook_employees</span><span class="op">[</span><span class="fl">4</span>, <span class="fl">3</span><span class="op">]</span></code></pre></div>
+<pre><code>## [1] "Park"</code></pre>
 <p>We can take a look at the data types using <code><a href="https://rdrr.io/r/utils/str.html">str()</a></code>.</p>
 <div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">workfrance_edges</span><span class="op">)</span></code></pre></div>
-<pre><code>## 'data.frame':    932 obs. of  3 variables:
-##  $ from: int  3 3 3 3 3 3 3 3 14 14 ...
-##  $ to  : int  159 253 447 498 694 751 859 908 18 99 ...
-##  $ mins: int  8 14 17 10 7 7 20 7 21 6 ...</code></pre>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">chinook_employees</span><span class="op">)</span></code></pre></div>
+<pre><code>## 'data.frame':    8 obs. of  4 variables:
+##  $ EmployeeId: int  1 2 3 4 5 6 7 8
+##  $ FirstName : chr  "Andrew" "Nancy" "Jane" "Margaret" ...
+##  $ LastName  : chr  "Adams" "Edwards" "Peacock" "Park" ...
+##  $ ReportsTo : int  NA 1 2 2 2 1 6 6</code></pre>
 <p>We can also see a statistical summary of each column using <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code>, which tells us various statistics depending on the type of the column.</p>
 <div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">workfrance_edges</span><span class="op">)</span></code></pre></div>
-<pre><code>##       from              to              mins       
-##  Min.   :   3.0   Min.   :  18.0   Min.   :  5.00  
-##  1st Qu.: 131.0   1st Qu.: 428.0   1st Qu.:  8.00  
-##  Median : 246.0   Median : 649.0   Median : 13.00  
-##  Mean   : 300.5   Mean   : 680.1   Mean   : 23.91  
-##  3rd Qu.: 428.0   3rd Qu.: 886.8   3rd Qu.: 26.00  
-##  Max.   :1362.0   Max.   :1492.0   Max.   :434.00</code></pre>
-<p>Note that there is no missing data in this dataframe. Missing data is identified by a special <code>NA</code> value in R. This should not be confused with <code>"NA"</code>, which is simply a character string.</p>
-<p>Let’s look at another data set: the <code>airquality</code> dataset, which is a record of some air quality measures taken in New York in 1973. This is an in-built dataframe in R and therefore it simply exists in your R session without needing to load it. The function <code><a href="https://rdrr.io/r/base/NA.html">is.na()</a></code> will look at all values in a vector or dataframe and return <code>TRUE</code> or <code>FALSE</code> based on whether they are <code>NA</code> or not. By adding these up using the <code><a href="https://rdrr.io/r/base/sum.html">sum()</a></code> function, it will take <code>TRUE</code> as 1 and <code>FALSE</code> as 0, which effectively provides a count of missing data.</p>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">chinook_employees</span><span class="op">)</span></code></pre></div>
+<pre><code>##    EmployeeId    FirstName           LastName           ReportsTo    
+##  Min.   :1.00   Length:8           Length:8           Min.   :1.000  
+##  1st Qu.:2.75   Class :character   Class :character   1st Qu.:1.500  
+##  Median :4.50   Mode  :character   Mode  :character   Median :2.000  
+##  Mean   :4.50                                         Mean   :2.857  
+##  3rd Qu.:6.25                                         3rd Qu.:4.000  
+##  Max.   :8.00                                         Max.   :6.000  
+##                                                       NA's   :1</code></pre>
+<p>Missing data in R is identified by a special <code>NA</code> value. This should not be confused with <code>"NA"</code>, which is simply a character string. The function <code><a href="https://rdrr.io/r/base/NA.html">is.na()</a></code> will look at all values in a vector or dataframe and return <code>TRUE</code> or <code>FALSE</code> based on whether they are <code>NA</code> or not. By adding these up using the <code><a href="https://rdrr.io/r/base/sum.html">sum()</a></code> function, it will take <code>TRUE</code> as 1 and <code>FALSE</code> as 0, which effectively provides a count of missing data.</p>
 <div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">airquality</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 0</code></pre>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">chinook_employees</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code>## [1] 1</code></pre>
 <p>In some cases, we might want to remove the rows of data that contain <code>NA</code>s. The easiest way is to use the <code><a href="https://rdrr.io/r/stats/complete.cases.html">complete.cases()</a></code> function, which identifies the rows that have no <code>NA</code>s, and then we can select those rows from the dataframe based on that condition. Note that you can overwrite objects with the same name in R.</p>
 <div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">airquality</span> <span class="op">&lt;-</span> <span class="va">airquality</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/stats/complete.cases.html">complete.cases</a></span><span class="op">(</span><span class="va">airquality</span><span class="op">)</span>, <span class="op">]</span>
+<code class="sourceCode R"><span class="co"># remove rows containing an NAs</span>
+<span class="va">chinook_employees</span> <span class="op">&lt;-</span> <span class="va">chinook_employees</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/stats/complete.cases.html">complete.cases</a></span><span class="op">(</span><span class="va">chinook_employees</span><span class="op">)</span>, <span class="op">]</span>
+
 <span class="co"># confirm no NAs</span>
-<span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">airquality</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">chinook_employees</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 0</code></pre>
 <p>We can see the unique values of a vector or column using the <code><a href="https://rdrr.io/r/base/unique.html">unique()</a></code> function.</p>
 <div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">airquality</span><span class="op">$</span><span class="va">Month</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 5 6 7 8 9
-## Levels: 5 6 7 8 9</code></pre>
-<p>If we need to change the type of a column in a dataframe, we can use the <code><a href="https://rdrr.io/r/base/numeric.html">as.numeric()</a></code>, <code><a href="https://rdrr.io/r/base/character.html">as.character()</a></code>, <code><a href="https://rdrr.io/r/base/logical.html">as.logical()</a></code> or <code><a href="https://rdrr.io/r/base/factor.html">as.factor()</a></code> functions. For example, given that there are only five unique values for the <code>Month</code> column in <code>airquality</code>, we may want to convert it from its current integer form to a factor.</p>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">chinook_employees</span><span class="op">$</span><span class="va">FirstName</span><span class="op">)</span></code></pre></div>
+<pre><code>## [1] "Nancy"    "Jane"     "Margaret" "Steve"    "Michael"  "Robert"   "Laura"</code></pre>
+<p>If we need to change the type of a column in a dataframe, we can use the <code><a href="https://rdrr.io/r/base/numeric.html">as.numeric()</a></code>, <code><a href="https://rdrr.io/r/base/character.html">as.character()</a></code>, <code><a href="https://rdrr.io/r/base/logical.html">as.logical()</a></code> or <code><a href="https://rdrr.io/r/base/factor.html">as.factor()</a></code> functions. For example, given that there are only seven unique values for the <code>FirstName</code> column in <code>chinook_employees</code>, we may want to convert it from its current character form to a factor.</p>
 <div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">airquality</span><span class="op">$</span><span class="va">Month</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">airquality</span><span class="op">$</span><span class="va">Month</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">airquality</span><span class="op">)</span></code></pre></div>
-<pre><code>## 'data.frame':    111 obs. of  6 variables:
-##  $ Ozone  : int  41 36 12 18 23 19 8 16 11 14 ...
-##  $ Solar.R: int  190 118 149 313 299 99 19 256 290 274 ...
-##  $ Wind   : num  7.4 8 12.6 11.5 8.6 13.8 20.1 9.7 9.2 10.9 ...
-##  $ Temp   : int  67 72 74 62 65 59 61 69 66 68 ...
-##  $ Month  : Factor w/ 5 levels "5","6","7","8",..: 1 1 1 1 1 1 1 1 1 1 ...
-##  $ Day    : int  1 2 3 4 7 8 9 12 13 14 ...</code></pre>
+<code class="sourceCode R"><span class="va">chinook_employees</span><span class="op">$</span><span class="va">FirstName</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">chinook_employees</span><span class="op">$</span><span class="va">FirstName</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">chinook_employees</span><span class="op">)</span></code></pre></div>
+<pre><code>## 'data.frame':    7 obs. of  4 variables:
+##  $ EmployeeId: int  2 3 4 5 6 7 8
+##  $ FirstName : Factor w/ 7 levels "Jane","Laura",..: 5 1 3 7 4 6 2
+##  $ LastName  : chr  "Edwards" "Peacock" "Park" "Johnson" ...
+##  $ ReportsTo : int  1 2 2 2 1 6 6</code></pre>
 </div>
 <div id="manipulating-dataframes" class="section level3" number="2.4.2">
 <h3>
@@ -368,63 +368,54 @@ Figure 2.1: The RStudio IDE
 </h3>
 <p>Dataframes can be subsetted to contain only rows that satisfy specific conditions.</p>
 <div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">airquality_month5</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">airquality</span>, subset <span class="op">=</span> <span class="va">Month</span> <span class="op">==</span> <span class="fl">5</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">airquality</span><span class="op">)</span></code></pre></div>
-<pre><code>##   Ozone Solar.R Wind Temp Month Day
-## 1    41     190  7.4   67     5   1
-## 2    36     118  8.0   72     5   2
-## 3    12     149 12.6   74     5   3
-## 4    18     313 11.5   62     5   4
-## 7    23     299  8.6   65     5   7
-## 8    19      99 13.8   59     5   8</code></pre>
+<code class="sourceCode R"><span class="op">(</span><span class="va">chinook_employee_5</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">chinook_employees</span>, subset <span class="op">=</span> <span class="va">EmployeeId</span> <span class="op">==</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code>##   EmployeeId FirstName LastName ReportsTo
+## 5          5     Steve  Johnson         2</code></pre>
 <p>Note the use of <code><a href="https://rdrr.io/r/base/Comparison.html">==</a></code>, which is used in many programming languages, to test for precise equality. Similarly we can select columns based on inequalities (<code><a href="https://rdrr.io/r/base/Comparison.html">&gt;</a></code> for ‘greater than’‍, <code><a href="https://rdrr.io/r/base/Comparison.html">&lt;</a></code> for ‘less than’‍, <code><a href="https://rdrr.io/r/base/Comparison.html">&gt;=</a></code> for ‘greater than or equal to’‍, <code><a href="https://rdrr.io/r/base/Comparison.html">&lt;=</a></code> for ‘less than or equal to’‍, or <code><a href="https://rdrr.io/r/base/Comparison.html">!=</a></code> for ‘not equal to’). For example:</p>
 <div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="op">(</span><span class="va">high_ozone</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">airquality</span>, subset <span class="op">=</span> <span class="va">Ozone</span> <span class="op">&gt;=</span> <span class="fl">120</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>##     Ozone Solar.R Wind Temp Month Day
-## 62    135     269  4.1   84     7   1
-## 99    122     255  4.0   89     8   7
-## 117   168     238  3.4   81     8  25</code></pre>
+<code class="sourceCode R"><span class="op">(</span><span class="va">chinook_employees_upto5</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">chinook_employees</span>, 
+                                   subset <span class="op">=</span> <span class="va">EmployeeId</span> <span class="op">&lt;=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code>##   EmployeeId FirstName LastName ReportsTo
+## 2          2     Nancy  Edwards         1
+## 3          3      Jane  Peacock         2
+## 4          4  Margaret     Park         2
+## 5          5     Steve  Johnson         2</code></pre>
 <p>To select specific columns use the <code>select</code> argument.</p>
 <div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">airquality_ozone_wind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">airquality</span>, 
-                                 select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Ozone"</span>, <span class="st">"Wind"</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">airquality_ozone_wind</span><span class="op">)</span></code></pre></div>
-<pre><code>##   Ozone Wind
-## 1    41  7.4
-## 2    36  8.0
-## 3    12 12.6
-## 4    18 11.5
-## 7    23  8.6
-## 8    19 13.8</code></pre>
+<code class="sourceCode R"><span class="op">(</span><span class="va">chinook_employee_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">chinook_employees</span>, 
+                                 select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"FirstName"</span>, <span class="st">"LastName"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code>##   FirstName LastName
+## 2     Nancy  Edwards
+## 3      Jane  Peacock
+## 4  Margaret     Park
+## 5     Steve  Johnson
+## 6   Michael Mitchell
+## 7    Robert     King
+## 8     Laura Callahan</code></pre>
 <p>Two dataframes with the same column names can be combined by their rows.</p>
 <div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">low_ozone</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">airquality</span>, subset <span class="op">=</span> <span class="va">Ozone</span> <span class="op">&lt;</span> <span class="fl">6</span><span class="op">)</span>
-<span class="co"># bind the rows of low_sales and high_sales together</span>
-<span class="va">low_and_high_ozone</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">low_ozone</span>, <span class="va">high_ozone</span><span class="op">)</span>
-<span class="va">low_and_high_ozone</span></code></pre></div>
-<pre><code>##     Ozone Solar.R Wind Temp Month Day
-## 21      1       8  9.7   59     5  21
-## 23      4      25  9.7   61     5  23
-## 62    135     269  4.1   84     7   1
-## 99    122     255  4.0   89     8   7
-## 117   168     238  3.4   81     8  25</code></pre>
+<code class="sourceCode R"><span class="va">chinook_employee_7</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">chinook_employees</span>, subset <span class="op">=</span><span class="va">EmployeeId</span> <span class="op">==</span> <span class="fl">7</span><span class="op">)</span>
+
+<span class="co"># bind the rows to chinook_employee_5</span>
+<span class="op">(</span><span class="va">chinook_employee_5and7</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">chinook_employee_5</span>, <span class="va">chinook_employee_7</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code>##   EmployeeId FirstName LastName ReportsTo
+## 5          5     Steve  Johnson         2
+## 7          7    Robert     King         6</code></pre>
 <p>Two dataframes with different column names can be combined by their columns.</p>
 <div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># two dataframes with two columns each</span>
-<span class="va">airquality_ozone_wind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">airquality</span>, 
-                     select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Ozone"</span>, <span class="st">"Wind"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">airquality_temp_day</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">airquality</span>, 
-                        select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Temp"</span>, <span class="st">"Day"</span><span class="op">)</span><span class="op">)</span>
-<span class="co"># bind the columns to create a dataframe with four columns</span>
-<span class="va">full_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">airquality_ozone_wind</span>, <span class="va">airquality_temp_day</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">full_df</span><span class="op">)</span></code></pre></div>
-<pre><code>##   Ozone Wind Temp Day
-## 1    41  7.4   67   1
-## 2    36  8.0   72   2
-## 3    12 12.6   74   3
-## 4    18 11.5   62   4
-## 7    23  8.6   65   7
-## 8    19 13.8   59   8</code></pre>
+<code class="sourceCode R"><span class="va">chinook_reporting</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">chinook_employees</span>, 
+                     select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"EmployeeId"</span>, <span class="st">"ReportsTo"</span><span class="op">)</span><span class="op">)</span>
+
+<span class="co"># bind the columns to chinook_employee_names</span>
+<span class="op">(</span><span class="va">full_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">chinook_reporting</span>, <span class="va">chinook_employee_names</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code>##   EmployeeId ReportsTo FirstName LastName
+## 2          2         1     Nancy  Edwards
+## 3          3         2      Jane  Peacock
+## 4          4         2  Margaret     Park
+## 5          5         2     Steve  Johnson
+## 6          6         1   Michael Mitchell
+## 7          7         6    Robert     King
+## 8          8         6     Laura Callahan</code></pre>
 </div>
 </div>
 <div id="functions-packages-and-libraries" class="section level2" number="2.5">
@@ -439,30 +430,30 @@ Figure 2.1: The RStudio IDE
 <p>Functions usually take one or more arguments. Often there are a large number of arguments that a function can take, but many are optional and not required to be specified by the user. For example, the function <code><a href="https://rdrr.io/r/utils/head.html">head()</a></code>, which displays the first rows of a dataframe<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;It actually has a broader definition but is mostly used for showing the first rows of a dataframe.&lt;/p&gt;"><sup>9</sup></a>, has only one required argument <code>x</code>: the name of the dataframe. A second argument is optional, <code>n</code>: the number of rows to display. If <code>n</code> is not entered, it is assumed to have the default value <code>n = 6</code>.</p>
 <p>When running a function, you can either specify the arguments by name or you can enter them in order without their names. If you enter arguments without naming them, R expects the arguments to be entered in exactly the right order.</p>
 <div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># see the head of salespeople, with the default of six rows</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">airquality</span><span class="op">)</span></code></pre></div>
-<pre><code>##   Ozone Solar.R Wind Temp Month Day
-## 1    41     190  7.4   67     5   1
-## 2    36     118  8.0   72     5   2
-## 3    12     149 12.6   74     5   3
-## 4    18     313 11.5   62     5   4
-## 7    23     299  8.6   65     5   7
-## 8    19      99 13.8   59     5   8</code></pre>
+<code class="sourceCode R"><span class="co"># see the head of chinook_employees, with the default of six rows</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">chinook_employees</span><span class="op">)</span></code></pre></div>
+<pre><code>##   EmployeeId FirstName LastName ReportsTo
+## 2          2     Nancy  Edwards         1
+## 3          3      Jane  Peacock         2
+## 4          4  Margaret     Park         2
+## 5          5     Steve  Johnson         2
+## 6          6   Michael Mitchell         1
+## 7          7    Robert     King         6</code></pre>
 <div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># see fewer rows - arguments need to be in the right order if not named</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">airquality</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
-<pre><code>##   Ozone Solar.R Wind Temp Month Day
-## 1    41     190  7.4   67     5   1
-## 2    36     118  8.0   72     5   2
-## 3    12     149 12.6   74     5   3</code></pre>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">chinook_employees</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
+<pre><code>##   EmployeeId FirstName LastName ReportsTo
+## 2          2     Nancy  Edwards         1
+## 3          3      Jane  Peacock         2
+## 4          4  Margaret     Park         2</code></pre>
 <div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># or if you don't know the right order, </span>
 <span class="co"># name your arguments and you can put them in any order</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">3</span>, x <span class="op">=</span> <span class="va">airquality</span><span class="op">)</span></code></pre></div>
-<pre><code>##   Ozone Solar.R Wind Temp Month Day
-## 1    41     190  7.4   67     5   1
-## 2    36     118  8.0   72     5   2
-## 3    12     149 12.6   74     5   3</code></pre>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">3</span>, x <span class="op">=</span> <span class="va">chinook_employees</span><span class="op">)</span></code></pre></div>
+<pre><code>##   EmployeeId FirstName LastName ReportsTo
+## 2          2     Nancy  Edwards         1
+## 3          3      Jane  Peacock         2
+## 4          4  Margaret     Park         2</code></pre>
 </div>
 <div id="help-with-functions" class="section level3" number="2.5.2">
 <h3>
@@ -497,10 +488,10 @@ Figure 2.2: Results of a search for the <code><a href="https://rdrr.io/r/utils/h
   <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"This dataframe contains"</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>, <span class="st">"rows and"</span>, 
         <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span>, <span class="st">"columns. There are"</span>, <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span><span class="op">)</span>, <span class="st">"NA entries."</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
-<p>We can test our function by using <code>airquality</code> data set.</p>
+<p>We can test our function by using <code>chinook_employees</code> data set (remember that we removed a row containing an <code>NA</code> value earlier).</p>
 <div class="sourceCode" id="cb89"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">df_report</span><span class="op">(</span><span class="va">airquality</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] "This dataframe contains 111 rows and 6 columns. There are 0 NA entries."</code></pre>
+<code class="sourceCode R"><span class="fu">df_report</span><span class="op">(</span><span class="va">chinook_employees</span><span class="op">)</span></code></pre></div>
+<pre><code>## [1] "This dataframe contains 7 rows and 4 columns. There are 0 NA entries."</code></pre>
 </div>
 <div id="installing-packages" class="section level3" number="2.5.4">
 <h3>
@@ -510,7 +501,7 @@ Figure 2.2: Results of a search for the <code><a href="https://rdrr.io/r/utils/h
 <p>Before an external package can be used, it must be installed into your package library using <code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages()</a></code>. So to install <code>igraph</code>, type <code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages("igraph")</a></code> into the console. This will send R to the main internet repository for R packages (known as CRAN). It will find the right version of <code>igraph</code> for your operating system and download and install it into your package library. If <code>igraph</code> needs other packages in order to work, it will also install these packages.</p>
 <p>If you want to install more than one package, put the names of the packages inside a character vector—for example:</p>
 <div class="sourceCode" id="cb91"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">my_packages</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"igraph"</span>, <span class="st">"onadata"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">my_packages</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"igraph"</span>, <span class="st">"ggraph"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="va">my_packages</span><span class="op">)</span></code></pre></div>
 <p>Once you have installed a package, you can see what functions are available by calling for help on it, for example using <code><a href="https://rdrr.io/pkg/igraph/man">help(package = igraph)</a></code>. One package you may wish to install now is the <code>onadata</code> package, which contains all the data sets used in this book. By installing and loading this package, all the data sets used in this book will be loaded into your R session and ready to work with. If you do this, you can ignore the <code><a href="https://rdrr.io/r/utils/read.table.html">read.csv()</a></code> commands later in the book, which download the data from the internet.</p>
 </div>
@@ -530,21 +521,22 @@ Figure 2.2: Results of a search for the <code><a href="https://rdrr.io/r/utils/h
 <p>Even in the most elementary briefing about R, it is very difficult to ignore the pipe operator. The pipe operator makes code more natural to read and write and reduces the typical computing problem of many nested operations inside parentheses.</p>
 <p>As an example, imagine we wanted to do the following two operations in one command:</p>
 <ol style="list-style-type: decimal">
-<li>Subset <code>airquality</code> to only the <code>Ozone</code> values of those with <code>Temp</code> less than 60</li>
-<li>Take the mean of those values</li>
+<li>Subset <code>chinook_employees</code> to only the <code>LastName</code> values of those with <code>EmployeeId</code> less than 5</li>
+<li>Convert those names to all upper case characters.</li>
 </ol>
-<p>Rememering that we have already removed rows with <code>NA</code> values from <code>airquality</code>, one way to do this is:</p>
+<p>Rememering that we have already removed rows with <code>NA</code> values from <code>chinook_employees</code>, one way to do this is:</p>
 <div class="sourceCode" id="cb92"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">airquality</span><span class="op">$</span><span class="va">Ozone</span>, subset <span class="op">=</span> <span class="va">airquality</span><span class="op">$</span><span class="va">Temp</span> <span class="op">&lt;</span> <span class="fl">60</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 11</code></pre>
-<p>This is nested and needs to be read from the inside out in order to align with the instructions. The pipe operator <code>|&gt;</code> takes the command that comes before it and places it inside the function that follows it (by default as the first unnamed argument). This reduces complexity and allows you to follow the logic more clearly.</p>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/chartr.html">toupper</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">chinook_employees</span><span class="op">$</span><span class="va">LastName</span>, 
+               subset <span class="op">=</span> <span class="va">chinook_employees</span><span class="op">$</span><span class="va">EmployeeId</span> <span class="op">&lt;</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code>## [1] "EDWARDS" "PEACOCK" "PARK"</code></pre>
+<p>This is nested and needs to be read from the inside out in order to align with the instructions. The pipe operator <code>|&gt;</code> takes the command that comes before it and places it inside the function that follows it (as the first unnamed argument). This reduces complexity and allows you to follow the logic more clearly.</p>
 <div class="sourceCode" id="cb94"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># use the pipe operator to lay out the steps more logically</span>
-<span class="va">airquality</span><span class="op">$</span><span class="va">Ozone</span> |&gt; 
-  <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span>subset <span class="op">=</span> <span class="va">airquality</span><span class="op">$</span><span class="va">Temp</span> <span class="op">&lt;</span> <span class="fl">60</span><span class="op">)</span> |&gt; 
-  <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="op">)</span> </code></pre></div>
-<pre><code>## [1] 11</code></pre>
-<p>The pipe operator is very widely used because it helps to make code more readable, it reduces complexity, and it helps orient around a common ‘grammar’ for the manipulation of data. The pipe operator helps you structure your code more clearly around nouns (objects), verbs (functions) and adverbs (arguments of functions). One of the most developed sets of packages in R that follows these principles is the <code>tidyverse</code> family of packages, which I encourage you to explore<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;Note that in this book I am using the ‘native pipe’ operator which was introduced to R as of Version 4.1.0. If you are using a prior version of R, or if you have old habits you would like to stick with, you can use the prior pipe operator that is only available when it is loaded as part of the &lt;code&gt;magrittr&lt;/code&gt; or &lt;code&gt;dplyr&lt;/code&gt; packages, and which is notated as &lt;code&gt;%&amp;gt;%&lt;/code&gt;&lt;/p&gt;"><sup>10</sup></a>.</p>
+<span class="va">chinook_employees</span><span class="op">$</span><span class="va">LastName</span> |&gt; 
+  <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span>subset <span class="op">=</span> <span class="va">chinook_employees</span><span class="op">$</span><span class="va">EmployeeId</span> <span class="op">&lt;</span> <span class="fl">5</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="https://rdrr.io/r/base/chartr.html">toupper</a></span><span class="op">(</span><span class="op">)</span> </code></pre></div>
+<pre><code>## [1] "EDWARDS" "PEACOCK" "PARK"</code></pre>
+<p>The pipe operator is very widely used because it helps to make code more readable, it reduces complexity, and it helps orient around a common ‘grammar’ for the manipulation of data. The pipe operator helps you structure your code more clearly around nouns (objects), verbs (functions) and adverbs (arguments of functions). One of the most developed sets of packages in R that follows these principles is the <code>tidyverse</code> family of packages, which I encourage you to explore<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;Note that in this book I am using the ‘native pipe’ operator which was introduced into R as of Version 4.1.0. If you are using a prior version of R, or if you have old habits you would like to stick with, you can use the prior pipe operator that is only available when it is loaded as part of the &lt;code&gt;magrittr&lt;/code&gt; or &lt;code&gt;dplyr&lt;/code&gt; packages, and which is notated as &lt;code&gt;%&amp;gt;%&lt;/code&gt;&lt;/p&gt;"><sup>10</sup></a>.</p>
 </div>
 </div>
 <div id="errors-warnings-and-messages" class="section level2" number="2.6">
@@ -553,12 +545,12 @@ Figure 2.2: Results of a search for the <code><a href="https://rdrr.io/r/utils/h
 </h2>
 <p>As I mentioned earlier in this chapter, getting familiar with R can be frustrating at the beginning if you have never programmed before. You can expect to regularly see messages, warnings or errors in response to your commands. I encourage you to regard these as your friend rather than your enemy. It is very tempting to take the latter approach when you are starting out, but over time I hope you will appreciate some wisdom from my words.</p>
 <p><em>Errors</em> are serious problems which usually result in the halting of your code and a failure to return your requested output. They usually come with an indication of the source of the error, and these can sometimes be easy to understand and sometimes frustratingly vague and abstract. For example, an easy-to-understand error is:</p>
-<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="r-intro.html#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">subset</span>(airquality, <span class="at">subset =</span> <span class="at">Temp =</span> <span class="dv">78</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="r-intro.html#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">subset</span>(chinook_employees, <span class="at">subset =</span> <span class="at">EmployeeId =</span> <span class="dv">5</span>)</span></code></pre></div>
 <pre><code>Error: unexpected '=' in "subset(salespeople, subset = sales ="</code></pre>
-<p>This helps you see that you have used <code>Temp = 720</code> as a condition to subset your data, when you should have used <code>Temp == 720</code> for precise equality.</p>
+<p>This helps you see that you have used <code>EmployeeId = 5</code> as a condition to subset your data, when you should have used <code>EmployeeId == 5</code> for precise equality.</p>
 <p>A much more challenging error to understand is:</p>
 <div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">head</span><span class="op">[</span><span class="va">airquality</span><span class="op">]</span></code></pre></div>
+<code class="sourceCode R"><span class="va">head</span><span class="op">[</span><span class="va">chinook_employees</span><span class="op">]</span></code></pre></div>
 <pre><code>Error in head[salespeople] : object of type 'closure' is not subsettable</code></pre>
 <p>When first faced with an error that you can’t understand, try not to get frustrated and proceed in the knowledge that it usually can be fixed easily and quickly. Often the problem is much more obvious than you think, and if not, there is still a 99% likelihood that others have made this error and you can read about it online. The first step is to take a look at your code to see if you can spot what you did wrong. In this case, you may see that you have used square brackets <code>[]</code> instead of parentheses <code>()</code> when calling your <code><a href="https://rdrr.io/r/utils/head.html">head()</a></code> function. If you cannot see what is wrong, the next step is to ask a colleague or do an internet search with the text of the error message you receive, or to consult online forums like <a href="https://stackoverflow.com" class="uri">https://stackoverflow.com</a>. The more experienced you become, the easier it is to interpret error messages.</p>
 <p><em>Warnings</em> are less serious and usually alert you to something that you might be overlooking and which could indicate a problem with the output. In many cases you can ignore warnings, but sometimes they are an important reminder to go back and edit your code. For example, you may run a model which doesn’t converge, and while this does not stop R from returning results, it is also very useful for you to know that it didn’t converge.</p>
@@ -573,7 +565,7 @@ Figure 2.2: Results of a search for the <code><a href="https://rdrr.io/r/utils/h
 <h3>
 <span class="header-section-number">2.7.1</span> Plotting in base R<a class="anchor" aria-label="anchor" href="#plotting-in-base-r"><i class="fas fa-link"></i></a>
 </h3>
-<p>The simplest plot function in base R is <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code>. This performs basic X-Y plotting. As an example, this code will generate a scatter plot of <code>Ozone</code> against <code>Temp</code> in the <code>airquality</code> data set, with the results displayed in Figure <a href="r-intro.html#fig:basicscatter">2.3</a>. Note the use of the arguments <code>main</code>, <code>xlab</code> and <code>ylab</code> for customizing the axis labels and title for the plot.</p>
+<p>The simplest plot function in base R is <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code>. This performs basic X-Y plotting. As an example, this code will generate a scatter plot of <code>Ozone</code> against <code>Temp</code> in the built-in <code>airquality</code> data set in R, with the results displayed in Figure <a href="r-intro.html#fig:basicscatter">2.3</a>. Note the use of the arguments <code>main</code>, <code>xlab</code> and <code>ylab</code> for customizing the axis labels and title for the plot.</p>
 <div class="sourceCode" id="cb100"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># scatter plot of ozone against temp</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">airquality</span><span class="op">$</span><span class="va">Temp</span>, y <span class="op">=</span> <span class="va">airquality</span><span class="op">$</span><span class="va">Ozone</span>,
@@ -615,8 +607,8 @@ Figure 2.5: Simple box plot of <code>Ozone</code> grouped against <code>Month</c
 <h3>
 <span class="header-section-number">2.7.2</span> Specialist plotting and graphing packages<a class="anchor" aria-label="anchor" href="#specialist-plotting-and-graphing-packages"><i class="fas fa-link"></i></a>
 </h3>
-<p>By far the most commonly used specialist plotting and graphing package in R is <code>ggplot2</code>. <code>ggplot2</code> allows the flexible construction of a very wide range of charts and graphs, but uses a very specific command grammar which can take some getting used to. However, once learned, <code>ggplot2</code> can be an extremely powerful tool. Later in this book we will make a lot of references to <code>ggplot2</code> and some of its extension packages like <code>ggmap</code> and <code>ggraph</code>. A great learning resource for <code>ggplot2</code> is <span class="citation"><a href="references.html#ref-ggplot2" role="doc-biblioref">Wickham</a> (<a href="references.html#ref-ggplot2" role="doc-biblioref">2016</a>)</span>. Here are some examples of how to recreate the plots from the previous section in <code>ggplot2</code> using its layered graphics grammar.</p>
-<p>To start graphing, the <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot()</a></code> function usually requires a data set. You can also define some aesthetic mappings in this initial function, which associate a feature of the chart with an element of the data. Any such aesthetic mappings are inherited by later commands in the layering. In this case, we use the <code>airquality</code> data set, we define our <code>x</code> and <code>y</code> aesthetics and we then use <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point()</a></code> to draw a scatter plot with some visual customization. We also use a theme command to obtain a preset look for our chart - in this case a minimal look - and we customize our title and axis labels. The result is in Figure <a href="r-intro.html#fig:ggplot-scatter">2.6</a>.</p>
+<p>By far the most commonly used specialist plotting and graphing package in R is <code>ggplot2</code>. <code>ggplot2</code> allows the flexible construction of a very wide range of charts and graphs, but uses a very specific command grammar which can take some getting used to. However, once learned, <code>ggplot2</code> can be an extremely powerful tool. Later in this book we will make a lot of references to <code>ggplot2</code> and some of its extension packages like <code>ggraph</code>. A great learning resource for <code>ggplot2</code> is <span class="citation"><a href="references.html#ref-ggplot2" role="doc-biblioref">Wickham</a> (<a href="references.html#ref-ggplot2" role="doc-biblioref">2016</a>)</span>. Here are some examples of how to recreate the plots from the previous section in <code>ggplot2</code> using its layered graphics grammar.</p>
+<p>To start graphing, the <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot()</a></code> function usually requires a data set. You can also define some aesthetic mappings in this initial function, which associate a feature of the chart with an element of the data. Any such aesthetic mappings are inherited by later commands in the layering. In this case, we use the <code>airquality</code> data set, we define our <code>x</code> and <code>y</code> aesthetics and we then use <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point()</a></code> to draw a scatter plot with some visual customization. We also use a theme command to obtain a preset look for our chart — in this case a minimal look — and we customize our title and axis labels. The result is in Figure <a href="r-intro.html#fig:ggplot-scatter">2.6</a>.</p>
 <div class="sourceCode" id="cb103"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
 
@@ -680,26 +672,25 @@ output: html_document
 <p>R Markdown allows you to build a formatted document using many shorthand formatting commands. Here are a few examples of how to format headings and place web links or images in your document:</p>
 <pre><code># My top heading
 This section is about this general topic.
+
 ## My first sub heading 
 To see more information on this sub-topic visit [here](https://my.web.link).
+
 ## My second sub heading
 Here is a nice picture about this sub-topic.
 ![](path/to/image)</code></pre>
-<p>Code can be written and executed and the results displayed inline using backticks. For example, recalling out <code>workfrance_edges</code> dataset from earlier and writing</p>
-<pre><code>`r nrow(workfrance_edges)`</code></pre>
-<p>inline will display 932 in the final document. Entire code blocks can be included and executed by using triple-backticks. The following code block:</p>
+<p>Code can be written and executed and the results displayed inline using backticks. For example, recalling our <code>chinook_employees</code> dataset from earlier and writing</p>
+<pre><code>`r nrow(chinook_employees)`</code></pre>
+<p>inline will display 8 in the final document<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;This assumes the dataset has been loaded afresh without removing any data from it&lt;/p&gt;"><sup>11</sup></a>. Entire code blocks can be included and executed by using triple-backticks. The following code block:</p>
 <pre><code>```{r}
-# show the first few rows of workfrance_edges
-head(workfrance_edges)
+# show the first three rows of chinook_employees
+head(chinook_employees, 3)
 ```</code></pre>
 <p>will display this output:</p>
-<pre><code>##   from  to mins
-## 1    3 159    8
-## 2    3 253   14
-## 3    3 447   17
-## 4    3 498   10
-## 5    3 694    7
-## 6    3 751    7</code></pre>
+<pre><code>##   EmployeeId FirstName LastName ReportsTo
+## 1          1    Andrew    Adams        NA
+## 2          2     Nancy  Edwards         1
+## 3          3      Jane  Peacock         2</code></pre>
 <p>The <code>{}</code> wrapping allows you to specify different languages for your code chunk. For example, if you wanted to run Python code instead of R code you can use <code>{python}</code>. It also allows you to set options for the code chunk display separated by commas. For example, if you want the results of your code to be displayed, but without the code itself being displayed, you can use <code>{r, echo = FALSE}</code>.</p>
 <p>The process of compiling your R Markdown code to produce a document is known as ‘knitting.’ To create a knitted document, you simply need to click on the ‘Knit’ button in RStudio that appears above your R Markdown code.</p>
 <p>If you are not familiar with R Markdown, I strongly encourage you to learn it alongside R and to challenge yourself to write up any practice exercises you take on in this book using R Markdown. Useful cheat sheets and reference guides for R Markdown formatting and commands are available through the Cheatsheets section of the Help menu in RStudio. I also recommend <span class="citation"><a href="references.html#ref-rmarkdown" role="doc-biblioref">Xie, Dervieux, and Riederer</a> (<a href="references.html#ref-rmarkdown" role="doc-biblioref">2020</a>)</span> for a really thorough instruction and reference guide.</p>
@@ -736,15 +727,16 @@ head(workfrance_edges)
 <li>Create a second numeric vector called <code>which</code> which corresponds to <code>my_names</code>. The entries should be the position of each name in the order of your full name. Verify that it has the same length as <code>my_names</code>.</li>
 <li>Create a dataframe called <code>names</code>, which consists of the two vectors <code>my_names</code> and <code>which</code> as columns. Calculate the dimensions of <code>names</code>.</li>
 <li>Create a new dataframe <code>new_names</code> with the <code>which</code> column converted to character type. Verify that your command worked using <code><a href="https://rdrr.io/r/utils/str.html">str()</a></code>.</li>
-<li>Load the <code>ugtests</code> data set via the <code>peopleanalyticsdata</code> package or download it from the internet<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="http://peopleanalytics-regression-book.org/data/ugtests.csv" class="uri"&gt;http://peopleanalytics-regression-book.org/data/ugtests.csv&lt;/a&gt;&lt;/p&gt;'><sup>11</sup></a>. Calculate the dimensions of <code>ugtests</code> and view the first three rows only.</li>
-<li>View a statistical summary of all of the columns of <code>ugtests</code>. Determine if there are any missing values.</li>
-<li>View the subset of <code>ugtests</code> for values of <code>Yr1</code> greater than 50.</li>
+<li>Load the <code>chinook_customers</code> data set via the <code>onadata</code> package or download it from the internet<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://ona-book.org/data/chinook_customers.csv" class="uri"&gt;https://ona-book.org/data/chinook_customers.csv&lt;/a&gt;&lt;/p&gt;'><sup>12</sup></a>. Calculate the dimensions of <code>chinook_customers</code> and view the first three rows only.</li>
+<li>View a statistical summary of all of the columns of <code>chinook_customers</code>. Determine if there are any missing values.</li>
+<li>View the subset of <code>chinook_customers</code> for values of <code>SupportRepId</code> equal to 3.</li>
 <li>Install and load the package <code>dplyr</code>. Look up the help for the <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> function in this package and try to use it to repeat the task in the previous question.</li>
-<li>Write code to find the mean of the <code>Yr1</code> test scores for all those who achieved <code>Yr3</code> test scores greater than 100. Round this mean to the nearest integer.</li>
+<li>Write code to find the last name of the customer with the highest <code>CustomerId</code> where the <code>SupportRepId</code> is equal to 4. Count the number of characters in this last name.</li>
 <li>Familiarize yourself with the two functions <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> and <code><a href="https://dplyr.tidyverse.org/reference/pull.html">pull()</a></code> from <code>dplyr</code>. Use these functions to try to do the same calculation in the previous question using a single unbroken piped command. Be sure to namespace where necessary.</li>
-<li>Create a scatter plot using the <code>ugtests</code> data with <code>Final</code> scores on the <span class="math inline">\(y\)</span> axis and <code>Yr3</code> scores on the <span class="math inline">\(x\)</span> axis.</li>
-<li>Create your own 5-level grading logic and use it to create a new <code>finalgrade</code> column in the <code>ugtests</code> data set with grades 1–5 of increasing attainment based on the <code>Final</code> score in <code>ugtests</code>. Generate a histogram of this <code>finalgrade</code> column.</li>
-<li>Using your new <code>ugtests</code> data with the extra column from the previous exercise, create a box plot of <code>Yr3</code> scores grouped by <code>finalgrade</code>.</li>
+<li>Create a scatter plot using the built-in <code>mtcars</code> dataset with data from the column named <code>mpg</code> plotted on the <span class="math inline">\(y\)</span> axis and data from the column named <code>hp</code> plotted on the <span class="math inline">\(x\)</span> axis.</li>
+<li>Using the same <code>mtcars</code> dataset, convert the data in the <code>cyl</code> column to a factor with three levels. Plot a histogram of the count of observations at each of the three <code>cyl</code> levels.</li>
+<li>Create a box plot of <code>mpg</code> grouped by <code>cyl</code>.</li>
+<li>If you used base plotting functions to answer questions 11-13, try to answer them again using the <code>ggplot2</code> package. Experiment with different themes and colors.</li>
 <li>Knit all of your answers to these exercises into an R Markdown document. Create one version that displays your code and answers, and another that just displays the answers.</li>
 </ol>
 </div>
