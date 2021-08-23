@@ -1,6 +1,6 @@
 # Working With Graphs {#working}
 
-When we think of a graph, we usually think of a diagram of dots and lines.  Indeed, as we have seen in the introduction to this book, the very concept of a graph came into existence in the 1600s when a mathematician tried to solve a problem diagramatically.   It makes sense that we think about graphs in this way, because it is intuitive, easy to communicate and in many cases a diagram helps us better address the problem we are solving. However, a diagram is only one way of describing a graph, and it is not particularly scalable.  It is easy to draw a diagram for a graph of a few nodes and edges like in our *Bridges of K&ouml;nigsberg* problem, but what if our problem involved thousands of nodes and millions of edges?  Most interesting graphs which we will want to study will be more complex in nature and will contain many hundreds or thousands of nodes and many more edges, and diagrams of graphs of that size are not always useful in helping us solve problems.  
+When we think of a graph, we usually think of a diagram of dots and lines.  Indeed, as we have seen in Chapter \@ref(everywhere) of this book, the very concept of a graph came into existence in the 1700s when a mathematician tried to solve a problem diagramatically.   It makes sense that we think about graphs in this way, because it is intuitive, easy to communicate and in many cases a diagram helps us better address the problem we are solving. However, a diagram is only one way of describing a graph, and it is not particularly scalable.  It is easy to draw a diagram for a graph of a few nodes and edges like in our *Bridges of K&ouml;nigsberg* problem, but what if our problem involved thousands of nodes and millions of edges?  Most interesting graphs which we will want to study will be more complex in nature and will contain many hundreds or thousands of nodes and many more edges, and diagrams of graphs of that size are not always useful in helping us solve problems.  
 
 In this chapter we will gain a basic understanding of graphs and how to construct them and work with them in R and in Python.   We will introduce the most general way of describing a graph mathematically, and we will then discuss how different types of graphs can be defined by placing more conditions on the most general definition.  We will then go on to look at the different options for how a known graph can be described, including edgelists and adjacency matrices.  Equipped with this understanding, we will then learn how to create simple graph objects in R and in Python.   Unlike the larger examples which we will introduce in later chapters, the data and examples we will use in this chapter are simple and  straightforward to work with.  The focus here is to make sure that the basic structures and definitions are understood before proceeding further.  Readers should not skip this chapter if they intend to fully understand the methods and procedures that will be introduced in later chapters.
 
@@ -66,7 +66,7 @@ It doesn't really matter how you choose to notate the vertex and edge sets as lo
 
 `r if (knitr::is_latex_output()) '<!--'`
 :::thinkahead
-**Thinking ahead:** If you already know how to load graphs in R or Python, you might want to take a look at a graph object now, and you will see how the object is structured and defined around the two set structure $G = (V, E)$.  For example in R, if you have the `igraph` and `igraphdata` packages installed and loaded, use `data(Koenigsberg)` to load the data for the *Bridges of K&ouml;nigsberg* graph.  Now take a look at the vertex set using `V(Koenigsberg)` or the edge set using `E(Koenigsberg)`.  
+**Thinking ahead:** If you already know how to load graphs in R or Python, you might want to take a look at a graph object now, and you will see how the object is structured and defined around the two set structure $G = (V, E)$.  For example, try to create a graph from the data for the *Bridges of K&ouml;nigsberg* problem using the `koenigsberg` edgelist in the `onadata` package or downloaded from the internet at https://ona-data.org/data/koenigsberg.csv.  Take a look at the vertex set or the edge set to see how they contain the structures discussed above.  
 :::
 `r if (knitr::is_latex_output()) '-->'`
 
@@ -74,15 +74,15 @@ It doesn't really matter how you choose to notate the vertex and edge sets as lo
 ```{=latex}
 \colorbox{babyblueeyes}{
 \begin{minipage}{\textwidth}
-\textbf{Thinking ahead:} If you already know how to load graphs in R or Python, you might want to take a look at a graph object now, and you will see how the object is structured and defined around the two set structure \(G = (V, E)\).  For example in R, if you have the \texttt{igraph} and \texttt{igraphdata} packages installed and loaded, use \texttt{data(Koenigsberg)} to load the data for the \textit{Bridges of K\"{o}nigsberg} graph.  Now take a look at the vertex set using \texttt{V(Koenigsberg)} or the edge set using \texttt{E(Koenigsberg)}.  
+\textbf{Thinking ahead:} If you already know how to load graphs in R or Python, you might want to take a look at a graph object now, and you will see how the object is structured and defined around the two set structure \(G = (V, E)\).  For example, try to create a graph from the data for the \textit{Bridges of K\"{o}nigsberg} problem using the \texttt{koenigsberg} edgelist in the \texttt{onadata} package or downloaded from the internet at \texttt{https://ona-data.org/data/koenigsberg.csv}.  Take a look at the vertex set or the edge set to see how they contain the structures discussed above. 
 \end{minipage}
 }
 ```
 `r if (knitr::is_html_output()) '-->'`
 
-The relationship that we are modeling using our edges in the graph $G_{\mathrm{work}}$ is undirected.  If David has worked with Zubin, then we automatically conclude that Zubin has worked with David.  Therefore there is no need for direction in the edges of $G_{\mathrm{work}}$.  We call such a graph an *undirected* graph. In an undirected graph, the order of the nodes in each pair in the edge set $E$ is not relevant.  For example, $\mathrm{David}\longleftrightarrow\mathrm{Zubin}$ is the same as $\mathrm{Zubin}\longleftrightarrow\mathrm{David}$.
+The relationship that we are modeling using our edges in the graph $G_{\mathrm{work}}$ is reciprocal in nature.  If David has worked with Zubin, then we automatically conclude that Zubin has worked with David.  Therefore there is no need for direction in the edges of $G_{\mathrm{work}}$.  We call such a graph an *undirected* graph. In an undirected graph, the order of the nodes in each pair in the edge set $E$ is not relevant.  For example, $\mathrm{David}\longleftrightarrow\mathrm{Zubin}$ is the same as $\mathrm{Zubin}\longleftrightarrow\mathrm{David}$.
 
-A graph where direction is important is called a *directed* graph.  As an example, let's consider a graph $G_{\mathrm{manage}}$ with the same group of four people but where an edge exists between two people if and only if the first person is the manager of the second person, as in Figure \@ref(fig:fourpeoplemanage).
+A graph where direction is important is called a *directed* graph.  As an example, let's consider a graph $G_{\mathrm{manage}}$ with the same vertex set of four people but where an edge exists between two people if and only if the first person is the manager of the second person, as in Figure \@ref(fig:fourpeoplemanage).
 
 ```{r fourpeoplemanage, echo = FALSE, fig.cap="Four people connected according to whether one person manages another"}
 library(igraph)
@@ -113,22 +113,6 @@ E = \{\mathrm{Suraya}\longrightarrow\mathrm{David}, \mathrm{David}\longrightarro
 $$
 
 Note that it is still possible in a directed graph for the edges to point in both directions.  While that is unlikely in the case of $G_{\mathrm{manage}}$ because the manager relationship usually only operates in one direction, imagine another graph $G_{\mathrm{like}}$ where an edge exists between two people if and only if the first person has listed the second person as someone they like.  It is perfectly possible for edges to exist in both directions between two vertices in a graph like this.  For example, it may be that Jane likes Zubin and Zubin likes Jane.  However, it is important to note that in such a graph, $\mathrm{Zubin}\longrightarrow\mathrm{Jane}$ and $\mathrm{Jane}\longrightarrow\mathrm{Zubin}$ are considered two *different* edges.
-
-`r if (knitr::is_latex_output()) '<!--'`
-:::thinkahead
-**Thinking ahead:** If you load a directed graph in R or Python, you should see that the edges are notated differently to an undirected graph.  As an example, again using `igraph` and `igraphdata` in R, load the `UKfaculty` graph using `data(UKfaculty)`.  Now look at its edges using `E(UKfaculty)` and compare to what you see for the `Koenigsberg` graph.  See the difference?  
-:::
-`r if (knitr::is_latex_output()) '-->'`
-
-`r if (knitr::is_html_output()) '<!--'`
-```{=latex}
-\colorbox{babyblueeyes}{
-\begin{minipage}{\textwidth}
-\textbf{Thinking ahead:} If you load a directed graph in R or Python, you should see that the edges are notated differently to an undirected graph.  As an example, again using \texttt{igraph} and \texttt{igraphdata} in R, load the \texttt{UKfaculty} graph using \texttt{data(UKfaculty)}.  Now look at its edges using \texttt{E(UKfaculty)} and compare to what you saw for the \texttt{Koenigsberg} graph.  Do you see the difference?  
-\end{minipage}
-}
-```
-`r if (knitr::is_html_output()) '-->'`
 
 ### Types of graphs {#graph-types}
 
@@ -285,9 +269,9 @@ ggraph(fourpeoplegraph, layout = "kk") +
 
 ```
 
-Complete graphs are rare and not very useful in practice, since if you already know that a relationship exists between every pair of vertices, there is not a lot of reason to examine your graph or put it to any practical use.  That said, in the field of Graph Theory, it can be important to prove that certain graphs are complete in order to support important theoretical results such as proving important theorems.
+Complete graphs are rare and not very useful in practice, since if you already know that a relationship exists between every pair of vertices, there is not a lot of reason to examine your graph or put it to any practical use.  That said, in the field of Graph Theory, it can be important to prove that certain graphs are complete in order to support important theoretical results.
 
-**Bipartite graphs** are graphs that have two disjoint sets of vertices, such that no vertex from one set is connected to any of the vertices in the othe set.  Imagine we were to add three new individuals to our $G_\mathrm{work}$ graph, and these three individuals all work for a completely different organization to the four people already in the graph.  Then the new graph $G_\mathrm{new}$ may look like Figure \@ref(fig:newwork), with the distinct sets of vertices representing individuals in different organizations.
+**Bipartite graphs** are graphs that have two disjoint sets of vertices, such that no vertex from one set is connected to any of the vertices in the other set.  Imagine we were to add three new individuals to our $G_\mathrm{work}$ graph, and these three individuals all work for a completely different organization to the four people already in the graph.  Then the new graph $G_\mathrm{new}$ may look like Figure \@ref(fig:newwork), with the distinct sets of vertices representing individuals in different organizations.
 
 ```{r newwork, echo = FALSE, fig.cap = "A bipartite graph showing working relationships involving individuals in separate organizations A and B"}
 library(igraph)
@@ -318,7 +302,7 @@ Extending the idea of bipartite graphs, **$k$-partite graphs** are graphs which 
 1.  It is undirected
 2.  There is exactly one path between any pair of vertices
 
-Usually, trees are graphs that where the edges represent some sort of hierarchical or nested relationship.  Figure \@ref(fig:boybands) shows a tree graph of my favorite boy bands, where an edge indicates that the vertex below is a member of the vertex above.  It seems like five is the magic number for a great boy band.
+Usually, trees are graphs where the edges represent some sort of hierarchical or nested relationship.  Figure \@ref(fig:boybands) shows a tree graph of my favorite boy bands, where an edge indicates that the vertex below is a member of the vertex above.  It seems like five is the magic number for a great boy band.
 
 ```{r boybands, echo = FALSE, fig.cap = "Membership of the exclusive class of the author's favourite boy bands can be represented as a tree graph"}
 bands <- data.frame(
@@ -347,7 +331,7 @@ In Section \@ref(graph-def) we learned that a graph $G = (V, E)$ consists of a v
 
 We can enhance a graph to provide even richer information on the entities and on the relationships by giving our vertices and edges *properties*.  A vertex property provides more specific information about a vertex and an edge property provides more specific information about the relationship between two vertices.
 
-As an example, let's return to our directed graph in Figure \@ref(fig:banktransfer), which represents bank transfers between companies A, B, and C.  In this graph, we only know from the edges that transfers took place, but we do not know how much money was involved in each transfer, and in what currency the transfer was made.  If we wanted to capture this information, we could give each edge properties called 'amt' and 'cur' and store the transfer amount and currency in those edge properties.  Similarly, we don't know a great deal about the companies represented by the vertices.  Maybe we would like to know where they are located?  If so, we can create a vertex property called 'loc' and store the location in that vertex property.  
+As an example, let's return to our directed graph in Figure \@ref(fig:banktransfer), which represents bank transfers between companies A, B, and C.  In this graph, we only know from the edges that transfers took place, but we do not know how much money was involved in each transfer, and in what currency the transfer was made.  If we wanted to capture this information, we could give each edge properties called `amt` and `cur` and store the transfer amount and currency in those edge properties.  Similarly, we don't know a great deal about the companies represented by the vertices.  Maybe we would like to know where they are located?  If so, we can create a vertex property called `loc` and store the location in that vertex property.  
 
 Figure \@ref(fig:enhancedcompanytransfers) shows this enhanced graph with the vertex and edge properties added diagramatically.
 
@@ -404,7 +388,7 @@ Note that the vertex property set $V_\mathrm{loc}$ has the same number of elemen
 
 `r if (knitr::is_latex_output()) '<!--'`
 :::thinkahead
-**Thinking ahead:** Go and have a look at the *Bridges of K&ouml;nigsberg* graph using `data(Koenigsberg)` in R.  By typing `summary(Koenigsberg)` you should see some edge and vertex properties, listed as `attr`.  Vertex properties are listed as `v/c` and edge properties are listed as `e/c`.  For example, the edges - or bridges - each have names and you can access these by typing `E(Koenigsberg)$name`.  Hopefully you'll see that there are seven bridges.
+**Thinking ahead:** If you know how to, load up graph of romantic relationships in the TV Series *Mad Men* using the `madmen_edgelist` data set from the `onadata` package or by downloading it from https://ona-book.org/data/madmen_edgelist.csv.  Try to create a graph that contains the `Married` edge property and then try to query your graph to determine which relationships were marriage relationships.
 :::
 `r if (knitr::is_latex_output()) '-->'`
 
@@ -412,7 +396,7 @@ Note that the vertex property set $V_\mathrm{loc}$ has the same number of elemen
 ```{=latex}
 \colorbox{babyblueeyes}{
 \begin{minipage}{\textwidth}
-\textbf{Thinking ahead:} Go and have a look at the \textit{Bridges of K\"{o}nigsberg} graph using \texttt{data(Koenigsberg)} in R.  By typing \texttt{summary(Koenigsberg)} you should see some edge and vertex properties, listed as \texttt{attr}.  Vertex properties are listed as \texttt{v/c} and edge properties are listed as \texttt{e/c}.  For example, the edges --- or bridges --- each have names and you can access these by typing \texttt{E(Koenigsberg)\$name}.  Hopefully you'll see that there are seven bridges.
+\textbf{Thinking ahead:} If you know how to, load up graph of romantic relationships in the TV Series \textit{Mad Men} using the \texttt{madmen\_edgelist} data set from the \textit{onadata} package or by downloading it from \texttt{https://ona-book.org/data/madmen\_edgelist.csv}.  Try to create a graph that contains the \texttt{Married} edge property and then try to query your graph to determine which relationships were marriage relationships.
 \end{minipage}
 }
 ```
@@ -486,9 +470,9 @@ ggplot() +
 
 ### Representations of graphs {#rep-graphs}
 
-So far in this chapter we have seen two common ways of representing a graph.  The first, and most well known way, is a diagram.  The second is as an algebraic structure consisting of a vertex set and and edge set $G = (V, E)$.  As we discussed at the beginning of this chapter, diagrams are useful for visualizing und understanding simple graphs, but less useful for storing graph data and working with large graphs.  When working with graphs in the field of data science, the two most common sources of graph data will be edgelists and adjacency matrices.  
+So far in this chapter we have seen two common ways of representing a graph.  The first, and most well known way, is a diagram.  The second is as an algebraic structure consisting of a vertex set and an edge set $G = (V, E)$.  As we discussed at the beginning of this chapter, diagrams are useful for visualizing und understanding simple graphs, but less useful for storing graph data and working with large graphs.  When working with graphs in the field of data science, the two most common sources of graph data will be edgelists and adjacency matrices.  
 
-An **edgelist** is the edge set $E$ in our graph $G = (V, E)$.  If we don't care about *singletons* --- that is, vertices not connected to any other vertices --- then our vertex set $V$ can be derived directly from $E$.  This means that the edgelist is all that is needed to build a graph provided you are happy to ignore singletons.  It's common that an analyst is happy to ignore singletons because they are often only interested in the connections or relationships in the data.   Let's look at an example.
+An **edgelist** is the edge set $E$ in our graph $G = (V, E)$.  If we don't care about *isolates* --- that is, vertices not connected to any other vertices --- then our vertex set $V$ can be derived directly from $E$.  This means that the edgelist is all that is needed to build a graph provided you are happy to ignore isolates.  It's common that an analyst is happy to ignore isolates because they are often only interested in the connections or relationships in the data.   Let's look at an example.
 
 Recall our edge set $E$ in the graph $G_\mathrm{work} = (V, E)$ from Section \@ref(graph-def):
 
@@ -499,7 +483,7 @@ E = \{\mathrm{David}\longleftrightarrow\mathrm{Zubin}, \mathrm{David}\longleftri
 \end{gather*}
 ```
 
-Since by definition each edge in $E$ must be a pair of vertices from $V$, and since we are not concerned about singletons (in fact, we know they don't exist in this case), we can obtain the vertex set $V$ by simply listing the unique vertices from the pairs in $E$).  Therefore we can construct $V$ to be
+Since by definition each edge in $E$ must be a pair of vertices from $V$, and since we are not concerned about isolates (in fact, we know they don't exist in this case), we can obtain the vertex set $V$ by simply listing the unique vertices from the pairs in $E$).  Therefore we can construct $V$ to be
 
 $$
 V = \{\mathrm{David}, \mathrm{Suraya}, \mathrm{Jane}, \mathrm{Zubin}\}
@@ -527,7 +511,7 @@ if (knitr::is_latex_output()) {
 
 `r if (knitr::is_latex_output()) '<!--'`
 :::thinkahead
-**Thinking ahead:** If you have the *Bridges of K&ouml;nigsberg* graph loaded in R, you can turn it into an edgelist easily.  Try `igraph::as_edgelist(Koenigsberg)` and see if you get the expected output.
+**Thinking ahead:** If you still have the *Bridges of K&ouml;nigsberg* data loaded as a graph in R or Python from earlier, you should be able to generate its edgelist easily.  Try to find the right function to use to do this within your package of choice.
 :::
 `r if (knitr::is_latex_output()) '-->'`
 
@@ -535,13 +519,13 @@ if (knitr::is_latex_output()) {
 ```{=latex}
 \colorbox{babyblueeyes}{
 \begin{minipage}{\textwidth}
-\textbf{Thinking ahead:} If you have the \textit{Bridges of K\"{o}nigsberg} graph loaded, you can turn it into an edgelist easily.  Try \texttt{igraph::as\_edgelist(Koenigsberg)} and see if you get the expected output.
+\textbf{Thinking ahead:} If you still have the \textit{Bridges of K\"{o}nigsberg} data loaded as a graph in R or Python from earlier, you should be able to generate its edgelist easily.  Try to find the right function to use to do this within your package of choice.
 \end{minipage}
 }
 ```
 `r if (knitr::is_html_output()) '-->'`
 
-An **adjacency matrix** is a square matrix with the vertices indexing the rows and columns, and where the $(i, j)$-th entry of the matrix represents number of edges from vertex $i$ to vertex $j$.  As an example, using our simple graph $G_\mathrm{work}$ again from Section \@ref(graph-def), the adjacency matrix would look like this:
+An **adjacency matrix** is a square matrix with the vertices indexing the rows and columns, and where the $(i, j)$-th entry of the matrix represents the number of edges from vertex $i$ to vertex $j$.  As an example, using our simple graph $G_\mathrm{work}$ again from Section \@ref(graph-def), the adjacency matrix would look like this:
 
 $$
 \begin{array}{ccccc}
@@ -590,7 +574,7 @@ $$
 
 `r if (knitr::is_latex_output()) '<!--'`
 :::thinkahead
-**Thinking ahead:** Again, with the *Bridges of K&ouml;nigsberg* graph loaded in R, you can turn it into an adjacency matrix easily.  Try `igraph::as_adjacency_matrix(Koenigsberg)`.  Note the sparse form of the output matrix.  Now try this with the `USairports` graph if you'd like to see a larger adjacency matrix.
+**Thinking ahead:** Again, with the *Bridges of K&ouml;nigsberg* graph loaded in R or Python, you can turn it into an adjacency matrix easily.  Try to find the right function for this in your package of choice.  Note that in packages like `networkx` in Python, the format is slightly different and is called an *adjacency list*.
 :::
 `r if (knitr::is_latex_output()) '-->'`
 
@@ -598,7 +582,7 @@ $$
 ```{=latex}
 \colorbox{babyblueeyes}{
 \begin{minipage}{\textwidth}
-\textbf{Thinking ahead:} Again, with the \textit{Bridges of K\"{o}nigsberg} graph loaded, you can turn it into an adjacency matrix easily.  Try \texttt{igraph::as\_adjacency\_matrix(Koenigsberg)}. Note the sparse form of the output matrix.  Now try this with the \texttt{USairports} graph if you'd like to see a larger adjacency matrix.
+\textbf{Thinking ahead:} Again, with the \textit{Bridges of K\"{o}nigsberg} graph loaded in R or Python, you can turn it into an adjacency matrix easily.  Try to find the right function for this in your package of choice.  Note that in packages like \texttt{networkx} in Python, the format is slightly different and is called an \textit{adjacency list}.
 \end{minipage}
 }
 ```
@@ -673,7 +657,7 @@ colnames(adj_flights) <- rownames(adj_flights)
 
 ```
 
-We see the expected directed multigraph with 3 vertices and 4 edges.  If we wish to use create the weighted graph in Figure \@ref(fig:weightedflights), we add `weighted = TRUE` to the arguments.
+We see the expected directed multigraph with 3 vertices and 16 edges.  If we wish to use create the weighted graph in Figure \@ref(fig:weightedflights), we add `weighted = TRUE` to the arguments.
 
 ```{r}
 # create weighted graph 
@@ -688,7 +672,7 @@ We now see a graph with only 5 edges but we see the addition of `W` in our graph
 
 ### Creating a graph from a dataframe
 
-As we noted in Section \@ref(rep-graphs), edgelists are usually sufficient to descibe a graph when singletons are not of concern.  The function `graph_from_edgelist()` works fine for this purpose, but is lacking in flexibility when graphs contain singletons or other properties that you would ideally like to load on creation.  However, the function `graph_from_data_frame()` allows you to create a more flexible graph directly from dataframes containing the required data.
+As we noted in Section \@ref(rep-graphs), edgelists are usually sufficient to descibe a graph when isolates are not of concern.  The function `graph_from_edgelist()` works fine for this purpose, but is lacking in flexibility when graphs contain isolates or other properties that you would ideally like to load on creation.  However, the function `graph_from_data_frame()` allows you to create a more flexible graph directly from dataframes containing the required data.
 
 Let's create our bipartite graph $G_\mathrm{new}$ from Figure \@ref(fig:newwork) using this function.  At a minimum, this function requires a dataframe of edges, and will also accept a dataframe of vertices if needed.
 
@@ -717,7 +701,7 @@ vertex_df <- data.frame(
 
 `r if (knitr::is_latex_output()) '<!--'`
 :::thinkahead
-**Playing around:** The functions in this section are not the only functions in the `igraph` package that builds graphs from data, but they are by far the most commonly used ones.  By typing `?graph_from` in your R console and looking at the functions that autocomplete, you can see some of the other functions that build graphs from data.  Try playing around with them if you are curious.
+**Playing around:** The functions in this section are not the only functions in the `igraph` package that build graphs from data, but they are by far the most commonly used ones.  By typing `?graph_from` in your R console and looking at the functions that autocomplete, you can see some of the other functions that build graphs from data.  Try playing around with them if you are curious.
 :::
 `r if (knitr::is_latex_output()) '-->'`
 
@@ -725,7 +709,7 @@ vertex_df <- data.frame(
 ```{=latex}
 \colorbox{babyblueeyes}{
 \begin{minipage}{\textwidth}
-\textbf{Playing around:} The functions in this section are not the only functions in the \texttt{igraph} package that builds graphs from data, but they are by far the most commonly used ones.  By typing \texttt{?graph\_from} in your R console and looking at the functions that autocomplete, you can see some of the other functions that build graphs from data.  Try playing around with them if you are curious.
+\textbf{Playing around:} The functions in this section are not the only functions in the \texttt{igraph} package that build graphs from data, but they are by far the most commonly used ones.  By typing \texttt{?graph\_from} in your R console and looking at the functions that autocomplete, you can see some of the other functions that build graphs from data.  Try playing around with them if you are curious.
 \end{minipage}
 }
 ```
@@ -733,7 +717,7 @@ vertex_df <- data.frame(
 
 ### Adding properties to the vertices and edges
 
-Vertex and edge properties can be added to a new graph at the point of creation or can be added progressively to an existing graph. To add properties at the same time as creating a graph, simply include these properties as columns in the edge or vertex dataframes in the `create_graph_from_data_frame()` function.  Let's recreate our financial transaction graph including the edge and vertex properties from Figure \@ref(fig:enhancedcompanytransfers).
+Vertex and edge properties can be added to a new graph at the point of creation or can be added progressively to an existing graph. To add properties at the same time as creating a graph, simply include these properties as columns in the edge or vertex dataframes in the `graph_from_data_frame()` function.  Let's recreate our financial transaction graph including the edge and vertex properties from Figure \@ref(fig:enhancedcompanytransfers).
 
 ```{r}
 # dataframe of edges and properties 
@@ -909,7 +893,9 @@ gmanage=nx.DiGraph(gmanage_edgelist)
 
 # check edges
 list(gmanage.edges)
+```
 
+```{python}
 # check directed
 gmanage.is_directed()
 ```
@@ -949,7 +935,9 @@ multiflights = nx.relabel_nodes(multiflights, label_mapping)
 
 # check edges
 list(multiflights.edges)
+```
 
+```{python}
 # check weights of edges
 [multiflights.edges[i]['weight'] for i in list(multiflights.edges)]
 ```
@@ -970,7 +958,9 @@ transfer=nx.DiGraph(transfer_edgelist)
 
 #view vertices
 list(transfer.nodes)
+```
 
+```{python}
 # add attribute loc to vertices
 loc_attributes = dict(A = "USA", B = "UK", C = "France")
 nx.set_node_attributes(G = transfer, name = "loc",
@@ -985,7 +975,9 @@ Note that multiple attributes can be set at once by passing a dict of dicts.
 ```{python}
 #view edges
 list(transfer.edges)
+```
 
+```{python}
 # add attributes to edges
 transfer_attributes = {
   ('A', 'A'): {"cur": "USD", "amt": 150000}, 
@@ -1003,7 +995,7 @@ nx.set_edge_attributes(G = transfer, values = transfer_attributes)
 
 ```
 
-While this may look tedious and manual, as we move into adding common properties like node centrality or edge weight to graphs, we will find these to be easy to set because of built-in functions that automatically index their output by the vertices or edges.  For example, we have already seen in Section \@ref(python-graph-from-adjacency) that the function `from_numpy_matrix()` automatically sets a weight according to the number of edges when we set the argument `parallel_edges` to `False`.  Also, if you have edge properties as columns in your Pandas edgelist, you can automatically import them into your graph by setting `edge_attr = True` in the `from_pandas_edgelist()` function in `networkx`
+While this may look tedious and manual, as we move into adding common properties like node centrality or edge weight to graphs, we will find these to be easy to set because of built-in functions that automatically index their output by the vertices or edges.  For example, we have already seen in Section \@ref(python-graph-from-adjacency) that the function `from_numpy_matrix()` automatically sets a weight according to the number of edges when we set the argument `parallel_edges` to `False`.  Also, if you have edge properties as columns in your Pandas edgelist, you can automatically import them into your graph by setting `edge_attr = True` in the `from_pandas_edgelist()` function in `networkx`.
 
 `r if (knitr::is_latex_output()) '<!--'`
 :::thinkahead
@@ -1042,16 +1034,16 @@ For each of the following real-world cases, what kind of graph would be the best
 
 ### Data exercises
 
-Load the `koenigsberg` edgelist from the `onadata` package or load it as a dataframe from the internet^[https://ona-book.org/data/koenigsberg.csv].  This is the edgelist for the `r if (knitr::is_html_output()) {"Bridges of K&ouml;nigsberg"} else {"Bridges of K&ouml;nigsberg"}` problem we looked at in ...
+Load the `koenigsberg` edgelist from the `onadata` package or load it as a dataframe from the internet^[https://ona-book.org/data/koenigsberg.csv].  This is the edgelist for the *Bridges of K&ouml;nigsberg* problem we looked at in Chapter \@ref(everywhere).  Use your software of choice for the following exercises.
 
 1.  Create a graph object using this edgelist. Ensure that it is undirected.
 2.  By exploring the graph object you just created, determine how many vertices and edges are in this graph.  Does this make sense given the original problem tackled by Euler?
 3.  Obtain a list of the names of the vertices in this graph.
-4.  Find a function or method in your graph package to create the adjacency matrix for this graph.  Check the output to see if it makes sense.
+4.  Find a function or method in your graph package to create the adjacency matrix or adjacency list for this graph.  Check the output to see if it makes sense.
 
-Load the `pizza` data set from the `onadata` package or load it as a dataframe from the internet^[https://ona-book.org/data/pizza.csv].  This dataset represents requests made by Reddit users on a thread called *Random Acts of Pizza* (ROAP), and is part of a larger dataset used for research purposes^[https://cs.stanford.edu/~althoff/raop-dataset/altruistic_requests_icwsm.pdf].  The `from` column represents users who made requests for pizza and the `to` column represents users who responded to the request by giving pizza^[This data set is only a small subset of the full data set, which included many requests which were not fulfilled.   As we all know, a free pizza is a rare thing].  Other columns represent the request ID and data on the requester at the time the request was made.
+Load the `pizza` data set from the `onadata` package or load it as a dataframe from the internet^[https://ona-book.org/data/pizza.csv].  This dataset represents requests made by Reddit users on a thread called *Random Acts of Pizza* (ROAP), and is part of a larger dataset used for research purposes in @altruistic.  The `requester` column represents users who made requests for pizza and the `responder`` column represents users who read the request and responded to the request by giving pizza^[This data set is only a small subset of the full data set, which included many requests which were not fulfilled.   As we all know, a free pizza is a rare thing!].  Other columns represent the request ID and data on the requester at the time the request was made.
 
-5. Use an appropriate method to create a graph object using the `from` and `to` columns in this data set.
+5. Use an appropriate method to create a graph object using the `requester` and `responder` columns in this data set.
 6. Use the information contained in the graph object to determine how many pizza requests were fulfilled.
 7. Determine using the information in the graph whether anyone fulfilled more than one pizza request.
 8. Using an appropriate method, add the other columns in the `pizza` data set as edge properties.   
