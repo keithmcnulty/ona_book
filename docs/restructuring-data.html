@@ -144,9 +144,9 @@
 <span class="op">(</span><span class="va">orgchart</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>
   d <span class="op">=</span> <span class="va">orgchart_edgelist2</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH 6313cc8 DN-- 8 7 -- 
+<pre><code>## IGRAPH 67e13bd DN-- 8 7 -- 
 ## + attr: name (v/c)
-## + edges from 6313cc8 (vertex names):
+## + edges from 67e13bd (vertex names):
 ## [1] Andrew -&gt;Nancy    Andrew -&gt;Michael  Nancy  -&gt;Jane     Nancy  -&gt;Margaret Nancy  -&gt;Steve    Michael-&gt;Robert  
 ## [7] Michael-&gt;Laura</code></pre>
 <p>We now have a directed graph with named vertices, so this should be easy to plot. Let’s use <code>ggplot</code> with a dendrogram (tree) layout, as in Figure <a href="restructuring-data.html#fig:chinook-pretty">5.1</a>.</p>
@@ -835,13 +835,13 @@ Figure 5.10: Visualization of the network of characters in Episode 1 of Friends,
 <span id="cb283-12"><a href="restructuring-data.html#cb283-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb283-13"><a href="restructuring-data.html#cb283-13" aria-hidden="true" tabindex="-1"></a><span class="co"># check unique values returned</span></span>
 <span id="cb283-14"><a href="restructuring-data.html#cb283-14" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span>(friends_ep1_list)</span></code></pre></div>
-<pre><code>## {'New Scene', 'Rachel', 'Monica', 'All', 'Phoebe', 'Ross', 'Monica ', 'Priest on TV', 'Joey', 'Customer', 'Frannie', 'Waitress', 'Ross and Rachel', 'Chandler ', 'Chandler', 'Paul'}</code></pre>
+<pre><code>## {'New Scene', 'Waitress', 'Joey', 'Priest on TV', 'Monica ', 'Rachel', 'Chandler ', 'Ross and Rachel', 'Customer', 'Ross', 'Monica', 'Phoebe', 'Frannie', 'All', 'Chandler', 'Paul'}</code></pre>
 <p>This looks promising - new we need to get rid of the ‘All’ entries and entries containing ’ and ’.</p>
 <div class="sourceCode" id="cb285"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb285-1"><a href="restructuring-data.html#cb285-1" aria-hidden="true" tabindex="-1"></a>friends_ep1_list2<span class="op">=</span>[entry.strip() <span class="cf">for</span> entry <span class="kw">in</span> friends_ep1_list </span>
 <span id="cb285-2"><a href="restructuring-data.html#cb285-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"All"</span> <span class="kw">not</span> <span class="kw">in</span> entry <span class="kw">and</span> <span class="st">" and "</span> <span class="kw">not</span> <span class="kw">in</span> entry]</span>
 <span id="cb285-3"><a href="restructuring-data.html#cb285-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb285-4"><a href="restructuring-data.html#cb285-4" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span>(friends_ep1_list2)</span></code></pre></div>
-<pre><code>## {'New Scene', 'Rachel', 'Monica', 'Phoebe', 'Ross', 'Customer', 'Priest on TV', 'Joey', 'Frannie', 'Waitress', 'Chandler', 'Paul'}</code></pre>
+<pre><code>## {'New Scene', 'Waitress', 'Joey', 'Priest on TV', 'Rachel', 'Customer', 'Ross', 'Monica', 'Phoebe', 'Frannie', 'Chandler', 'Paul'}</code></pre>
 <p>Now we are ready to organize our characters by scene. First we do a scene count, then we create a dataframe and obtain unique character lists by scene.</p>
 <div class="sourceCode" id="cb287"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb287-1"><a href="restructuring-data.html#cb287-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb287-2"><a href="restructuring-data.html#cb287-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -964,15 +964,40 @@ Figure 5.11: Graph of Friends character network from Episode 1 with edge width i
 <li>What kinds of data sources are most likely to already exist in a graph-friendly form? Why?</li>
 <li>What are the two most important things to define when you intend to transform data into a graph-friendly structure?</li>
 <li>Imagine that you are working in a global Law firm with a database that has three tables. One table lists employee location details including office and home address. A second table includes details on which clients each employee has been working for and what specialty areas they focus on with each client. A third table lists the education history of each employee including school and major/subject area. List out all the different ways you can think to turn this data into a graph.</li>
-<li>Pick one or two of your answers from Question 3 and write down two options for how to structure a graph for each of them. For one option, consider a graph where employees are the only vertices. Then consider a graph where there are at least two different entities as vertices. How might your edges be defined in each. Would the edges have any properties?</li>
-<li>
+<li>Pick one or two of your answers from Question 3 and write down two options for how to structure a graph for each of them. For one option, consider a graph where employees are the only vertices. Then consider a graph where there are at least two different entity types as vertices.<br>
+</li>
+<li>Considering your answers to Question 4, how might your edges be defined in each of your options? Would the edges have any properties?
+For the examples in Questions 6-10, discuss ways that information could be extracted, reshaped and loaded into a graph in order to serve a useful analytic purpose.<br>
+</li>
+<li>Loyalty card data for a retail company showing detailed information on customer visits and purchases.</li>
+<li>Data from the calendars of a large number of company employees.</li>
+<li>Data from automatic number plate scanning from police cameras on major roads in a large city.</li>
+<li>Data on addresses of deliveries made by a courier company.</li>
+<li>Electronic files of legal contracts between different organizations to deliver specified services at specified prices.</li>
 </ol>
 </div>
 <div id="data-exercises-3" class="section level3" number="5.3.2">
 <h3>
 <span class="header-section-number">5.3.2</span> Data exercises<a class="anchor" aria-label="anchor" href="#data-exercises-3"><i class="fas fa-link"></i></a>
 </h3>
-
+<p>Load the <code>park_reviews</code> dataset from the <code>onadata</code> package or download it from the internet<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://ona-book.org/data/park_reviews.csv" class="uri"&gt;https://ona-book.org/data/park_reviews.csv&lt;/a&gt;&lt;/p&gt;'><sup>30</sup></a>. This data contains the reviews of a collection of Yelp users on dog parks in the Phoenix, Arizona area.</p>
+<ol style="list-style-type: decimal">
+<li>Create an edgelist and vertex set that allows you to build a graph showing both the parks and the users as entity types. Include the <code>stars</code> rating as an edge property and ensure that entity types are distinguishable in your data.</li>
+<li>Use your edgelist and vertex set to create a graph object that has edge and vertex properties.</li>
+<li>Visualize your graph in a way that differentiates between users and parks. Use your visualization to point out users that have reviewed numerous dog parks.</li>
+<li>Generate a subgraph consisting only of edges where the <code>stars</code> rating was 5. Repeat your visualization for this subgraph. Use it to identify a frequently 5-star rated park. Has any user reviewed more than one park as 5-star rated?</li>
+</ol>
+<p>Go to the webpage containing the script for Season 1 Episode 2 of <em>Friends</em> at <code>https://fangj.github.io/friends/season/0102.html</code>.</p>
+<ol start="5" style="list-style-type: decimal">
+<li>Repeat the steps in Section <a href="restructuring-data.html#doc-transform">5.2</a> to scrape this webpage to obtain a list of scenes and characters speaking in each scene. Watch out for any additional cleaning that might be necessary for this script compared to the Episode 1 script.</li>
+<li>Use the methods in Section <a href="restructuring-data.html#doc-transform">5.2</a>, including the <code>unique_pairs()</code> function, to create an edgelist for the character network for Episode 2 with the same edge weight based on the number of scenes the characters both spoke in.</li>
+<li>Create a graph for Episode 2 and visualize the graph.</li>
+<li>Combine the edgelist for both Episodes 1 and 2 by adding the weights for each character pair, and then create and visualize a new graph that combines both episodes.</li>
+<li>
+<strong>Extension:</strong>. Try to wrap the previous methods in a function that creates an edgelist for any arbitrary <em>Friends</em> episode found at <code>https://fangj.github.io/friends/</code>. Add additional cleaning commands for unexpected formatting that you might see in different scripts.</li>
+<li>
+<strong>Extension:</strong>. Try to run your function on all Season 1 episodes of <em>Friends</em> and use the results to create and visualize a graph of the character network of the entire first season.</li>
+</ol>
 </div>
 </div>
 </div>

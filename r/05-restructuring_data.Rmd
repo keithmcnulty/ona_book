@@ -886,7 +886,30 @@ knitr::include_graphics("www/restructuring-data/friends-graph-py-1.png")
 1. What kinds of data sources are most likely to already exist in a graph-friendly form?  Why? 
 2. What are the two most important things to define when you intend to transform data into a graph-friendly structure?
 3.  Imagine that you are working in a global Law firm with a database that has three tables.  One table lists employee location details including office and home address.  A second table includes details on which clients each employee has been working for and what specialty areas they focus on with each client.  A third table lists the education history of each employee including school and major/subject area.  List out all the different ways you can think to turn this data into a graph. 
-4.  Pick one or two of your answers from Question 3 and write down two options for how to structure a graph for each of them.  For one option, consider a graph where employees are the only vertices.  Then consider a graph where there are at least two different entities as vertices.  How might your edges be defined in each.  Would the edges have any properties?
-5.    
+4.  Pick one or two of your answers from Question 3 and write down two options for how to structure a graph for each of them.  For one option, consider a graph where employees are the only vertices.  Then consider a graph where there are at least two different entity types as vertices.  
+5. Considering your answers to Question 4, how might your edges be defined in each of your options?  Would the edges have any properties?
+For the examples in Questions 6-10, discuss ways that information could be extracted, reshaped and loaded into a graph in order to serve a useful analytic purpose.  
+6. Loyalty card data for a retail company showing detailed information on customer visits and purchases.
+7. Data from the calendars of a large number of company employees.
+8. Data from automatic number plate scanning from police cameras on major roads in a large city.
+9. Data on addresses of deliveries made by a courier company.
+10. Electronic files of legal contracts between different organizations to deliver specified services at specified prices. 
 
 ### Data exercises
+
+Load the `park_reviews` dataset from the `onadata` package or download it from the internet^[https://ona-book.org/data/park_reviews.csv].  This data contains the reviews of a collection of Yelp users on dog parks in the Phoenix, Arizona area.
+
+1. Create an edgelist and vertex set that allows you to build a graph showing both the parks and the users as entity types.  Include the `stars` rating as an edge property and ensure that entity types are distinguishable in your data.
+2. Use your edgelist and vertex set to create a graph object that has edge and vertex properties.
+3. Visualize your graph in a way that differentiates between users and parks.  Use your visualization to point out users that have reviewed numerous dog parks. 
+4. Generate a subgraph consisting only of edges where the `stars` rating was 5.  Repeat your visualization for this subgraph.  Use it to identify a frequently 5-star rated park.  Has any user reviewed more than one park as 5-star rated? 
+
+Go to the webpage containing the script for Season 1 Episode 2 of *Friends* at `https://fangj.github.io/friends/season/0102.html`.  
+
+5.  Repeat the steps in Section \@ref(doc-transform) to scrape this webpage to obtain a list of scenes and characters speaking in each scene.  Watch out for any additional cleaning that might be necessary for this script compared to the Episode 1 script.
+6.  Use the methods in Section \@ref(doc-transform), including the `unique_pairs()` function, to create an edgelist for the character network for Episode 2 with the same edge weight based on the number of scenes the characters both spoke in.
+7.  Create a graph for Episode 2 and visualize the graph.
+8.  Combine the edgelist for both Episodes 1 and 2 by adding the weights for each character pair, and then create and visualize a new graph that combines both episodes.
+9.  **Extension:**. Try to wrap the previous methods in a function that creates an edgelist for any arbitrary *Friends* episode found at `https://fangj.github.io/friends/`.  Add additional cleaning commands for unexpected formatting that you might see in different scripts.
+10. **Extension:**. Try to run your function on all Season 1 episodes of *Friends* and use the results to create and visualize a graph of the character network of the entire first season. 
+
