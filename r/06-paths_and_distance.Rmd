@@ -1,1 +1,96 @@
-# Paths and Distance in Networks {#paths-distance}
+# Paths and Distance in Graphs {#paths-distance}
+
+Over the course of the earlier chapters, as we learned how to transform data into graph-friendly structures and how to create and visualize graphs, we started to see some concepts emerge informally which we will now start to formally describe and support by means of some mathematical definition and measurement.  For example, we have seen that vertices can be connected directly or indirectly to other vertices by means of a single edge or a series of edges.  We have seen visually that there can be greater 'distance' between some vertices in graphs compared to others, and in some cases it is not possible to get from one vertex to another by any means. 
+
+The process of moving from vertex to vertex in a graph is known as *graph traversal*.  Graph traversal is an extremely important topic that underlies any sort of graph search algorithm.  Graph search algorithms, in turn, are foundational in determining the optimal or shortest path between a given pair of vertices, or the set of shortest paths from a given vertex to all other vertices.  Shortest paths are themselves important in the definition of distance and diameter in networks.  Distance and diameter are useful and intuitive measurements that are frequently used in understanding 'closeness' or 'familiarity' between vertices or in the overall network, and in determining different degrees of influence between vertices.
+
+In this chapter we will progressively look at each of these concepts, so that the reader has a good understanding of their meaning and how they are derived, before we delve into the convenient functions in R and Python which can calculate paths, distance and diameter.  Then, towards the end of the chapter, we will look at a short case study which puts these concepts to use in the analysis of a moderately large and complex network.
+
+The early work in this chapter will use a graph we we will call $G_{14}$, and which is shown in Figure \@ref(fig:g14). This graph contains fourteen vertices labelled A thru N, where all vertices are connected to at least one other vertex in the network.  In other words, this graph consists of fourteen vertices all in a single connected component.  
+
+```{r g14, echo = FALSE, fig.align = "center", fig.cap = "The $G_{14}$ graph"}
+library(igraph)
+library(ggraph)
+library(dplyr)
+
+g14_edgelist <- read.csv("https://ona-book.org/data/g14_edgelist.csv")
+g14 <- igraph::graph_from_data_frame(d = g14_edgelist |> 
+                                       dplyr::select(from, to),
+                                     directed = FALSE)
+
+set.seed(123)
+(g14viz <- ggraph(g14, layout = "lgl") +
+    geom_edge_link(color = "grey", alpha = 0.7) +
+    geom_node_label(aes(label = name), fill = "lightblue") +
+    theme_void())
+```
+
+## Paths and graph traversal
+
+Given any two vertices $A$ and $B$ in a graph $G$, a *path* between $A$ and $B$ is any series of edges in $G$ that begin at $A$ and end at $B$.  For example, in our $G_{14}$ graph, the following are examples of paths between Vertex 9 and Vertex 4:
+
+* $9 \longrightarrow 8 \longrightarrow 4$
+* $9 \longrightarrow 7 \longrightarrow 4$
+* $9 \longrightarrow 7 \longrightarrow 8 \longrightarrow 4$
+* $9 \longrightarrow 8 \longrightarrow 7 \longrightarrow 4$
+* $9 \longrightarrow 7 \longrightarrow 6 \longrightarrow 4$
+* $9 \longrightarrow 8 \longrightarrow 7 \longrightarrow 6 \longrightarrow 4$
+* $9 \longrightarrow 7 \longrightarrow 8 \longrightarrow 7 \longrightarrow 4$
+
+An *acyclic path* is a path where no vertex is repeated.  All except the last path above are acyclic paths between Vertex 9 and Vertex 4 in $G_{14}$.  In general, because we are interested in efficient paths between vertices, we are only interested in acyclic paths in a graph.  The acyclic condition also ensures that the number of paths between any two vertices in a graph is finite.  When we refer to a path from now on, we will always mean an acyclic path unless we say otherwise. 
+
+`r if (knitr::is_latex_output()) '<!--'`
+:::thinkahead
+**Playing around:** Let's reminisce about Chapter \@ref(everywhere) where we studied the *Bridges of K&ouml;nigsberg* problem.  You may recall that an *Eulerian Path* or *Euler Walk* is a path that visits every vertex in a graph at least once and which uses every edge in a graph exactly once.  Consider subgraphs of $G_{14}$ by taking subsets of vertices and the edges that connect them.  How many vertices are in the largest subgraph you can form from $G_{14}$ that contains an Eulerian Path?  If you are an R user, you could consider using the `eulerian` package to verify your answer.    
+:::
+`r if (knitr::is_latex_output()) '-->'`
+
+`r if (knitr::is_html_output()) '<!--'`
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Playing around:}  Let's reminisce about Chapter \ref{everywhere} where we studied the \textit{Bridges of K\"{o}nigsberg} problem.  You may recall that an \textit{Eulerian Path} or \textit{Euler Walk} is a path that visits every vertex in a graph at least once and which uses every edge in a graph exactly once.  Consider subgraphs of $G_{14}$ by taking subsets of vertices and the edges that connect them.  How many vertices are in the largest subgraph you can form from $G_{14}$ that contains an Eulerian Path?  If you are an R user, you could consider using the \texttt{eulerian} package to verify your answer.    
+\end{minipage}
+}
+```
+`r if (knitr::is_html_output()) '-->'`
+
+In order to determine whether a path exists between two vertices $A$ and $B$ in a graph, we need to be able to search the graph for possible routes across edges of the graph starting at Vertex $A$ and ending at Vertex $B$, passing through other vertices where necessary.  Let's take an example from our $G_{14}$ graph.  Let's say we want to determine if a path exists between Vertex 9 and Vertex 5. When a human looks at a simple graph like this, it is visually obvious that such a path exists.  However, as we have mentioned in earlier chapters, most complex graphs cannot be visualized as simply as this one, and computer programs are not human.  So we are going to need a more systematic and programmable way of searching the graph for a path from Vertex 9 to Vertex 5.
+
+One option is to traverse the graph using a *breadth-first approach*. This means that we search all of the immediate neighbors of Vertex 9, then we search the immediate neighbors of the immediate neighbors, until we either eventually find Vertex 5 or until we have covered all vertices and concluded that there is no possible path to Vertex 5.  Here is a simple breadth-first algorithm which would achieve this:
+
+1.  The immediate neighbors of Vertex 9 are Vertices 7, 8, 10 and 13.  We have not found Vertex 5, but we mark Vertex 9 and these neighbor vertices as having been searched.
+2.  The unsearched immediate neighbors of Vertices 7, 8, 10 and 13 are Vertices 4, 6, 11, 12 and 14.  We still have not found Vertex 5, but we add these vertices to the list of vertices which have been searched.
+3.  The unsearched immediate neighbors of Vertices 4, 6, 11, 12 and 14 are Vertices 1, 2, 3 and 5.  We have found Vertex 5 and therefore a path exists between Vertex 9 and Vertex 5.
+
+Alternatively, we could traverse the graph using a *depth-first approach*.  This means that we choose a neighboring vertex of Vertex 9, then find a neighboring vertex of that neighboring vertex, and keep going until we cannot find any more unsearched neighboring vertices.  When this happens, we move back a vertex and look for an unsearched neighboring vertex.  If we find one, we repeat our process.  If not, we move back another vertex and so on until we either find Vertex 5 or we have searched all vertices and conclude that a path to Vertex 5 does not exist.  Here is a simple depth-first algorithm which would achieve this:
+
+1.  We select Vertex 10 as an immediate neighbor of Vertex 9 and mark both Vertex 9 and 10 as searched.
+2.  We select Vertex 11 as an unsearched immediate neighbor of Vertex 10 and mark it as searched.
+3.  We select Vertex 12 as an unsearched immediate neighbor of Vertex 11 and mark it as searched.
+4.  We cannot find an unsearched immediate neighbor of Vertex 12.  So we move back to Vertex 11.
+5.  We cannot find an unsearched immediate neighbor of Vertex 11.  So we move back to Vertex 10.
+6.  We cannot find an unsearched immediate neighbor of Vertex 10.  So we move back to Vertex 9.
+7.  We select Vertex 8 as an unsearched immediate neighbor of Vertex 9.
+8.  We select Vertex 4 as an unsearched immediate neighbor of Vertex 8.
+9.  We select Vertex 3 as an unsearched immediate neighbor of Vertex 4.
+10. We cannot find an unsearched immediate neighbor of Vertex 3.  So we move back to Vertex 4.
+11. We select Vertex 5 as an unsearched immediate neighbor of Vertex 4.  We have found Vertex 5 and therefore a path exists between Vertex 9 and Vertex 5.
+
+It appears that the breadth-first approach is quicker and more computationally efficient than the depth-first approach, but this really depends on the specifics of the search.  Breadth first searches like to stay close to the starting node, and gradually increase their search radius.  Depth-first searches like to 'run away and come back'.  In our $G_{14}$ example above, because the network is very small and all nodes are within a short path from Vertex 9, a breadth-first search will usually find the target vertex quickly compared to a depth-first search, whose speed will depend on the choice of route it takes.  However, when target nodes are very 'far away' in the network, depth-first approaches can be more efficient.  On average, however, computation time complexity for both search types is similar^[The computation time complexity for both search types is proportional to the square of the number of vertices in the graph when an adjacency matrix is used.].
+
+`r if (knitr::is_latex_output()) '<!--'`
+:::thinkahead
+**Thinking ahead:** Consider the *smallest number of edges* that need to be traversed to get from Vertex 9 to Vertex 5 in our $G_{14}$ graph.   Work out what you think that is, and then try to use a depth-first search to move from Vertex 9 to Vertex 5 in different ways.  Will the depth-first search always return a path with the smallest number of edges?  Why or why not?  What about the breadth-first search?    
+:::
+`r if (knitr::is_latex_output()) '-->'`
+
+`r if (knitr::is_html_output()) '<!--'`
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Thinking ahead:} Consider the \textit{smallest number of edges} that need to be traversed to get from Vertex 9 to Vertex 5 in our $G_{14}$ graph.   Work out what you think that is, and then try to use a depth-first search to move from Vertex 9 to Vertex 5 in different ways.  Will the depth-first search always return a path with the smallest number of edges?  Why or why not?  What about the breadth-first search?   
+\end{minipage}
+}
+```
+`r if (knitr::is_html_output()) '-->'`
