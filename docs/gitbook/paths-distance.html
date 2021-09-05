@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>6 Paths and Distance in Networks | Handbook of Graphs and Networks in People Analytics</title>
+  <title>6 Paths and Distance in Graphs | Handbook of Graphs and Networks in People Analytics</title>
   <meta name="description" content="A technical manual of graphs, networks and their applications in the people and social sciences" />
   <meta name="generator" content="bookdown 0.22.15 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="6 Paths and Distance in Networks | Handbook of Graphs and Networks in People Analytics" />
+  <meta property="og:title" content="6 Paths and Distance in Graphs | Handbook of Graphs and Networks in People Analytics" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://ona-book.org" />
   <meta property="og:image" content="https://ona-book.org/www/cover/cover-ona.png" />
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="keithmcnulty/ona_book" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="6 Paths and Distance in Networks | Handbook of Graphs and Networks in People Analytics" />
+  <meta name="twitter:title" content="6 Paths and Distance in Graphs | Handbook of Graphs and Networks in People Analytics" />
   <meta name="twitter:site" content="@dr_keithmcnulty" />
   <meta name="twitter:description" content="A technical manual of graphs, networks and their applications in the people and social sciences" />
   <meta name="twitter:image" content="https://ona-book.org/www/cover/cover-ona.png" />
@@ -286,7 +286,17 @@ div.csl-indent {
 <li class="chapter" data-level="5.3.2" data-path="restructuring-data.html"><a href="restructuring-data.html#data-exercises-3"><i class="fa fa-check"></i><b>5.3.2</b> Data exercises</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="paths-distance.html"><a href="paths-distance.html"><i class="fa fa-check"></i><b>6</b> Paths and Distance in Networks</a></li>
+<li class="chapter" data-level="6" data-path="paths-distance.html"><a href="paths-distance.html"><i class="fa fa-check"></i><b>6</b> Paths and Distance in Graphs</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="paths-distance.html"><a href="paths-distance.html#theory-of-traversal-and-distance-in-graphs"><i class="fa fa-check"></i><b>6.1</b> Theory of traversal and distance in graphs</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="paths-distance.html"><a href="paths-distance.html#traversal"><i class="fa fa-check"></i><b>6.1.1</b> Paths and graph traversal</a></li>
+<li class="chapter" data-level="6.1.2" data-path="paths-distance.html"><a href="paths-distance.html#path-length-and-distance"><i class="fa fa-check"></i><b>6.1.2</b> Path length and distance</a></li>
+<li class="chapter" data-level="6.1.3" data-path="paths-distance.html"><a href="paths-distance.html#shortest-path-algorithms"><i class="fa fa-check"></i><b>6.1.3</b> Shortest path algorithms</a></li>
+<li class="chapter" data-level="6.1.4" data-path="paths-distance.html"><a href="paths-distance.html#graph-diameter-and-density"><i class="fa fa-check"></i><b>6.1.4</b> Graph diameter and density</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="paths-distance.html"><a href="paths-distance.html#calculating-paths-distance-diameter-and-density-in-r"><i class="fa fa-check"></i><b>6.2</b> Calculating Paths, Distance, Diameter and Density in R</a></li>
+</ul></li>
 <li class="chapter" data-level="7" data-path="vertex-importance.html"><a href="vertex-importance.html"><i class="fa fa-check"></i><b>7</b> Vertex Importance and Centrality</a></li>
 <li class="chapter" data-level="8" data-path="community.html"><a href="community.html"><i class="fa fa-check"></i><b>8</b> Segmentation and Community</a></li>
 <li class="chapter" data-level="9" data-path="similarity.html"><a href="similarity.html"><i class="fa fa-check"></i><b>9</b> Commonality and Assortativity</a></li>
@@ -311,8 +321,252 @@ div.csl-indent {
 
             <section class="normal" id="section-">
 <div id="paths-distance" class="section level1" number="6">
-<h1><span class="header-section-number">6</span> Paths and Distance in Networks</h1>
+<h1><span class="header-section-number">6</span> Paths and Distance in Graphs</h1>
+<p>Over the course of the earlier chapters, as we learned how to transform data into graph-friendly structures and how to create and visualize graphs, we started to see some concepts emerge informally which we will now start to formally describe and support by means of some mathematical definition and measurement. For example, we have seen that vertices can be connected directly or indirectly to other vertices by means of a single edge or a series of edges. We have seen visually that there can be greater ‘distance’ between some vertices in graphs compared to others, and in some cases it is not possible to get from one vertex to another by any means.</p>
+<p>The process of moving from vertex to vertex in a graph is known as <em>graph traversal</em>. Graph traversal is an extremely important topic that underlies any sort of graph search algorithm. Graph search algorithms, in turn, are foundational in determining the optimal or shortest path between a given pair of vertices, or the set of shortest paths from a given vertex to all other vertices. Shortest paths are themselves important in the definition of distance and diameter in networks. Distance and diameter are useful and intuitive measurements that are frequently used in understanding ‘closeness’ or ‘familiarity’ between vertices or in the overall network, and in determining different degrees of influence between vertices.</p>
+<p>In this chapter we will progressively look at each of these concepts, so that the reader has a good understanding of their meaning and how they are derived, before we delve into the convenient functions in R and Python which can calculate paths, distance and diameter. Then, towards the end of the chapter, we will look at a short case study which puts these concepts to use in the analysis of a moderately large and complex network.</p>
+<p>The early work in this chapter will use a graph we we will call <span class="math inline">\(G_{14}\)</span>, and which is shown in Figure <a href="paths-distance.html#fig:g14">6.1</a>. This graph contains fourteen vertices labelled 1 thru 14, where all vertices are connected to at least one other vertex in the network. This is known as a <em>connected graph</em>.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:g14"></span>
+<img src="_main_files/figure-html/g14-1.png" alt="The $G_{14}$ graph" width="672" />
+<p class="caption">
+Figure 6.1: The <span class="math inline">\(G_{14}\)</span> graph
+</p>
+</div>
+<div id="theory-of-traversal-and-distance-in-graphs" class="section level2" number="6.1">
+<h2><span class="header-section-number">6.1</span> Theory of traversal and distance in graphs</h2>
+<div id="traversal" class="section level3" number="6.1.1">
+<h3><span class="header-section-number">6.1.1</span> Paths and graph traversal</h3>
+<p>Given any two vertices <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> in a graph <span class="math inline">\(G\)</span>, a <strong>path</strong> between <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> is any series of edges in <span class="math inline">\(G\)</span> that begin at <span class="math inline">\(A\)</span> and end at <span class="math inline">\(B\)</span>. For example, in our <span class="math inline">\(G_{14}\)</span> graph, the following are examples of paths between Vertex 9 and Vertex 4:</p>
+<ul>
+<li><span class="math inline">\(9 \longrightarrow 8 \longrightarrow 4\)</span></li>
+<li><span class="math inline">\(9 \longrightarrow 7 \longrightarrow 4\)</span></li>
+<li><span class="math inline">\(9 \longrightarrow 7 \longrightarrow 8 \longrightarrow 4\)</span></li>
+<li><span class="math inline">\(9 \longrightarrow 8 \longrightarrow 7 \longrightarrow 4\)</span></li>
+<li><span class="math inline">\(9 \longrightarrow 7 \longrightarrow 6 \longrightarrow 4\)</span></li>
+<li><span class="math inline">\(9 \longrightarrow 8 \longrightarrow 7 \longrightarrow 6 \longrightarrow 4\)</span></li>
+<li><span class="math inline">\(9 \longrightarrow 7 \longrightarrow 8 \longrightarrow 7 \longrightarrow 4\)</span></li>
+</ul>
+<p>An <strong>acyclic path</strong> is a path where no vertex is repeated. All except the last path above are acyclic paths between Vertex 9 and Vertex 4 in <span class="math inline">\(G_{14}\)</span>. In general, because we are interested in efficient paths between vertices, we are only interested in acyclic paths in a graph. The acyclic condition also ensures that the number of paths between any two vertices in a graph is finite. When we refer to a path from now on, we will always mean an acyclic path unless we say otherwise.</p>
+<div class="thinkahead">
+<p><strong>Playing around:</strong> Let’s reminisce about Chapter <a href="everywhere.html#everywhere">1</a> where we studied the <em>Bridges of Königsberg</em> problem. You may recall that an <em>Eulerian Path</em> or <em>Euler Walk</em> is a path that visits every vertex in a graph at least once and which uses every edge in a graph exactly once. Consider subgraphs of <span class="math inline">\(G_{14}\)</span> by taking subsets of vertices and the edges that connect them. How many vertices are in the largest subgraph you can form from <span class="math inline">\(G_{14}\)</span> that contains an Eulerian Path? If you are an R user, you could consider using the <code>eulerian</code> package to verify your answer.</p>
+</div>
+<!--
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Playing around:}  Let's reminisce about Chapter \ref{everywhere} where we studied the \textit{Bridges of K\"{o}nigsberg} problem.  You may recall that an \textit{Eulerian Path} or \textit{Euler Walk} is a path that visits every vertex in a graph at least once and which uses every edge in a graph exactly once.  Consider subgraphs of $G_{14}$ by taking subsets of vertices and the edges that connect them.  How many vertices are in the largest subgraph you can form from $G_{14}$ that contains an Eulerian Path?  If you are an R user, you could consider using the \texttt{eulerian} package to verify your answer.    
+\end{minipage}
+}
+```
+-->
+<p>In order to determine whether a path exists between two vertices <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> in a graph, we need to be able to search the graph for possible routes across edges of the graph starting at Vertex <span class="math inline">\(A\)</span> and ending at Vertex <span class="math inline">\(B\)</span>, passing through other vertices where necessary. Let’s take an example from our <span class="math inline">\(G_{14}\)</span> graph. Let’s say we want to determine if a path exists between Vertex 9 and Vertex 5. When a human looks at a simple graph like this, it is visually obvious that such a path exists. However, as we have mentioned in earlier chapters, most complex graphs cannot be visualized as simply as this one, and computer programs are not human. So we are going to need a more systematic and programmable way of searching the graph for a path from Vertex 9 to Vertex 5.</p>
+<p>One option is to traverse the graph using a <em>breadth-first approach</em>. This means that we search all of the immediate neighbors of Vertex 9, then we search the immediate neighbors of the immediate neighbors, until we either eventually find Vertex 5 or until we have covered all vertices and concluded that there is no possible path to Vertex 5. Here is a simple breadth-first algorithm which would achieve this:</p>
+<ol style="list-style-type: decimal">
+<li>The immediate neighbors of Vertex 9 are Vertices 7, 8, 10 and 13. We have not found Vertex 5, but we mark Vertex 9 and these neighbor vertices as having been searched.</li>
+<li>The unsearched immediate neighbors of Vertices 7, 8, 10 and 13 are Vertices 4, 6, 11, 12 and 14. We still have not found Vertex 5, but we add these vertices to the list of vertices which have been searched.</li>
+<li>The unsearched immediate neighbors of Vertices 4, 6, 11, 12 and 14 are Vertices 1, 2, 3 and 5. We have found Vertex 5 and therefore a path exists between Vertex 9 and Vertex 5.</li>
+</ol>
+<p>Alternatively, we could traverse the graph using a <em>depth-first approach</em>. This means that we choose a neighboring vertex of Vertex 9, then find a neighboring vertex of that neighboring vertex, and keep going until we cannot find any more unsearched neighboring vertices. When this happens, we move back a vertex and look for an unsearched neighboring vertex. If we find one, we repeat our process. If not, we move back another vertex and so on until we either find Vertex 5 or we have searched all vertices and conclude that a path to Vertex 5 does not exist. Here is a simple depth-first algorithm which would achieve this:</p>
+<ol style="list-style-type: decimal">
+<li>We select Vertex 10 as an immediate neighbor of Vertex 9 and mark both Vertex 9 and 10 as searched.</li>
+<li>We select Vertex 11 as an unsearched immediate neighbor of Vertex 10 and mark it as searched.</li>
+<li>We select Vertex 12 as an unsearched immediate neighbor of Vertex 11 and mark it as searched.</li>
+<li>We cannot find an unsearched immediate neighbor of Vertex 12. So we move back to Vertex 11.</li>
+<li>We cannot find an unsearched immediate neighbor of Vertex 11. So we move back to Vertex 10.</li>
+<li>We cannot find an unsearched immediate neighbor of Vertex 10. So we move back to Vertex 9.</li>
+<li>We select Vertex 8 as an unsearched immediate neighbor of Vertex 9.</li>
+<li>We select Vertex 4 as an unsearched immediate neighbor of Vertex 8.</li>
+<li>We select Vertex 3 as an unsearched immediate neighbor of Vertex 4.</li>
+<li>We cannot find an unsearched immediate neighbor of Vertex 3. So we move back to Vertex 4.</li>
+<li>We select Vertex 5 as an unsearched immediate neighbor of Vertex 4. We have found Vertex 5 and therefore a path exists between Vertex 9 and Vertex 5.</li>
+</ol>
+<p>It appears that the breadth-first approach is quicker and more computationally efficient than the depth-first approach, but this really depends on the specifics of the search. Breadth first searches like to stay close to the starting node, and gradually increase their search radius. Depth-first searches like to ‘run away and come back.’ In our <span class="math inline">\(G_{14}\)</span> example above, because the network is very small and all nodes are within a short path from Vertex 9, a breadth-first search will usually find the target vertex quickly compared to a depth-first search, whose speed will depend on the choice of route it takes. However, when target nodes are very ‘far away’ in the network, depth-first approaches can be more efficient. On average, however, computation time complexity for both search types is similar<a href="#fn31" class="footnote-ref" id="fnref31"><sup>31</sup></a>.</p>
+<div class="thinkahead">
+<p><strong>Thinking ahead:</strong> Consider the <em>smallest number of edges</em> that need to be traversed to get from Vertex 9 to Vertex 5 in our <span class="math inline">\(G_{14}\)</span> graph. Work out what you think that is, and then try to use a depth-first search to move from Vertex 9 to Vertex 5 in different ways. Will the depth-first search always return a path with the smallest number of edges? Why or why not? What about the breadth-first search?</p>
+</div>
+<!--
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Thinking ahead:} Consider the \textit{smallest number of edges} that need to be traversed to get from Vertex 9 to Vertex 5 in our $G_{14}$ graph.   Work out what you think that is, and then try to use a depth-first search to move from Vertex 9 to Vertex 5 in different ways.  Will the depth-first search always return a path with the smallest number of edges?  Why or why not?  What about the breadth-first search?   
+\end{minipage}
+}
+```
+-->
+</div>
+<div id="path-length-and-distance" class="section level3" number="6.1.2">
+<h3><span class="header-section-number">6.1.2</span> Path length and distance</h3>
+<p>For a path from vertex <span class="math inline">\(A\)</span> to vertex <span class="math inline">\(B\)</span> in a graph, the <strong>length</strong> of the path is the sum of the weights of the edges traversed in the path. If a graph does not have an edge weight property, then the weight of every edge is assumed to be equal to 1. Therefore in an unweighted graph, the length of the path is the number of edges traversed on that path.</p>
+<p>Looking at the (acyclic) paths from Vertex 9 to Vertex 4 in <span class="math inline">\(G_{14}\)</span> as enumerated in Section <a href="paths-distance.html#traversal">6.1.1</a>, we can see that two of the paths have length 2, three of them have length 3, and one has length 4. Now let’s look at a new graph <span class="math inline">\(G_{14W}\)</span> which has weighted edges as in Figure <a href="paths-distance.html#fig:g14w">6.2</a>.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:g14w"></span>
+<img src="_main_files/figure-html/g14w-1.png" alt="The $G_{14W}$ weighted graph" width="672" />
+<p class="caption">
+Figure 6.2: The <span class="math inline">\(G_{14W}\)</span> weighted graph
+</p>
+</div>
+<p>The list of all acyclic paths from Vertex 9 to Vertex 4 and their lengths are as follows:</p>
+<ul>
+<li><span class="math inline">\(9 \longrightarrow 8 \longrightarrow 4\)</span> (Length 5)</li>
+<li><span class="math inline">\(9 \longrightarrow 7 \longrightarrow 4\)</span> (Length 5)</li>
+<li><span class="math inline">\(9 \longrightarrow 7 \longrightarrow 8 \longrightarrow 4\)</span> (Length 7)</li>
+<li><span class="math inline">\(9 \longrightarrow 8 \longrightarrow 7 \longrightarrow 4\)</span> (Length 5)</li>
+<li><span class="math inline">\(9 \longrightarrow 7 \longrightarrow 6 \longrightarrow 4\)</span> (Length 6)</li>
+<li><span class="math inline">\(9 \longrightarrow 8 \longrightarrow 7 \longrightarrow 6 \longrightarrow 4\)</span> (Length 6)</li>
+</ul>
+<p>The <strong>distance</strong> between vertices <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> - sometimes notated as <span class="math inline">\(d(A, B)\)</span> - is the length of the shortest path between <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>. Note that there is no requirement for a unique shortest path, and the shortest path could be traversed in more than one way in a graph. In our unweighted graph <span class="math inline">\(G_{14}\)</span> the distance between Vertex 9 and Vertex 4 is 2. In the weighted graph <span class="math inline">\(G_{14W}\)</span> the distance between Vertex 9 and Vertex 4 is 5. If no path exists between <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> then the distance is called ‘infinite’ or denoted as <span class="math inline">\(\infty\)</span> by convention.</p>
+<p>If <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are vertices of an undirected graph, then <span class="math inline">\(d(A, B) = d(B, A)\)</span>. However, this may not be true for a directed graph.</p>
+<p>Distance is an extremely important concept in graphs and has many practical applications. In physical networks like road or rail networks, distance is meant quite literally with greater distances between vertices usually translating to greater time taken to travel between those vertices. In social networks distance can relate to the ‘familiarity’ or ‘commonality’ between two individuals. Greater distance between individuals in a network usually implies lower likelihood that those individuals know each other in real life, or lower likelihood that information given to one individual will find its way to other individuals. In graphs that represent the knowledge or interests of individuals (such as ‘likes’ in social networks or in knowledge graphs), greater distance between an individual and a topic, event or product usually implies that the individual is less likely to be interested in that topic, event or product. The utility of graph distance measures in fields like transport, communications, marketing and sociology should therefore be quite obvious.</p>
+</div>
+<div id="shortest-path-algorithms" class="section level3" number="6.1.3">
+<h3><span class="header-section-number">6.1.3</span> Shortest path algorithms</h3>
+<p>Due to the importance of distance in graphs, various algorithms have been developed to calculate shortest paths. Some of these algorithms — such as Dijkstra’s algorithm or the Bellman-Ford algorithm — focus on a <em>single source</em> shortest path, which calculates the shortest path between a given vertex and all other vertices in the graph. Others — such as Johnson’s algorithm or the Floyd-Warshall algorithm — focus on the <em>all pairs</em> shortest path problem and calculate the shortest path between any pair of vertices in the graph. Special algorithms have also been developed to facilitate fast calculation of shortest path between a specific pair of vertices, such as the A* algorithm.</p>
+<p>Dijkstra’s algorithm is perhaps the most well-known (and most established) shortest path algorithm, and the easiest to explain. Let’s take a look at how this algorithm works by using our unweighted <span class="math inline">\(G_{14}\)</span> graph as an illustrative example. Dijkstra’s algorithm accepts a single initial vertex and calculates the distance between that vertex and all other vertices in the graph. Let’s use Vertex 9 as our initial vertex. Dijkstra’s algorithm operates in a series of iterative steps as follows:</p>
+<ol style="list-style-type: decimal">
+<li>We assign a tentative distance between Node 9 and itself as zero, and between Node 9 and all other nodes as <span class="math inline">\(\infty\)</span>. WE then mark Node 9 as searched.</li>
+<li>Move to each of the neighbors of Vertex 9, and calculate the length of the path from Node 9 to each of those neighbours and update the tentative distance to this length. In this case we give a tentative distance of 1 to vertices 7, 8, 10 and 13. Mark these vertices as searched.<br />
+</li>
+<li>Go to each of the vertices 7, 8, 10 and 13 in turn, marking each one as current as you proceed. For each current vertex, calculate the length of the shortest path to from Node 9 to each of the unsearched neighbors of the current vertex which <em>pass through the current vertex</em>. If that length is smaller than the existing tentative distance, update the tentative distance with this length. If we move to Vertex 7 first, we see two unsearched neighbours: vertices 4 and 6. The distance from Vertex 9 to both these vertices passing through Vertex 7 is 2, which is less than <span class="math inline">\(\infty\)</span>, and so we update the tentative distances from Vertex 9 to these vertices 4 and 6 to 2.</li>
+<li>In a similar fashion we update the tentative distances from Vertex 9 to vertices 11, 12, and 14 to 2.<br />
+</li>
+<li>We mark vertices 4, 6, 11, 12 and 14 as searched and move to these vertices and repeat the process for their neighbors. In this way we update the tentative distance from Vertex 9 to vertices 1, 2, 3 and 5 to 3. We mark vertices 1, 2, 3 and 5 as searched.</li>
+<li>We have now searched all vertices in the graph, and the tentative distances between vertex 9 and all other vertices are now assigned as the final distances.</li>
+</ol>
+<div class="thinkahead">
+<p><strong>Playing around:</strong> Try to repeat the process of Dijkstra’s algorithm for the weighted graph <span class="math inline">\(G_{14W}\)</span>. Which vertex has the shortest distance from Vertex 9 and which vertex has the longest distance?</p>
+</div>
+<!--
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Playing around:} Try to repeat the process of Dijkstra's algorithm for the weighted graph $G_{14W}$.  Which vertex has the shortest distance from Vertex 9 and which vertex has the longest distance? 
+\end{minipage}
+}
+```
+-->
+<p>Single source shortest path algorithms like Dijkstra’s algorithm can be used to solve the all pairs distance problem by simply repeating the algorithm for each vertex in the graph. For large graphs, however, this can be inefficient, which explains why alternative algorithms have been developed for the all pairs problem<a href="#fn32" class="footnote-ref" id="fnref32"><sup>32</sup></a>.</p>
+</div>
+<div id="graph-diameter-and-density" class="section level3" number="6.1.4">
+<h3><span class="header-section-number">6.1.4</span> Graph diameter and density</h3>
+<p>The <em>diameter</em> of a graph <span class="math inline">\(G\)</span> is the maximum distance between any pair of vertices in <span class="math inline">\(G\)</span>. Alternatively stated, it is the longest shortest path between vertices in <span class="math inline">\(G\)</span>. If a graph is not a connected graph, then by definition its diameter is infinite. Diameter is usually only a useful measure in connected graphs, or in studying connected subgraphs of larger graphs.</p>
+<p>The diameter of a social network is an intuitive measure of the overall ‘closeness’ of the individuals in that network. Networks with smaller diameters can be often be considered as more ‘close-knit’ communities. However, care needs to be taken in interpreting the diameter of a network, particularly given that other measures may be better representative of how close-knit a community is. Common alternative metrics used to assess overall network ‘closeness’ include:</p>
+<ul>
+<li>Average distance between all pairs of vertices</li>
+<li>The <strong>density</strong> of the network, which is defined as the number of edges divided by the total possible number of edges in a simple graph<a href="#fn33" class="footnote-ref" id="fnref33"><sup>33</sup></a>. A complete graph, for example, would have a density of 1.</li>
+</ul>
+<p>Consider the two graphs in Figure <a href="paths-distance.html#fig:dens-ex">6.3</a>. In the first graph, the diameter is 5 and in the second the diameter is 4. However, the average distance between vertices in the first graph is 2.38 and in the second graph it is 2.49. Both graphs have the same density of 0.2. Therefore, on measure would regard the first graph as ‘closer,’ another would regard the second graph as closer, and the third measure would regard them as the same.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:dens-ex"></span>
+<img src="_main_files/figure-html/dens-ex-1.png" alt="Two graphs illustrating how closeness can be measured in different ways" width="672" />
+<p class="caption">
+Figure 6.3: Two graphs illustrating how closeness can be measured in different ways
+</p>
+</div>
+<div class="thinkahead">
+<p><strong>Playing around:</strong> Graph distance and diameter is of great interest in everyday life. You may know the theory of the <em>six degrees of separation</em>, which suggests that the entire world is a connected graph with a diameter of 6. Several industry-specific case studies of this have arisen for research and just for fun. The first was a 1969 paper by two psychologists (<span class="citation"><a href="#ref-millgram" role="doc-biblioref">Travers and Milgram</a> (<a href="#ref-millgram" role="doc-biblioref">1969</a>)</span>), which used an experiment of chain letters to determine that the average distance between people in a population in Nebraska and Massachusetts was 6.2. A 2011 study of the Facebook graph (<span class="citation"><a href="#ref-ugander2011anatomy" role="doc-biblioref">Ugander et al.</a> (<a href="#ref-ugander2011anatomy" role="doc-biblioref">2011</a>)</span>) determined that the Facebook member network was almost fully connected with 99.91% of vertices in a connected subgraph, and that the average distance between vertices was 4.7. In the entertainment industry, the <em>Bacon number</em> is used to denote the distance between an individual and the actor Kevin Bacon, based on participation in the same movie or TV production. In academia, the <em>Erdös number</em> is used to denote the distance between an individual and the mathematician Paul Erdös. Both Bacon and Erdös have arisen as central points because they were highly active in their disciplines and as a result have high centrality in their network. We will look at centrality in the next chapter, but if you are interested you can find the Bacon number of any actor by visiting <a href="https://oracleofbacon.org/" class="uri">https://oracleofbacon.org/</a>.</p>
+</div>
+<!--
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Playing around:} Graph distance and diameter is of great interest in everyday life.  You may know the theory of the \textit{six degrees of separation}, which suggests that the entire world is a connected graph where a path exists between any two people via at most six intermediaries.  Alternatively stated, the world is a connected graph with a diameter of 7.  Several industry-specific case studies of this have arisen for research and just for fun.  The first was a 1969 paper by two psychologists (\verb|\cite{}|\cite{millgram}), which used an experiment of chain letters to determine that the average distance between people in a population in Nebraska and Massachusetts was 6.2.  A 2011 study of the Facebook graph (\verb|\cite{}|\cite{ugander2011anatomy}) determined that the Facebook member network was almost fully connected with 99.91% of vertices connected to other vertices, and that the average distance between vertices was 4.7.  In the entertainment industry, the \textit{Bacon number} is used to denote the distance between an individual and the actor Kevin Bacon, based on participation in the same movie or TV production.  In academia, the \textit{Erd\"{o}s number} is used to denote the distance between an individual and the mathematician Paul Erd\"{o}s.  Both Bacon and Erd\"{o}s have arisen as central points because they were highly active in their disciplines and as a result have high centrality in their network.  We will look at centrality in the next chapter, but if you are interested you can find the Bacon number of any actor by visiting \texttt{https://oracleofbacon.org/}.   
+\end{minipage}
+}
+```
+-->
+</div>
+</div>
+<div id="calculating-paths-distance-diameter-and-density-in-r" class="section level2" number="6.2">
+<h2><span class="header-section-number">6.2</span> Calculating Paths, Distance, Diameter and Density in R</h2>
+<p>Thanks to packages like <code>igraph</code> in R, it is much easier to calculate path, distance and density metrics than to understand the theory behind them. In this section we will illustrate various functions that can be used to easily calculate these metrics. Before we begin, let’s create the graphs <span class="math inline">\(G_{14}\)</span> and <span class="math inline">\(G_{14W}\)</span> from the previous section by downloading the <code>g14_edgelist</code> dataset from the <code>onadata</code> package or by downloading it from the internet<a href="#fn34" class="footnote-ref" id="fnref34"><sup>34</sup></a>.</p>
+<div class="sourceCode" id="cb295"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb295-1"><a href="paths-distance.html#cb295-1" aria-hidden="true" tabindex="-1"></a><span class="co"># download the edgelist</span></span>
+<span id="cb295-2"><a href="paths-distance.html#cb295-2" aria-hidden="true" tabindex="-1"></a>g14_edgelist <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://ona-book.org/data/g14_edgelist.csv&quot;</span>)</span>
+<span id="cb295-3"><a href="paths-distance.html#cb295-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb295-4"><a href="paths-distance.html#cb295-4" aria-hidden="true" tabindex="-1"></a><span class="co"># view head</span></span>
+<span id="cb295-5"><a href="paths-distance.html#cb295-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(g14_edgelist)</span></code></pre></div>
+<pre><code>##   from to weight
+## 1    9 10      4
+## 2   10 11      1
+## 3   11 12      1
+## 4   10 12      1
+## 5    9 13      3
+## 6   13 14      2</code></pre>
+<p>Let’s start by creating the weighted <span class="math inline">\(G_{14W}\)</span> graph from the previous section.</p>
+<div class="sourceCode" id="cb297"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb297-1"><a href="paths-distance.html#cb297-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create weighted graph</span></span>
+<span id="cb297-2"><a href="paths-distance.html#cb297-2" aria-hidden="true" tabindex="-1"></a>(g14w <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(g14_edgelist, <span class="at">directed =</span> <span class="cn">FALSE</span>))</span></code></pre></div>
+<pre><code>## IGRAPH c56f0d8 UNW- 14 18 -- 
+## + attr: name (v/c), weight (e/n)
+## + edges from c56f0d8 (vertex names):
+##  [1] 9 --10 10--11 11--12 10--12 9 --13 13--14 9 --8  9 --7  8 --7  4 --6  4 --7  8 --4  6 --7  4 --1  4 --2  4 --3  4 --5 
+## [18] 1 --2</code></pre>
+<p>The <code>all_simple_paths()</code> function in <code>igraph</code> returns all paths from a specified vertex, and expects at least an <code>igraph</code> object and a vertex name for the <code>from</code> vertex as arguments. If the <code>to</code> argument specifies a vertex, then the function will return only paths between the <code>from</code> and <code>to</code> vertex. Otherwise it will return a list containing all paths from the specified vertex to all other vertices. Note that functions expect the vertex name as a character string.</p>
+<div class="sourceCode" id="cb299"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb299-1"><a href="paths-distance.html#cb299-1" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">all_simple_paths</span>(g14w, <span class="at">from =</span> <span class="st">&quot;9&quot;</span>, <span class="at">to =</span> <span class="st">&quot;4&quot;</span>)</span></code></pre></div>
+<pre><code>## [[1]]
+## + 3/14 vertices, named, from c56f0d8:
+## [1] 9 8 4
+## 
+## [[2]]
+## + 4/14 vertices, named, from c56f0d8:
+## [1] 9 8 7 4
+## 
+## [[3]]
+## + 5/14 vertices, named, from c56f0d8:
+## [1] 9 8 7 6 4
+## 
+## [[4]]
+## + 4/14 vertices, named, from c56f0d8:
+## [1] 9 7 8 4
+## 
+## [[5]]
+## + 3/14 vertices, named, from c56f0d8:
+## [1] 9 7 4
+## 
+## [[6]]
+## + 4/14 vertices, named, from c56f0d8:
+## [1] 9 7 6 4</code></pre>
+<p>We see that this agrees with our manual calculations in Section <a href="paths-distance.html#traversal">6.1.1</a>, and is the same whether or not the edges are weighted. This function is easy to use in the case of undirected graphs. When using with digraphs, there is an additional argument called <code>mode</code>, specifying the direction of the paths you are seeking. <code>out</code>, <code>in</code>, <code>all</code> or <code>total</code> are the accepted values for this argument.</p>
+<p>The <code>all_shortest_paths()</code> function performs the same task as the previous function but restricts the output to paths of the shortest length. This function returns a list of objects, but the paths can be found in the <code>res</code> element of the list.</p>
+<div class="sourceCode" id="cb301"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb301-1"><a href="paths-distance.html#cb301-1" aria-hidden="true" tabindex="-1"></a>shortest_9to4 <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">all_shortest_paths</span>(g14w, <span class="at">from =</span> <span class="st">&quot;9&quot;</span>, <span class="at">to =</span> <span class="st">&quot;4&quot;</span>)</span>
+<span id="cb301-2"><a href="paths-distance.html#cb301-2" aria-hidden="true" tabindex="-1"></a>shortest_9to4<span class="sc">$</span>res</span></code></pre></div>
+<pre><code>## [[1]]
+## + 3/14 vertices, named, from c56f0d8:
+## [1] 9 8 4
+## 
+## [[2]]
+## + 3/14 vertices, named, from c56f0d8:
+## [1] 9 7 4
+## 
+## [[3]]
+## + 4/14 vertices, named, from c56f0d8:
+## [1] 9 8 7 4</code></pre>
+<p>Note that the function has returned the shortest path according to edge weights. To ignore edge weights, simply set <code>weights = NA</code>. This is equivalent to calculating shortest paths in our unweighted <span class="math inline">\(G_{14}\)</span> graph.</p>
+<div class="sourceCode" id="cb303"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb303-1"><a href="paths-distance.html#cb303-1" aria-hidden="true" tabindex="-1"></a>shortest_9to4_uw <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">all_shortest_paths</span>(g14w, <span class="at">from =</span> <span class="st">&quot;9&quot;</span>, <span class="at">to =</span> <span class="st">&quot;4&quot;</span>, <span class="at">weights =</span> <span class="cn">NA</span>)</span>
+<span id="cb303-2"><a href="paths-distance.html#cb303-2" aria-hidden="true" tabindex="-1"></a>shortest_9to4_uw<span class="sc">$</span>res</span></code></pre></div>
+<pre><code>## [[1]]
+## + 3/14 vertices, named, from c56f0d8:
+## [1] 9 7 4
+## 
+## [[2]]
+## + 3/14 vertices, named, from c56f0d8:
+## [1] 9 8 4</code></pre>
 
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-millgram" class="csl-entry">
+Travers, Jeffrey, and Stanley Milgram. 1969. <span>“An Experimental Study of the Small World Problem.”</span> <em>Sociometry</em>. <a href="http://snap.stanford.edu/class/cs224w-readings/travers69smallworld.pdf">http://snap.stanford.edu/class/cs224w-readings/travers69smallworld.pdf</a>.
+</div>
+<div id="ref-ugander2011anatomy" class="csl-entry">
+Ugander, Johan, Brian Karrer, Lars Backstrom, and Cameron Marlow. 2011. <span>“The Anatomy of the Facebook Social Graph.”</span> <a href="https://arxiv.org/pdf/1111.4503.pdf">https://arxiv.org/pdf/1111.4503.pdf</a>.
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="31">
+<li id="fn31"><p>The computation time complexity for both search types is proportional to the square of the number of vertices in the graph when an adjacency matrix is used.<a href="paths-distance.html#fnref31" class="footnote-back">↩︎</a></p></li>
+<li id="fn32"><p>Basic time complexity for Dijkstra’s algorithm for a single source vertex is proportional to the square of the number of vertices in the graph. As a comparison, basic time complexity for the all pairs Floyd-Warshall algorithm is proportional to the cube of the number of vertices in the graph. Based on this, you would expect both algorithms to calculate all pairs distance in approximately the same computation time, but numerous modern computational methods have been able to cut these computation time significantly for different varieties of large graphs.<a href="paths-distance.html#fnref32" class="footnote-back">↩︎</a></p></li>
+<li id="fn33"><p>If <span class="math inline">\(|V|\)</span> is the number of vertices in a simple directed graph, then the number of possible edges is <span class="math inline">\(|V|(|V| - 1)\)</span>, and in an undirected graph it is <span class="math inline">\(\frac{|V|(|V| - 1)}{2}\)</span>. Therefore, if <span class="math inline">\(|E|\)</span> is the number of edges, we can derive the formula for density <span class="math inline">\(D\)</span> as <span class="math inline">\(\frac{|E|}{|V|(|V| - 1)}\)</span> for a directed graph and <span class="math inline">\(\frac{2|E|}{|V|(|V| - 1)}\)</span> for an undirected graph.<a href="paths-distance.html#fnref33" class="footnote-back">↩︎</a></p></li>
+<li id="fn34"><p><a href="https://ona-book.org/data/g14_edgelist.csv" class="uri">https://ona-book.org/data/g14_edgelist.csv</a><a href="paths-distance.html#fnref34" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
             </section>
 
