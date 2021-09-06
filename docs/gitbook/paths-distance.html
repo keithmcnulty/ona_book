@@ -295,7 +295,11 @@ div.csl-indent {
 <li class="chapter" data-level="6.1.3" data-path="paths-distance.html"><a href="paths-distance.html#shortest-path-algorithms"><i class="fa fa-check"></i><b>6.1.3</b> Shortest path algorithms</a></li>
 <li class="chapter" data-level="6.1.4" data-path="paths-distance.html"><a href="paths-distance.html#graph-diameter-and-density"><i class="fa fa-check"></i><b>6.1.4</b> Graph diameter and density</a></li>
 </ul></li>
-<li class="chapter" data-level="6.2" data-path="paths-distance.html"><a href="paths-distance.html#calculating-paths-distance-diameter-and-density-in-r"><i class="fa fa-check"></i><b>6.2</b> Calculating Paths, Distance, Diameter and Density in R</a></li>
+<li class="chapter" data-level="6.2" data-path="paths-distance.html"><a href="paths-distance.html#calculating-paths-distance-diameter-and-density"><i class="fa fa-check"></i><b>6.2</b> Calculating Paths, Distance, Diameter and Density</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="paths-distance.html"><a href="paths-distance.html#calculating-in-r"><i class="fa fa-check"></i><b>6.2.1</b> Calculating in R</a></li>
+<li class="chapter" data-level="6.2.2" data-path="paths-distance.html"><a href="paths-distance.html#calculating-in-python"><i class="fa fa-check"></i><b>6.2.2</b> Calculating in Python</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="vertex-importance.html"><a href="vertex-importance.html"><i class="fa fa-check"></i><b>7</b> Vertex Importance and Centrality</a></li>
 <li class="chapter" data-level="8" data-path="community.html"><a href="community.html"><i class="fa fa-check"></i><b>8</b> Segmentation and Community</a></li>
@@ -461,7 +465,7 @@ Figure 6.3: Two graphs illustrating how closeness can be measured in different w
 </p>
 </div>
 <div class="thinkahead">
-<p><strong>Playing around:</strong> Graph distance and diameter is of great interest in everyday life. You may know the theory of the <em>six degrees of separation</em>, which suggests that the entire world is a connected graph with a diameter of 6. Several industry-specific case studies of this have arisen for research and just for fun. The first was a 1969 paper by two psychologists (<span class="citation"><a href="#ref-millgram" role="doc-biblioref">Travers and Milgram</a> (<a href="#ref-millgram" role="doc-biblioref">1969</a>)</span>), which used an experiment of chain letters to determine that the average distance between people in a population in Nebraska and Massachusetts was 6.2. A 2011 study of the Facebook graph (<span class="citation"><a href="#ref-ugander2011anatomy" role="doc-biblioref">Ugander et al.</a> (<a href="#ref-ugander2011anatomy" role="doc-biblioref">2011</a>)</span>) determined that the Facebook member network was almost fully connected with 99.91% of vertices in a connected subgraph, and that the average distance between vertices was 4.7. In the entertainment industry, the <em>Bacon number</em> is used to denote the distance between an individual and the actor Kevin Bacon, based on participation in the same movie or TV production. In academia, the <em>Erdös number</em> is used to denote the distance between an individual and the mathematician Paul Erdös. Both Bacon and Erdös have arisen as central points because they were highly active in their disciplines and as a result have high centrality in their network. We will look at centrality in the next chapter, but if you are interested you can find the Bacon number of any actor by visiting <a href="https://oracleofbacon.org/" class="uri">https://oracleofbacon.org/</a>.</p>
+<p><strong>Playing around:</strong> Graph distance and diameter is of great interest in everyday life. You may know the theory of the <em>six degrees of separation</em>, which suggests that the entire world is a connected graph where a path exists between any two people via at most six intermediaries. Alternatively stated, the world is a connected graph with a diameter of 7. Several industry-specific case studies of this have arisen for research and just for fun. The first was a 1969 paper by two psychologists (<span class="citation"><a href="#ref-millgram" role="doc-biblioref">Travers and Milgram</a> (<a href="#ref-millgram" role="doc-biblioref">1969</a>)</span>), which used an experiment of chain letters to determine that the average distance between people in a population in Nebraska and Massachusetts was 6.2. A 2011 study of the Facebook graph (<span class="citation"><a href="#ref-ugander2011anatomy" role="doc-biblioref">Ugander et al.</a> (<a href="#ref-ugander2011anatomy" role="doc-biblioref">2011</a>)</span>) determined that the Facebook member network was almost fully connected with 99.91% of vertices in a connected subgraph, and that the average distance between vertices was 4.7. In the entertainment industry, the <em>Bacon number</em> is used to denote the distance between an individual and the actor Kevin Bacon, based on participation in the same movie or TV production. In academia, the <em>Erdös number</em> is used to denote the distance between an individual and the mathematician Paul Erdös. Both Bacon and Erdös have arisen as central points because they were highly active in their disciplines and as a result have high centrality in their network. We will look at centrality in the next chapter, but if you are interested you can find the Bacon number of any actor by visiting <a href="https://oracleofbacon.org/" class="uri">https://oracleofbacon.org/</a>.</p>
 </div>
 <!--
 ```{=latex}
@@ -474,8 +478,10 @@ Figure 6.3: Two graphs illustrating how closeness can be measured in different w
 -->
 </div>
 </div>
-<div id="calculating-paths-distance-diameter-and-density-in-r" class="section level2" number="6.2">
-<h2><span class="header-section-number">6.2</span> Calculating Paths, Distance, Diameter and Density in R</h2>
+<div id="calculating-paths-distance-diameter-and-density" class="section level2" number="6.2">
+<h2><span class="header-section-number">6.2</span> Calculating Paths, Distance, Diameter and Density</h2>
+<div id="calculating-in-r" class="section level3" number="6.2.1">
+<h3><span class="header-section-number">6.2.1</span> Calculating in R</h3>
 <p>Thanks to packages like <code>igraph</code> in R, it is much easier to calculate path, distance and density metrics than to understand the theory behind them. In this section we will illustrate various functions that can be used to easily calculate these metrics. Before we begin, let’s create the graphs <span class="math inline">\(G_{14}\)</span> and <span class="math inline">\(G_{14W}\)</span> from the previous section by downloading the <code>g14_edgelist</code> dataset from the <code>onadata</code> package or by downloading it from the internet<a href="#fn34" class="footnote-ref" id="fnref34"><sup>34</sup></a>.</p>
 <div class="sourceCode" id="cb295"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb295-1"><a href="paths-distance.html#cb295-1" aria-hidden="true" tabindex="-1"></a><span class="co"># download the edgelist</span></span>
 <span id="cb295-2"><a href="paths-distance.html#cb295-2" aria-hidden="true" tabindex="-1"></a>g14_edgelist <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://ona-book.org/data/g14_edgelist.csv&quot;</span>)</span>
@@ -492,62 +498,159 @@ Figure 6.3: Two graphs illustrating how closeness can be measured in different w
 <p>Let’s start by creating the weighted <span class="math inline">\(G_{14W}\)</span> graph from the previous section.</p>
 <div class="sourceCode" id="cb297"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb297-1"><a href="paths-distance.html#cb297-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create weighted graph</span></span>
 <span id="cb297-2"><a href="paths-distance.html#cb297-2" aria-hidden="true" tabindex="-1"></a>(g14w <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(g14_edgelist, <span class="at">directed =</span> <span class="cn">FALSE</span>))</span></code></pre></div>
-<pre><code>## IGRAPH c56f0d8 UNW- 14 18 -- 
+<pre><code>## IGRAPH f23991c UNW- 14 18 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from c56f0d8 (vertex names):
+## + edges from f23991c (vertex names):
 ##  [1] 9 --10 10--11 11--12 10--12 9 --13 13--14 9 --8  9 --7  8 --7  4 --6  4 --7  8 --4  6 --7  4 --1  4 --2  4 --3  4 --5 
 ## [18] 1 --2</code></pre>
 <p>The <code>all_simple_paths()</code> function in <code>igraph</code> returns all paths from a specified vertex, and expects at least an <code>igraph</code> object and a vertex name for the <code>from</code> vertex as arguments. If the <code>to</code> argument specifies a vertex, then the function will return only paths between the <code>from</code> and <code>to</code> vertex. Otherwise it will return a list containing all paths from the specified vertex to all other vertices. Note that functions expect the vertex name as a character string.</p>
 <div class="sourceCode" id="cb299"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb299-1"><a href="paths-distance.html#cb299-1" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">all_simple_paths</span>(g14w, <span class="at">from =</span> <span class="st">&quot;9&quot;</span>, <span class="at">to =</span> <span class="st">&quot;4&quot;</span>)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 3/14 vertices, named, from c56f0d8:
+## + 3/14 vertices, named, from f23991c:
 ## [1] 9 8 4
 ## 
 ## [[2]]
-## + 4/14 vertices, named, from c56f0d8:
+## + 4/14 vertices, named, from f23991c:
 ## [1] 9 8 7 4
 ## 
 ## [[3]]
-## + 5/14 vertices, named, from c56f0d8:
+## + 5/14 vertices, named, from f23991c:
 ## [1] 9 8 7 6 4
 ## 
 ## [[4]]
-## + 4/14 vertices, named, from c56f0d8:
+## + 4/14 vertices, named, from f23991c:
 ## [1] 9 7 8 4
 ## 
 ## [[5]]
-## + 3/14 vertices, named, from c56f0d8:
+## + 3/14 vertices, named, from f23991c:
 ## [1] 9 7 4
 ## 
 ## [[6]]
-## + 4/14 vertices, named, from c56f0d8:
+## + 4/14 vertices, named, from f23991c:
 ## [1] 9 7 6 4</code></pre>
 <p>We see that this agrees with our manual calculations in Section <a href="paths-distance.html#traversal">6.1.1</a>, and is the same whether or not the edges are weighted. This function is easy to use in the case of undirected graphs. When using with digraphs, there is an additional argument called <code>mode</code>, specifying the direction of the paths you are seeking. <code>out</code>, <code>in</code>, <code>all</code> or <code>total</code> are the accepted values for this argument.</p>
 <p>The <code>all_shortest_paths()</code> function performs the same task as the previous function but restricts the output to paths of the shortest length. This function returns a list of objects, but the paths can be found in the <code>res</code> element of the list.</p>
 <div class="sourceCode" id="cb301"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb301-1"><a href="paths-distance.html#cb301-1" aria-hidden="true" tabindex="-1"></a>shortest_9to4 <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">all_shortest_paths</span>(g14w, <span class="at">from =</span> <span class="st">&quot;9&quot;</span>, <span class="at">to =</span> <span class="st">&quot;4&quot;</span>)</span>
 <span id="cb301-2"><a href="paths-distance.html#cb301-2" aria-hidden="true" tabindex="-1"></a>shortest_9to4<span class="sc">$</span>res</span></code></pre></div>
 <pre><code>## [[1]]
-## + 3/14 vertices, named, from c56f0d8:
+## + 3/14 vertices, named, from f23991c:
 ## [1] 9 8 4
 ## 
 ## [[2]]
-## + 3/14 vertices, named, from c56f0d8:
+## + 3/14 vertices, named, from f23991c:
 ## [1] 9 7 4
 ## 
 ## [[3]]
-## + 4/14 vertices, named, from c56f0d8:
+## + 4/14 vertices, named, from f23991c:
 ## [1] 9 8 7 4</code></pre>
 <p>Note that the function has returned the shortest path according to edge weights. To ignore edge weights, simply set <code>weights = NA</code>. This is equivalent to calculating shortest paths in our unweighted <span class="math inline">\(G_{14}\)</span> graph.</p>
 <div class="sourceCode" id="cb303"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb303-1"><a href="paths-distance.html#cb303-1" aria-hidden="true" tabindex="-1"></a>shortest_9to4_uw <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">all_shortest_paths</span>(g14w, <span class="at">from =</span> <span class="st">&quot;9&quot;</span>, <span class="at">to =</span> <span class="st">&quot;4&quot;</span>, <span class="at">weights =</span> <span class="cn">NA</span>)</span>
 <span id="cb303-2"><a href="paths-distance.html#cb303-2" aria-hidden="true" tabindex="-1"></a>shortest_9to4_uw<span class="sc">$</span>res</span></code></pre></div>
 <pre><code>## [[1]]
-## + 3/14 vertices, named, from c56f0d8:
+## + 3/14 vertices, named, from f23991c:
 ## [1] 9 7 4
 ## 
 ## [[2]]
-## + 3/14 vertices, named, from c56f0d8:
+## + 3/14 vertices, named, from f23991c:
 ## [1] 9 8 4</code></pre>
+<p>The <code>distances()</code> function calculates distance in a graph. By default it calculates the distance between all pairs of vertices and returns the results as a distance matrix.</p>
+<div class="sourceCode" id="cb305"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb305-1"><a href="paths-distance.html#cb305-1" aria-hidden="true" tabindex="-1"></a><span class="fu">distances</span>(g14w)</span></code></pre></div>
+<pre><code>##    9 10 11 13 8  4  6  1 12 14 7  2  3  5
+## 9  0  4  5  3 2  5  5  6  5  5 3  6  6  7
+## 10 4  0  1  7 6  9  9 10  1  9 7 10 10 11
+## 11 5  1  0  8 7 10 10 11  1 10 8 11 11 12
+## 13 3  7  8  0 5  8  8  9  8  2 6  9  9 10
+## 8  2  6  7  5 0  3  3  4  7  7 1  4  4  5
+## 4  5  9 10  8 3  0  1  1 10 10 2  1  1  2
+## 6  5  9 10  8 3  1  0  2 10 10 2  2  2  3
+## 1  6 10 11  9 4  1  2  0 11 11 3  1  2  3
+## 12 5  1  1  8 7 10 10 11  0 10 8 11 11 12
+## 14 5  9 10  2 7 10 10 11 10  0 8 11 11 12
+## 7  3  7  8  6 1  2  2  3  8  8 0  3  3  4
+## 2  6 10 11  9 4  1  2  1 11 11 3  0  2  3
+## 3  6 10 11  9 4  1  2  2 11 11 3  2  0  3
+## 5  7 11 12 10 5  2  3  3 12 12 4  3  3  0</code></pre>
+<p>Again, specific subsets of vertices can be selected and the function will return a matrix for just those subsets, and the same <code>mode</code> argument can be used for digraphs. Weights can be ignored by setting <code>weights = NA</code>. The algorithm used to calculate shortest path is automatically selected, but can be specified using the <code>algorithm</code> argument.</p>
+<div class="sourceCode" id="cb307"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb307-1"><a href="paths-distance.html#cb307-1" aria-hidden="true" tabindex="-1"></a><span class="fu">distances</span>(g14w, <span class="at">v =</span> <span class="st">&quot;9&quot;</span>, <span class="at">to =</span> <span class="st">&quot;4&quot;</span>, <span class="at">weights =</span> <span class="cn">NA</span>, <span class="at">algorithm =</span> <span class="st">&quot;bellman-ford&quot;</span>)</span></code></pre></div>
+<pre><code>##   4
+## 9 2</code></pre>
+<p>The <code>mean_distance()</code> function calculates the average distance between all pairs of vertices. Note that this function does not consider edge weights.</p>
+<div class="sourceCode" id="cb309"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb309-1"><a href="paths-distance.html#cb309-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean_distance</span>(g14w)</span></code></pre></div>
+<pre><code>## [1] 2.736264</code></pre>
+<p>To consider edge weights in calculating average distance, you should take the mean of the off-diagonal elements of the distance matrix. This is most easily done by extracting the lower and upper triangles of the distance matrix.</p>
+<div class="sourceCode" id="cb311"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb311-1"><a href="paths-distance.html#cb311-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get lower and upper triangles of weighted distance matrix </span></span>
+<span id="cb311-2"><a href="paths-distance.html#cb311-2" aria-hidden="true" tabindex="-1"></a>dist <span class="ot">&lt;-</span> <span class="fu">distances</span>(g14w)</span>
+<span id="cb311-3"><a href="paths-distance.html#cb311-3" aria-hidden="true" tabindex="-1"></a>off_diag_dist <span class="ot">&lt;-</span> dist[<span class="fu">upper.tri</span>(dist) <span class="sc">|</span> <span class="fu">lower.tri</span>(dist)] </span>
+<span id="cb311-4"><a href="paths-distance.html#cb311-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb311-5"><a href="paths-distance.html#cb311-5" aria-hidden="true" tabindex="-1"></a><span class="co"># calcuate mean</span></span>
+<span id="cb311-6"><a href="paths-distance.html#cb311-6" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(off_diag_dist)</span></code></pre></div>
+<pre><code>## [1] 6.208791</code></pre>
+<p>Graph diameter can be calculated using the <code>diameter()</code> function, and is equal to the maximal element of the distance matrix. Again, weights can be ignored by setting <code>weights = NA</code>.</p>
+<div class="sourceCode" id="cb313"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb313-1"><a href="paths-distance.html#cb313-1" aria-hidden="true" tabindex="-1"></a><span class="fu">diameter</span>(g14w)</span></code></pre></div>
+<pre><code>## [1] 12</code></pre>
+<p>Finally, the <code>edge_density()</code> function will calculate the density of the graph. You can find the formula for edge density in an earlier footnote in this chapter and if you like you can verify this manually for our <span class="math inline">\(G_{14W}\)</span> graph.</p>
+<div class="sourceCode" id="cb315"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb315-1"><a href="paths-distance.html#cb315-1" aria-hidden="true" tabindex="-1"></a><span class="fu">edge_density</span>(g14w)</span></code></pre></div>
+<pre><code>## [1] 0.1978022</code></pre>
+<div class="thinkahead">
+<p><strong>Playing around:</strong> The <code>distance()</code> function allows you to select from three algorithms to use: Dijkstra, Bellman-Ford and Johnson. If you are interested in computation speed you could try an experiment on a large graph to see which one is quicker. The <code>microbenchmark</code> package in R is useful for running a computation many times and benchmarking its average speed. You could try creating a directed graph from the <code>wikivote</code> data set in the <code>onadata</code> package or via the internet at <a href="https://ona-book.org/wikivote.csv" class="uri">https://ona-book.org/wikivote.csv</a>, calculating the distance matrix using each of the three algorithms and benchmarking the speed. I found the Johnson algorithm to be about four times faster than the others. Don’t try this, however, if you are on a low memory or slow CPU computer.</p>
+</div>
+<!--
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Playing around:} The \texttt{distance()} function allows you to select from three algorithms to use:  Dijkstra, Bellman-Ford and Johnson.  If you are interested in computation speed you could try an experiment on a large graph to see which one is quicker.  The \texttt{microbenchmark} package in R is useful for running a computation many times and benchmarking its average speed.  You could try creating a directed graph from the \texttt{wikivote} data set in the \texttt{onadata} package or via the internet at \texttt{https://ona-book.org/wikivote.csv}, calculating the distance matrix using each of the three algorithms and benchmarking the speed.  I found the Johnson algorithm to be about four times faster than the others.  Don't try this, however, if you are on a low memory or slow CPU computer.
+\end{minipage}
+}
+```
+-->
+</div>
+<div id="calculating-in-python" class="section level3" number="6.2.2">
+<h3><span class="header-section-number">6.2.2</span> Calculating in Python</h3>
+<p>The functions in the <code>networkx</code> package in Python are very similar to those in <code>igraph</code> in R. First let’s load our weighted graph <span class="math inline">\(G_{14W}\)</span>.</p>
+<div class="sourceCode" id="cb317"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb317-1"><a href="paths-distance.html#cb317-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
+<span id="cb317-2"><a href="paths-distance.html#cb317-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb317-3"><a href="paths-distance.html#cb317-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb317-4"><a href="paths-distance.html#cb317-4" aria-hidden="true" tabindex="-1"></a>g14w_edges <span class="op">=</span> pd.read_csv(<span class="st">&quot;https://ona-book.org/data/g14_edgelist.csv&quot;</span>)</span>
+<span id="cb317-5"><a href="paths-distance.html#cb317-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb317-6"><a href="paths-distance.html#cb317-6" aria-hidden="true" tabindex="-1"></a>g14w <span class="op">=</span> nx.from_pandas_edgelist(g14w_edges, source <span class="op">=</span> <span class="st">&quot;from&quot;</span>, target <span class="op">=</span> <span class="st">&quot;to&quot;</span>, </span>
+<span id="cb317-7"><a href="paths-distance.html#cb317-7" aria-hidden="true" tabindex="-1"></a>edge_attr <span class="op">=</span> <span class="va">True</span>)</span></code></pre></div>
+<p>To calculate all simple paths between two specified nodes, use the <code>all_simple_paths()</code> function.</p>
+<div class="sourceCode" id="cb318"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb318-1"><a href="paths-distance.html#cb318-1" aria-hidden="true" tabindex="-1"></a>simple_paths <span class="op">=</span> nx.all_simple_paths(G <span class="op">=</span> g14w, source <span class="op">=</span> <span class="dv">9</span>, target <span class="op">=</span> <span class="dv">4</span>)</span>
+<span id="cb318-2"><a href="paths-distance.html#cb318-2" aria-hidden="true" tabindex="-1"></a>[path <span class="cf">for</span> path <span class="kw">in</span> simple_paths]</span></code></pre></div>
+<pre><code>## [[9, 8, 7, 4], [9, 8, 7, 6, 4], [9, 8, 4], [9, 7, 8, 4], [9, 7, 4], [9, 7, 6, 4]]</code></pre>
+<p>To calculate all shortest paths between two specified nodes, use the <code>all_shortest_paths()</code> function. By default this will ignore edge weights.</p>
+<div class="sourceCode" id="cb320"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb320-1"><a href="paths-distance.html#cb320-1" aria-hidden="true" tabindex="-1"></a>shortest_paths_uw <span class="op">=</span> nx.all_shortest_paths(G <span class="op">=</span> g14w, source <span class="op">=</span> <span class="dv">9</span>, target <span class="op">=</span> <span class="dv">4</span>)</span>
+<span id="cb320-2"><a href="paths-distance.html#cb320-2" aria-hidden="true" tabindex="-1"></a>[path <span class="cf">for</span> path <span class="kw">in</span> shortest_paths_uw]</span></code></pre></div>
+<pre><code>## [[9, 8, 4], [9, 7, 4]]</code></pre>
+<p>To consider edge weights, use the name of the weight attribute as the value of the <code>weight</code> argument.</p>
+<div class="sourceCode" id="cb322"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb322-1"><a href="paths-distance.html#cb322-1" aria-hidden="true" tabindex="-1"></a>shortest_paths_w <span class="op">=</span> nx.all_shortest_paths(G <span class="op">=</span> g14w, source <span class="op">=</span> <span class="dv">9</span>, target <span class="op">=</span> <span class="dv">4</span>,</span>
+<span id="cb322-2"><a href="paths-distance.html#cb322-2" aria-hidden="true" tabindex="-1"></a>weight <span class="op">=</span> <span class="st">&#39;weight&#39;</span>)</span>
+<span id="cb322-3"><a href="paths-distance.html#cb322-3" aria-hidden="true" tabindex="-1"></a>[path <span class="cf">for</span> path <span class="kw">in</span> shortest_paths_w]</span></code></pre></div>
+<pre><code>## [[9, 8, 4], [9, 7, 4], [9, 8, 7, 4]]</code></pre>
+<p>For undirected graphs, the <code>shortest_path()</code> function will calculate a single shortest path for every pair of nodes in the graph, returning the paths in a dict. You can also specify source and target node subsets.</p>
+<div class="sourceCode" id="cb324"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb324-1"><a href="paths-distance.html#cb324-1" aria-hidden="true" tabindex="-1"></a>shortest_paths_from9 <span class="op">=</span> nx.shortest_path(g14w, source <span class="op">=</span> <span class="dv">9</span>, weight <span class="op">=</span> <span class="st">&#39;weight&#39;</span>)</span>
+<span id="cb324-2"><a href="paths-distance.html#cb324-2" aria-hidden="true" tabindex="-1"></a>shortest_paths_from9</span></code></pre></div>
+<pre><code>## {9: [9], 10: [9, 10], 13: [9, 13], 8: [9, 8], 7: [9, 7], 4: [9, 8, 4], 14: [9, 13, 14], 6: [9, 7, 6], 11: [9, 10, 11], 12: [9, 10, 12], 1: [9, 8, 4, 1], 2: [9, 8, 4, 2], 3: [9, 8, 4, 3], 5: [9, 8, 4, 5]}</code></pre>
+<p>For directed graphs, various algorithm-specific functions are available, such as <code>dijkstra_path()</code>, <code>bellman_ford_path()</code> and many others.</p>
+<p>Distances can be calculated using the <code>shortest_path_length()</code> function, either to produce all distances or to focus on a specific source and/or target. This will return a dict if single source/target, or a tuple otherwise.</p>
+<div class="sourceCode" id="cb326"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb326-1"><a href="paths-distance.html#cb326-1" aria-hidden="true" tabindex="-1"></a>distances_from9 <span class="op">=</span> nx.shortest_path_length(g14w, source <span class="op">=</span> <span class="dv">9</span>, weight <span class="op">=</span> <span class="st">&#39;weight&#39;</span>)</span>
+<span id="cb326-2"><a href="paths-distance.html#cb326-2" aria-hidden="true" tabindex="-1"></a>distances_from9</span></code></pre></div>
+<pre><code>## {9: 0, 8: 2, 13: 3, 7: 3, 10: 4, 4: 5, 14: 5, 6: 5, 11: 5, 12: 5, 1: 6, 2: 6, 3: 6, 5: 7}</code></pre>
+<p>Average distance can be calculated using the <code>average_shortest_path_length()</code> function. Include weights as an argument to get average weighted distance.</p>
+<div class="sourceCode" id="cb328"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb328-1"><a href="paths-distance.html#cb328-1" aria-hidden="true" tabindex="-1"></a>nx.average_shortest_path_length(g14w, weight <span class="op">=</span> <span class="st">&#39;weight&#39;</span>)</span></code></pre></div>
+<pre><code>## 6.208791208791209</code></pre>
+<p>Diameter can be calculated using the <code>diameter()</code> function, but this will only compute unweighted diameter.</p>
+<div class="sourceCode" id="cb330"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb330-1"><a href="paths-distance.html#cb330-1" aria-hidden="true" tabindex="-1"></a>nx.diameter(g14w)</span></code></pre></div>
+<pre><code>## 5</code></pre>
+<p>To calculate weighted diameter, simple take the maximum value of the weighted distances across all pairs.</p>
+<div class="sourceCode" id="cb332"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb332-1"><a href="paths-distance.html#cb332-1" aria-hidden="true" tabindex="-1"></a>distances <span class="op">=</span> nx.shortest_path_length(g14w, weight <span class="op">=</span> <span class="st">&#39;weight&#39;</span>)</span>
+<span id="cb332-2"><a href="paths-distance.html#cb332-2" aria-hidden="true" tabindex="-1"></a><span class="bu">max</span>([<span class="bu">max</span>(distance[<span class="dv">1</span>].values()) <span class="cf">for</span> distance <span class="kw">in</span> distances])</span></code></pre></div>
+<pre><code>## 12</code></pre>
+<p>Finally, edge density can be calculated using the <code>density()</code> function.</p>
+<div class="sourceCode" id="cb334"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb334-1"><a href="paths-distance.html#cb334-1" aria-hidden="true" tabindex="-1"></a>nx.density(g14w)</span></code></pre></div>
+<pre><code>## 0.1978021978021978</code></pre>
 
+</div>
 </div>
 </div>
 <h3>References</h3>
