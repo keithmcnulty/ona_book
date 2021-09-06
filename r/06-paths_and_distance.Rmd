@@ -222,7 +222,7 @@ g1 + g2
 ```
 `r if (knitr::is_html_output()) '-->'`
 
-## Calculating Paths, Distance, Diameter and Density
+## Calculating paths, distance, diameter and density
 
 ### Calculating in R
 
@@ -397,3 +397,223 @@ Finally, edge density can be calculated using the `density()` function.
 ```{python}
 nx.density(g14w)
 ```
+
+## Illustrative Examples
+
+To illustrate uses of paths and distance in organizational settings, we will go through a couple of simple examples.  We will look at real data from the `workfrance` graph which we introduced earlier in Section \@ref(ggraph).  The `workfrance` data set contains information captured in an experimental study in an office building in France.  Vertices in this data set represent individual employees and edges exist between employees if they have spent a minimum amount of time together in the same place in the building.  Let's download the data and create the graph in R.
+
+
+```{r}
+set.seed(123)
+
+# download workfrance data sets
+workfrance_edges <- read.csv("https://ona-book.org/data/workfrance_edgelist.csv")
+workfrance_vertices <- read.csv("https://ona-book.org/data/workfrance_vertices.csv")
+
+# create graph
+(workfrance <- igraph::graph_from_data_frame(
+    d = workfrance_edges,
+    vertices = workfrance_vertices,
+    directed = FALSE
+))
+```
+
+We have built a graph with 211 vertices and 932 edges.  The vertices have a `dept` property which indicates the department the person works in, and the edges have a `mins` property which indicates the amount of time spent together in the same place.  The `mins` property could be considered a measure of how strong the connection between two individuals is, so lets make it a weight in the graph.
+
+```{r}
+E(workfrance)$weight <- E(workfrance)$mins
+```
+
+### Finding routes to introductions in the workplace
+
+A simple use case of shortest paths is to help connect individuals by common intermediaries.  Let's take two vertices from our `workfrance` graph who are from different departments.  Let's select vertices 3 and 55.  Let's see what departments they are in.
+
+```{r}
+V(workfrance)$dept[V(workfrance)$name %in% c("3", "55")]
+```
+
+Now let's determine the unweighted distance between these two employees in the network.
+
+```{r}
+distances(workfrance, v = "3", to = "55", weights = NA)
+```
+
+These two individuals have an unweighted distance of 2 in the network, meaning they can connect through one intermediary.  Now we can use our `all_shortest_paths()` function to determine who the common intermediary is.  T
+
+```{r}
+all_shortest_paths(workfrance, from = "3", to = "55", weight = NA)$res 
+
+```
+
+
+There is one common intermediary: employee 447.  Therefore, if employees 3 and 55 do not know each other, employee 447 may be able to introduce them.  Note that there may be more than one suggestion for intermediaries.  For example: 
+
+```{r}
+(paths <- all_shortest_paths(workfrance, from = "3", to = "290", weight = NA)$res )
+```
+
+In this case, we could consider using the edge weights to rank the intermediary options, on the basis that higher weights may indicate stronger connections. Let's visualize these two options by looking at the subgraph with edge weights in Figure \@ref(fig:intermediary).
+
+```{r intermediary, fig.align = "center", fig.cap = "Selecting an intermediary according to higher edge weights"}
+subgraph <- induced_subgraph(workfrance, vids = c("3", "290", "694", "859"))
+
+ggraph(subgraph) +
+    geom_edge_link(aes(edge_width = weight, label = weight), color = "grey", alpha = 0.7,
+                   show.legend = FALSE) +
+    geom_node_label(size = 3, fill = "lightblue", aes(label = name)) +
+    theme_void()
+```
+Here we may recommend employee 859 first on the basis of higher edge weights and therefore possibly greater familiarity with employees 3 and 290.
+
+`r if (knitr::is_latex_output()) '<!--'`
+:::thinkahead
+**Playing around:** You may have seen this kind of 'introduction' system at work through social networks such as *LinkedIn*, which can suggest how to be introduced to another member via a common connection.  You may also have seen the distance of an individual relative to you in the network, with direct connections (distance of 1) labelled as 1st, connections of connections (distance of 2) labelled as 2nd, and so on.  These massive networks rarely calculate distances of greater than 3 or suggest connection paths with more than one intermediary because of the massive computational cost of doing so.  If you have a *LinkedIn* profile, you may want to go and explore your second order connections and view the intermediaries who can connect you.  This is the equivalent of looking at all the shortest paths between you and that individual in the network.  
+:::
+`r if (knitr::is_latex_output()) '-->'`
+
+`r if (knitr::is_html_output()) '<!--'`
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Playing around:} You may have seen this kind of 'introduction' system at work through social networks such as \textit{LinkedIn}, which can suggest how to be introduced to another member via a common connection.  You may also have seen the distance of an individual relative to you in the network, with direct connections (distance of 1) labelled as 1st, connections of connections (distance of 2) labelled as 2nd, and so on.  These massive networks rarely calculate distances of greater than 3 or suggest connection paths with more than one intermediary because of the massive computational cost of doing so.  If you have a \textit{LinkedIn} profile, you may want to go and explore your second order connections and view the intermediaries who can connect you.  This is the equivalent of looking at all the shortest paths between you and that individual in the network. 
+\end{minipage}
+}
+```
+`r if (knitr::is_html_output()) '-->'`
+
+
+### Finding distant colleagues in a workplace
+
+Now, imagine that a professional event is being organized in our French workplace, where employees will be assigned to one of 21 tables of ten people^[We can assume the 211th person is hosting the event.].  You have been asked to try to help ensure that the tables contain a good mix of individuals and to avoid tables where everyone knows each other very well.
+
+Before we start, we should check whether this graph has any disconnected components.  
+
+```{r}
+is.connected(workfrance)
+```
+
+So there are no disconnected components in this graph.   Let's also look at the diameter of this graph to get a sense of the maximum possible distance between any pair of individuals.
+
+```{r}
+diameter(workfrance, weights = NA)
+```
+
+As a first step, we can pick 21 people at random who have an unweighted distance of 1 from each other and sit them all at a different table.  That would certainly be a good starting point.  We can use the `neighbors()` function in `igraph` and look for a vertex that has the most neighbors^[You can also use the `degree()` function for this --- more in the next chapter.].   
+
+```{r}
+# create vectors to capture name and no of neighbours
+v_name <- c()
+n_neighbors <- c()
+
+# capture id and no of neighbours for every vertex
+for (v in V(workfrance)$name) {
+    v_name <- append(v_name, v)
+    n_neighbors <- append(n_neighbors, length(neighbors(workfrance, v)))
+}
+
+# find the max
+v_name[which.max(n_neighbors)]
+```
+
+It looks like employee 603 has the most neighbors - let's find out how many.
+
+```{r}
+n_neighbors[which.max(n_neighbors)]
+```
+
+Great!  We could pick any 20 from the neighbors of employee 603 and that would be a great starting point for our 21 tables.  Let's pick those with the highest `mins` property (assuming that this represents a closer relationship).  We can use the `inc()` function to get all edges containing employee 603 and then select those that have the highest `mins` property.
+
+```{r}
+edges603 <- E(workfrance)[inc("603")]
+(top_edges603 <- edges603[order(sort(edges603$mins, decreasing = TRUE))][1:20])
+```
+
+Now we have the 'closest' 20 people to employee 603.  Let's create an edge subgraph and extract the vertices.
+
+```{r}
+subgraph603 <- igraph::subgraph.edges(workfrance, eid = top_edges603)
+V(subgraph603)$name
+```
+
+We can also look at the departments of these individuals:
+
+```{r}
+V(subgraph603)$dept
+```
+
+We see some considerable department similarity, which makes sense.  Now that we have found the first person for each table, we will want to try to make sure that we sit that person with nine other people who have some distance from them, and to minimize neighbors sitting at the same table.  Let's start with our first employee 603.  We know that this employee must sit with at least one neighbor in the graph, because they have 28 neighbors but there are only 21 tables.  Let's sit them with the neighbor who shared the least minutes.
+
+```{r}
+edges603[which.min(edges603$mins)]
+```
+
+So we will sit employee 603 with employee 77.  Now we can select a third individual who has a reasonable distance in the network from both employee 603 and employee 77.
+
+```{r}
+(distance603_77 <- distances(workfrance, v = c("603", "77"), weights = NA))
+```
+
+We could use the mean of the distances to decide on the person with the furthest distance from those already selected.
+
+```{r}
+which.max(colMeans(distance603_77))
+```
+
+We can select employee 502 for the third seat, and we iterate to find the remainder of the people at the table.  In this iteration, we make sure that the same person does not arise twice in the calculations.
+
+```{r}
+table1 <- c("603", "77", "502")
+for (i in 4:10) {
+    # get most distant person
+    new <- distances(workfrance, v = table1, weights = NA) |> 
+        colMeans() |> 
+        which.max() |> 
+        names()
+    # if the person is not new, take them out of the graph and get another distant person
+    if (new %in% table1) {
+        workfrance2 <- induced_subgraph(workfrance, vids = V(workfrance)[V(workfrance)$name != new])
+        table1[i] <- distances(workfrance2, v = table1[table1 != new], weights = NA) |> 
+            colMeans() |> 
+            which.max() |> 
+            names()
+    } else {
+        table1[i] <- new
+    }
+}
+
+table1
+```
+
+Now let's assign a `table` property to the `workfrance` graph and take a look at where our members of Table 1 appear, as in Figure \@ref(fig:table1).
+
+```{r table1, fig.align = "center", fig.cap = "Individuals selected for Table 1 based on optimizing for distance"}
+# add a table property to workfrance graph
+V(workfrance)$table <- ifelse(V(workfrance)$name %in% table1, 1, NA)
+
+# visualize
+ggraph(workfrance, layout = "fr") +
+    geom_edge_link(color = "grey", alpha = 0.5) +
+    geom_node_point(size = 4, aes(color = as.factor(table))) +
+    labs(color = "Table") +
+    theme_void()
+```
+
+It looks as if we have done a good job of maximizing for distance in the network in our table selection.  Let's check the average distance among the employees at Table 1.
+
+```{r}
+mean(distances(workfrance, v = table1, to = table1, weights = NA))
+```
+
+Given that the diameter of the graph is 6, and that we were forced to include a pair of individuals with a distance of 1 on this table, a mean distance of 3.96 seems pretty good.  Let's look at the department mix of our ten people at Table 1.
+
+```{r}
+V(workfrance)$dept[V(workfrance)$name %in% table1]
+```
+
+We have seven departments represented at a table of ten, which seems a good indication of a diverse table.  This gives you a sense of how you can use paths and distance as a mathematical model for familiarity in a network.  If you are interested in continuing this process to fill further tables, see the exercises at the end of this chapter.
+
+## Learning exercises
+
+### Discussion questions
+
+### Data exercises

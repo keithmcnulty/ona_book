@@ -239,7 +239,7 @@ Figure 6.3: Two graphs illustrating how closeness can be measured in different w
 </div>
 <div id="calculating-paths-distance-diameter-and-density" class="section level2" number="6.2">
 <h2>
-<span class="header-section-number">6.2</span> Calculating Paths, Distance, Diameter and Density<a class="anchor" aria-label="anchor" href="#calculating-paths-distance-diameter-and-density"><i class="fas fa-link"></i></a>
+<span class="header-section-number">6.2</span> Calculating paths, distance, diameter and density<a class="anchor" aria-label="anchor" href="#calculating-paths-distance-diameter-and-density"><i class="fas fa-link"></i></a>
 </h2>
 <div id="calculating-in-r" class="section level3" number="6.2.1">
 <h3>
@@ -263,36 +263,36 @@ Figure 6.3: Two graphs illustrating how closeness can be measured in different w
 <div class="sourceCode" id="cb297"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># create weighted graph</span>
 <span class="op">(</span><span class="va">g14w</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span><span class="va">g14_edgelist</span>, directed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH 125f382 UNW- 14 18 -- 
+<pre><code>## IGRAPH c42db31 UNW- 14 18 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from 125f382 (vertex names):
+## + edges from c42db31 (vertex names):
 ##  [1] 9 --10 10--11 11--12 10--12 9 --13 13--14 9 --8  9 --7  8 --7  4 --6  4 --7  8 --4  6 --7  4 --1  4 --2  4 --3  4 --5 
 ## [18] 1 --2</code></pre>
 <p>The <code><a href="https://rdrr.io/pkg/igraph/man/all_simple_paths.html">all_simple_paths()</a></code> function in <code>igraph</code> returns all paths from a specified vertex, and expects at least an <code>igraph</code> object and a vertex name for the <code>from</code> vertex as arguments. If the <code>to</code> argument specifies a vertex, then the function will return only paths between the <code>from</code> and <code>to</code> vertex. Otherwise it will return a list containing all paths from the specified vertex to all other vertices. Note that functions expect the vertex name as a character string.</p>
 <div class="sourceCode" id="cb299"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/all_simple_paths.html">all_simple_paths</a></span><span class="op">(</span><span class="va">g14w</span>, from <span class="op">=</span> <span class="st">"9"</span>, to <span class="op">=</span> <span class="st">"4"</span><span class="op">)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 3/14 vertices, named, from 125f382:
+## + 3/14 vertices, named, from c42db31:
 ## [1] 9 8 4
 ## 
 ## [[2]]
-## + 4/14 vertices, named, from 125f382:
+## + 4/14 vertices, named, from c42db31:
 ## [1] 9 8 7 4
 ## 
 ## [[3]]
-## + 5/14 vertices, named, from 125f382:
+## + 5/14 vertices, named, from c42db31:
 ## [1] 9 8 7 6 4
 ## 
 ## [[4]]
-## + 4/14 vertices, named, from 125f382:
+## + 4/14 vertices, named, from c42db31:
 ## [1] 9 7 8 4
 ## 
 ## [[5]]
-## + 3/14 vertices, named, from 125f382:
+## + 3/14 vertices, named, from c42db31:
 ## [1] 9 7 4
 ## 
 ## [[6]]
-## + 4/14 vertices, named, from 125f382:
+## + 4/14 vertices, named, from c42db31:
 ## [1] 9 7 6 4</code></pre>
 <p>We see that this agrees with our manual calculations in Section <a href="paths-distance.html#traversal">6.1.1</a>, and is the same whether or not the edges are weighted. This function is easy to use in the case of undirected graphs. When using with digraphs, there is an additional argument called <code>mode</code>, specifying the direction of the paths you are seeking. <code>out</code>, <code>in</code>, <code>all</code> or <code>total</code> are the accepted values for this argument.</p>
 <p>The <code><a href="https://rdrr.io/pkg/igraph/man/distances.html">all_shortest_paths()</a></code> function performs the same task as the previous function but restricts the output to paths of the shortest length. This function returns a list of objects, but the paths can be found in the <code>res</code> element of the list.</p>
@@ -300,26 +300,26 @@ Figure 6.3: Two graphs illustrating how closeness can be measured in different w
 <code class="sourceCode R"><span class="va">shortest_9to4</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/distances.html">all_shortest_paths</a></span><span class="op">(</span><span class="va">g14w</span>, from <span class="op">=</span> <span class="st">"9"</span>, to <span class="op">=</span> <span class="st">"4"</span><span class="op">)</span>
 <span class="va">shortest_9to4</span><span class="op">$</span><span class="va">res</span></code></pre></div>
 <pre><code>## [[1]]
-## + 3/14 vertices, named, from 125f382:
+## + 3/14 vertices, named, from c42db31:
 ## [1] 9 8 4
 ## 
 ## [[2]]
-## + 3/14 vertices, named, from 125f382:
+## + 3/14 vertices, named, from c42db31:
 ## [1] 9 7 4
 ## 
 ## [[3]]
-## + 4/14 vertices, named, from 125f382:
+## + 4/14 vertices, named, from c42db31:
 ## [1] 9 8 7 4</code></pre>
 <p>Note that the function has returned the shortest path according to edge weights. To ignore edge weights, simply set <code>weights = NA</code>. This is equivalent to calculating shortest paths in our unweighted <span class="math inline">\(G_{14}\)</span> graph.</p>
 <div class="sourceCode" id="cb303"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">shortest_9to4_uw</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/distances.html">all_shortest_paths</a></span><span class="op">(</span><span class="va">g14w</span>, from <span class="op">=</span> <span class="st">"9"</span>, to <span class="op">=</span> <span class="st">"4"</span>, weights <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span>
 <span class="va">shortest_9to4_uw</span><span class="op">$</span><span class="va">res</span></code></pre></div>
 <pre><code>## [[1]]
-## + 3/14 vertices, named, from 125f382:
+## + 3/14 vertices, named, from c42db31:
 ## [1] 9 7 4
 ## 
 ## [[2]]
-## + 3/14 vertices, named, from 125f382:
+## + 3/14 vertices, named, from c42db31:
 ## [1] 9 8 4</code></pre>
 <p>The <code><a href="https://rdrr.io/pkg/igraph/man/distances.html">distances()</a></code> function calculates distance in a graph. By default it calculates the distance between all pairs of vertices and returns the results as a distance matrix.</p>
 <div class="sourceCode" id="cb305"><pre class="downlit sourceCode r">
@@ -425,6 +425,247 @@ Figure 6.3: Two graphs illustrating how closeness can be measured in different w
 <p>Finally, edge density can be calculated using the <code><a href="https://rdrr.io/r/stats/density.html">density()</a></code> function.</p>
 <div class="sourceCode" id="cb334"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb334-1"><a href="paths-distance.html#cb334-1" aria-hidden="true" tabindex="-1"></a>nx.density(g14w)</span></code></pre></div>
 <pre><code>## 0.1978021978021978</code></pre>
+</div>
+</div>
+<div id="illustrative-examples" class="section level2" number="6.3">
+<h2>
+<span class="header-section-number">6.3</span> Illustrative Examples<a class="anchor" aria-label="anchor" href="#illustrative-examples"><i class="fas fa-link"></i></a>
+</h2>
+<p>To illustrate uses of paths and distance in organizational settings, we will go through a couple of simple examples. We will look at real data from the <code>workfrance</code> graph which we introduced earlier in Section <a href="viz-graphs.html#ggraph">4.1.3</a>. The <code>workfrance</code> data set contains information captured in an experimental study in an office building in France. Vertices in this data set represent individual employees and edges exist between employees if they have spent a minimum amount of time together in the same place in the building. Let’s download the data and create the graph in R.</p>
+<div class="sourceCode" id="cb336"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+
+<span class="co"># download workfrance data sets</span>
+<span class="va">workfrance_edges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"https://ona-book.org/data/workfrance_edgelist.csv"</span><span class="op">)</span>
+<span class="va">workfrance_vertices</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"https://ona-book.org/data/workfrance_vertices.csv"</span><span class="op">)</span>
+
+<span class="co"># create graph</span>
+<span class="op">(</span><span class="va">workfrance</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>
+    d <span class="op">=</span> <span class="va">workfrance_edges</span>,
+    vertices <span class="op">=</span> <span class="va">workfrance_vertices</span>,
+    directed <span class="op">=</span> <span class="cn">FALSE</span>
+<span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code>## IGRAPH 53f3fb8 UN-- 211 932 -- 
+## + attr: name (v/c), dept (v/c), mins (e/n)
+## + edges from 53f3fb8 (vertex names):
+##  [1] 3   --159  253 --3    3   --447  3   --498  3   --694  3   --751  3   --859  3   --908  14  --18   99  --14   14  --441 
+## [12] 520 --14   14  --544  14  --653  14  --998  15  --120  15  --160  15  --162  15  --178  15  --259  15  --261  15  --295 
+## [23] 15  --353  15  --372  15  --464  15  --491  15  --498  15  --909  15  --1090 39  --18   99  --18   429 --18   488 --18  
+## [34] 527 --18   18  --621  18  --650  753 --18   18  --797  18  --845  99  --27   160 --27   259 --27   295 --27   27  --346 
+## [45] 27  --1392 34  --156  34  --250  34  --259  34  --489  34  --615  34  --694  34  --884  34  --959  219 --38   38  --435 
+## [56] 39  --71   39  --72   39  --99   118 --39   39  --219  39  --339  39  --407  39  --468  39  --871  39  --939  43  --285 
+## [67] 43  --339  43  --809  43  --866  43  --985  118 --47   47  --366  47  --691  54  --74   54  --134  54  --158  54  --236 
+## [78] 55  --110  55  --164  447 --55   634 --55   55  --985  1245--55   59  --285  59  --790  59  --793  59  --866  59  --889 
+## + ... omitted several edges</code></pre>
+<p>We have built a graph with 211 vertices and 932 edges. The vertices have a <code>dept</code> property which indicates the department the person works in, and the edges have a <code>mins</code> property which indicates the amount of time spent together in the same place. The <code>mins</code> property could be considered a measure of how strong the connection between two individuals is, so lets make it a weight in the graph.</p>
+<div class="sourceCode" id="cb338"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/E.html">E</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">$</span><span class="va">weight</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/E.html">E</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">$</span><span class="va">mins</span></code></pre></div>
+<div id="finding-routes-to-introductions-in-the-workplace" class="section level3" number="6.3.1">
+<h3>
+<span class="header-section-number">6.3.1</span> Finding routes to introductions in the workplace<a class="anchor" aria-label="anchor" href="#finding-routes-to-introductions-in-the-workplace"><i class="fas fa-link"></i></a>
+</h3>
+<p>A simple use case of shortest paths is to help connect individuals by common intermediaries. Let’s take two vertices from our <code>workfrance</code> graph who are from different departments. Let’s select vertices 3 and 55. Let’s see what departments they are in.</p>
+<div class="sourceCode" id="cb339"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">$</span><span class="va">dept</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">$</span><span class="va">name</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"3"</span>, <span class="st">"55"</span><span class="op">)</span><span class="op">]</span></code></pre></div>
+<pre><code>## [1] "DMI" "SSI"</code></pre>
+<p>Now let’s determine the unweighted distance between these two employees in the network.</p>
+<div class="sourceCode" id="cb341"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/distances.html">distances</a></span><span class="op">(</span><span class="va">workfrance</span>, v <span class="op">=</span> <span class="st">"3"</span>, to <span class="op">=</span> <span class="st">"55"</span>, weights <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></code></pre></div>
+<pre><code>##   55
+## 3  2</code></pre>
+<p>These two individuals have an unweighted distance of 2 in the network, meaning they can connect through one intermediary. Now we can use our <code><a href="https://rdrr.io/pkg/igraph/man/distances.html">all_shortest_paths()</a></code> function to determine who the common intermediary is. T</p>
+<div class="sourceCode" id="cb343"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/distances.html">all_shortest_paths</a></span><span class="op">(</span><span class="va">workfrance</span>, from <span class="op">=</span> <span class="st">"3"</span>, to <span class="op">=</span> <span class="st">"55"</span>, weight <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span><span class="op">$</span><span class="va">res</span> </code></pre></div>
+<pre><code>## [[1]]
+## + 3/211 vertices, named, from 53f3fb8:
+## [1] 3   447 55</code></pre>
+<p>There is one common intermediary: employee 447. Therefore, if employees 3 and 55 do not know each other, employee 447 may be able to introduce them. Note that there may be more than one suggestion for intermediaries. For example:</p>
+<div class="sourceCode" id="cb345"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="op">(</span><span class="va">paths</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/distances.html">all_shortest_paths</a></span><span class="op">(</span><span class="va">workfrance</span>, from <span class="op">=</span> <span class="st">"3"</span>, to <span class="op">=</span> <span class="st">"290"</span>, weight <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span><span class="op">$</span><span class="va">res</span> <span class="op">)</span></code></pre></div>
+<pre><code>## [[1]]
+## + 3/211 vertices, named, from 53f3fb8:
+## [1] 3   859 290
+## 
+## [[2]]
+## + 3/211 vertices, named, from 53f3fb8:
+## [1] 3   694 290</code></pre>
+<p>In this case, we could consider using the edge weights to rank the intermediary options, on the basis that higher weights may indicate stronger connections. Let’s visualize these two options by looking at the subgraph with edge weights in Figure <a href="paths-distance.html#fig:intermediary">6.4</a>.</p>
+<div class="sourceCode" id="cb347"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">subgraph</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/subgraph.html">induced_subgraph</a></span><span class="op">(</span><span class="va">workfrance</span>, vids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"3"</span>, <span class="st">"290"</span>, <span class="st">"694"</span>, <span class="st">"859"</span><span class="op">)</span><span class="op">)</span>
+
+<span class="fu"><a href="https://ggraph.data-imaginist.com/reference/ggraph.html">ggraph</a></span><span class="op">(</span><span class="va">subgraph</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_edge_link.html">geom_edge_link</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>edge_width <span class="op">=</span> <span class="va">weight</span>, label <span class="op">=</span> <span class="va">weight</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"grey"</span>, alpha <span class="op">=</span> <span class="fl">0.7</span>,
+                   show.legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_text.html">geom_node_label</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">3</span>, fill <span class="op">=</span> <span class="st">"lightblue"</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:intermediary"></span>
+<img src="_main_files/figure-html/intermediary-1.png" alt="Selecting an intermediary according to higher edge weights" width="672"><p class="caption">
+Figure 6.4: Selecting an intermediary according to higher edge weights
+</p>
+</div>
+<p>Here we may recommend employee 859 first on the basis of higher edge weights and therefore possibly greater familiarity with employees 3 and 290.</p>
+<div class="thinkahead">
+<p><strong>Playing around:</strong> You may have seen this kind of ‘introduction’ system at work through social networks such as <em>LinkedIn</em>, which can suggest how to be introduced to another member via a common connection. You may also have seen the distance of an individual relative to you in the network, with direct connections (distance of 1) labelled as 1st, connections of connections (distance of 2) labelled as 2nd, and so on. These massive networks rarely calculate distances of greater than 3 or suggest connection paths with more than one intermediary because of the massive computational cost of doing so. If you have a <em>LinkedIn</em> profile, you may want to go and explore your second order connections and view the intermediaries who can connect you. This is the equivalent of looking at all the shortest paths between you and that individual in the network.</p>
+</div>
+<!--
+```{=latex}
+\colorbox{babyblueeyes}{
+\begin{minipage}{\textwidth}
+\textbf{Playing around:} You may have seen this kind of 'introduction' system at work through social networks such as \textit{LinkedIn}, which can suggest how to be introduced to another member via a common connection.  You may also have seen the distance of an individual relative to you in the network, with direct connections (distance of 1) labelled as 1st, connections of connections (distance of 2) labelled as 2nd, and so on.  These massive networks rarely calculate distances of greater than 3 or suggest connection paths with more than one intermediary because of the massive computational cost of doing so.  If you have a \textit{LinkedIn} profile, you may want to go and explore your second order connections and view the intermediaries who can connect you.  This is the equivalent of looking at all the shortest paths between you and that individual in the network. 
+\end{minipage}
+}
+```
+-->
+</div>
+<div id="finding-distant-colleagues-in-a-workplace" class="section level3" number="6.3.2">
+<h3>
+<span class="header-section-number">6.3.2</span> Finding distant colleagues in a workplace<a class="anchor" aria-label="anchor" href="#finding-distant-colleagues-in-a-workplace"><i class="fas fa-link"></i></a>
+</h3>
+<p>Now, imagine that a professional event is being organized in our French workplace, where employees will be assigned to one of 21 tables of ten people<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;We can assume the 211th person is hosting the event.&lt;/p&gt;"><sup>35</sup></a>. You have been asked to try to help ensure that the tables contain a good mix of individuals and to avoid tables where everyone knows each other very well.</p>
+<p>Before we start, we should check whether this graph has any disconnected components.</p>
+<div class="sourceCode" id="cb348"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/components.html">is.connected</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<p>So there are no disconnected components in this graph. Let’s also look at the diameter of this graph to get a sense of the maximum possible distance between any pair of individuals.</p>
+<div class="sourceCode" id="cb350"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/diameter.html">diameter</a></span><span class="op">(</span><span class="va">workfrance</span>, weights <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></code></pre></div>
+<pre><code>## [1] 6</code></pre>
+<p>As a first step, we can pick 21 people at random who have an unweighted distance of 1 from each other and sit them all at a different table. That would certainly be a good starting point. We can use the <code><a href="https://rdrr.io/pkg/igraph/man/neighbors.html">neighbors()</a></code> function in <code>igraph</code> and look for a vertex that has the most neighbors<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;You can also use the &lt;code&gt;degree()&lt;/code&gt; function for this — more in the next chapter.&lt;/p&gt;"><sup>36</sup></a>.</p>
+<div class="sourceCode" id="cb352"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># create vectors to capture name and no of neighbours</span>
+<span class="va">v_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">n_neighbors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">)</span>
+
+<span class="co"># capture id and no of neighbours for every vertex</span>
+<span class="kw">for</span> <span class="op">(</span><span class="va">v</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">$</span><span class="va">name</span><span class="op">)</span> <span class="op">{</span>
+    <span class="va">v_name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/append.html">append</a></span><span class="op">(</span><span class="va">v_name</span>, <span class="va">v</span><span class="op">)</span>
+    <span class="va">n_neighbors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/append.html">append</a></span><span class="op">(</span><span class="va">n_neighbors</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/neighbors.html">neighbors</a></span><span class="op">(</span><span class="va">workfrance</span>, <span class="va">v</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="op">}</span>
+
+<span class="co"># find the max</span>
+<span class="va">v_name</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.min.html">which.max</a></span><span class="op">(</span><span class="va">n_neighbors</span><span class="op">)</span><span class="op">]</span></code></pre></div>
+<pre><code>## [1] "603"</code></pre>
+<p>It looks like employee 603 has the most neighbors - let’s find out how many.</p>
+<div class="sourceCode" id="cb354"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">n_neighbors</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.min.html">which.max</a></span><span class="op">(</span><span class="va">n_neighbors</span><span class="op">)</span><span class="op">]</span></code></pre></div>
+<pre><code>## [1] 28</code></pre>
+<p>Great! We could pick any 20 from the neighbors of employee 603 and that would be a great starting point for our 21 tables. Let’s pick those with the highest <code>mins</code> property (assuming that this represents a closer relationship). We can use the <code>inc()</code> function to get all edges containing employee 603 and then select those that have the highest <code>mins</code> property.</p>
+<div class="sourceCode" id="cb356"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">edges603</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/E.html">E</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">[</span><span class="fu">inc</span><span class="op">(</span><span class="st">"603"</span><span class="op">)</span><span class="op">]</span>
+<span class="op">(</span><span class="va">top_edges603</span> <span class="op">&lt;-</span> <span class="va">edges603</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html">order</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span><span class="op">(</span><span class="va">edges603</span><span class="op">$</span><span class="va">mins</span>, decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span><span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">20</span><span class="op">]</span><span class="op">)</span></code></pre></div>
+<pre><code>## + 20/932 edges from 53f3fb8 (vertex names):
+##  [1] 603--1392 603--1323 603--1362 859--603  603--954  603--1245 603--779  603--649  691--603  694--603  706--603  603--725 
+## [13] 487--603  420--603  428--603  387--603  401--603  603--272  290--603  346--603</code></pre>
+<p>Now we have the ‘closest’ 20 people to employee 603. Let’s create an edge subgraph and extract the vertices.</p>
+<div class="sourceCode" id="cb358"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">subgraph603</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/subgraph.html">subgraph.edges</a></span><span class="op">(</span><span class="va">workfrance</span>, eid <span class="op">=</span> <span class="va">top_edges603</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">subgraph603</span><span class="op">)</span><span class="op">$</span><span class="va">name</span></code></pre></div>
+<pre><code>##  [1] "290"  "420"  "428"  "691"  "706"  "694"  "859"  "346"  "387"  "401"  "487"  "603"  "649"  "725"  "779"  "954"  "1245"
+## [18] "1323" "1362" "1392" "272"</code></pre>
+<p>We can also look at the departments of these individuals:</p>
+<div class="sourceCode" id="cb360"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">subgraph603</span><span class="op">)</span><span class="op">$</span><span class="va">dept</span></code></pre></div>
+<pre><code>##  [1] "DG"   "DISQ" "DISQ" "DISQ" "DMCT" "DMI"  "DMI"  "DST"  "DST"  "DST"  "DST"  "DST"  "DST"  "DST"  "DST"  "DST"  "DST" 
+## [18] "DST"  "DST"  "DST"  "SRH"</code></pre>
+<p>We see some considerable department similarity, which makes sense. Now that we have found the first person for each table, we will want to try to make sure that we sit that person with nine other people who have some distance from them, and to minimize neighbors sitting at the same table. Let’s start with our first employee 603. We know that this employee must sit with at least one neighbor in the graph, because they have 28 neighbors but there are only 21 tables. Let’s sit them with the neighbor who shared the least minutes.</p>
+<div class="sourceCode" id="cb362"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">edges603</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.min.html">which.min</a></span><span class="op">(</span><span class="va">edges603</span><span class="op">$</span><span class="va">mins</span><span class="op">)</span><span class="op">]</span></code></pre></div>
+<pre><code>## + 1/932 edge from 53f3fb8 (vertex names):
+## [1] 77--603</code></pre>
+<p>So we will sit employee 603 with employee 77. Now we can select a third individual who has a reasonable distance in the network from both employee 603 and employee 77.</p>
+<div class="sourceCode" id="cb364"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="op">(</span><span class="va">distance603_77</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/distances.html">distances</a></span><span class="op">(</span><span class="va">workfrance</span>, v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"603"</span>, <span class="st">"77"</span><span class="op">)</span>, weights <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code>##     89 97 118 220 378 656 720 741 886 1204 1209 1492 290 502 47 119 198 213 253 267 270 343 366 420 428 445 478 520 525 660
+## 603  3  2   2   2   3   3   3   2   3    2    3    4   1   4  2   2   2   2   2   1   2   2   2   1   1   2   2   2   2   2
+## 77   2  1   2   1   2   2   2   2   2    1    2    3   2   4  3   3   3   3   3   2   3   3   3   2   2   3   3   3   2   3
+##     691 836 39 43 59 63 72 80 122 211 219 246 257 285 339 407 466 468 533 702 706 753 784 790 793 809 866 871 889 894 923 939
+## 603   1   2  2  3  3  3  2  2   2   3   3   2   2   3   2   2   3   2   4   3   1   2   2   3   3   3   3   3   2   2   2   3
+## 77    2   3  3  3  3  2  2  3   1   3   3   3   3   3   3   2   3   3   3   4   2   2   3   3   3   3   3   3   2   3   3   2
+##     3 15 34 54 74 79 99 120 131 134 141 156 158 159 160 162 165 178 183 193 205 236 242 250 259 261 295 333 353 372 425 447
+## 603 2  3  2  3  2  3  1   2   3   3   2   2   3   2   2   2   4   3   2   3   3   2   4   3   2   2   2   2   3   2   4   3
+## 77  2  2  2  2  1  2  2   2   3   3   2   2   2   1   2   1   3   3   2   2   3   3   3   2   1   2   2   2   2   2   3   3
+##     453 460 464 489 491 498 574 615 642 677 694 751 763 859 880 884 909 959 1067 1090 1164 1238 1342 38 172 184 210 222 248
+## 603   2   3   3   3   3   3   3   3   3   3   1   3   3   1   3   3   2   3    2    3    2    3    2  4   3   3   1   3   3
+## 77    2   3   2   2   2   2   2   2   2   4   2   2   2   2   2   2   3   2    2    3    3    2    1  3   4   4   2   4   4
+##     252 269 275 322 374 424 465 477 486 504 510 513 527 577 634 638 674 743 771 867 882 893 908 921 1485 27 71 77 147 215 346
+## 603   2   3   2   3   3   2   3   3   3   3   3   3   3   3   2   3   3   2   3   3   2   3   2   3    2  2  1  1   1   1   1
+## 77    3   4   3   3   4   3   4   4   3   4   4   4   3   4   3   4   4   3   4   4   3   4   3   3    3  2  2  0   2   1   1
+##     387 401 426 429 487 488 580 582 603 649 725 779 954 1245 1323 1362 1392 14 181 441 544 778 998 1260 106 245 435 440 117
+## 603   1   1   2   2   1   2   2   2   0   1   1   1   1    1    1    1    1  2   2   3   3   3   3    3   3   3   3   2   1
+## 77    2   2   2   1   2   2   2   2   1   1   2   2   2    2    2    2    2  3   3   4   4   3   4    4   3   3   2   2   2
+##     197 200 413 432 461 475 496 626 653 874 977 1414 18 232 272 531 621 650 744 797 845 55 110 164 173 628 970 985
+## 603   3   2   2   3   2   2   3   3   2   2   3    2  2   2   1   2   3   2   2   2   2  2   3   3   3   2   4   3
+## 77    3   3   3   3   3   3   4   4   2   3   4    3  2   3   2   3   3   3   3   3   3  3   4   3   3   2   4   2</code></pre>
+<p>We could use the mean of the distances to decide on the person with the furthest distance from those already selected.</p>
+<div class="sourceCode" id="cb366"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/which.min.html">which.max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colMeans</a></span><span class="op">(</span><span class="va">distance603_77</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code>## 502 
+##  14</code></pre>
+<p>We can select employee 502 for the third seat, and we iterate to find the remainder of the people at the table. In this iteration, we make sure that the same person does not arise twice in the calculations.</p>
+<div class="sourceCode" id="cb368"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">table1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"603"</span>, <span class="st">"77"</span>, <span class="st">"502"</span><span class="op">)</span>
+<span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">4</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> <span class="op">{</span>
+    <span class="co"># get most distant person</span>
+    <span class="va">new</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/distances.html">distances</a></span><span class="op">(</span><span class="va">workfrance</span>, v <span class="op">=</span> <span class="va">table1</span>, weights <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span> |&gt; 
+        <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colMeans</a></span><span class="op">(</span><span class="op">)</span> |&gt; 
+        <span class="fu"><a href="https://rdrr.io/r/base/which.min.html">which.max</a></span><span class="op">(</span><span class="op">)</span> |&gt; 
+        <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="op">)</span>
+    <span class="co"># if the person is not new, take them out of the graph and get another distant person</span>
+    <span class="kw">if</span> <span class="op">(</span><span class="va">new</span> <span class="op">%in%</span> <span class="va">table1</span><span class="op">)</span> <span class="op">{</span>
+        <span class="va">workfrance2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/subgraph.html">induced_subgraph</a></span><span class="op">(</span><span class="va">workfrance</span>, vids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">$</span><span class="va">name</span> <span class="op">!=</span> <span class="va">new</span><span class="op">]</span><span class="op">)</span>
+        <span class="va">table1</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/distances.html">distances</a></span><span class="op">(</span><span class="va">workfrance2</span>, v <span class="op">=</span> <span class="va">table1</span><span class="op">[</span><span class="va">table1</span> <span class="op">!=</span> <span class="va">new</span><span class="op">]</span>, weights <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span> |&gt; 
+            <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colMeans</a></span><span class="op">(</span><span class="op">)</span> |&gt; 
+            <span class="fu"><a href="https://rdrr.io/r/base/which.min.html">which.max</a></span><span class="op">(</span><span class="op">)</span> |&gt; 
+            <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="op">)</span>
+    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span>
+        <span class="va">table1</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">new</span>
+    <span class="op">}</span>
+<span class="op">}</span>
+
+<span class="va">table1</span></code></pre></div>
+<pre><code>##  [1] "603" "77"  "502" "533" "496" "970" "165" "677" "977" "38"</code></pre>
+<p>Now let’s assign a <code>table</code> property to the <code>workfrance</code> graph and take a look at where our members of Table 1 appear, as in Figure <a href="paths-distance.html#fig:table1">6.5</a>.</p>
+<div class="sourceCode" id="cb370"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># add a table property to workfrance graph</span>
+<span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">$</span><span class="va">table</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">$</span><span class="va">name</span> <span class="op">%in%</span> <span class="va">table1</span>, <span class="fl">1</span>, <span class="cn">NA</span><span class="op">)</span>
+
+<span class="co"># visualize</span>
+<span class="fu"><a href="https://ggraph.data-imaginist.com/reference/ggraph.html">ggraph</a></span><span class="op">(</span><span class="va">workfrance</span>, layout <span class="op">=</span> <span class="st">"fr"</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_edge_link.html">geom_edge_link</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"grey"</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_point.html">geom_node_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">4</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">table</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"Table"</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:table1"></span>
+<img src="_main_files/figure-html/table1-1.png" alt="Individuals selected for Table 1 based on optimizing for distance" width="672"><p class="caption">
+Figure 6.5: Individuals selected for Table 1 based on optimizing for distance
+</p>
+</div>
+<p>It looks as if we have done a good job of maximizing for distance in the network in our table selection. Let’s check the average distance among the employees at Table 1.</p>
+<div class="sourceCode" id="cb371"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/distances.html">distances</a></span><span class="op">(</span><span class="va">workfrance</span>, v <span class="op">=</span> <span class="va">table1</span>, to <span class="op">=</span> <span class="va">table1</span>, weights <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code>## [1] 3.96</code></pre>
+<p>Given that the diameter of the graph is 6, and that we were forced to include a pair of individuals with a distance of 1 on this table, a mean distance of 3.96 seems pretty good. Let’s look at the department mix of our ten people at Table 1.</p>
+<div class="sourceCode" id="cb373"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">$</span><span class="va">dept</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">$</span><span class="va">name</span> <span class="op">%in%</span> <span class="va">table1</span><span class="op">]</span></code></pre></div>
+<pre><code>##  [1] "DG"   "DMCT" "DMI"  "DMI"  "DSE"  "DST"  "DST"  "SFLE" "SFLE" "SSI"</code></pre>
+<p>We have seven departments represented at a table of ten, which seems a good indication of a diverse table. This gives you a sense of how you can use paths and distance as a mathematical model for familiarity in a network. If you are interested in continuing this process to fill further tables, see the exercises at the end of this chapter.</p>
+</div>
+</div>
+<div id="learning-exercises-4" class="section level2" number="6.4">
+<h2>
+<span class="header-section-number">6.4</span> Learning exercises<a class="anchor" aria-label="anchor" href="#learning-exercises-4"><i class="fas fa-link"></i></a>
+</h2>
+<div id="discussion-questions-4" class="section level3" number="6.4.1">
+<h3>
+<span class="header-section-number">6.4.1</span> Discussion questions<a class="anchor" aria-label="anchor" href="#discussion-questions-4"><i class="fas fa-link"></i></a>
+</h3>
+</div>
+<div id="data-exercises-4" class="section level3" number="6.4.2">
+<h3>
+<span class="header-section-number">6.4.2</span> Data exercises<a class="anchor" aria-label="anchor" href="#data-exercises-4"><i class="fas fa-link"></i></a>
+</h3>
 
 </div>
 </div>
@@ -446,9 +687,21 @@ Figure 6.3: Two graphs illustrating how closeness can be measured in different w
 </ul>
 </li>
 <li>
-<a class="nav-link" href="#calculating-paths-distance-diameter-and-density"><span class="header-section-number">6.2</span> Calculating Paths, Distance, Diameter and Density</a><ul class="nav navbar-nav">
+<a class="nav-link" href="#calculating-paths-distance-diameter-and-density"><span class="header-section-number">6.2</span> Calculating paths, distance, diameter and density</a><ul class="nav navbar-nav">
 <li><a class="nav-link" href="#calculating-in-r"><span class="header-section-number">6.2.1</span> Calculating in R</a></li>
 <li><a class="nav-link" href="#calculating-in-python"><span class="header-section-number">6.2.2</span> Calculating in Python</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#illustrative-examples"><span class="header-section-number">6.3</span> Illustrative Examples</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#finding-routes-to-introductions-in-the-workplace"><span class="header-section-number">6.3.1</span> Finding routes to introductions in the workplace</a></li>
+<li><a class="nav-link" href="#finding-distant-colleagues-in-a-workplace"><span class="header-section-number">6.3.2</span> Finding distant colleagues in a workplace</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#learning-exercises-4"><span class="header-section-number">6.4</span> Learning exercises</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#discussion-questions-4"><span class="header-section-number">6.4.1</span> Discussion questions</a></li>
+<li><a class="nav-link" href="#data-exercises-4"><span class="header-section-number">6.4.2</span> Data exercises</a></li>
 </ul>
 </li>
 </ul>

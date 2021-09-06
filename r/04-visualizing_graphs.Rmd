@@ -296,7 +296,7 @@ knitr::include_graphics("www/visualizing-graphs/hairball.png")
 
 In the absence of any information on layout, the `plot()` function in `igraph` will choose an appropriate layout using a logic determined by `layout_nicely()`.  If the graph already has a `layout` attribute, it will use this layout.  Otherwise, if the vertices have `x` and `y` attributes, it will use these as vertex co-ordinates.  Failing both of these, `layout_with_fr()` will be used if the graph has fewer than 1,000 vertices, and `layout_with_drl()` will be used if the graph has more than 1,000 vertices.  Thus, the plot defaults to a form of force-directed layout unless the graph attributes suggest otherwise.  
 
-### Plotting with `ggraph`
+### Plotting with `ggraph` {#ggraph}
 
 The `ggraph` package is developed for those who enjoy working with the more general `ggplot2` package, which is a very popular plotting package in R.  To learn `ggplot2` as a foundational package, @ggplot2 is highly recommended.  As with `ggplot2`, `ggraph` provides a grammar for building graph visualizations.  While the native capabilities of `igraph` will suffice in R for most static graph visualizations, `ggraph` could be considered an additional option for those who prefer to use it.  It also integrates well with `ggplot2` which allows further layers to be added to the graph visualization, such as a greater variety of node shapes and the ability to layer networks onto geographic maps with relative ease.
 
