@@ -131,9 +131,9 @@ The **distance** between vertices $A$ and $B$ --- sometimes notated as $d(A, B)$
 
 Distance is an extremely important concept in graphs and has many practical applications.  In physical networks like road or rail networks, distance is meant quite literally with greater distances between vertices usually translating to greater time taken to travel between those vertices.  In social networks distance can relate to the 'familiarity' or 'commonality' between two individuals.  Greater distance between individuals in a network usually implies lower likelihood that those individuals know each other in real life, or lower likelihood that information given to one individual will find its way to other individuals.   In graphs that represent the knowledge or interests of individuals (such as 'likes' in social networks or in knowledge graphs), greater distance between an individual and a topic, event or product usually implies that the individual is less likely to be interested in that topic, event or product.  The utility of graph distance measures in fields like transport, communications, marketing, sociology and psychology should therefore be quite obvious.  
 
-Distance in weighted graphs needs to be treated with care, particularly in sociological and psychological contexts.  Often unweighted distance will be more relevant than weighted distance.  For example, if edges are weighted according to the 'strength' of a connection between individuals, then the weighted distance between two individuals might be the result of a long path of low weighted edges, even if those individuals are directly connected by an edge.  A simple example of this is in \@ref(fig:weightdist), where the weighted distance from $A$ to $B$ is 2, which arises via the path $A \longleftrightarrow C \longleftrightarrow B$.  It is important to understand the meaning of 'weight' in your research context before determining if weighted or unweighted distance is appropriate.
+Distance in weighted graphs needs to be treated with care, particularly in sociological and psychological contexts.  Often unweighted distance will be more relevant than weighted distance.  For example, if edges are weighted according to the 'strength' of a connection between individuals, then the weighted distance between two individuals might be the result of a sequence of multiple edges with low weights, even if those individuals are directly connected by an edge with a higher weight.  A simple example of this is in Figure \@ref(fig:weightdist), where the weighted distance from $A$ to $B$ is 2, which arises via the path $A \longleftrightarrow C \longleftrightarrow B$, despite the fact that $A$ and $B$ are adjacent vertices.  It is important to understand the meaning of 'weight' in your research context before determining if weighted or unweighted distance is appropriate.
 
-```{r weightdist, echo = FALSE, fig.align = "center", fig.cap = "Distance needs to be treated with care in weighted graphs.  In this case the weighted distance from $A$ to $B$ arises from a path of unweighted length 2."}
+```{r weightdist, echo = FALSE, fig.align = "center", fig.cap = "Distance needs to be treated with care in weighted graphs.  In this case the weighted distance from $A$ to $B$ arises from a path of two edges, even though $A$ and $B$ are adjacent in the graph."}
 edges <- data.frame(
     from = c("A", "B", "C"),
     to = c("B", "C", "A"),
@@ -505,7 +505,7 @@ Here we may recommend employee 859 first on the basis of higher edge weights and
 `r if (knitr::is_html_output()) '-->'`
 
 
-### Finding distant colleagues in a workplace
+### Finding distant colleagues in a workplace {#workplace-distance}
 
 Now, imagine that a professional event is being organized in the office building in France, where employees will be assigned to one of 21 tables of ten people^[We can assume the 211th person is hosting the event.].  You have been asked to try to help ensure that the tables contain a good mix of individuals and to avoid tables where everyone knows each other very well.
 
@@ -665,6 +665,8 @@ For Exercises 5 to 7, load the `friends_tv_edgelist` data set from the `onadata`
 8.  A 'clique' is a subgraph which is complete (that is, all vertices are connected to each other and the density is 1).  Can you find a clique in the *Friends* graph that does not contain any of the main characters^[We are getting a little ahead of ourselves with cliques, and we will look at these more in a later chapter, but you might want to try to find some functions in your software of choice for finding cliques.]?  
 9.  Create a new subgraph by removing the six main characters from the original graph.  Check whether this subgraph is connected.  What can you conclude from this?
 10.  Calculate the largest diameter of connected components of this new graph.  Find the pair of characters associated with this diameter path.  Find the largest clique in this graph.
+11. **Extension:**  Extend the example in Section \@ref(workplace-distance) by creating a second table for the event.  Remember that this second table cannot include anyone selected for Table 1.  Explore your results by visualizing them and analyzing the average distance for Table 2 and the mix of departments for Table 2.
+12.  **Extension:** Repeat the process in Question 11 to try to fill all 21 tables at the event.  Visualize your results with the vertices color coded by table number.
 
 
 

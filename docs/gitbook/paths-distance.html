@@ -303,7 +303,7 @@ div.csl-indent {
 <li class="chapter" data-level="6.3" data-path="paths-distance.html"><a href="paths-distance.html#illustrative-examples"><i class="fa fa-check"></i><b>6.3</b> Illustrative Examples</a>
 <ul>
 <li class="chapter" data-level="6.3.1" data-path="paths-distance.html"><a href="paths-distance.html#facilitating-introductions-in-the-workplace"><i class="fa fa-check"></i><b>6.3.1</b> Facilitating introductions in the workplace</a></li>
-<li class="chapter" data-level="6.3.2" data-path="paths-distance.html"><a href="paths-distance.html#finding-distant-colleagues-in-a-workplace"><i class="fa fa-check"></i><b>6.3.2</b> Finding distant colleagues in a workplace</a></li>
+<li class="chapter" data-level="6.3.2" data-path="paths-distance.html"><a href="paths-distance.html#workplace-distance"><i class="fa fa-check"></i><b>6.3.2</b> Finding distant colleagues in a workplace</a></li>
 </ul></li>
 <li class="chapter" data-level="6.4" data-path="paths-distance.html"><a href="paths-distance.html#learning-exercises-4"><i class="fa fa-check"></i><b>6.4</b> Learning exercises</a>
 <ul>
@@ -429,11 +429,11 @@ Figure 6.2: The <span class="math inline">\(G_{14W}\)</span> weighted graph
 </ul>
 <p>The <strong>distance</strong> between vertices <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> — sometimes notated as <span class="math inline">\(d(A, B)\)</span> — is the length of the shortest path between <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>. Note that there is no requirement for a unique shortest path, and the shortest path could be traversed in more than one way in a graph. In our unweighted graph <span class="math inline">\(G_{14}\)</span> the distance between Vertex 9 and Vertex 4 is 2. In the weighted graph <span class="math inline">\(G_{14W}\)</span> the distance between Vertex 9 and Vertex 4 is 5. If no path exists between <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> then the distance is called ‘infinite’ or denoted as <span class="math inline">\(\infty\)</span> by convention. If <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are vertices of an undirected graph, then <span class="math inline">\(d(A, B) = d(B, A)\)</span>. However, this may not be true for a directed graph.</p>
 <p>Distance is an extremely important concept in graphs and has many practical applications. In physical networks like road or rail networks, distance is meant quite literally with greater distances between vertices usually translating to greater time taken to travel between those vertices. In social networks distance can relate to the ‘familiarity’ or ‘commonality’ between two individuals. Greater distance between individuals in a network usually implies lower likelihood that those individuals know each other in real life, or lower likelihood that information given to one individual will find its way to other individuals. In graphs that represent the knowledge or interests of individuals (such as ‘likes’ in social networks or in knowledge graphs), greater distance between an individual and a topic, event or product usually implies that the individual is less likely to be interested in that topic, event or product. The utility of graph distance measures in fields like transport, communications, marketing, sociology and psychology should therefore be quite obvious.</p>
-<p>Distance in weighted graphs needs to be treated with care, particularly in sociological and psychological contexts. Often unweighted distance will be more relevant than weighted distance. For example, if edges are weighted according to the ‘strength’ of a connection between individuals, then the weighted distance between two individuals might be the result of a long path of low weighted edges, even if those individuals are directly connected by an edge. A simple example of this is in <a href="paths-distance.html#fig:weightdist">6.3</a>, where the weighted distance from <span class="math inline">\(A\)</span> to <span class="math inline">\(B\)</span> is 2, which arises via the path <span class="math inline">\(A \longleftrightarrow C \longleftrightarrow B\)</span>. It is important to understand the meaning of ‘weight’ in your research context before determining if weighted or unweighted distance is appropriate.</p>
+<p>Distance in weighted graphs needs to be treated with care, particularly in sociological and psychological contexts. Often unweighted distance will be more relevant than weighted distance. For example, if edges are weighted according to the ‘strength’ of a connection between individuals, then the weighted distance between two individuals might be the result of a sequence of multiple edges with low weights, even if those individuals are directly connected by an edge with a higher weight. A simple example of this is in Figure <a href="paths-distance.html#fig:weightdist">6.3</a>, where the weighted distance from <span class="math inline">\(A\)</span> to <span class="math inline">\(B\)</span> is 2, which arises via the path <span class="math inline">\(A \longleftrightarrow C \longleftrightarrow B\)</span>, despite the fact that <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are adjacent vertices. It is important to understand the meaning of ‘weight’ in your research context before determining if weighted or unweighted distance is appropriate.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:weightdist"></span>
-<img src="_main_files/figure-html/weightdist-1.png" alt="Distance needs to be treated with care in weighted graphs.  In this case the weighted distance from $A$ to $B$ arises from a path of unweighted length 2." width="672" />
+<img src="_main_files/figure-html/weightdist-1.png" alt="Distance needs to be treated with care in weighted graphs.  In this case the weighted distance from $A$ to $B$ arises from a path of two edges, even though $A$ and $B$ are adjacent in the graph." width="672" />
 <p class="caption">
-Figure 6.3: Distance needs to be treated with care in weighted graphs. In this case the weighted distance from <span class="math inline">\(A\)</span> to <span class="math inline">\(B\)</span> arises from a path of unweighted length 2.
+Figure 6.3: Distance needs to be treated with care in weighted graphs. In this case the weighted distance from <span class="math inline">\(A\)</span> to <span class="math inline">\(B\)</span> arises from a path of two edges, even though <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are adjacent in the graph.
 </p>
 </div>
 </div>
@@ -514,60 +514,60 @@ Figure 6.4: Two graphs illustrating how closeness can be measured in different w
 <p>Let’s start by creating the weighted <span class="math inline">\(G_{14W}\)</span> graph from the previous section.</p>
 <div class="sourceCode" id="cb297"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb297-1"><a href="paths-distance.html#cb297-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create weighted graph</span></span>
 <span id="cb297-2"><a href="paths-distance.html#cb297-2" aria-hidden="true" tabindex="-1"></a>(g14w <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(g14_edgelist, <span class="at">directed =</span> <span class="cn">FALSE</span>))</span></code></pre></div>
-<pre><code>## IGRAPH ad63c79 UNW- 14 18 -- 
+<pre><code>## IGRAPH 30eb796 UNW- 14 18 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from ad63c79 (vertex names):
+## + edges from 30eb796 (vertex names):
 ##  [1] 9 --10 10--11 11--12 10--12 9 --13 13--14 9 --8  9 --7  8 --7  4 --6  4 --7  8 --4  6 --7  4 --1  4 --2  4 --3  4 --5 
 ## [18] 1 --2</code></pre>
 <p>The <code>all_simple_paths()</code> function in <code>igraph</code> returns all paths from a specified vertex, and expects at least an <code>igraph</code> object and a vertex name for the <code>from</code> vertex as arguments. If the <code>to</code> argument specifies a vertex, then the function will return only paths between the <code>from</code> and <code>to</code> vertex. Otherwise it will return a list containing all paths from the specified vertex to all other vertices. Note that these functions expect the vertex name as a character string.</p>
 <div class="sourceCode" id="cb299"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb299-1"><a href="paths-distance.html#cb299-1" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">all_simple_paths</span>(g14w, <span class="at">from =</span> <span class="st">&quot;9&quot;</span>, <span class="at">to =</span> <span class="st">&quot;4&quot;</span>)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 3/14 vertices, named, from ad63c79:
+## + 3/14 vertices, named, from 30eb796:
 ## [1] 9 8 4
 ## 
 ## [[2]]
-## + 4/14 vertices, named, from ad63c79:
+## + 4/14 vertices, named, from 30eb796:
 ## [1] 9 8 7 4
 ## 
 ## [[3]]
-## + 5/14 vertices, named, from ad63c79:
+## + 5/14 vertices, named, from 30eb796:
 ## [1] 9 8 7 6 4
 ## 
 ## [[4]]
-## + 4/14 vertices, named, from ad63c79:
+## + 4/14 vertices, named, from 30eb796:
 ## [1] 9 7 8 4
 ## 
 ## [[5]]
-## + 3/14 vertices, named, from ad63c79:
+## + 3/14 vertices, named, from 30eb796:
 ## [1] 9 7 4
 ## 
 ## [[6]]
-## + 4/14 vertices, named, from ad63c79:
+## + 4/14 vertices, named, from 30eb796:
 ## [1] 9 7 6 4</code></pre>
 <p>We see that this agrees with our manual calculations in Section <a href="paths-distance.html#traversal">6.1.1</a>, and is the same whether or not the edges are weighted. This function is easy to use in the case of undirected graphs. When using with digraphs, there is an additional argument called <code>mode</code>, specifying the direction of the paths you are seeking. <code>out</code>, <code>in</code>, <code>all</code> or <code>total</code> are the accepted values for this argument.</p>
 <p>The <code>all_shortest_paths()</code> function performs the same task as the previous function but restricts the output to paths of the shortest length. This function returns a list of objects, but the paths can be found in the <code>res</code> element of the list.</p>
 <div class="sourceCode" id="cb301"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb301-1"><a href="paths-distance.html#cb301-1" aria-hidden="true" tabindex="-1"></a>shortest_9to4 <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">all_shortest_paths</span>(g14w, <span class="at">from =</span> <span class="st">&quot;9&quot;</span>, <span class="at">to =</span> <span class="st">&quot;4&quot;</span>)</span>
 <span id="cb301-2"><a href="paths-distance.html#cb301-2" aria-hidden="true" tabindex="-1"></a>shortest_9to4<span class="sc">$</span>res</span></code></pre></div>
 <pre><code>## [[1]]
-## + 3/14 vertices, named, from ad63c79:
+## + 3/14 vertices, named, from 30eb796:
 ## [1] 9 8 4
 ## 
 ## [[2]]
-## + 3/14 vertices, named, from ad63c79:
+## + 3/14 vertices, named, from 30eb796:
 ## [1] 9 7 4
 ## 
 ## [[3]]
-## + 4/14 vertices, named, from ad63c79:
+## + 4/14 vertices, named, from 30eb796:
 ## [1] 9 8 7 4</code></pre>
 <p>Note that the function has returned the shortest path according to edge weights. To ignore edge weights, simply set <code>weights = NA</code>. This is equivalent to calculating shortest paths in our unweighted <span class="math inline">\(G_{14}\)</span> graph.</p>
 <div class="sourceCode" id="cb303"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb303-1"><a href="paths-distance.html#cb303-1" aria-hidden="true" tabindex="-1"></a>shortest_9to4_uw <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">all_shortest_paths</span>(g14w, <span class="at">from =</span> <span class="st">&quot;9&quot;</span>, <span class="at">to =</span> <span class="st">&quot;4&quot;</span>, <span class="at">weights =</span> <span class="cn">NA</span>)</span>
 <span id="cb303-2"><a href="paths-distance.html#cb303-2" aria-hidden="true" tabindex="-1"></a>shortest_9to4_uw<span class="sc">$</span>res</span></code></pre></div>
 <pre><code>## [[1]]
-## + 3/14 vertices, named, from ad63c79:
+## + 3/14 vertices, named, from 30eb796:
 ## [1] 9 7 4
 ## 
 ## [[2]]
-## + 3/14 vertices, named, from ad63c79:
+## + 3/14 vertices, named, from 30eb796:
 ## [1] 9 8 4</code></pre>
 <p>The <code>distances()</code> function calculates distance in a graph. By default it calculates the distance between all pairs of vertices and returns the results as a distance matrix.</p>
 <div class="sourceCode" id="cb305"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb305-1"><a href="paths-distance.html#cb305-1" aria-hidden="true" tabindex="-1"></a><span class="fu">distances</span>(g14w)</span></code></pre></div>
@@ -607,13 +607,13 @@ Figure 6.4: Two graphs illustrating how closeness can be measured in different w
 <p>If a graph is not connected, the <code>diameter()</code> function will return the diameter of the largest connected component by default. The function <code>farthest_vertices()</code> will return a pair vertices at either end of a diameter path, and the function <code>get_diameter()</code> will return a full diameter path.</p>
 <div class="sourceCode" id="cb315"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb315-1"><a href="paths-distance.html#cb315-1" aria-hidden="true" tabindex="-1"></a><span class="fu">farthest_vertices</span>(g14w, <span class="at">weights =</span> <span class="cn">NA</span>)</span></code></pre></div>
 <pre><code>## $vertices
-## + 2/14 vertices, named, from ad63c79:
+## + 2/14 vertices, named, from 30eb796:
 ## [1] 11 1 
 ## 
 ## $distance
 ## [1] 5</code></pre>
 <div class="sourceCode" id="cb317"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb317-1"><a href="paths-distance.html#cb317-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_diameter</span>(g14w, <span class="at">weights =</span> <span class="cn">NA</span>)</span></code></pre></div>
-<pre><code>## + 6/14 vertices, named, from ad63c79:
+<pre><code>## + 6/14 vertices, named, from 30eb796:
 ## [1] 11 10 9  8  4  1</code></pre>
 <p>Finally, the <code>edge_density()</code> function will calculate the density of the graph. You can find the formula for edge density in an earlier footnote in this chapter and if you like you can verify this manually for our <span class="math inline">\(G_{14W}\)</span> graph.</p>
 <div class="sourceCode" id="cb319"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb319-1"><a href="paths-distance.html#cb319-1" aria-hidden="true" tabindex="-1"></a><span class="fu">edge_density</span>(g14w)</span></code></pre></div>
@@ -693,9 +693,9 @@ Figure 6.4: Two graphs illustrating how closeness can be measured in different w
 <span id="cb340-10"><a href="paths-distance.html#cb340-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">vertices =</span> workfrance_vertices,</span>
 <span id="cb340-11"><a href="paths-distance.html#cb340-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">directed =</span> <span class="cn">FALSE</span></span>
 <span id="cb340-12"><a href="paths-distance.html#cb340-12" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
-<pre><code>## IGRAPH 98326ca UN-- 211 932 -- 
+<pre><code>## IGRAPH 10a6019 UN-- 211 932 -- 
 ## + attr: name (v/c), dept (v/c), mins (e/n)
-## + edges from 98326ca (vertex names):
+## + edges from 10a6019 (vertex names):
 ##  [1] 3   --159  253 --3    3   --447  3   --498  3   --694  3   --751  3   --859  3   --908  14  --18   99  --14   14  --441 
 ## [12] 520 --14   14  --544  14  --653  14  --998  15  --120  15  --160  15  --162  15  --178  15  --259  15  --261  15  --295 
 ## [23] 15  --353  15  --372  15  --464  15  --491  15  --498  15  --909  15  --1090 39  --18   99  --18   429 --18   488 --18  
@@ -719,16 +719,16 @@ Figure 6.4: Two graphs illustrating how closeness can be measured in different w
 <p>These two individuals have an unweighted distance of 2 in the network, meaning they can connect through one intermediary. Now we can use our <code>all_shortest_paths()</code> function to determine who the common intermediary is.</p>
 <div class="sourceCode" id="cb347"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb347-1"><a href="paths-distance.html#cb347-1" aria-hidden="true" tabindex="-1"></a><span class="fu">all_shortest_paths</span>(workfrance, <span class="at">from =</span> <span class="st">&quot;3&quot;</span>, <span class="at">to =</span> <span class="st">&quot;55&quot;</span>, <span class="at">weight =</span> <span class="cn">NA</span>)<span class="sc">$</span>res </span></code></pre></div>
 <pre><code>## [[1]]
-## + 3/211 vertices, named, from 98326ca:
+## + 3/211 vertices, named, from 10a6019:
 ## [1] 3   447 55</code></pre>
 <p>There is one common intermediary: employee 447. Therefore, if employees 3 and 55 do not know each other, employee 447 may be able to introduce them. Note that there may be more than one suggestion for intermediaries. For example:</p>
 <div class="sourceCode" id="cb349"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb349-1"><a href="paths-distance.html#cb349-1" aria-hidden="true" tabindex="-1"></a>(paths <span class="ot">&lt;-</span> <span class="fu">all_shortest_paths</span>(workfrance, <span class="at">from =</span> <span class="st">&quot;3&quot;</span>, <span class="at">to =</span> <span class="st">&quot;290&quot;</span>, <span class="at">weight =</span> <span class="cn">NA</span>)<span class="sc">$</span>res )</span></code></pre></div>
 <pre><code>## [[1]]
-## + 3/211 vertices, named, from 98326ca:
+## + 3/211 vertices, named, from 10a6019:
 ## [1] 3   859 290
 ## 
 ## [[2]]
-## + 3/211 vertices, named, from 98326ca:
+## + 3/211 vertices, named, from 10a6019:
 ## [1] 3   694 290</code></pre>
 <p>In this case, we could consider using the edge weights to rank the intermediary options, on the basis that higher weights may indicate stronger connections. Let’s visualize these two options by looking at the subgraph with edge weights in Figure <a href="paths-distance.html#fig:intermediary">6.5</a>.</p>
 <div class="sourceCode" id="cb351"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb351-1"><a href="paths-distance.html#cb351-1" aria-hidden="true" tabindex="-1"></a>subgraph <span class="ot">&lt;-</span> <span class="fu">induced_subgraph</span>(workfrance, <span class="at">vids =</span> <span class="fu">c</span>(<span class="st">&quot;3&quot;</span>, <span class="st">&quot;290&quot;</span>, <span class="st">&quot;694&quot;</span>, <span class="st">&quot;859&quot;</span>))</span>
@@ -758,7 +758,7 @@ Figure 6.5: Selecting an intermediary according to higher edge weights
 ```
 -->
 </div>
-<div id="finding-distant-colleagues-in-a-workplace" class="section level3" number="6.3.2">
+<div id="workplace-distance" class="section level3" number="6.3.2">
 <h3><span class="header-section-number">6.3.2</span> Finding distant colleagues in a workplace</h3>
 <p>Now, imagine that a professional event is being organized in the office building in France, where employees will be assigned to one of 21 tables of ten people<a href="#fn35" class="footnote-ref" id="fnref35"><sup>35</sup></a>. You have been asked to try to help ensure that the tables contain a good mix of individuals and to avoid tables where everyone knows each other very well.</p>
 <p>Before we start, we should check whether this graph has any disconnected components.</p>
@@ -787,7 +787,7 @@ Figure 6.5: Selecting an intermediary according to higher edge weights
 <p>We could pick any 20 from the neighbors of employee 603 and that would be a great starting point for our 21 tables. Let’s pick those with the highest <code>mins</code> property (assuming that this represents a closer relationship). We can use the <code>inc()</code> function to get all edges containing employee 603 and then select those that have the highest <code>mins</code> property.</p>
 <div class="sourceCode" id="cb360"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb360-1"><a href="paths-distance.html#cb360-1" aria-hidden="true" tabindex="-1"></a>edges603 <span class="ot">&lt;-</span> <span class="fu">E</span>(workfrance)[<span class="fu">inc</span>(<span class="st">&quot;603&quot;</span>)]</span>
 <span id="cb360-2"><a href="paths-distance.html#cb360-2" aria-hidden="true" tabindex="-1"></a>(top_edges603 <span class="ot">&lt;-</span> edges603[<span class="fu">order</span>(<span class="fu">sort</span>(edges603<span class="sc">$</span>mins, <span class="at">decreasing =</span> <span class="cn">TRUE</span>))][<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>])</span></code></pre></div>
-<pre><code>## + 20/932 edges from 98326ca (vertex names):
+<pre><code>## + 20/932 edges from 10a6019 (vertex names):
 ##  [1] 603--1392 603--1323 603--1362 859--603  603--954  603--1245 603--779  603--649  691--603  694--603  706--603  603--725 
 ## [13] 487--603  420--603  428--603  387--603  401--603  603--272  290--603  346--603</code></pre>
 <p>Now we have the ‘closest’ 20 people to employee 603. Let’s create an edge subgraph and extract the vertices.</p>
@@ -801,7 +801,7 @@ Figure 6.5: Selecting an intermediary according to higher edge weights
 ## [18] &quot;DST&quot;  &quot;DST&quot;  &quot;DST&quot;  &quot;SRH&quot;</code></pre>
 <p>We see some considerable department similarity, which makes sense. Now that we have found the first person for each table, we will want to try to make sure that we sit that person with nine other people who have some distance from them, and to minimize neighbors sitting at the same table. Let’s start with our first employee 603, and call this Table 1. Because there are only 21 tables but employee 603 has 28 neighbors, we might be willing to allow one neighbor to sit at Table 1. Let’s sit them with the neighbor who shared the least minutes.</p>
 <div class="sourceCode" id="cb366"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb366-1"><a href="paths-distance.html#cb366-1" aria-hidden="true" tabindex="-1"></a>edges603[<span class="fu">which.min</span>(edges603<span class="sc">$</span>mins)]</span></code></pre></div>
-<pre><code>## + 1/932 edge from 98326ca (vertex names):
+<pre><code>## + 1/932 edge from 10a6019 (vertex names):
 ## [1] 77--603</code></pre>
 <p>So we will sit employee 603 with employee 77. Now we can select a third individual who has a reasonable distance in the network from both employee 603 and employee 77. Let’s look at all these distances.</p>
 <div class="sourceCode" id="cb368"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb368-1"><a href="paths-distance.html#cb368-1" aria-hidden="true" tabindex="-1"></a>(distance603_77 <span class="ot">&lt;-</span> <span class="fu">distances</span>(workfrance, <span class="at">v =</span> <span class="fu">c</span>(<span class="st">&quot;603&quot;</span>, <span class="st">&quot;77&quot;</span>), <span class="at">weights =</span> <span class="cn">NA</span>))</span></code></pre></div>
@@ -911,6 +911,8 @@ Figure 6.6: Individuals selected for Table 1 based on optimizing for distance
 </li>
 <li>Create a new subgraph by removing the six main characters from the original graph. Check whether this subgraph is connected. What can you conclude from this?</li>
 <li>Calculate the largest diameter of connected components of this new graph. Find the pair of characters associated with this diameter path. Find the largest clique in this graph.</li>
+<li><strong>Extension:</strong> Extend the example in Section <a href="paths-distance.html#workplace-distance">6.3.2</a> by creating a second table for the event. Remember that this second table cannot include anyone selected for Table 1. Explore your results by visualizing them and analyzing the average distance for Table 2 and the mix of departments for Table 2.</li>
+<li><strong>Extension:</strong> Repeat the process in Question 11 to try to fill all 21 tables at the event. Visualize your results with the vertices color coded by table number.</li>
 </ol>
 
 </div>
