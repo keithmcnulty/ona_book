@@ -144,11 +144,11 @@
 <span class="op">(</span><span class="va">orgchart</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>
   d <span class="op">=</span> <span class="va">orgchart_edgelist2</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH 6e2cac5 DN-- 8 7 -- 
+<pre><code>## IGRAPH 8a020f2 DN-- 8 7 -- 
 ## + attr: name (v/c)
-## + edges from 6e2cac5 (vertex names):
-## [1] Andrew -&gt;Nancy    Andrew -&gt;Michael  Nancy  -&gt;Jane     Nancy  -&gt;Margaret Nancy  -&gt;Steve    Michael-&gt;Robert  
-## [7] Michael-&gt;Laura</code></pre>
+## + edges from 8a020f2 (vertex names):
+## [1] Andrew -&gt;Nancy    Andrew -&gt;Michael  Nancy  -&gt;Jane     Nancy  -&gt;Margaret Nancy  -&gt;Steve   
+## [6] Michael-&gt;Robert   Michael-&gt;Laura</code></pre>
 <p>We now have a directed graph with named vertices, so this should be easy to plot. Let’s use <code>ggplot</code> with a dendrogram (tree) layout, as in Figure <a href="restructuring-data.html#fig:chinook-pretty">5.1</a>.</p>
 <div class="sourceCode" id="cb219"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggraph.data-imaginist.com">ggraph</a></span><span class="op">)</span>
@@ -618,10 +618,11 @@ Figure 5.9: Visualization of the Chinook customer-to-customer network based on a
 <span class="co"># check a sample</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
 <span class="va">nodes_char</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">30</span><span class="op">)</span><span class="op">]</span></code></pre></div>
-<pre><code>##  [1] NA           NA           NA           NA           NA           "Monica"     NA           NA           NA          
-## [10] NA           NA           "Chandler"   NA           NA           NA           NA           NA           NA          
-## [19] NA           NA           NA           NA           NA           "Joey"       "Phoebe"     NA           "New Scene" 
-## [28] NA           NA           "Written by"</code></pre>
+<pre><code>##  [1] NA           NA           NA           NA           NA           "Monica"     NA          
+##  [8] NA           NA           NA           NA           "Chandler"   NA           NA          
+## [15] NA           NA           NA           NA           NA           NA           NA          
+## [22] NA           NA           "Joey"       "Phoebe"     NA           "New Scene"  NA          
+## [29] NA           "Written by"</code></pre>
 <p>So this is working, but we have more cleaning to do. For example, we will want to get rid of the <code>NA</code> values. We will also see if we take a look that there is a ‘character’ called ‘All’ which probably should not be in our network. We can also see phrases like ‘Written by’ which are not dialogue characters, and strings containing " and " which involves combinations of characters. So we can create special commands to remove any instances of these phrases<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;The limited cleaning commands here work for this specific episode, but they would need to be expanded to be used on more episodes to take into account any unpredictable formatting in the scripts. The reality of most scraping exercises is that some code has to be written to deal with exceptions.&lt;/p&gt;"><sup>29</sup></a>.</p>
 <div class="sourceCode" id="cb266"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># remove NAs</span>
@@ -634,8 +635,9 @@ Figure 5.9: Visualization of the Chinook customer-to-customer network based on a
 
 <span class="co"># check </span>
 <span class="va">nodes_char_clean2</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span><span class="op">]</span></code></pre></div>
-<pre><code>##  [1] "Chandler"  "Monica"    "Chandler"  "Monica"    "Phoebe"    "Joey"      "Phoebe"    "Joey"      "Monica"    "Monica"   
-## [11] "Chandler"  "Chandler"  "New Scene" "Ross"      "Joey"      "Chandler"  "Joey"      "Chandler"  "Phoebe"    "Chandler"</code></pre>
+<pre><code>##  [1] "Chandler"  "Monica"    "Chandler"  "Monica"    "Phoebe"    "Joey"      "Phoebe"    "Joey"     
+##  [9] "Monica"    "Monica"    "Chandler"  "Chandler"  "New Scene" "Ross"      "Joey"      "Chandler" 
+## [17] "Joey"      "Chandler"  "Phoebe"    "Chandler"</code></pre>
 <p>Let’s assume our cleaning is done and we have a nice vector that contains either the names of characters that are speaking lines in the episode or “New Scene” to indicate that we are crossing a scene boundary. We now just need to convert this vector into a simple dataframe with two columns for scene and character. We already have our character lists, so we really just need to iterate through our nodes vector and for each entry, count the number of previous occurrences of “New Scene” and add one.</p>
 <div class="sourceCode" id="cb268"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># number each scene by counting previous "New Scene" entries and adding 1</span>
