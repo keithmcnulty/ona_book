@@ -79,21 +79,10 @@ l <- layout_randomly(karate)
 plot(karate, layout = l)
 ```
 
-`r if (knitr::is_latex_output()) '<!--'`
-:::thinkahead
+
+:::{.thinkahead data-latex=""}
 **Playing around:** The previous code chunk fixes the positioning of the vertices on our `karate` graph.  By setting a random seed, we can ensure the same random numbers are generated each time so that this plot is repeatable and reproducible.  Then the `random_layout()` function calculates random x and y coordinates for the vertices, and when we use it in the `plot()` function, it assigns those coordinates in the plot.  As we learn about layouts later in the chapter, we will use this technique a lot.  If you like, try playing around with other layouts now.  A couple of examples are `layout_with_sugiyama()` and `layout_with_dh()`.   
 :::
-`r if (knitr::is_latex_output()) '-->'`
-
-`r if (knitr::is_html_output()) '<!--'`
-```{=latex}
-\colorbox{babyblueeyes}{
-\begin{minipage}{\textwidth}
-\textbf{Playing around:} The previous code chunk fixes the positioning of the vertices on our \texttt{karate} graph.  By setting a random seed, we can ensure the same random numbers are generated each time so that this plot is repeatable and reproducible.  Then the \texttt{random\_layout()} function calculates random x and y coordinates for the vertices, and when we use it in the \texttt{plot()} function, it assigns those coordinates in the plot.  As we learn about layouts later in the chapter, we will use this technique a lot.  If you like, try playing around with other layouts now.  A couple of examples are \texttt{layout\_with\_sugiyama()} and \texttt{layout\_with\_dh()}.   
-\end{minipage}
-}
-```
-`r if (knitr::is_html_output()) '-->'`
 
 
 Looking at Figure \@ref(fig:basic-karate), we note that the labeling of the vertices is somewhat obtrusive and unhelpful to the clarity of the graph.  This will be a common problem with default graph plotting, and with large number of vertices the plot can turn into a messy cloud of overlapping labels.
@@ -170,22 +159,10 @@ E(karate)$lty <- "dashed"
 plot(karate, layout = l)
 ```
 
-`r if (knitr::is_latex_output()) '<!--'`
-:::thinkahead
+
+:::{.thinkahead data-latex=""}
 **Playing around:** Usually, getting your graph looking the way you want takes some trial and error and some playing around with its properties.  Try further adjusting the `karate` graph using some of the other properties listed.    
 :::
-`r if (knitr::is_latex_output()) '-->'`
-
-`r if (knitr::is_html_output()) '<!--'`
-```{=latex}
-\colorbox{babyblueeyes}{
-\begin{minipage}{\textwidth}
-\textbf{Thinking ahead:} Usually, getting your graph looking the way you want takes some trial and error and some playing around with its properties.  Try further adjusting the \texttt{karate} graph using some of the other properties listed. 
-\end{minipage}
-}
-```
-`r if (knitr::is_html_output()) '-->'`
-
 
 
 ### Graph layouts {#layouts}
@@ -226,21 +203,10 @@ sph <- layout_on_sphere(karate)
 plot(karate, layout = sph)
 ```
 
-`r if (knitr::is_latex_output()) '<!--'`
-:::thinkahead
+
+:::{.thinkahead data-latex=""}
 **Thinking ahead:** Notice how the circle and sphere layouts position Mr Hi and John A very close to each other.  This is an indication that the layout algorithms have established something in common between these two individuals based on the properties of the graph.  This is something we will cover in a later chapter, but if you want to explore ahead, and you know how to, calculate some centrality measures for the vertices in the `karate` graph --- for example degree centrality and betweenness centrality. 
 :::
-`r if (knitr::is_latex_output()) '-->'`
-
-`r if (knitr::is_html_output()) '<!--'`
-```{=latex}
-\colorbox{babyblueeyes}{
-\begin{minipage}{\textwidth}
-\textbf{Thinking ahead:} Notice how the circle and sphere layouts position Mr Hi and John A very close to each other.  This is an indication that the layout algorithms have established something in common between these two individuals based on the properties of the graph.  This is something we will cover in a later chapter, but if you want to explore ahead, and you know how to, calculate some centrality measures for the vertices in the \texttt{karate} graph --- for example degree centrality and betweenness centrality. 
-\end{minipage}
-}
-```
-`r if (knitr::is_html_output()) '-->'`
 
 
 *Force-directed* graph layouts are extremely popular, as they are aesthetically pleasing and they help visualize communities of vertices quite effectively, especially in graphs with low to moderate edge-complexity.  These algorithms emulate physical models like Hooke's law to attract connected vertices together, while at the same time applying repelling forces to all pairs of vertices to try to keep as much space as possible between them.  This calculation is an iterative process where vertex positions are recalculated again and again until equilibrium is reached^[Note that this means that the process is usuallu highly computationally expensive on large graphs and can easily freeze up your machine if you are not careful.].  The result is usually a layout where connected vertices are closer together and where edge-length are approximately equal.  
@@ -274,21 +240,11 @@ As well as force-directed and shape-oriented layout algorithms, several alternat
 
 Finally, there are three layout algorithms that are suited for large graphs with many thousands or even millions of edges. One of the biggest problems with visualizing large graphs is the potential for 'hairballs' --- that is, clumps of connected nodes that are so dense they cannot be usefully visualized.  `layout_with_lgl()` uses the Large Graph Layout algorithm which tries to identify clusters of vertices and position the clusters before positioning the individual vertices to minimize the chance of hairballs, while still adhering to the principles of force-directed networks. `layout_with_drl()` and  `layout_with_graphopt()` uses efficient force-directed algorithms which scale well on large graphs.  
 
-`r if (knitr::is_latex_output()) '<!--'`
-:::thinkahead
+
+:::{.thinkahead data-latex=""}
 **Playing around:** Try laying out the `karate` graph using these various algorithms and observe the different appearances.  If you are interested in experimenting with a larger graph, and you have enough computing power that it won't freeze your machine, load the `wikivote` edgelist from the `onadata` package, or download it from the internet^[https://ona-book.org/data/wikivote.csv.  This data set is taken from the Stanford University SNAP library of network data sets]. This network represents votes from Wikipedia members for other members to be made administrators.  Create a directed graph object, and lay it out using `layout_with_graphopt()`.  To help with your visualization, remove the vertex labels, set the node size to 0.5 and set the edge arrow size to 0.1. When you plot this, you should see a great example of a hairball, as in Figure \@ref(fig:hairball-example).   
 :::
-`r if (knitr::is_latex_output()) '-->'`
 
-`r if (knitr::is_html_output()) '<!--'`
-```{=latex}
-\colorbox{babyblueeyes}{
-\begin{minipage}{\textwidth}
-\textbf{Playing around:} Try laying out the \texttt{karate} graph using these various algorithms and observe the different appearances.  If you are interested in experimenting with a larger graph, and you have enough computing power that it won't freeze your machine, load the \texttt{wikivote} edgelist from the \texttt{onadata} package, or download it from the internet at \texttt{https://ona-book.org/data/wikivote.csv}.  This data set is taken from the Stanford University SNAP library of network data sets. It represents votes from Wikipedia members for other members to be made administrators.  Create a directed graph object, and lay it out using \texttt{layout\_with\_graphopt()}.  To help with your visualization, remove the vertex labels, set the node size to 0.5 and set the edge arrow size to 0.1. When you plot this, you should see a great example of a hairball, as in Figure \ref{fig:hairball-example}.  
-\end{minipage}
-}
-```
-`r if (knitr::is_html_output()) '-->'`
 
 ```{r hairball-example, echo = FALSE, fig.cap="Example of a hairball generated by trying to visualize a large network of Wikipedia votes for administrators", fig.align = "center", out.width = "80%"}
 knitr::include_graphics("www/visualizing-graphs/hairball.png")
@@ -385,21 +341,11 @@ ggraph(workfrance, layout = "fr") +
   labs(title = "Spatial co-location of employees in a workplace")
 ```
 
-`r if (knitr::is_latex_output()) '<!--'`
-:::thinkahead
+
+:::{.thinkahead data-latex=""}
 **Thinking ahead:** The graph we have just created in Figure \@ref(fig:workfrance-additional) shows how we have detected a community segmentation of our vertices.  It's relatively clear that individuals in the same department are more likely to be connected.  Community segmentation is an important topic in Organizational Network Analysis which we will study later in this book.  It's not always straightforward to identify drivers of community in networks, but we will learn about a number of community detection algorithms which will segment the graph into different community groups.  As an example, Figure \@ref(fig:workfrance-louvain) shows the results of running the Louvain community detection algorithm on the `workfrance` graph with `mins` as the edge weights.  You can see that the communities detected are strongly aligned with the departments in Figure \@ref(fig:workfrance-additional).    
 :::
-`r if (knitr::is_latex_output()) '-->'`
 
-`r if (knitr::is_html_output()) '<!--'`
-```{=latex}
-\colorbox{babyblueeyes}{
-\begin{minipage}{\textwidth}
-\textbf{Thinking ahead:} The graph we have just created in Figure \ref{fig:workfrance-additional} shows how we have detected a community segmentation of our vertices.  It's relatively clear that individuals in the same department are more likely to be connected.  Community segmentation is an important topic in Organizational Network Analysis which we will study later in this book.  It's not always straightforward to identify drivers of community in networks, but we will learn about a number of community detection algorithms which will segment the graph into different community groups.  As an example, Figure \ref{fig:workfrance-louvain} shows the results of running the Louvain community detection algorithm on the \texttt{workfrance} graph with \texttt{mins} as the edge weights.  You can see that the communities detected are strongly aligned with the departments in Figure \ref{fig:workfrance-additional}.   
-\end{minipage}
-}
-```
-`r if (knitr::is_html_output()) '-->'`
 
 ```{r workfrance-louvain, echo = FALSE, fig.align = "center", fig.cap="Clusters of employees as detected by the Louvain community detection algorithm.  Note the cluster similarity of communities with the departments in the previous graph."}
 louv <- igraph::cluster_louvain(workfrance, weights = E(workfrance)$mins)
@@ -617,21 +563,10 @@ visNetwork::visIgraph(karate, layout = "layout_with_fr") |>
 
 ```
 
-`r if (knitr::is_latex_output()) '<!--'`
-:::thinkahead
+
+:::{.thinkahead data-latex=""}
 **Playing around:** The `visNetwork` package allows you to take advantage of a ton of features in the `vis.js` API, including a wide range of graph customization, and the ability to make your graph editable or to add selector menus to search for specific nodes or groups of nodes.  It's worth experimenting with all the different capabilities.  A thorough manual can be found at [https://datastorm-open.github.io/visNetwork/](https://datastorm-open.github.io/visNetwork/).  Why don't you try to recreate the `workfrance` graph from this chapter in `visNetwork`?
 :::
-`r if (knitr::is_latex_output()) '-->'`
-
-`r if (knitr::is_html_output()) '<!--'`
-```{=latex}
-\colorbox{babyblueeyes}{
-\begin{minipage}{\textwidth}
-\textbf{Playing around:} The \texttt{visNetwork} package allows you to take advantage of a ton of features in the \texttt{vis.js} API, including a wide range of graph customization, and the ability to make your graph editable or to add selector menus to search for specific nodes or groups of nodes.  It's worth experimenting with all the different capabilities.  A thorough manual can be found at \texttt{https://datastorm-open.github.io/visNetwork/}.  Why don't you try to recreate the \texttt{workfrance} graph from this chapter in \texttt{visNetwork}?
-\end{minipage}
-}
-```
-`r if (knitr::is_html_output()) '-->'`
 
 The `networkD3` package creates responsive and interactive network visualizations using the `D3` javascript library, which has some beautiful options for common network layouts like force-directed or chord diagrams.
 
@@ -800,21 +735,11 @@ if (knitr::is_html_output()) {
 }
 ```
 
-`r if (knitr::is_latex_output()) '<!--'`
-:::thinkahead
+
+:::{.thinkahead data-latex=""}
 **Thinking ahead:** As we have shown in the examples in this section, the `networkD3` package offers useful, convenient ways for non-Javascript programmers to make use of many of the great capabilities of the D3 visualization library. See [https://christophergandrud.github.io/networkD3/](https://christophergandrud.github.io/networkD3/) for more examples. However, the package's customization potential is limited.  For those who can program in D3, the scope exists to create amazing interactive graph visualizations, with limitless customization potential.  In the more advanced chapters of this book we will look at an example of how to visualize a network of the characters in the TV show *Friends* by coding natively in Javascript.
 :::
-`r if (knitr::is_latex_output()) '-->'`
 
-<!-- `r if (knitr::is_html_output()) '<!--'` -->
-<!-- ```{=latex} -->
-<!-- \colorbox{babyblueeyes}{ -->
-<!-- \begin{minipage}{\textwidth} -->
-<!-- \textbf{Thinking ahead:} As we have shown in the examples in this section, the \texttt{networkD3} package offers useful, convenient ways for non-Javascript programmers to make use of many of the great capabilities of the D3 visualization library. See \texttt{https://christophergandrud.github.io/networkD3/} for more examples. However, the package's customization potential is limited.  For those who can program in D3, the scope exists to create amazing interactive graph visualizations, with limitless customization potential.  In the more advanced chapters of this book we will look at an example of how to visualize a network of the characters in the TV show \textit{Friends} by coding natively in Javascript. -->
-<!-- \end{minipage} -->
-<!-- } -->
-<!-- ``` -->
-<!-- `r if (knitr::is_html_output()) '-->'`
 
 ## Visualizing graphs in Python
 
@@ -970,21 +895,12 @@ plt.savefig("www/visualizing-graphs/pykarateshell-1.png", bbox_inches = 'tight')
 knitr::include_graphics("www/visualizing-graphs/pykarateshell-1.png")
 ```
 
-`r if (knitr::is_latex_output()) '<!--'`
-:::thinkahead
+
+:::{.thinkahead data-latex=""}
 **Playing around:** The visual capabilities of `networkx` in Python are more limited than `igraph` or `ggraph` in R, but there still are a range of ways to customize your visualization.  Try making further changes to the visualizations shown in this section by trying different layouts or by looking at the range of arguments that can be adjusted in the `draw_networkx()` function.  You can look up more details on all this at https://networkx.org/documentation/stable/reference/drawing.html.
 :::
-`r if (knitr::is_latex_output()) '-->'`
 
-`r if (knitr::is_html_output()) '<!--'`
-```{=latex}
-\colorbox{babyblueeyes}{
-\begin{minipage}{\textwidth}
-\textbf{Playing around:} The visual capabilities of \texttt{networkx} in Python are more limited than \texttt{igraph} or \texttt{ggraph} in R, but there still are a range of ways to customize your visualization.  Try making further changes to the visualizations shown in this section by trying different layouts or by looking at the range of arguments that can be adjusted in the \texttt{draw\_networkx()} function.  You can look up more details on all this at \texttt{https://networkx.org/documentation/stable/reference/drawing.html}.
-\end{minipage}
-}
-```
-`r if (knitr::is_html_output()) '-->'`
+
 
 ### Dynamic visualization using `networkx` and `pyvis`
 
@@ -1069,21 +985,11 @@ knitr::include_graphics("www/visualizing-graphs/pykaratevisadditional.png")
 ```
 
 
-`r if (knitr::is_latex_output()) '<!--'`
-:::thinkahead
+
+:::{.thinkahead data-latex=""}
 **Playing around:** Different UI controls can be added directly onto your `pyvis` visualizations using the `show_buttons()` method allowing you to experiment directly with the graph's look and feel.   For example, you can add buttons to experiment with the physics of the force-directed layout, or the node or edge properties.  This can be useful when you are experimenting with options.  You can learn more at the tutorial pages at https://pyvis.readthedocs.io/en/latest/.
 :::
-`r if (knitr::is_latex_output()) '-->'`
 
-`r if (knitr::is_html_output()) '<!--'`
-```{=latex}
-\colorbox{babyblueeyes}{
-\begin{minipage}{\textwidth}
-\textbf{Playing around:} Different UI controls can be added directly onto your \texttt{pyvis} visualizations using the \texttt{show\_buttons()} method allowing you to experiment directly with the graph's look and feel.   For example, you can add buttons to experiment with the physics of the force-directed layout, or the node or edge properties.  This can be useful when you are experimenting with options.  You can learn more at the tutorial pages at \texttt{https://pyvis.readthedocs.io/en/latest/}.
-\end{minipage}
-}
-```
-`r if (knitr::is_html_output()) '-->'`
 
 
 ## Learning exercises

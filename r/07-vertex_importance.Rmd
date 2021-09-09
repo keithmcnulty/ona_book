@@ -1,1 +1,279 @@
 # Vertex Importance and Centrality {#vertex-importance}
+
+It follows from much of the earlier work we have been doing in this book that the vertices of a graph can provide rich information about a network, its structure and its dynamics.  In sociology and psychology contexts, this is particularly true, because more often than not vertices represent people.  The fact that people play different roles and have different influences inside groups and communities has motivated centuries of sociological and psychological research, so it is unsurprising that the concept of vertex importance and influence is of great interest in the study of people or organizational networks.
+
+But importance and influence are not precisely defined concepts, and to make them real within the context of graphs and networks we need to find some sort of mathematical definition for them.  In many visual graph layouts, more important or influential vertices that have a stronger roles in overall connectivity will usually be positioned towards the center of a group of other vertices^[If you want to see an earlier example of this, take a look at Figure \@ref(fig:fr-karate) for Zachary's Karate Club network and note the positions of the influential actors Mr Hi and John A.].  Intuitively therefore, we use the term 'centrality' to describe the importance or influence of a vertex in the connected structure of a graph. 
+
+In this chapter we will go through the most common types of centrality that can be measured for vertices in graphs, and discuss how they can be interpreted in the context of people or organizational networks.  We will show how to calculate different types of centrality in R or Python and how to illustrate centrality in graph visualizations. We will then use a case example of Facebook connections between high school students to show how these measures can be used in practice.
+
+In this chapter we will use the $G_{14}$ graph which we introduced in the previous chapter.  We will work with an undirected and unweighted graph in this chapter.  Most centrality measures are valid and easily calculated for directed graphs, and will depend on defining the direction of the edges to consider. Figure \@ref(fig:g14-colored) shows the $G_{14}$ graph with four vertices of interest colored differently from other vertices.
+
+```{r g14-colored, echo = FALSE, fig.align = "center", fig.cap = "The $G_{14}$ graph with four vertices of interest colored differently"}
+library(igraph)
+library(ggraph)
+library(dplyr)
+
+g14_edgelist <- read.csv("https://ona-book.org/data/g14_edgelist.csv")
+g14 <- igraph::graph_from_data_frame(d = g14_edgelist |> 
+                                       dplyr::select(from, to),
+                                     directed = FALSE)
+
+V(g14)$fill = ifelse(
+  V(g14)$name == "9", "pink",
+  ifelse(
+    V(g14)$name == "7", "lightgreen",
+    ifelse(
+      V(g14)$name == "8", "yellow",
+      ifelse(
+        V(g14)$name == "4", "orange",
+        NA
+      )
+    )
+  )
+)
+
+
+
+set.seed(123)
+layout <- create_layout(g14, layout = 'igraph', algorithm = 'lgl')
+(g14viz <- ggraph(layout) +
+    geom_edge_link(color = "grey", alpha = 0.7) +
+    geom_node_label(aes(label = name, fill = fill), show.legend = FALSE) +
+    scale_fill_manual(values = c("pink", "lightgreen", "yellow", "orange"), 
+                      na.value = "lightblue") +
+    theme_void())
+```
+
+
+## Vertex centrality measures in graphs
+
+As we look at the $G_{14}$ graph in Figure \@ref(fig:g14-colored), we see the colored nodes seem to occupy prominent roles in the connective structure of the graph.  If we removed Vertex 9, for example, we would split our graph into two sizeable disconnected components.  Vertex 4 seems to be connected to a lot of immediate neighbours, and we would also split the graph if we removed it, leaving behind some isolates^[Recall that isolates are vertices that are not connected to any other vertices.].  Vertex 7 seems to occupy a stealthy position from which to efficiently reach other nodes, while Vertex 8 seems to sit in between those other three and probably can't be ignored for that reason alone.  
+
+What if these vertices represented people in an organization?  Would the departure of Vertex 4 mean that Vertices 1, 2, 3 and 5 lose their entire connection to the remainder of the organization?  Would the departure of Vertex 9 split the organization in two in terms of the flow of work?  If we wanted to distribute important information across the organization by means of these connections, which vertex would be a good place to start?  By understanding centrality we can start to appreciate the possible impact of changes to the network, or identify important or influential actors in the network.
+
+### Degree centrality
+
+The **degree centrality** or **valence** of a vertex $v$ is the number of edges connected to $v$.  Alternatively stated, in an unweighted graph it is the number of neighbors of $v$ or the number of vertices of distance 1 from $v$.  For example, the degree centrality of Vertex 8 in $G_{14}$ is 3, and for Vertex 4 it is 7.  It should not be difficult to see that Vertex 4 has the highest degree centrality in $G_{14}$.
+
+Degree centrality is a measure of immediate connection in a network.  It could be interpreted as immediate reach in a social network.  Its precise interpretation depends strongly on the nature of the connection.  In a network of academic co-authoring, someone with high degree centrality has collaborated directly with a larger number of other academics.  In our French office building network from Section \@ref(illustrative-6), someone of high degree centrality is likely to be well-known socially to a greater number of colleagues.    
+
+Related to degree centrality is *ego size*.  The $n$-th degree ego network of a given vertex $v$ is a set including $v$ itself and all vertices of distance at most $n$ from $v$.  The $n$-th degree ego size is the number of vertices in the $n$-th degree ego network.  In $G_{14}$, Vertex 8 has a 1st degree ego size of 4, a 2nd degree ego size of 11, and third degree ego size of 14 (the entire graph).  It easily follows that the 1st-degree ego size of a vertex is one greater than the degree centrality of the vertex.
+
+### Closeness centrality
+
+The **closeness centrality** of a vertex $v$ in a connected graph is the inverse of the sum of the distances from $v$ to all other vertices. Let's take a moment to understand this better by looking at an example:  we will calculate the closeness centrality of Vertex 8 from $G_{14}$.  Vertex 8 has the following distances to other vertices:
+
+* Distance 1 to vertices 4, 7 and 9
+* Distance 2 to vertices 1, 2, 3, 5, 6, 10 and 13
+* Distance 3 to vertices 11, 12 and 14
+
+The sum of these distances is 26, and the inverse of 26 is `r round(1/26, 3)`.  Inverting this distance means that lower total distances will generate higher closeness centrality.  Therefore the vertex with the highest closeness centrality will be the most efficient in reaching all the other vertices in the graph.  While Vertex 8 has one of the highest closeness centralities in $G_{14}$, Vertex 7 has a slightly higher closeness centrality, because its additional direct edge to Vertex 6 gives it a slightly smaller total distance of 25 to the other vertices, and therefore a slightly higher closeness centrality of `r round(1/25, 2)`.
+
+Closeness centrality is a measure of how efficiently the entire graph can be traversed from a given vertex.  This is particularly valuable in the study of information flow.  In social networks, information shared by those with high closeness centrality will likely reach the entire network more efficiently.  In our French office building network from Section \@ref(illustrative-6), those with high closeness centrality may be better choices for efficiently spreading a message through social interactions/word-of-mouth.  
+
+### Betweenness centrality
+
+The **betweenness centrality** of a vertex $v$ is calculated by taking each pair of other vertices $x$ and $y$, calculating the number of shortest paths between $x$ and $y$ that go through $v$, dividing by the total number of shortest paths between $x$ and $y$, then summing over all such pairs of vertices in the graph.  We can use the following process to manually calculate this for Vertex 8 in $G_{14}$:
+
+* If we look at all pairs of vertices 9 thru 14, we conclude that 8 is not on any shortest paths between these vertices  (betweenness centrality: 0). 
+* Similarly for vertices 1 thru 7 we conclude that Vertex 8 is not on any of these shortest paths either (betweenness centrality: 0).
+* Now we look at all pairs between Vertex 7 and vertices 9 thru 14, and conclude that 8 is not on any shortest paths for these pairs because vertices 7 and 9 are adjacent (betweenness centrality: 0).
+* Now we look at all pairs betwee Vertex 6 and Vertices 9 thru 14, and conclude that 8 is not on any of these shortest paths, because a shorter route is through Vertex 7 (betweenness centrality: 0).
+* Finally, we look at all pairs between Vertices 1 thru 5 and Vertices 9 thru 14, and conclude that for each of the 30 such pairs there are two shortest paths, one of which goes through Vertex 7 and the other through Vertex 8 (betweenness centrality: $0.5 \times 30 = 15$).  
+* Summing over these, we conclude that the betweenness centrality of Vertex 8 in $G_{14}$ is 15. 
+
+Using similar logic it is not too difficult to reason that Vertex 9 has the highest betweenness centrality in $G_{14}$.  If we split the graph on either side of Vertex 9, we have betweenness centralities of zero in the sets of vertices on either side, but any path between vertices on either side of Vertex 9 *must* pass through Vertex 9.  There are 46 such paths between Vertices 1 thru 8 and Vertices 10 thru 14, and so the total betweenness centrality of Vertex 9 is 46.  
+
+Betweenness centrality is a measure of how important a given vertex is in connecting other pairs of vertices in the graph.  It makes intuitive sense that Vertex 9 should have the highest betweenness centrality because its removal would have the largest destructive effect on overall connectivity in $G_{14}$, splitting it into a disconnected graph with two sizeable connected components.  In people networks, individuals with higher betweenness centrality can be regarded as playing important roles in the ensuring overall connectivity of the network, and if they are removed from the network the risks of overall disconnection are higher.  This has strong applications in studying the effects of attrition and departures from organizations.  
+
+:::{.thinkahead data-latex=""}
+**Playing around:** It's worth thinking about some of the things we did in the previous chapter based on our new understanding of degree, closeness and betweenness centrality.  For example,  how do certain types of central vertices influence the overall 'closeness' of a network?  What would happen to average distance or edge density if we remove certain central vertices?  Try playing around with removing Vertices 4 (highest degree centrality), 7 (highest closeness centrality) and 9 (highest betweenness centrality) from $G_{14}$ and determining the impact of these removals on diameter, mean distance and density.  
+:::
+
+
+### Eigenvector centrality
+
+The **Eigenvector centrality** or **relative centrality** or **prestige** of a vertex is a measure of how connected the vertex is to other influential vertices.  It is impossible to define this without a little linear algebra.  
+
+Recall from Section \@ref(rep-graphs) that the adjacency matrix $A = (a_{ij})$ for an unweighted graph $G$ containing $p$ vertices is defined as $a_{ij} = 1$ if $i$ and $j$ are adjacent vertices in $G$ and 0 otherwise.  A vector $x = (x_1, x_2, ...,x_p)$ and scalar value $\lambda$ are considered an eigenvector and eigenvalue of $A$ if they satisfy the equation
+
+$$
+Ax = \lambda{x}
+$$
+If we require that $x$ can only have positive entries, then a unique solution exists to this equation which has maximum eigenvalue $\lambda$.  We take $x$ and $\lambda$ for this solution and define the eigenvector centrality for vertex $v$ as
+
+$$
+\frac{1}{\lambda}\sum_{w \in G}a_{vw}x_w
+$$
+
+Because this is solving for a system of linear equations with coefficients that relate to the connectedness of neighbouring vertices, its solution is a measure of the relative influence of a vertex as a function of the influences of the vertices it is connected to.  Vertices can have high influence through being connected to a lot of other vertices with low influence, or through being connected to a small number of highly influential vertices.  Vertex 10 in $G_{14}$ has an eigenvector centrality of 0.21, and Vertex 2 has an eigenvector centrality of 0.41.  This makes sense because Vertex 2 is connected to Vertex 4, which we already know has the highest degree centrality in the network.  Intuitively, it shouldn't be too hard to appreciate that Vertex 4 as the highest eigenvector centrality in $G_{14}$.
+
+In directed graphs, eigenvector centrality gives rise to interesting measures of different types of influence.  For example, imagine a citation network where certain authors are regularly citing a lot of influential articles.  These authors are known as *hubs*, and their *outgoing* eigenvector centrality will be high.  *Hub centrality* is the outgoing eigenvector centrality of a vertex.  Meanwhile, authors who have high incoming eigenvector centrality will be frequently referenced by hubs, and these authors are known as *authorities*.  *Authority centrality* is the *incoming* eigenvector centrality of a vertex.  These types of measures are becoming increasingly adopted in fields such as bibliometrics.  Note that in undirected graphs the hub score, authority score and eigenvector centrality of vertices are identical.
+
+
+:::{.thinkahead data-latex=""}
+**Playing around:** We have not looked at the impact of edge weights on centrality in this chapter.  This is because it is unusual to consider edge weights in centrality measures.  Nonetheless, most centrality measures do have approaches to consider edge weights, and this is a topic of ongoing research.  Usually in these situations, edge weights are transformed to be cost functions --- for example by inverting them --- so that edges with higher weights are considered 'preferable' in graph traversal.  To see what I mean, go back and have a look at the $G_{14W}$ weighted graph from the previous chapter.  Pick pairs of vertices and see what the shortest path between them would be using the sum of weights of edges, and what it would be using the sum of the inverse weights of edges.    
+:::
+
+
+## Calculating and illustrating vertex centrality
+
+### Calculating in R
+
+Degree centrality can be calculated for a specific set of vertices using the `degree()` function in `igraph`.  By default, the degree centrality will be calculated for all vertices. Let's load up our $G_{14}$ graph to demonstrate as we did in the previous chapter.
+
+```{r}
+library(igraph)
+library(dplyr)
+
+# get g14 edgelist and ignore weights
+g14_edgelist <- read.csv("https://ona-book.org/data/g14_edgelist.csv")
+g14_unweighted <- g14_edgelist |> 
+  dplyr::select(-weight)
+
+# create graph
+g14 <- igraph::graph_from_data_frame(g14_unweighted, directed = FALSE)
+
+# calculate degree centrality for all vertices
+igraph::degree(g14)
+```
+
+We can see that Vertex 4 has a degree centrality of 7, which agrees with our earlier manual calculations.  Ego networks and ego sizes can be determined using the `ego()` and `ego_size()` functions.
+
+```{r}
+# 2nd order ego network of Vertex 4
+igraph::ego(g14, order = 2, nodes = "4")
+```
+
+```{r}
+# size of ego network
+igraph::ego_size(g14, order = 2, nodes = "4")
+```
+
+Closeness centrality is calculated using the `closeness()` function for all or a subset of vertices. Let's verify that this function returns the same results for Vertices 7 and 8 that we manually calculated earlier.
+
+```{r}
+igraph::closeness(g14, vids = c("7", "8"))
+```
+
+Betweenness centrality is calculated using the `betweenness()` function in a similar way.  Let's verify our previous manual calculations for Vertices 8 and 9.
+
+```{r}
+igraph::betweenness(g14, v = c("8", "9"))
+```
+
+Finally, eigenvector centrality can be calculated using the `eigen_centrality()` function.  Note that this returns a list including various details about the computation^[For example if you are curious to know the eigenvalue, you can look at the `value` element of the list].  To see the actual centralities, you should call the `vector` element of the output list.  Note also that this function scales the values by default so that the maximum eigenvector centrality is 1.  To avoid this, set `scale = FALSE`.
+
+```{r}
+eigens <- igraph::eigen_centrality(g14, scale = FALSE)
+eigens$vector
+```
+
+We can see confirmation here that Vertex 4 has the highest eigenvector centrality.
+
+:::{.thinkahead data-latex=""}
+**Playing around:** There are a few other centrality-like measures available in `igraph` which you could explore and try to understand.  Examples include `page_rank()` for Google's measure of importance of a web page, and `hub_score()` and `authority_score()` for directed networks.  Consider testing these out on some datasets, like the `wikivote` data set from the `onadata` package or downloaded from the internet^[https://ona-book.org/data/wikivote.csv].
+:::
+
+### Calculating in Python
+
+Again, as in the work in the previous chapter, centrality function in `networkx` are very similar to those in `igraph`.  The `degree()` function calculates degree centrality for all vertices by default, or you can specify a list of vertices.
+
+```{python}
+import networkx as nx
+import pandas as pd
+
+# download edgelist and remove weights
+g14_edgelist = pd.read_csv("https://ona-book.org/data/g14_edgelist.csv")
+g14_undirected = g14_edgelist.drop('weight', axis = 1)
+
+# create undirected g14 graph
+g14 = nx.from_pandas_edgelist(g14_undirected, source = 'from', target = 'to')
+
+# calculate degree centrality of Vertex 4
+nx.degree(g14, [4, 9])
+```
+
+There are also methods called `degree()` for a `Graph()` object as well as `in_degree()` and `out_degree()` for `DiGraph()` objects in `networkx`.
+
+```{python}
+g14.degree(4)
+```
+
+The ego network of a vertex can be obtained using `ego_graph()` function.  To obtain the 2nd order ego network of Node 4:
+
+```{python}
+ego_4_2 = nx.ego_graph(g14, n = 4, radius = 2)
+ego_4_2.nodes
+```
+
+Closeness centrality is calculated using the `closeness_centrality()` function.  However, in `networkx` this is normalized by multiplying the result by $n - 1$ where $n$ is the number of vertices in the graph.  To obtain non-normalized closeness centrality it will be necessary to divide the output of this function by $n - 1$^[You may wonder why $n - 1$?  This is simply the total number of other vertices that we are calculating the paths to.  Strangely, there is no option to non-normalize in the arguments of this function as of recent versions of `networkx`.  In any case, for the purposes of comparing vertices, it doesn't matter a great deal whether you normalize or not.].
+
+```{python}
+# get non-normalized closeness centrality for Vertex 7
+norm_closeness = nx.closeness_centrality(g14, 7)
+norm_closeness/(len(g14.nodes) - 1)
+```
+
+Betweenness centrality is calculated using the `betweenness_centrality()` function.  Again this is normalized by default but this can be set to `False` in the arguments^[The normalization here divides the result by the number of vertex pairs in a graph with $n-1$ vertices, which is $(n - 1)(n - 2)$ for directed graphs and $\frac{(n - 1)(n - 2)}{2}$ for undirected graphs].  This function calculates values for all nodes are returns them in a dict.
+
+```{python}
+# get non-normalized betweenness centrality for Vertex 9
+between = nx.betweenness_centrality(g14, normalized = False)
+between.get(9)
+```
+
+Finally, eigenvector centrality is calculated using the `eigenvector_centrality` function, with a dict returned similar to `betweenness_centrality()`.
+
+```{python}
+eigen = nx.eigenvector_centrality(g14)
+eigen.get(4)
+```
+
+Closeness, betweenness and eigenvector centrality are calculated using *incoming* edges in `networkx` digraphs.  To calculate the outgoing equivalent, simply use the `reverse()` method on the digraph to make all outgoing edges incoming and vice-versa.
+
+:::{.thinkahead data-latex=""}
+**Playing around**:  `networkx` gas an extrmely wide range of centrality measures.  Visit the Centrality section of its documentation^[https://networkx.org] and have a look at the wide variety of centrality measures. Many of these are very specific to graph use cases in different industries and disciplines, but you can have a look at some of them, see if you can understand them and even give them a try with a data set.
+:::
+
+### Illustrating centrality in graph visualizations
+
+As we reviewed in Chapter \@ref(viz-graphs), we will often make adjustments when visualizing graphs to illustrate certain aspects of the graph's structure.  For example, we highlight certain vertices with color or adjust the thickness of certain edges.  When we want to visually illustrate the importance or influence of vertices in graphs, we will often do so using centrality measures.  The two most common methods are to adjust vertex size according to centrality or to use a centrality-related color scale.  We will illustrate a couple of examples using `ggraph` in R to show some of the options available.
+
+For greatest efficientcy, it's always a good idea to add centralities as vertex properties in graphs.  Let's add a few of these now in our $G_{14}$ graph.
+
+```{r}
+V(g14)$degree <- degree(g14)
+V(g14)$betweenness <- betweenness(g14)
+V(g14)$eigen <- eigen_centrality(g14)$vector
+```
+
+Now we can create a visualization where we map the size of vertices to the degree vertex property, as in Figure \@ref(fig:g14-degree).  Note the `scale_size()` function which is useful for setting a scale to suit your visualization.  
+
+```{r g14-degree, fig.align = "center", fig.cap = "$G_{14}$ with vertex size scaled according to degree centrality"}
+set.seed(123)
+ggraph(g14, layout = "lgl") +
+  geom_edge_link(color = "grey", alpha = 0.7) +
+  geom_node_point(aes(size = degree), color = "lightblue",
+                  show.legend = FALSE) +
+  scale_size(range = c(5,15)) +
+  geom_node_text(aes(label = name)) +
+  theme_void()
+```
+
+Alternatively, Figure \@ref(fig:g14-eigen) shows the same graph with the vertex colors scaled according to normalized eigenvector centrality.  This helps us see that the vertices to the left of Vertex 9 in $G_{14}$ do not have particularly influential connections compared to those to the right.
+
+```{r g14-eigen, fig.align = "center", fig.cap = "$G_{14}$ with vertex size scaled according to normalized eigenvector centrality"}
+set.seed(123)
+ggraph(g14, layout = "lgl") +
+  geom_edge_link(color = "grey", alpha = 0.7) +
+  geom_node_point(size = 6, aes(color = eigen)) +
+  scale_color_gradient(low = "lightblue", high = "red") +
+  geom_node_text(aes(label = name)) +
+  theme_void()
+```
+
+:::{.thinkahead data-latex=""}
+**Playing around:**. Play around with different ways of visualizing the centralities of vertices in $G_{14}$.  Try using color, size or both.  And also try the different types of centrality to see if the look of the graph changes substantially between them.
+:::
+

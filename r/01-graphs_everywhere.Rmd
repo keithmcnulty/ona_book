@@ -51,21 +51,11 @@ Now Euler calculated how many place visits this would mean in total for K&ouml;n
 
 Euler's proof was the first time a graph like the one in `r if (knitr::is_html_output()) "Interactive"` Figure \@ref(fig:euler-graph) was used to solve a problem.  The solution also involved concepts that would later become critical in the study of graphs.  Euler set up the places as *vertices* or *nodes* of the graph and he set up the bridges as *edges*.  The proof depends on a conclusion about the number of edges connected to a vertex, which later became known as the *degree* of a vertex.  The proof required the study of *walks* or *paths* through the graph.  The requirement that a walk could only use each edge once became known as an *Euler walk* (or *Eulerian path*) and various algorithms exist today to calculate Euler walks for problems such as constructing DNA sequences from their fragments^[In fact, Euler extended his proof to consider any graph, and concluded that if an Euler walk exists in a graph, then the number of vertices with odd degree is either 0 or 2.  For a fascinating write up of Euler's original proof, see @paoletti].  Little was Euler to know the Pandora's Box he had opened.
 
-`r if (knitr::is_latex_output()) '<!--'`
-:::thinkahead
+
+::: {.thinkahead data-latex=""}
 **Thinking ahead:** If you know how to load a graph object into R or Python, you could try to load the `koenigsberg` data set from the `onadata` package or download it from the internet^[https://ona-data.org/data/koenigsberg.csv] and create a graph from it.  You could use your software to calculate the degrees of the vertices of the graph.  For example in R, if you have the data loaded into an `igraph` object, you can use `igraph::degree()` to get a vector showing you the degrees of each vertex.  There is even a package called `eulerian` in R which has a function `hasEulerianPath()` which determines whether an Euler walk exists in a given graph.  
 :::
-`r if (knitr::is_latex_output()) '-->'`
 
-`r if (knitr::is_html_output()) '<!--'`
-```{=latex}
-\colorbox{babyblueeyes}{
-\begin{minipage}{\textwidth}
-\textbf{Thinking ahead:} If you know how to load a graph object into R or Python, you could try to load the \texttt{koenigsberg} data set from the \texttt{onadata} package or download it from the internet at \texttt{https://ona-data.org/data/koenigsberg.csv} and create a graph from it.  You could use your software to calculate the degrees of the vertices of the graph.  For example in R, if you have the data loaded into an \texttt{igraph} object, you can use \texttt{igraph::degree()} to get a vector showing you the degrees of each vertex.  There is even a package called \texttt{eulerian} in R which has a function \texttt{hasEulerianPath()} which determines whether an Euler walk exists in a given graph.  
-\end{minipage}
-}
-```
-`r if (knitr::is_html_output()) '-->'`
 
 ## Graphs as mathematical models
 
@@ -130,21 +120,12 @@ ggplot() +
 
 Of course, any organization, institution or place of work can be considered a social network and there will be individuals that command greater or less attachment according to their tenure, seniority, skills or general popularity.  Understanding this in an organizational context can lead to insights about leadership and followership, and can help contribute to broader work in understanding the influence of followership on recruitment and on attrition.  Different types of centrality such as degree, betweenness and closeness centrality can imply different roles of individuals in terms of their importance to the overall community.
 
-`r if (knitr::is_latex_output()) '<!--'`
-:::thinkahead
+
+::: {.thinkahead data-latex=""}
 **Thinking ahead:** If you know how to, load up the graph of Zachary's Karate Club via the `onadata` package or by downloading the edgelist from the internet^[https://ona-book.org/data/karate.csv].  See if you can find some functions to calculate the degree centrality, betweenness centrality, closeness centrality and eigenvector centrality of the various individuals in the network.  If you compare the results you should discover that centrality can mean different things depending on how you define it.   
 :::
-`r if (knitr::is_latex_output()) '-->'`
 
-`r if (knitr::is_html_output()) '<!--'`
-```{=latex}
-\colorbox{babyblueeyes}{
-\begin{minipage}{\textwidth}
-\textbf{Thinking ahead:} If you know how to, load up the graph of Zachary's Karate Club via the `onadata` package or by downloading the edgelist from the internet at \texttt{https://ona-book.org/data/karate.csv}.  See if you can find some functions to calculate the degree centrality, betweenness centrality, closeness centrality and eigenvector centrality of the various individuals in the network.  If you compare the results you should discover that centrality can mean different things depending on how you define it.   
-\end{minipage}
-}
-```
-`r if (knitr::is_html_output()) '-->'`
+
 
 ### Graphs as data sources
 

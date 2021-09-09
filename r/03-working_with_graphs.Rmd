@@ -64,21 +64,11 @@ E = \{\mathrm{David}\longleftrightarrow\mathrm{Zubin}, \mathrm{David}\longleftri
 
 It doesn't really matter how you choose to notate the vertex and edge sets as long as your notation contains all of the information required to construct the graph.  
 
-`r if (knitr::is_latex_output()) '<!--'`
-:::thinkahead
+
+:::{.thinkahead data-latex=""}
 **Thinking ahead:** If you already know how to load graphs in R or Python, you might want to take a look at a graph object now, and you will see how the object is structured and defined around the two set structure $G = (V, E)$.  For example, try to create a graph from the data for the *Bridges of K&ouml;nigsberg* problem using the `koenigsberg` edgelist in the `onadata` package or downloaded from the internet at https://ona-data.org/data/koenigsberg.csv.  Take a look at the vertex set or the edge set to see how they contain the structures discussed above.  
 :::
-`r if (knitr::is_latex_output()) '-->'`
 
-`r if (knitr::is_html_output()) '<!--'`
-```{=latex}
-\colorbox{babyblueeyes}{
-\begin{minipage}{\textwidth}
-\textbf{Thinking ahead:} If you already know how to load graphs in R or Python, you might want to take a look at a graph object now, and you will see how the object is structured and defined around the two set structure \(G = (V, E)\).  For example, try to create a graph from the data for the \textit{Bridges of K\"{o}nigsberg} problem using the \texttt{koenigsberg} edgelist in the \texttt{onadata} package or downloaded from the internet at \texttt{https://ona-data.org/data/koenigsberg.csv}.  Take a look at the vertex set or the edge set to see how they contain the structures discussed above. 
-\end{minipage}
-}
-```
-`r if (knitr::is_html_output()) '-->'`
 
 The relationship that we are modeling using our edges in the graph $G_{\mathrm{work}}$ is reciprocal in nature.  If David has worked with Zubin, then we automatically conclude that Zubin has worked with David.  Therefore there is no need for direction in the edges of $G_{\mathrm{work}}$.  We call such a graph an *undirected* graph. In an undirected graph, the order of the nodes in each pair in the edge set $E$ is not relevant.  For example, $\mathrm{David}\longleftrightarrow\mathrm{Zubin}$ is the same as $\mathrm{Zubin}\longleftrightarrow\mathrm{David}$.
 
@@ -386,21 +376,10 @@ $$
 
 Note that the vertex property set $V_\mathrm{loc}$ has the same number of elements as $V$ and the associated properties appear in the same order as the vertices of $V$.  Note also a similar size and order for the edge property sets $E_\mathrm{cur}$ and $E_\mathrm{amt}$.   This notation system allows us to provide all the information we need in a reliable way for any number of vertex or edge properties.
 
-`r if (knitr::is_latex_output()) '<!--'`
-:::thinkahead
+:::{.thinkahead data-latex=""}
 **Thinking ahead:** If you know how to, load up graph of romantic relationships in the TV Series *Mad Men* using the `madmen_edgelist` data set from the `onadata` package or by downloading it from https://ona-book.org/data/madmen_edgelist.csv.  Try to create a graph that contains the `Married` edge property and then try to query your graph to determine which relationships were marriage relationships.
 :::
-`r if (knitr::is_latex_output()) '-->'`
 
-`r if (knitr::is_html_output()) '<!--'`
-```{=latex}
-\colorbox{babyblueeyes}{
-\begin{minipage}{\textwidth}
-\textbf{Thinking ahead:} If you know how to, load up graph of romantic relationships in the TV Series \textit{Mad Men} using the \texttt{madmen\_edgelist} data set from the \textit{onadata} package or by downloading it from \texttt{https://ona-book.org/data/madmen\_edgelist.csv}.  Try to create a graph that contains the \texttt{Married} edge property and then try to query your graph to determine which relationships were marriage relationships.
-\end{minipage}
-}
-```
-`r if (knitr::is_html_output()) '-->'`
 
 One of the most common edge properties we will come across is **edge weight**.  Weighted edges are edges which are given a numeric value to represent an important construct such as edge importance or connection strength. This can often be used to simplify otherwise complex graphs, and will be frequently used in calculations related to centrality and community.  As an example, returning to our flights graph, instead of creating an edge for each carrier, we could simplify our graph by creating one edge per route and giving it a weight according to the number of carriers on that route.  Such a graph would look like Figure \@ref(fig:weightedflights).
 
@@ -509,21 +488,11 @@ if (knitr::is_latex_output()) {
 
 ```
 
-`r if (knitr::is_latex_output()) '<!--'`
-:::thinkahead
+
+:::{.thinkahead data-latex=""}
 **Thinking ahead:** If you still have the *Bridges of K&ouml;nigsberg* data loaded as a graph in R or Python from earlier, you should be able to generate its edgelist easily.  Try to find the right function to use to do this within your package of choice.
 :::
-`r if (knitr::is_latex_output()) '-->'`
 
-`r if (knitr::is_html_output()) '<!--'`
-```{=latex}
-\colorbox{babyblueeyes}{
-\begin{minipage}{\textwidth}
-\textbf{Thinking ahead:} If you still have the \textit{Bridges of K\"{o}nigsberg} data loaded as a graph in R or Python from earlier, you should be able to generate its edgelist easily.  Try to find the right function to use to do this within your package of choice.
-\end{minipage}
-}
-```
-`r if (knitr::is_html_output()) '-->'`
 
 An **adjacency matrix** is a square matrix with the vertices indexing the rows and columns, and where the $(i, j)$-th entry of the matrix represents the number of edges from vertex $i$ to vertex $j$.  As an example, using our simple graph $G_\mathrm{work}$ again from Section \@ref(graph-def), the adjacency matrix would look like this:
 
@@ -572,21 +541,11 @@ $$
 \end{array}
 $$
 
-`r if (knitr::is_latex_output()) '<!--'`
-:::thinkahead
+
+:::{.thinkahead latex-data = ""}
 **Thinking ahead:** Again, with the *Bridges of K&ouml;nigsberg* graph loaded in R or Python, you can turn it into an adjacency matrix easily.  Try to find the right function for this in your package of choice.  Note that in packages like `networkx` in Python, the format is slightly different and is called an *adjacency list*.
 :::
-`r if (knitr::is_latex_output()) '-->'`
 
-`r if (knitr::is_html_output()) '<!--'`
-```{=latex}
-\colorbox{babyblueeyes}{
-\begin{minipage}{\textwidth}
-\textbf{Thinking ahead:} Again, with the \textit{Bridges of K\"{o}nigsberg} graph loaded in R or Python, you can turn it into an adjacency matrix easily.  Try to find the right function for this in your package of choice.  Note that in packages like \texttt{networkx} in Python, the format is slightly different and is called an \textit{adjacency list}.
-\end{minipage}
-}
-```
-`r if (knitr::is_html_output()) '-->'`
 
 ## Creating graphs in R
 
@@ -699,21 +658,10 @@ vertex_df <- data.frame(
 ))
 ```
 
-`r if (knitr::is_latex_output()) '<!--'`
-:::thinkahead
+
+:::{.thinkahead data-latex=""}
 **Playing around:** The functions in this section are not the only functions in the `igraph` package that build graphs from data, but they are by far the most commonly used ones.  By typing `?graph_from` in your R console and looking at the functions that autocomplete, you can see some of the other functions that build graphs from data.  Try playing around with them if you are curious.
 :::
-`r if (knitr::is_latex_output()) '-->'`
-
-`r if (knitr::is_html_output()) '<!--'`
-```{=latex}
-\colorbox{babyblueeyes}{
-\begin{minipage}{\textwidth}
-\textbf{Playing around:} The functions in this section are not the only functions in the \texttt{igraph} package that build graphs from data, but they are by far the most commonly used ones.  By typing \texttt{?graph\_from} in your R console and looking at the functions that autocomplete, you can see some of the other functions that build graphs from data.  Try playing around with them if you are curious.
-\end{minipage}
-}
-```
-`r if (knitr::is_html_output()) '-->'`
 
 ### Adding properties to the vertices and edges
 
@@ -746,20 +694,10 @@ vertex_transfers <- data.frame(
 We see that the additional edge properties `cur` and `amt` and the vertex property `loc` have been included in the graph.  The codes immediately following these properties represent the property type and the data type.  We can see that `loc` is a vertex property of character type (`v/c`), `cur` is an edge property of character type (`e/c`) and `amt` is an edge property of numeric type (`e/n`).
 
 `r if (knitr::is_latex_output()) '<!--'`
-:::thinkahead
+:::{.thinkahead data-latex=""}
 **Playing around:** An arbitrary number of properties can be added to the vertices and edges of a graph.  If you label one of the properties as `weight` and if that property is numeric, this will change the type of your graph to `W`, a weighted graph.  Try playing around with this by changing the name of the `amt` column to `weight` in `gtransfers`.
 :::
-`r if (knitr::is_latex_output()) '-->'`
 
-`r if (knitr::is_html_output()) '<!--'`
-```{=latex}
-\colorbox{babyblueeyes}{
-\begin{minipage}{\textwidth}
-\textbf{Playing around:} An arbitrary number of properties can be added to the vertices and edges of a graph.  If you label one of the properties as \textbf{weight} and if that property is numeric, this will change the type of your graph to \textbf{W}, a weighted graph.  Try playing around with this by changing the name of the \textbf{amt} column to \textbf{weight} in \textbf{gtransfers}.
-\end{minipage}
-}
-```
-`r if (knitr::is_html_output()) '-->'`
 
 You can view the vertex and edge sets of a graph using the `V()` and `E()` functions respectively.
 
@@ -812,20 +750,10 @@ gnew
 We can see that out graph `gnew` now has the final of the four graph types: `B` meaning bipartite.
 
 `r if (knitr::is_latex_output()) '<!--'`
-:::thinkahead
+:::{.thinkahead data-latex=""}
 **Playing around:** Hopefully you can now see that there are many ways to construct your graph.  Try using the `graph_from_data_frame()` function to create `gnew` as a bipartite graph at the point of creation. 
 :::
-`r if (knitr::is_latex_output()) '-->'`
 
-`r if (knitr::is_html_output()) '<!--'`
-```{=latex}
-\colorbox{babyblueeyes}{
-\begin{minipage}{\textwidth}
-\textbf{Playing around:} Hopefully you can now see that there are many ways to construct your graph.  Try using the \texttt{graph\_from\_data\_frame()} function to create \texttt{gnew} as a bipartite graph at the point of creation. 
-\end{minipage}
-}
-```
-`r if (knitr::is_html_output()) '-->'`
 
 ## Creating graphs in Python
 
@@ -998,20 +926,10 @@ nx.set_edge_attributes(G = transfer, values = transfer_attributes)
 While this may look tedious and manual, as we move into adding common properties like node centrality or edge weight to graphs, we will find these to be easy to set because of built-in functions that automatically index their output by the vertices or edges.  For example, we have already seen in Section \@ref(python-graph-from-adjacency) that the function `from_numpy_matrix()` automatically sets a weight according to the number of edges when we set the argument `parallel_edges` to `False`.  Also, if you have edge properties as columns in your Pandas edgelist, you can automatically import them into your graph by setting `edge_attr = True` in the `from_pandas_edgelist()` function in `networkx`.
 
 `r if (knitr::is_latex_output()) '<!--'`
-:::thinkahead
+:::{thinkahead data-latex=""}
 **Playing around:** As with the `igraph` package in R, the `networkx` package in Python contains a whole host of ways to import data into a graph.  While the methods outlined here are likely to be the most common, it's worth taking a look at some of the other functions such as `from_dict_of_dicts()` or `from_dict_of_lists()` to see what is available to you.
 :::
-`r if (knitr::is_latex_output()) '-->'`
 
-`r if (knitr::is_html_output()) '<!--'`
-```{=latex}
-\colorbox{babyblueeyes}{
-\begin{minipage}{\textwidth}
-\textbf{Playing around:} As with the \texttt{igraph} package in R, the \texttt{networkx} package in Python contains a whole host of ways to import data into a graph.  While the methods outlined here are likely to be the most common, it's worth taking a look at some of the other functions such as 'textt{from\_dict\_of\_dicts()}` or \texttt{from\_dict\_of\_lists()} to see what is available to you.
-\end{minipage}
-}
-```
-`r if (knitr::is_html_output()) '-->'`
 
 ## Learning exercises
 

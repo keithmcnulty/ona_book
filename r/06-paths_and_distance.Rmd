@@ -40,21 +40,11 @@ Given any two vertices $A$ and $B$ in a graph $G$, a **path** between $A$ and $B
 
 A **simple path** or **acyclic path** is a path where no vertex is repeated.  All except the last path above are simple paths between Vertex 9 and Vertex 4 in $G_{14}$.  In general, because we are interested in efficient paths between vertices, we are only interested in simple paths in a graph.  While the number of general paths between two vertices in a graph can be infinite due to possible repeated cycles, the number of simple paths between any two vertices in a graph is always finite.  When we refer to a path from now on, we will always mean a simple path unless we say otherwise. 
 
-`r if (knitr::is_latex_output()) '<!--'`
-:::thinkahead
+
+:::{.thinkahead data-latex=""}
 **Playing around:** Let's reminisce about Chapter \@ref(everywhere) where we studied the *Bridges of K&ouml;nigsberg* problem.  You may recall that an *Eulerian Path* or *Euler Walk* is a path that visits every vertex in a graph at least once and which uses every edge in a graph exactly once.  Consider subgraphs of $G_{14}$ by taking subsets of vertices and the edges that connect them.  How many vertices are in the largest subgraph you can form from $G_{14}$ that contains an Eulerian Path?  If you are an R user, you could consider using the `eulerian` package to verify your answer.    
 :::
-`r if (knitr::is_latex_output()) '-->'`
 
-`r if (knitr::is_html_output()) '<!--'`
-```{=latex}
-\colorbox{babyblueeyes}{
-\begin{minipage}{\textwidth}
-\textbf{Playing around:}  Let's reminisce about Chapter \ref{everywhere} where we studied the \textit{Bridges of K\"{o}nigsberg} problem.  You may recall that an \textit{Eulerian Path} or \textit{Euler Walk} is a path that visits every vertex in a graph at least once and which uses every edge in a graph exactly once.  Consider subgraphs of $G_{14}$ by taking subsets of vertices and the edges that connect them.  How many vertices are in the largest subgraph you can form from $G_{14}$ that contains an Eulerian Path?  If you are an R user, you could consider using the \texttt{eulerian} package to verify your answer.    
-\end{minipage}
-}
-```
-`r if (knitr::is_html_output()) '-->'`
 
 In order to determine whether a path exists between two vertices $A$ and $B$ in a graph, we need to be able to search or traverse the graph for possible routes across its edges, starting at Vertex $A$ and ending at Vertex $B$, and passing through other vertices as necessary.  Let's take an example from our $G_{14}$ graph.  Let's say we want to determine if a path exists between Vertex 9 and Vertex 5. When a human looks at a simple graph like this, it is visually obvious that such a path exists.  However, as we have mentioned in earlier chapters, most complex graphs cannot be visualized as simply as this one, and computer programs are not human.  So we are going to need a more systematic and programmable way of searching the graph for a path from Vertex 9 to Vertex 5.
 
@@ -80,21 +70,11 @@ Alternatively, we could traverse the graph using a *depth-first approach*.  This
 
 It appears that the breadth-first approach is quicker and more computationally efficient than the depth-first approach, but this really depends on the specifics of the search.  Breadth-first searches like to stay close to the starting node, and gradually increase their search radius.  Depth-first searches like to 'run away and come back'.  In our $G_{14}$ example above, because the network is very small and all nodes are within a short path from Vertex 9, a breadth-first search will usually find the target vertex quickly compared to a depth-first search, whose speed will depend on the route it takes.  However, when target nodes are very 'far away' in the network, depth-first approaches can be more efficient.  On average, however, computation time complexity for both search types is similar^[The computation time complexity for both search types is proportional to the square of the number of vertices in the graph when an adjacency matrix is used.].
 
-`r if (knitr::is_latex_output()) '<!--'`
-:::thinkahead
+
+:::{.thinkahead data-latex=""}
 **Thinking ahead:** Consider the *smallest number of edges* that need to be traversed to get from Vertex 9 to Vertex 5 in our $G_{14}$ graph.   Work out what you think that is, and then try to use a depth-first search to move from Vertex 9 to Vertex 5 in different ways.  Will the depth-first search always return a path with the smallest number of edges?  Why or why not?  What about the breadth-first search?    
 :::
-`r if (knitr::is_latex_output()) '-->'`
 
-`r if (knitr::is_html_output()) '<!--'`
-```{=latex}
-\colorbox{babyblueeyes}{
-\begin{minipage}{\textwidth}
-\textbf{Thinking ahead:} Consider the \textit{smallest number of edges} that need to be traversed to get from Vertex 9 to Vertex 5 in our $G_{14}$ graph.   Work out what you think that is, and then try to use a depth-first search to move from Vertex 9 to Vertex 5 in different ways.  Will the depth-first search always return a path with the smallest number of edges?  Why or why not?  What about the breadth-first search?   
-\end{minipage}
-}
-```
-`r if (knitr::is_html_output()) '-->'`
 
 ### Path length and distance
 
@@ -161,21 +141,11 @@ Dijkstra's algorithm is perhaps the most well-known (and most established) short
 5.  We mark vertices 4, 6, 11, 12 and 14 as searched and move to these vertices as current vertices and repeat the process for their neighbors.  In this way we update the tentative distance from Vertex 9 to vertices 1, 2, 3 and 5 to 3.  We mark vertices 1, 2, 3 and 5 as searched.
 6.  We have now searched all vertices in the graph, and the tentative distances between Vertex 9 and all other vertices are now assigned as the final distances.
 
-`r if (knitr::is_latex_output()) '<!--'`
-:::thinkahead
+
+:::{.thinkahead data-latex=""}
 **Playing around:** Try to repeat the process of Dijkstra's algorithm for the weighted graph $G_{14W}$.  Which vertex has the shortest distance from Vertex 9 and which vertex has the longest distance?  
 :::
-`r if (knitr::is_latex_output()) '-->'`
 
-`r if (knitr::is_html_output()) '<!--'`
-```{=latex}
-\colorbox{babyblueeyes}{
-\begin{minipage}{\textwidth}
-\textbf{Playing around:} Try to repeat the process of Dijkstra's algorithm for the weighted graph $G_{14W}$.  Which vertex has the shortest distance from Vertex 9 and which vertex has the longest distance? 
-\end{minipage}
-}
-```
-`r if (knitr::is_html_output()) '-->'`
 
 Single source shortest path algorithms like Dijkstra's algorithm can be used to solve the all pairs distance problem by simply repeating the algorithm for each vertex in the graph.  For large graphs, however, this can be inefficient, which explains why alternative algorithms have been developed for the all pairs problem^[Basic time complexity for Dijkstra's algorithm for a single source vertex is proportional to the square of the number of vertices in the graph.  As a comparison, basic time complexity for the all pairs Floyd-Warshall algorithm is proportional to the cube of the number of vertices in the graph.  Based on this, you would expect both algorithms to calculate all pairs distance in approximately the same computation time, but numerous modern computational methods have been able to cut these computation time significantly for different varieties of large graphs.  Johnson's algorithm, for example, is known to perform particularly well on sparse graphs.].  
 
@@ -221,21 +191,11 @@ g1 + g2
 
 ```
 
-`r if (knitr::is_latex_output()) '<!--'`
-:::thinkahead
+
+:::{.thinkahead data-latex=""}
 **Playing around:** Graph distance and diameter is of great interest in everyday life.  You may know the theory of the *six degrees of separation*, which suggests that the entire world is a connected graph where a path exists between any two people via at most six intermediaries.  Alternatively stated, the world is a connected graph with a diameter of 7.   Several industry-specific case studies of this have arisen for research and just for fun.  The first was a 1969 paper by two psychologists (@millgram), which used an experiment of chain letters to determine that the average distance between people in a population in Nebraska and Massachusetts was 6.2.  A 2011 study of the Facebook graph (@ugander2011anatomy) determined that the Facebook member network was almost fully connected with 99.91% of vertices in a connected subgraph, and that the average distance between vertices was 4.7.  In the entertainment industry, the *Bacon number* is used to denote the distance between an individual and the actor Kevin Bacon, based on participation in the same movie or TV production.  In academia, the *Erd&ouml;s number* is used to denote the distance between an individual and the mathematician Paul Erd&ouml;s.  Both Bacon and Erd&ouml;s have arisen as central points because they were highly active in their disciplines and as a result have high centrality in their network.  We will look at centrality in the next chapter, but if you are interested you can find the Bacon number of any actor by visiting https://oracleofbacon.org/.       
 :::
-`r if (knitr::is_latex_output()) '-->'`
 
-`r if (knitr::is_html_output()) '<!--'`
-```{=latex}
-\colorbox{babyblueeyes}{
-\begin{minipage}{\textwidth}
-\textbf{Playing around:} Graph distance and diameter is of great interest in everyday life.  You may know the theory of the \textit{six degrees of separation}, which suggests that the entire world is a connected graph where a path exists between any two people via at most six intermediaries.  Alternatively stated, the world is a connected graph with a diameter of 7.  Several industry-specific case studies of this have arisen for research and just for fun.  The first was a 1969 paper by two psychologists (\verb|\cite{}|\cite{millgram}), which used an experiment of chain letters to determine that the average distance between people in a population in Nebraska and Massachusetts was 6.2.  A 2011 study of the Facebook graph (\verb|\cite{}|\cite{ugander2011anatomy}) determined that the Facebook member network was almost fully connected with 99.91% of vertices connected to other vertices, and that the average distance between vertices was 4.7.  In the entertainment industry, the \textit{Bacon number} is used to denote the distance between an individual and the actor Kevin Bacon, based on participation in the same movie or TV production.  In academia, the \textit{Erd\"{o}s number} is used to denote the distance between an individual and the mathematician Paul Erd\"{o}s.  Both Bacon and Erd\"{o}s have arisen as central points because they were highly active in their disciplines and as a result have high centrality in their network.  We will look at centrality in the next chapter, but if you are interested you can find the Bacon number of any actor by visiting \texttt{https://oracleofbacon.org/}.   
-\end{minipage}
-}
-```
-`r if (knitr::is_html_output()) '-->'`
 
 ## Calculating paths, distance, diameter and density
 
@@ -330,21 +290,11 @@ Finally, the `edge_density()` function will calculate the density of the graph. 
 edge_density(g14w)
 ```
 
-`r if (knitr::is_latex_output()) '<!--'`
-:::thinkahead
+
+:::{.thinkahead data-latex=""}
 **Playing around:** The `distance()` function allows you to select from three algorithms to use:  Dijkstra, Bellman-Ford and Johnson.  If you are interested in computation speed you could try an experiment on a large graph to see which one is faster.  The `microbenchmark` package in R is useful for running a computation many times and benchmarking its average speed.  You could try creating a directed graph from the `wikivote` data set in the `onadata` package or via the internet at https://ona-book.org/wikivote.csv, calculating the distance matrix using each of the three algorithms and benchmarking the speed.  I found the Johnson algorithm to be about four times faster than the others.  Don't try this, however, if you are on a low memory or slow CPU computer.
 :::
-`r if (knitr::is_latex_output()) '-->'`
 
-`r if (knitr::is_html_output()) '<!--'`
-```{=latex}
-\colorbox{babyblueeyes}{
-\begin{minipage}{\textwidth}
-\textbf{Playing around:} The \texttt{distance()} function allows you to select from three algorithms to use:  Dijkstra, Bellman-Ford and Johnson.  If you are interested in computation speed you could try an experiment on a large graph to see which one is quicker.  The \texttt{microbenchmark} package in R is useful for running a computation many times and benchmarking its average speed.  You could try creating a directed graph from the \texttt{wikivote} data set in the \texttt{onadata} package or via the internet at \texttt{https://ona-book.org/wikivote.csv}, calculating the distance matrix using each of the three algorithms and benchmarking the speed.  I found the Johnson algorithm to be about four times faster than the others.  Don't try this, however, if you are on a low memory or slow CPU computer.
-\end{minipage}
-}
-```
-`r if (knitr::is_html_output()) '-->'`
 
 ### Calculating in Python
 
@@ -423,7 +373,7 @@ Finally, edge density can be calculated using the `density()` function.
 nx.density(g14w)
 ```
 
-## Illustrative Examples
+## Illustrative Examples {#illustrative-6}
 
 To illustrate uses of paths and distance in organizational settings, we will go through a couple of examples.  We will look at real data from the `workfrance` graph which we introduced earlier in Section \@ref(ggraph).  The `workfrance` data set contains information captured in an experimental study in an office building in France.  Vertices in this data set represent individual employees and edges exist between employees if they have spent a minimum amount of time together in the same place in the building.  Let's download the data and create the graph in R.
 
@@ -488,21 +438,10 @@ ggraph(subgraph) +
 ```
 Here we may recommend employee 859 first on the basis of higher edge weights and therefore possibly greater familiarity with employees 3 and 290.
 
-`r if (knitr::is_latex_output()) '<!--'`
-:::thinkahead
+
+:::{.thinkahead data-latex=""}
 **Playing around:** You may have seen this kind of 'introduction' system at work through social networks such as *LinkedIn*, which can suggest how to be introduced to another member via a common connection.  You may also have seen the distance of an individual relative to you in the network, with direct connections (distance of 1) labelled as 1st, connections of connections (distance of 2) labelled as 2nd, and so on.  These massive networks rarely calculate distances of greater than 3 or suggest connection paths with more than one intermediary because of the massive computational cost of doing so.  If you have a *LinkedIn* profile, you may want to go and explore your second order connections and view the intermediaries who can connect you.  This is the equivalent of looking at all the shortest paths between you and that individual in the network.  
 :::
-`r if (knitr::is_latex_output()) '-->'`
-
-`r if (knitr::is_html_output()) '<!--'`
-```{=latex}
-\colorbox{babyblueeyes}{
-\begin{minipage}{\textwidth}
-\textbf{Playing around:} You may have seen this kind of 'introduction' system at work through social networks such as \textit{LinkedIn}, which can suggest how to be introduced to another member via a common connection.  You may also have seen the distance of an individual relative to you in the network, with direct connections (distance of 1) labelled as 1st, connections of connections (distance of 2) labelled as 2nd, and so on.  These massive networks rarely calculate distances of greater than 3 or suggest connection paths with more than one intermediary because of the massive computational cost of doing so.  If you have a \textit{LinkedIn} profile, you may want to go and explore your second order connections and view the intermediaries who can connect you.  This is the equivalent of looking at all the shortest paths between you and that individual in the network. 
-\end{minipage}
-}
-```
-`r if (knitr::is_html_output()) '-->'`
 
 
 ### Finding distant colleagues in a workplace {#workplace-distance}

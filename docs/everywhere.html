@@ -83,8 +83,8 @@ Figure 1.1: The Prussian city of Königsberg circa 1600
 <p>The first thing Euler did — as any good mathematician will always do — is strip the problem of all its extraneous information and reduce it to its most minimal form. The problem merely requires one to set foot on a land mass. It is not concerned with what route one takes while on that land mass. Therefore we can represent each of the four land masses as dots. We can then draw lines between the dots to represent the bridges. This, he reasoned, leads to a diagram like that in Interactive Figure <a href="everywhere.html#fig:euler-graph">1.2</a>. The picture can be drawn in infinitely many ways, but it will always be four dots connected by seven lines in the same configuration. If you like, move the nodes around to see what I mean.</p>
 <div class="figure" style="text-align: center">
 <span style="display:block;" id="fig:euler-graph"></span>
-<div id="htmlwidget-41417e2668c27add1bd0" style="width:80%;height:480px;" class="visNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-41417e2668c27add1bd0">{"x":{"nodes":{"id":["Altstadt-Loebenicht","Kneiphof","Vorstadt-Haberberg","Lomse"],"label":["Altstadt-Loebenicht","Kneiphof","Vorstadt-Haberberg","Lomse"]},"edges":{"from":["Altstadt-Loebenicht","Altstadt-Loebenicht","Altstadt-Loebenicht","Kneiphof","Kneiphof","Kneiphof","Vorstadt-Haberberg"],"to":["Kneiphof","Kneiphof","Lomse","Lomse","Vorstadt-Haberberg","Vorstadt-Haberberg","Lomse"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot"},"manipulation":{"enabled":false},"layout":{"randomSeed":1}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false},"byselection":{"enabled":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)"},"evals":[],"jsHooks":[]}</script><p class="caption">
+<div id="htmlwidget-4131cbaeb27485cf7f79" style="width:80%;height:480px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-4131cbaeb27485cf7f79">{"x":{"nodes":{"id":["Altstadt-Loebenicht","Kneiphof","Vorstadt-Haberberg","Lomse"],"label":["Altstadt-Loebenicht","Kneiphof","Vorstadt-Haberberg","Lomse"]},"edges":{"from":["Altstadt-Loebenicht","Altstadt-Loebenicht","Altstadt-Loebenicht","Kneiphof","Kneiphof","Kneiphof","Vorstadt-Haberberg"],"to":["Kneiphof","Kneiphof","Lomse","Lomse","Vorstadt-Haberberg","Vorstadt-Haberberg","Lomse"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot"},"manipulation":{"enabled":false},"layout":{"randomSeed":1}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false},"byselection":{"enabled":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)"},"evals":[],"jsHooks":[]}</script><p class="caption">
 Figure 1.2: A minimal representation of the <em>Seven Bridges of Königsberg</em> problem
 </p>
 </div>
@@ -95,15 +95,6 @@ Figure 1.2: A minimal representation of the <em>Seven Bridges of Königsberg</em
 <div class="thinkahead">
 <p><strong>Thinking ahead:</strong> If you know how to load a graph object into R or Python, you could try to load the <code>koenigsberg</code> data set from the <code>onadata</code> package or download it from the internet<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://ona-data.org/data/koenigsberg.csv" class="uri"&gt;https://ona-data.org/data/koenigsberg.csv&lt;/a&gt;&lt;/p&gt;'><sup>3</sup></a> and create a graph from it. You could use your software to calculate the degrees of the vertices of the graph. For example in R, if you have the data loaded into an <code>igraph</code> object, you can use <code><a href="https://rdrr.io/pkg/igraph/man/degree.html">igraph::degree()</a></code> to get a vector showing you the degrees of each vertex. There is even a package called <code>eulerian</code> in R which has a function <code>hasEulerianPath()</code> which determines whether an Euler walk exists in a given graph.</p>
 </div>
-<!--
-```{=latex}
-\colorbox{babyblueeyes}{
-\begin{minipage}{\textwidth}
-\textbf{Thinking ahead:} If you know how to load a graph object into R or Python, you could try to load the \texttt{koenigsberg} data set from the \texttt{onadata} package or download it from the internet at \texttt{https://ona-data.org/data/koenigsberg.csv} and create a graph from it.  You could use your software to calculate the degrees of the vertices of the graph.  For example in R, if you have the data loaded into an \texttt{igraph} object, you can use \texttt{igraph::degree()} to get a vector showing you the degrees of each vertex.  There is even a package called \texttt{eulerian} in R which has a function \texttt{hasEulerianPath()} which determines whether an Euler walk exists in a given graph.  
-\end{minipage}
-}
-```
--->
 <div id="graphs-as-mathematical-models" class="section level2" number="1.1">
 <h2>
 <span class="header-section-number">1.1</span> Graphs as mathematical models<a class="anchor" aria-label="anchor" href="#graphs-as-mathematical-models"><i class="fas fa-link"></i></a>
@@ -162,15 +153,6 @@ Figure 1.4: Power law distribution of node degrees in a scale-free network for <
 <div class="thinkahead">
 <p><strong>Thinking ahead:</strong> If you know how to, load up the graph of Zachary’s Karate Club via the <code>onadata</code> package or by downloading the edgelist from the internet<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://ona-book.org/data/karate.csv" class="uri"&gt;https://ona-book.org/data/karate.csv&lt;/a&gt;&lt;/p&gt;'><sup>7</sup></a>. See if you can find some functions to calculate the degree centrality, betweenness centrality, closeness centrality and eigenvector centrality of the various individuals in the network. If you compare the results you should discover that centrality can mean different things depending on how you define it.</p>
 </div>
-<!--
-```{=latex}
-\colorbox{babyblueeyes}{
-\begin{minipage}{\textwidth}
-\textbf{Thinking ahead:} If you know how to, load up the graph of Zachary's Karate Club via the `onadata` package or by downloading the edgelist from the internet at \texttt{https://ona-book.org/data/karate.csv}.  See if you can find some functions to calculate the degree centrality, betweenness centrality, closeness centrality and eigenvector centrality of the various individuals in the network.  If you compare the results you should discover that centrality can mean different things depending on how you define it.   
-\end{minipage}
-}
-```
--->
 </div>
 <div id="graphs-as-data-sources" class="section level3" number="1.2.5">
 <h3>

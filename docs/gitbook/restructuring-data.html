@@ -300,7 +300,7 @@ div.csl-indent {
 <li class="chapter" data-level="6.2.1" data-path="paths-distance.html"><a href="paths-distance.html#calculating-in-r"><i class="fa fa-check"></i><b>6.2.1</b> Calculating in R</a></li>
 <li class="chapter" data-level="6.2.2" data-path="paths-distance.html"><a href="paths-distance.html#calculating-in-python"><i class="fa fa-check"></i><b>6.2.2</b> Calculating in Python</a></li>
 </ul></li>
-<li class="chapter" data-level="6.3" data-path="paths-distance.html"><a href="paths-distance.html#illustrative-examples"><i class="fa fa-check"></i><b>6.3</b> Illustrative Examples</a>
+<li class="chapter" data-level="6.3" data-path="paths-distance.html"><a href="paths-distance.html#illustrative-6"><i class="fa fa-check"></i><b>6.3</b> Illustrative Examples</a>
 <ul>
 <li class="chapter" data-level="6.3.1" data-path="paths-distance.html"><a href="paths-distance.html#facilitating-introductions-in-the-workplace"><i class="fa fa-check"></i><b>6.3.1</b> Facilitating introductions in the workplace</a></li>
 <li class="chapter" data-level="6.3.2" data-path="paths-distance.html"><a href="paths-distance.html#workplace-distance"><i class="fa fa-check"></i><b>6.3.2</b> Finding distant colleagues in a workplace</a></li>
@@ -311,7 +311,22 @@ div.csl-indent {
 <li class="chapter" data-level="6.4.2" data-path="paths-distance.html"><a href="paths-distance.html#data-exercises-4"><i class="fa fa-check"></i><b>6.4.2</b> Data exercises</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="vertex-importance.html"><a href="vertex-importance.html"><i class="fa fa-check"></i><b>7</b> Vertex Importance and Centrality</a></li>
+<li class="chapter" data-level="7" data-path="vertex-importance.html"><a href="vertex-importance.html"><i class="fa fa-check"></i><b>7</b> Vertex Importance and Centrality</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="vertex-importance.html"><a href="vertex-importance.html#vertex-centrality-measures-in-graphs"><i class="fa fa-check"></i><b>7.1</b> Vertex centrality measures in graphs</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="vertex-importance.html"><a href="vertex-importance.html#degree-centrality"><i class="fa fa-check"></i><b>7.1.1</b> Degree centrality</a></li>
+<li class="chapter" data-level="7.1.2" data-path="vertex-importance.html"><a href="vertex-importance.html#closeness-centrality"><i class="fa fa-check"></i><b>7.1.2</b> Closeness centrality</a></li>
+<li class="chapter" data-level="7.1.3" data-path="vertex-importance.html"><a href="vertex-importance.html#betweenness-centrality"><i class="fa fa-check"></i><b>7.1.3</b> Betweenness centrality</a></li>
+<li class="chapter" data-level="7.1.4" data-path="vertex-importance.html"><a href="vertex-importance.html#eigenvector-centrality"><i class="fa fa-check"></i><b>7.1.4</b> Eigenvector centrality</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="vertex-importance.html"><a href="vertex-importance.html#calculating-and-illustrating-vertex-centrality"><i class="fa fa-check"></i><b>7.2</b> Calculating and illustrating vertex centrality</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="vertex-importance.html"><a href="vertex-importance.html#calculating-in-r-1"><i class="fa fa-check"></i><b>7.2.1</b> Calculating in R</a></li>
+<li class="chapter" data-level="7.2.2" data-path="vertex-importance.html"><a href="vertex-importance.html#calculating-in-python-1"><i class="fa fa-check"></i><b>7.2.2</b> Calculating in Python</a></li>
+<li class="chapter" data-level="7.2.3" data-path="vertex-importance.html"><a href="vertex-importance.html#illustrating-centrality-in-graph-visualizations"><i class="fa fa-check"></i><b>7.2.3</b> Illustrating centrality in graph visualizations</a></li>
+</ul></li>
+</ul></li>
 <li class="chapter" data-level="8" data-path="community.html"><a href="community.html"><i class="fa fa-check"></i><b>8</b> Segmentation and Community</a></li>
 <li class="chapter" data-level="9" data-path="similarity.html"><a href="similarity.html"><i class="fa fa-check"></i><b>9</b> Commonality and Assortativity</a></li>
 <li class="chapter" data-level="10" data-path="databases.html"><a href="databases.html"><i class="fa fa-check"></i><b>10</b> Graphs as Databases</a></li>
@@ -402,9 +417,9 @@ div.csl-indent {
 <span id="cb217-4"><a href="restructuring-data.html#cb217-4" aria-hidden="true" tabindex="-1"></a>(orgchart <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(</span>
 <span id="cb217-5"><a href="restructuring-data.html#cb217-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">d =</span> orgchart_edgelist2</span>
 <span id="cb217-6"><a href="restructuring-data.html#cb217-6" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
-<pre><code>## IGRAPH 4f62d25 DN-- 8 7 -- 
+<pre><code>## IGRAPH 5cee8a2 DN-- 8 7 -- 
 ## + attr: name (v/c)
-## + edges from 4f62d25 (vertex names):
+## + edges from 5cee8a2 (vertex names):
 ## [1] Andrew -&gt;Nancy    Andrew -&gt;Michael  Nancy  -&gt;Jane     Nancy  -&gt;Margaret Nancy  -&gt;Steve    Michael-&gt;Robert  
 ## [7] Michael-&gt;Laura</code></pre>
 <p>We now have a directed graph with named vertices, so this should be easy to plot. Let’s use <code>ggplot</code> with a dendrogram (tree) layout, as in Figure <a href="restructuring-data.html#fig:chinook-pretty">5.1</a>.</p>
@@ -526,15 +541,6 @@ Figure 5.3: Customer to customer network for Chinook based on customers sharing 
 <div class="thinkahead">
 <p><strong>Thinking ahead:</strong> Recall from Section <a href="working.html#graph-types">3.1.2</a> that a complete graph is a graph where every pair of vertices are connected by an edge. Can you see how it follows from the shape of the graph in Figure <a href="restructuring-data.html#fig:cust-rep">5.2</a> that when we transform the data to produce Figure <a href="restructuring-data.html#fig:cust-cust">5.3</a>, we expect to produce complete subgraphs? Can you also see how visually dense those complete subgraphs are? We will look at the measurement of density in graphs later, but a complete graph will always have a density of 1.</p>
 </div>
-<!--
-```{=latex}
-\colorbox{babyblueeyes}{
-\begin{minipage}{\textwidth}
-\textbf{Playing around:} Recall from Section \ref{graph-types} that a complete graph is a graph where every pair of vertices are connected by an edge.  Can you see how it follows from the shape of the graph in Figure \ref{fig:cust-rep} that when we transform the data to produce Figure \ref{fig:cust-cust}, we expect to produce complete subgraphs?  Can you also see how visually dense those complete subgraphs are?  We will look at the measurement of density in graphs later, but a complete graph will always have a density of 1.
-\end{minipage}
-}
-```
--->
 </div>
 <div id="common-purchases" class="section level3" number="5.1.3">
 <h3><span class="header-section-number">5.1.3</span> Connecting customers through common purchases</h3>
@@ -1044,13 +1050,13 @@ Figure 5.10: Visualization of the network of characters in Episode 1 of Friends,
 <span id="cb283-12"><a href="restructuring-data.html#cb283-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb283-13"><a href="restructuring-data.html#cb283-13" aria-hidden="true" tabindex="-1"></a><span class="co"># check unique values returned</span></span>
 <span id="cb283-14"><a href="restructuring-data.html#cb283-14" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span>(friends_ep1_list)</span></code></pre></div>
-<pre><code>## {&#39;Customer&#39;, &#39;Waitress&#39;, &#39;Chandler &#39;, &#39;Monica&#39;, &#39;All&#39;, &#39;Monica &#39;, &#39;Paul&#39;, &#39;Phoebe&#39;, &#39;Rachel&#39;, &#39;New Scene&#39;, &#39;Frannie&#39;, &#39;Ross&#39;, &#39;Joey&#39;, &#39;Ross and Rachel&#39;, &#39;Chandler&#39;, &#39;Priest on TV&#39;}</code></pre>
+<pre><code>## {&#39;Customer&#39;, &#39;Ross and Rachel&#39;, &#39;Waitress&#39;, &#39;Monica &#39;, &#39;Chandler &#39;, &#39;New Scene&#39;, &#39;Monica&#39;, &#39;Paul&#39;, &#39;Chandler&#39;, &#39;Rachel&#39;, &#39;Priest on TV&#39;, &#39;Ross&#39;, &#39;Phoebe&#39;, &#39;All&#39;, &#39;Joey&#39;, &#39;Frannie&#39;}</code></pre>
 <p>This looks promising - new we need to get rid of the ‘All’ entries and entries containing ’ and ’.</p>
 <div class="sourceCode" id="cb285"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb285-1"><a href="restructuring-data.html#cb285-1" aria-hidden="true" tabindex="-1"></a>friends_ep1_list2<span class="op">=</span>[entry.strip() <span class="cf">for</span> entry <span class="kw">in</span> friends_ep1_list </span>
 <span id="cb285-2"><a href="restructuring-data.html#cb285-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">&quot;All&quot;</span> <span class="kw">not</span> <span class="kw">in</span> entry <span class="kw">and</span> <span class="st">&quot; and &quot;</span> <span class="kw">not</span> <span class="kw">in</span> entry]</span>
 <span id="cb285-3"><a href="restructuring-data.html#cb285-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb285-4"><a href="restructuring-data.html#cb285-4" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span>(friends_ep1_list2)</span></code></pre></div>
-<pre><code>## {&#39;Customer&#39;, &#39;Waitress&#39;, &#39;Monica&#39;, &#39;Paul&#39;, &#39;Phoebe&#39;, &#39;Rachel&#39;, &#39;New Scene&#39;, &#39;Frannie&#39;, &#39;Ross&#39;, &#39;Joey&#39;, &#39;Chandler&#39;, &#39;Priest on TV&#39;}</code></pre>
+<pre><code>## {&#39;Customer&#39;, &#39;Waitress&#39;, &#39;New Scene&#39;, &#39;Monica&#39;, &#39;Paul&#39;, &#39;Chandler&#39;, &#39;Rachel&#39;, &#39;Priest on TV&#39;, &#39;Ross&#39;, &#39;Phoebe&#39;, &#39;Joey&#39;, &#39;Frannie&#39;}</code></pre>
 <p>Now we are ready to organize our characters by scene. First we do a scene count, then we create a dataframe and obtain unique character lists by scene.</p>
 <div class="sourceCode" id="cb287"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb287-1"><a href="restructuring-data.html#cb287-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb287-2"><a href="restructuring-data.html#cb287-2" aria-hidden="true" tabindex="-1"></a></span>
