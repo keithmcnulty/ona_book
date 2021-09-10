@@ -326,6 +326,16 @@ div.csl-indent {
 <li class="chapter" data-level="7.2.2" data-path="vertex-importance.html"><a href="vertex-importance.html#calculating-in-python-1"><i class="fa fa-check"></i><b>7.2.2</b> Calculating in Python</a></li>
 <li class="chapter" data-level="7.2.3" data-path="vertex-importance.html"><a href="vertex-importance.html#illustrating-centrality-in-graph-visualizations"><i class="fa fa-check"></i><b>7.2.3</b> Illustrating centrality in graph visualizations</a></li>
 </ul></li>
+<li class="chapter" data-level="7.3" data-path="vertex-importance.html"><a href="vertex-importance.html#illustrative-7"><i class="fa fa-check"></i><b>7.3</b> Illustrative example</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="vertex-importance.html"><a href="vertex-importance.html#finding-superconnectors"><i class="fa fa-check"></i><b>7.3.1</b> Finding ‘superconnectors’</a></li>
+<li class="chapter" data-level="7.3.2" data-path="vertex-importance.html"><a href="vertex-importance.html#identifying-influential-employees"><i class="fa fa-check"></i><b>7.3.2</b> Identifying influential employees</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="vertex-importance.html"><a href="vertex-importance.html#learning-exercises-5"><i class="fa fa-check"></i><b>7.4</b> Learning exercises</a>
+<ul>
+<li class="chapter" data-level="7.4.1" data-path="vertex-importance.html"><a href="vertex-importance.html#discussion-questions-5"><i class="fa fa-check"></i><b>7.4.1</b> Discussion questions</a></li>
+<li class="chapter" data-level="7.4.2" data-path="vertex-importance.html"><a href="vertex-importance.html#data-exercises-5"><i class="fa fa-check"></i><b>7.4.2</b> Data exercises</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="community.html"><a href="community.html"><i class="fa fa-check"></i><b>8</b> Segmentation and Community</a></li>
 <li class="chapter" data-level="9" data-path="similarity.html"><a href="similarity.html"><i class="fa fa-check"></i><b>9</b> Commonality and Assortativity</a></li>
@@ -353,8 +363,8 @@ div.csl-indent {
 <h1><span class="header-section-number">7</span> Vertex Importance and Centrality</h1>
 <p>It follows from much of the earlier work we have been doing in this book that the vertices of a graph can provide rich information about a network, its structure and its dynamics. In sociology and psychology contexts, this is particularly true, because more often than not vertices represent people. The fact that people play different roles and have different influences inside groups and communities has motivated centuries of sociological and psychological research, so it is unsurprising that the concept of vertex importance and influence is of great interest in the study of people or organizational networks.</p>
 <p>But importance and influence are not precisely defined concepts, and to make them real within the context of graphs and networks we need to find some sort of mathematical definition for them. In many visual graph layouts, more important or influential vertices that have a stronger roles in overall connectivity will usually be positioned towards the center of a group of other vertices<a href="#fn39" class="footnote-ref" id="fnref39"><sup>39</sup></a>. Intuitively therefore, we use the term ‘centrality’ to describe the importance or influence of a vertex in the connected structure of a graph.</p>
-<p>In this chapter we will go through the most common types of centrality that can be measured for vertices in graphs, and discuss how they can be interpreted in the context of people or organizational networks. We will show how to calculate different types of centrality in R or Python and how to illustrate centrality in graph visualizations. We will then use a case example of Facebook connections between high school students to show how these measures can be used in practice.</p>
-<p>In this chapter we will use the <span class="math inline">\(G_{14}\)</span> graph which we introduced in the previous chapter. We will work with an undirected and unweighted graph in this chapter. Most centrality measures are valid and easily calculated for directed graphs, and will depend on defining the direction of the edges to consider. Figure <a href="vertex-importance.html#fig:g14-colored">7.1</a> shows the <span class="math inline">\(G_{14}\)</span> graph with four vertices of interest colored differently from other vertices.</p>
+<p>In this chapter we will go through the most common types of centrality that can be measured for vertices in graphs, and discuss how they can be interpreted in the context of people or organizational networks. We will show how to calculate different types of centrality in R or Python and how to illustrate centrality in graph visualizations. We will then reprise our example of the French office building network from the previous chapter to illustrate the utility of centrality in network analysis.</p>
+<p>In this chapter we will use the <span class="math inline">\(G_{14}\)</span> graph which we introduced in the previous chapter, which is an undirected and unweighted graph. Most centrality measures are valid and easily calculated for directed graphs, and will depend on defining the direction of the edges to consider. Figure <a href="vertex-importance.html#fig:g14-colored">7.1</a> shows the <span class="math inline">\(G_{14}\)</span> graph with four vertices of interest colored differently from other vertices.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:g14-colored"></span>
 <img src="_main_files/figure-html/g14-colored-1.png" alt="The $G_{14}$ graph with four vertices of interest colored differently" width="672" />
 <p class="caption">
@@ -442,7 +452,7 @@ If we require that <span class="math inline">\(x\)</span> can only have positive
 <div class="sourceCode" id="cb381"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb381-1"><a href="vertex-importance.html#cb381-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2nd order ego network of Vertex 4</span></span>
 <span id="cb381-2"><a href="vertex-importance.html#cb381-2" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">ego</span>(g14, <span class="at">order =</span> <span class="dv">2</span>, <span class="at">nodes =</span> <span class="st">&quot;4&quot;</span>)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 9/14 vertices, named, from dabe716:
+## + 9/14 vertices, named, from b983aa6:
 ## [1] 4 8 6 1 7 2 3 5 9</code></pre>
 <div class="sourceCode" id="cb383"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb383-1"><a href="vertex-importance.html#cb383-1" aria-hidden="true" tabindex="-1"></a><span class="co"># size of ego network</span></span>
 <span id="cb383-2"><a href="vertex-importance.html#cb383-2" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">ego_size</span>(g14, <span class="at">order =</span> <span class="dv">2</span>, <span class="at">nodes =</span> <span class="st">&quot;4&quot;</span>)</span></code></pre></div>
@@ -506,7 +516,7 @@ If we require that <span class="math inline">\(x\)</span> can only have positive
 <pre><code>## 0.5503779695532801</code></pre>
 <p>Closeness, betweenness and eigenvector centrality are calculated using <em>incoming</em> edges in <code>networkx</code> digraphs. To calculate the outgoing equivalent, simply use the <code>reverse()</code> method on the digraph to make all outgoing edges incoming and vice-versa.</p>
 <div class="thinkahead">
-<p><strong>Playing around</strong>: <code>networkx</code> gas an extrmely wide range of centrality measures. Visit the Centrality section of its documentation<a href="#fn45" class="footnote-ref" id="fnref45"><sup>45</sup></a> and have a look at the wide variety of centrality measures. Many of these are very specific to graph use cases in different industries and disciplines, but you can have a look at some of them, see if you can understand them and even give them a try with a data set.</p>
+<p><strong>Playing around</strong>: <code>networkx</code> has a very wide range of centrality measures available. Visit the Centrality section of its documentation<a href="#fn45" class="footnote-ref" id="fnref45"><sup>45</sup></a> and have a look at the options. Many of these are very specific to graph use cases in different industries and disciplines, but you can have a look at some of them, see if you can understand them and even give them a try with a data set.</p>
 </div>
 </div>
 <div id="illustrating-centrality-in-graph-visualizations" class="section level3" number="7.2.3">
@@ -548,6 +558,162 @@ Figure 7.3: <span class="math inline">\(G_{14}\)</span> with vertex size scaled 
 <div class="thinkahead">
 <p><strong>Playing around:</strong>. Play around with different ways of visualizing the centralities of vertices in <span class="math inline">\(G_{14}\)</span>. Try using color, size or both. And also try the different types of centrality to see if the look of the graph changes substantially between them.</p>
 </div>
+</div>
+</div>
+<div id="illustrative-7" class="section level2" number="7.3">
+<h2><span class="header-section-number">7.3</span> Illustrative example</h2>
+<p>In this section we will reprise the <code>workfrance</code> unweighted graph from the previous chapter, and use to it to illustrate some common uses for centrality measures. First we will look at how to find network-wide and department level ‘superconnectors,’ then we will look at how to find potential socially-influential actors in a network. Let’s load up the <code>workfrance</code> graph again.</p>
+<div class="sourceCode" id="cb406"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb406-1"><a href="vertex-importance.html#cb406-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb406-2"><a href="vertex-importance.html#cb406-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb406-3"><a href="vertex-importance.html#cb406-3" aria-hidden="true" tabindex="-1"></a><span class="co"># download workfrance data sets</span></span>
+<span id="cb406-4"><a href="vertex-importance.html#cb406-4" aria-hidden="true" tabindex="-1"></a>workfrance_edges <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://ona-book.org/data/workfrance_edgelist.csv&quot;</span>)</span>
+<span id="cb406-5"><a href="vertex-importance.html#cb406-5" aria-hidden="true" tabindex="-1"></a>workfrance_vertices <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://ona-book.org/data/workfrance_vertices.csv&quot;</span>)</span>
+<span id="cb406-6"><a href="vertex-importance.html#cb406-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb406-7"><a href="vertex-importance.html#cb406-7" aria-hidden="true" tabindex="-1"></a><span class="co"># create graph</span></span>
+<span id="cb406-8"><a href="vertex-importance.html#cb406-8" aria-hidden="true" tabindex="-1"></a>workfrance <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(</span>
+<span id="cb406-9"><a href="vertex-importance.html#cb406-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">d =</span> workfrance_edges,</span>
+<span id="cb406-10"><a href="vertex-importance.html#cb406-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">vertices =</span> workfrance_vertices,</span>
+<span id="cb406-11"><a href="vertex-importance.html#cb406-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">directed =</span> <span class="cn">FALSE</span></span>
+<span id="cb406-12"><a href="vertex-importance.html#cb406-12" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div id="finding-superconnectors" class="section level3" number="7.3.1">
+<h3><span class="header-section-number">7.3.1</span> Finding ‘superconnectors’</h3>
+<p>Individuals with high betweenness centrality in people networks could be regarded as ‘superconnectors.’ Superconnectors can play very valuable roles in the social integration of new entrants to the network, and can also present greater risk of connective disruption if they leave the network. Imagine a new hire is about to join the DMI department in our <code>workfrance</code> network. We want to assign two ‘buddies’ to this individual to help them socially integrate into the workplace more effectively. Given that it is important for the individual to assimilate into their own department and into the workplace as a whole, we want to select the best two current employees to assist with both goals. Let’s start with the DMI department first.</p>
+<p>In order to study the DMI department as a self-contained network, we will create an induced subgraph which contains only those in that department and the connections between them, and visualize this network, labeling the employee IDs, as in <a href="vertex-importance.html#fig:dmi-workfrance">7.4</a>.</p>
+<div class="sourceCode" id="cb407"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb407-1"><a href="vertex-importance.html#cb407-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create DMI subgraph</span></span>
+<span id="cb407-2"><a href="vertex-importance.html#cb407-2" aria-hidden="true" tabindex="-1"></a>DMI_vertices <span class="ot">&lt;-</span> <span class="fu">V</span>(workfrance)[<span class="fu">V</span>(workfrance)<span class="sc">$</span>dept <span class="sc">==</span> <span class="st">&quot;DMI&quot;</span>]</span>
+<span id="cb407-3"><a href="vertex-importance.html#cb407-3" aria-hidden="true" tabindex="-1"></a>DMI_graph <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">induced.subgraph</span>(workfrance, <span class="at">vids =</span> DMI_vertices)</span>
+<span id="cb407-4"><a href="vertex-importance.html#cb407-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb407-5"><a href="vertex-importance.html#cb407-5" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize</span></span>
+<span id="cb407-6"><a href="vertex-importance.html#cb407-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(DMI_graph) <span class="sc">+</span></span>
+<span id="cb407-7"><a href="vertex-importance.html#cb407-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb407-8"><a href="vertex-importance.html#cb407-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="at">color =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb407-9"><a href="vertex-importance.html#cb407-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> name), <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span> </span>
+<span id="cb407-10"><a href="vertex-importance.html#cb407-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:dmi-workfrance"></span>
+<img src="_main_files/figure-html/dmi-workfrance-1.png" alt="The induced subgraph of the DMI department in `workfrance`" width="672" />
+<p class="caption">
+Figure 7.4: The induced subgraph of the DMI department in <code>workfrance</code>
+</p>
+</div>
+<p>Now we are interested in those who have the strongest role in connecting others in this network. Let’s find the top three individuals in terms of betweenness centrality.</p>
+<div class="sourceCode" id="cb408"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb408-1"><a href="vertex-importance.html#cb408-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get IDs of top 3 betweenness centralities</span></span>
+<span id="cb408-2"><a href="vertex-importance.html#cb408-2" aria-hidden="true" tabindex="-1"></a>ranked_betweenness_DMI <span class="ot">&lt;-</span> DMI_graph <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb408-3"><a href="vertex-importance.html#cb408-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">betweenness</span>() <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb408-4"><a href="vertex-importance.html#cb408-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span>(<span class="at">decreasing =</span> <span class="cn">TRUE</span>) </span>
+<span id="cb408-5"><a href="vertex-importance.html#cb408-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb408-6"><a href="vertex-importance.html#cb408-6" aria-hidden="true" tabindex="-1"></a>(top3_DMI <span class="ot">&lt;-</span> <span class="fu">names</span>(ranked_betweenness_DMI[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]))</span></code></pre></div>
+<pre><code>## [1] &quot;156&quot; &quot;74&quot;  &quot;884&quot;</code></pre>
+<p>These are the IDs of the top three superconnectors in the DMI department. Now we can visualize the graph again, but let’s adjust vertex size by betweenness and color the top three superconnectors, as in Figure <a href="vertex-importance.html#fig:dmi-superconnectors">7.5</a>.</p>
+<div class="sourceCode" id="cb410"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb410-1"><a href="vertex-importance.html#cb410-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add betweenness vertex property</span></span>
+<span id="cb410-2"><a href="vertex-importance.html#cb410-2" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(DMI_graph)<span class="sc">$</span>betweenness <span class="ot">&lt;-</span> <span class="fu">betweenness</span>(DMI_graph)</span>
+<span id="cb410-3"><a href="vertex-importance.html#cb410-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb410-4"><a href="vertex-importance.html#cb410-4" aria-hidden="true" tabindex="-1"></a><span class="co"># add top three superconnectors property</span></span>
+<span id="cb410-5"><a href="vertex-importance.html#cb410-5" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(DMI_graph)<span class="sc">$</span>top3 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(DMI_graph)<span class="sc">$</span>name <span class="sc">%in%</span> top3_DMI, <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb410-6"><a href="vertex-importance.html#cb410-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb410-7"><a href="vertex-importance.html#cb410-7" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize</span></span>
+<span id="cb410-8"><a href="vertex-importance.html#cb410-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(DMI_graph) <span class="sc">+</span></span>
+<span id="cb410-9"><a href="vertex-importance.html#cb410-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb410-10"><a href="vertex-importance.html#cb410-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> <span class="fu">as.factor</span>(top3), <span class="at">size =</span> betweenness),</span>
+<span id="cb410-11"><a href="vertex-importance.html#cb410-11" aria-hidden="true" tabindex="-1"></a>                  <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb410-12"><a href="vertex-importance.html#cb410-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;lightblue&quot;</span>, <span class="st">&quot;pink&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb410-13"><a href="vertex-importance.html#cb410-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> name), <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span> </span>
+<span id="cb410-14"><a href="vertex-importance.html#cb410-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:dmi-superconnectors"></span>
+<img src="_main_files/figure-html/dmi-superconnectors-1.png" alt="DMI subgraph with the top three superconnectors identified" width="672" />
+<p class="caption">
+Figure 7.5: DMI subgraph with the top three superconnectors identified
+</p>
+</div>
+<p>In a similar way we can find the superconnectors of the overall <code>workfrance</code> network.</p>
+<div class="sourceCode" id="cb411"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb411-1"><a href="vertex-importance.html#cb411-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get IDs of top 3 betweenness centralities</span></span>
+<span id="cb411-2"><a href="vertex-importance.html#cb411-2" aria-hidden="true" tabindex="-1"></a>ranked_betweenness_workfrance <span class="ot">&lt;-</span> workfrance <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb411-3"><a href="vertex-importance.html#cb411-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">betweenness</span>() <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb411-4"><a href="vertex-importance.html#cb411-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span>(<span class="at">decreasing =</span> <span class="cn">TRUE</span>) </span>
+<span id="cb411-5"><a href="vertex-importance.html#cb411-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb411-6"><a href="vertex-importance.html#cb411-6" aria-hidden="true" tabindex="-1"></a><span class="co">#get top 3</span></span>
+<span id="cb411-7"><a href="vertex-importance.html#cb411-7" aria-hidden="true" tabindex="-1"></a>(top3_workfrance <span class="ot">&lt;-</span> <span class="fu">names</span>(ranked_betweenness_workfrance[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]))</span></code></pre></div>
+<pre><code>## [1] &quot;603&quot; &quot;99&quot;  &quot;322&quot;</code></pre>
+<p>In Figure <a href="vertex-importance.html#fig:workfrance-superconnectors">7.6</a>, we create a graph of the <code>workfrance</code> network with nodes scaled by betweenness centrality. We color by department so we can easily see which departments our superconnectors are in.</p>
+<div class="sourceCode" id="cb413"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb413-1"><a href="vertex-importance.html#cb413-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add betweenness property</span></span>
+<span id="cb413-2"><a href="vertex-importance.html#cb413-2" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(workfrance)<span class="sc">$</span>betweenness <span class="ot">&lt;-</span> <span class="fu">betweenness</span>(workfrance)</span>
+<span id="cb413-3"><a href="vertex-importance.html#cb413-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb413-4"><a href="vertex-importance.html#cb413-4" aria-hidden="true" tabindex="-1"></a><span class="co"># label only if a top3 superconnector</span></span>
+<span id="cb413-5"><a href="vertex-importance.html#cb413-5" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(workfrance)<span class="sc">$</span>btwn_label <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(workfrance)<span class="sc">$</span>name <span class="sc">%in%</span> top3_workfrance,</span>
+<span id="cb413-6"><a href="vertex-importance.html#cb413-6" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">V</span>(workfrance)<span class="sc">$</span>name, <span class="st">&quot;&quot;</span>)</span>
+<span id="cb413-7"><a href="vertex-importance.html#cb413-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb413-8"><a href="vertex-importance.html#cb413-8" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize</span></span>
+<span id="cb413-9"><a href="vertex-importance.html#cb413-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(workfrance) <span class="sc">+</span></span>
+<span id="cb413-10"><a href="vertex-importance.html#cb413-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb413-11"><a href="vertex-importance.html#cb413-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> dept, <span class="at">size =</span> betweenness),</span>
+<span id="cb413-12"><a href="vertex-importance.html#cb413-12" aria-hidden="true" tabindex="-1"></a>                  <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb413-13"><a href="vertex-importance.html#cb413-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> btwn_label), <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span> </span>
+<span id="cb413-14"><a href="vertex-importance.html#cb413-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:workfrance-superconnectors"></span>
+<img src="_main_files/figure-html/workfrance-superconnectors-1.png" alt="`workfrance` graph with the top three superconnectors identified" width="672" />
+<p class="caption">
+Figure 7.6: <code>workfrance</code> graph with the top three superconnectors identified
+</p>
+</div>
+<p>We can see upon examination that our top three organization-wide superconnectors are all in different departments. Putting all this together, it would seem that a good choice of buddies for the new hire would be employee 156 for departmental integration and employee 603 for office-wide integration, although any combination of the six individuals identified through this analysis would probably be decent choices.</p>
+</div>
+<div id="identifying-influential-employees" class="section level3" number="7.3.2">
+<h3><span class="header-section-number">7.3.2</span> Identifying influential employees</h3>
+<p>Influential actors in a network can be very useful to identify. In organizational contexts, working with more influential employees can make a difference to how certain initiatives or changes can be perceived by other employees. Influential employees can also be useful in efficiently tapping into prevalent opinions across the entire employee population. Imagine that we want to identify individuals from across the organization to participate in important workshops to problem solve some critical operational initiatives. These initiatives will affect employees at both an overall and a department level, therefore it would be ideal to have individuals who are influential within each department as well as across the entire organization.</p>
+<p>Again, let’s look at a single department - the DMI department as an example. Because we are interested in overall influence, this could mean we are equally interested in employees with a lot of connections or employees who are ‘stealthily’ infuential in being connected to a smaller number of other highly connected employees. The best measure for this is eigenvector centrality.</p>
+<p>First we identify the top three most influential individuals in the DMI department as measured by eigenvector centrality by working on the DMI subgraph.</p>
+<div class="sourceCode" id="cb414"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb414-1"><a href="vertex-importance.html#cb414-1" aria-hidden="true" tabindex="-1"></a><span class="co"># working with lists so use purrr package</span></span>
+<span id="cb414-2"><a href="vertex-importance.html#cb414-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
+<span id="cb414-3"><a href="vertex-importance.html#cb414-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb414-4"><a href="vertex-importance.html#cb414-4" aria-hidden="true" tabindex="-1"></a><span class="co"># get IDs of top 3 eigen centrality</span></span>
+<span id="cb414-5"><a href="vertex-importance.html#cb414-5" aria-hidden="true" tabindex="-1"></a>ranked_eigen_DMI <span class="ot">&lt;-</span> DMI_graph <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb414-6"><a href="vertex-importance.html#cb414-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">eigen_centrality</span>() <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb414-7"><a href="vertex-importance.html#cb414-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pluck</span>(<span class="st">&quot;vector&quot;</span>) <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb414-8"><a href="vertex-importance.html#cb414-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span>(<span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb414-9"><a href="vertex-importance.html#cb414-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb414-10"><a href="vertex-importance.html#cb414-10" aria-hidden="true" tabindex="-1"></a><span class="co">#get top 3</span></span>
+<span id="cb414-11"><a href="vertex-importance.html#cb414-11" aria-hidden="true" tabindex="-1"></a>(top3_DMI_eigen <span class="ot">&lt;-</span> <span class="fu">names</span>(ranked_eigen_DMI[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>])) </span></code></pre></div>
+<pre><code>## [1] &quot;884&quot; &quot;156&quot; &quot;642&quot;</code></pre>
+<p>We see two employee IDs in common with our top 3 superconnectors. We can also identify the top 3 most influential individuals across the <code>workfrance</code> graph according to their eigenvector centrality.</p>
+<div class="sourceCode" id="cb416"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb416-1"><a href="vertex-importance.html#cb416-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get IDs of top 3 eigen centrality</span></span>
+<span id="cb416-2"><a href="vertex-importance.html#cb416-2" aria-hidden="true" tabindex="-1"></a>ranked_eigen_workfrance <span class="ot">&lt;-</span> workfrance <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb416-3"><a href="vertex-importance.html#cb416-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">eigen_centrality</span>() <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb416-4"><a href="vertex-importance.html#cb416-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pluck</span>(<span class="st">&quot;vector&quot;</span>) <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb416-5"><a href="vertex-importance.html#cb416-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span>(<span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb416-6"><a href="vertex-importance.html#cb416-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb416-7"><a href="vertex-importance.html#cb416-7" aria-hidden="true" tabindex="-1"></a><span class="co">#get top 3</span></span>
+<span id="cb416-8"><a href="vertex-importance.html#cb416-8" aria-hidden="true" tabindex="-1"></a>(top3_workfrance_eigen <span class="ot">&lt;-</span> <span class="fu">names</span>(ranked_eigen_workfrance[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>])) </span></code></pre></div>
+<pre><code>## [1] &quot;603&quot; &quot;649&quot; &quot;147&quot;</code></pre>
+<p>We see one individual in common with our top 3 superconnectors. Let’s visualize this network so we can identify the department mix of our top 3 most influential individuals, as in Figure <a href="vertex-importance.html#fig:eigen-workfrance">7.7</a>.</p>
+<div class="sourceCode" id="cb418"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb418-1"><a href="vertex-importance.html#cb418-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add betweenness property</span></span>
+<span id="cb418-2"><a href="vertex-importance.html#cb418-2" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(workfrance)<span class="sc">$</span>eigen <span class="ot">&lt;-</span> <span class="fu">eigen_centrality</span>(workfrance)<span class="sc">$</span>vector</span>
+<span id="cb418-3"><a href="vertex-importance.html#cb418-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb418-4"><a href="vertex-importance.html#cb418-4" aria-hidden="true" tabindex="-1"></a><span class="co"># label only if a top3 superconnector</span></span>
+<span id="cb418-5"><a href="vertex-importance.html#cb418-5" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(workfrance)<span class="sc">$</span>eigen_label <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(workfrance)<span class="sc">$</span>name <span class="sc">%in%</span> top3_workfrance_eigen,</span>
+<span id="cb418-6"><a href="vertex-importance.html#cb418-6" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">V</span>(workfrance)<span class="sc">$</span>name, <span class="st">&quot;&quot;</span>)</span>
+<span id="cb418-7"><a href="vertex-importance.html#cb418-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb418-8"><a href="vertex-importance.html#cb418-8" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize</span></span>
+<span id="cb418-9"><a href="vertex-importance.html#cb418-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(workfrance) <span class="sc">+</span></span>
+<span id="cb418-10"><a href="vertex-importance.html#cb418-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb418-11"><a href="vertex-importance.html#cb418-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> dept, <span class="at">size =</span> eigen),</span>
+<span id="cb418-12"><a href="vertex-importance.html#cb418-12" aria-hidden="true" tabindex="-1"></a>                  <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb418-13"><a href="vertex-importance.html#cb418-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> eigen_label), <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span> </span>
+<span id="cb418-14"><a href="vertex-importance.html#cb418-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:eigen-workfrance"></span>
+<img src="_main_files/figure-html/eigen-workfrance-1.png" alt="`workfrance` graph with the top three most influential vertices  identified" width="672" />
+<p class="caption">
+Figure 7.7: <code>workfrance</code> graph with the top three most influential vertices identified
+</p>
+</div>
+<p>This time we see that our three most influential individuals are all in the same department, suggesting that this department may be a strategically important one to involve in any planned change initiatives.</p>
+</div>
+</div>
+<div id="learning-exercises-5" class="section level2" number="7.4">
+<h2><span class="header-section-number">7.4</span> Learning exercises</h2>
+<div id="discussion-questions-5" class="section level3" number="7.4.1">
+<h3><span class="header-section-number">7.4.1</span> Discussion questions</h3>
+</div>
+<div id="data-exercises-5" class="section level3" number="7.4.2">
+<h3><span class="header-section-number">7.4.2</span> Data exercises</h3>
 
 </div>
 </div>

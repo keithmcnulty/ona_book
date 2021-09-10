@@ -4,9 +4,9 @@ It follows from much of the earlier work we have been doing in this book that th
 
 But importance and influence are not precisely defined concepts, and to make them real within the context of graphs and networks we need to find some sort of mathematical definition for them.  In many visual graph layouts, more important or influential vertices that have a stronger roles in overall connectivity will usually be positioned towards the center of a group of other vertices^[If you want to see an earlier example of this, take a look at Figure \@ref(fig:fr-karate) for Zachary's Karate Club network and note the positions of the influential actors Mr Hi and John A.].  Intuitively therefore, we use the term 'centrality' to describe the importance or influence of a vertex in the connected structure of a graph. 
 
-In this chapter we will go through the most common types of centrality that can be measured for vertices in graphs, and discuss how they can be interpreted in the context of people or organizational networks.  We will show how to calculate different types of centrality in R or Python and how to illustrate centrality in graph visualizations. We will then use a case example of Facebook connections between high school students to show how these measures can be used in practice.
+In this chapter we will go through the most common types of centrality that can be measured for vertices in graphs, and discuss how they can be interpreted in the context of people or organizational networks.  We will show how to calculate different types of centrality in R or Python and how to illustrate centrality in graph visualizations. We will then reprise our example of the French office building network from the previous chapter to illustrate the utility of centrality in network analysis.
 
-In this chapter we will use the $G_{14}$ graph which we introduced in the previous chapter.  We will work with an undirected and unweighted graph in this chapter.  Most centrality measures are valid and easily calculated for directed graphs, and will depend on defining the direction of the edges to consider. Figure \@ref(fig:g14-colored) shows the $G_{14}$ graph with four vertices of interest colored differently from other vertices.
+In this chapter we will use the $G_{14}$ graph which we introduced in the previous chapter, which is an undirected and unweighted graph.  Most centrality measures are valid and easily calculated for directed graphs, and will depend on defining the direction of the edges to consider. Figure \@ref(fig:g14-colored) shows the $G_{14}$ graph with four vertices of interest colored differently from other vertices.
 
 ```{r g14-colored, echo = FALSE, fig.align = "center", fig.cap = "The $G_{14}$ graph with four vertices of interest colored differently"}
 library(igraph)
@@ -233,7 +233,7 @@ eigen.get(4)
 Closeness, betweenness and eigenvector centrality are calculated using *incoming* edges in `networkx` digraphs.  To calculate the outgoing equivalent, simply use the `reverse()` method on the digraph to make all outgoing edges incoming and vice-versa.
 
 :::{.thinkahead data-latex=""}
-**Playing around**:  `networkx` gas an extrmely wide range of centrality measures.  Visit the Centrality section of its documentation^[https://networkx.org] and have a look at the wide variety of centrality measures. Many of these are very specific to graph use cases in different industries and disciplines, but you can have a look at some of them, see if you can understand them and even give them a try with a data set.
+**Playing around**:  `networkx` has a very wide range of centrality measures available.  Visit the Centrality section of its documentation^[https://networkx.org] and have a look at the options. Many of these are very specific to graph use cases in different industries and disciplines, but you can have a look at some of them, see if you can understand them and even give them a try with a data set.
 :::
 
 ### Illustrating centrality in graph visualizations
@@ -277,3 +277,168 @@ ggraph(g14, layout = "lgl") +
 **Playing around:**. Play around with different ways of visualizing the centralities of vertices in $G_{14}$.  Try using color, size or both.  And also try the different types of centrality to see if the look of the graph changes substantially between them.
 :::
 
+
+## Illustrative example {#illustrative-7}
+
+In this section we will reprise the `workfrance` unweighted graph from the previous chapter, and use to it to illustrate some common uses for centrality measures.  First we will look at how to find network-wide and department level 'superconnectors', then we will look at how to find potential socially-influential actors in a network.  Let's load up the `workfrance` graph again.
+
+```{r}
+set.seed(123)
+
+# download workfrance data sets
+workfrance_edges <- read.csv("https://ona-book.org/data/workfrance_edgelist.csv")
+workfrance_vertices <- read.csv("https://ona-book.org/data/workfrance_vertices.csv")
+
+# create graph
+workfrance <- igraph::graph_from_data_frame(
+    d = workfrance_edges,
+    vertices = workfrance_vertices,
+    directed = FALSE
+)
+```
+
+### Finding 'superconnectors'
+
+Individuals with high betweenness centrality in people networks could be regarded as 'superconnectors'.  Superconnectors can play very valuable roles in the social integration of new entrants to the network, and can also present greater risk of connective disruption if they leave the network.  Imagine a new hire is about to join the DMI department in our `workfrance` network.  We want to assign two 'buddies' to this individual to help them socially integrate into the workplace more effectively.  Given that it is important for the individual to assimilate into their own department and into the workplace as a whole, we want to select the best two current employees to assist with both goals.  Let's start with the DMI department first.
+
+In order to study the DMI department as a self-contained network, we will create an induced subgraph which contains only those in that department and the connections between them, and visualize this network, labeling the employee IDs, as in \@ref(fig:dmi-workfrance).  
+
+```{r dmi-workfrance, fig.align = "center", fig.cap="The induced subgraph of the DMI department in `workfrance`"}
+# create DMI subgraph
+DMI_vertices <- V(workfrance)[V(workfrance)$dept == "DMI"]
+DMI_graph <- igraph::induced.subgraph(workfrance, vids = DMI_vertices)
+
+# visualize
+ggraph(DMI_graph) +
+  geom_edge_link(color = "grey", alpha = 0.7) +
+  geom_node_point(color = "lightblue", size = 4) +
+  geom_node_text(aes(label = name), size = 2) + 
+  theme_void()
+```
+
+Now we are interested in those who have the strongest role in connecting others in this network.  Let's find the top three individuals in terms of betweenness centrality.
+
+```{r}
+# get IDs of top 3 betweenness centralities
+ranked_betweenness_DMI <- DMI_graph |> 
+  betweenness() |> 
+  sort(decreasing = TRUE) 
+
+(top3_DMI <- names(ranked_betweenness_DMI[1:3]))
+
+```
+
+These are the IDs of the top three superconnectors in the DMI department.  Now we can visualize the graph again, but let's adjust vertex size by betweenness and color the top three superconnectors, as in Figure \@ref(fig:dmi-superconnectors).
+
+```{r dmi-superconnectors, fig.align='center', fig.cap="DMI subgraph with the top three superconnectors identified"}
+# add betweenness vertex property
+V(DMI_graph)$betweenness <- betweenness(DMI_graph)
+
+# add top three superconnectors property
+V(DMI_graph)$top3 <- ifelse(V(DMI_graph)$name %in% top3_DMI, 1, 0)
+
+# visualize
+ggraph(DMI_graph) +
+  geom_edge_link(color = "grey", alpha = 0.7) +
+  geom_node_point(aes(color = as.factor(top3), size = betweenness),
+                  show.legend = FALSE) +
+  scale_color_manual(values = c("lightblue", "pink")) +
+  geom_node_text(aes(label = name), size = 2) + 
+  theme_void()
+
+```
+
+In a similar way we can find the superconnectors of the overall `workfrance` network. 
+
+```{r}
+# get IDs of top 3 betweenness centralities
+ranked_betweenness_workfrance <- workfrance |> 
+  betweenness() |> 
+  sort(decreasing = TRUE) 
+
+#get top 3
+(top3_workfrance <- names(ranked_betweenness_workfrance[1:3]))
+```
+
+
+In Figure \@ref(fig:workfrance-superconnectors), we create a graph of the `workfrance` network with nodes scaled by betweenness centrality.  We color by department so we can easily see which departments our superconnectors are in.
+
+```{r workfrance-superconnectors, fig.align='center', fig.cap="`workfrance` graph with the top three superconnectors identified"}
+# add betweenness property
+V(workfrance)$betweenness <- betweenness(workfrance)
+
+# label only if a top3 superconnector
+V(workfrance)$btwn_label <- ifelse(V(workfrance)$name %in% top3_workfrance,
+                              V(workfrance)$name, "")
+
+# visualize
+ggraph(workfrance) +
+  geom_edge_link(color = "grey", alpha = 0.7) +
+  geom_node_point(aes(color = dept, size = betweenness),
+                  show.legend = FALSE) +
+  geom_node_text(aes(label = btwn_label), size = 3) + 
+  theme_void()
+```
+We can see upon examination that our top three organization-wide superconnectors are all in different departments.  Putting all this together, it would seem that a good choice of buddies for the new hire would be employee 156 for departmental integration and employee 603 for office-wide integration, although any combination of the six individuals identified through this analysis would probably be decent choices. 
+
+### Identifying influential employees
+
+Influential actors in a network can be very useful to identify.  In organizational contexts, working with more influential employees can make a difference to how certain initiatives or changes can be perceived by other employees.  Influential employees can also be useful in efficiently tapping into prevalent opinions across the entire employee population.  Imagine that we want to identify individuals from across the organization to participate in important workshops to problem solve some critical operational initiatives.  These initiatives will affect employees at both an overall and a department level, therefore it would be ideal to have individuals who are influential within each department as well as across the entire organization.
+
+Again, let's look at a single department - the DMI department as an example.  Because we are interested in overall influence, this could mean we are equally interested in employees with a lot of connections or employees who are 'stealthily' infuential in being connected to a smaller number of other highly connected employees. The best measure for this is eigenvector centrality.
+
+First we identify the top three most influential individuals in the DMI department as measured by eigenvector centrality by working on the DMI subgraph.
+
+```{r}
+# working with lists so use purrr package
+library(purrr)
+
+# get IDs of top 3 eigen centrality
+ranked_eigen_DMI <- DMI_graph |> 
+  eigen_centrality() |> 
+  pluck("vector") |> 
+  sort(decreasing = TRUE)
+
+#get top 3
+(top3_DMI_eigen <- names(ranked_eigen_DMI[1:3])) 
+```
+
+We see two employee IDs in common with our top 3 superconnectors.  We can also identify the top 3 most influential individuals across the `workfrance` graph according to their eigenvector centrality.
+
+```{r}
+# get IDs of top 3 eigen centrality
+ranked_eigen_workfrance <- workfrance |> 
+  eigen_centrality() |> 
+  pluck("vector") |> 
+  sort(decreasing = TRUE)
+
+#get top 3
+(top3_workfrance_eigen <- names(ranked_eigen_workfrance[1:3])) 
+```
+
+We see one individual in common with our top 3 superconnectors.  Let's visualize this network so we can identify the department mix of our top 3 most influential individuals, as in Figure \@ref(fig:eigen-workfrance).
+
+```{r eigen-workfrance, fig.align = "center", fig.cap = "`workfrance` graph with the top three most influential vertices  identified"}
+# add betweenness property
+V(workfrance)$eigen <- eigen_centrality(workfrance)$vector
+
+# label only if a top3 superconnector
+V(workfrance)$eigen_label <- ifelse(V(workfrance)$name %in% top3_workfrance_eigen,
+                              V(workfrance)$name, "")
+
+# visualize
+ggraph(workfrance) +
+  geom_edge_link(color = "grey", alpha = 0.7) +
+  geom_node_point(aes(color = dept, size = eigen),
+                  show.legend = FALSE) +
+  geom_node_text(aes(label = eigen_label), size = 3) + 
+  theme_void()
+```
+
+This time we see that our three most influential individuals are all in the same department, suggesting that this department may be a strategically important one to involve in any planned change initiatives.
+
+## Learning exercises
+
+### Discussion questions
+
+### Data exercises
