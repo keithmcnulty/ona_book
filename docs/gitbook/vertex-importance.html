@@ -175,7 +175,7 @@ div.csl-indent {
 <li class="chapter" data-level="1.2.1" data-path="everywhere.html"><a href="everywhere.html#the-study-of-connection"><i class="fa fa-check"></i><b>1.2.1</b> The study of connection</a></li>
 <li class="chapter" data-level="1.2.2" data-path="everywhere.html"><a href="everywhere.html#the-study-of-information-flow"><i class="fa fa-check"></i><b>1.2.2</b> The study of information flow</a></li>
 <li class="chapter" data-level="1.2.3" data-path="everywhere.html"><a href="everywhere.html#the-study-of-community-diversity-and-familiarity"><i class="fa fa-check"></i><b>1.2.3</b> The study of community, diversity and familiarity</a></li>
-<li class="chapter" data-level="1.2.4" data-path="everywhere.html"><a href="everywhere.html#the-study-of-importance-influence-and-attachment"><i class="fa fa-check"></i><b>1.2.4</b> The study of importance, influence and attachment</a></li>
+<li class="chapter" data-level="1.2.4" data-path="everywhere.html"><a href="everywhere.html#study-importance"><i class="fa fa-check"></i><b>1.2.4</b> The study of importance, influence and attachment</a></li>
 <li class="chapter" data-level="1.2.5" data-path="everywhere.html"><a href="everywhere.html#graphs-as-data-sources"><i class="fa fa-check"></i><b>1.2.5</b> Graphs as data sources</a></li>
 </ul></li>
 <li class="chapter" data-level="1.3" data-path="everywhere.html"><a href="everywhere.html#the-purpose-structure-and-organization-of-this-book"><i class="fa fa-check"></i><b>1.3</b> The purpose, structure and organization of this book</a></li>
@@ -452,7 +452,7 @@ If we require that <span class="math inline">\(x\)</span> can only have positive
 <div class="sourceCode" id="cb381"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb381-1"><a href="vertex-importance.html#cb381-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2nd order ego network of Vertex 4</span></span>
 <span id="cb381-2"><a href="vertex-importance.html#cb381-2" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">ego</span>(g14, <span class="at">order =</span> <span class="dv">2</span>, <span class="at">nodes =</span> <span class="st">&quot;4&quot;</span>)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 9/14 vertices, named, from b983aa6:
+## + 9/14 vertices, named, from d36182a:
 ## [1] 4 8 6 1 7 2 3 5 9</code></pre>
 <div class="sourceCode" id="cb383"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb383-1"><a href="vertex-importance.html#cb383-1" aria-hidden="true" tabindex="-1"></a><span class="co"># size of ego network</span></span>
 <span id="cb383-2"><a href="vertex-importance.html#cb383-2" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">ego_size</span>(g14, <span class="at">order =</span> <span class="dv">2</span>, <span class="at">nodes =</span> <span class="st">&quot;4&quot;</span>)</span></code></pre></div>
@@ -711,9 +711,46 @@ Figure 7.7: <code>workfrance</code> graph with the top three most influential ve
 <h2><span class="header-section-number">7.4</span> Learning exercises</h2>
 <div id="discussion-questions-5" class="section level3" number="7.4.1">
 <h3><span class="header-section-number">7.4.1</span> Discussion questions</h3>
+<ol style="list-style-type: decimal">
+<li>Describe the general concept of vertex centrality in networks and why it is important.</li>
+<li>Define the degree centrality of a vertex <span class="math inline">\(v\)</span> in an undirected graph <span class="math inline">\(G\)</span> in at least two different ways. How would you interpret the degree centrality of <span class="math inline">\(v\)</span> in an organizational network? Manually calculate the degree centrality of vertices 9, 10 and 11 in <span class="math inline">\(G_{14}\)</span>.</li>
+<li>Draw the 2nd-order ego network of Vertex 8 in <span class="math inline">\(G_{14}\)</span>. What is the 2nd-order ego size of Vertex 8?</li>
+<li>Define closeness centrality and describe how it can be interpreted. Manually calculate the closeness centrality of Vertex 10 in <span class="math inline">\(G_{14}\)</span> (feel free to express your answer as a fraction).</li>
+<li>Define betweenness centrality and describe how it can be interpreted. Manually calculate the betweenness centrality of Vertex 4 in <span class="math inline">\(G_14}\)</span>.</li>
+<li>Describe how you would interpret the eigenvector centrality of a vertex in an undirected graph <span class="math inline">\(G\)</span>.<br />
+</li>
+<li>For each of the four main centrality measures — degree, closeness, betweenness and eigenvector — write down some potential benefits from knowing which individuals rank highest in a people network?</li>
+<li>When visualizing graphs, name some ways to illustrate vertex centrality.</li>
+<li>Why might some centrality functions in R or Python not actually output the raw centrality measure? Give an example of this. Do you think it matters? What would you do to correct it if you need to?<br />
+</li>
+<li>Describe the some additional considerations in the calculation of vertex centrality in the case of directed graphs and in the case of weighted graphs.</li>
+</ol>
 </div>
 <div id="data-exercises-5" class="section level3" number="7.4.2">
 <h3><span class="header-section-number">7.4.2</span> Data exercises</h3>
+<ol style="list-style-type: decimal">
+<li>Use an appropriate function to calculate the degree centrality of vertices 9, 10 and 11 in <span class="math inline">\(G_{14}\)</span> and verify that the output matches your manual calculations from the earlier questions.</li>
+<li>Create and visualize the 2nd-order ego network of Vertex 8 in <span class="math inline">\(G_{14}\)</span>.</li>
+<li>Use an appropriate function to calculate the closeness centrality of Vertex 10 in <span class="math inline">\(G_{14}\)</span> and verify that it agrees with your manual calculation from the earlier questions.</li>
+<li>Use an appropriate function to calculate the betweenness centrality of Vertex 4 in <span class="math inline">\(G_{14}\)</span> and verify that it agrees with your manual calculation from the earlier questions.</li>
+<li>Find the mean eigenvector centrality of all vertices in <span class="math inline">\(G_{14}\)</span>. Do this twice, raw and normalized.</li>
+<li>Visualize <span class="math inline">\(G_{14}\)</span> with the size of the vertices scaled to their eigenvector centrality and the color scaled to their closeness centrality.</li>
+</ol>
+<p>For questions 6 to 10, create an undirected graph from the Facebook friendships in the <code>schoolfriends_edgelist</code> and <code>schoolfriends_vertices</code> datasets in the <code>onadata</code> package or downloaded from the internet<a href="#fn46" class="footnote-ref" id="fnref46"><sup>46</sup></a>. Recall from the exercises in Chapter <a href="viz-graphs.html#viz-graphs">4</a> that this data contains information on friendships between high school students in France. Make sure not to include the reported friendships in this graph. There are a lot of isolates in this graph because it only represents ‘known’ Facebook friendships, and you should remove isolates before proceeding<a href="#fn47" class="footnote-ref" id="fnref47"><sup>47</sup></a>.</p>
+<ol start="6" style="list-style-type: decimal">
+<li>Identify the top three individuals with the most Facebook connections.</li>
+<li>Determine 1st-degree and 2nd-degree ego sizes of the individual with the most Facebook connections. What proportion of the total population is included in these ego networks?</li>
+<li>Plot the distribution of the degree centrality of all vertices using a histogram or density plot.<br />
+</li>
+<li>Identify which individuals have the maximum closeness centrality, betweenness centrality and eigenvector centrality in the graph. Visualize the network color coded by class and identify where these individuals are. What do you notice?</li>
+<li>If you were the leader of this high school and were deciding class placements for next year, how might this information be useful to you?</li>
+</ol>
+<p><strong>Extension:</strong>. For these questions, create a <em>directed</em> graph from the <em>reported</em> friendships in the same data set, and remove the isolates as before.</p>
+<ol start="11" style="list-style-type: decimal">
+<li>Identify the individuals with the maximum in-degree centrality and the maximum out-degree centrality in this network? How would you describe these two individuals in the friendship dynamics of the high school? Do you see anything in common with the Facebook friendships?</li>
+<li>Calculate the hub scores and authority scores of the vertices. How would you interpret these?</li>
+<li>Determine the 1st degree ego network of the individual with the highest authority score. Visualize this as a <em>directed</em> network with vertices color coded by class. Do the same for the individual with the highest hub score. Can you use these visualizations to describe the these individuals have high authority/hub scores?</li>
+</ol>
 
 </div>
 </div>
@@ -728,6 +765,8 @@ Figure 7.7: <code>workfrance</code> graph with the top three most influential ve
 <li id="fn43"><p>You may wonder why <span class="math inline">\(n - 1\)</span>? This is simply the total number of other vertices that we are calculating the paths to. Strangely, there is no option to non-normalize in the arguments of this function as of recent versions of <code>networkx</code>. In any case, for the purposes of comparing vertices, it doesn’t matter a great deal whether you normalize or not.<a href="vertex-importance.html#fnref43" class="footnote-back">↩︎</a></p></li>
 <li id="fn44"><p>The normalization here divides the result by the number of vertex pairs in a graph with <span class="math inline">\(n-1\)</span> vertices, which is <span class="math inline">\((n - 1)(n - 2)\)</span> for directed graphs and <span class="math inline">\(\frac{(n - 1)(n - 2)}{2}\)</span> for undirected graphs<a href="vertex-importance.html#fnref44" class="footnote-back">↩︎</a></p></li>
 <li id="fn45"><p><a href="https://networkx.org" class="uri">https://networkx.org</a><a href="vertex-importance.html#fnref45" class="footnote-back">↩︎</a></p></li>
+<li id="fn46"><p><a href="https://ona-book.org/data/schoolfriends_edgelist.csv" class="uri">https://ona-book.org/data/schoolfriends_edgelist.csv</a> and <a href="https://ona-book.org/data/schoolfriends_vertices.csv" class="uri">https://ona-book.org/data/schoolfriends_vertices.csv</a><a href="vertex-importance.html#fnref46" class="footnote-back">↩︎</a></p></li>
+<li id="fn47"><p>One easy way to identify isolates in a graph object <code>G</code> in R to identify them using <code>isolates &lt;- which(degree(G) == 0)</code>, and then remove them using <code>G_new &lt;- remove.vertices(G, isolates)</code>.<a href="vertex-importance.html#fnref47" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>

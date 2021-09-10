@@ -441,4 +441,37 @@ This time we see that our three most influential individuals are all in the same
 
 ### Discussion questions
 
+1.  Describe the general concept of vertex centrality in networks and why it is important.
+2.  Define the degree centrality of a vertex $v$ in an undirected graph $G$ in at least two different ways. How would you interpret the degree centrality of $v$ in an organizational network?  Manually calculate the degree centrality of vertices 9, 10 and 11 in $G_{14}$.
+3.  Draw the 2nd-order ego network of Vertex 8 in $G_{14}$.  What is the 2nd-order ego size of Vertex 8?
+4.  Define closeness centrality and describe how it can be interpreted.  Manually calculate the closeness centrality of Vertex 10 in $G_{14}$ (feel free to express your answer as a fraction).
+5.  Define betweenness centrality and describe how it can be interpreted.  Manually calculate the betweenness centrality of Vertex 4 in $G_14}$.
+6.  Describe how you would interpret the eigenvector centrality of a vertex in an undirected graph $G$.  
+7.  For each of the four main centrality measures --- degree, closeness, betweenness and eigenvector --- write down some potential benefits from knowing which individuals rank highest in a people network?
+8.  When visualizing graphs, name some ways to illustrate vertex centrality.
+9.  Why might some centrality functions in R or Python not actually output the raw centrality measure?  Give an example of this.  Do you think it matters?  What would you do to correct it if you need to?  
+10.  Describe the some additional considerations in the calculation of vertex centrality in the case of directed graphs and in the case of weighted graphs. 
+
 ### Data exercises
+
+1.  Use an appropriate function to calculate the degree centrality of vertices 9, 10 and 11 in $G_{14}$ and verify that the output matches your manual calculations from the earlier questions.
+2.  Create and visualize the 2nd-order ego network of Vertex 8 in $G_{14}$.
+3.  Use an appropriate function to calculate the closeness centrality of Vertex 10 in $G_{14}$ and verify that it agrees with your manual calculation from the earlier questions.
+3.  Use an appropriate function to calculate the betweenness centrality of Vertex 4 in $G_{14}$ and verify that it agrees with your manual calculation from the earlier questions.
+4.  Find the mean eigenvector centrality of all vertices in $G_{14}$.  Do this twice, raw and normalized.
+5.  Visualize $G_{14}$ with the size of the vertices scaled to their eigenvector centrality and the color scaled to their closeness centrality.
+
+For questions 6 to 10, create an undirected graph from the Facebook friendships in the `schoolfriends_edgelist` and `schoolfriends_vertices` datasets in the `onadata` package or downloaded from the internet^[https://ona-book.org/data/schoolfriends_edgelist.csv and https://ona-book.org/data/schoolfriends_vertices.csv].  Recall from the exercises in Chapter \@ref(viz-graphs) that this data contains information on friendships between high school students in France.  Make sure not to include the reported friendships in this graph.  There are a lot of isolates in this graph because it only represents 'known' Facebook friendships, and you should remove isolates before proceeding^[One easy way to identify isolates in a graph object `G` in R to identify them using `isolates <- which(degree(G) == 0)`, and then remove them using `G_new <- remove.vertices(G, isolates)`.].
+
+6.  Identify the top three individuals with the most Facebook connections.
+7.  Determine 1st-degree and 2nd-degree ego sizes of the individual with the most Facebook connections.  What proportion of the total population is included in these ego networks?
+8.  Plot the distribution of the degree centrality of all vertices using a histogram or density plot.  
+9.  Identify which individuals have the maximum closeness centrality, betweenness centrality and eigenvector centrality in the graph.  Visualize the network color coded by class and identify where these individuals are.  What do you notice?
+10.  If you were the leader of this high school and were deciding class placements for next year, how might this information be useful to you?
+
+**Extension:**. For these questions, create a *directed* graph from the *reported* friendships in the same data set, and remove the isolates as before. 
+
+11.  Identify the individuals with the maximum in-degree centrality and the maximum out-degree centrality in this network?  How would you describe these two individuals in the friendship dynamics of the high school? Do you see anything in common with the Facebook friendships?
+12.  Calculate the hub scores and authority scores of the vertices.  How would you interpret these?
+13.  Determine the 1st degree ego network of the individual with the highest authority score.  Visualize this as a *directed* network with vertices color coded by class. Do the same for the individual with the highest hub score.  Can you use these visualizations to describe the these individuals have high authority/hub scores? 
+
