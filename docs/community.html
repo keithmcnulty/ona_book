@@ -4,19 +4,19 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>8 Segmentation and Community | Handbook of Graphs and Networks in People Analytics</title>
+<title>8 Components, Cliques and Communities | Handbook of Graphs and Networks in People Analytics</title>
 <meta name="author" content="Keith McNulty">
-<meta name="description" content="A technical manual of graphs, networks and their applications in the people and social sciences">
+<meta name="description" content="The study of group dynamics would be pretty ineffective if we were not able to identify and study important subgroups. Networks of people are often made up of subsets that interact more intensely...">
 <meta name="generator" content="bookdown 0.22.15 with bs4_book()">
-<meta property="og:title" content="8 Segmentation and Community | Handbook of Graphs and Networks in People Analytics">
+<meta property="og:title" content="8 Components, Cliques and Communities | Handbook of Graphs and Networks in People Analytics">
 <meta property="og:type" content="book">
 <meta property="og:url" content="https://ona-book.org/community.html">
 <meta property="og:image" content="https://ona-book.org/www/cover/cover-ona.png">
-<meta property="og:description" content="A technical manual of graphs, networks and their applications in the people and social sciences">
+<meta property="og:description" content="The study of group dynamics would be pretty ineffective if we were not able to identify and study important subgroups. Networks of people are often made up of subsets that interact more intensely...">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="8 Segmentation and Community | Handbook of Graphs and Networks in People Analytics">
+<meta name="twitter:title" content="8 Components, Cliques and Communities | Handbook of Graphs and Networks in People Analytics">
 <meta name="twitter:site" content="@dr_keithmcnulty">
-<meta name="twitter:description" content="A technical manual of graphs, networks and their applications in the people and social sciences">
+<meta name="twitter:description" content="The study of group dynamics would be pretty ineffective if we were not able to identify and study important subgroups. Networks of people are often made up of subsets that interact more intensely...">
 <meta name="twitter:image" content="https://ona-book.org/www/cover/cover-ona.png">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.9.5/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
@@ -53,7 +53,7 @@
 <li><a class="" href="restructuring-data.html"><span class="header-section-number">5</span> Restructuring Data For Use in Graphs</a></li>
 <li><a class="" href="paths-distance.html"><span class="header-section-number">6</span> Paths and Distance</a></li>
 <li><a class="" href="vertex-importance.html"><span class="header-section-number">7</span> Vertex Importance and Centrality</a></li>
-<li><a class="active" href="community.html"><span class="header-section-number">8</span> Segmentation and Community</a></li>
+<li><a class="active" href="community.html"><span class="header-section-number">8</span> Components, Cliques and Communities</a></li>
 <li><a class="" href="similarity.html"><span class="header-section-number">9</span> Commonality and Assortativity</a></li>
 <li><a class="" href="databases.html"><span class="header-section-number">10</span> Graphs as Databases</a></li>
 <li><a class="" href="advanced-viz.html"><span class="header-section-number">11</span> Advanced Network Visualization</a></li>
@@ -67,16 +67,301 @@
 </div>
   </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="community" class="section level1" number="8">
 <h1>
-<span class="header-section-number">8</span> Segmentation and Community<a class="anchor" aria-label="anchor" href="#community"><i class="fas fa-link"></i></a>
+<span class="header-section-number">8</span> Components, Cliques and Communities<a class="anchor" aria-label="anchor" href="#community"><i class="fas fa-link"></i></a>
 </h1>
+<p>The study of group dynamics would be pretty ineffective if we were not able to identify and study important subgroups. Networks of people are often made up of subsets that interact more intensely among each other than they do with the rest of the network, and it is often very important in research and analysis to identify or approximate these subsets as best as possible so that they can be studied more closely. In complex networks, this is not an easy task. Most of the computational methods we have available to us for finding densely connected subsets of vertices (usually called <em>communities</em>) are iterative approximations which make use of heuristics<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;Heuristics are methodological ‘shortcuts’ which can vastly reduce the complexity of a problem but usually sacrifice some element of accuracy in doing so.&lt;/p&gt;"><sup>48</sup></a> and are rarely 100% accurate<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;Many problems of graph ‘clustering’ — that is, finding partitions of a graph that maximise intra-group density but minimize between-group density — have already been shown to be NP-hard&lt;/p&gt;"><sup>49</sup></a>. However, in the study of networks in the organizational sciences, we do not need high levels of precision to be able to draw valuable insights, and therefore these modern approximation techniques are very powerful tools for us to have at our disposal.</p>
+<p>In the work we have done thus far in the book, we have already been exposed to subgraphs — we have used induced vertex subgraphs containing a specified set of vertices and all edges between them. However, in these situations we were able to specify the precise subset of vertices that we were interested in. In this chapter we will look at methods to identify or ‘detect’ subsets of vertices based on certain properties of the induced subgraphs of those vertices. We will start with simpler problems such as identifying subsets of vertices which are completely disconnected from others, and then we will proceed to look at graph partitioning and the identification of cliques and communities of vertices which, though not disconnected from other parts of the graph, have higher levels of density between each other than with the rest of the network.</p>
+<div id="theory-of-components-partitions-and-clusters" class="section level2" number="8.1">
+<h2>
+<span class="header-section-number">8.1</span> Theory of components, partitions and clusters<a class="anchor" aria-label="anchor" href="#theory-of-components-partitions-and-clusters"><i class="fas fa-link"></i></a>
+</h2>
+<div id="connected-components-of-graphs" class="section level3" number="8.1.1">
+<h3>
+<span class="header-section-number">8.1.1</span> Connected components of graphs<a class="anchor" aria-label="anchor" href="#connected-components-of-graphs"><i class="fas fa-link"></i></a>
+</h3>
+<p>We learned earlier that a graph <span class="math inline">\(G\)</span> is <strong>connected</strong> if a path exists between any pair of vertices <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span> in <span class="math inline">\(G\)</span>. If <span class="math inline">\(G\)</span> is a directed graph, we say <span class="math inline">\(G\)</span> is <strong>weakly connected</strong> if it would be connected when viewed as an undirected graph. We say that <span class="math inline">\(G\)</span> is <strong>strongly connected</strong> if a path exists <em>from</em> <span class="math inline">\(u\)</span> <em>to</em> <span class="math inline">\(v\)</span> for any pair of vertices <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span> in <span class="math inline">\(G\)</span>. We say <span class="math inline">\(G\)</span> is <strong>unilaterally connected</strong> if a path exists <em>either</em> from <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span> <em>or</em> from <span class="math inline">\(v\)</span> to <span class="math inline">\(u\)</span> for any pair of vertices <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span> in <span class="math inline">\(G\)</span>.</p>
+<p>A <strong>connected component</strong> of a graph is a connected subset of vertices, none of which are connected to any other vertex in the graph. As an example, the undirected graph in Figure <a href="community.html#fig:component1">8.1</a> consists of three connected components, each with three vertices. In the directed graph in Figure <a href="community.html#fig:component2">8.2</a>, one component is strongly connected (<span class="math inline">\(A \longrightarrow B \longrightarrow C \longrightarrow A\)</span>), one is unilaterally connected (<span class="math inline">\(D \longrightarrow E \longrightarrow F\)</span>) and the third is weakly connected (<span class="math inline">\(G \longrightarrow I \longleftarrow H\)</span>).</p>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:component1"></span>
+<img src="_main_files/figure-html/component1-1.png" alt="A graph with three connected components, each containing three vertices" width="672"><p class="caption">
+Figure 8.1: A graph with three connected components, each containing three vertices
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:component2"></span>
+<img src="_main_files/figure-html/component2-1.png" alt="A directed graph with three connected components, one strongly connected, one weakly connected and one unilaterallu connected" width="672"><p class="caption">
+Figure 8.2: A directed graph with three connected components, one strongly connected, one weakly connected and one unilaterallu connected
+</p>
+</div>
+<p>Connected components of disconnected graphs are important to identify, because many of the measures we have learned so far break down for disconnected graphs. For example, the diameter of a disconnected graph is defined as infinite by mathematical convention, but this is not a useful practical measure. Usually when we want to know the diameter of a graph, we want to understand that largest <em>finite</em> distance between any two vertices, which translates to the diameter of the largest connected component in the graph. Therefore most calculations of diameter in disconnected graphs require us to be able to identify the largest connected component.</p>
+<p>It is not too difficult to think of an algorithm that can determine all the connected components of a graph. If you are interested in this see the exercises at the end of this chapter.</p>
+<div class="thinkahead">
+<p><strong>Playing around</strong>: Go back and try to find some examples in earlier chapters of graphs that are disconnected, and calculate the diameter that is returned by the functions in R or Python packages. For example, you could try the Random Acts of Pizza graph from the exercises at the end of Chapter <a href="viz-graphs.html#viz-graphs">4</a> or the graph of reported friendships from the <code>schoolfriends</code> data set at the end of the previous chapter. What do these functions return?</p>
+</div>
+</div>
+<div id="vertex-partitioning" class="section level3" number="8.1.2">
+<h3>
+<span class="header-section-number">8.1.2</span> Vertex partitioning<a class="anchor" aria-label="anchor" href="#vertex-partitioning"><i class="fas fa-link"></i></a>
+</h3>
+<p>Often graphs will be connected but we still want to divide the vertices up into mutually exclusive subgroups of interest. Such a division is called a <strong>partition</strong> of a graph. In a partition, all vertices must be in one and only one subgroup. Partitions are created through making cuts in a graph.</p>
+<p>A <strong>cut</strong> in a graph <span class="math inline">\(G\)</span> is a set of edges that divide the vertices of <span class="math inline">\(G\)</span> into two disjoint subsets. The number of edges is known as the size of the cut. In Figure <a href="community.html#fig:cutex">8.3</a>, edges e3, e4 and e5 divide the graph into two disjoint connected sets and represents a cut of size 3.</p>
+<p>A <strong>minimum cut</strong> is a cut where no other cut exists in <span class="math inline">\(G\)</span> with a smaller number of edges. In Figure <a href="community.html#fig:cutex">8.3</a>, it should not be difficult to see that mimimum cuts have size 1 can be achieved with either e1 or e2. In both cases these minimum cuts divide the graph into a connected component and an isolate<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;Maximum cuts are cuts where no other cuts exist with a greater number of edges. Maximum cuts in graphs are extremely challenging. Luckily, we rarely need them in organizational network analysis.&lt;/p&gt;"><sup>50</sup></a>.</p>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:cutex"></span>
+<img src="_main_files/figure-html/cutex-1.png" alt="Cuts are defined by edges that split the vertices of a graph into disjoint subsets" width="672"><p class="caption">
+Figure 8.3: Cuts are defined by edges that split the vertices of a graph into disjoint subsets
+</p>
+</div>
+<p>A partition of a graph <span class="math inline">\(G\)</span> is obtained through a series of cuts. For example, if we make a cut using e3, e5 and e7 in Figure <a href="community.html#fig:cutex">8.3</a>, we split the graph into two disjoint connected graphs. If we then make a further cut using e1, we split the graph into three disjoint sets: two disjoint connected sets and an isolate.</p>
+<p>In directed graphs, cuts can be defined according to the direction of edges, and in weighted graphs, minimum cuts can be determined through the weights of edges. The most popular algorithm for determining the minimum cut of a graph is the Stoer-Wagner algorithm (<span class="citation"><a href="references.html#ref-stoer" role="doc-biblioref">Stoer and Wagner</a> (<a href="references.html#ref-stoer" role="doc-biblioref">1997</a>)</span>).</p>
+</div>
+<div id="vertex-clustering-and-community-detection" class="section level3" number="8.1.3">
+<h3>
+<span class="header-section-number">8.1.3</span> Vertex clustering and community detection<a class="anchor" aria-label="anchor" href="#vertex-clustering-and-community-detection"><i class="fas fa-link"></i></a>
+</h3>
+<p>Vertex <strong>clustering</strong> refers to the process of partitioning a graph in order to satisfy a certain objective. Most commonly in organizational network analysis, that objective is to achieve a high edge density between the vertices inside a cluster, and a low edge density between vertices that are in different clusters. Such highly connected clusters are usually referred to as communities and the process of determining optimal communities in a graph is knows as <strong>community detection</strong><a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;The meaning of ‘high’ and ‘low’ edge density is relative and really depends on the nature of the graph, and algorithms will do their best to find communities which maximize the difference between in-community density and cross-community density, even though some or all of these communities may not end up having have particularly high edge density&lt;/p&gt;"><sup>51</sup></a>. Community detection is an unsupervised process. When we perform community detection on a graph, we do not know in advance how many communities we seek to find or the size of those communities.</p>
+<p>The most commonly used (and fastest) community detection algorithm is the Louvain algorithm. The Louvain algorithm accepts a graph and partitions it into subsets of vertices by trying to maximize the <em>modularity</em> of the graph. Modularity measures how dense the connections are within subsets of vertices in a graph by comparing the density to that which would be expected from a random graph. In an unweighted and undirected graph, modularity takes a value between -0.5 and +1. Any value above zero means that the the vertices inside the subgroups are more densely connected than would be expected by chance. The higher the modularity of a graph, the more connected the vertices are inside the subgroups compared to between the subgroups, and therefore the more certain we can be that the subgroups represent genuine communities. The approximate steps of the Louvain algorithm are in two phases as follows:</p>
+<ol style="list-style-type: decimal">
+<li>The algorithm starts with each vertex in its own community.</li>
+<li>Vertices are moved into other communities and modularity is calculated.<br>
+</li>
+<li>When the algorithm reaches a point where further vertex moves do not increase modularity, it finishes its first phase.</li>
+<li>In the second phase, the communities resulting from the first phase are aggregated to form a simpler pseudograph where each vertex represents a community, where loop edges on a vertex are weighted by the total number of edges inside that community, and where edges between vertices are weighted by the total number of edges between those communities<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;This also works with weighted edges, assuming that weights represent ‘closeness’ of connection, which they usually do in organizational contexts.&lt;/p&gt;"><sup>52</sup></a>. In this heuristic step, vertices are moved in this simpler graph with the aim of improving modularity. That is, communities may be combined if modularity is improved.</li>
+<li>Phases 1 and 2 are repeated until modularity cannot be further improved.</li>
+</ol>
+<p>A more recently developed community detection algorithm which improves on the Louvain algorithm is the Leiden algorithm. The Leiden algorithm operates similarly to Louvain, but has an additional refinement process at the end of the first phase which helps increase the options for improved modularity in the second phase. The Leiden algorithm will always achieve results as good as the Louvain algorithm, and in many cases may detect communities which are better connected than those detected by Louvain.</p>
+<p>Both the Louvain and Leiden algorithms are good options for performing community detection in an organizational context. However, there are numerous other options, many of which are available in common data science packages. For example, the Girvan-Newman algorithm operates in a very different way by starting with an entire graph and progressively removing important edges to potentially reveal high modularity subgroups. For more detailed reference on the Louvain and Leiden algorithms see <span class="citation"><a href="references.html#ref-traag" role="doc-biblioref">Traag, Waltman, and Eck</a> (<a href="references.html#ref-traag" role="doc-biblioref">2019</a>)</span> and for more general insight into a broader range of community detection algorithms, see <span class="citation"><a href="references.html#ref-yang" role="doc-biblioref">Yang, Algesheimer, and Tessone</a> (<a href="references.html#ref-yang" role="doc-biblioref">2016</a>)</span>.</p>
+<p>One important aspect of community detection which is often not understood is that community detection algorithms classify vertices into subgroups, but offer no direct insight into the <em>nature</em> of those subgroups. Further analytic techniques need to be applied to help describe the subgroups in a meaningful way. For example, the subgroups could be compared to known characteristics of the network (such as department in the <code>workfrance</code> graph or class in the <code>schoolfriends</code> graph). We will examine this using an example later in this chapter.</p>
+</div>
+<div id="cliques" class="section level3" number="8.1.4">
+<h3>
+<span class="header-section-number">8.1.4</span> Cliques<a class="anchor" aria-label="anchor" href="#cliques"><i class="fas fa-link"></i></a>
+</h3>
+<p>A <strong>clique</strong> is a subset of vertices in an undirected graph whose induced subgraph is complete. That is, the induced subgraph has an edge density of 1. This is best understood as the most intense possible type of community in an undirected graph. A <strong>maximal clique</strong> is a clique which cannot be extended by adding another vertex. A <strong>largest clique</strong> is a clique with the greatest number of vertices of all cliques in the graph.</p>
+<p>In Figure <a href="community.html#fig:cutex">8.3</a>, the following are maximal cliques: <span class="math inline">\(B \longleftrightarrow C\)</span>, <span class="math inline">\(A \longleftrightarrow C\)</span>, <span class="math inline">\(C \longleftrightarrow E \longleftrightarrow F\)</span> and <span class="math inline">\(C \longleftrightarrow D \longleftrightarrow F\)</span> because no other vertex can be added to these cliques without creating an incomplete graph. <span class="math inline">\(C \longleftrightarrow E \longleftrightarrow F\)</span> and <span class="math inline">\(C \longleftrightarrow D \longleftrightarrow F\)</span> are largest cliques because there is no other clique in the graph that has more than three vertices.</p>
+<p>Finding a single maximal clique in an undirected graph is not a complex problem and can be done quickly using a standard search algorithm starting on an arbitrary vertex. However, finding maximal cliques of a specified size, or all maximal cliques, as well as finding largest cliques, are problems whose complexity increases with the size and density of a graph. Care should be taken in attempting these algorithms on very large graphs.</p>
+<div class="thinkahead">
+<p><strong>Thinking ahead:</strong> Go back to the graph of <strong>Zachary’s Karate Club</strong> in Chapter <a href="viz-graphs.html#viz-graphs">4</a>. Can you identify some maximal cliques? What do you think is the size of the largest clique? Thinking about this will give you a sense of how hard the largest clique problem might be on very large graphs. We will use this as an example later in the chapter.</p>
+</div>
+</div>
+</div>
+<div id="components-cliques-and-communities-in-r" class="section level2" number="8.2">
+<h2>
+<span class="header-section-number">8.2</span> Components, cliques and communities in R<a class="anchor" aria-label="anchor" href="#components-cliques-and-communities-in-r"><i class="fas fa-link"></i></a>
+</h2>
+<div id="finding-connected-components-of-disconnected-graphs" class="section level3" number="8.2.1">
+<h3>
+<span class="header-section-number">8.2.1</span> Finding connected components of disconnected graphs<a class="anchor" aria-label="anchor" href="#finding-connected-components-of-disconnected-graphs"><i class="fas fa-link"></i></a>
+</h3>
+<p>To illustrate the <code><a href="https://rdrr.io/pkg/igraph/man/components.html">components()</a></code> function in <code>igraph</code> we will load up the <code>schoolfriends</code> edgelist dataset from an earlier chapter. We will use reported friendships, create a directed graph and visualize it.</p>
+<div class="sourceCode" id="cb419"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://igraph.org">igraph</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggraph.data-imaginist.com">ggraph</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
+
+<span class="co"># get schoolfriends edgelist</span>
+<span class="va">schoolfriends_edgelist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"https://ona-book.org/data/schoolfriends_edgelist.csv"</span><span class="op">)</span>
+
+<span class="co"># just use reported friendships</span>
+<span class="va">schoolfriends_reported</span> <span class="op">&lt;-</span> <span class="va">schoolfriends_edgelist</span> |&gt; 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">type</span> <span class="op">==</span> <span class="st">"reported"</span><span class="op">)</span>
+
+<span class="co"># create directed graph</span>
+<span class="va">schoolfriends_rp</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span><span class="va">schoolfriends_reported</span><span class="op">)</span>
+
+<span class="co"># visualize</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<span class="fu"><a href="https://ggraph.data-imaginist.com/reference/ggraph.html">ggraph</a></span><span class="op">(</span><span class="va">schoolfriends_rp</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_edge_link.html">geom_edge_link</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"grey"</span>, alpha <span class="op">=</span> <span class="fl">0.7</span>, 
+                 arrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/arrow.html">arrow</a></span><span class="op">(</span>length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html">unit</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="st">"cm"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_point.html">geom_node_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">2</span>, color <span class="op">=</span> <span class="st">"lightblue"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div class="inline-figure"><img src="_main_files/figure-html/unnamed-chunk-207-1.png" width="672"></div>
+<p>We can see some connected components in this disconnected graph. We can use the <code><a href="https://rdrr.io/pkg/igraph/man/components.html">components()</a></code> function to classify the vertices into the connected components. This function generates a list containing the following vectors:</p>
+<ul>
+<li>
+<code>membership</code>, which is a vector assigning each vertex to a numbered component</li>
+<li>
+<code>csize</code>, which returns the size of each component</li>
+<li>
+<code>no</code>, which is the number of connected components</li>
+</ul>
+<p>Let’s verify the latter two:</p>
+<div class="sourceCode" id="cb420"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># get weakly connected components (mode ignored if undirected)</span>
+<span class="va">schoolfriends_components</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/components.html">components</a></span><span class="op">(</span><span class="va">schoolfriends_rp</span>, 
+                                               mode <span class="op">=</span> <span class="st">"weak"</span><span class="op">)</span>
+
+<span class="co"># how many components?</span>
+<span class="va">schoolfriends_components</span><span class="op">$</span><span class="va">no</span></code></pre></div>
+<pre><code>## [1] 3</code></pre>
+<div class="sourceCode" id="cb422"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># size of components</span>
+<span class="va">schoolfriends_components</span><span class="op">$</span><span class="va">csize</span></code></pre></div>
+<pre><code>## [1] 128   3   3</code></pre>
+<p>We can use the membership to assign a <code>component</code> property and then visualize with the vertices colored by component, as in Figure <a href="community.html#fig:component-color">8.4</a>.</p>
+<div class="sourceCode" id="cb424"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># assign component property</span>
+<span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">schoolfriends_rp</span><span class="op">)</span><span class="op">$</span><span class="va">component</span> <span class="op">&lt;-</span> <span class="va">schoolfriends_components</span><span class="op">$</span><span class="va">membership</span>
+
+<span class="co"># visualize</span>
+<span class="fu"><a href="https://ggraph.data-imaginist.com/reference/ggraph.html">ggraph</a></span><span class="op">(</span><span class="va">schoolfriends_rp</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_edge_link.html">geom_edge_link</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"grey"</span>, alpha <span class="op">=</span> <span class="fl">0.7</span>, 
+                 arrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/arrow.html">arrow</a></span><span class="op">(</span>length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html">unit</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="st">"cm"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_point.html">geom_node_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">2</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">component</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"Component"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:component-color"></span>
+<img src="_main_files/figure-html/component-color-1.png" alt="The reported `schoolfriends` graph color coded by its (weakly) connected components" width="672"><p class="caption">
+Figure 8.4: The reported <code>schoolfriends</code> graph color coded by its (weakly) connected components
+</p>
+</div>
+<div class="thinkahead">
+<p><strong>Playing around:</strong> Weakly connected components of a directed graph are easier to spot with the naked eye compared to strongly connected components. Why? Remind yourself of the definition of weakly connected from earlier in this chapter. Try to repeat this analysis to visualize all strongly connected components in the reported <code>schoolfriends</code>graph and see the difference.</p>
+</div>
+</div>
+<div id="partioning-and-community-detection-in-r" class="section level3" number="8.2.2">
+<h3>
+<span class="header-section-number">8.2.2</span> Partioning and community detection in R<a class="anchor" aria-label="anchor" href="#partioning-and-community-detection-in-r"><i class="fas fa-link"></i></a>
+</h3>
+<p>For the next few examples we will return to <em>Zachary’s Karate Club</em> network from Chapter <a href="viz-graphs.html#viz-graphs">4</a>. Let’s load up and visualize that directed graph and mark the known leading actors Mr Hi and John A with larger vertices.</p>
+<div class="sourceCode" id="cb425"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># get karate edgelist</span>
+<span class="va">karate_edges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"https://ona-book.org/data/karate.csv"</span><span class="op">)</span>
+
+<span class="co"># create undirected graph</span>
+<span class="va">karate</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span><span class="va">karate_edges</span>, directed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+
+<span class="co"># color John A and Mr Hi differently</span>
+<span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span><span class="op">$</span><span class="va">leader</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span><span class="op">$</span><span class="va">name</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Mr Hi"</span>, <span class="st">"John A"</span><span class="op">)</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>
+
+<span class="co"># visualize</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<span class="fu"><a href="https://ggraph.data-imaginist.com/reference/ggraph.html">ggraph</a></span><span class="op">(</span><span class="va">karate</span>, layout <span class="op">=</span> <span class="st">"fr"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_edge_link.html">geom_edge_link</a></span><span class="op">(</span>color <span class="op">=</span>  <span class="st">"grey"</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_point.html">geom_node_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">leader</span><span class="op">)</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"lightblue"</span>,
+                  show.legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:karate8"></span>
+<img src="_main_files/figure-html/karate8-1.png" alt="The `karate` graph with Mr Hi and John A indicated with larger vertices" width="672"><p class="caption">
+Figure 8.5: The <code>karate</code> graph with Mr Hi and John A indicated with larger vertices
+</p>
+</div>
+<p>Minimum cuts in graphs can be found using the <code><a href="https://rdrr.io/pkg/igraph/man/min_cut.html">min_cut()</a></code> function in <code>igraph</code>. This will return the number of edges in the minimum cut, unless you use the <code>value.only = FALSE</code> argument, in which case it will return more information on the cut,</p>
+<div class="sourceCode" id="cb426"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/min_cut.html">min_cut</a></span><span class="op">(</span><span class="va">karate</span>, value.only <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<pre><code>## $value
+## [1] 1
+## 
+## $cut
+## + 1/78 edge from 2f19ddb (vertex names):
+## [1] Mr Hi--Actor 12
+## 
+## $partition1
+## + 1/34 vertex, named, from 2f19ddb:
+## [1] Actor 12
+## 
+## $partition2
+## + 33/34 vertices, named, from 2f19ddb:
+##  [1] Mr Hi    Actor 2  Actor 3  Actor 4  Actor 5  Actor 6  Actor 7  Actor 9  Actor 10 Actor 14 Actor 15 Actor 16 Actor 19
+## [14] Actor 20 Actor 21 Actor 23 Actor 24 Actor 25 Actor 26 Actor 27 Actor 28 Actor 29 Actor 30 Actor 31 Actor 32 Actor 33
+## [27] Actor 8  Actor 11 Actor 13 Actor 18 Actor 22 Actor 17 John A</code></pre>
+<p>We see that a minimum cut exists of size 1 between Mr Hi and Actor 12.</p>
+<p>The Louvain community detection algorithm can be run using the <code><a href="https://rdrr.io/pkg/igraph/man/cluster_louvain.html">cluster_louvain()</a></code> function. <code>weights</code> can be added as an argument, or will be used by default if the graph has a <code>weight</code> edge attribute (set <code>weight = NA</code> to avoid this). This will produce a list of community groups. The best way to record the resulting community membership is to assign it as a vertex property using the <code><a href="https://rdrr.io/pkg/igraph/man/communities.html">membership()</a></code> function.</p>
+<div class="sourceCode" id="cb428"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># detect communities using Louvain</span>
+<span class="va">communities</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/cluster_louvain.html">cluster_louvain</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span>
+
+<span class="co"># assign as a vertex property</span>
+<span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span><span class="op">$</span><span class="va">community</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/communities.html">membership</a></span><span class="op">(</span><span class="va">communities</span><span class="op">)</span></code></pre></div>
+<p>Before visualizing the communities, we can see how many they are and their size<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;We can also see the modularity of the partition by calling the &lt;code&gt;modularity()&lt;/code&gt; function.&lt;/p&gt;"><sup>53</sup></a>:</p>
+<div class="sourceCode" id="cb429"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/communities.html">sizes</a></span><span class="op">(</span><span class="va">communities</span><span class="op">)</span></code></pre></div>
+<pre><code>## Community sizes
+##  1  2  3  4 
+##  6 12 11  5</code></pre>
+<p>We have four detected communities of varying sizes. As before, we can color code to visualize these, as in Figure <a href="community.html#fig:karate-communities">8.6</a>.</p>
+<div class="sourceCode" id="cb431"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<span class="fu"><a href="https://ggraph.data-imaginist.com/reference/ggraph.html">ggraph</a></span><span class="op">(</span><span class="va">karate</span>, layout <span class="op">=</span> <span class="st">"fr"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_edge_link.html">geom_edge_link</a></span><span class="op">(</span>color <span class="op">=</span>  <span class="st">"grey"</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_point.html">geom_node_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">leader</span><span class="op">)</span>, color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">community</span><span class="op">)</span><span class="op">)</span>,
+                  show.legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:karate-communities"></span>
+<img src="_main_files/figure-html/karate-communities-1.png" alt="Communities of the `karate` graph as detected by the Louvain algorithm" width="672"><p class="caption">
+Figure 8.6: Communities of the <code>karate</code> graph as detected by the Louvain algorithm
+</p>
+</div>
+<div class="thinkahead">
+<p><strong>Playing around:</strong>. Try playing around with some of the other community detection methods available in <code>igraph</code> using the <code>karate</code> example. How different are the results? For example, try <code><a href="https://rdrr.io/pkg/igraph/man/cluster_edge_betweenness.html">cluster_edge_betweenness()</a></code> (the Girvan-Newman algorithm) or <code><a href="https://rdrr.io/pkg/igraph/man/cluster_infomap.html">cluster_infomap()</a></code> or any other methods that begin with <code>cluster</code>.</p>
+</div>
+</div>
+<div id="finding-cliques-in-r" class="section level3" number="8.2.3">
+<h3>
+<span class="header-section-number">8.2.3</span> Finding cliques in R<a class="anchor" aria-label="anchor" href="#finding-cliques-in-r"><i class="fas fa-link"></i></a>
+</h3>
+<p>The <code><a href="https://rdrr.io/pkg/igraph/man/cliques.html">cliques()</a></code> and <code><a href="https://rdrr.io/pkg/igraph/man/cliques.html">max_cliques()</a></code> function in <code>igraph</code> identifies all cliques or maximal cliques respectively, with a specified maximum or minimum size if desired. It is advisable to specify a size for cliques of interest because otherwise a long list might be returned, including many single node cliques.</p>
+<div class="sourceCode" id="cb432"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/cliques.html">max_cliques</a></span><span class="op">(</span><span class="va">karate</span>, min <span class="op">=</span> <span class="fl">5</span>, max <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
+<pre><code>## [[1]]
+## + 5/34 vertices, named, from 2f19ddb:
+## [1] Actor 2  Mr Hi    Actor 4  Actor 3  Actor 14
+## 
+## [[2]]
+## + 5/34 vertices, named, from 2f19ddb:
+## [1] Actor 2 Mr Hi   Actor 4 Actor 3 Actor 8</code></pre>
+<p>The <code><a href="https://rdrr.io/pkg/igraph/man/cliques.html">largest_cliques()</a></code> finds all largest cliques in a graph.</p>
+<div class="sourceCode" id="cb434"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/cliques.html">largest_cliques</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span></code></pre></div>
+<pre><code>## [[1]]
+## + 5/34 vertices, named, from 2f19ddb:
+## [1] Actor 8 Mr Hi   Actor 2 Actor 3 Actor 4
+## 
+## [[2]]
+## + 5/34 vertices, named, from 2f19ddb:
+## [1] Actor 4  Mr Hi    Actor 2  Actor 3  Actor 14</code></pre>
+<p>We see that the maximal cliques of size 5 that we identified are also the largest cliques in the <code>karate graph</code>, and both orient around Mr Hi. The function <code><a href="https://rdrr.io/pkg/igraph/man/cliques.html">clique_num()</a></code> returns the size of the largest clique.</p>
+<div class="sourceCode" id="cb436"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/cliques.html">clique_num</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span></code></pre></div>
+<pre><code>## [1] 5</code></pre>
+</div>
+</div>
+<div id="components-cliques-and-communities-in-python" class="section level2" number="8.3">
+<h2>
+<span class="header-section-number">8.3</span> Components, cliques and communities in Python<a class="anchor" aria-label="anchor" href="#components-cliques-and-communities-in-python"><i class="fas fa-link"></i></a>
+</h2>
 
 </div>
+</div>
+
   <div class="chapter-nav">
 <div class="prev"><a href="vertex-importance.html"><span class="header-section-number">7</span> Vertex Importance and Centrality</a></div>
 <div class="next"><a href="similarity.html"><span class="header-section-number">9</span> Commonality and Assortativity</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
-      <ul class="nav navbar-nav"><li><a class="nav-link" href="#community"><span class="header-section-number">8</span> Segmentation and Community</a></li></ul>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#community"><span class="header-section-number">8</span> Components, Cliques and Communities</a></li>
+<li>
+<a class="nav-link" href="#theory-of-components-partitions-and-clusters"><span class="header-section-number">8.1</span> Theory of components, partitions and clusters</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#connected-components-of-graphs"><span class="header-section-number">8.1.1</span> Connected components of graphs</a></li>
+<li><a class="nav-link" href="#vertex-partitioning"><span class="header-section-number">8.1.2</span> Vertex partitioning</a></li>
+<li><a class="nav-link" href="#vertex-clustering-and-community-detection"><span class="header-section-number">8.1.3</span> Vertex clustering and community detection</a></li>
+<li><a class="nav-link" href="#cliques"><span class="header-section-number">8.1.4</span> Cliques</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#components-cliques-and-communities-in-r"><span class="header-section-number">8.2</span> Components, cliques and communities in R</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#finding-connected-components-of-disconnected-graphs"><span class="header-section-number">8.2.1</span> Finding connected components of disconnected graphs</a></li>
+<li><a class="nav-link" href="#partioning-and-community-detection-in-r"><span class="header-section-number">8.2.2</span> Partioning and community detection in R</a></li>
+<li><a class="nav-link" href="#finding-cliques-in-r"><span class="header-section-number">8.2.3</span> Finding cliques in R</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#components-cliques-and-communities-in-python"><span class="header-section-number">8.3</span> Components, cliques and communities in Python</a></li>
+</ul>
 
       <div class="book-extra">
         <ul class="list-unstyled">
