@@ -1,4 +1,4 @@
-# Components, Cliques and Communities {#community}
+# Components, Communities and Cliques {#community}
 
 The study of group dynamics would be pretty ineffective if we were not able to identify and study important subgroups.  Networks of people are often made up of subsets that interact more intensely among each other than they do with the rest of the network, and it is often very important in research and analysis to identify or approximate these subsets as best as possible so that they can be studied more closely.  In complex networks, this is not an easy task.  Most of the computational methods we have available to us for finding densely connected subsets of vertices (usually called *communities*) are iterative approximations which make use of heuristics^[Heuristics are methodological 'shortcuts' which can vastly reduce the complexity of a problem but usually sacrifice some element of accuracy in doing so.] and are rarely 100% accurate^[Many problems of graph 'clustering' --- that is, finding partitions of a graph that maximise intra-group density but minimize between-group density --- have already been shown to be NP-hard].  However, in the study of networks in the organizational sciences, we do not need high levels of precision to be able to draw valuable insights, and therefore these modern approximation techniques are very powerful tools for us to have at our disposal.
 
@@ -105,11 +105,11 @@ In Figure \@ref(fig:cutex), the following are maximal cliques:  $B \longleftrigh
 Finding a single maximal clique in an undirected graph is not a complex problem and can be done quickly using a standard search algorithm starting on an arbitrary vertex. However, finding maximal cliques of a specified size, or all maximal cliques, as well as finding largest cliques, are problems whose complexity increases with the size and density of a graph.  Care should be taken in attempting these algorithms on very large graphs. 
 
 :::{.thinkahead data-latex=""}
-**Thinking ahead:**  Go back to the graph of **Zachary's Karate Club** in Chapter \@ref(viz-graphs).  Can you identify some maximal cliques?  What do you think is the size of the largest clique?  Thinking about this will give you a sense of how hard the largest clique problem might be on very large graphs.  We will use this as an example later in the chapter.
+**Thinking ahead:**  Go back to the graph of *Zachary's Karate Club* in Chapter \@ref(viz-graphs).  Can you identify some maximal cliques?  What do you think is the size of the largest clique?  Thinking about this will give you a sense of how hard the largest clique problem might be on very large graphs.  We will use this as an example later in the chapter.
 :::
 
 
-## Components, cliques and communities in R
+## Finding components, communities and cliques using R
 
 ### Finding connected components of disconnected graphs
 
@@ -182,7 +182,7 @@ ggraph(schoolfriends_rp) +
 
 ### Partioning and community detection in R
 
-For the next few examples we will return to *Zachary's Karate Club* network from Chapter \@ref(viz-graphs).  Let's load up and visualize that directed graph and mark the known leading actors Mr Hi and John A with larger vertices.
+For the next few examples we will return to *Zachary's Karate Club* network from Chapter \@ref(viz-graphs).  Let's load up and visualize that directed graph and mark the known leading actors Mr Hi and John A with larger vertices, as in Figure \@ref(fig:karate8).
 
 ```{r karate8, fig.align = "center", fig.cap = "The `karate` graph with Mr Hi and John A indicated with larger vertices"}
 # get karate edgelist
@@ -255,10 +255,182 @@ The `largest_cliques()` finds all largest cliques in a graph.
 largest_cliques(karate)
 ```
 
-We see that the maximal cliques of size 5 that we identified are also the largest cliques in the `karate graph`, and both orient around Mr Hi.  The function `clique_num()` returns the size of the largest clique.
+We see that the maximal cliques of size 5 that we identified are also the largest cliques in the `karate graph`, and they have four out of 5 vertices in common.  The function `clique_num()` returns the size of the largest clique.
 
 ```{r}
 clique_num(karate)
 ```
 
-## Components, cliques and communities in Python
+
+## Finding components, communities and cliques using Python
+
+### Finding components using Python
+
+For *undirected graphs*, the `networkx` function `number_connected_components()` returns the number of connected components in the graph while the `connected_components()` function returns the vertices in each connected component.  
+
+For *directed graphs*, the similar functions identify weakly and strongly connected components.  Let's use the reported friendships from the `schoolfriends` data set as an example.
+
+```{python}
+import pandas as pd
+import networkx as nx
+
+# get schoolfriends edgelist
+schoolfriends_edges = pd.read_csv("https://ona-book.org/data/schoolfriends_edgelist.csv")
+
+# use only reported friendships
+schoolfriends_reported = schoolfriends_edges[schoolfriends_edges.type == "reported"]
+
+# create directed graph
+schoolfriends_rp = nx.from_pandas_edgelist(
+  schoolfriends_reported,
+  source = "from",
+  target = "to",
+  create_using=nx.DiGraph
+)
+
+# number of weakly connected components
+nx.number_weakly_connected_components(schoolfriends_rp)
+```
+
+
+```{python}
+# create component subgraphs 
+components = nx.weakly_connected_components(schoolfriends_rp)
+
+subgraphs = [schoolfriends_rp.subgraph(component).copy() 
+for component in components]
+
+# size of subgraphs
+[len(subgraph.nodes) for subgraph in subgraphs]
+```
+
+```{python}
+# view nodes in one of the smaller components
+subgraphs[2].nodes
+```
+
+### Partitioning and community detection using Python
+
+`networkx` has numerous algorithmic functions for exploring edge cuts on graphs, including to find the minimum edge cut.  You can consult the reference documentation^[https://networkx.org/documentation/stable/reference/algorithms/cuts.html] to learn about the various functions available.  Let's use the `karate` dataset to demonstrate how to find a minimum cut.  
+
+```{python}
+# get karate edgelist
+karate_edges = pd.read_csv("https://ona-book.org/data/karate.csv")
+
+# create undirected network
+karate = nx.from_pandas_edgelist(karate_edges, source = "from", target = "to")
+
+# find minimum cut
+nx.minimum_edge_cut(karate)
+```
+
+```{python}
+# get minimum edge cut size
+len(nx.minimum_edge_cut(karate))
+```
+
+Various built-in community detection algorithms are available in the the `networkx.community` module, such as the Girvan-Newman edge betweenness algorithm.  This generates communities by progressively removing edges with the highest edge betweenness centrality.  It returns an iterator object where the first element is the result of the first edge removal, and subsequent elements are the result of progressive edge removal.
+
+```{python}
+# get communities based on girvan-newman and sort according to no of communities
+communities = sorted(
+  nx.community.girvan_newman(karate), 
+  key = len
+)
+
+# view communities from first edge removal
+communities[0]
+```
+
+We see that the first split leads to two communities, one around John A and the other around Mr Hi.
+
+The `cdlib` package in Python contains a very wide range of community detection algorithms that work with the `networkx` package, including the Louvain and Leiden algorithms as well as many others.  In this example we create a Louvain partition of the `karate` graph using `cdlib`.
+
+```{python, echo = FALSE}
+plt.cla()
+```
+
+```{python}
+from cdlib import algorithms
+import numpy as np
+import matplotlib.cm as cm
+import matplotlib.pyplot as plt 
+
+# get louvain partition which optimizes modularity
+louvain_comms = algorithms.louvain(karate)
+```
+
+`louvain_comms` is a clustering object that has a lot of useful properties and methods.  To see the communities:
+
+```{python}
+louvain_comms.communities
+```
+
+We see four communities.  The modularity of the resulting community structure can be calculated using the `newman_girvan_modularity()` method.
+
+```{python}
+louvain_comms.newman_girvan_modularity()
+```
+
+To visualize the network community structure, we can create a color mapping against the communities, as in Figure \@ref(fig:karate-py-conn).
+
+```{python, echo = FALSE}
+plt.cla()
+```
+
+```{python karate-py-conn, fig.align = "center", fig.cap = "Best Louvain partition of the `karate` graph"}
+import matplotlib.pyplot as plt
+from matplotlib import cm
+from matplotlib.colors import ListedColormap, LinearSegmentedColormap
+
+# create dict with labels only for Mr Hi and John A
+node = list(karate.nodes)
+labels = [i if i == "Mr Hi" or i == "John A" else "" for i in karate.nodes]
+nodelabels = dict(zip(node, labels))
+
+# create and order community mappings
+communities = louvain_comms.to_node_community_map()
+communities = [communities[k].pop() for k in node]
+
+# create color map
+viridis = cm.get_cmap('viridis', max(communities) + 1)
+
+# visualize
+np.random.seed(123)
+nx.draw_spring(karate, labels = nodelabels, cmap = viridis,
+node_color = communities, edge_color = "grey")
+plt.show()
+```
+
+:::{.thinkahead data-latex=""}
+**Playing around:** The options for community detection algorithms in the `cdlib` Python package are incredible.  Consider playing around with some different algorithm.  For example, you could try to visualize the community structure based on the Leiden algorithm.  It's also worth spending a little time exploring the technical documentation for the  `cdlib` package^[https://cdlib.readthedocs.io/en/latest].
+:::
+
+### Finding cliques in Python
+
+All maximal cliques in a graph can be calculated using the `find_cliques()` function:
+
+```{python}
+cliques = nx.find_cliques(karate)
+maximal_cliques = sorted(cliques, key = len)
+
+# get number of maximal cliques
+len(maximal_cliques)
+```
+
+```{python}
+# get largest clique
+maximal_cliques[len(maximal_cliques) - 1]
+```
+
+Alternatively there are functions that can calculate the number of cliques, the size of the largest clique, and can extract the graph of the largest clique.
+
+```{python}
+nx.graph_number_of_cliques(karate)
+```
+
+```{python}
+nx.graph_clique_number(karate)
+```
+
+## Examples of uses
