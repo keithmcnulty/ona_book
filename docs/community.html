@@ -153,7 +153,7 @@ Figure 8.3: Cuts are defined by edges that split the vertices of a graph into di
 <h3>
 <span class="header-section-number">8.2.1</span> Finding connected components of disconnected graphs<a class="anchor" aria-label="anchor" href="#finding-connected-components-of-disconnected-graphs"><i class="fas fa-link"></i></a>
 </h3>
-<p>To illustrate the <code><a href="https://rdrr.io/pkg/igraph/man/components.html">components()</a></code> function in <code>igraph</code> we will load up the <code>schoolfriends</code> edgelist dataset from an earlier chapter. We will use reported friendships, create a directed graph and visualize it.</p>
+<p>To illustrate the <code><a href="https://rdrr.io/pkg/igraph/man/components.html">components()</a></code> function in <code>igraph</code> we will load up the <code>schoolfriends</code> edgelist dataset from an earlier chapter. We will use reported friendships, create a directed graph and visualize it as in Figure <a href="community.html#fig:viz-schoolfriends-rp">8.4</a>.</p>
 <div class="sourceCode" id="cb419"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://igraph.org">igraph</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggraph.data-imaginist.com">ggraph</a></span><span class="op">)</span>
@@ -176,7 +176,12 @@ Figure 8.3: Cuts are defined by edges that split the vertices of a graph into di
                  arrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/arrow.html">arrow</a></span><span class="op">(</span>length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html">unit</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="st">"cm"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_point.html">geom_node_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">2</span>, color <span class="op">=</span> <span class="st">"lightblue"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<div class="inline-figure"><img src="_main_files/figure-html/unnamed-chunk-242-1.png" width="672"></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:viz-schoolfriends-rp"></span>
+<img src="_main_files/figure-html/viz-schoolfriends-rp-1.png" alt="The directed graph of reported friendships from the `schoolfriends` data set" width="672"><p class="caption">
+Figure 8.4: The directed graph of reported friendships from the <code>schoolfriends</code> data set
+</p>
+</div>
 <p>We can see some connected components in this disconnected graph. We can use the <code><a href="https://rdrr.io/pkg/igraph/man/components.html">components()</a></code> function to classify the vertices into the connected components. This function generates a list containing the following vectors:</p>
 <ul>
 <li>
@@ -199,7 +204,7 @@ Figure 8.3: Cuts are defined by edges that split the vertices of a graph into di
 <code class="sourceCode R"><span class="co"># size of components</span>
 <span class="va">schoolfriends_components</span><span class="op">$</span><span class="va">csize</span></code></pre></div>
 <pre><code>## [1] 128   3   3</code></pre>
-<p>We can use the membership to assign a <code>component</code> property and then visualize with the vertices colored by component, as in Figure <a href="community.html#fig:component-color">8.4</a>.</p>
+<p>We can use the membership to assign a <code>component</code> property and then visualize with the vertices colored by component, as in Figure <a href="community.html#fig:component-color">8.5</a>.</p>
 <div class="sourceCode" id="cb424"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># assign component property</span>
 <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">schoolfriends_rp</span><span class="op">)</span><span class="op">$</span><span class="va">component</span> <span class="op">&lt;-</span> <span class="va">schoolfriends_components</span><span class="op">$</span><span class="va">membership</span>
@@ -214,7 +219,7 @@ Figure 8.3: Cuts are defined by edges that split the vertices of a graph into di
 <div class="figure" style="text-align: center">
 <span style="display:block;" id="fig:component-color"></span>
 <img src="_main_files/figure-html/component-color-1.png" alt="The reported `schoolfriends` graph color coded by its (weakly) connected components" width="672"><p class="caption">
-Figure 8.4: The reported <code>schoolfriends</code> graph color coded by its (weakly) connected components
+Figure 8.5: The reported <code>schoolfriends</code> graph color coded by its (weakly) connected components
 </p>
 </div>
 <div class="thinkahead">
@@ -225,7 +230,7 @@ Figure 8.4: The reported <code>schoolfriends</code> graph color coded by its (we
 <h3>
 <span class="header-section-number">8.2.2</span> Partioning and community detection in R<a class="anchor" aria-label="anchor" href="#partioning-and-community-detection-in-r"><i class="fas fa-link"></i></a>
 </h3>
-<p>For the next few examples we will return to <em>Zachary’s Karate Club</em> network from Chapter <a href="viz-graphs.html#viz-graphs">4</a>. Let’s load up and visualize that directed graph and mark the known leading actors Mr Hi and John A with larger vertices, as in Figure <a href="community.html#fig:karate8">8.5</a>.</p>
+<p>For the next few examples we will return to <em>Zachary’s Karate Club</em> network from Chapter <a href="viz-graphs.html#viz-graphs">4</a>. Let’s load up and visualize that directed graph and mark the known leading actors Mr Hi and John A with larger vertices, as in Figure <a href="community.html#fig:karate8">8.6</a>.</p>
 <div class="sourceCode" id="cb425"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># get karate edgelist</span>
 <span class="va">karate_edges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"https://ona-book.org/data/karate.csv"</span><span class="op">)</span>
@@ -246,7 +251,7 @@ Figure 8.4: The reported <code>schoolfriends</code> graph color coded by its (we
 <div class="figure" style="text-align: center">
 <span style="display:block;" id="fig:karate8"></span>
 <img src="_main_files/figure-html/karate8-1.png" alt="The `karate` graph with Mr Hi and John A indicated with larger vertices" width="672"><p class="caption">
-Figure 8.5: The <code>karate</code> graph with Mr Hi and John A indicated with larger vertices
+Figure 8.6: The <code>karate</code> graph with Mr Hi and John A indicated with larger vertices
 </p>
 </div>
 <p>Minimum cuts in graphs can be found using the <code><a href="https://rdrr.io/pkg/igraph/man/min_cut.html">min_cut()</a></code> function in <code>igraph</code>. This will return the number of edges in the minimum cut, unless you use the <code>value.only = FALSE</code> argument, in which case it will return more information on the cut,</p>
@@ -256,18 +261,19 @@ Figure 8.5: The <code>karate</code> graph with Mr Hi and John A indicated with l
 ## [1] 1
 ## 
 ## $cut
-## + 1/78 edge from 364231b (vertex names):
+## + 1/78 edge from 2ca25bb (vertex names):
 ## [1] Mr Hi--Actor 12
 ## 
 ## $partition1
-## + 1/34 vertex, named, from 364231b:
+## + 1/34 vertex, named, from 2ca25bb:
 ## [1] Actor 12
 ## 
 ## $partition2
-## + 33/34 vertices, named, from 364231b:
-##  [1] Mr Hi    Actor 2  Actor 3  Actor 4  Actor 5  Actor 6  Actor 7  Actor 9  Actor 10 Actor 14 Actor 15 Actor 16 Actor 19
-## [14] Actor 20 Actor 21 Actor 23 Actor 24 Actor 25 Actor 26 Actor 27 Actor 28 Actor 29 Actor 30 Actor 31 Actor 32 Actor 33
-## [27] Actor 8  Actor 11 Actor 13 Actor 18 Actor 22 Actor 17 John A</code></pre>
+## + 33/34 vertices, named, from 2ca25bb:
+##  [1] Mr Hi    Actor 2  Actor 3  Actor 4  Actor 5  Actor 6  Actor 7  Actor 9  Actor 10 Actor 14
+## [11] Actor 15 Actor 16 Actor 19 Actor 20 Actor 21 Actor 23 Actor 24 Actor 25 Actor 26 Actor 27
+## [21] Actor 28 Actor 29 Actor 30 Actor 31 Actor 32 Actor 33 Actor 8  Actor 11 Actor 13 Actor 18
+## [31] Actor 22 Actor 17 John A</code></pre>
 <p>We see that a minimum cut exists of size 1 between Mr Hi and Actor 12.</p>
 <p>The Louvain community detection algorithm can be run using the <code><a href="https://rdrr.io/pkg/igraph/man/cluster_louvain.html">cluster_louvain()</a></code> function. <code>weights</code> can be added as an argument, or will be used by default if the graph has a <code>weight</code> edge attribute (set <code>weight = NA</code> to avoid this). This will produce a list of community groups. The best way to record the resulting community membership is to assign it as a vertex property using the <code><a href="https://rdrr.io/pkg/igraph/man/communities.html">membership()</a></code> function.</p>
 <div class="sourceCode" id="cb428"><pre class="downlit sourceCode r">
@@ -282,7 +288,7 @@ Figure 8.5: The <code>karate</code> graph with Mr Hi and John A indicated with l
 <pre><code>## Community sizes
 ##  1  2  3  4 
 ##  6 12 11  5</code></pre>
-<p>We have four detected communities of varying sizes. As before, we can color code to visualize these, as in Figure <a href="community.html#fig:karate-communities">8.6</a>.</p>
+<p>We have four detected communities of varying sizes. As before, we can color code to visualize these, as in Figure <a href="community.html#fig:karate-communities">8.7</a>.</p>
 <div class="sourceCode" id="cb431"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
 <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/ggraph.html">ggraph</a></span><span class="op">(</span><span class="va">karate</span>, layout <span class="op">=</span> <span class="st">"fr"</span><span class="op">)</span> <span class="op">+</span>
@@ -293,7 +299,7 @@ Figure 8.5: The <code>karate</code> graph with Mr Hi and John A indicated with l
 <div class="figure" style="text-align: center">
 <span style="display:block;" id="fig:karate-communities"></span>
 <img src="_main_files/figure-html/karate-communities-1.png" alt="Communities of the `karate` graph as detected by the Louvain algorithm" width="672"><p class="caption">
-Figure 8.6: Communities of the <code>karate</code> graph as detected by the Louvain algorithm
+Figure 8.7: Communities of the <code>karate</code> graph as detected by the Louvain algorithm
 </p>
 </div>
 <div class="thinkahead">
@@ -308,21 +314,21 @@ Figure 8.6: Communities of the <code>karate</code> graph as detected by the Louv
 <div class="sourceCode" id="cb432"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/cliques.html">max_cliques</a></span><span class="op">(</span><span class="va">karate</span>, min <span class="op">=</span> <span class="fl">5</span>, max <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 5/34 vertices, named, from 364231b:
+## + 5/34 vertices, named, from 2ca25bb:
 ## [1] Actor 2  Mr Hi    Actor 4  Actor 3  Actor 14
 ## 
 ## [[2]]
-## + 5/34 vertices, named, from 364231b:
+## + 5/34 vertices, named, from 2ca25bb:
 ## [1] Actor 2 Mr Hi   Actor 4 Actor 3 Actor 8</code></pre>
 <p>The <code><a href="https://rdrr.io/pkg/igraph/man/cliques.html">largest_cliques()</a></code> finds all largest cliques in a graph.</p>
 <div class="sourceCode" id="cb434"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/cliques.html">largest_cliques</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 5/34 vertices, named, from 364231b:
+## + 5/34 vertices, named, from 2ca25bb:
 ## [1] Actor 8 Mr Hi   Actor 2 Actor 3 Actor 4
 ## 
 ## [[2]]
-## + 5/34 vertices, named, from 364231b:
+## + 5/34 vertices, named, from 2ca25bb:
 ## [1] Actor 4  Mr Hi    Actor 2  Actor 3  Actor 14</code></pre>
 <p>We see that the maximal cliques of size 5 that we identified are also the largest cliques in the <code>karate graph</code>, and they have four out of 5 vertices in common. The function <code><a href="https://rdrr.io/pkg/igraph/man/cliques.html">clique_num()</a></code> returns the size of the largest clique.</p>
 <div class="sourceCode" id="cb436"><pre class="downlit sourceCode r">
@@ -415,7 +421,7 @@ Figure 8.6: Communities of the <code>karate</code> graph as detected by the Louv
 <p>We see four communities. The modularity of the resulting community structure can be calculated using the <code>newman_girvan_modularity()</code> method.</p>
 <div class="sourceCode" id="cb453"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb453-1"><a href="community.html#cb453-1" aria-hidden="true" tabindex="-1"></a>louvain_comms.newman_girvan_modularity()</span></code></pre></div>
 <pre><code>## FitnessResult(min=None, max=None, score=0.4188034188034188, std=None)</code></pre>
-<p>To visualize the network community structure, we can create a color mapping against the communities, as in Figure <a href="community.html#fig:karate-py-conn">8.7</a>.</p>
+<p>To visualize the network community structure, we can create a color mapping against the communities, as in Figure <a href="community.html#fig:karate-py-conn">8.8</a>.</p>
 <div class="sourceCode" id="cb455"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb455-1"><a href="community.html#cb455-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb455-2"><a href="community.html#cb455-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> cm</span>
 <span id="cb455-3"><a href="community.html#cb455-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.colors <span class="im">import</span> ListedColormap, LinearSegmentedColormap</span>
@@ -440,7 +446,7 @@ Figure 8.6: Communities of the <code>karate</code> graph as detected by the Louv
 <div class="figure" style="text-align: center">
 <span style="display:block;" id="fig:karate-py-conn"></span>
 <img src="_main_files/figure-html/unnamed-chunk-124-1.png" alt="Best Louvain partition of the `karate` graph" width="614"><p class="caption">
-Figure 8.7: Best Louvain partition of the <code>karate</code> graph
+Figure 8.8: Best Louvain partition of the <code>karate</code> graph
 </p>
 </div>
 <div class="thinkahead">
@@ -501,27 +507,27 @@ Figure 8.7: Best Louvain partition of the <code>karate</code> graph
 <div class="sourceCode" id="cb465"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">(</span><span class="va">cliques</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/cliques.html">largest_cliques</a></span><span class="op">(</span><span class="va">schoolfriends_fb</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 14/156 vertices, named, from 644bbc6:
+## + 14/156 vertices, named, from f66900f:
 ##  [1] 525  797  466  376  638  841  1423 1218 769  440  125  325  694  245 
 ## 
 ## [[2]]
-## + 14/156 vertices, named, from 644bbc6:
+## + 14/156 vertices, named, from f66900f:
 ##  [1] 245  564  1218 440  466  376  841  1237 1423 769  624  125  325  694 
 ## 
 ## [[3]]
-## + 14/156 vertices, named, from 644bbc6:
+## + 14/156 vertices, named, from f66900f:
 ##  [1] 245  797  466  376  841  1423 1218 624  440  125  638  325  694  769 
 ## 
 ## [[4]]
-## + 14/156 vertices, named, from 644bbc6:
+## + 14/156 vertices, named, from f66900f:
 ##  [1] 245  797  466  376  841  1423 1218 624  440  125  638  325  694  1067
 ## 
 ## [[5]]
-## + 14/156 vertices, named, from 644bbc6:
+## + 14/156 vertices, named, from f66900f:
 ##  [1] 245  1067 466  376  841  1237 1423 1218 624  440  125  638  325  694 
 ## 
 ## [[6]]
-## + 14/156 vertices, named, from 644bbc6:
+## + 14/156 vertices, named, from f66900f:
 ##  [1] 245  638  466  376  841  1237 1423 1218 769  624  440  125  325  694</code></pre>
 <p>We see six cliques of 14 individuals, all of which have considerable overlap. We can take a look at the class and gender of one of these cliques.</p>
 <div class="sourceCode" id="cb467"><pre class="downlit sourceCode r">
@@ -548,7 +554,7 @@ Figure 8.7: Best Louvain partition of the <code>karate</code> graph
 ## 12  325  PSI*      M
 ## 13  694    MP      F
 ## 14  245    MP      F</code></pre>
-<p>We see that this clique is distributed over four classes and is mostly male. Let’s visualize where this clique sits in the full network as in Figure <a href="community.html#fig:schoolfriends-clique">8.8</a>.</p>
+<p>We see that this clique is distributed over four classes and is mostly male. Let’s visualize where this clique sits in the full network as in Figure <a href="community.html#fig:schoolfriends-clique">8.9</a>.</p>
 <div class="sourceCode" id="cb469"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># create clique property</span>
 <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">schoolfriends_fb</span><span class="op">)</span><span class="op">$</span><span class="va">clique6</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span>
@@ -564,7 +570,7 @@ Figure 8.7: Best Louvain partition of the <code>karate</code> graph
 <div class="figure" style="text-align: center">
 <span style="display:block;" id="fig:schoolfriends-clique"></span>
 <img src="_main_files/figure-html/schoolfriends-clique-1.png" alt="Facebook schoolfriends network with one of the largest cliques indicated" width="672"><p class="caption">
-Figure 8.8: Facebook schoolfriends network with one of the largest cliques indicated
+Figure 8.9: Facebook schoolfriends network with one of the largest cliques indicated
 </p>
 </div>
 <p>Now let’s use the Louvain algorithm to detect communities in our graph.</p>
@@ -591,7 +597,7 @@ Figure 8.8: Facebook schoolfriends network with one of the largest cliques indic
 <code class="sourceCode R"><span class="co"># modularity of gender structure</span>
 <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/modularity.igraph.html">modularity</a></span><span class="op">(</span><span class="va">schoolfriends_fb</span>, <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">schoolfriends_fb</span><span class="op">)</span><span class="op">$</span><span class="va">gender</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 0.06504432</code></pre>
-<p>This community structure is certainly a better indicator of Facebook subgroups than gender or class. We can visualize the class structure side by side with the Louvain community structure to try to interpret it, as in Figure <a href="community.html#fig:schoolfriends-louvain">8.9</a>.</p>
+<p>This community structure is certainly a better indicator of Facebook subgroups than gender or class. We can visualize the class structure side by side with the Louvain community structure to try to interpret it, as in Figure <a href="community.html#fig:schoolfriends-louvain">8.10</a>.</p>
 <div class="sourceCode" id="cb478"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span>
 
@@ -615,7 +621,7 @@ Figure 8.8: Facebook schoolfriends network with one of the largest cliques indic
 <div class="figure" style="text-align: center">
 <span style="display:block;" id="fig:schoolfriends-louvain"></span>
 <img src="_main_files/figure-html/schoolfriends-louvain-1.png" alt="Optimal Louvain communities in the Facebook schoolfriends graph (left) versus class communities (right)" width="672"><p class="caption">
-Figure 8.9: Optimal Louvain communities in the Facebook schoolfriends graph (left) versus class communities (right)
+Figure 8.10: Optimal Louvain communities in the Facebook schoolfriends graph (left) versus class communities (right)
 </p>
 </div>
 <p>Visually, we can see that the Louvain community structure is a much better representation of dense friendship groups compared to the class structure, indicating that Facebook friendships tend to span across class structures. We can also see that one of the Louvain communities contains the clique we identified earlier.</p>
@@ -636,17 +642,17 @@ Figure 8.9: Optimal Louvain communities in the Facebook schoolfriends graph (lef
   vertices <span class="op">=</span> <span class="va">ontariopol_vertices</span>, 
   directed <span class="op">=</span> <span class="cn">FALSE</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH 0306c0a UNW- 108 6095 -- 
+<pre><code>## IGRAPH d920334 UNW- 108 6095 -- 
 ## + attr: name (v/c), screen_name (v/c), party (v/c), weight (e/n)
-## + edges from 0306c0a (vertex names):
-##  [1] Deepak Anand--Doug Ford               Deepak Anand--Victor Fedeli           Deepak Anand--Deepak Anand           
-##  [4] Deepak Anand--Monte McNaughton        Deepak Anand--Christine Elliott       Deepak Anand--Stephen Lecce          
-##  [7] Deepak Anand--Rod Phillips            Deepak Anand--Lisa MacLeod            Deepak Anand--Michael Tibollo        
-## [10] Deepak Anand--Peter Bethlenfalvy      Deepak Anand--Raymond Sung Joon Cho   Deepak Anand--Rudy Cuzzetto          
-## [13] Deepak Anand--Caroline Mulroney       Deepak Anand--Sheref Sabawy           Deepak Anand--Nina Tangri            
-## [16] Deepak Anand--Jill Dunlop             Deepak Anand--Todd Smith              Deepak Anand--Kinga Surma            
-## [19] Deepak Anand--Lisa Thompson           Deepak Anand--Kaleed Rasheed          Deepak Anand--Steve Clark            
-## [22] Deepak Anand--Ernie Hardeman          Deepak Anand--Natalia Kusendova       Deepak Anand--Prabmeet Singh Sarkaria
+## + edges from d920334 (vertex names):
+##  [1] Deepak Anand--Doug Ford             Deepak Anand--Victor Fedeli        
+##  [3] Deepak Anand--Deepak Anand          Deepak Anand--Monte McNaughton     
+##  [5] Deepak Anand--Christine Elliott     Deepak Anand--Stephen Lecce        
+##  [7] Deepak Anand--Rod Phillips          Deepak Anand--Lisa MacLeod         
+##  [9] Deepak Anand--Michael Tibollo       Deepak Anand--Peter Bethlenfalvy   
+## [11] Deepak Anand--Raymond Sung Joon Cho Deepak Anand--Rudy Cuzzetto        
+## [13] Deepak Anand--Caroline Mulroney     Deepak Anand--Sheref Sabawy        
+## [15] Deepak Anand--Nina Tangri           Deepak Anand--Jill Dunlop          
 ## + ... omitted several edges</code></pre>
 <p>We have an undirected, weighted graph, with <code>screen_name</code> and <code>party</code> vertex properties. First, we check if our graph is connected:</p>
 <div class="sourceCode" id="cb481"><pre class="downlit sourceCode r">
@@ -676,7 +682,7 @@ Figure 8.9: Optimal Louvain communities in the Facebook schoolfriends graph (lef
            membership <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">ontariopol</span><span class="op">)</span><span class="op">$</span><span class="va">party</span><span class="op">)</span><span class="op">)</span>, 
            weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/E.html">E</a></span><span class="op">(</span><span class="va">ontariopol</span><span class="op">)</span><span class="op">$</span><span class="va">weight</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 0.382394</code></pre>
-<p>We see very similar modularity. Let’s visualize the Louvain community and party structure side-by-side as in Figure <a href="community.html#fig:ontariopol-communities">8.10</a>.</p>
+<p>We see very similar modularity. Let’s visualize the Louvain community and party structure side-by-side as in Figure <a href="community.html#fig:ontariopol-communities">8.11</a>.</p>
 <div class="sourceCode" id="cb489"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># louvain communities</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
@@ -698,10 +704,10 @@ Figure 8.9: Optimal Louvain communities in the Facebook schoolfriends graph (lef
 <div class="figure" style="text-align: center">
 <span style="display:block;" id="fig:ontariopol-communities"></span>
 <img src="_main_files/figure-html/ontariopol-communities-1.png" alt="Twitter interaction of Ontario politicians segmented by their Louvain communities (left) and their political parties (right).  Louvain does a good job of identifying political alignment." width="672"><p class="caption">
-Figure 8.10: Twitter interaction of Ontario politicians segmented by their Louvain communities (left) and their political parties (right). Louvain does a good job of identifying political alignment.
+Figure 8.11: Twitter interaction of Ontario politicians segmented by their Louvain communities (left) and their political parties (right). Louvain does a good job of identifying political alignment.
 </p>
 </div>
-<p>We see very similar community structures, indicating that the Louvain algorithm has done a good job of identifying political party alignment from the tweet activity of the politicians. Using similar methods to our Facebook schoolfriends example in Section <a href="community.html#schoolfriend-community">8.4.1</a>, we can also identify large cliques within the political parties, as in Figure <a href="community.html#fig:ontariopol-clique">8.11</a>.</p>
+<p>We see very similar community structures, indicating that the Louvain algorithm has done a good job of identifying political party alignment from the tweet activity of the politicians. Using similar methods to our Facebook schoolfriends example in Section <a href="community.html#schoolfriend-community">8.4.1</a>, we can also identify large cliques within the political parties, as in Figure <a href="community.html#fig:ontariopol-clique">8.12</a>.</p>
 <div class="sourceCode" id="cb490"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># get largest cliques </span>
 <span class="va">cliques</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/cliques.html">largest_cliques</a></span><span class="op">(</span><span class="va">ontariopol</span><span class="op">)</span>
@@ -730,8 +736,8 @@ Figure 8.10: Twitter interaction of Ontario politicians segmented by their Louva
 <span class="va">g1</span> <span class="op">+</span> <span class="va">g2</span></code></pre></div>
 <div class="figure" style="text-align: center">
 <span style="display:block;" id="fig:ontariopol-clique"></span>
-<img src="_main_files/figure-html/ontariopol-clique-1.png" alt="Large Twitter clique of 48 politicans (left).  Comparison with party membership (right) reveals this to be a PCP clique." width="672"><p class="caption">
-Figure 8.11: Large Twitter clique of 48 politicans (left). Comparison with party membership (right) reveals this to be a PCP clique.
+<img src="_main_files/figure-html/ontariopol-clique-1.png" alt="Large Twitter clique of 48 politicians (left).  Comparison with party membership (right) reveals this to be a PCP clique." width="672"><p class="caption">
+Figure 8.12: Large Twitter clique of 48 politicians (left). Comparison with party membership (right) reveals this to be a PCP clique.
 </p>
 </div>
 <div class="thinkahead">
