@@ -434,3 +434,22 @@ nx.graph_clique_number(karate)
 ```
 
 ## Examples of uses
+
+```{r}
+# get edgelist and vertex data
+ontariopol_edges <- read.csv("https://ona-book.org/data/ontariopol_edgelist.csv")
+ontariopol_vertices <- read.csv("https://ona-book.org/data/ontariopol_vertices.csv") 
+ontariopol_edges <- ontariopol_edges[complete.cases(ontariopol_edges), ]
+
+# create graph
+ontariopol <- igraph::graph_from_data_frame(
+  d = ontariopol_edges,
+  vertices = ontariopol_vertices
+)
+
+## plot
+ggraph(ontariopol, layout = "fr") +
+  geom_edge_link(color = "grey", alpha = 0.7, arrow = arrow(length = unit(0.2, "cm"))) +
+  geom_node_point(size = 2, aes(color = party)) +
+  theme_void()
+```
