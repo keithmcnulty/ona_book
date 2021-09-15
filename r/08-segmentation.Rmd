@@ -435,21 +435,238 @@ nx.graph_clique_number(karate)
 
 ## Examples of uses
 
+In this section we will illustrate the implementation and interpretation of community detection algorithms using our Facebook schoolfriends example, and introducing a new example related to political tweets in the Ontario province of Canada.
+
+### Detecting communities and cliques among Facebook friends {#schoolfriend-community}
+
+Let's reload our Facebook schoolfriends graph so that we can investigate communities and cliques inside it.
+
+```{r}
+# get schoolfriends data
+schoolfriends_edgelist <- read.csv("https://ona-book.org/data/schoolfriends_edgelist.csv")
+schoolfriends_vertices <- read.csv("https://ona-book.org/data/schoolfriends_vertices.csv")
+
+# facebook only
+schoolfriends_facebook <- schoolfriends_edgelist |> 
+  dplyr::filter(type == "facebook")
+
+# create undirected graph
+schoolfriends_fb <- igraph::graph_from_data_frame(
+  d = schoolfriends_facebook,
+  vertices = schoolfriends_vertices,
+  directed = FALSE
+)
+
+# remove isolates
+isolates = which(degree(schoolfriends_fb) == 0)
+schoolfriends_fb <- delete.vertices(schoolfriends_fb, isolates)
+```
+
+We now have a connected, undirected graph of 156 vertices, with class and gender as vertex properties.  First, let's detemine the largest clique in the graph.
+
+```{r}
+(cliques <- igraph::largest_cliques(schoolfriends_fb))
+```
+
+We see six cliques of 14 individuals, all of which have considerable overlap.  We can take a look at the class and gender of one of these cliques.
+
+```{r}
+# subgraph for clique 6
+clique6 <- igraph::induced_subgraph(schoolfriends_fb, vids = cliques[[6]])
+
+(data.frame(
+  id = V(clique6)$name,
+  class = V(clique6)$class,
+  gender = V(clique6)$gender
+))
+```
+We see that this clique is distributed over four classes and is mostly male.  Let's visualize where this clique sits in the full network as in Figure \@ref(fig:schoolfriends-clique).
+
+```{r schoolfriends-clique, fig.align = "center", fig.cap = "Facebook schoolfriends network with one of the largest cliques indicated"}
+# create clique property
+V(schoolfriends_fb)$clique6 <- ifelse(
+  V(schoolfriends_fb) %in% cliques[[6]], 1, 0
+)
+
+set.seed(123)
+ggraph(schoolfriends_fb, layout = "fr") +
+  geom_edge_link(color = "grey", alpha = 0.7) +
+  geom_node_point(size = 2, aes(color = as.factor(clique6)),
+                  show.legend = FALSE) +
+  theme_void()
+  
+
+```
+
+Now let's use the Louvain algorithm to detect communities in our graph.
+
+```{r}
+# get optimal louvain communities
+communities <- igraph::cluster_louvain(schoolfriends_fb)
+
+# assign as a vertex property
+V(schoolfriends_fb)$community <- membership(communities)
+
+# how many communities?
+length(unique(V(schoolfriends_fb)$community))
+```
+
+Six communities have been identified.  Let's compare the modularity of this community structure to the known communities of class and gender.
+
+```{r}
+# modularity of louvain
+modularity(schoolfriends_fb, V(schoolfriends_fb)$community)
+```
+
+```{r}
+# modularity of class structure
+modularity(schoolfriends_fb, as.integer(as.factor(V(schoolfriends_fb)$class)))
+```
+
+```{r}
+# modularity of gender structure
+modularity(schoolfriends_fb, as.integer(as.factor(V(schoolfriends_fb)$gender)))
+```
+
+This community structure is certainly a better indicator of Facebook subgroups than gender or class.  We can visualize the class structure side by side with the Louvain community structure to try to interpret it, as in Figure \@ref(fig:schoolfriends-louvain).
+
+```{r schoolfriends-louvain, fig.align = "center", fig.cap = "Optimal Louvain communities in the Facebook schoolfriends graph (left) versus class communities (right)"}
+library(patchwork)
+
+# louvain communities
+set.seed(123)
+g1 <- ggraph(schoolfriends_fb, layout = "fr") +
+  geom_edge_link(color = "grey", alpha = 0.7) +
+  geom_node_point(size = 2, aes(color = as.factor(community)),
+                  show.legend = FALSE) +
+  theme_void()
+
+# class communities
+set.seed(123)
+g2 <- ggraph(schoolfriends_fb, layout = "fr") +
+  geom_edge_link(color = "grey", alpha = 0.7) +
+  geom_node_point(size = 2, aes(color = class),
+                  show.legend = FALSE) +
+  theme_void()
+
+g1 + g2
+
+```
+Visually, we can see that the Louvain community structure is a much better representation of dense friendship groups compared to the class structure, indicating that Facebook friendships tend to span across class structures.  We can also see that one of the Louvain communities contains the clique we identified earlier. 
+
+
+### Detecting politically aligned communities on Twitter
+
+The `ontariopol_edgelist` and `ontariopol_vertices` data sets represent tweeting activity between Ontario province politicians in Canada as captured in September 2021 and spanning several prior years of activity.  Although the Twitter graph is a directed graph, we will set this network up as undirected, with two politicians connected if there has been an interaction between them by means of one mentioning the other in a tweet or one replying to a tweet from the other.  The `weight` property represents the number of interactions and is therefore a measure of the connection strength. 
+
 ```{r}
 # get edgelist and vertex data
 ontariopol_edges <- read.csv("https://ona-book.org/data/ontariopol_edgelist.csv")
 ontariopol_vertices <- read.csv("https://ona-book.org/data/ontariopol_vertices.csv") 
-ontariopol_edges <- ontariopol_edges[complete.cases(ontariopol_edges), ]
 
 # create graph
-ontariopol <- igraph::graph_from_data_frame(
+(ontariopol <- igraph::graph_from_data_frame(
   d = ontariopol_edges,
-  vertices = ontariopol_vertices
+  vertices = ontariopol_vertices, 
+  directed = FALSE
+))
+```
+
+We have an undirected, weighted graph, with `screen_name` and `party` vertex properties.  First, we check if our graph is connected:
+
+```{r}
+is.connected(ontariopol)
+```
+
+Now we use the Louvain algorithm to detect an optimal community structure in our graph.  Since the graph has a `weight` property, our modularity calculations will include edge weight.
+
+```{r}
+# find optimal communities
+communities <- igraph::cluster_louvain(ontariopol)
+
+# assign as vertex properties
+V(ontariopol)$community <- membership(communities)
+
+# how many communities
+length(unique(V(ontariopol)$community))
+```
+
+We see six commmunities.  Let's compare the modularity of this community structure to the political party structure.
+
+```{r}
+# louvain modularity
+modularity(ontariopol, 
+           membership = V(ontariopol)$community, 
+           weights = E(ontariopol)$weight)
+```
+
+```{r}
+# political party modularity
+modularity(ontariopol, 
+           membership = as.integer(as.factor(V(ontariopol)$party)), 
+           weights = E(ontariopol)$weight)
+```
+
+We see very similar modularity.  Let's visualize the Louvain community and party structure side-by-side as in Figure \@ref(fig:ontariopol-communities).
+
+```{r ontariopol-communities, fig.align = "center", fig.cap = "Twitter interaction of Ontario politicians segmented by their Louvain communities (left) and their political parties (right).  Louvain does a good job of identifying political alignment."}
+# louvain communities
+set.seed(123)
+g1 <- ggraph(ontariopol, layout = "fr") +
+  geom_edge_link(color = "grey", alpha = 0.5) +
+  geom_node_point(size = 2, aes(color = as.factor(community)),
+                  show.legend = FALSE) +
+  theme_void()
+
+# class communities
+set.seed(123)
+g2 <- ggraph(ontariopol, layout = "fr") +
+  geom_edge_link(color = "grey", alpha = 0.5) +
+  geom_node_point(size = 2, aes(color = party),
+                  show.legend = FALSE) +
+  theme_void()
+
+g1 + g2
+```
+
+We see very similar community structures, indicating that the Louvain algorithm has done a good job of identifying political party alignment from the tweet activity of the politicians.  Using similar methods to our Facebook schoolfriends example in Section \@ref(schoolfriend-community), we can also identify large cliques within the political parties, as in Figure \@ref(fig:ontariopol-clique).
+
+
+```{r ontariopol-clique, fig.align = "center", fig.cap = "Large Twitter clique of 48 politicians (left).  Comparison with party membership (right) reveals this to be a PCP clique."}
+# get largest cliques 
+cliques <- igraph::largest_cliques(ontariopol)
+
+# there are 24 cliques of size 48 - choose one and visualize
+# create clique property
+V(ontariopol)$clique24 <- ifelse(
+  V(ontariopol) %in% cliques[[24]], 1, 0
 )
 
-## plot
-ggraph(ontariopol, layout = "fr") +
-  geom_edge_link(color = "grey", alpha = 0.7, arrow = arrow(length = unit(0.2, "cm"))) +
-  geom_node_point(size = 2, aes(color = party)) +
+# visualize
+set.seed(123)
+g1 <- ggraph(ontariopol, layout = "fr") +
+  geom_edge_link(color = "grey", alpha = 0.5) +
+  geom_node_point(size = 2, aes(color = as.factor(clique24)),
+                  show.legend = FALSE) +
   theme_void()
+
+set.seed(123)
+g2 <- ggraph(ontariopol, layout = "fr") +
+  geom_edge_link(color = "grey", alpha = 0.5) +
+  geom_node_point(size = 2, aes(color = party)) +
+  labs(color = "Party (Right hand graph)") +
+  theme_void()
+
+g1 + g2
 ```
+
+:::{.thinkahead data-latex=""}
+**Playing around:**  In both of the examples in this section, consider extending the work to identify key important or influential nodes within communities using your learning from Chapter \@ref(vertex-importance).  Remember that the Twitter graph is a directed graph and this may impact calculations of centrality, so consider moving back to a directed graph for these calculations.  Also, try investigating what happens when you seek optimal *unweighted* Louvain communities in the `ontariopol` graph. 
+:::
+
+## Learning exercises
+
+### Discussion questions
+
+### Data exercises
+
