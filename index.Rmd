@@ -36,6 +36,7 @@ eval_heavy_chunks <- TRUE
 # bookdown::render_book("index.Rmd", output_format = "bookdown::gitbook", config_file = "_bookdown_gitbook.yml")
 ```
 
+`r if (knitr::is_latex_output()) '<!--'`
 # Welcome {-}
 
 Welcome to the website of the book *Handbook of Graphs and Networks in People Analytics* by [Keith McNulty](https://www.linkedin.com/in/keith-mcnulty/).  The book is available in [bootstrap format](https://ona-book.org) or in a more plain [gitbook format](https://ona-book.org/gitbook).
@@ -45,5 +46,7 @@ This book is being progressively written and is in open review.  Please file any
 Many thanks!
 
 *Last updated: `r format(Sys.Date(), "%d %B %Y")`*
+
+`r if (knitr::is_latex_output()) '-->'`
 
 

@@ -167,6 +167,7 @@ div.csl-indent {
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a></li>
+<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i>Introduction</a></li>
 <li class="chapter" data-level="1" data-path="everywhere.html"><a href="everywhere.html"><i class="fa fa-check"></i><b>1</b> Graphs everywhere!</a>
 <ul>
 <li class="chapter" data-level="1.1" data-path="everywhere.html"><a href="everywhere.html#graphs-as-mathematical-models"><i class="fa fa-check"></i><b>1.1</b> Graphs as mathematical models</a></li>
@@ -392,7 +393,7 @@ div.csl-indent {
             <section class="normal" id="section-">
 <div id="community" class="section level1" number="8">
 <h1><span class="header-section-number">8</span> Components, Communities and Cliques</h1>
-<p>The study of group dynamics would be pretty ineffective if we were not able to identify and study important subgroups. Networks of people are often made up of subsets that interact more intensely among each other than they do with the rest of the network, and it is often very important in research and analysis to identify or approximate these subsets as best as possible so that they can be studied more closely. In complex networks, this is not an easy task. Most of the computational methods we have available to us for finding densely connected subsets of vertices (usually called <em>communities</em>) are iterative approximations which make use of heuristics<a href="#fn48" class="footnote-ref" id="fnref48"><sup>48</sup></a> and are rarely 100% accurate<a href="#fn49" class="footnote-ref" id="fnref49"><sup>49</sup></a>. However, in the study of networks in the organizational sciences, we do not need high levels of precision to be able to draw valuable insights, and therefore these modern approximation techniques are very powerful tools for us to have at our disposal.</p>
+<p>The study of group dynamics would be pretty ineffective if we were not able to identify and study important subgroups. Networks of people are often made up of subsets that interact more intensely among each other than they do with the rest of the network, and it is often very important in research and analysis to identify or approximate these subsets as best as possible so that they can be studied more closely. In complex networks, this is not an easy task. Most of the computational methods we have available to us for finding densely connected subsets of vertices (usually called <em>communities</em>) are iterative approximations which make use of heuristics<a href="#fn49" class="footnote-ref" id="fnref49"><sup>49</sup></a> and are rarely 100% accurate<a href="#fn50" class="footnote-ref" id="fnref50"><sup>50</sup></a>. However, in the study of networks in the organizational sciences, we do not need high levels of precision to be able to draw valuable insights, and therefore these modern approximation techniques are very powerful tools for us to have at our disposal.</p>
 <p>In the work we have done thus far in the book, we have already been exposed to subgraphs — we have used induced vertex subgraphs containing a specified set of vertices and all edges between them. However, in these situations we were able to specify the precise subset of vertices that we were interested in. In this chapter we will look at methods to identify or ‘detect’ subsets of vertices based on certain properties of the induced subgraphs of those vertices. We will start with simpler problems such as identifying subsets of vertices which are completely disconnected from others, and then we will proceed to look at graph partitioning and the identification of cliques and communities of vertices which, though not disconnected from other parts of the graph, have higher levels of density between each other than with the rest of the network.</p>
 <div id="theory-of-components-partitions-and-clusters" class="section level2" number="8.1">
 <h2><span class="header-section-number">8.1</span> Theory of components, partitions and clusters</h2>
@@ -422,7 +423,7 @@ Figure 8.2: A directed graph with three connected components, one strongly conne
 <h3><span class="header-section-number">8.1.2</span> Vertex partitioning</h3>
 <p>Often graphs will be connected but we still want to divide the vertices up into mutually exclusive subgroups of interest. Such a division is called a <strong>partition</strong> of a graph. In a partition, all vertices must be in one and only one subgroup. Partitions are created through making cuts in a graph.</p>
 <p>A <strong>cut</strong> in a graph <span class="math inline">\(G\)</span> is a set of edges that divide the vertices of <span class="math inline">\(G\)</span> into two disjoint subsets. The number of edges is known as the size of the cut. In Figure <a href="community.html#fig:cutex">8.3</a>, edges e3, e4 and e5 divide the graph into two disjoint connected sets and represents a cut of size 3.</p>
-<p>A <strong>minimum cut</strong> is a cut where no other cut exists in <span class="math inline">\(G\)</span> with a smaller number of edges. In Figure <a href="community.html#fig:cutex">8.3</a>, it should not be difficult to see that mimimum cuts have size 1 can be achieved with either e1 or e2. In both cases these minimum cuts divide the graph into a connected component and an isolate<a href="#fn50" class="footnote-ref" id="fnref50"><sup>50</sup></a>.</p>
+<p>A <strong>minimum cut</strong> is a cut where no other cut exists in <span class="math inline">\(G\)</span> with a smaller number of edges. In Figure <a href="community.html#fig:cutex">8.3</a>, it should not be difficult to see that mimimum cuts have size 1 can be achieved with either e1 or e2. In both cases these minimum cuts divide the graph into a connected component and an isolate<a href="#fn51" class="footnote-ref" id="fnref51"><sup>51</sup></a>.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:cutex"></span>
 <img src="_main_files/figure-html/cutex-1.png" alt="Cuts are defined by edges that split the vertices of a graph into disjoint subsets" width="672" />
 <p class="caption">
@@ -434,14 +435,14 @@ Figure 8.3: Cuts are defined by edges that split the vertices of a graph into di
 </div>
 <div id="vertex-clustering-and-community-detection" class="section level3" number="8.1.3">
 <h3><span class="header-section-number">8.1.3</span> Vertex clustering and community detection</h3>
-<p>Vertex <strong>clustering</strong> refers to the process of partitioning a graph in order to satisfy a certain objective. Most commonly in organizational network analysis, that objective is to achieve a high edge density between the vertices inside a cluster, and a low edge density between vertices that are in different clusters. Such highly connected clusters are usually referred to as communities and the process of determining optimal communities in a graph is knows as <strong>community detection</strong><a href="#fn51" class="footnote-ref" id="fnref51"><sup>51</sup></a>. Community detection is an unsupervised process. When we perform community detection on a graph, we do not know in advance how many communities we seek to find or the size of those communities.</p>
+<p>Vertex <strong>clustering</strong> refers to the process of partitioning a graph in order to satisfy a certain objective. Most commonly in organizational network analysis, that objective is to achieve a high edge density between the vertices inside a cluster, and a low edge density between vertices that are in different clusters. Such highly connected clusters are usually referred to as communities and the process of determining optimal communities in a graph is knows as <strong>community detection</strong><a href="#fn52" class="footnote-ref" id="fnref52"><sup>52</sup></a>. Community detection is an unsupervised process. When we perform community detection on a graph, we do not know in advance how many communities we seek to find or the size of those communities.</p>
 <p>The most commonly used (and fastest) community detection algorithm is the Louvain algorithm. The Louvain algorithm accepts a graph and partitions it into subsets of vertices by trying to maximize the <em>modularity</em> of the graph. Modularity measures how dense the connections are within subsets of vertices in a graph by comparing the density to that which would be expected from a random graph. In an unweighted and undirected graph, modularity takes a value between -0.5 and +1. Any value above zero means that the the vertices inside the subgroups are more densely connected than would be expected by chance. The higher the modularity of a graph, the more connected the vertices are inside the subgroups compared to between the subgroups, and therefore the more certain we can be that the subgroups represent genuine communities. The approximate steps of the Louvain algorithm are in two phases as follows:</p>
 <ol style="list-style-type: decimal">
 <li>The algorithm starts with each vertex in its own community.</li>
 <li>Vertices are moved into other communities and modularity is calculated.<br />
 </li>
 <li>When the algorithm reaches a point where further vertex moves do not increase modularity, it finishes its first phase.</li>
-<li>In the second phase, the communities resulting from the first phase are aggregated to form a simpler pseudograph where each vertex represents a community, where loop edges on a vertex are weighted by the total number of edges inside that community, and where edges between vertices are weighted by the total number of edges between those communities<a href="#fn52" class="footnote-ref" id="fnref52"><sup>52</sup></a>. In this heuristic step, vertices are moved in this simpler graph with the aim of improving modularity. That is, communities may be combined if modularity is improved.</li>
+<li>In the second phase, the communities resulting from the first phase are aggregated to form a simpler pseudograph where each vertex represents a community, where loop edges on a vertex are weighted by the total number of edges inside that community, and where edges between vertices are weighted by the total number of edges between those communities<a href="#fn53" class="footnote-ref" id="fnref53"><sup>53</sup></a>. In this heuristic step, vertices are moved in this simpler graph with the aim of improving modularity. That is, communities may be combined if modularity is improved.</li>
 <li>Phases 1 and 2 are repeated until modularity cannot be further improved.</li>
 </ol>
 <p>A more recently developed community detection algorithm which improves on the Louvain algorithm is the Leiden algorithm. The Leiden algorithm operates similarly to Louvain, but has an additional refinement process at the end of the first phase which helps increase the options for improved modularity in the second phase. The Leiden algorithm will always achieve results as good as the Louvain algorithm, and in many cases may detect communities which are better connected than those detected by Louvain.</p>
@@ -559,15 +560,15 @@ Figure 8.6: The <code>karate</code> graph with Mr Hi and John A indicated with l
 ## [1] 1
 ## 
 ## $cut
-## + 1/78 edge from ff2e6f5 (vertex names):
+## + 1/78 edge from 2f2f8f3 (vertex names):
 ## [1] Mr Hi--Actor 12
 ## 
 ## $partition1
-## + 1/34 vertex, named, from ff2e6f5:
+## + 1/34 vertex, named, from 2f2f8f3:
 ## [1] Actor 12
 ## 
 ## $partition2
-## + 33/34 vertices, named, from ff2e6f5:
+## + 33/34 vertices, named, from 2f2f8f3:
 ##  [1] Mr Hi    Actor 2  Actor 3  Actor 4  Actor 5  Actor 6  Actor 7  Actor 9  Actor 10 Actor 14 Actor 15 Actor 16 Actor 19
 ## [14] Actor 20 Actor 21 Actor 23 Actor 24 Actor 25 Actor 26 Actor 27 Actor 28 Actor 29 Actor 30 Actor 31 Actor 32 Actor 33
 ## [27] Actor 8  Actor 11 Actor 13 Actor 18 Actor 22 Actor 17 John A</code></pre>
@@ -578,7 +579,7 @@ Figure 8.6: The <code>karate</code> graph with Mr Hi and John A indicated with l
 <span id="cb428-3"><a href="community.html#cb428-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb428-4"><a href="community.html#cb428-4" aria-hidden="true" tabindex="-1"></a><span class="co"># assign as a vertex property</span></span>
 <span id="cb428-5"><a href="community.html#cb428-5" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(karate)<span class="sc">$</span>community <span class="ot">&lt;-</span> <span class="fu">membership</span>(communities)</span></code></pre></div>
-<p>Before visualizing the communities, we can see how many they are and their size<a href="#fn53" class="footnote-ref" id="fnref53"><sup>53</sup></a>:</p>
+<p>Before visualizing the communities, we can see how many they are and their size<a href="#fn54" class="footnote-ref" id="fnref54"><sup>54</sup></a>:</p>
 <div class="sourceCode" id="cb429"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb429-1"><a href="community.html#cb429-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sizes</span>(communities)</span></code></pre></div>
 <pre><code>## Community sizes
 ##  1  2  3  4 
@@ -605,20 +606,20 @@ Figure 8.7: Communities of the <code>karate</code> graph as detected by the Louv
 <p>The <code>cliques()</code> and <code>max_cliques()</code> function in <code>igraph</code> identifies all cliques or maximal cliques respectively, with a specified maximum or minimum size if desired. It is advisable to specify a size for cliques of interest because otherwise a long list might be returned, including many single node cliques.</p>
 <div class="sourceCode" id="cb432"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb432-1"><a href="community.html#cb432-1" aria-hidden="true" tabindex="-1"></a><span class="fu">max_cliques</span>(karate, <span class="at">min =</span> <span class="dv">5</span>, <span class="at">max =</span> <span class="dv">5</span>)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 5/34 vertices, named, from ff2e6f5:
+## + 5/34 vertices, named, from 2f2f8f3:
 ## [1] Actor 2  Mr Hi    Actor 4  Actor 3  Actor 14
 ## 
 ## [[2]]
-## + 5/34 vertices, named, from ff2e6f5:
+## + 5/34 vertices, named, from 2f2f8f3:
 ## [1] Actor 2 Mr Hi   Actor 4 Actor 3 Actor 8</code></pre>
 <p>The <code>largest_cliques()</code> finds all largest cliques in a graph.</p>
 <div class="sourceCode" id="cb434"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb434-1"><a href="community.html#cb434-1" aria-hidden="true" tabindex="-1"></a><span class="fu">largest_cliques</span>(karate)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 5/34 vertices, named, from ff2e6f5:
+## + 5/34 vertices, named, from 2f2f8f3:
 ## [1] Actor 8 Mr Hi   Actor 2 Actor 3 Actor 4
 ## 
 ## [[2]]
-## + 5/34 vertices, named, from ff2e6f5:
+## + 5/34 vertices, named, from 2f2f8f3:
 ## [1] Actor 4  Mr Hi    Actor 2  Actor 3  Actor 14</code></pre>
 <p>We see that the maximal cliques of size 5 that we identified are also the largest cliques in the <code>karate graph</code>, and they have four out of 5 vertices in common. The function <code>clique_num()</code> returns the size of the largest clique.</p>
 <div class="sourceCode" id="cb436"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb436-1"><a href="community.html#cb436-1" aria-hidden="true" tabindex="-1"></a><span class="fu">clique_num</span>(karate)</span></code></pre></div>
@@ -666,7 +667,7 @@ Figure 8.7: Communities of the <code>karate</code> graph as detected by the Louv
 </div>
 <div id="partitioning-and-community-detection-using-python" class="section level3" number="8.3.2">
 <h3><span class="header-section-number">8.3.2</span> Partitioning and community detection using Python</h3>
-<p><code>networkx</code> has numerous algorithmic functions for exploring edge cuts on graphs, including to find the minimum edge cut. You can consult the reference documentation<a href="#fn54" class="footnote-ref" id="fnref54"><sup>54</sup></a> to learn about the various functions available. Let’s use the <code>karate</code> dataset to demonstrate how to find a minimum cut.</p>
+<p><code>networkx</code> has numerous algorithmic functions for exploring edge cuts on graphs, including to find the minimum edge cut. You can consult the reference documentation<a href="#fn55" class="footnote-ref" id="fnref55"><sup>55</sup></a> to learn about the various functions available. Let’s use the <code>karate</code> dataset to demonstrate how to find a minimum cut.</p>
 <div class="sourceCode" id="cb444"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb444-1"><a href="community.html#cb444-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get karate edgelist</span></span>
 <span id="cb444-2"><a href="community.html#cb444-2" aria-hidden="true" tabindex="-1"></a>karate_edges <span class="op">=</span> pd.read_csv(<span class="st">&quot;https://ona-book.org/data/karate.csv&quot;</span>)</span>
 <span id="cb444-3"><a href="community.html#cb444-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -688,7 +689,7 @@ Figure 8.7: Communities of the <code>karate</code> graph as detected by the Louv
 <span id="cb448-6"><a href="community.html#cb448-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb448-7"><a href="community.html#cb448-7" aria-hidden="true" tabindex="-1"></a><span class="co"># view communities from first edge removal</span></span>
 <span id="cb448-8"><a href="community.html#cb448-8" aria-hidden="true" tabindex="-1"></a>communities[<span class="dv">0</span>]</span></code></pre></div>
-<pre><code>## ({&#39;Mr Hi&#39;, &#39;Actor 4&#39;, &#39;Actor 20&#39;, &#39;Actor 22&#39;, &#39;Actor 7&#39;, &#39;Actor 6&#39;, &#39;Actor 8&#39;, &#39;Actor 12&#39;, &#39;Actor 17&#39;, &#39;Actor 14&#39;, &#39;Actor 5&#39;, &#39;Actor 11&#39;, &#39;Actor 18&#39;, &#39;Actor 2&#39;, &#39;Actor 13&#39;}, {&#39;Actor 21&#39;, &#39;Actor 15&#39;, &#39;Actor 19&#39;, &#39;Actor 24&#39;, &#39;Actor 25&#39;, &#39;Actor 32&#39;, &#39;Actor 9&#39;, &#39;Actor 30&#39;, &#39;John A&#39;, &#39;Actor 10&#39;, &#39;Actor 31&#39;, &#39;Actor 26&#39;, &#39;Actor 16&#39;, &#39;Actor 3&#39;, &#39;Actor 29&#39;, &#39;Actor 28&#39;, &#39;Actor 23&#39;, &#39;Actor 27&#39;, &#39;Actor 33&#39;})</code></pre>
+<pre><code>## ({&#39;Actor 13&#39;, &#39;Actor 11&#39;, &#39;Mr Hi&#39;, &#39;Actor 20&#39;, &#39;Actor 8&#39;, &#39;Actor 4&#39;, &#39;Actor 14&#39;, &#39;Actor 12&#39;, &#39;Actor 6&#39;, &#39;Actor 22&#39;, &#39;Actor 17&#39;, &#39;Actor 7&#39;, &#39;Actor 18&#39;, &#39;Actor 2&#39;, &#39;Actor 5&#39;}, {&#39;Actor 21&#39;, &#39;Actor 31&#39;, &#39;Actor 15&#39;, &#39;Actor 24&#39;, &#39;Actor 9&#39;, &#39;Actor 29&#39;, &#39;Actor 33&#39;, &#39;Actor 25&#39;, &#39;Actor 32&#39;, &#39;Actor 30&#39;, &#39;John A&#39;, &#39;Actor 3&#39;, &#39;Actor 28&#39;, &#39;Actor 19&#39;, &#39;Actor 26&#39;, &#39;Actor 16&#39;, &#39;Actor 23&#39;, &#39;Actor 10&#39;, &#39;Actor 27&#39;})</code></pre>
 <p>We see that the first split leads to two communities, one around John A and the other around Mr Hi.</p>
 <p>The <code>cdlib</code> package in Python contains a very wide range of community detection algorithms that work with the <code>networkx</code> package, including the Louvain and Leiden algorithms as well as many others. In this example we create a Louvain partition of the <code>karate</code> graph using <code>cdlib</code>.</p>
 <div class="sourceCode" id="cb450"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb450-1"><a href="community.html#cb450-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> cdlib <span class="im">import</span> algorithms</span>
@@ -727,13 +728,13 @@ Figure 8.7: Communities of the <code>karate</code> graph as detected by the Louv
 <span id="cb455-20"><a href="community.html#cb455-20" aria-hidden="true" tabindex="-1"></a>node_color <span class="op">=</span> communities, edge_color <span class="op">=</span> <span class="st">&quot;grey&quot;</span>)</span>
 <span id="cb455-21"><a href="community.html#cb455-21" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:karate-py-conn"></span>
-<img src="_main_files/figure-html/unnamed-chunk-124-1.png" alt="Best Louvain partition of the `karate` graph" width="614" />
+<img src="_main_files/figure-html/unnamed-chunk-89-1.png" alt="Best Louvain partition of the `karate` graph" width="614" />
 <p class="caption">
 Figure 8.8: Best Louvain partition of the <code>karate</code> graph
 </p>
 </div>
 <div class="thinkahead">
-<p><strong>Playing around:</strong> The options for community detection algorithms in the <code>cdlib</code> Python package are incredible. Consider playing around with some different algorithm. For example, you could try to visualize the community structure based on the Leiden algorithm. It’s also worth spending a little time exploring the technical documentation for the <code>cdlib</code> package<a href="#fn55" class="footnote-ref" id="fnref55"><sup>55</sup></a> to see the range of methods available.</p>
+<p><strong>Playing around:</strong> The options for community detection algorithms in the <code>cdlib</code> Python package are incredible. Consider playing around with some different algorithm. For example, you could try to visualize the community structure based on the Leiden algorithm. It’s also worth spending a little time exploring the technical documentation for the <code>cdlib</code> package<a href="#fn56" class="footnote-ref" id="fnref56"><sup>56</sup></a> to see the range of methods available.</p>
 </div>
 </div>
 <div id="finding-cliques-in-python" class="section level3" number="8.3.3">
@@ -747,7 +748,7 @@ Figure 8.8: Best Louvain partition of the <code>karate</code> graph
 <pre><code>## 36</code></pre>
 <div class="sourceCode" id="cb458"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb458-1"><a href="community.html#cb458-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get largest clique</span></span>
 <span id="cb458-2"><a href="community.html#cb458-2" aria-hidden="true" tabindex="-1"></a>maximal_cliques[<span class="bu">len</span>(maximal_cliques) <span class="op">-</span> <span class="dv">1</span>]</span></code></pre></div>
-<pre><code>## [&#39;Mr Hi&#39;, &#39;Actor 2&#39;, &#39;Actor 4&#39;, &#39;Actor 3&#39;, &#39;Actor 14&#39;]</code></pre>
+<pre><code>## [&#39;Mr Hi&#39;, &#39;Actor 2&#39;, &#39;Actor 3&#39;, &#39;Actor 4&#39;, &#39;Actor 14&#39;]</code></pre>
 <p>Alternatively there are functions that can calculate the number of cliques, the size of the largest clique, and can extract the graph of the largest clique.</p>
 <div class="sourceCode" id="cb460"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb460-1"><a href="community.html#cb460-1" aria-hidden="true" tabindex="-1"></a>nx.graph_number_of_cliques(karate)</span></code></pre></div>
 <pre><code>## 36</code></pre>
@@ -782,27 +783,27 @@ Figure 8.8: Best Louvain partition of the <code>karate</code> graph
 <p>We now have a connected, undirected graph of 156 vertices, with class and gender as vertex properties. First, let’s detemine the largest clique in the graph.</p>
 <div class="sourceCode" id="cb465"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb465-1"><a href="community.html#cb465-1" aria-hidden="true" tabindex="-1"></a>(cliques <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">largest_cliques</span>(schoolfriends_fb))</span></code></pre></div>
 <pre><code>## [[1]]
-## + 14/156 vertices, named, from ce5c1cf:
+## + 14/156 vertices, named, from e99d15a:
 ##  [1] 525  797  466  376  638  841  1423 1218 769  440  125  325  694  245 
 ## 
 ## [[2]]
-## + 14/156 vertices, named, from ce5c1cf:
+## + 14/156 vertices, named, from e99d15a:
 ##  [1] 245  564  1218 440  466  376  841  1237 1423 769  624  125  325  694 
 ## 
 ## [[3]]
-## + 14/156 vertices, named, from ce5c1cf:
+## + 14/156 vertices, named, from e99d15a:
 ##  [1] 245  797  466  376  841  1423 1218 624  440  125  638  325  694  769 
 ## 
 ## [[4]]
-## + 14/156 vertices, named, from ce5c1cf:
+## + 14/156 vertices, named, from e99d15a:
 ##  [1] 245  797  466  376  841  1423 1218 624  440  125  638  325  694  1067
 ## 
 ## [[5]]
-## + 14/156 vertices, named, from ce5c1cf:
+## + 14/156 vertices, named, from e99d15a:
 ##  [1] 245  1067 466  376  841  1237 1423 1218 624  440  125  638  325  694 
 ## 
 ## [[6]]
-## + 14/156 vertices, named, from ce5c1cf:
+## + 14/156 vertices, named, from e99d15a:
 ##  [1] 245  638  466  376  841  1237 1423 1218 769  624  440  125  325  694</code></pre>
 <p>We see six cliques of 14 individuals, all of which have considerable overlap. We can take a look at the class and gender of one of these cliques.</p>
 <div class="sourceCode" id="cb467"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb467-1"><a href="community.html#cb467-1" aria-hidden="true" tabindex="-1"></a><span class="co"># subgraph for clique 6</span></span>
@@ -907,9 +908,9 @@ Figure 8.10: Optimal Louvain communities in the Facebook schoolfriends graph (le
 <span id="cb479-8"><a href="community.html#cb479-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">vertices =</span> ontariopol_vertices, </span>
 <span id="cb479-9"><a href="community.html#cb479-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">directed =</span> <span class="cn">FALSE</span></span>
 <span id="cb479-10"><a href="community.html#cb479-10" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
-<pre><code>## IGRAPH 0f152a0 UNW- 108 6095 -- 
+<pre><code>## IGRAPH 61d9612 UNW- 108 6095 -- 
 ## + attr: name (v/c), screen_name (v/c), party (v/c), weight (e/n)
-## + edges from 0f152a0 (vertex names):
+## + edges from 61d9612 (vertex names):
 ##  [1] Deepak Anand--Doug Ford               Deepak Anand--Victor Fedeli           Deepak Anand--Deepak Anand           
 ##  [4] Deepak Anand--Monte McNaughton        Deepak Anand--Christine Elliott       Deepak Anand--Stephen Lecce          
 ##  [7] Deepak Anand--Rod Phillips            Deepak Anand--Lisa MacLeod            Deepak Anand--Michael Tibollo        
@@ -1008,9 +1009,45 @@ Figure 8.12: Large Twitter clique of 48 politicians (left). Comparison with part
 <h2><span class="header-section-number">8.5</span> Learning exercises</h2>
 <div id="discussion-questions-6" class="section level3" number="8.5.1">
 <h3><span class="header-section-number">8.5.1</span> Discussion questions</h3>
+<ol style="list-style-type: decimal">
+<li>What does it mean when an undirected graph is decribed as a connected graph? Provide similar definitions for a weakly and strongly connected directed graph.</li>
+<li>By starting with a random vertex, design a set algorithmic steps that would determine all connected components of an undirected graph.</li>
+<li>What is a vertex partition of a graph? Describe how a partition arises from a series of edge cuts in a graph.</li>
+<li>What is meant by a vertex clustering of a graph?</li>
+<li>What is meant by a community of vertices? What objective are we usually trying to achieve when we detect communities in a graph?</li>
+<li>Describe your understanding of the term ‘modularity’ as it relates to community detection in graphs.</li>
+<li>Name a common community detection algorithm and describe how it works.</li>
+<li>What do we mean when we describe the a community detection process as ‘unsupervised?’<br />
+</li>
+<li>What is meant be a clique in an undirected graph?<br />
+</li>
+<li>What is a maximal clique and a largest clique in a graph? Are maximal cliques always largest cliques? Why or why not?</li>
+</ol>
 </div>
 <div id="data-exercises-6" class="section level3" number="8.5.2">
 <h3><span class="header-section-number">8.5.2</span> Data exercises</h3>
+<p>For Exercises 1-3, load the <code>wikivote</code> edgelist from the <code>onadata</code> package or download it from the internet<a href="#fn57" class="footnote-ref" id="fnref57"><sup>57</sup></a>. Recall that this data set represents votes from Wikipedia members to other Wikipedia members to nominate the <code>to</code> member to administrator status. Create a directed graph from this data set. Be careful with trying to visualize this graph as it is large.</p>
+<ol style="list-style-type: decimal">
+<li>Determine how many weakly connected components there are in this graph. How large is the largest component?</li>
+<li>Determine how many strongly connected components there are in this graph. How large is the largest component?</li>
+<li>Describe how you would explain and interepret the difference between your results for Questions 1 and 2.</li>
+</ol>
+<p>For exercises 4-10, load the <code>email_edgelist</code> and <code>email_vertices</code> data sets from the <code>onadata</code> package or download them from the internet<a href="#fn58" class="footnote-ref" id="fnref58"><sup>58</sup></a>. This data set represents a network of emails sent between members of a large research institution. The department of each member is included in the vertex data set. Create an undirected graph from this data*[Note that the visualizations in these exercises might be demanding on low-memory/low-CPU machines. Proceed with caution.].</p>
+<ol start="4" style="list-style-type: decimal">
+<li>Determine the connected components of this network and reduce the network to its largest connected component.</li>
+<li>Use the Louvain algorithm to determine a vertex partition/community structure with optimal modularity in this network.</li>
+<li>Compare the modularity of the Louvain community structure with that of the ground truth department structure.</li>
+<li>Visualize the graph color-coded by Louvain community, and visualize separately color-coded by ground truth department. Compare the visualizations. Can you describe any of the Louvain communities in terms of departments?</li>
+<li>Create a dataframe containing the community and department for each vertex. Manipulate this dataframe to show the percentage of individuals from each department in each community. Try to visalize this using a heatmap or other style of visualization and try to use this to describe the communities in terms of departments.</li>
+<li>Find the largest clique size in the graph. How many such largest cliques are there? What do you think a clique represents in this context?</li>
+<li>Try to visualize the members of these cliques in the context of the entire graph. What can you conclude?</li>
+</ol>
+<p><strong>Extension:</strong> These questions require the use of the Leiden community detection algorithm, which you may recall from earlier in this chapter is guaranteed to find a partition which at least matches the modularity of a Louvain partition, and can often improve it. If you are a Python programmer the Leiden algorithm is easily used from the <code>cdlib</code> package. If you are an R programmer, you will need to use the <code>leiden</code> package, which uses a Python implementation of the algorithm inside R. You may need to be familiar with the <code>reticulate</code> package<a href="#fn59" class="footnote-ref" id="fnref59"><sup>59</sup></a> to ensure that an appropriate Python environment is available inside your R session.</p>
+<ol start="11" style="list-style-type: decimal">
+<li>Use the Leiden community detection algorithm to find a vertex partition with optimal modularity. How many communities does the Leiden algorithm detect?</li>
+<li>Compare the Leiden partition modularity to the Louvain partition modularity.</li>
+<li>Try to use visualization or data exploration methods to determine the main differences between the Leiden and Louvain partitions.</li>
+</ol>
 
 </div>
 </div>
@@ -1029,15 +1066,18 @@ Yang, Zhao, René Algesheimer, and Claudio J. Tessone. 2016. <span>“A Comparat
 </div>
 <div class="footnotes">
 <hr />
-<ol start="48">
-<li id="fn48"><p>Heuristics are methodological ‘shortcuts’ which can vastly reduce the complexity of a problem but usually sacrifice some element of accuracy in doing so.<a href="community.html#fnref48" class="footnote-back">↩︎</a></p></li>
-<li id="fn49"><p>Many problems of graph ‘clustering’ — that is, finding partitions of a graph that maximise intra-group density but minimize between-group density — have already been shown to be NP-hard<a href="community.html#fnref49" class="footnote-back">↩︎</a></p></li>
-<li id="fn50"><p>Maximum cuts are cuts where no other cuts exist with a greater number of edges. Maximum cuts in graphs are extremely challenging. Luckily, we rarely need them in organizational network analysis.<a href="community.html#fnref50" class="footnote-back">↩︎</a></p></li>
-<li id="fn51"><p>The meaning of ‘high’ and ‘low’ edge density is relative and really depends on the nature of the graph, and algorithms will do their best to find communities which maximize the difference between in-community density and cross-community density, even though some or all of these communities may not end up having have particularly high edge density<a href="community.html#fnref51" class="footnote-back">↩︎</a></p></li>
-<li id="fn52"><p>This also works with weighted edges, assuming that weights represent ‘closeness’ of connection, which they usually do in organizational contexts.<a href="community.html#fnref52" class="footnote-back">↩︎</a></p></li>
-<li id="fn53"><p>We can also see the modularity of the partition by calling the <code>modularity()</code> function.<a href="community.html#fnref53" class="footnote-back">↩︎</a></p></li>
-<li id="fn54"><p><a href="https://networkx.org/documentation/stable/reference/algorithms/cuts.html" class="uri">https://networkx.org/documentation/stable/reference/algorithms/cuts.html</a><a href="community.html#fnref54" class="footnote-back">↩︎</a></p></li>
-<li id="fn55"><p><a href="https://cdlib.readthedocs.io/en/latest" class="uri">https://cdlib.readthedocs.io/en/latest</a><a href="community.html#fnref55" class="footnote-back">↩︎</a></p></li>
+<ol start="49">
+<li id="fn49"><p>Heuristics are methodological ‘shortcuts’ which can vastly reduce the complexity of a problem but usually sacrifice some element of accuracy in doing so.<a href="community.html#fnref49" class="footnote-back">↩︎</a></p></li>
+<li id="fn50"><p>Many problems of graph ‘clustering’ — that is, finding partitions of a graph that maximise intra-group density but minimize between-group density — have already been shown to be NP-hard<a href="community.html#fnref50" class="footnote-back">↩︎</a></p></li>
+<li id="fn51"><p>Maximum cuts are cuts where no other cuts exist with a greater number of edges. Maximum cuts in graphs are extremely challenging. Luckily, we rarely need them in organizational network analysis.<a href="community.html#fnref51" class="footnote-back">↩︎</a></p></li>
+<li id="fn52"><p>The meaning of ‘high’ and ‘low’ edge density is relative and really depends on the nature of the graph, and algorithms will do their best to find communities which maximize the difference between in-community density and cross-community density, even though some or all of these communities may not end up having have particularly high edge density<a href="community.html#fnref52" class="footnote-back">↩︎</a></p></li>
+<li id="fn53"><p>This also works with weighted edges, assuming that weights represent ‘closeness’ of connection, which they usually do in organizational contexts.<a href="community.html#fnref53" class="footnote-back">↩︎</a></p></li>
+<li id="fn54"><p>We can also see the modularity of the partition by calling the <code>modularity()</code> function.<a href="community.html#fnref54" class="footnote-back">↩︎</a></p></li>
+<li id="fn55"><p><a href="https://networkx.org/documentation/stable/reference/algorithms/cuts.html" class="uri">https://networkx.org/documentation/stable/reference/algorithms/cuts.html</a><a href="community.html#fnref55" class="footnote-back">↩︎</a></p></li>
+<li id="fn56"><p><a href="https://cdlib.readthedocs.io/en/latest" class="uri">https://cdlib.readthedocs.io/en/latest</a><a href="community.html#fnref56" class="footnote-back">↩︎</a></p></li>
+<li id="fn57"><p><a href="https://ona-book.org/data/wikivote.csv" class="uri">https://ona-book.org/data/wikivote.csv</a><a href="community.html#fnref57" class="footnote-back">↩︎</a></p></li>
+<li id="fn58"><p><a href="https://ona-book.org/daya/email_edgelist.csv" class="uri">https://ona-book.org/daya/email_edgelist.csv</a> and <a href="https://ona-book.org/data/email_vertices.csv" class="uri">https://ona-book.org/data/email_vertices.csv</a><a href="community.html#fnref58" class="footnote-back">↩︎</a></p></li>
+<li id="fn59"><p><a href="https://rstudio.github.io/reticulate/" class="uri">https://rstudio.github.io/reticulate/</a><a href="community.html#fnref59" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
