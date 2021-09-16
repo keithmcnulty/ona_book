@@ -459,11 +459,11 @@ div.csl-indent {
 <span id="cb217-4"><a href="restructuring-data.html#cb217-4" aria-hidden="true" tabindex="-1"></a>(orgchart <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(</span>
 <span id="cb217-5"><a href="restructuring-data.html#cb217-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">d =</span> orgchart_edgelist2</span>
 <span id="cb217-6"><a href="restructuring-data.html#cb217-6" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
-<pre><code>## IGRAPH 14a10f5 DN-- 8 7 -- 
+<pre><code>## IGRAPH 03a41e7 DN-- 8 7 -- 
 ## + attr: name (v/c)
-## + edges from 14a10f5 (vertex names):
-## [1] Andrew -&gt;Nancy    Andrew -&gt;Michael  Nancy  -&gt;Jane     Nancy  -&gt;Margaret Nancy  -&gt;Steve    Michael-&gt;Robert  
-## [7] Michael-&gt;Laura</code></pre>
+## + edges from 03a41e7 (vertex names):
+## [1] Andrew -&gt;Nancy    Andrew -&gt;Michael  Nancy  -&gt;Jane     Nancy  -&gt;Margaret Nancy  -&gt;Steve   
+## [6] Michael-&gt;Robert   Michael-&gt;Laura</code></pre>
 <p>We now have a directed graph with named vertices, so this should be easy to plot. Let’s use <code>ggplot</code> with a dendrogram (tree) layout, as in Figure <a href="restructuring-data.html#fig:chinook-pretty">5.1</a>.</p>
 <div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb219-1"><a href="restructuring-data.html#cb219-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggraph)</span>
 <span id="cb219-2"><a href="restructuring-data.html#cb219-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -901,10 +901,11 @@ Figure 5.9: Visualization of the Chinook customer-to-customer network based on a
 <span id="cb264-8"><a href="restructuring-data.html#cb264-8" aria-hidden="true" tabindex="-1"></a><span class="co"># check a sample</span></span>
 <span id="cb264-9"><a href="restructuring-data.html#cb264-9" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
 <span id="cb264-10"><a href="restructuring-data.html#cb264-10" aria-hidden="true" tabindex="-1"></a>nodes_char[<span class="fu">sample</span>(<span class="dv">30</span>)]</span></code></pre></div>
-<pre><code>##  [1] NA           NA           NA           NA           NA           &quot;Monica&quot;     NA           NA           NA          
-## [10] NA           NA           &quot;Chandler&quot;   NA           NA           NA           NA           NA           NA          
-## [19] NA           NA           NA           NA           NA           &quot;Joey&quot;       &quot;Phoebe&quot;     NA           &quot;New Scene&quot; 
-## [28] NA           NA           &quot;Written by&quot;</code></pre>
+<pre><code>##  [1] NA           NA           NA           NA           NA           &quot;Monica&quot;     NA          
+##  [8] NA           NA           NA           NA           &quot;Chandler&quot;   NA           NA          
+## [15] NA           NA           NA           NA           NA           NA           NA          
+## [22] NA           NA           &quot;Joey&quot;       &quot;Phoebe&quot;     NA           &quot;New Scene&quot;  NA          
+## [29] NA           &quot;Written by&quot;</code></pre>
 <p>So this is working, but we have more cleaning to do. For example, we will want to get rid of the <code>NA</code> values. We will also see if we take a look that there is a ‘character’ called ‘All’ which probably should not be in our network. We can also see phrases like ‘Written by’ which are not dialogue characters, and strings containing " and " which involves combinations of characters. So we can create special commands to remove any instances of these phrases<a href="#fn30" class="footnote-ref" id="fnref30"><sup>30</sup></a>.</p>
 <div class="sourceCode" id="cb266"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb266-1"><a href="restructuring-data.html#cb266-1" aria-hidden="true" tabindex="-1"></a><span class="co"># remove NAs</span></span>
 <span id="cb266-2"><a href="restructuring-data.html#cb266-2" aria-hidden="true" tabindex="-1"></a>nodes_char_clean1 <span class="ot">&lt;-</span> nodes_char[<span class="sc">!</span><span class="fu">is.na</span>(nodes_char)] </span>
@@ -916,8 +917,9 @@ Figure 5.9: Visualization of the Chinook customer-to-customer network based on a
 <span id="cb266-8"><a href="restructuring-data.html#cb266-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb266-9"><a href="restructuring-data.html#cb266-9" aria-hidden="true" tabindex="-1"></a><span class="co"># check </span></span>
 <span id="cb266-10"><a href="restructuring-data.html#cb266-10" aria-hidden="true" tabindex="-1"></a>nodes_char_clean2[<span class="fu">sample</span>(<span class="dv">20</span>)]</span></code></pre></div>
-<pre><code>##  [1] &quot;Chandler&quot;  &quot;Monica&quot;    &quot;Chandler&quot;  &quot;Monica&quot;    &quot;Phoebe&quot;    &quot;Joey&quot;      &quot;Phoebe&quot;    &quot;Joey&quot;      &quot;Monica&quot;    &quot;Monica&quot;   
-## [11] &quot;Chandler&quot;  &quot;Chandler&quot;  &quot;New Scene&quot; &quot;Ross&quot;      &quot;Joey&quot;      &quot;Chandler&quot;  &quot;Joey&quot;      &quot;Chandler&quot;  &quot;Phoebe&quot;    &quot;Chandler&quot;</code></pre>
+<pre><code>##  [1] &quot;Chandler&quot;  &quot;Monica&quot;    &quot;Chandler&quot;  &quot;Monica&quot;    &quot;Phoebe&quot;    &quot;Joey&quot;      &quot;Phoebe&quot;    &quot;Joey&quot;     
+##  [9] &quot;Monica&quot;    &quot;Monica&quot;    &quot;Chandler&quot;  &quot;Chandler&quot;  &quot;New Scene&quot; &quot;Ross&quot;      &quot;Joey&quot;      &quot;Chandler&quot; 
+## [17] &quot;Joey&quot;      &quot;Chandler&quot;  &quot;Phoebe&quot;    &quot;Chandler&quot;</code></pre>
 <p>Let’s assume our cleaning is done and we have a nice vector that contains either the names of characters that are speaking lines in the episode or “New Scene” to indicate that we are crossing a scene boundary. We now just need to convert this vector into a simple dataframe with two columns for scene and character. We already have our character lists, so we really just need to iterate through our nodes vector and for each entry, count the number of previous occurrences of “New Scene” and add one.</p>
 <div class="sourceCode" id="cb268"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb268-1"><a href="restructuring-data.html#cb268-1" aria-hidden="true" tabindex="-1"></a><span class="co"># number each scene by counting previous &quot;New Scene&quot; entries and adding 1</span></span>
 <span id="cb268-2"><a href="restructuring-data.html#cb268-2" aria-hidden="true" tabindex="-1"></a>scene_count <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>

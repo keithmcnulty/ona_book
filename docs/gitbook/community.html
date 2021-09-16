@@ -560,18 +560,19 @@ Figure 8.6: The <code>karate</code> graph with Mr Hi and John A indicated with l
 ## [1] 1
 ## 
 ## $cut
-## + 1/78 edge from 2f2f8f3 (vertex names):
+## + 1/78 edge from c98dfa8 (vertex names):
 ## [1] Mr Hi--Actor 12
 ## 
 ## $partition1
-## + 1/34 vertex, named, from 2f2f8f3:
+## + 1/34 vertex, named, from c98dfa8:
 ## [1] Actor 12
 ## 
 ## $partition2
-## + 33/34 vertices, named, from 2f2f8f3:
-##  [1] Mr Hi    Actor 2  Actor 3  Actor 4  Actor 5  Actor 6  Actor 7  Actor 9  Actor 10 Actor 14 Actor 15 Actor 16 Actor 19
-## [14] Actor 20 Actor 21 Actor 23 Actor 24 Actor 25 Actor 26 Actor 27 Actor 28 Actor 29 Actor 30 Actor 31 Actor 32 Actor 33
-## [27] Actor 8  Actor 11 Actor 13 Actor 18 Actor 22 Actor 17 John A</code></pre>
+## + 33/34 vertices, named, from c98dfa8:
+##  [1] Mr Hi    Actor 2  Actor 3  Actor 4  Actor 5  Actor 6  Actor 7  Actor 9  Actor 10 Actor 14
+## [11] Actor 15 Actor 16 Actor 19 Actor 20 Actor 21 Actor 23 Actor 24 Actor 25 Actor 26 Actor 27
+## [21] Actor 28 Actor 29 Actor 30 Actor 31 Actor 32 Actor 33 Actor 8  Actor 11 Actor 13 Actor 18
+## [31] Actor 22 Actor 17 John A</code></pre>
 <p>We see that a minimum cut exists of size 1 between Mr Hi and Actor 12.</p>
 <p>The Louvain community detection algorithm can be run using the <code>cluster_louvain()</code> function. <code>weights</code> can be added as an argument, or will be used by default if the graph has a <code>weight</code> edge attribute (set <code>weight = NA</code> to avoid this). This will produce a list of community groups. The best way to record the resulting community membership is to assign it as a vertex property using the <code>membership()</code> function.</p>
 <div class="sourceCode" id="cb428"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb428-1"><a href="community.html#cb428-1" aria-hidden="true" tabindex="-1"></a><span class="co"># detect communities using Louvain</span></span>
@@ -606,20 +607,20 @@ Figure 8.7: Communities of the <code>karate</code> graph as detected by the Louv
 <p>The <code>cliques()</code> and <code>max_cliques()</code> function in <code>igraph</code> identifies all cliques or maximal cliques respectively, with a specified maximum or minimum size if desired. It is advisable to specify a size for cliques of interest because otherwise a long list might be returned, including many single node cliques.</p>
 <div class="sourceCode" id="cb432"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb432-1"><a href="community.html#cb432-1" aria-hidden="true" tabindex="-1"></a><span class="fu">max_cliques</span>(karate, <span class="at">min =</span> <span class="dv">5</span>, <span class="at">max =</span> <span class="dv">5</span>)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 5/34 vertices, named, from 2f2f8f3:
+## + 5/34 vertices, named, from c98dfa8:
 ## [1] Actor 2  Mr Hi    Actor 4  Actor 3  Actor 14
 ## 
 ## [[2]]
-## + 5/34 vertices, named, from 2f2f8f3:
+## + 5/34 vertices, named, from c98dfa8:
 ## [1] Actor 2 Mr Hi   Actor 4 Actor 3 Actor 8</code></pre>
 <p>The <code>largest_cliques()</code> finds all largest cliques in a graph.</p>
 <div class="sourceCode" id="cb434"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb434-1"><a href="community.html#cb434-1" aria-hidden="true" tabindex="-1"></a><span class="fu">largest_cliques</span>(karate)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 5/34 vertices, named, from 2f2f8f3:
+## + 5/34 vertices, named, from c98dfa8:
 ## [1] Actor 8 Mr Hi   Actor 2 Actor 3 Actor 4
 ## 
 ## [[2]]
-## + 5/34 vertices, named, from 2f2f8f3:
+## + 5/34 vertices, named, from c98dfa8:
 ## [1] Actor 4  Mr Hi    Actor 2  Actor 3  Actor 14</code></pre>
 <p>We see that the maximal cliques of size 5 that we identified are also the largest cliques in the <code>karate graph</code>, and they have four out of 5 vertices in common. The function <code>clique_num()</code> returns the size of the largest clique.</p>
 <div class="sourceCode" id="cb436"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb436-1"><a href="community.html#cb436-1" aria-hidden="true" tabindex="-1"></a><span class="fu">clique_num</span>(karate)</span></code></pre></div>
@@ -783,27 +784,27 @@ Figure 8.8: Best Louvain partition of the <code>karate</code> graph
 <p>We now have a connected, undirected graph of 156 vertices, with class and gender as vertex properties. First, let’s detemine the largest clique in the graph.</p>
 <div class="sourceCode" id="cb465"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb465-1"><a href="community.html#cb465-1" aria-hidden="true" tabindex="-1"></a>(cliques <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">largest_cliques</span>(schoolfriends_fb))</span></code></pre></div>
 <pre><code>## [[1]]
-## + 14/156 vertices, named, from e99d15a:
+## + 14/156 vertices, named, from 785f680:
 ##  [1] 525  797  466  376  638  841  1423 1218 769  440  125  325  694  245 
 ## 
 ## [[2]]
-## + 14/156 vertices, named, from e99d15a:
+## + 14/156 vertices, named, from 785f680:
 ##  [1] 245  564  1218 440  466  376  841  1237 1423 769  624  125  325  694 
 ## 
 ## [[3]]
-## + 14/156 vertices, named, from e99d15a:
+## + 14/156 vertices, named, from 785f680:
 ##  [1] 245  797  466  376  841  1423 1218 624  440  125  638  325  694  769 
 ## 
 ## [[4]]
-## + 14/156 vertices, named, from e99d15a:
+## + 14/156 vertices, named, from 785f680:
 ##  [1] 245  797  466  376  841  1423 1218 624  440  125  638  325  694  1067
 ## 
 ## [[5]]
-## + 14/156 vertices, named, from e99d15a:
+## + 14/156 vertices, named, from 785f680:
 ##  [1] 245  1067 466  376  841  1237 1423 1218 624  440  125  638  325  694 
 ## 
 ## [[6]]
-## + 14/156 vertices, named, from e99d15a:
+## + 14/156 vertices, named, from 785f680:
 ##  [1] 245  638  466  376  841  1237 1423 1218 769  624  440  125  325  694</code></pre>
 <p>We see six cliques of 14 individuals, all of which have considerable overlap. We can take a look at the class and gender of one of these cliques.</p>
 <div class="sourceCode" id="cb467"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb467-1"><a href="community.html#cb467-1" aria-hidden="true" tabindex="-1"></a><span class="co"># subgraph for clique 6</span></span>
@@ -908,17 +909,17 @@ Figure 8.10: Optimal Louvain communities in the Facebook schoolfriends graph (le
 <span id="cb479-8"><a href="community.html#cb479-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">vertices =</span> ontariopol_vertices, </span>
 <span id="cb479-9"><a href="community.html#cb479-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">directed =</span> <span class="cn">FALSE</span></span>
 <span id="cb479-10"><a href="community.html#cb479-10" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
-<pre><code>## IGRAPH 61d9612 UNW- 108 6095 -- 
+<pre><code>## IGRAPH 50efebe UNW- 108 6095 -- 
 ## + attr: name (v/c), screen_name (v/c), party (v/c), weight (e/n)
-## + edges from 61d9612 (vertex names):
-##  [1] Deepak Anand--Doug Ford               Deepak Anand--Victor Fedeli           Deepak Anand--Deepak Anand           
-##  [4] Deepak Anand--Monte McNaughton        Deepak Anand--Christine Elliott       Deepak Anand--Stephen Lecce          
-##  [7] Deepak Anand--Rod Phillips            Deepak Anand--Lisa MacLeod            Deepak Anand--Michael Tibollo        
-## [10] Deepak Anand--Peter Bethlenfalvy      Deepak Anand--Raymond Sung Joon Cho   Deepak Anand--Rudy Cuzzetto          
-## [13] Deepak Anand--Caroline Mulroney       Deepak Anand--Sheref Sabawy           Deepak Anand--Nina Tangri            
-## [16] Deepak Anand--Jill Dunlop             Deepak Anand--Todd Smith              Deepak Anand--Kinga Surma            
-## [19] Deepak Anand--Lisa Thompson           Deepak Anand--Kaleed Rasheed          Deepak Anand--Steve Clark            
-## [22] Deepak Anand--Ernie Hardeman          Deepak Anand--Natalia Kusendova       Deepak Anand--Prabmeet Singh Sarkaria
+## + edges from 50efebe (vertex names):
+##  [1] Deepak Anand--Doug Ford             Deepak Anand--Victor Fedeli        
+##  [3] Deepak Anand--Deepak Anand          Deepak Anand--Monte McNaughton     
+##  [5] Deepak Anand--Christine Elliott     Deepak Anand--Stephen Lecce        
+##  [7] Deepak Anand--Rod Phillips          Deepak Anand--Lisa MacLeod         
+##  [9] Deepak Anand--Michael Tibollo       Deepak Anand--Peter Bethlenfalvy   
+## [11] Deepak Anand--Raymond Sung Joon Cho Deepak Anand--Rudy Cuzzetto        
+## [13] Deepak Anand--Caroline Mulroney     Deepak Anand--Sheref Sabawy        
+## [15] Deepak Anand--Nina Tangri           Deepak Anand--Jill Dunlop          
 ## + ... omitted several edges</code></pre>
 <p>We have an undirected, weighted graph, with <code>screen_name</code> and <code>party</code> vertex properties. First, we check if our graph is connected:</p>
 <div class="sourceCode" id="cb481"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb481-1"><a href="community.html#cb481-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.connected</span>(ontariopol)</span></code></pre></div>
@@ -1032,7 +1033,7 @@ Figure 8.12: Large Twitter clique of 48 politicians (left). Comparison with part
 <li>Determine how many strongly connected components there are in this graph. How large is the largest component?</li>
 <li>Describe how you would explain and interepret the difference between your results for Questions 1 and 2.</li>
 </ol>
-<p>For exercises 4-10, load the <code>email_edgelist</code> and <code>email_vertices</code> data sets from the <code>onadata</code> package or download them from the internet<a href="#fn58" class="footnote-ref" id="fnref58"><sup>58</sup></a>. This data set represents a network of emails sent between members of a large research institution. The department of each member is included in the vertex data set. Create an undirected graph from this data*[Note that the visualizations in these exercises might be demanding on low-memory/low-CPU machines. Proceed with caution.].</p>
+<p>For exercises 4-10, load the <code>email_edgelist</code> and <code>email_vertices</code> data sets from the <code>onadata</code> package or download them from the internet<a href="#fn58" class="footnote-ref" id="fnref58"><sup>58</sup></a>. This data set represents a network of emails sent between members of a large research institution. The department of each member is included in the vertex data set. Create an undirected graph from this data<a href="#fn59" class="footnote-ref" id="fnref59"><sup>59</sup></a>.</p>
 <ol start="4" style="list-style-type: decimal">
 <li>Determine the connected components of this network and reduce the network to its largest connected component.</li>
 <li>Use the Louvain algorithm to determine a vertex partition/community structure with optimal modularity in this network.</li>
@@ -1042,7 +1043,7 @@ Figure 8.12: Large Twitter clique of 48 politicians (left). Comparison with part
 <li>Find the largest clique size in the graph. How many such largest cliques are there? What do you think a clique represents in this context?</li>
 <li>Try to visualize the members of these cliques in the context of the entire graph. What can you conclude?</li>
 </ol>
-<p><strong>Extension:</strong> These questions require the use of the Leiden community detection algorithm, which you may recall from earlier in this chapter is guaranteed to find a partition which at least matches the modularity of a Louvain partition, and can often improve it. If you are a Python programmer the Leiden algorithm is easily used from the <code>cdlib</code> package. If you are an R programmer, you will need to use the <code>leiden</code> package, which uses a Python implementation of the algorithm inside R. You may need to be familiar with the <code>reticulate</code> package<a href="#fn59" class="footnote-ref" id="fnref59"><sup>59</sup></a> to ensure that an appropriate Python environment is available inside your R session.</p>
+<p><strong>Extension:</strong> These questions require the use of the Leiden community detection algorithm, which you may recall from earlier in this chapter is guaranteed to find a partition which at least matches the modularity of a Louvain partition, and can often improve it. If you are a Python programmer the Leiden algorithm is easily used from the <code>cdlib</code> package. If you are an R programmer, you will need to use the <code>leiden</code> package, which uses a Python implementation of the algorithm inside R. You may need to be familiar with the <code>reticulate</code> package<a href="#fn60" class="footnote-ref" id="fnref60"><sup>60</sup></a> to ensure that an appropriate Python environment is available inside your R session.</p>
 <ol start="11" style="list-style-type: decimal">
 <li>Use the Leiden community detection algorithm to find a vertex partition with optimal modularity. How many communities does the Leiden algorithm detect?</li>
 <li>Compare the Leiden partition modularity to the Louvain partition modularity.</li>
@@ -1077,7 +1078,8 @@ Yang, Zhao, René Algesheimer, and Claudio J. Tessone. 2016. <span>“A Comparat
 <li id="fn56"><p><a href="https://cdlib.readthedocs.io/en/latest" class="uri">https://cdlib.readthedocs.io/en/latest</a><a href="community.html#fnref56" class="footnote-back">↩︎</a></p></li>
 <li id="fn57"><p><a href="https://ona-book.org/data/wikivote.csv" class="uri">https://ona-book.org/data/wikivote.csv</a><a href="community.html#fnref57" class="footnote-back">↩︎</a></p></li>
 <li id="fn58"><p><a href="https://ona-book.org/daya/email_edgelist.csv" class="uri">https://ona-book.org/daya/email_edgelist.csv</a> and <a href="https://ona-book.org/data/email_vertices.csv" class="uri">https://ona-book.org/data/email_vertices.csv</a><a href="community.html#fnref58" class="footnote-back">↩︎</a></p></li>
-<li id="fn59"><p><a href="https://rstudio.github.io/reticulate/" class="uri">https://rstudio.github.io/reticulate/</a><a href="community.html#fnref59" class="footnote-back">↩︎</a></p></li>
+<li id="fn59"><p>Note that the visualizations in these exercises might be demanding on low-memory/low-CPU machines. Proceed with caution.<a href="community.html#fnref59" class="footnote-back">↩︎</a></p></li>
+<li id="fn60"><p><a href="https://rstudio.github.io/reticulate/" class="uri">https://rstudio.github.io/reticulate/</a><a href="community.html#fnref60" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
