@@ -4,19 +4,19 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>9 Commonality and Assortativity | Handbook of Graphs and Networks in People Analytics</title>
+<title>9 Assortativity and Comparability of Networks | Handbook of Graphs and Networks in People Analytics</title>
 <meta name="author" content="Keith McNulty">
-<meta name="description" content="A technical manual of graphs, networks and their applications in the people and social sciences">
+<meta name="description" content="In this chapter we will round off our study of important graph concepts and metrics by looking at two new concepts which a people network analyst will often have good reason to study. The first...">
 <meta name="generator" content="bookdown 0.22.15 with bs4_book()">
-<meta property="og:title" content="9 Commonality and Assortativity | Handbook of Graphs and Networks in People Analytics">
+<meta property="og:title" content="9 Assortativity and Comparability of Networks | Handbook of Graphs and Networks in People Analytics">
 <meta property="og:type" content="book">
 <meta property="og:url" content="https://ona-book.org/similarity.html">
 <meta property="og:image" content="https://ona-book.org/www/cover/cover-ona.png">
-<meta property="og:description" content="A technical manual of graphs, networks and their applications in the people and social sciences">
+<meta property="og:description" content="In this chapter we will round off our study of important graph concepts and metrics by looking at two new concepts which a people network analyst will often have good reason to study. The first...">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="9 Commonality and Assortativity | Handbook of Graphs and Networks in People Analytics">
+<meta name="twitter:title" content="9 Assortativity and Comparability of Networks | Handbook of Graphs and Networks in People Analytics">
 <meta name="twitter:site" content="@dr_keithmcnulty">
-<meta name="twitter:description" content="A technical manual of graphs, networks and their applications in the people and social sciences">
+<meta name="twitter:description" content="In this chapter we will round off our study of important graph concepts and metrics by looking at two new concepts which a people network analyst will often have good reason to study. The first...">
 <meta name="twitter:image" content="https://ona-book.org/www/cover/cover-ona.png">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.9.5/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
@@ -55,7 +55,7 @@
 <li><a class="" href="paths-distance.html"><span class="header-section-number">6</span> Paths and Distance</a></li>
 <li><a class="" href="vertex-importance.html"><span class="header-section-number">7</span> Vertex Importance and Centrality</a></li>
 <li><a class="" href="community.html"><span class="header-section-number">8</span> Components, Communities and Cliques</a></li>
-<li><a class="active" href="similarity.html"><span class="header-section-number">9</span> Commonality and Assortativity</a></li>
+<li><a class="active" href="similarity.html"><span class="header-section-number">9</span> Assortativity and Comparability of Networks</a></li>
 <li><a class="" href="databases.html"><span class="header-section-number">10</span> Graphs as Databases</a></li>
 <li><a class="" href="advanced-viz.html"><span class="header-section-number">11</span> Advanced Network Visualization</a></li>
 <li><a class="" href="references.html">References</a></li>
@@ -68,16 +68,103 @@
 </div>
   </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="similarity" class="section level1" number="9">
 <h1>
-<span class="header-section-number">9</span> Commonality and Assortativity<a class="anchor" aria-label="anchor" href="#similarity"><i class="fas fa-link"></i></a>
+<span class="header-section-number">9</span> Assortativity and Comparability of Networks<a class="anchor" aria-label="anchor" href="#similarity"><i class="fas fa-link"></i></a>
 </h1>
+<p>In this chapter we will round off our study of important graph concepts and metrics by looking at two new concepts which a people network analyst will often have good reason to study. The first concept is assortativity, and this is described as the tendency of vertices to attach to vertices with similar properties in a network. This is effectively a measure of homophily in a network. Highly assortative networks are more robust to destructive events like the loss of vertices, but because of their concentration they can be inefficient in terms of information flow and in organizational settings they can be problematic for diverse interaction and experience. The second concept we will look at is network similarity. In an age where we now have the data to construct different networks based on the same vertices (such as email networks versus calendar networks, or online friendships versus ‘real’ friendships), it will be increasingly of interest to judge the similarity of those networks and the extent to which the relationships being modeled by them are the same or different.</p>
+<div id="assortativity-in-networks" class="section level2" number="9.1">
+<h2>
+<span class="header-section-number">9.1</span> Assortativity in networks<a class="anchor" aria-label="anchor" href="#assortativity-in-networks"><i class="fas fa-link"></i></a>
+</h2>
+<p>We have already seen in previous chapters that it is natural to want to study the extent to which vertices with similar ground truth properties are more densely connected in a graph. In Chapter <a href="community.html#community">8</a>, we studied examples where we looked at the how politicians representing the same political parties connect to each other over Twitter, or how schoolchildren in the same class connect over Facebook. In the exercises at the end of that chapter, we looked at how researcher communities form over email either within or between ground trust research departments.</p>
+<p>The <strong>assortativity coefficient</strong> of a graph is a measure of the extent to which vertices with the same properties connect to each other. It is a relatively recently defined metric, and is defined slightly differently according to whether the property of interest is categorical (eg department or political party) or numeric (eg degree centrality). See <span class="citation"><a href="references.html#ref-newman" role="doc-biblioref">Newman</a> (<a href="references.html#ref-newman" role="doc-biblioref">2002</a>)</span> for a full description and mathematical definition.</p>
+<p>The assortativity coefficient of a graph ranges between -1 and 1, just like a correlation coefficient. Assortativity coefficients close to 1 indicate that there is very high likelihood of two vertices with the same property being connected. This is called an assortative network. A coefficient of -1 indicates that there is very low likelihood of two vertcies with the same property being connected. This is called a disassortative network. Networks with coefficients close to zero are neither assortative nor disassortative and are usually described as neutral.</p>
+<div id="categorical-or-nominal-assortativity" class="section level3" number="9.1.1">
+<h3>
+<span class="header-section-number">9.1.1</span> Categorical or nominal assortativity<a class="anchor" aria-label="anchor" href="#categorical-or-nominal-assortativity"><i class="fas fa-link"></i></a>
+</h3>
+<p>Let’s look at categorical assortativity first by bringing back two examples from the previous chapter. First we look at our Facebook schoolfriends network and calculate the assortativity by class. In R, we can use the <code><a href="https://rdrr.io/pkg/igraph/man/assortativity.html">assortativity_nominal()</a></code> function to calculate categorical assortativity - see the end of this chapter for Python implementations. Note that these fuctions expect a numeric vector to indicate the category membership.</p>
+<div class="sourceCode" id="cb491"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://igraph.org">igraph</a></span><span class="op">)</span>
 
+<span class="co"># get data</span>
+<span class="va">schoolfriends_edgelist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"https://ona-book.org/data/schoolfriends_edgelist.csv"</span><span class="op">)</span>
+<span class="va">schoolfriends_vertices</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"https://ona-book.org/data/schoolfriends_vertices.csv"</span><span class="op">)</span>
+
+<span class="co"># create undirected Facebook graph</span>
+<span class="va">schoolfriends_fb</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>
+  d <span class="op">=</span> <span class="va">schoolfriends_edgelist</span> |&gt; 
+    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">type</span> <span class="op">==</span> <span class="st">"facebook"</span><span class="op">)</span>,
+  vertices <span class="op">=</span> <span class="va">schoolfriends_vertices</span>,
+  directed <span class="op">=</span> <span class="cn">FALSE</span>
+<span class="op">)</span>
+
+<span class="co"># calculate assortativity by class for facebook</span>
+<span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/assortativity.html">assortativity_nominal</a></span><span class="op">(</span>
+  <span class="va">schoolfriends_fb</span>, 
+  <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">schoolfriends_fb</span><span class="op">)</span><span class="op">$</span><span class="va">class</span><span class="op">)</span><span class="op">)</span>
+<span class="op">)</span></code></pre></div>
+<pre><code>## [1] 0.3833667</code></pre>
+<p>This suggests moderate assortativity, or moderate likelihood that students in the same class will be Facebook friends. Now let’s compare to ‘real’ reported friendships.</p>
+<div class="sourceCode" id="cb493"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># create directed graph of reported friendships</span>
+<span class="va">schoolfriends_rp</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>
+  d <span class="op">=</span> <span class="va">schoolfriends_edgelist</span> |&gt; 
+    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">type</span> <span class="op">==</span> <span class="st">"reported"</span><span class="op">)</span>,
+  vertices <span class="op">=</span> <span class="va">schoolfriends_vertices</span>
+<span class="op">)</span>
+
+<span class="co"># calculate assortativity by class for reported</span>
+<span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/assortativity.html">assortativity_nominal</a></span><span class="op">(</span>
+  <span class="va">schoolfriends_rp</span>, 
+  <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">schoolfriends_fb</span><span class="op">)</span><span class="op">$</span><span class="va">class</span><span class="op">)</span><span class="op">)</span>
+<span class="op">)</span></code></pre></div>
+<pre><code>## [1] 0.7188919</code></pre>
+<p>We see substantially higher assortativity by class for reported friendships, indicating that being in the same class is more strongly associated with developing a reported school friendship.</p>
+<div class="thinkahead">
+<p><strong>Playing around:</strong> You may remember the concept of modularity which we introduced in Chapter <a href="community.html#community">8</a>. For categorical vertex properties, modularity and assortativity effectively measure the same thing. Calculate the modularity for the Facebook schoolfriends by class and compare it to the assortativity. Also, play around with some prior data sets and calculate the assortativity of some of the communities we detected in Chapter <a href="community.html#community">8</a>. Recall also our example for Chapter <a href="paths-distance.html#paths-distance">6</a> our example of breaking up the <code>workfrance</code> population to have tables with a good mix of different departments. If you completed that exercise you may be interested to compare the assortativity of that population by department versus by table to get a measure how how successful you were are creating diverse tables.</p>
+</div>
+</div>
+<div id="degree-assortativity" class="section level3" number="9.1.2">
+<h3>
+<span class="header-section-number">9.1.2</span> Degree assortativity<a class="anchor" aria-label="anchor" href="#degree-assortativity"><i class="fas fa-link"></i></a>
+</h3>
+<p>The most common form of numerical assortativity is degree assortativity. A high degree assortativity is a measure of preferential attachment in organizations, where highly connected vertices are connected with each other and a large number of vertices with low degree make up the remainder of the network.</p>
+<p>Again, let’s use our schoolfriends networks as an example to calculate degree assortativity in R.</p>
+<div class="sourceCode" id="cb495"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># degree assortativity of facebook friendships (undirected)</span>
+<span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/assortativity.html">assortativity_degree</a></span><span class="op">(</span><span class="va">schoolfriends_fb</span><span class="op">)</span></code></pre></div>
+<pre><code>## [1] 0.02462444</code></pre>
+<div class="sourceCode" id="cb497"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># degree assortativity of facebook friendships (directed)</span>
+<span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/assortativity.html">assortativity_degree</a></span><span class="op">(</span><span class="va">schoolfriends_rp</span><span class="op">)</span></code></pre></div>
+<pre><code>## [1] 0.3098123</code></pre>
+<p>We see that real life friendships are moderately assortative in this data, whereas Facebook friendships are approximatlely neutral. This indicates that more popular students have a stronger tendency in real life to be friends with other popular students.</p>
+<p>Although it is a relatively recent concept, assortativity is a useful measure in understanding people or organizational networks. Highly assortative networks demonstrate resilience in that knowledge, community and other social capital are concentrated in a strong core, and disruptions such as departures of actors from those networks are less likely to affect the network as a whole. However, such networks also demonstrate characteristics which are counterproductive to diversity and inclusion, and can represent challenging environments for new entrants to adjust to.</p>
+<p>It has been thought that social networks are unlike most other real life networks in that they are degree assortative. However, recent research has begun to question this. Although it does seem to be the case that social networks are more assortative than non-social networks, research on various datasets where the connection between individuals is direct (rather than inferred from joint membership of a group) suggests that social networks are likely neutrally assortative (<span class="citation"><a href="references.html#ref-fisher" role="doc-biblioref">Fisher, Silk, and Franks</a> (<a href="references.html#ref-fisher" role="doc-biblioref">2017</a>)</span>). This is a research topic of great interest currently in social network anaysis.</p>
+</div>
+</div>
+<div id="comparing-networks" class="section level2" number="9.2">
+<h2>
+<span class="header-section-number">9.2</span> Comparing networks<a class="anchor" aria-label="anchor" href="#comparing-networks"><i class="fas fa-link"></i></a>
+</h2>
+
+</div>
 </div>
   <div class="chapter-nav">
 <div class="prev"><a href="community.html"><span class="header-section-number">8</span> Components, Communities and Cliques</a></div>
 <div class="next"><a href="databases.html"><span class="header-section-number">10</span> Graphs as Databases</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
-      <ul class="nav navbar-nav"><li><a class="nav-link" href="#similarity"><span class="header-section-number">9</span> Commonality and Assortativity</a></li></ul>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#similarity"><span class="header-section-number">9</span> Assortativity and Comparability of Networks</a></li>
+<li>
+<a class="nav-link" href="#assortativity-in-networks"><span class="header-section-number">9.1</span> Assortativity in networks</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#categorical-or-nominal-assortativity"><span class="header-section-number">9.1.1</span> Categorical or nominal assortativity</a></li>
+<li><a class="nav-link" href="#degree-assortativity"><span class="header-section-number">9.1.2</span> Degree assortativity</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#comparing-networks"><span class="header-section-number">9.2</span> Comparing networks</a></li>
+</ul>
 
       <div class="book-extra">
         <ul class="list-unstyled">

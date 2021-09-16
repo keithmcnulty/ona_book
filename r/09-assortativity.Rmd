@@ -1,1 +1,86 @@
-# Commonality and Assortativity {#similarity}
+# Assortativity and Comparability of Networks {#similarity}
+
+In this chapter we will round off our study of important graph concepts and metrics by looking at two new concepts which a people network analyst will often have good reason to study.  The first concept is assortativity, and this is described as the tendency of vertices to attach to vertices with similar properties in a network.  This is effectively a measure of homophily in a network.  Highly assortative networks are more robust to destructive events like the loss of vertices, but because of their concentration they can be inefficient in terms of information flow and in organizational settings they can be problematic for diverse interaction and experience. The second concept we will look at is network similarity.  In an age where we now have the data to construct different networks based on the same vertices (such as email networks versus calendar networks, or online friendships versus 'real' friendships), it will be increasingly of interest to judge the similarity of those networks and the extent to which the relationships being modeled by them are the same or different.
+
+## Assortativity in networks 
+
+We have already seen in previous chapters that it is natural to want to study the extent to which vertices with similar ground truth properties are more densely connected in a graph.  In Chapter \@ref(community), we studied examples where we looked at the how politicians representing the same political parties connect to each other over Twitter, or how schoolchildren in the same class connect over Facebook.  In the exercises at the end of that chapter, we looked at how researcher communities form over email either within or between ground trust research departments.
+
+The **assortativity coefficient** of a graph is a measure of the extent to which vertices with the same properties connect to each other. It is a relatively recently defined metric, and is defined slightly differently according to whether the property of interest is categorical (eg department or political party) or numeric (eg degree centrality).  See @newman for a full description and mathematical definition.
+
+The assortativity coefficient of a graph ranges between -1 and 1, just like a correlation coefficient.  Assortativity coefficients close to 1 indicate that there is very high likelihood of two vertices with the same property being connected.  This is called an assortative network.  A coefficient of -1 indicates that there is very low likelihood of two vertcies with the same property being connected.  This is called a disassortative network.  Networks with coefficients close to zero are neither assortative nor disassortative and are usually described as neutral.
+
+### Categorical or nominal assortativity
+
+Let's look at categorical assortativity first by bringing back two examples from the previous chapter.  First we look at our Facebook schoolfriends network and calculate the assortativity by class.   In R, we can use the `assortativity_nominal()` function to calculate categorical assortativity - see the end of this chapter for Python implementations.  Note that these fuctions expect a numeric vector to indicate the category membership.
+
+```{r}
+library(igraph)
+
+# get data
+schoolfriends_edgelist <- read.csv("https://ona-book.org/data/schoolfriends_edgelist.csv")
+schoolfriends_vertices <- read.csv("https://ona-book.org/data/schoolfriends_vertices.csv")
+
+# create undirected Facebook graph
+schoolfriends_fb <- igraph::graph_from_data_frame(
+  d = schoolfriends_edgelist |> 
+    dplyr::filter(type == "facebook"),
+  vertices = schoolfriends_vertices,
+  directed = FALSE
+)
+
+# calculate assortativity by class for facebook
+igraph::assortativity_nominal(
+  schoolfriends_fb, 
+  as.integer(as.factor(V(schoolfriends_fb)$class))
+)
+```
+
+This suggests moderate assortativity, or moderate likelihood that students in the same class will be Facebook friends.  Now let's compare to 'real' reported friendships.
+
+```{r}
+# create directed graph of reported friendships
+schoolfriends_rp <- igraph::graph_from_data_frame(
+  d = schoolfriends_edgelist |> 
+    dplyr::filter(type == "reported"),
+  vertices = schoolfriends_vertices
+)
+
+# calculate assortativity by class for reported
+igraph::assortativity_nominal(
+  schoolfriends_rp, 
+  as.integer(as.factor(V(schoolfriends_fb)$class))
+)
+```
+
+We see substantially higher assortativity by class for reported friendships, indicating that being in the same class is more strongly associated with developing a reported school friendship. 
+
+:::{.thinkahead data-latex=""}
+**Playing around:** You may remember the concept of modularity which we introduced in Chapter \@ref(community).  For categorical vertex properties, modularity and assortativity effectively measure the same thing.  Calculate the modularity for the Facebook schoolfriends by class and compare it to the assortativity.  Also, play around with some prior data sets and calculate the assortativity of some of the communities we detected in Chapter \@ref(community). Recall also our example for Chapter \@ref(paths-distance) our example of breaking up the `workfrance` population to have tables with a good mix of different departments.  If you completed that exercise you may be interested to compare the assortativity of that population by department versus by table to get a measure how how successful you were are creating diverse tables. 
+:::
+
+### Degree assortativity
+
+The most common form of numerical assortativity is degree assortativity.  A high degree assortativity is a measure of preferential attachment in organizations, where highly connected vertices are connected with each other and a large number of vertices with low degree make up the remainder of the network.
+
+Again, let's use our schoolfriends networks as an example to calculate degree assortativity in R.
+
+```{r}
+# degree assortativity of facebook friendships (undirected)
+igraph::assortativity_degree(schoolfriends_fb)
+```
+
+```{r}
+# degree assortativity of facebook friendships (directed)
+igraph::assortativity_degree(schoolfriends_rp)
+```
+
+We see that real life friendships are moderately assortative in this data, whereas Facebook friendships are approximatlely neutral.  This indicates that more popular students have a stronger tendency in real life to be friends with other popular students.
+
+Although it is a relatively recent concept, assortativity is a useful measure in understanding people or organizational networks.  Highly assortative networks demonstrate resilience in that knowledge, community and other social capital are concentrated in a strong core, and disruptions such as departures of actors from those networks are less likely to affect the network as a whole. However, such networks also demonstrate characteristics which are counterproductive to diversity and inclusion, and can represent challenging environments for new entrants to adjust to.
+
+It has been thought that social networks are unlike most other real life networks in that they are degree assortative.  However, recent research has begun to question this.  Although it does seem to be the case that social networks are more assortative than non-social networks, research on various datasets where the connection between individuals is direct (rather than inferred from joint membership of a group) suggests that social networks are likely neutrally assortative (@fisher).  This is a research topic of great interest currently in social network anaysis.
+
+## Comparing networks
+
+
