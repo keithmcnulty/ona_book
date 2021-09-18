@@ -370,7 +370,22 @@ div.csl-indent {
 <li class="chapter" data-level="8.5.2" data-path="community.html"><a href="community.html#data-exercises-6"><i class="fa fa-check"></i><b>8.5.2</b> Data exercises</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="similarity.html"><a href="similarity.html"><i class="fa fa-check"></i><b>9</b> Commonality and Assortativity</a></li>
+<li class="chapter" data-level="9" data-path="similarity.html"><a href="similarity.html"><i class="fa fa-check"></i><b>9</b> Assortativity and Similarity of Networks</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="similarity.html"><a href="similarity.html#assortativity-in-networks"><i class="fa fa-check"></i><b>9.1</b> Assortativity in networks</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="similarity.html"><a href="similarity.html#categorical-or-nominal-assortativity"><i class="fa fa-check"></i><b>9.1.1</b> Categorical or nominal assortativity</a></li>
+<li class="chapter" data-level="9.1.2" data-path="similarity.html"><a href="similarity.html#degree-assortativity"><i class="fa fa-check"></i><b>9.1.2</b> Degree assortativity</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="similarity.html"><a href="similarity.html#vertex-similarity"><i class="fa fa-check"></i><b>9.2</b> Vertex Similarity</a></li>
+<li class="chapter" data-level="9.3" data-path="similarity.html"><a href="similarity.html#graph-similarity"><i class="fa fa-check"></i><b>9.3</b> Graph similarity</a></li>
+<li class="chapter" data-level="9.4" data-path="similarity.html"><a href="similarity.html#calculating-assortativity-and-similarity-in-python"><i class="fa fa-check"></i><b>9.4</b> Calculating assortativity and similarity in Python</a></li>
+<li class="chapter" data-level="9.5" data-path="similarity.html"><a href="similarity.html#learning-exercises-7"><i class="fa fa-check"></i><b>9.5</b> Learning exercises</a>
+<ul>
+<li class="chapter" data-level="9.5.1" data-path="similarity.html"><a href="similarity.html#discussion-questions-7"><i class="fa fa-check"></i><b>9.5.1</b> Discussion questions</a></li>
+<li class="chapter" data-level="9.5.2" data-path="similarity.html"><a href="similarity.html#data-exercises-7"><i class="fa fa-check"></i><b>9.5.2</b> Data exercises</a></li>
+</ul></li>
+</ul></li>
 <li class="chapter" data-level="10" data-path="databases.html"><a href="databases.html"><i class="fa fa-check"></i><b>10</b> Graphs as Databases</a></li>
 <li class="chapter" data-level="11" data-path="advanced-viz.html"><a href="advanced-viz.html"><i class="fa fa-check"></i><b>11</b> Advanced Network Visualization</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -484,7 +499,7 @@ If we require that <span class="math inline">\(x\)</span> can only have positive
 <div class="sourceCode" id="cb381"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb381-1"><a href="vertex-importance.html#cb381-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2nd order ego network of Vertex 4</span></span>
 <span id="cb381-2"><a href="vertex-importance.html#cb381-2" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">ego</span>(g14, <span class="at">order =</span> <span class="dv">2</span>, <span class="at">nodes =</span> <span class="st">&quot;4&quot;</span>)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 9/14 vertices, named, from c33f289:
+## + 9/14 vertices, named, from eb81e2d:
 ## [1] 4 8 6 1 7 2 3 5 9</code></pre>
 <div class="sourceCode" id="cb383"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb383-1"><a href="vertex-importance.html#cb383-1" aria-hidden="true" tabindex="-1"></a><span class="co"># size of ego network</span></span>
 <span id="cb383-2"><a href="vertex-importance.html#cb383-2" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">ego_size</span>(g14, <span class="at">order =</span> <span class="dv">2</span>, <span class="at">nodes =</span> <span class="st">&quot;4&quot;</span>)</span></code></pre></div>
@@ -500,10 +515,10 @@ If we require that <span class="math inline">\(x\)</span> can only have positive
 <p>Finally, eigenvector centrality can be calculated using the <code>eigen_centrality()</code> function. Note that this returns a list including various details about the computation<a href="#fn42" class="footnote-ref" id="fnref42"><sup>42</sup></a>. To see the actual centralities, you should call the <code>vector</code> element of the output list. Note also that this function scales the values by default so that the maximum eigenvector centrality is 1. To avoid this, set <code>scale = FALSE</code>.</p>
 <div class="sourceCode" id="cb389"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb389-1"><a href="vertex-importance.html#cb389-1" aria-hidden="true" tabindex="-1"></a>eigens <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">eigen_centrality</span>(g14, <span class="at">scale =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb389-2"><a href="vertex-importance.html#cb389-2" aria-hidden="true" tabindex="-1"></a>eigens<span class="sc">$</span>vector</span></code></pre></div>
-<pre><code>##          9         10         11         13          8          4          6          1         12 
-## 0.30157876 0.11585270 0.04773223 0.09618665 0.37800315 0.55038069 0.29000589 0.22676118 0.04773223 
-##         14          7          2          3          5 
-## 0.02806617 0.44350955 0.22676118 0.16059484 0.16059484</code></pre>
+<pre><code>##          9         10         11         13          8          4          6          1         12         14          7 
+## 0.30157876 0.11585270 0.04773223 0.09618665 0.37800315 0.55038069 0.29000589 0.22676118 0.04773223 0.02806617 0.44350955 
+##          2          3          5 
+## 0.22676118 0.16059484 0.16059484</code></pre>
 <p>We can see confirmation here that Vertex 4 has the highest eigenvector centrality.</p>
 <div class="thinkahead">
 <p><strong>Playing around:</strong> There are a few other centrality-like measures available in <code>igraph</code> which you could explore and try to understand. Examples include <code>page_rank()</code> for Google’s measure of importance of a web page, and <code>hub_score()</code> and <code>authority_score()</code> for directed networks. Consider testing these out on some datasets, like the <code>wikivote</code> data set from the <code>onadata</code> package or downloaded from the internet<a href="#fn43" class="footnote-ref" id="fnref43"><sup>43</sup></a>.</p>

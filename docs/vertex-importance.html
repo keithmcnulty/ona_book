@@ -55,7 +55,7 @@
 <li><a class="" href="paths-distance.html"><span class="header-section-number">6</span> Paths and Distance</a></li>
 <li><a class="active" href="vertex-importance.html"><span class="header-section-number">7</span> Vertex Importance and Centrality</a></li>
 <li><a class="" href="community.html"><span class="header-section-number">8</span> Components, Communities and Cliques</a></li>
-<li><a class="" href="similarity.html"><span class="header-section-number">9</span> Assortativity and Comparability of Networks</a></li>
+<li><a class="" href="similarity.html"><span class="header-section-number">9</span> Assortativity and Similarity of Networks</a></li>
 <li><a class="" href="databases.html"><span class="header-section-number">10</span> Graphs as Databases</a></li>
 <li><a class="" href="advanced-viz.html"><span class="header-section-number">11</span> Advanced Network Visualization</a></li>
 <li><a class="" href="references.html">References</a></li>
@@ -156,7 +156,7 @@ If we require that <span class="math inline">\(x\)</span> can only have positive
 <span class="header-section-number">7.2.1</span> Calculating in R<a class="anchor" aria-label="anchor" href="#calculating-in-r-1"><i class="fas fa-link"></i></a>
 </h3>
 <p>Degree centrality can be calculated for a specific set of vertices using the <code><a href="https://rdrr.io/pkg/igraph/man/degree.html">degree()</a></code> function in <code>igraph</code>. By default, the degree centrality will be calculated for all vertices. Let’s load up our <span class="math inline">\(G_{14}\)</span> graph to demonstrate as we did in the previous chapter.</p>
-<div class="sourceCode" id="cb379"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb382"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://igraph.org">igraph</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 
@@ -173,28 +173,28 @@ If we require that <span class="math inline">\(x\)</span> can only have positive
 <pre><code>##  9 10 11 13  8  4  6  1 12 14  7  2  3  5 
 ##  4  3  2  2  3  7  2  2  2  1  4  2  1  1</code></pre>
 <p>We can see that Vertex 4 has a degree centrality of 7, which agrees with our earlier manual calculations. Ego networks and ego sizes can be determined using the <code><a href="https://rdrr.io/pkg/igraph/man/ego.html">ego()</a></code> and <code><a href="https://rdrr.io/pkg/igraph/man/ego.html">ego_size()</a></code> functions.</p>
-<div class="sourceCode" id="cb381"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb384"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># 2nd order ego network of Vertex 4</span>
 <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/ego.html">ego</a></span><span class="op">(</span><span class="va">g14</span>, order <span class="op">=</span> <span class="fl">2</span>, nodes <span class="op">=</span> <span class="st">"4"</span><span class="op">)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 9/14 vertices, named, from caab14c:
+## + 9/14 vertices, named, from 69616f0:
 ## [1] 4 8 6 1 7 2 3 5 9</code></pre>
-<div class="sourceCode" id="cb383"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb386"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># size of ego network</span>
 <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/ego.html">ego_size</a></span><span class="op">(</span><span class="va">g14</span>, order <span class="op">=</span> <span class="fl">2</span>, nodes <span class="op">=</span> <span class="st">"4"</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 9</code></pre>
 <p>Closeness centrality is calculated using the <code><a href="https://rdrr.io/pkg/igraph/man/closeness.html">closeness()</a></code> function for all or a subset of vertices. Let’s verify that this function returns the same results for Vertices 7 and 8 that we manually calculated earlier.</p>
-<div class="sourceCode" id="cb385"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb388"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/closeness.html">closeness</a></span><span class="op">(</span><span class="va">g14</span>, vids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"7"</span>, <span class="st">"8"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>##          7          8 
 ## 0.04000000 0.03846154</code></pre>
 <p>Betweenness centrality is calculated using the <code><a href="https://rdrr.io/pkg/igraph/man/betweenness.html">betweenness()</a></code> function in a similar way. Let’s verify our previous manual calculations for Vertices 8 and 9.</p>
-<div class="sourceCode" id="cb387"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb390"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/betweenness.html">betweenness</a></span><span class="op">(</span><span class="va">g14</span>, v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"8"</span>, <span class="st">"9"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>##  8  9 
 ## 15 46</code></pre>
 <p>Finally, eigenvector centrality can be calculated using the <code><a href="https://rdrr.io/pkg/igraph/man/eigen_centrality.html">eigen_centrality()</a></code> function. Note that this returns a list including various details about the computation<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;For example if you are curious to know the eigenvalue, you can look at the &lt;code&gt;value&lt;/code&gt; element of the list&lt;/p&gt;"><sup>42</sup></a>. To see the actual centralities, you should call the <code>vector</code> element of the output list. Note also that this function scales the values by default so that the maximum eigenvector centrality is 1. To avoid this, set <code>scale = FALSE</code>.</p>
-<div class="sourceCode" id="cb389"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb392"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">eigens</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/eigen_centrality.html">eigen_centrality</a></span><span class="op">(</span><span class="va">g14</span>, scale <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 <span class="va">eigens</span><span class="op">$</span><span class="va">vector</span></code></pre></div>
 <pre><code>##          9         10         11         13          8          4          6          1         12         14          7 
@@ -211,39 +211,39 @@ If we require that <span class="math inline">\(x\)</span> can only have positive
 <span class="header-section-number">7.2.2</span> Calculating in Python<a class="anchor" aria-label="anchor" href="#calculating-in-python-1"><i class="fas fa-link"></i></a>
 </h3>
 <p>Again, as in the work in the previous chapter, centrality function in <code>networkx</code> are very similar to those in <code>igraph</code>. The <code><a href="https://rdrr.io/pkg/igraph/man/degree.html">degree()</a></code> function calculates degree centrality for all vertices by default, or you can specify a list of vertices.</p>
-<div class="sourceCode" id="cb391"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb391-1"><a href="vertex-importance.html#cb391-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
-<span id="cb391-2"><a href="vertex-importance.html#cb391-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb391-3"><a href="vertex-importance.html#cb391-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb391-4"><a href="vertex-importance.html#cb391-4" aria-hidden="true" tabindex="-1"></a><span class="co"># download edgelist and remove weights</span></span>
-<span id="cb391-5"><a href="vertex-importance.html#cb391-5" aria-hidden="true" tabindex="-1"></a>g14_edgelist <span class="op">=</span> pd.read_csv(<span class="st">"https://ona-book.org/data/g14_edgelist.csv"</span>)</span>
-<span id="cb391-6"><a href="vertex-importance.html#cb391-6" aria-hidden="true" tabindex="-1"></a>g14_undirected <span class="op">=</span> g14_edgelist.drop(<span class="st">'weight'</span>, axis <span class="op">=</span> <span class="dv">1</span>)</span>
-<span id="cb391-7"><a href="vertex-importance.html#cb391-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb391-8"><a href="vertex-importance.html#cb391-8" aria-hidden="true" tabindex="-1"></a><span class="co"># create undirected g14 graph</span></span>
-<span id="cb391-9"><a href="vertex-importance.html#cb391-9" aria-hidden="true" tabindex="-1"></a>g14 <span class="op">=</span> nx.from_pandas_edgelist(g14_undirected, source <span class="op">=</span> <span class="st">'from'</span>, target <span class="op">=</span> <span class="st">'to'</span>)</span>
-<span id="cb391-10"><a href="vertex-importance.html#cb391-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb391-11"><a href="vertex-importance.html#cb391-11" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate degree centrality of Vertex 4</span></span>
-<span id="cb391-12"><a href="vertex-importance.html#cb391-12" aria-hidden="true" tabindex="-1"></a>nx.degree(g14, [<span class="dv">4</span>, <span class="dv">9</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb394"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb394-1"><a href="vertex-importance.html#cb394-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
+<span id="cb394-2"><a href="vertex-importance.html#cb394-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb394-3"><a href="vertex-importance.html#cb394-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb394-4"><a href="vertex-importance.html#cb394-4" aria-hidden="true" tabindex="-1"></a><span class="co"># download edgelist and remove weights</span></span>
+<span id="cb394-5"><a href="vertex-importance.html#cb394-5" aria-hidden="true" tabindex="-1"></a>g14_edgelist <span class="op">=</span> pd.read_csv(<span class="st">"https://ona-book.org/data/g14_edgelist.csv"</span>)</span>
+<span id="cb394-6"><a href="vertex-importance.html#cb394-6" aria-hidden="true" tabindex="-1"></a>g14_undirected <span class="op">=</span> g14_edgelist.drop(<span class="st">'weight'</span>, axis <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb394-7"><a href="vertex-importance.html#cb394-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb394-8"><a href="vertex-importance.html#cb394-8" aria-hidden="true" tabindex="-1"></a><span class="co"># create undirected g14 graph</span></span>
+<span id="cb394-9"><a href="vertex-importance.html#cb394-9" aria-hidden="true" tabindex="-1"></a>g14 <span class="op">=</span> nx.from_pandas_edgelist(g14_undirected, source <span class="op">=</span> <span class="st">'from'</span>, target <span class="op">=</span> <span class="st">'to'</span>)</span>
+<span id="cb394-10"><a href="vertex-importance.html#cb394-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb394-11"><a href="vertex-importance.html#cb394-11" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate degree centrality of Vertex 4</span></span>
+<span id="cb394-12"><a href="vertex-importance.html#cb394-12" aria-hidden="true" tabindex="-1"></a>nx.degree(g14, [<span class="dv">4</span>, <span class="dv">9</span>])</span></code></pre></div>
 <pre><code>## DegreeView({4: 7, 9: 4})</code></pre>
 <p>There are also methods called <code><a href="https://rdrr.io/pkg/igraph/man/degree.html">degree()</a></code> for a <code>Graph()</code> object as well as <code>in_degree()</code> and <code>out_degree()</code> for <code>DiGraph()</code> objects in <code>networkx</code>.</p>
-<div class="sourceCode" id="cb393"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb393-1"><a href="vertex-importance.html#cb393-1" aria-hidden="true" tabindex="-1"></a>g14.degree(<span class="dv">4</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb396"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb396-1"><a href="vertex-importance.html#cb396-1" aria-hidden="true" tabindex="-1"></a>g14.degree(<span class="dv">4</span>)</span></code></pre></div>
 <pre><code>## 7</code></pre>
 <p>The ego network of a vertex can be obtained using <code><a href="https://rdrr.io/pkg/igraph/man/ego.html">ego_graph()</a></code> function. To obtain the 2nd order ego network of Node 4:</p>
-<div class="sourceCode" id="cb395"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb395-1"><a href="vertex-importance.html#cb395-1" aria-hidden="true" tabindex="-1"></a>ego_4_2 <span class="op">=</span> nx.ego_graph(g14, n <span class="op">=</span> <span class="dv">4</span>, radius <span class="op">=</span> <span class="dv">2</span>)</span>
-<span id="cb395-2"><a href="vertex-importance.html#cb395-2" aria-hidden="true" tabindex="-1"></a>ego_4_2.nodes</span></code></pre></div>
+<div class="sourceCode" id="cb398"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb398-1"><a href="vertex-importance.html#cb398-1" aria-hidden="true" tabindex="-1"></a>ego_4_2 <span class="op">=</span> nx.ego_graph(g14, n <span class="op">=</span> <span class="dv">4</span>, radius <span class="op">=</span> <span class="dv">2</span>)</span>
+<span id="cb398-2"><a href="vertex-importance.html#cb398-2" aria-hidden="true" tabindex="-1"></a>ego_4_2.nodes</span></code></pre></div>
 <pre><code>## NodeView((9, 8, 7, 4, 6, 1, 2, 3, 5))</code></pre>
 <p>Closeness centrality is calculated using the <code>closeness_centrality()</code> function. However, in <code>networkx</code> this is normalized by multiplying the result by <span class="math inline">\(n - 1\)</span> where <span class="math inline">\(n\)</span> is the number of vertices in the graph. To obtain non-normalized closeness centrality it will be necessary to divide the output of this function by <span class="math inline">\(n - 1\)</span><a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;You may wonder why &lt;span class="math inline"&gt;\(n - 1\)&lt;/span&gt;? This is simply the total number of other vertices that we are calculating the paths to. Strangely, there is no option to non-normalize in the arguments of this function as of recent versions of &lt;code&gt;networkx&lt;/code&gt;. In any case, for the purposes of comparing vertices, it doesn’t matter a great deal whether you normalize or not.&lt;/p&gt;'><sup>44</sup></a>.</p>
-<div class="sourceCode" id="cb397"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb397-1"><a href="vertex-importance.html#cb397-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get non-normalized closeness centrality for Vertex 7</span></span>
-<span id="cb397-2"><a href="vertex-importance.html#cb397-2" aria-hidden="true" tabindex="-1"></a>norm_closeness <span class="op">=</span> nx.closeness_centrality(g14, <span class="dv">7</span>)</span>
-<span id="cb397-3"><a href="vertex-importance.html#cb397-3" aria-hidden="true" tabindex="-1"></a>norm_closeness<span class="op">/</span>(<span class="bu">len</span>(g14.nodes) <span class="op">-</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb400"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb400-1"><a href="vertex-importance.html#cb400-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get non-normalized closeness centrality for Vertex 7</span></span>
+<span id="cb400-2"><a href="vertex-importance.html#cb400-2" aria-hidden="true" tabindex="-1"></a>norm_closeness <span class="op">=</span> nx.closeness_centrality(g14, <span class="dv">7</span>)</span>
+<span id="cb400-3"><a href="vertex-importance.html#cb400-3" aria-hidden="true" tabindex="-1"></a>norm_closeness<span class="op">/</span>(<span class="bu">len</span>(g14.nodes) <span class="op">-</span> <span class="dv">1</span>)</span></code></pre></div>
 <pre><code>## 0.04</code></pre>
 <p>Betweenness centrality is calculated using the <code>betweenness_centrality()</code> function. Again this is normalized by default but this can be set to <code>False</code> in the arguments<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;The normalization here divides the result by the number of vertex pairs in a graph with &lt;span class="math inline"&gt;\(n-1\)&lt;/span&gt; vertices, which is &lt;span class="math inline"&gt;\((n - 1)(n - 2)\)&lt;/span&gt; for directed graphs and &lt;span class="math inline"&gt;\(\frac{(n - 1)(n - 2)}{2}\)&lt;/span&gt; for undirected graphs&lt;/p&gt;'><sup>45</sup></a>. This function calculates values for all nodes are returns them in a dict.</p>
-<div class="sourceCode" id="cb399"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb399-1"><a href="vertex-importance.html#cb399-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get non-normalized betweenness centrality for Vertex 9</span></span>
-<span id="cb399-2"><a href="vertex-importance.html#cb399-2" aria-hidden="true" tabindex="-1"></a>between <span class="op">=</span> nx.betweenness_centrality(g14, normalized <span class="op">=</span> <span class="va">False</span>)</span>
-<span id="cb399-3"><a href="vertex-importance.html#cb399-3" aria-hidden="true" tabindex="-1"></a>between.get(<span class="dv">9</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb402"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb402-1"><a href="vertex-importance.html#cb402-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get non-normalized betweenness centrality for Vertex 9</span></span>
+<span id="cb402-2"><a href="vertex-importance.html#cb402-2" aria-hidden="true" tabindex="-1"></a>between <span class="op">=</span> nx.betweenness_centrality(g14, normalized <span class="op">=</span> <span class="va">False</span>)</span>
+<span id="cb402-3"><a href="vertex-importance.html#cb402-3" aria-hidden="true" tabindex="-1"></a>between.get(<span class="dv">9</span>)</span></code></pre></div>
 <pre><code>## 46.0</code></pre>
 <p>Finally, eigenvector centrality is calculated using the <code>eigenvector_centrality</code> function, with a dict returned similar to <code>betweenness_centrality()</code>.</p>
-<div class="sourceCode" id="cb401"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb401-1"><a href="vertex-importance.html#cb401-1" aria-hidden="true" tabindex="-1"></a>eigen <span class="op">=</span> nx.eigenvector_centrality(g14)</span>
-<span id="cb401-2"><a href="vertex-importance.html#cb401-2" aria-hidden="true" tabindex="-1"></a>eigen.get(<span class="dv">4</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb404"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb404-1"><a href="vertex-importance.html#cb404-1" aria-hidden="true" tabindex="-1"></a>eigen <span class="op">=</span> nx.eigenvector_centrality(g14)</span>
+<span id="cb404-2"><a href="vertex-importance.html#cb404-2" aria-hidden="true" tabindex="-1"></a>eigen.get(<span class="dv">4</span>)</span></code></pre></div>
 <pre><code>## 0.5503779695532801</code></pre>
 <p>Closeness, betweenness and eigenvector centrality are calculated using <em>incoming</em> edges in <code>networkx</code> digraphs. To calculate the outgoing equivalent, simply use the <code>reverse()</code> method on the digraph to make all outgoing edges incoming and vice-versa.</p>
 <div class="thinkahead">
@@ -256,12 +256,12 @@ If we require that <span class="math inline">\(x\)</span> can only have positive
 </h3>
 <p>As we reviewed in Chapter <a href="viz-graphs.html#viz-graphs">4</a>, we will often make adjustments when visualizing graphs to illustrate certain aspects of the graph’s structure. For example, we highlight certain vertices with color or adjust the thickness of certain edges. When we want to visually illustrate the importance or influence of vertices in graphs, we will often do so using centrality measures. The two most common methods are to adjust vertex size according to centrality or to use a centrality-related color scale. We will illustrate a couple of examples using <code>ggraph</code> in R to show some of the options available.</p>
 <p>For greatest efficientcy, it’s always a good idea to add centralities as vertex properties in graphs. Let’s add a few of these now in our <span class="math inline">\(G_{14}\)</span> graph.</p>
-<div class="sourceCode" id="cb403"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb406"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">g14</span><span class="op">)</span><span class="op">$</span><span class="va">degree</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/degree.html">degree</a></span><span class="op">(</span><span class="va">g14</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">g14</span><span class="op">)</span><span class="op">$</span><span class="va">betweenness</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/betweenness.html">betweenness</a></span><span class="op">(</span><span class="va">g14</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">g14</span><span class="op">)</span><span class="op">$</span><span class="va">eigen</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/eigen_centrality.html">eigen_centrality</a></span><span class="op">(</span><span class="va">g14</span><span class="op">)</span><span class="op">$</span><span class="va">vector</span></code></pre></div>
 <p>Now we can create a visualization where we map the size of vertices to the degree vertex property, as in Figure <a href="vertex-importance.html#fig:g14-degree">7.2</a>. Note the <code><a href="https://ggplot2.tidyverse.org/reference/scale_size.html">scale_size()</a></code> function which is useful for setting a scale to suit your visualization.</p>
-<div class="sourceCode" id="cb404"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb407"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
 <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/ggraph.html">ggraph</a></span><span class="op">(</span><span class="va">g14</span>, layout <span class="op">=</span> <span class="st">"lgl"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_edge_link.html">geom_edge_link</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"grey"</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span>
@@ -277,7 +277,7 @@ Figure 7.2: <span class="math inline">\(G_{14}\)</span> with vertex size scaled 
 </p>
 </div>
 <p>Alternatively, Figure <a href="vertex-importance.html#fig:g14-eigen">7.3</a> shows the same graph with the vertex colors scaled according to normalized eigenvector centrality. This helps us see that the vertices to the left of Vertex 9 in <span class="math inline">\(G_{14}\)</span> do not have particularly influential connections compared to those to the right.</p>
-<div class="sourceCode" id="cb405"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb408"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
 <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/ggraph.html">ggraph</a></span><span class="op">(</span><span class="va">g14</span>, layout <span class="op">=</span> <span class="st">"lgl"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_edge_link.html">geom_edge_link</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"grey"</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span>
@@ -301,7 +301,7 @@ Figure 7.3: <span class="math inline">\(G_{14}\)</span> with vertex size scaled 
 <span class="header-section-number">7.3</span> Examples of uses<a class="anchor" aria-label="anchor" href="#illustrative-7"><i class="fas fa-link"></i></a>
 </h2>
 <p>In this section we will reprise the <code>workfrance</code> unweighted graph from the previous chapter, and use to it to illustrate some common uses for centrality measures. First we will look at how to find network-wide and department level ‘superconnectors,’ then we will look at how to find potential socially-influential actors in a network. Let’s load up the <code>workfrance</code> graph again.</p>
-<div class="sourceCode" id="cb406"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb409"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
 
 <span class="co"># download workfrance data sets</span>
@@ -320,7 +320,7 @@ Figure 7.3: <span class="math inline">\(G_{14}\)</span> with vertex size scaled 
 </h3>
 <p>Individuals with high betweenness centrality in people networks could be regarded as ‘superconnectors.’ Superconnectors can play very valuable roles in the social integration of new entrants to the network, and can also present greater risk of connective disruption if they leave the network. Imagine a new hire is about to join the DMI department in our <code>workfrance</code> network. We want to assign two ‘buddies’ to this individual to help them socially integrate into the workplace more effectively. Given that it is important for the individual to assimilate into their own department and into the workplace as a whole, we want to select the best two current employees to assist with both goals. Let’s start with the DMI department first.</p>
 <p>In order to study the DMI department as a self-contained network, we will create an induced subgraph which contains only those in that department and the connections between them, and visualize this network, labeling the employee IDs, as in <a href="vertex-importance.html#fig:dmi-workfrance">7.4</a>.</p>
-<div class="sourceCode" id="cb407"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb410"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># create DMI subgraph</span>
 <span class="va">DMI_vertices</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">$</span><span class="va">dept</span> <span class="op">==</span> <span class="st">"DMI"</span><span class="op">]</span>
 <span class="va">DMI_graph</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/subgraph.html">induced.subgraph</a></span><span class="op">(</span><span class="va">workfrance</span>, vids <span class="op">=</span> <span class="va">DMI_vertices</span><span class="op">)</span>
@@ -338,7 +338,7 @@ Figure 7.4: The induced subgraph of the DMI department in <code>workfrance</code
 </p>
 </div>
 <p>Now we are interested in those who have the strongest role in connecting others in this network. Let’s find the top three individuals in terms of betweenness centrality.</p>
-<div class="sourceCode" id="cb408"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb411"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># get IDs of top 3 betweenness centralities</span>
 <span class="va">ranked_betweenness_DMI</span> <span class="op">&lt;-</span> <span class="va">DMI_graph</span> |&gt; 
   <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/betweenness.html">betweenness</a></span><span class="op">(</span><span class="op">)</span> |&gt; 
@@ -347,7 +347,7 @@ Figure 7.4: The induced subgraph of the DMI department in <code>workfrance</code
 <span class="op">(</span><span class="va">top3_DMI</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">ranked_betweenness_DMI</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] "156" "74"  "884"</code></pre>
 <p>These are the IDs of the top three superconnectors in the DMI department. Now we can visualize the graph again, but let’s adjust vertex size by betweenness and color the top three superconnectors, as in Figure <a href="vertex-importance.html#fig:dmi-superconnectors">7.5</a>.</p>
-<div class="sourceCode" id="cb410"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb413"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># add betweenness vertex property</span>
 <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">DMI_graph</span><span class="op">)</span><span class="op">$</span><span class="va">betweenness</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/betweenness.html">betweenness</a></span><span class="op">(</span><span class="va">DMI_graph</span><span class="op">)</span>
 
@@ -369,7 +369,7 @@ Figure 7.5: DMI subgraph with the top three superconnectors identified
 </p>
 </div>
 <p>In a similar way we can find the superconnectors of the overall <code>workfrance</code> network.</p>
-<div class="sourceCode" id="cb411"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb414"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># get IDs of top 3 betweenness centralities</span>
 <span class="va">ranked_betweenness_workfrance</span> <span class="op">&lt;-</span> <span class="va">workfrance</span> |&gt; 
   <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/betweenness.html">betweenness</a></span><span class="op">(</span><span class="op">)</span> |&gt; 
@@ -379,7 +379,7 @@ Figure 7.5: DMI subgraph with the top three superconnectors identified
 <span class="op">(</span><span class="va">top3_workfrance</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">ranked_betweenness_workfrance</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] "603" "99"  "322"</code></pre>
 <p>In Figure <a href="vertex-importance.html#fig:workfrance-superconnectors">7.6</a>, we create a graph of the <code>workfrance</code> network with nodes scaled by betweenness centrality. We color by department so we can easily see which departments our superconnectors are in.</p>
-<div class="sourceCode" id="cb413"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb416"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># add betweenness property</span>
 <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">$</span><span class="va">betweenness</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/betweenness.html">betweenness</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span>
 
@@ -409,7 +409,7 @@ Figure 7.6: <code>workfrance</code> graph with the top three superconnectors ide
 <p>Influential actors in a network can be very useful to identify. In organizational contexts, working with more influential employees can make a difference to how certain initiatives or changes can be perceived by other employees. Influential employees can also be useful in efficiently tapping into prevalent opinions across the entire employee population. Imagine that we want to identify individuals from across the organization to participate in important workshops to problem solve some critical operational initiatives. These initiatives will affect employees at both an overall and a department level, therefore it would be ideal to have individuals who are influential within each department as well as across the entire organization.</p>
 <p>Again, let’s look at a single department - the DMI department as an example. Because we are interested in overall influence, this could mean we are equally interested in employees with a lot of connections or employees who are ‘stealthily’ infuential in being connected to a smaller number of other highly connected employees. The best measure for this is eigenvector centrality.</p>
 <p>First we identify the top three most influential individuals in the DMI department as measured by eigenvector centrality by working on the DMI subgraph.</p>
-<div class="sourceCode" id="cb414"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb417"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># working with lists so use purrr package</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://purrr.tidyverse.org">purrr</a></span><span class="op">)</span>
 
@@ -423,7 +423,7 @@ Figure 7.6: <code>workfrance</code> graph with the top three superconnectors ide
 <span class="op">(</span><span class="va">top3_DMI_eigen</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">ranked_eigen_DMI</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> </code></pre></div>
 <pre><code>## [1] "884" "156" "642"</code></pre>
 <p>We see two employee IDs in common with our top 3 superconnectors. We can also identify the top 3 most influential individuals across the <code>workfrance</code> graph according to their eigenvector centrality.</p>
-<div class="sourceCode" id="cb416"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb419"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># get IDs of top 3 eigen centrality</span>
 <span class="va">ranked_eigen_workfrance</span> <span class="op">&lt;-</span> <span class="va">workfrance</span> |&gt; 
   <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/eigen_centrality.html">eigen_centrality</a></span><span class="op">(</span><span class="op">)</span> |&gt; 
@@ -434,7 +434,7 @@ Figure 7.6: <code>workfrance</code> graph with the top three superconnectors ide
 <span class="op">(</span><span class="va">top3_workfrance_eigen</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">ranked_eigen_workfrance</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> </code></pre></div>
 <pre><code>## [1] "603" "649" "147"</code></pre>
 <p>We see one individual in common with our top 3 superconnectors. Let’s visualize this network so we can identify the department mix of our top 3 most influential individuals, as in Figure <a href="vertex-importance.html#fig:eigen-workfrance">7.7</a>.</p>
-<div class="sourceCode" id="cb418"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb421"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># add betweenness property</span>
 <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">$</span><span class="va">eigen</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/eigen_centrality.html">eigen_centrality</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">$</span><span class="va">vector</span>
 

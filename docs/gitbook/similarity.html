@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>9 Commonality and Assortativity | Handbook of Graphs and Networks in People Analytics</title>
+  <title>9 Assortativity and Similarity of Networks | Handbook of Graphs and Networks in People Analytics</title>
   <meta name="description" content="A technical manual of graphs, networks and their applications in the people and social sciences" />
   <meta name="generator" content="bookdown 0.22.15 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="9 Commonality and Assortativity | Handbook of Graphs and Networks in People Analytics" />
+  <meta property="og:title" content="9 Assortativity and Similarity of Networks | Handbook of Graphs and Networks in People Analytics" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://ona-book.org" />
   <meta property="og:image" content="https://ona-book.org/www/cover/cover-ona.png" />
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="keithmcnulty/ona_book" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="9 Commonality and Assortativity | Handbook of Graphs and Networks in People Analytics" />
+  <meta name="twitter:title" content="9 Assortativity and Similarity of Networks | Handbook of Graphs and Networks in People Analytics" />
   <meta name="twitter:site" content="@dr_keithmcnulty" />
   <meta name="twitter:description" content="A technical manual of graphs, networks and their applications in the people and social sciences" />
   <meta name="twitter:image" content="https://ona-book.org/www/cover/cover-ona.png" />
@@ -370,7 +370,22 @@ div.csl-indent {
 <li class="chapter" data-level="8.5.2" data-path="community.html"><a href="community.html#data-exercises-6"><i class="fa fa-check"></i><b>8.5.2</b> Data exercises</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="similarity.html"><a href="similarity.html"><i class="fa fa-check"></i><b>9</b> Commonality and Assortativity</a></li>
+<li class="chapter" data-level="9" data-path="similarity.html"><a href="similarity.html"><i class="fa fa-check"></i><b>9</b> Assortativity and Similarity of Networks</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="similarity.html"><a href="similarity.html#assortativity-in-networks"><i class="fa fa-check"></i><b>9.1</b> Assortativity in networks</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="similarity.html"><a href="similarity.html#categorical-or-nominal-assortativity"><i class="fa fa-check"></i><b>9.1.1</b> Categorical or nominal assortativity</a></li>
+<li class="chapter" data-level="9.1.2" data-path="similarity.html"><a href="similarity.html#degree-assortativity"><i class="fa fa-check"></i><b>9.1.2</b> Degree assortativity</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="similarity.html"><a href="similarity.html#vertex-similarity"><i class="fa fa-check"></i><b>9.2</b> Vertex Similarity</a></li>
+<li class="chapter" data-level="9.3" data-path="similarity.html"><a href="similarity.html#graph-similarity"><i class="fa fa-check"></i><b>9.3</b> Graph similarity</a></li>
+<li class="chapter" data-level="9.4" data-path="similarity.html"><a href="similarity.html#calculating-assortativity-and-similarity-in-python"><i class="fa fa-check"></i><b>9.4</b> Calculating assortativity and similarity in Python</a></li>
+<li class="chapter" data-level="9.5" data-path="similarity.html"><a href="similarity.html#learning-exercises-7"><i class="fa fa-check"></i><b>9.5</b> Learning exercises</a>
+<ul>
+<li class="chapter" data-level="9.5.1" data-path="similarity.html"><a href="similarity.html#discussion-questions-7"><i class="fa fa-check"></i><b>9.5.1</b> Discussion questions</a></li>
+<li class="chapter" data-level="9.5.2" data-path="similarity.html"><a href="similarity.html#data-exercises-7"><i class="fa fa-check"></i><b>9.5.2</b> Data exercises</a></li>
+</ul></li>
+</ul></li>
 <li class="chapter" data-level="10" data-path="databases.html"><a href="databases.html"><i class="fa fa-check"></i><b>10</b> Graphs as Databases</a></li>
 <li class="chapter" data-level="11" data-path="advanced-viz.html"><a href="advanced-viz.html"><i class="fa fa-check"></i><b>11</b> Advanced Network Visualization</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -392,8 +407,297 @@ div.csl-indent {
 
             <section class="normal" id="section-">
 <div id="similarity" class="section level1" number="9">
-<h1><span class="header-section-number">9</span> Commonality and Assortativity</h1>
+<h1><span class="header-section-number">9</span> Assortativity and Similarity of Networks</h1>
+<p>In this chapter we will round off our study of important graph concepts and metrics by looking at two new concepts which a people network analyst will often have good reason to study. The first concept is assortativity, and this is described as the tendency of vertices to attach to vertices with similar properties in a graph. This is effectively a measure of homophily in a network. Highly assortative networks are more robust to destructive events like the loss of vertices, but because of their concentration they can be inefficient in terms of information flow and in organizational settings they can be problematic for diverse interaction and experience.</p>
+<p>The second concept we will look at is vertex and graph similarity. In certain networks where information on vertex properties is not available, it may make sense to infer that two vertices are similar in some way if their immediate networks are very similar. The concept of similarity can be also extended to entire graphs. In the simplest case, we may be looking at the same set of vertices but using different definitions of connection, and we want a measure of whether those different definition produce substantially the same network or an entirely different network. As organizations start to mine many different forms of data to define connection (email, calendar, timesheet, document collaboration to name a few), it is becoming more and more important to understand the similarities or differences between the networks generated by these data sources.</p>
+<div id="assortativity-in-networks" class="section level2" number="9.1">
+<h2><span class="header-section-number">9.1</span> Assortativity in networks</h2>
+<p>We have already seen in previous chapters that it is natural to want to study the extent to which vertices with similar ground truth properties are more densely connected in a graph. In Chapter <a href="community.html#community">8</a>, we studied examples where we looked at the how politicians representing the same political parties connect to each other over Twitter, or how schoolchildren in the same class connect over Facebook. In the exercises at the end of that chapter, we looked at how researcher communities form over email either within or between ground trust research departments.</p>
+<p>The <strong>assortativity coefficient</strong> of a graph is a measure of the extent to which vertices with the same properties connect to each other. It is a relatively recently defined metric, and is defined slightly differently according to whether the property of interest is categorical (eg department or political party) or numeric (eg degree centrality). See <span class="citation"><a href="#ref-newman" role="doc-biblioref">Newman</a> (<a href="#ref-newman" role="doc-biblioref">2002</a>)</span> for a full description and mathematical definition.</p>
+<p>The assortativity coefficient of a graph ranges between -1 and 1, just like a correlation coefficient. Assortativity coefficients close to 1 indicate that there is very high likelihood of two vertices with the same property being connected. This is called an assortative network. A coefficient of -1 indicates that there is very low likelihood of two vertcies with the same property being connected. This is called a disassortative network. Networks with coefficients close to zero are neither assortative nor disassortative and are usually described as neutral.</p>
+<div id="categorical-or-nominal-assortativity" class="section level3" number="9.1.1">
+<h3><span class="header-section-number">9.1.1</span> Categorical or nominal assortativity</h3>
+<p>Let’s look at categorical assortativity first by bringing back two examples from the previous chapter. First we look at our Facebook schoolfriends network and calculate the assortativity by class. In R, we can use the <code>assortativity_nominal()</code> function to calculate categorical assortativity - see the end of this chapter for Python implementations. Note that these fuctions expect a numeric vector to indicate the category membership.</p>
+<div class="sourceCode" id="cb491"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb491-1"><a href="similarity.html#cb491-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(igraph)</span>
+<span id="cb491-2"><a href="similarity.html#cb491-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb491-3"><a href="similarity.html#cb491-3" aria-hidden="true" tabindex="-1"></a><span class="co"># get data</span></span>
+<span id="cb491-4"><a href="similarity.html#cb491-4" aria-hidden="true" tabindex="-1"></a>schoolfriends_edgelist <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://ona-book.org/data/schoolfriends_edgelist.csv&quot;</span>)</span>
+<span id="cb491-5"><a href="similarity.html#cb491-5" aria-hidden="true" tabindex="-1"></a>schoolfriends_vertices <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://ona-book.org/data/schoolfriends_vertices.csv&quot;</span>)</span>
+<span id="cb491-6"><a href="similarity.html#cb491-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb491-7"><a href="similarity.html#cb491-7" aria-hidden="true" tabindex="-1"></a><span class="co"># create undirected Facebook graph</span></span>
+<span id="cb491-8"><a href="similarity.html#cb491-8" aria-hidden="true" tabindex="-1"></a>schoolfriends_fb <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(</span>
+<span id="cb491-9"><a href="similarity.html#cb491-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">d =</span> schoolfriends_edgelist <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb491-10"><a href="similarity.html#cb491-10" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(type <span class="sc">==</span> <span class="st">&quot;facebook&quot;</span>),</span>
+<span id="cb491-11"><a href="similarity.html#cb491-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">vertices =</span> schoolfriends_vertices,</span>
+<span id="cb491-12"><a href="similarity.html#cb491-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">directed =</span> <span class="cn">FALSE</span></span>
+<span id="cb491-13"><a href="similarity.html#cb491-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb491-14"><a href="similarity.html#cb491-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb491-15"><a href="similarity.html#cb491-15" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate assortativity by class for facebook</span></span>
+<span id="cb491-16"><a href="similarity.html#cb491-16" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">assortativity_nominal</span>(</span>
+<span id="cb491-17"><a href="similarity.html#cb491-17" aria-hidden="true" tabindex="-1"></a>  schoolfriends_fb, </span>
+<span id="cb491-18"><a href="similarity.html#cb491-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.integer</span>(<span class="fu">as.factor</span>(<span class="fu">V</span>(schoolfriends_fb)<span class="sc">$</span>class))</span>
+<span id="cb491-19"><a href="similarity.html#cb491-19" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## [1] 0.3833667</code></pre>
+<p>This suggests moderate assortativity, or moderate likelihood that students in the same class will be Facebook friends. Now let’s compare to ‘real’ reported friendships.</p>
+<div class="sourceCode" id="cb493"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb493-1"><a href="similarity.html#cb493-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create directed graph of reported friendships</span></span>
+<span id="cb493-2"><a href="similarity.html#cb493-2" aria-hidden="true" tabindex="-1"></a>schoolfriends_rp <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(</span>
+<span id="cb493-3"><a href="similarity.html#cb493-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">d =</span> schoolfriends_edgelist <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb493-4"><a href="similarity.html#cb493-4" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(type <span class="sc">==</span> <span class="st">&quot;reported&quot;</span>),</span>
+<span id="cb493-5"><a href="similarity.html#cb493-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">vertices =</span> schoolfriends_vertices</span>
+<span id="cb493-6"><a href="similarity.html#cb493-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb493-7"><a href="similarity.html#cb493-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb493-8"><a href="similarity.html#cb493-8" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate assortativity by class for reported</span></span>
+<span id="cb493-9"><a href="similarity.html#cb493-9" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">assortativity_nominal</span>(</span>
+<span id="cb493-10"><a href="similarity.html#cb493-10" aria-hidden="true" tabindex="-1"></a>  schoolfriends_rp, </span>
+<span id="cb493-11"><a href="similarity.html#cb493-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.integer</span>(<span class="fu">as.factor</span>(<span class="fu">V</span>(schoolfriends_fb)<span class="sc">$</span>class))</span>
+<span id="cb493-12"><a href="similarity.html#cb493-12" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## [1] 0.7188919</code></pre>
+<p>We see substantially higher assortativity by class for reported friendships, indicating that being in the same class is more strongly associated with developing a reported school friendship.</p>
+<div class="thinkahead">
+<p><strong>Playing around:</strong> You may remember the concept of modularity which we introduced in Chapter <a href="community.html#community">8</a>. For categorical vertex properties, modularity and assortativity effectively measure the same thing. Calculate the modularity for the Facebook schoolfriends by class and compare it to the assortativity. Also, play around with some prior data sets and calculate the assortativity of some of the communities we detected in Chapter <a href="community.html#community">8</a>. Recall also our example for Chapter <a href="paths-distance.html#paths-distance">6</a> our example of breaking up the <code>workfrance</code> population to have tables with a good mix of different departments. If you completed that exercise you may be interested to compare the assortativity of that population by department versus by table to get a measure how how successful you were are creating diverse tables.</p>
+</div>
+</div>
+<div id="degree-assortativity" class="section level3" number="9.1.2">
+<h3><span class="header-section-number">9.1.2</span> Degree assortativity</h3>
+<p>The most common form of numerical assortativity is degree assortativity. A high degree assortativity is a measure of preferential attachment in organizations, where highly connected vertices are connected with each other and a large number of vertices with low degree make up the remainder of the network.</p>
+<p>Again, let’s use our schoolfriends networks as an example to calculate degree assortativity in R.</p>
+<div class="sourceCode" id="cb495"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb495-1"><a href="similarity.html#cb495-1" aria-hidden="true" tabindex="-1"></a><span class="co"># degree assortativity of facebook friendships (undirected)</span></span>
+<span id="cb495-2"><a href="similarity.html#cb495-2" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">assortativity_degree</span>(schoolfriends_fb)</span></code></pre></div>
+<pre><code>## [1] 0.02462444</code></pre>
+<div class="sourceCode" id="cb497"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb497-1"><a href="similarity.html#cb497-1" aria-hidden="true" tabindex="-1"></a><span class="co"># degree assortativity of facebook friendships (directed)</span></span>
+<span id="cb497-2"><a href="similarity.html#cb497-2" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">assortativity_degree</span>(schoolfriends_rp)</span></code></pre></div>
+<pre><code>## [1] 0.3098123</code></pre>
+<p>We see that real life friendships are moderately assortative in this data, whereas Facebook friendships are approximatlely neutral. This indicates that more popular students have a stronger tendency in real life to be friends with other popular students.</p>
+<p>Although it is a relatively recent concept, assortativity is a useful measure in understanding people or organizational networks. Highly assortative networks demonstrate resilience in that knowledge, community and other social capital are concentrated in a strong core, and disruptions such as departures of actors from those networks are less likely to affect the network as a whole. However, such networks also demonstrate characteristics which are counterproductive to diversity and inclusion, and can represent challenging environments for new entrants to adjust to.</p>
+<p>It has been thought that social networks are unlike most other real life networks in that they are degree assortative. However, recent research has begun to question this. Although it does seem to be the case that social networks are more assortative than non-social networks, research on various datasets where the connection between individuals is direct (rather than inferred from joint membership of a group) suggests that social networks are likely neutrally assortative (<span class="citation"><a href="#ref-fisher" role="doc-biblioref">Fisher, Silk, and Franks</a> (<a href="#ref-fisher" role="doc-biblioref">2017</a>)</span>). This is a research topic of great interest currently in social network anaysis.</p>
+</div>
+</div>
+<div id="vertex-similarity" class="section level2" number="9.2">
+<h2><span class="header-section-number">9.2</span> Vertex Similarity</h2>
+<p>Often we are not lucky enough to have really rich ground truth information on the vertices in a network. This is particularly the case if we need to analyze people networks under anonymization constraints. Nevertheless, as we have seen with examples in previous chapters like the <code>workfrance</code> graph and the <code>ontariopol</code> graph, computational methods allow us to infer conclusions about vertices and groups of vertices that can often be accurate representations of the ground truth properties of those vertices. In some networks, we can conclude that vertices are similar in some way if they share very similar immediate connections. For example, in our <code>workfrance</code> graph, if two vertices have first degree networks that overlap to a large degree, it would not be unreasonable to infer a likelihood that those two vertices are from the same department.</p>
+<p>The <strong>vertex similarity coefficient</strong> of a pair of vertices is a measure of how similar the immediate networks of those two vertices are. Imagine we have two vertices <span class="math inline">\(v_1\)</span> and <span class="math inline">\(v_2\)</span> in an unweighted graph <span class="math inline">\(G\)</span>. There are three common ways to calculate the vertex similarity of <span class="math inline">\(v_1\)</span> and <span class="math inline">\(v_2\)</span>, as follows:</p>
+<ol style="list-style-type: decimal">
+<li>The <em>Jaccard similarity coefficient</em> is the number of vertices who are neighbours of <em>both</em> <span class="math inline">\(v_1\)</span> and <span class="math inline">\(v_2\)</span> divided by the number of vertices who are neighbours of <em>at least one of</em> <span class="math inline">\(v_1\)</span> and <span class="math inline">\(v_2\)</span>.</li>
+<li>The <em>dice similarity coefficient</em> is twice the number of vertices who are neighbours of <em>both</em> <span class="math inline">\(v_1\)</span> and <span class="math inline">\(v_2\)</span> divided by the sum of the degree centralities of <span class="math inline">\(v_1\)</span> and <span class="math inline">\(v_2\)</span>. Thus, common neighbours are double counted in this method, but are not in method 1.<br />
+</li>
+<li>The <em>inverse log-weighted similarity coefficient</em> is the sum of the inverse logs of the degrees of the common neighbours of <span class="math inline">\(v_1\)</span> and <span class="math inline">\(v_2\)</span>. This definition asserts that common neighbors that have high degree in the network are ‘less valuable’ in detecting similarity because there is a higher likelihood that they would be a common neighbor simply by chance.</li>
+</ol>
+<p>To illustrate these three types of vertex similarity coefficients and show how they are calculated in R, let’s bring back our <span class="math inline">\(G_{14}\)</span> unweighted graph from Chapters <a href="paths-distance.html#paths-distance">6</a> and <a href="vertex-importance.html#vertex-importance">7</a>, and visualize it again in Figure <a href="similarity.html#fig:g14-9">9.1</a>.</p>
+<div class="sourceCode" id="cb499"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb499-1"><a href="similarity.html#cb499-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(igraph)</span>
+<span id="cb499-2"><a href="similarity.html#cb499-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggraph)</span>
+<span id="cb499-3"><a href="similarity.html#cb499-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb499-4"><a href="similarity.html#cb499-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb499-5"><a href="similarity.html#cb499-5" aria-hidden="true" tabindex="-1"></a><span class="co"># download edgelist and create unweighted graph</span></span>
+<span id="cb499-6"><a href="similarity.html#cb499-6" aria-hidden="true" tabindex="-1"></a>g14_edgelist <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://ona-book.org/data/g14_edgelist.csv&quot;</span>)</span>
+<span id="cb499-7"><a href="similarity.html#cb499-7" aria-hidden="true" tabindex="-1"></a>g14 <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(<span class="at">d =</span> g14_edgelist <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb499-8"><a href="similarity.html#cb499-8" aria-hidden="true" tabindex="-1"></a>                                       dplyr<span class="sc">::</span><span class="fu">select</span>(from, to),</span>
+<span id="cb499-9"><a href="similarity.html#cb499-9" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">directed =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb499-10"><a href="similarity.html#cb499-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb499-11"><a href="similarity.html#cb499-11" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize</span></span>
+<span id="cb499-12"><a href="similarity.html#cb499-12" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb499-13"><a href="similarity.html#cb499-13" aria-hidden="true" tabindex="-1"></a>(g14viz <span class="ot">&lt;-</span> <span class="fu">ggraph</span>(g14, <span class="at">layout =</span> <span class="st">&quot;lgl&quot;</span>) <span class="sc">+</span></span>
+<span id="cb499-14"><a href="similarity.html#cb499-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb499-15"><a href="similarity.html#cb499-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_label</span>(<span class="fu">aes</span>(<span class="at">label =</span> name), <span class="at">fill =</span> <span class="st">&quot;lightblue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb499-16"><a href="similarity.html#cb499-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_void</span>())</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:g14-9"></span>
+<img src="_main_files/figure-html/g14-9-1.png" alt="It's our old friend $G_{14}$ again" width="672" />
+<p class="caption">
+Figure 9.1: It’s our old friend <span class="math inline">\(G_{14}\)</span> again
+</p>
+</div>
+<p>Let’s look at vertices 7 and 8 in <span class="math inline">\(G_{14}\)</span>. To calculate the Jaccard similarity coefficient, we note that vertices 4 and 9 are the two common neighbours of these vertices, and that vertices 4, 6, 7, 8 and 9 are all neighbours of at least one of vertices 7 and 8. Therefore we should see a Jaccard similarity coefficient of 0.4. We use the <code>similarity()</code> function in <code>igraph</code> who’s default is to calculate Jaccard similarity.</p>
+<div class="sourceCode" id="cb500"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb500-1"><a href="similarity.html#cb500-1" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">similarity</span>(g14, <span class="at">vids =</span> <span class="fu">c</span>(<span class="st">&quot;7&quot;</span>, <span class="st">&quot;8&quot;</span>))</span></code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]  1.0  0.4
+## [2,]  0.4  1.0</code></pre>
+<p>We see in the off-diagonal components of this matrix confirmation of a Jaccard similarity coefficient of 0.4.</p>
+<p>To calculate the dice similarity coefficient, we note that the sum of the degrees of vertices 7 and 8 is 7, therefore the dice similarity should equal 4/14 or 0.286.</p>
+<div class="sourceCode" id="cb502"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb502-1"><a href="similarity.html#cb502-1" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">similarity</span>(g14, <span class="at">vids =</span> <span class="fu">c</span>(<span class="st">&quot;7&quot;</span>, <span class="st">&quot;8&quot;</span>), <span class="at">method =</span> <span class="st">&quot;dice&quot;</span>)</span></code></pre></div>
+<pre><code>##           [,1]      [,2]
+## [1,] 1.0000000 0.5714286
+## [2,] 0.5714286 1.0000000</code></pre>
+<p>Finally, to calculate the inverse log weighted similarity coefficient, we sum inverse of the logs of the degrees of the common neighbours vertices 4 and 8, which is <span class="math inline">\(\frac{1}{\ln{7}} + \frac{1}{\ln{4}}\)</span>, which calculates to 1.235.</p>
+<p>The output of this <code>similarity()</code> function variant returns the similarity of the selected vertices with all vertices in the network — try it if you like. In order to extract the specific similarity for vertices 7 and 8, we should ensure to label the rows and columns of the matrix by vertex name before extracting a specific value from it.</p>
+<div class="sourceCode" id="cb504"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb504-1"><a href="similarity.html#cb504-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get invlogweighted similarity</span></span>
+<span id="cb504-2"><a href="similarity.html#cb504-2" aria-hidden="true" tabindex="-1"></a>invsim <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">similarity</span>(g14, <span class="at">method =</span> <span class="st">&quot;invlogweighted&quot;</span>)</span>
+<span id="cb504-3"><a href="similarity.html#cb504-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb504-4"><a href="similarity.html#cb504-4" aria-hidden="true" tabindex="-1"></a><span class="co"># rows and cols should be labelled by vertex name before extracting values </span></span>
+<span id="cb504-5"><a href="similarity.html#cb504-5" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(invsim) <span class="ot">&lt;-</span> <span class="fu">V</span>(g14)<span class="sc">$</span>name</span>
+<span id="cb504-6"><a href="similarity.html#cb504-6" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(invsim) <span class="ot">&lt;-</span> <span class="fu">V</span>(g14)<span class="sc">$</span>name</span>
+<span id="cb504-7"><a href="similarity.html#cb504-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb504-8"><a href="similarity.html#cb504-8" aria-hidden="true" tabindex="-1"></a><span class="co"># extract value for vertices 7 and 8</span></span>
+<span id="cb504-9"><a href="similarity.html#cb504-9" aria-hidden="true" tabindex="-1"></a>invsim[<span class="st">&quot;7&quot;</span>, <span class="st">&quot;8&quot;</span>]</span></code></pre></div>
+<pre><code>## [1] 1.235246</code></pre>
+<div class="thinkahead">
+<p><strong>Playing around:</strong> Go back to some of our prior examples from Chapter <a href="community.html#community">8</a> where we detected communities of more densely connected vertices in graphs like <code>schoolfriends</code> and <code>ontariopol</code>. Play around with calculating the similarity between pairs of vertices inside communities versus between communities and think about whether the results make sense.</p>
+</div>
+</div>
+<div id="graph-similarity" class="section level2" number="9.3">
+<h2><span class="header-section-number">9.3</span> Graph similarity</h2>
+<p>The general question of whether two graphs which contain vertices representing different entities still exhibit similar internal patterns and structures is of great interest in computer science and image recognition. The <em>graph isomorphism</em> problem, for example, is a computational problem concerned with finding a function that exactly maps the vertices of one graph onto other<a href="#fn61" class="footnote-ref" id="fnref61"><sup>61</sup></a>.</p>
+<p>In organizational network analysis we are usually more concerned with comparing graphs where the vertices represent the same entities (usually people), and where the vertex set is identical but where the edge set may be different. An example of this is our <code>schoolfriends</code> data set from earlier in this chapter, where the vertices are the same set of high school students, but where the edge sets are different according to whether the friendships are Facebook friendships or ‘real’ reported friendships. In this situation we can use a common set similarity metric from set theory to determine how similar our graphs are..</p>
+<p>Let <span class="math inline">\(G_1 = (V, E_1)\)</span> and <span class="math inline">\(G_2 = (V, E_2)\)</span> be two graphs with the same vertex set. The <em>Jaccard similarity</em> of <span class="math inline">\(G_1\)</span> and <span class="math inline">\(G_2\)</span> is the number of edges in <em>both</em> <span class="math inline">\(E_1\)</span> and <span class="math inline">\(E_2\)</span> divided by the number of edges in <em>at least one</em> of <span class="math inline">\(E_1\)</span> and <span class="math inline">\(E_2\)</span>.</p>
+<p>Note that a Jaccard similarity of 1 means that both graphs have identical edge sets and so are identical in structure, and a similarity of 0 means that both graphs have no edges in common. Let’s try this on our <code>schoolfriends</code> graphs. To do a fair comparison, we will redefine our Facebook schoolfriends graph to be a directed graph where edges always go on both directions.</p>
+<div class="sourceCode" id="cb506"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb506-1"><a href="similarity.html#cb506-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create undirected Facebook graph</span></span>
+<span id="cb506-2"><a href="similarity.html#cb506-2" aria-hidden="true" tabindex="-1"></a>schoolfriends_fb_dir <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">as.directed</span>(schoolfriends_fb)</span></code></pre></div>
+<p>We can create a handy function to calculate the Jaccard similarity of the edge sets of two graphs. Note that the <code>igraph</code> package has special operators <code>$s%</code> for the intersection of two graphs (that is, all nodes and edges that both graphs have in common), and <code>%u%</code> for the union of two graphs (that is, all unique nodes and edges in both graphs combined).</p>
+<div class="sourceCode" id="cb507"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb507-1"><a href="similarity.html#cb507-1" aria-hidden="true" tabindex="-1"></a><span class="co"># function for jaccard similarity of edges sets</span></span>
+<span id="cb507-2"><a href="similarity.html#cb507-2" aria-hidden="true" tabindex="-1"></a>jaccard_edgeset_similarity <span class="ot">&lt;-</span> <span class="cf">function</span>(G1, G2) {</span>
+<span id="cb507-3"><a href="similarity.html#cb507-3" aria-hidden="true" tabindex="-1"></a>  inter <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">E</span>(G1 <span class="sc">%s%</span> G2))</span>
+<span id="cb507-4"><a href="similarity.html#cb507-4" aria-hidden="true" tabindex="-1"></a>  un <span class="ot">&lt;-</span> <span class="fu">length</span>(<span class="fu">E</span>(G1 <span class="sc">%u%</span> G2))</span>
+<span id="cb507-5"><a href="similarity.html#cb507-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb507-6"><a href="similarity.html#cb507-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (un <span class="sc">==</span> <span class="dv">0</span>) {</span>
+<span id="cb507-7"><a href="similarity.html#cb507-7" aria-hidden="true" tabindex="-1"></a>    <span class="dv">0</span></span>
+<span id="cb507-8"><a href="similarity.html#cb507-8" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb507-9"><a href="similarity.html#cb507-9" aria-hidden="true" tabindex="-1"></a>    inter<span class="sc">/</span>un</span>
+<span id="cb507-10"><a href="similarity.html#cb507-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb507-11"><a href="similarity.html#cb507-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb507-12"><a href="similarity.html#cb507-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb507-13"><a href="similarity.html#cb507-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb507-14"><a href="similarity.html#cb507-14" aria-hidden="true" tabindex="-1"></a><span class="co"># test</span></span>
+<span id="cb507-15"><a href="similarity.html#cb507-15" aria-hidden="true" tabindex="-1"></a><span class="fu">jaccard_edgeset_similarity</span>(schoolfriends_fb_dir, schoolfriends_rp)</span></code></pre></div>
+<pre><code>## [1] 0.09727385</code></pre>
+<p>We see that there is only about 10% similarity between the facebook friendships and the ‘real’ reported friendships.</p>
+</div>
+<div id="calculating-assortativity-and-similarity-in-python" class="section level2" number="9.4">
+<h2><span class="header-section-number">9.4</span> Calculating assortativity and similarity in Python</h2>
+<p>To demonstrate assortativity functions we load up the <code>schoolfriends</code> data sets.</p>
+<div class="sourceCode" id="cb509"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb509-1"><a href="similarity.html#cb509-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
+<span id="cb509-2"><a href="similarity.html#cb509-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb509-3"><a href="similarity.html#cb509-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb509-4"><a href="similarity.html#cb509-4" aria-hidden="true" tabindex="-1"></a><span class="co"># load data</span></span>
+<span id="cb509-5"><a href="similarity.html#cb509-5" aria-hidden="true" tabindex="-1"></a><span class="co"># get data</span></span>
+<span id="cb509-6"><a href="similarity.html#cb509-6" aria-hidden="true" tabindex="-1"></a>schoolfriends_edgelist <span class="op">=</span> pd.read_csv(<span class="st">&quot;https://ona-book.org/data/schoolfriends_edgelist.csv&quot;</span>)</span>
+<span id="cb509-7"><a href="similarity.html#cb509-7" aria-hidden="true" tabindex="-1"></a>schoolfriends_vertices <span class="op">=</span> pd.read_csv(<span class="st">&quot;https://ona-book.org/data/schoolfriends_vertices.csv&quot;</span>)</span>
+<span id="cb509-8"><a href="similarity.html#cb509-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb509-9"><a href="similarity.html#cb509-9" aria-hidden="true" tabindex="-1"></a><span class="co"># create undirected facebook graph</span></span>
+<span id="cb509-10"><a href="similarity.html#cb509-10" aria-hidden="true" tabindex="-1"></a>schoolfriends_fb <span class="op">=</span> nx.from_pandas_edgelist(</span>
+<span id="cb509-11"><a href="similarity.html#cb509-11" aria-hidden="true" tabindex="-1"></a>  df <span class="op">=</span> schoolfriends_edgelist[schoolfriends_edgelist.<span class="bu">type</span> <span class="op">==</span> <span class="st">&#39;facebook&#39;</span>],</span>
+<span id="cb509-12"><a href="similarity.html#cb509-12" aria-hidden="true" tabindex="-1"></a>  source <span class="op">=</span> <span class="st">&quot;from&quot;</span>,</span>
+<span id="cb509-13"><a href="similarity.html#cb509-13" aria-hidden="true" tabindex="-1"></a>  target <span class="op">=</span> <span class="st">&quot;to&quot;</span></span>
+<span id="cb509-14"><a href="similarity.html#cb509-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb509-15"><a href="similarity.html#cb509-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb509-16"><a href="similarity.html#cb509-16" aria-hidden="true" tabindex="-1"></a><span class="co"># create directed reported graph</span></span>
+<span id="cb509-17"><a href="similarity.html#cb509-17" aria-hidden="true" tabindex="-1"></a>schoolfriends_rp <span class="op">=</span> nx.from_pandas_edgelist(</span>
+<span id="cb509-18"><a href="similarity.html#cb509-18" aria-hidden="true" tabindex="-1"></a>  df <span class="op">=</span> schoolfriends_edgelist[schoolfriends_edgelist.<span class="bu">type</span> <span class="op">==</span> <span class="st">&#39;reported&#39;</span>],</span>
+<span id="cb509-19"><a href="similarity.html#cb509-19" aria-hidden="true" tabindex="-1"></a>  source <span class="op">=</span> <span class="st">&quot;from&quot;</span>,</span>
+<span id="cb509-20"><a href="similarity.html#cb509-20" aria-hidden="true" tabindex="-1"></a>  target <span class="op">=</span> <span class="st">&quot;to&quot;</span>,</span>
+<span id="cb509-21"><a href="similarity.html#cb509-21" aria-hidden="true" tabindex="-1"></a>  create_using<span class="op">=</span>nx.DiGraph()</span>
+<span id="cb509-22"><a href="similarity.html#cb509-22" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb509-23"><a href="similarity.html#cb509-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb509-24"><a href="similarity.html#cb509-24" aria-hidden="true" tabindex="-1"></a><span class="co"># add class vertex attribute to both graphs</span></span>
+<span id="cb509-25"><a href="similarity.html#cb509-25" aria-hidden="true" tabindex="-1"></a>class_attr <span class="op">=</span> <span class="bu">dict</span>(<span class="bu">zip</span>(schoolfriends_vertices[<span class="st">&#39;id&#39;</span>], schoolfriends_vertices[<span class="st">&#39;class&#39;</span>]))</span>
+<span id="cb509-26"><a href="similarity.html#cb509-26" aria-hidden="true" tabindex="-1"></a>nx.set_node_attributes(schoolfriends_fb, name <span class="op">=</span> <span class="st">&quot;class&quot;</span>, values <span class="op">=</span> class_attr)</span>
+<span id="cb509-27"><a href="similarity.html#cb509-27" aria-hidden="true" tabindex="-1"></a>nx.set_node_attributes(schoolfriends_rp, name <span class="op">=</span> <span class="st">&quot;class&quot;</span>, values <span class="op">=</span> class_attr)</span></code></pre></div>
+<p>The <code>attribute_assortativity_coefficient()</code> and <code>degree_assortativity_coefficient()</code> functions can be used to calculate categorical assortativity and degree assortativity respectively.</p>
+<div class="sourceCode" id="cb510"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb510-1"><a href="similarity.html#cb510-1" aria-hidden="true" tabindex="-1"></a>nx.attribute_assortativity_coefficient(schoolfriends_fb, <span class="st">&quot;class&quot;</span>)</span></code></pre></div>
+<pre><code>## 0.38336668753682646</code></pre>
+<div class="sourceCode" id="cb512"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb512-1"><a href="similarity.html#cb512-1" aria-hidden="true" tabindex="-1"></a>nx.attribute_assortativity_coefficient(schoolfriends_rp, <span class="st">&quot;class&quot;</span>)</span></code></pre></div>
+<pre><code>## 0.7188918572576617</code></pre>
+<div class="sourceCode" id="cb514"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb514-1"><a href="similarity.html#cb514-1" aria-hidden="true" tabindex="-1"></a>nx.degree_assortativity_coefficient(schoolfriends_fb)</span></code></pre></div>
+<pre><code>## 0.024624435635859483</code></pre>
+<div class="sourceCode" id="cb516"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb516-1"><a href="similarity.html#cb516-1" aria-hidden="true" tabindex="-1"></a>nx.degree_assortativity_coefficient(schoolfriends_rp)</span></code></pre></div>
+<pre><code>## 0.30981226480406543</code></pre>
+<p>To calculate Jaccard similarity between two vertices use the <code>jaccard_coefficient()</code> function in <code>networkx</code>. In this example we calculate the Jaccard coefficients for two pairs of vertices in <code>schoolfriends_fb</code>.</p>
+<div class="sourceCode" id="cb518"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb518-1"><a href="similarity.html#cb518-1" aria-hidden="true" tabindex="-1"></a>jaccards <span class="op">=</span> nx.jaccard_coefficient(G <span class="op">=</span> schoolfriends_fb, ebunch <span class="op">=</span> [(<span class="dv">883</span>, <span class="dv">132</span>), (<span class="dv">63</span>, <span class="dv">991</span>)])</span>
+<span id="cb518-2"><a href="similarity.html#cb518-2" aria-hidden="true" tabindex="-1"></a><span class="bu">sorted</span>(jaccards)</span></code></pre></div>
+<pre><code>## [(63, 991, 0.15384615384615385), (883, 132, 0.30612244897959184)]</code></pre>
+<p>Dice similarity and inverse log weighted similarity coefficients can be calculated by creating functions.</p>
+<div class="sourceCode" id="cb520"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb520-1"><a href="similarity.html#cb520-1" aria-hidden="true" tabindex="-1"></a><span class="co"># function for dice similarity</span></span>
+<span id="cb520-2"><a href="similarity.html#cb520-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> dice_coefficient(G, ebunch <span class="op">=</span> <span class="va">None</span>):</span>
+<span id="cb520-3"><a href="similarity.html#cb520-3" aria-hidden="true" tabindex="-1"></a>      <span class="kw">def</span> dicesim(u, v):</span>
+<span id="cb520-4"><a href="similarity.html#cb520-4" aria-hidden="true" tabindex="-1"></a>        total_degree <span class="op">=</span> nx.degree(G, u) <span class="op">+</span> nx.degree(G, v)</span>
+<span id="cb520-5"><a href="similarity.html#cb520-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> total_degree <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb520-6"><a href="similarity.html#cb520-6" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="dv">0</span></span>
+<span id="cb520-7"><a href="similarity.html#cb520-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="dv">2</span><span class="op">*</span><span class="bu">len</span>(<span class="bu">list</span>(nx.common_neighbors(G, u, v))) <span class="op">/</span> total_degree</span>
+<span id="cb520-8"><a href="similarity.html#cb520-8" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb520-9"><a href="similarity.html#cb520-9" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> ebunch <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb520-10"><a href="similarity.html#cb520-10" aria-hidden="true" tabindex="-1"></a>        ebunch <span class="op">=</span> nx.non_edges(G)</span>
+<span id="cb520-11"><a href="similarity.html#cb520-11" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> ((u, v, dicesim(u, v)) <span class="cf">for</span> u, v <span class="kw">in</span> ebunch)</span>
+<span id="cb520-12"><a href="similarity.html#cb520-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb520-13"><a href="similarity.html#cb520-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb520-14"><a href="similarity.html#cb520-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb520-15"><a href="similarity.html#cb520-15" aria-hidden="true" tabindex="-1"></a><span class="co"># test</span></span>
+<span id="cb520-16"><a href="similarity.html#cb520-16" aria-hidden="true" tabindex="-1"></a>dice <span class="op">=</span> dice_coefficient(G <span class="op">=</span> schoolfriends_fb, ebunch <span class="op">=</span> [(<span class="dv">883</span>, <span class="dv">132</span>), (<span class="dv">63</span>, <span class="dv">991</span>)])</span>
+<span id="cb520-17"><a href="similarity.html#cb520-17" aria-hidden="true" tabindex="-1"></a><span class="bu">sorted</span>(dice)</span></code></pre></div>
+<pre><code>## [(63, 991, 0.26666666666666666), (883, 132, 0.46875)]</code></pre>
+<div class="sourceCode" id="cb522"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb522-1"><a href="similarity.html#cb522-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math </span>
+<span id="cb522-2"><a href="similarity.html#cb522-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb522-3"><a href="similarity.html#cb522-3" aria-hidden="true" tabindex="-1"></a><span class="co"># function for inverse log weighted similarity</span></span>
+<span id="cb522-4"><a href="similarity.html#cb522-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> invlogweight_coefficient(G, ebunch <span class="op">=</span> <span class="va">None</span>):</span>
+<span id="cb522-5"><a href="similarity.html#cb522-5" aria-hidden="true" tabindex="-1"></a>      <span class="kw">def</span> invlogwsim(u, v):</span>
+<span id="cb522-6"><a href="similarity.html#cb522-6" aria-hidden="true" tabindex="-1"></a>        logw <span class="op">=</span> [<span class="dv">1</span><span class="op">/</span>math.log(nx.degree(G, w)) <span class="cf">for</span> w <span class="kw">in</span> nx.common_neighbors(G, u, v)]</span>
+<span id="cb522-7"><a href="similarity.html#cb522-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> logw <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb522-8"><a href="similarity.html#cb522-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="dv">0</span></span>
+<span id="cb522-9"><a href="similarity.html#cb522-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">sum</span>(i <span class="cf">for</span> i <span class="kw">in</span> logw)</span>
+<span id="cb522-10"><a href="similarity.html#cb522-10" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb522-11"><a href="similarity.html#cb522-11" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> ebunch <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb522-12"><a href="similarity.html#cb522-12" aria-hidden="true" tabindex="-1"></a>        ebunch <span class="op">=</span> nx.non_edges(G)</span>
+<span id="cb522-13"><a href="similarity.html#cb522-13" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> ((u, v, invlogwsim(u, v)) <span class="cf">for</span> u, v <span class="kw">in</span> ebunch)</span>
+<span id="cb522-14"><a href="similarity.html#cb522-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb522-15"><a href="similarity.html#cb522-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb522-16"><a href="similarity.html#cb522-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb522-17"><a href="similarity.html#cb522-17" aria-hidden="true" tabindex="-1"></a><span class="co"># test</span></span>
+<span id="cb522-18"><a href="similarity.html#cb522-18" aria-hidden="true" tabindex="-1"></a>invlogw <span class="op">=</span> invlogweight_coefficient(G <span class="op">=</span> schoolfriends_fb, ebunch <span class="op">=</span> [(<span class="dv">883</span>, <span class="dv">132</span>), (<span class="dv">63</span>, <span class="dv">991</span>)])</span>
+<span id="cb522-19"><a href="similarity.html#cb522-19" aria-hidden="true" tabindex="-1"></a><span class="bu">sorted</span>(invlogw)</span></code></pre></div>
+<pre><code>## [(63, 991, 0.5728002621049868), (883, 132, 4.566433503199232)]</code></pre>
+<p>Finally, to calculate Jaccard similarity of two edge sets a simple function can be written:</p>
+<div class="sourceCode" id="cb524"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb524-1"><a href="similarity.html#cb524-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create functions for Jaccard edges set similarity</span></span>
+<span id="cb524-2"><a href="similarity.html#cb524-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> jaccard_edgeset_similarity(G1, G2):</span>
+<span id="cb524-3"><a href="similarity.html#cb524-3" aria-hidden="true" tabindex="-1"></a>  setG1 <span class="op">=</span> <span class="bu">set</span>(G1.edges)</span>
+<span id="cb524-4"><a href="similarity.html#cb524-4" aria-hidden="true" tabindex="-1"></a>  intersection <span class="op">=</span> <span class="bu">len</span>(setG1.intersection(G2.edges))</span>
+<span id="cb524-5"><a href="similarity.html#cb524-5" aria-hidden="true" tabindex="-1"></a>  union <span class="op">=</span> <span class="bu">len</span>(setG1.union(G2.edges))</span>
+<span id="cb524-6"><a href="similarity.html#cb524-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb524-7"><a href="similarity.html#cb524-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> union <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb524-8"><a href="similarity.html#cb524-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span></span>
+<span id="cb524-9"><a href="similarity.html#cb524-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> intersection<span class="op">/</span>union</span>
+<span id="cb524-10"><a href="similarity.html#cb524-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb524-11"><a href="similarity.html#cb524-11" aria-hidden="true" tabindex="-1"></a><span class="co"># recreate schoolfriends_fb as directed graph to compare</span></span>
+<span id="cb524-12"><a href="similarity.html#cb524-12" aria-hidden="true" tabindex="-1"></a>schoolfriends_fb_dir <span class="op">=</span> schoolfriends_fb.to_directed()</span>
+<span id="cb524-13"><a href="similarity.html#cb524-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb524-14"><a href="similarity.html#cb524-14" aria-hidden="true" tabindex="-1"></a><span class="co"># test</span></span>
+<span id="cb524-15"><a href="similarity.html#cb524-15" aria-hidden="true" tabindex="-1"></a>jaccard_edgeset_similarity(schoolfriends_fb_dir, schoolfriends_rp)</span></code></pre></div>
+<pre><code>## 0.09727385377942999</code></pre>
+</div>
+<div id="learning-exercises-7" class="section level2" number="9.5">
+<h2><span class="header-section-number">9.5</span> Learning exercises</h2>
+<div id="discussion-questions-7" class="section level3" number="9.5.1">
+<h3><span class="header-section-number">9.5.1</span> Discussion questions</h3>
+<ol style="list-style-type: decimal">
+<li>Describe the meaning of the term assortativity for vertices in a graph.</li>
+<li>Describe the meaning of degree assortativity and discuss how it relates to the concept of preferential attachment.</li>
+<li>Describe why assortativity and modularity are similar concepts in graph theory.</li>
+<li>Describe the concept of vertex similarity and define two measures of vertex similarity.</li>
+<li>Describe a method to compare the similarity of two graphs with the same vertex sets.</li>
+</ol>
+</div>
+<div id="data-exercises-7" class="section level3" number="9.5.2">
+<h3><span class="header-section-number">9.5.2</span> Data exercises</h3>
+<ol style="list-style-type: decimal">
+<li>Calculate the gender assortativity coefficient in the two <code>schoolfriends</code> graph - what would you conclude from this?</li>
+<li>Calculate the department assortativity coefficient in the <code>workfrance</code> graph from earlier chapters.</li>
+<li>Calculate the degree assortativity coefficient of the <code>workfrance</code> and the <code>ontariopol</code> graphs from previous chapters. How would you describe the meaning of the difference between the two?</li>
+<li>Choose pairs of vertices from the same department in the <code>workfrance</code> graph and calculate their Jaccard similarity coefficients. Then choose pairs from different departments and do the same. Do the results make sense? Why?</li>
+<li>Find the three vertices with highest degree centrality in the <code>workfrance</code> graph, and calculate some pairwise similarity coefficients for them. Now do the same with three vertices with relatively low degree centrality. Do the results make sense? Why?</li>
+</ol>
 
+</div>
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-fisher" class="csl-entry">
+Fisher, David, Matthew Silk, and Daniel Franks. 2017. <span>“The Perceived Assortativity of Social Networks: Methodological Problems and Solutions.”</span> In.
+</div>
+<div id="ref-newman" class="csl-entry">
+Newman, M. E. J. 2002. <span>“Assortative Mixing in Networks.”</span> <em>Physical Review Letters</em>.
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="61">
+<li id="fn61"><p>The question of whether the graph isomorphism problem can be solved in polynomial time is one of a number of high-profile open graph problems currently.<a href="similarity.html#fnref61" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
             </section>
 
