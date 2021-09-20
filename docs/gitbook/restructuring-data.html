@@ -386,8 +386,26 @@ div.csl-indent {
 <li class="chapter" data-level="9.5.2" data-path="similarity.html"><a href="similarity.html#data-exercises-7"><i class="fa fa-check"></i><b>9.5.2</b> Data exercises</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="databases.html"><a href="databases.html"><i class="fa fa-check"></i><b>10</b> Graphs as Databases</a></li>
-<li class="chapter" data-level="11" data-path="advanced-viz.html"><a href="advanced-viz.html"><i class="fa fa-check"></i><b>11</b> Advanced Network Visualization</a></li>
+<li class="chapter" data-level="10" data-path="databases.html"><a href="databases.html"><i class="fa fa-check"></i><b>10</b> Graphs as Databases</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="databases.html"><a href="databases.html#graph-database-technology"><i class="fa fa-check"></i><b>10.1</b> Graph database technology</a>
+<ul>
+<li class="chapter" data-level="10.1.1" data-path="databases.html"><a href="databases.html#labeled-property-graphs"><i class="fa fa-check"></i><b>10.1.1</b> Labeled-property graphs</a></li>
+<li class="chapter" data-level="10.1.2" data-path="databases.html"><a href="databases.html#resource-description-frameworks-rdfs"><i class="fa fa-check"></i><b>10.1.2</b> Resource Description Frameworks (RDFs)</a></li>
+</ul></li>
+<li class="chapter" data-level="10.2" data-path="databases.html"><a href="databases.html#example-how-to-work-with-a-neo4j-graph-database"><i class="fa fa-check"></i><b>10.2</b> Example: how to work with a Neo4J graph database</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="databases.html"><a href="databases.html#neo4j-browser"><i class="fa fa-check"></i><b>10.2.1</b> Using the browser interface</a></li>
+<li class="chapter" data-level="10.2.2" data-path="databases.html"><a href="databases.html#working-with-neo4j-using-r"><i class="fa fa-check"></i><b>10.2.2</b> Working with Neo4J using R</a></li>
+<li class="chapter" data-level="10.2.3" data-path="databases.html"><a href="databases.html#working-with-neo4j-using-python"><i class="fa fa-check"></i><b>10.2.3</b> Working with Neo4J using Python</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="databases.html"><a href="databases.html#moving-to-persistent-graph-data-in-organizations"><i class="fa fa-check"></i><b>10.3</b> Moving to persistent graph data in organizations</a></li>
+<li class="chapter" data-level="10.4" data-path="databases.html"><a href="databases.html#learning-exercises-8"><i class="fa fa-check"></i><b>10.4</b> Learning exercises</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="databases.html"><a href="databases.html#discussion-questions-8"><i class="fa fa-check"></i><b>10.4.1</b> Discussion questions</a></li>
+<li class="chapter" data-level="10.4.2" data-path="databases.html"><a href="databases.html#data-exercises-8"><i class="fa fa-check"></i><b>10.4.2</b> Data exercises</a></li>
+</ul></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -474,9 +492,9 @@ div.csl-indent {
 <span id="cb217-4"><a href="restructuring-data.html#cb217-4" aria-hidden="true" tabindex="-1"></a>(orgchart <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(</span>
 <span id="cb217-5"><a href="restructuring-data.html#cb217-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">d =</span> orgchart_edgelist2</span>
 <span id="cb217-6"><a href="restructuring-data.html#cb217-6" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
-<pre><code>## IGRAPH 972070a DN-- 8 7 -- 
+<pre><code>## IGRAPH 01b7d7a DN-- 8 7 -- 
 ## + attr: name (v/c)
-## + edges from 972070a (vertex names):
+## + edges from 01b7d7a (vertex names):
 ## [1] Andrew -&gt;Nancy    Andrew -&gt;Michael  Nancy  -&gt;Jane     Nancy  -&gt;Margaret Nancy  -&gt;Steve    Michael-&gt;Robert  
 ## [7] Michael-&gt;Laura</code></pre>
 <p>We now have a directed graph with named vertices, so this should be easy to plot. Let’s use <code>ggplot</code> with a dendrogram (tree) layout, as in Figure <a href="restructuring-data.html#fig:chinook-pretty">5.1</a>.</p>
@@ -1107,13 +1125,13 @@ Figure 5.10: Visualization of the network of characters in Episode 1 of Friends,
 <span id="cb283-12"><a href="restructuring-data.html#cb283-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb283-13"><a href="restructuring-data.html#cb283-13" aria-hidden="true" tabindex="-1"></a><span class="co"># check unique values returned</span></span>
 <span id="cb283-14"><a href="restructuring-data.html#cb283-14" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span>(friends_ep1_list)</span></code></pre></div>
-<pre><code>## {&#39;Ross and Rachel&#39;, &#39;Paul&#39;, &#39;Ross&#39;, &#39;New Scene&#39;, &#39;Monica&#39;, &#39;Chandler &#39;, &#39;Waitress&#39;, &#39;Priest on TV&#39;, &#39;Phoebe&#39;, &#39;Rachel&#39;, &#39;Frannie&#39;, &#39;All&#39;, &#39;Customer&#39;, &#39;Chandler&#39;, &#39;Joey&#39;, &#39;Monica &#39;}</code></pre>
+<pre><code>## {&#39;All&#39;, &#39;Monica&#39;, &#39;Frannie&#39;, &#39;Ross&#39;, &#39;Customer&#39;, &#39;Chandler&#39;, &#39;Priest on TV&#39;, &#39;Joey&#39;, &#39;Chandler &#39;, &#39;Ross and Rachel&#39;, &#39;Monica &#39;, &#39;Rachel&#39;, &#39;Phoebe&#39;, &#39;New Scene&#39;, &#39;Waitress&#39;, &#39;Paul&#39;}</code></pre>
 <p>This looks promising - new we need to get rid of the ‘All’ entries and entries containing ’ and ’.</p>
 <div class="sourceCode" id="cb285"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb285-1"><a href="restructuring-data.html#cb285-1" aria-hidden="true" tabindex="-1"></a>friends_ep1_list2<span class="op">=</span>[entry.strip() <span class="cf">for</span> entry <span class="kw">in</span> friends_ep1_list </span>
 <span id="cb285-2"><a href="restructuring-data.html#cb285-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">&quot;All&quot;</span> <span class="kw">not</span> <span class="kw">in</span> entry <span class="kw">and</span> <span class="st">&quot; and &quot;</span> <span class="kw">not</span> <span class="kw">in</span> entry]</span>
 <span id="cb285-3"><a href="restructuring-data.html#cb285-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb285-4"><a href="restructuring-data.html#cb285-4" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span>(friends_ep1_list2)</span></code></pre></div>
-<pre><code>## {&#39;Paul&#39;, &#39;Ross&#39;, &#39;New Scene&#39;, &#39;Monica&#39;, &#39;Waitress&#39;, &#39;Priest on TV&#39;, &#39;Phoebe&#39;, &#39;Rachel&#39;, &#39;Frannie&#39;, &#39;Customer&#39;, &#39;Chandler&#39;, &#39;Joey&#39;}</code></pre>
+<pre><code>## {&#39;Monica&#39;, &#39;Frannie&#39;, &#39;Ross&#39;, &#39;Customer&#39;, &#39;Chandler&#39;, &#39;Priest on TV&#39;, &#39;Joey&#39;, &#39;Rachel&#39;, &#39;Phoebe&#39;, &#39;New Scene&#39;, &#39;Waitress&#39;, &#39;Paul&#39;}</code></pre>
 <p>Now we are ready to organize our characters by scene. First we do a scene count, then we create a dataframe and obtain unique character lists by scene.</p>
 <div class="sourceCode" id="cb287"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb287-1"><a href="restructuring-data.html#cb287-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb287-2"><a href="restructuring-data.html#cb287-2" aria-hidden="true" tabindex="-1"></a></span>

@@ -386,8 +386,26 @@ div.csl-indent {
 <li class="chapter" data-level="9.5.2" data-path="similarity.html"><a href="similarity.html#data-exercises-7"><i class="fa fa-check"></i><b>9.5.2</b> Data exercises</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="databases.html"><a href="databases.html"><i class="fa fa-check"></i><b>10</b> Graphs as Databases</a></li>
-<li class="chapter" data-level="11" data-path="advanced-viz.html"><a href="advanced-viz.html"><i class="fa fa-check"></i><b>11</b> Advanced Network Visualization</a></li>
+<li class="chapter" data-level="10" data-path="databases.html"><a href="databases.html"><i class="fa fa-check"></i><b>10</b> Graphs as Databases</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="databases.html"><a href="databases.html#graph-database-technology"><i class="fa fa-check"></i><b>10.1</b> Graph database technology</a>
+<ul>
+<li class="chapter" data-level="10.1.1" data-path="databases.html"><a href="databases.html#labeled-property-graphs"><i class="fa fa-check"></i><b>10.1.1</b> Labeled-property graphs</a></li>
+<li class="chapter" data-level="10.1.2" data-path="databases.html"><a href="databases.html#resource-description-frameworks-rdfs"><i class="fa fa-check"></i><b>10.1.2</b> Resource Description Frameworks (RDFs)</a></li>
+</ul></li>
+<li class="chapter" data-level="10.2" data-path="databases.html"><a href="databases.html#example-how-to-work-with-a-neo4j-graph-database"><i class="fa fa-check"></i><b>10.2</b> Example: how to work with a Neo4J graph database</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="databases.html"><a href="databases.html#neo4j-browser"><i class="fa fa-check"></i><b>10.2.1</b> Using the browser interface</a></li>
+<li class="chapter" data-level="10.2.2" data-path="databases.html"><a href="databases.html#working-with-neo4j-using-r"><i class="fa fa-check"></i><b>10.2.2</b> Working with Neo4J using R</a></li>
+<li class="chapter" data-level="10.2.3" data-path="databases.html"><a href="databases.html#working-with-neo4j-using-python"><i class="fa fa-check"></i><b>10.2.3</b> Working with Neo4J using Python</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="databases.html"><a href="databases.html#moving-to-persistent-graph-data-in-organizations"><i class="fa fa-check"></i><b>10.3</b> Moving to persistent graph data in organizations</a></li>
+<li class="chapter" data-level="10.4" data-path="databases.html"><a href="databases.html#learning-exercises-8"><i class="fa fa-check"></i><b>10.4</b> Learning exercises</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="databases.html"><a href="databases.html#discussion-questions-8"><i class="fa fa-check"></i><b>10.4.1</b> Discussion questions</a></li>
+<li class="chapter" data-level="10.4.2" data-path="databases.html"><a href="databases.html#data-exercises-8"><i class="fa fa-check"></i><b>10.4.2</b> Data exercises</a></li>
+</ul></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -421,8 +439,8 @@ Figure 1.1: The Prussian city of Königsberg circa 1600
 <p>Enter Leonhard Euler — an 18th century Swiss mathematician who spent the majority of his life in St Petersburg and Berlin. A prolific original thinker, Euler is considered by many as the greatest mathematician of all time. It is impossible to study mathematics even at high school without being constantly exposed to Euler’s work. He popularized the greek letter <span class="math inline">\(\pi\)</span> to denote Archimedes’ constant ratio between the circumference and diameter of a circle, he formalized the letter <span class="math inline">\(i\)</span> to denote the imaginary number <span class="math inline">\(\sqrt{-1}\)</span> and he defined the exponential constant <span class="math inline">\(e\)</span> which is known as <em>Euler’s number</em>. Living between two cities on either side of Königsberg at the time of the problem of the Seven Bridges, he set about finding a solution. The one he discovered is both a testament to the beauty of mathematical proof and the first use of the concept of a graph to solve a mathematical problem.</p>
 <p>The first thing Euler did — as any good mathematician will always do — is strip the problem of all its extraneous information and reduce it to its most minimal form. The problem merely requires one to set foot on a land mass. It is not concerned with what route one takes while on that land mass. Therefore we can represent each of the four land masses as dots. We can then draw lines between the dots to represent the bridges. This, he reasoned, leads to a diagram like that in Interactive Figure <a href="everywhere.html#fig:euler-graph">1.2</a>. The picture can be drawn in infinitely many ways, but it will always be four dots connected by seven lines in the same configuration. If you like, move the nodes around to see what I mean.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:euler-graph"></span>
-<div id="htmlwidget-2ea6cf8bcac0c0cc735d" style="width:80%;height:480px;" class="visNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-2ea6cf8bcac0c0cc735d">{"x":{"nodes":{"id":["Altstadt-Loebenicht","Kneiphof","Vorstadt-Haberberg","Lomse"],"label":["Altstadt-Loebenicht","Kneiphof","Vorstadt-Haberberg","Lomse"]},"edges":{"from":["Altstadt-Loebenicht","Altstadt-Loebenicht","Altstadt-Loebenicht","Kneiphof","Kneiphof","Kneiphof","Vorstadt-Haberberg"],"to":["Kneiphof","Kneiphof","Lomse","Lomse","Vorstadt-Haberberg","Vorstadt-Haberberg","Lomse"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot"},"manipulation":{"enabled":false},"layout":{"randomSeed":1}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false},"byselection":{"enabled":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-450f171f14364aa3ebed" style="width:80%;height:480px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-450f171f14364aa3ebed">{"x":{"nodes":{"id":["Altstadt-Loebenicht","Kneiphof","Vorstadt-Haberberg","Lomse"],"label":["Altstadt-Loebenicht","Kneiphof","Vorstadt-Haberberg","Lomse"]},"edges":{"from":["Altstadt-Loebenicht","Altstadt-Loebenicht","Altstadt-Loebenicht","Kneiphof","Kneiphof","Kneiphof","Vorstadt-Haberberg"],"to":["Kneiphof","Kneiphof","Lomse","Lomse","Vorstadt-Haberberg","Vorstadt-Haberberg","Lomse"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot"},"manipulation":{"enabled":false},"layout":{"randomSeed":1}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false},"byselection":{"enabled":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)"},"evals":[],"jsHooks":[]}</script>
 <p class="caption">
 Figure 1.2: A minimal representation of the <em>Seven Bridges of Königsberg</em> problem
 </p>
@@ -495,20 +513,22 @@ Figure 1.4: Power law distribution of node degrees in a scale-free network for <
 <p>Various downloadable data sets are used throughout this book, and in some cases I point to other sources of data outside the book for those who are interested in further exploration, particularly of very large network data. Most chapters end with a set of discussion questions and data exercises and I strongly encourage the reader to engage with these in order to put their learning into practice. Often, it is through taking on these exercises that readers discover some of the common pitfalls of working with graph data structures, and better to learn these pitfalls now than to find out about them when the situation is higher stakes or more urgent.</p>
 <p>This chapter and the one following it can be considered preliminary. From Chapter <a href="working.html#working">3</a> onwards, this book takes the following structure:</p>
 <ul>
-<li><p>Chapter <a href="working.html#working">3</a> introduces the simple elements of graph theory including how to define a graph, the various types of graphs, vertex and edge properties and the ways in which a graph can be described mathematically. It then proceeds to demonstrate how to create graph objects in R or in Python and how to start working with them.</p></li>
-<li><p>Chapter <a href="viz-graphs.html#viz-graphs">4</a> looks at the various options for how to visualize graphs in R and in Python. It goes through a variety of technical options for static and dynamic visualizations of graphs and how to customize the appearance of graphs for various purposes.</p></li>
-<li><p>Chapter <a href="restructuring-data.html#restructuring-data">5</a> looks at how data can be transformed to be used in a graph structure, which is often an important element of making graphs useful for analysis. Two important examples are used to illustrate how to transform rectangular data into an edgelist for a graph and how to scrape document information for use in graphs.</p></li>
-<li><p>Chapter <a href="paths-distance.html#paths-distance">6</a> examines the topic of paths and distance in graphs, introduces related concepts such graph diameter, and demonstrates some common methods such as Dijkstra’s shortest path algorithm.</p></li>
-<li><p>Chapter <a href="vertex-importance.html#vertex-importance">7</a> examines the topic of vertex importance and centrality in graphs. It discusses different types of centrality and their meaning and usefulness in a network analytics context, and it shows various methods for calculating and graphically illustrating centrality in graphs.</p></li>
-<li><p>Chapter <a href="community.html#community">8</a> looks at community detection. It covers various options for how to identify communities in graphs, how to describe communities and how to illustrate them effectively.</p></li>
-<li><p>Chapter <a href="similarity.html#similarity">9</a> deep dives into some common statistics used in analyzing networks, in particular related to similarity, assortativity and attachment.<br />
-</p></li>
-<li><p>Chapter <a href="databases.html#databases">10</a> introduces the concept of graphs as databases and provides some examples of how to design and use graph databases for the purpose of network analytics. This can be considered an extension chapter for those who are interested.</p></li>
-<li><p>Chapter <a href="advanced-viz.html#advanced-viz">11</a> demonstrates some advanced visualization options for graphs through using the Javascript D3 library in combination with some of the work done earlier in the book. This can also be considered an extension chapter for those who are interested.</p></li>
-</ul>
+<li>Chapter <a href="working.html#working">3</a> introduces the simple elements of graph theory including how to define a graph, the various types of graphs, vertex and edge properties and the ways in which a graph can be described mathematically. It then proceeds to demonstrate how to create graph objects in R or in Python and how to start working with them.</li>
+<li>Chapter <a href="viz-graphs.html#viz-graphs">4</a> looks at the various options for how to visualize graphs in R and in Python. It goes through a variety of technical options for static and dynamic visualizations of graphs and how to customize the appearance of graphs for various purposes.</li>
+<li>Chapter <a href="restructuring-data.html#restructuring-data">5</a> looks at how data can be transformed to be used in a graph structure, which is often an important element of making graphs useful for analysis. Two important examples are used to illustrate how to transform rectangular data into an edgelist for a graph and how to scrape document information for use in graphs.</li>
+<li>Chapter <a href="paths-distance.html#paths-distance">6</a> examines the topic of paths and distance in graphs, introduces related concepts such graph diameter, and demonstrates some common methods such as Dijkstra’s shortest path algorithm.</li>
+<li>Chapter <a href="vertex-importance.html#vertex-importance">7</a> examines the topic of vertex importance and centrality in graphs. It discusses different types of centrality and their meaning and usefulness in a network analytics context, and it shows various methods for calculating and graphically illustrating centrality in graphs.</li>
+<li>Chapter <a href="community.html#community">8</a> looks at community detection. It covers various options for how to identify communities in graphs, how to describe communities and how to illustrate them effectively.</li>
+<li>Chapter <a href="similarity.html#similarity">9</a> deep dives into some common statistics used in analyzing networks, in particular related to similarity, assortativity and attachment.<br />
+</li>
+<li>Chapter <a href="databases.html#databases">10</a> introduces the concept of graphs as databases and provides some examples of how to design and use graph databases for the purpose of network analytics. This can be considered an extension chapter for those who are interested.
+<!--  -->
+<!-- * Chapter \@ref(advanced-viz) demonstrates some advanced visualization options for graphs through using the Javascript D3 library in combination with some of the work done earlier in the book.  This can also be considered an extension chapter for those who are interested. -->
+<!--  -->
 <!--
 * Chapter \@ref(exercises) is a set of practice exercises and data sets designed to give the reader an opportunity to put some of the learning from earlier chapters into practice.  These exercises are ideal for class assignment or project work.
--->
+--></li>
+</ul>
 
 </div>
 </div>

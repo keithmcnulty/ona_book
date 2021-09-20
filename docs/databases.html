@@ -6,17 +6,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>10 Graphs as Databases | Handbook of Graphs and Networks in People Analytics</title>
 <meta name="author" content="Keith McNulty">
-<meta name="description" content="A technical manual of graphs, networks and their applications in the people and social sciences">
+<meta name="description" content="Over the course of the early chapters of this book we established a certain workflow for doing graph analysis, as follows: If necessary, transform existing transactional data into a graph-like...">
 <meta name="generator" content="bookdown 0.22.15 with bs4_book()">
 <meta property="og:title" content="10 Graphs as Databases | Handbook of Graphs and Networks in People Analytics">
 <meta property="og:type" content="book">
 <meta property="og:url" content="https://ona-book.org/databases.html">
 <meta property="og:image" content="https://ona-book.org/www/cover/cover-ona.png">
-<meta property="og:description" content="A technical manual of graphs, networks and their applications in the people and social sciences">
+<meta property="og:description" content="Over the course of the early chapters of this book we established a certain workflow for doing graph analysis, as follows: If necessary, transform existing transactional data into a graph-like...">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="10 Graphs as Databases | Handbook of Graphs and Networks in People Analytics">
 <meta name="twitter:site" content="@dr_keithmcnulty">
-<meta name="twitter:description" content="A technical manual of graphs, networks and their applications in the people and social sciences">
+<meta name="twitter:description" content="Over the course of the early chapters of this book we established a certain workflow for doing graph analysis, as follows: If necessary, transform existing transactional data into a graph-like...">
 <meta name="twitter:image" content="https://ona-book.org/www/cover/cover-ona.png">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.9.5/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
@@ -57,7 +57,6 @@
 <li><a class="" href="community.html"><span class="header-section-number">8</span> Components, Communities and Cliques</a></li>
 <li><a class="" href="similarity.html"><span class="header-section-number">9</span> Assortativity and Similarity of Networks</a></li>
 <li><a class="active" href="databases.html"><span class="header-section-number">10</span> Graphs as Databases</a></li>
-<li><a class="" href="advanced-viz.html"><span class="header-section-number">11</span> Advanced Network Visualization</a></li>
 <li><a class="" href="references.html">References</a></li>
 </ul>
 
@@ -70,14 +69,325 @@
 <h1>
 <span class="header-section-number">10</span> Graphs as Databases<a class="anchor" aria-label="anchor" href="#databases"><i class="fas fa-link"></i></a>
 </h1>
-
+<p>Over the course of the early chapters of this book we established a certain workflow for doing graph analysis, as follows:</p>
+<ol style="list-style-type: decimal">
+<li>If necessary, transform existing transactional data into a graph-like structure that better allows the analysis of relationships in the data (Chapter <a href="restructuring-data.html#restructuring-data">5</a>).</li>
+<li>Load data into (temporary) graph structures inside data science languages like R or Python (Chapter <a href="working.html#working">3</a>).</li>
+<li>Create visualizations, perform analysis or run algorithms based on those temporary structures (Chapter <a href="viz-graphs.html#viz-graphs">4</a> and Chapters <a href="paths-distance.html#paths-distance">6</a> to <a href="similarity.html#similarity">9</a>).</li>
+</ol>
+<p>This workflow is perfectly fine for one-off or temporary network analysis, such as an academic project or an experimental analytic effort. However, for organizations whose use of graph methods is maturing, it will become wasteful, inefficient and unnecessarily repetitive to ask analysts to follow this workflow for repeated similar analyses. We have already seen in Chapter <a href="restructuring-data.html#restructuring-data">5</a> that the steps involved in transforming rectangular data into a graph-like structure are far from trivial. Therefore, as the use of graphs for analytic purposes matures, it becomes natural to ask whether the data can be persisted in a graph-like structure in order to be permanently available in that structure for rapid querying or easier, faster analysis.</p>
+<p>In this chapter we look at how organizations can persist data in a graph structure for more efficient analysis and data query. This is a rapidly developing field, and many leading organizations have started implementing graph databases in recent years. There are a variety of technologies available, and no single technology is dominant. We will start with an overview of the space of graph database technology and then proceed to show illustrative examples of one particular well-developed technology — Neo4J graph databases — including how to work with these graph databases in R and in Python. While this chapter is not intended to be a full reference on graph databases, by the end of this chapter readers should have a good sense of the basics of how these powerful emerging technologies operate and how they can be used to make network analysis faster and easier to perform.</p>
+<div id="graph-database-technology" class="section level2" number="10.1">
+<h2>
+<span class="header-section-number">10.1</span> Graph database technology<a class="anchor" aria-label="anchor" href="#graph-database-technology"><i class="fas fa-link"></i></a>
+</h2>
+<p>Graph databases store data so that finding <em>relationships</em> is the primary priority. This contrasts with traditional databases where finding a transaction is the primary priority. Most commonly, graph databases take one of two forms: labeled-property graphs or resource description frameworks<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;It should be noted that graph database technologies are now emerging that can support both of these forms - most notably AWS Neptune.&lt;/p&gt;"><sup>62</sup></a>.</p>
+<div id="labeled-property-graphs" class="section level3" number="10.1.1">
+<h3>
+<span class="header-section-number">10.1.1</span> Labeled-property graphs<a class="anchor" aria-label="anchor" href="#labeled-property-graphs"><i class="fas fa-link"></i></a>
+</h3>
+<p><strong>Labeled-property graphs</strong> are very similar in structure to the way we have learned about graphs in this book. Entities such as products, customers, employees or organizational units are stored in nodes, and relationships such as ‘purchased,’ ‘member of,’ ‘worked with’ or ‘met with’ are stored in edges. Nodes and edges can contain defined properties allowing users to filter data effectively. These node and edge structures are usually encoded by means of simple JSON documents. This type of graph database is simple and efficient, and also very intuitive to query. However, flexibility can be limited and the upfront design of the graph needs to be considered carefully, because changes to the structure of the database via the introduction of new nodes and new relationships may not be straightforward. For organizational network analysis, such databases are a good choice, however, because of their ease of use and because data structures within organizations are generally quite predictable and manageable. <em>Neo4J</em> is an example of a labeled-property graph database, and is the most popular at the time of the writing of this book.</p>
+<p>One of the features of labeled-property graphs which make them easier to use in general is the ability to write queries using intuitive query languages. The <em>Cypher</em> query language for Neo4J graph databases is a good example. A common graph database used for teaching Cypher is the <code>movies</code> database, which contains information on relationships between a small number of people in the entertainment industry and the movies they have participated in. Figure <a href="databases.html#fig:movies-schema">10.1</a> is a schema diagram of the types of nodes and relationships stored in this graph database.</p>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:movies-schema"></span>
+<img src="www/databases/movies-schema.png" alt="Graph schema of the `movies` database" width="731"><p class="caption">
+Figure 10.1: Graph schema of the <code>movies</code> database
+</p>
 </div>
+<p>We can see that there are two types of node: Person and Movie. We can also see that a Person can follow another Person, while there are five relationship types between a Person and a Movie. Cypher uses ASCII art to make queries easier to understand and write. Nodes are written in parentheses such as <code>(p:Person)</code> and relationships are written in lines or arrows such as <code>-[:ACTED_IN]-&gt;</code>. The following Cypher query will return the graph of all people who acted in movies in the database which were directed by Clint Eastwood, with the results displayed in Figure <a href="databases.html#fig:clinteastwood">10.2</a>.</p>
+<pre><code>MATCH (p1:Person)-[:ACTED_IN]-&gt;(m:Movie)
+MATCH (m:Movie)&lt;-[:DIRECTED]-(p2:Person {name: "Clint Eastwood"})
+RETURN p1, m</code></pre>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:clinteastwood"></span>
+<img src="www/databases/clinteastwood.png" alt="Graph of actors in movies directed by Clint Eastwood from `movies` graph database" width="638"><p class="caption">
+Figure 10.2: Graph of actors in movies directed by Clint Eastwood from <code>movies</code> graph database
+</p>
+</div>
+<p>Each node or relationship may contain properties which can be accessed and returned in queries. For example, the Movie node has a <code>released</code> property, so this query will return the actor name, movie title and movie release data, and the result looks like Figure <a href="databases.html#fig:clint-results">10.3</a>.</p>
+<pre><code>MATCH (p1:Person)-[:ACTED_IN]-&gt;(m:Movie)
+MATCH (m:Movie)&lt;-[:DIRECTED]-(p2:Person {name: "Clint Eastwood"})
+RETURN p1.name AS actor, m.title AS movie, m.released AS released</code></pre>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:clint-results"></span>
+<img src="www/databases/clint-results.png" alt="Results of a query to find the names of actors, movie title and release date for movies directed by Clint Eastwood in `movies` database" width="416"><p class="caption">
+Figure 10.3: Results of a query to find the names of actors, movie title and release date for movies directed by Clint Eastwood in <code>movies</code> database
+</p>
+</div>
+<div class="thinkahead">
+<p><strong>Thinking ahead:</strong> Neo4J offers a free, sandbox web-based environment with which to learn about its graph database structure and to learn how to write Cypher queries. In includes some interesting graph data sets related to social media analysis, crime investigation, fraud detection, sport and many others. You can start projects in this sandbox and interact with them over the web for a limited period (after which you need to restart a project). You can access the sandbox at <a href="https://neo4j.com/sandbox" class="uri">https://neo4j.com/sandbox</a>. Later in this chapter we will go into more detail about working with Neo4J graph databases including how to interact with them in R and Python, and how to run queries and algorithms against them.</p>
+</div>
+</div>
+<div id="resource-description-frameworks-rdfs" class="section level3" number="10.1.2">
+<h3>
+<span class="header-section-number">10.1.2</span> Resource Description Frameworks (RDFs)<a class="anchor" aria-label="anchor" href="#resource-description-frameworks-rdfs"><i class="fas fa-link"></i></a>
+</h3>
+<p><strong>Resource Description Frameworks (RDFs)</strong> are highly flexible graph database models that allow the hierarchical ‘spawning’ of new information in a graph by means of the additions of new nodes. This permits the graph to build more easily organically, because there is no need to worry about whether a given node property already exists in the graph — it can simply be added into a new node that is pointed to by the parent node. For example, imagine that a graph contains nodes that represent people, and imagine that we have some information on the preferred names of those people. Imagine that we have this information for some but not all people, and that some people have a preferred name but others do not. In an RDF, we can create new ‘property edge’ called <code>hasPreferredName</code> in which directs to a new node containing the preferred name of the individual.</p>
+<p>This high level of flexibility makes RDFs a great choice for ontologies or knowledge graphs for which their development will be unpredictable and will grow organically over time. The low level simplicity of RDFs is the engine behind this flexibility, but this can translate into a complex query language at a high level, making RDFs challenging to deal with for those without specialized knowledge of them. In particular, it can often be necessary to ‘dictate the traversal route’ of the graph in the query language of an RDF, which will require an extensive knowledge of the graph’s structure.</p>
+<p>An example of an open, widely-used RDF graph is the graph that underlies the Wikipedia online encyclopedia, known as <em>Wikidata</em><a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://www.wikidata.org/" class="uri"&gt;https://www.wikidata.org/&lt;/a&gt;&lt;/p&gt;'><sup>63</sup></a>. This graph gives structure and connection to the various components of Wikipedia’s content. It helps organize common hierarchical elements of articles and helps link related articles as well as the resources inside those articles such as photos, hyperlinks and so on. As Wikipedia is constantly developing and being added to by a thriving community, this underlying graph needs an extremely high degree of flexibility to support it.</p>
+<p>The <em>Wikidata Query Service (WDQS)</em> allows this graph to be queried directly using SPARQL, the standard query language for RDFs. Queries can be submitted at <a href="https://query.wikidata.org/" class="uri">https://query.wikidata.org/</a>, or sent to an API endpoint by an application<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;For example, the author of this book has developed an R package called &lt;code&gt;wikifacts&lt;/code&gt; which contains a function to submit queries to Wikidata and retrieve the results as a dataframe&lt;/p&gt;"><sup>64</sup></a>. Here is an example that will return the top ten countries of the world in terms of the number of current female city mayors recorded in Wikidata.</p>
+<pre><code>SELECT ?countryLabel (count(*) AS ?count)
+WHERE
+{
+    ?city wdt:P31/wdt:P279* wd:Q515 . 
+    ?city p:P6 ?hog .           
+    ?hog ps:P6 ?mayor .         
+    ?mayor wdt:P21 wd:Q6581072 .      
+    FILTER NOT EXISTS { ?hog pq:P582 ?x }  
+    ?city wdt:P17 ?country .          
+
+    SERVICE wikibase:label {
+        bd:serviceParam wikibase:language "en" .
+    }
+}
+GROUP BY ?countryLabel
+ORDER BY DESC(?count)
+LIMIT 10</code></pre>
+<p>Briefly described, the <code>WHERE</code> component of this query instructs a graph traversal as follows:</p>
+<ol style="list-style-type: decimal">
+<li>Follow property edges that are ‘instances of cities’ or ‘subclasses of cities’ (call the resulting nodes <code>city</code>)</li>
+<li>Follow ‘head of government’ property edges from <code>city</code> nodes (call the resulting nodes <code>hog</code>)</li>
+<li>Follow to retrieve the value of the <code>hog</code> nodes (call this <code>mayor</code>)</li>
+<li>
+<code>mayor</code> must have a ‘sex or gender’ property edge that directs to ‘female’</li>
+<li>Filter results so that <code>hog</code> has no ‘end date’ property edge going from it (that is, current heads of government)</li>
+<li>Follow ‘country’ property edge from remaining <code>city</code> nodes (call the resulting nodes <code>country</code>)</li>
+<li>Get the English labels of the <code>country</code> nodes.</li>
+</ol>
+<p>This is the core of the query — the remainder simply counts the occurrences of the different country labels and then ranks them descending and returns the top ten. You can see how this query requires quite detailed instruction on how to traverse the graph, and also needs a very detailed knowledge of a bewildering array of codes for properties and values. RDFs are beautiful and extremely powerful relationship storage engines, but there is an extremely high expertise bar to their use.</p>
+<div class="thinkahead">
+<p><strong>Playing around:</strong> The query and traversal complexity of RDFs should not be a barrier to you playing around with them. The Wikidata Query Service has a ton of resources to help you understand how to construct interesting queries. For a start, try submitting the above query to WDQS and check the result. If you thought that was fun, some key resources include a long list of example queries<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/queries/examples" class="uri"&gt;https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/queries/examples&lt;/a&gt;&lt;/p&gt;'><sup>65</sup></a> and a Query Builder<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://query.wikidata.org/querybuilder/?uselang=en" class="uri"&gt;https://query.wikidata.org/querybuilder/?uselang=en&lt;/a&gt;&lt;/p&gt;'><sup>66</sup></a> which can help non-SPARQL experts to build their own queries.</p>
+</div>
+</div>
+</div>
+<div id="example-how-to-work-with-a-neo4j-graph-database" class="section level2" number="10.2">
+<h2>
+<span class="header-section-number">10.2</span> Example: how to work with a Neo4J graph database<a class="anchor" aria-label="anchor" href="#example-how-to-work-with-a-neo4j-graph-database"><i class="fas fa-link"></i></a>
+</h2>
+<p>In this section we will briefly review some ways to work with a Neo4J graph database in order to illustrate how data can be moved into a persistent graph structure for regular query and analysis. First we will look at how to interact with the database via a web browser interface. Then we will look at how to load and query data via R and Python.</p>
+<p>In order to follow the instructions in this section, you will need to set up a free Neo4J Aura graph database. This is a limited instance of a Neo4J graph database hosted on the cloud and offered to developers and learners for free. To do this, follow these steps:</p>
+<ol style="list-style-type: decimal">
+<li>Go to the Neo4J Aura site a <a href="https://neo4j.com/cloud/aura/" class="uri">https://neo4j.com/cloud/aura/</a> and click ‘Start Free.’</li>
+<li>Register for free database in a region of your choice and give your database a name.</li>
+<li>Make a record of your database URI, your username and your password. In the following instructions we will refer to these as <code>your_URI</code>, <code>your_username</code> and <code>your_password</code>.</li>
+</ol>
+<p>In the following examples we will load our <code>ontariopol</code> dataset of the Ontario state politician twitter network from Chapter <a href="community.html#community">8</a> into a Neo4J graph database and do some querying against the database.</p>
+<div id="neo4j-browser" class="section level3" number="10.2.1">
+<h3>
+<span class="header-section-number">10.2.1</span> Using the browser interface<a class="anchor" aria-label="anchor" href="#neo4j-browser"><i class="fas fa-link"></i></a>
+</h3>
+<p>The easiest way to interact with the database is using the browser interface, similar to the Neo4J sandbox mentioned earlier. This is especially useful for beginners who do not need to interact with the database programatically from other applications or data science languages.</p>
+<p>Navigate to your free database instance by visting the Neo4J Aura site, selecting ‘Databases’ from the menu, finding your free database and selecting ‘Open with Neo4J Browser.’ After logging in with your credentials, you should be in the browser interface, which looks like Figure <a href="databases.html#fig:neo4j-interface">10.4</a>.</p>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:neo4j-interface"></span>
+<img src="www/databases/interface.png" alt="The Neo4J browser interface" width="90%"><p class="caption">
+Figure 10.4: The Neo4J browser interface
+</p>
+</div>
+<p>Cypher queries can be entered in the box at the top. To break a line without submitting the query press Shift+Enter. To submit the query press Enter or click the play icon. But before we can start submitting queries we need to load some data into the database. Among many formats, data can be loaded into Neo4J from an online <code>csv</code> file. Use the following query to load all the vertices from our <code>ontariopol</code> data set.</p>
+<pre><code>LOAD CSV WITH HEADERS 
+FROM 'https://ona-book.org/data/ontariopol_vertices.csv' 
+AS row
+MERGE (p:Person {
+  personId: row.id, 
+  screenName: row.screen_name, 
+  name: row.name, 
+  party: row.party
+});</code></pre>
+<p>This query instructs the database to retrieve the data from the specified URL address. It further instructs the database to create nodes called <code>Person</code> nodes from each row of the data. Each <code>Person</code> node should contain four properties: <code>personId</code>, <code>screenName</code>, <code>name</code> and <code>party</code> loaded from the <code>id</code>, <code>screen_name</code>, <code>name</code> and <code>party</code> fields respectively.</p>
+<p>This will load all our <code>Person</code> nodes. You can check that these have been loaded by running this new query:</p>
+<pre><code>MATCH (p:Person) 
+RETURN p.name;</code></pre>
+<p>This query should return the <code>name</code> property of all <code>Person</code> nodes in the graph. Now we need to add the edges using this query.</p>
+<pre><code>LOAD CSV WITH HEADERS 
+FROM 'https://ona-book.org/data/ontariopol_edgelist.csv' 
+AS row
+MATCH (p1:Person {personId:row.from}), (p2:Person {personId:row.to})
+CREATE (p1)-[:INTERACTED_WITH {weight: toInteger(row.weight)}]-&gt; (p2);</code></pre>
+<p>This query instructs the database to load the data from the specified online URL. For each row of the data, it instructs the database to find the <code>Person</code> nodes with <code>personId</code> property corresponding to the <code>from</code> and <code>to</code> fields, to create a <em>directed</em> edge called <code>INTERACTED_WITH</code> between these nodes and to give the edge an integer value weight property extracted from the <code>weight</code> field.</p>
+<p>We can now look at our database schema using the following query:</p>
+<pre><code>CALL db.schema.visualization();</code></pre>
+<p>This should show a very simple schema with one node type and one edge type. By clicking on the database icon in the top left, you should see further information panel, which should confirm the details of the nodes, the relationships and the properties in the graph, as in Figure <a href="databases.html#fig:database-info">10.5</a>.</p>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:database-info"></span>
+<img src="www/databases/database-info.png" alt="The database information panel" width="360"><p class="caption">
+Figure 10.5: The database information panel
+</p>
+</div>
+<p>Congratulations! You’ve loaded the data into the graph. Now let’s run a query to find the top five politicians who interacted with Christine Elliott based on weight (excluding Christine Elliott herself).</p>
+<pre><code>MATCH (p:Person)-[i:INTERACTED_WITH]-&gt;({name: "Christine Elliott"})
+WHERE p.name &lt;&gt; "Christine Elliott"
+RETURN p.name as name, i.weight as weight
+ORDER BY weight DESC
+LIMIT 5;</code></pre>
+<p>This should return a list of five with Robin Martin at the top with a weight of 872. As another example, we can try to find out all interactions between LIB party politicians and IND party politicians.</p>
+<pre><code>MATCH (p1:Person {party: 'LIB'})-[INTERACTED_WITH]-&gt;(p2:Person {party: "IND"})
+RETURN p1.name AS LIB_name, p2.name AS IND_name;</code></pre>
+<p>This should return four interactions. You can also try some procedures from Neo4J’s APOC (Awesome Procedures on Cypher) library. For example try this to receive information on the distribution of the degrees of the nodes in the graph.</p>
+<pre><code>CALL apoc.stats.degrees()</code></pre>
+<div class="thinkahead">
+<p><strong>Playing around:</strong> APOC is an add-on library which, in its full form, has a very wide range of useful procedures for calculating statistics, finding paths, running search algorithms and much more. As of the time of writing, only a limited number of APOC procedures are available on the free cloud database version we are using here. To see a list of all available APOC procedures run the query <code>CALL apoc.help('apoc')</code>. If you are interested in the full range of APOC procedures you can consider installing the Neo4J Desktop product on your local machine for free from the Neo4J website. <em>APOC Full</em> can be installed as an add-on inside the Desktop version, as well as the GDS (Graph Data Science) library, which contains a wide range of graph algorithms including many of the methods we have covered earlier in this book.</p>
+</div>
+</div>
+<div id="working-with-neo4j-using-r" class="section level3" number="10.2.2">
+<h3>
+<span class="header-section-number">10.2.2</span> Working with Neo4J using R<a class="anchor" aria-label="anchor" href="#working-with-neo4j-using-r"><i class="fas fa-link"></i></a>
+</h3>
+<p>The <code>neo4jshell</code> package in R allows you to submit queries to a Neo4J database and retrieve results, among other things<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;In full disclosure, this package was developed by the author of this book&lt;/p&gt;"><sup>67</sup></a>. This package requires the <code>cypher-shell</code> command line utility to be installed on your system. You can install the <code>cypher-shell</code> command line utility standalone by downloading and installing from the Neo4J downloads page<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://neo4j.com/download-center/#cyphershell" class="uri"&gt;https://neo4j.com/download-center/#cyphershell&lt;/a&gt;&lt;/p&gt;'><sup>68</sup></a>. Another option is to download and install the full and free Neo4J community server, which will include <code>cypher-shell</code>, from the community server download page<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://neo4j.com/download-center/#community" class="uri"&gt;https://neo4j.com/download-center/#community&lt;/a&gt;&lt;/p&gt;'><sup>69</sup></a>.</p>
+<p>For the <code>neo4j_query()</code> query function to work most smoothly, you should ensure the directory containing the <code>cypher-shell</code> executable is in your system <code>PATH</code> environment variable. Otherwise you will need to constantly quote the full path to the <code>cypher-shell</code> executable in the <code>shell_path</code> argument of the function.</p>
+<p>Assuming you have configured <code>cypher-shell</code> on your system, it is very easy to submit queries to your Neo4J instance and retrieve the results as a dataframe. The first step is to configure your Neo4J connection as a list in R.</p>
+<div class="sourceCode" id="cb536"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">neo4j_conn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
+  address <span class="op">=</span> <span class="st">"your_URI"</span>,
+  uid <span class="op">=</span> <span class="st">"your_username"</span>,
+  pwd <span class="op">=</span> <span class="st">"your_password"</span>
+<span class="op">)</span></code></pre></div>
+<p>In the examples below, we assume that the data has already been loaded to the database using the queries in Section <a href="databases.html#neo4j-browser">10.2.1</a>. If not, you can load the data from R by submitting the same queries using the <code>neo4j_query()</code> function. Assuming the data has already been loaded, we can submit a query to the database and retrieve the results as a dataframe. Let’s submit a query to find out the first degree incoming network of all IND party politicans.</p>
+<div class="sourceCode" id="cb537"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># write cypher query</span>
+<span class="va">query</span> <span class="op">&lt;-</span> <span class="st">"
+MATCH (p:Person)-[:INTERACTED_WITH]-&gt;({party: 'IND'})
+RETURN DISTINCT p.name AS name, p.party as party
+"</span>
+
+<span class="co"># submit to server and retrieve results as dataframe</span>
+<span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">neo4jshell</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/neo4jshell/man/neo4j_query.html">neo4j_query</a></span><span class="op">(</span>con <span class="op">=</span> <span class="va">neo4j_conn</span>, qry <span class="op">=</span> <span class="va">query</span><span class="op">)</span>
+
+<span class="co"># view first few results</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></code></pre></div>
+<pre><code>##               name party
+## 1   Ernie Hardeman   PCP
+## 2      Kinga Surma   PCP
+## 3 Randy Pettapiece   PCP
+## 4      Gila Martow   PCP
+## 5       Sara Singh   NDP
+## 6     Robin Martin   PCP</code></pre>
+<p>In a similar way we can submit an APOC procedure to obtain statistics about the graph. This query gets statistics on the out-degree of the nodes of the graph.</p>
+<div class="sourceCode" id="cb539"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># get out-degree stats</span>
+<span class="va">stats</span> <span class="op">&lt;-</span> <span class="fu">neo4jshell</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/neo4jshell/man/neo4j_query.html">neo4j_query</a></span><span class="op">(</span>
+  con <span class="op">=</span> <span class="va">neo4j_conn</span>, 
+  qry <span class="op">=</span> <span class="st">"CALL apoc.stats.degrees('&gt;')"</span>
+<span class="op">)</span>
+
+<span class="co"># extract max, min and mean</span>
+<span class="va">stats</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"min"</span>, <span class="st">"max"</span>, <span class="st">"mean"</span><span class="op">)</span>, <span class="op">]</span></code></pre></div>
+<pre><code>## [1] "7"                 "80"                "56.43518518518518"</code></pre>
+</div>
+<div id="working-with-neo4j-using-python" class="section level3" number="10.2.3">
+<h3>
+<span class="header-section-number">10.2.3</span> Working with Neo4J using Python<a class="anchor" aria-label="anchor" href="#working-with-neo4j-using-python"><i class="fas fa-link"></i></a>
+</h3>
+<p>The <code>py2neo</code> package allows interaction with Neo4J servers from Python. No preconfiguration is required. Connection is established by means of a <code>Graph()</code> object.</p>
+<div class="sourceCode" id="cb541"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb541-1"><a href="databases.html#cb541-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb541-2"><a href="databases.html#cb541-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> py2neo <span class="im">import</span> Graph</span>
+<span id="cb541-3"><a href="databases.html#cb541-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb541-4"><a href="databases.html#cb541-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb541-5"><a href="databases.html#cb541-5" aria-hidden="true" tabindex="-1"></a><span class="co"># create  connection</span></span>
+<span id="cb541-6"><a href="databases.html#cb541-6" aria-hidden="true" tabindex="-1"></a>neo4j_conn <span class="op">=</span> Graph(</span>
+<span id="cb541-7"><a href="databases.html#cb541-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"your_URI"</span>, </span>
+<span id="cb541-8"><a href="databases.html#cb541-8" aria-hidden="true" tabindex="-1"></a>    auth <span class="op">=</span> (<span class="st">"your_username"</span>, <span class="st">"your_password"</span>)</span>
+<span id="cb541-9"><a href="databases.html#cb541-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>Again, we assume that data has already been loaded to the graph. If this is not the case, submit the data load queries from Section <a href="databases.html#neo4j-browser">10.2.1</a> in the same way as the following examples.</p>
+<p>Results from queries will be returned as a list of dicts, which can be converted into the required format.</p>
+<div class="sourceCode" id="cb542"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb542-1"><a href="databases.html#cb542-1" aria-hidden="true" tabindex="-1"></a><span class="co"># write cypher query</span></span>
+<span id="cb542-2"><a href="databases.html#cb542-2" aria-hidden="true" tabindex="-1"></a>query <span class="op">=</span> <span class="st">"""</span></span>
+<span id="cb542-3"><a href="databases.html#cb542-3" aria-hidden="true" tabindex="-1"></a><span class="st">MATCH (p:Person)-[:INTERACTED_WITH]-&gt;({party: 'IND'})</span></span>
+<span id="cb542-4"><a href="databases.html#cb542-4" aria-hidden="true" tabindex="-1"></a><span class="st">RETURN DISTINCT p.name AS name, p.party as party</span></span>
+<span id="cb542-5"><a href="databases.html#cb542-5" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
+<span id="cb542-6"><a href="databases.html#cb542-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb542-7"><a href="databases.html#cb542-7" aria-hidden="true" tabindex="-1"></a><span class="co"># submit to server and retrieve results as list of dicts</span></span>
+<span id="cb542-8"><a href="databases.html#cb542-8" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> neo4j_conn.run(query).data()</span>
+<span id="cb542-9"><a href="databases.html#cb542-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb542-10"><a href="databases.html#cb542-10" aria-hidden="true" tabindex="-1"></a><span class="co"># convert results to pandas DataFrame and view first few rows</span></span>
+<span id="cb542-11"><a href="databases.html#cb542-11" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(results).head()</span></code></pre></div>
+<pre><code>##                name party
+## 0    Ernie Hardeman   PCP
+## 1       Kinga Surma   PCP
+## 2  Randy Pettapiece   PCP
+## 3       Gila Martow   PCP
+## 4        Sara Singh   NDP</code></pre>
+<p>To run APOC procedures:</p>
+<div class="sourceCode" id="cb544"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb544-1"><a href="databases.html#cb544-1" aria-hidden="true" tabindex="-1"></a><span class="co"># submit APOC procedure</span></span>
+<span id="cb544-2"><a href="databases.html#cb544-2" aria-hidden="true" tabindex="-1"></a>stats <span class="op">=</span> neo4j_conn.run(<span class="st">"CALL apoc.stats.degrees('&gt;')"</span>).data()</span>
+<span id="cb544-3"><a href="databases.html#cb544-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb544-4"><a href="databases.html#cb544-4" aria-hidden="true" tabindex="-1"></a><span class="co"># convert results to pandas DataFrame and view first few rows</span></span>
+<span id="cb544-5"><a href="databases.html#cb544-5" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(stats)</span></code></pre></div>
+<pre><code>##    type direction  total  p50  p75  p90  p95  p99  p999  max  min       mean
+## 0  None  OUTGOING   6095   59   63   70   71   77    80   80    7  56.435185</code></pre>
+</div>
+</div>
+<div id="moving-to-persistent-graph-data-in-organizations" class="section level2" number="10.3">
+<h2>
+<span class="header-section-number">10.3</span> Moving to persistent graph data in organizations<a class="anchor" aria-label="anchor" href="#moving-to-persistent-graph-data-in-organizations"><i class="fas fa-link"></i></a>
+</h2>
+<p>The material in this chapter is intended as a brief introduction to the idea of persisting data in a graph database. For organizations who are repeatedly conducting analysis on connections and relationships, this is a natural step to make such analysis more ‘oven ready.’ Common transformations which need to be done on data in traditional rectangular databases in order to allow the analysis of connections can be done automatically at regular intervals (weekly, monthly or whatever makes sense based on reporting cadences) and incrementally added to the graph database. An automated ETL (Extract, Transform, Load) process can be set up in R, Python or another platform and timed to run on servers at specified intervals to extract the data from the rectanguar databases, perform the necessary transformations to create the data on vertices, edges and properties and then load the data to the graph database.</p>
+<p>It should be noted that a graph database is extremely flexible in its ability to store many types of data for many use cases in the same schema. Imagine, for example that we wanted to add the data from out <code>schoolfriends</code> graph to the same graph schema where we loaded the <code>ontariopol</code> data. These are completely different networks, but they can easily coexist in the same graph database. There are many options for how the database could be designed to facilitate this. For example, instead of a single <code>Person</code> node there could be different <code>Politician</code> and <code>Student</code> nodes. Or we could add a <code>type</code> property to a <code>Person</code> node which could have the value <code>politican</code> or <code>student</code>. Or we could create new <code>Politican</code> and <code>Student</code> nodes and have edges with the relationship <code>IS_A</code> connecting them in a more RDF like approach.</p>
+<p>In all of these cases the two networks can live in the same database but never interfere with each other, and this model can be scaled arbitrarily as long as it is designed appropriately. This plethora of options means that graph databases often require more up-front schema design consideration compared to traditional databases. Changes in the organizations data that inevitably occur over time will need to be added to the schema, and some designs will make it more or less easy to do this.</p>
+</div>
+<div id="learning-exercises-8" class="section level2" number="10.4">
+<h2>
+<span class="header-section-number">10.4</span> Learning exercises<a class="anchor" aria-label="anchor" href="#learning-exercises-8"><i class="fas fa-link"></i></a>
+</h2>
+<div id="discussion-questions-8" class="section level3" number="10.4.1">
+<h3>
+<span class="header-section-number">10.4.1</span> Discussion questions<a class="anchor" aria-label="anchor" href="#discussion-questions-8"><i class="fas fa-link"></i></a>
+</h3>
+<ol style="list-style-type: decimal">
+<li>Why are graph databases an attractive option for organizations who are regularly performing analysis on connections?</li>
+<li>Describe labeled-property graphs and resource description frameworks (RDFs) and explain some differences between them as graph database technologies, including some pros and cons of their use.</li>
+<li>Find some examples of real-life use cases of RDFs. Why are RDFs good choices for these use cases?</li>
+<li>Search some examples of labeled-property graph technologies. What query languages do each use?</li>
+<li>Describe how Cypher queries are constructed intuitively using ACSII art. Can you find any other query languages that use ASCII art? How similar or different are these languages?</li>
+</ol>
+</div>
+<div id="data-exercises-8" class="section level3" number="10.4.2">
+<h3>
+<span class="header-section-number">10.4.2</span> Data exercises<a class="anchor" aria-label="anchor" href="#data-exercises-8"><i class="fas fa-link"></i></a>
+</h3>
+<p>For exercises related to Neo4J, try completing this in the browser and also using either R or Python. Remember that is you are loading data to the graph, be careful to ensure that any previous load of the same data is deleted before reload. If you need to, you can search for help online for Cypher deletion queries, but note that edges must be deleted before nodes.</p>
+<ol style="list-style-type: decimal">
+<li>Try to write a SPARQL query and submit it to Wikidata to find the winners of the first ten Eurovision song contests. Try a similar query to find the winners of all FIFA World Cups.</li>
+<li>Write and submit a Cypher query on the <code>ontariopol</code> data loaded to Neo4J to find all interactions <em>from</em> PCP party politicians <em>to</em> LIB party politicians with a weight of greater than 10.</li>
+<li>Write and submit an APOC procedure on the <code>ontariopol</code> data loaded to Neo4J to obtain the in-degree statistics of the graph.</li>
+<li>Using the online vertex and edge set for the <code>schoolfriends</code> data set<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://ona-book.org/data/schoolfriends_edgelist.csv" class="uri"&gt;https://ona-book.org/data/schoolfriends_edgelist.csv&lt;/a&gt; and &lt;a href="https://ona-book.org/data/schoolfriends_vertices.csv" class="uri"&gt;https://ona-book.org/data/schoolfriends_vertices.csv&lt;/a&gt;&lt;/p&gt;'><sup>70</sup></a>, create a new set of nodes in the Neo4J graph called <code>Student</code> nodes. Give these nodes a <code>name</code>, <code>studentClass</code> and <code>studentGender</code> property from the data sets.<br>
+</li>
+<li>Create <em>undirected</em> edges for the Facebook friendships in the data and call the relationship <code>FACEBOOK_FRIENDS</code>. Create <em>directed</em> edges for the reported friendships and call the relationship <code>REPORTED_FRIEND</code>.</li>
+<li>Write and submit a Cypher query to find all Facebook friends of node 883, and a similar query to find all those who reported node 883 as a friend.</li>
+<li>Write and submit an APOC procedure to find the node degree statistics for the Facebook friendships. Write and submit separate procedures for the incoming and outgoing reported freindships.</li>
+</ol>
+</div>
+</div>
+</div>
+
   <div class="chapter-nav">
 <div class="prev"><a href="similarity.html"><span class="header-section-number">9</span> Assortativity and Similarity of Networks</a></div>
-<div class="next"><a href="advanced-viz.html"><span class="header-section-number">11</span> Advanced Network Visualization</a></div>
+<div class="next"><a href="references.html">References</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
-      <ul class="nav navbar-nav"><li><a class="nav-link" href="#databases"><span class="header-section-number">10</span> Graphs as Databases</a></li></ul>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#databases"><span class="header-section-number">10</span> Graphs as Databases</a></li>
+<li>
+<a class="nav-link" href="#graph-database-technology"><span class="header-section-number">10.1</span> Graph database technology</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#labeled-property-graphs"><span class="header-section-number">10.1.1</span> Labeled-property graphs</a></li>
+<li><a class="nav-link" href="#resource-description-frameworks-rdfs"><span class="header-section-number">10.1.2</span> Resource Description Frameworks (RDFs)</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#example-how-to-work-with-a-neo4j-graph-database"><span class="header-section-number">10.2</span> Example: how to work with a Neo4J graph database</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#neo4j-browser"><span class="header-section-number">10.2.1</span> Using the browser interface</a></li>
+<li><a class="nav-link" href="#working-with-neo4j-using-r"><span class="header-section-number">10.2.2</span> Working with Neo4J using R</a></li>
+<li><a class="nav-link" href="#working-with-neo4j-using-python"><span class="header-section-number">10.2.3</span> Working with Neo4J using Python</a></li>
+</ul>
+</li>
+<li><a class="nav-link" href="#moving-to-persistent-graph-data-in-organizations"><span class="header-section-number">10.3</span> Moving to persistent graph data in organizations</a></li>
+<li>
+<a class="nav-link" href="#learning-exercises-8"><span class="header-section-number">10.4</span> Learning exercises</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#discussion-questions-8"><span class="header-section-number">10.4.1</span> Discussion questions</a></li>
+<li><a class="nav-link" href="#data-exercises-8"><span class="header-section-number">10.4.2</span> Data exercises</a></li>
+</ul>
+</li>
+</ul>
 
       <div class="book-extra">
         <ul class="list-unstyled">
