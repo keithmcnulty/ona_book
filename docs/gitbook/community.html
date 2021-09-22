@@ -595,15 +595,15 @@ Figure 8.6: The <code>karate</code> graph with Mr Hi and John A indicated with l
 ## [1] 1
 ## 
 ## $cut
-## + 1/78 edge from 52f72fe (vertex names):
+## + 1/78 edge from 31e079f (vertex names):
 ## [1] Mr Hi--Actor 12
 ## 
 ## $partition1
-## + 1/34 vertex, named, from 52f72fe:
+## + 1/34 vertex, named, from 31e079f:
 ## [1] Actor 12
 ## 
 ## $partition2
-## + 33/34 vertices, named, from 52f72fe:
+## + 33/34 vertices, named, from 31e079f:
 ##  [1] Mr Hi    Actor 2  Actor 3  Actor 4  Actor 5  Actor 6  Actor 7  Actor 9  Actor 10 Actor 14 Actor 15 Actor 16 Actor 19
 ## [14] Actor 20 Actor 21 Actor 23 Actor 24 Actor 25 Actor 26 Actor 27 Actor 28 Actor 29 Actor 30 Actor 31 Actor 32 Actor 33
 ## [27] Actor 8  Actor 11 Actor 13 Actor 18 Actor 22 Actor 17 John A</code></pre>
@@ -641,20 +641,20 @@ Figure 8.7: Communities of the <code>karate</code> graph as detected by the Louv
 <p>The <code>cliques()</code> and <code>max_cliques()</code> function in <code>igraph</code> identifies all cliques or maximal cliques respectively, with a specified maximum or minimum size if desired. It is advisable to specify a size for cliques of interest because otherwise a long list might be returned, including many single node cliques.</p>
 <div class="sourceCode" id="cb432"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb432-1"><a href="community.html#cb432-1" aria-hidden="true" tabindex="-1"></a><span class="fu">max_cliques</span>(karate, <span class="at">min =</span> <span class="dv">5</span>, <span class="at">max =</span> <span class="dv">5</span>)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 5/34 vertices, named, from 52f72fe:
+## + 5/34 vertices, named, from 31e079f:
 ## [1] Actor 2  Mr Hi    Actor 4  Actor 3  Actor 14
 ## 
 ## [[2]]
-## + 5/34 vertices, named, from 52f72fe:
+## + 5/34 vertices, named, from 31e079f:
 ## [1] Actor 2 Mr Hi   Actor 4 Actor 3 Actor 8</code></pre>
 <p>The <code>largest_cliques()</code> finds all largest cliques in a graph.</p>
 <div class="sourceCode" id="cb434"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb434-1"><a href="community.html#cb434-1" aria-hidden="true" tabindex="-1"></a><span class="fu">largest_cliques</span>(karate)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 5/34 vertices, named, from 52f72fe:
+## + 5/34 vertices, named, from 31e079f:
 ## [1] Actor 8 Mr Hi   Actor 2 Actor 3 Actor 4
 ## 
 ## [[2]]
-## + 5/34 vertices, named, from 52f72fe:
+## + 5/34 vertices, named, from 31e079f:
 ## [1] Actor 4  Mr Hi    Actor 2  Actor 3  Actor 14</code></pre>
 <p>We see that the maximal cliques of size 5 that we identified are also the largest cliques in the <code>karate graph</code>, and they have four out of 5 vertices in common. The function <code>clique_num()</code> returns the size of the largest clique.</p>
 <div class="sourceCode" id="cb436"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb436-1"><a href="community.html#cb436-1" aria-hidden="true" tabindex="-1"></a><span class="fu">clique_num</span>(karate)</span></code></pre></div>
@@ -818,27 +818,27 @@ Figure 8.8: Best Louvain partition of the <code>karate</code> graph
 <p>We now have a connected, undirected graph of 156 vertices, with class and gender as vertex properties. First, let’s detemine the largest clique in the graph.</p>
 <div class="sourceCode" id="cb465"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb465-1"><a href="community.html#cb465-1" aria-hidden="true" tabindex="-1"></a>(cliques <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">largest_cliques</span>(schoolfriends_fb))</span></code></pre></div>
 <pre><code>## [[1]]
-## + 14/156 vertices, named, from b65605d:
+## + 14/156 vertices, named, from c0b4d75:
 ##  [1] 525  797  466  376  638  841  1423 1218 769  440  125  325  694  245 
 ## 
 ## [[2]]
-## + 14/156 vertices, named, from b65605d:
+## + 14/156 vertices, named, from c0b4d75:
 ##  [1] 245  564  1218 440  466  376  841  1237 1423 769  624  125  325  694 
 ## 
 ## [[3]]
-## + 14/156 vertices, named, from b65605d:
+## + 14/156 vertices, named, from c0b4d75:
 ##  [1] 245  797  466  376  841  1423 1218 624  440  125  638  325  694  769 
 ## 
 ## [[4]]
-## + 14/156 vertices, named, from b65605d:
+## + 14/156 vertices, named, from c0b4d75:
 ##  [1] 245  797  466  376  841  1423 1218 624  440  125  638  325  694  1067
 ## 
 ## [[5]]
-## + 14/156 vertices, named, from b65605d:
+## + 14/156 vertices, named, from c0b4d75:
 ##  [1] 245  1067 466  376  841  1237 1423 1218 624  440  125  638  325  694 
 ## 
 ## [[6]]
-## + 14/156 vertices, named, from b65605d:
+## + 14/156 vertices, named, from c0b4d75:
 ##  [1] 245  638  466  376  841  1237 1423 1218 769  624  440  125  325  694</code></pre>
 <p>We see six cliques of 14 individuals, all of which have considerable overlap. We can take a look at the class and gender of one of these cliques.</p>
 <div class="sourceCode" id="cb467"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb467-1"><a href="community.html#cb467-1" aria-hidden="true" tabindex="-1"></a><span class="co"># subgraph for clique 6</span></span>
@@ -943,9 +943,9 @@ Figure 8.10: Optimal Louvain communities in the Facebook schoolfriends graph (le
 <span id="cb479-8"><a href="community.html#cb479-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">vertices =</span> ontariopol_vertices, </span>
 <span id="cb479-9"><a href="community.html#cb479-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">directed =</span> <span class="cn">FALSE</span></span>
 <span id="cb479-10"><a href="community.html#cb479-10" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
-<pre><code>## IGRAPH 1b9e820 UNW- 108 6095 -- 
+<pre><code>## IGRAPH 4b56701 UNW- 108 6095 -- 
 ## + attr: name (v/c), screen_name (v/c), party (v/c), weight (e/n)
-## + edges from 1b9e820 (vertex names):
+## + edges from 4b56701 (vertex names):
 ##  [1] Deepak Anand--Doug Ford               Deepak Anand--Victor Fedeli           Deepak Anand--Deepak Anand           
 ##  [4] Deepak Anand--Monte McNaughton        Deepak Anand--Christine Elliott       Deepak Anand--Stephen Lecce          
 ##  [7] Deepak Anand--Rod Phillips            Deepak Anand--Lisa MacLeod            Deepak Anand--Michael Tibollo        
