@@ -47,7 +47,7 @@
         <ul class="book-toc list-unstyled">
 <li><a class="" href="index.html">Welcome</a></li>
 <li><a class="" href="introduction.html">Introduction</a></li>
-<li><a class="" href="everywhere.html"><span class="header-section-number">1</span> Graphs everywhere!</a></li>
+<li><a class="" href="everywhere.html"><span class="header-section-number">1</span> Graphs Everywhere!</a></li>
 <li><a class="" href="r-intro.html"><span class="header-section-number">2</span> The Basics of the R Programming Language</a></li>
 <li><a class="" href="working.html"><span class="header-section-number">3</span> Working With Graphs</a></li>
 <li><a class="" href="viz-graphs.html"><span class="header-section-number">4</span> Visualizing Graphs</a></li>
@@ -55,8 +55,9 @@
 <li><a class="" href="paths-distance.html"><span class="header-section-number">6</span> Paths and Distance</a></li>
 <li><a class="" href="vertex-importance.html"><span class="header-section-number">7</span> Vertex Importance and Centrality</a></li>
 <li><a class="" href="community.html"><span class="header-section-number">8</span> Components, Communities and Cliques</a></li>
-<li><a class="" href="similarity.html"><span class="header-section-number">9</span> Assortativity and Similarity of Networks</a></li>
+<li><a class="" href="similarity.html"><span class="header-section-number">9</span> Assortativity and Similarity</a></li>
 <li><a class="" href="databases.html"><span class="header-section-number">10</span> Graphs as Databases</a></li>
+<li><a class="" href="appendix-descriptions-of-data-sets-used.html">Appendix: Descriptions of Data Sets Used</a></li>
 <li><a class="" href="references.html">References</a></li>
 </ul>
 
@@ -144,11 +145,11 @@
 <span class="op">(</span><span class="va">orgchart</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>
   d <span class="op">=</span> <span class="va">orgchart_edgelist2</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH 01036b4 DN-- 8 7 -- 
+<pre><code>## IGRAPH 8b91c82 DN-- 8 7 -- 
 ## + attr: name (v/c)
-## + edges from 01036b4 (vertex names):
-## [1] Andrew -&gt;Nancy    Andrew -&gt;Michael  Nancy  -&gt;Jane     Nancy  -&gt;Margaret Nancy  -&gt;Steve    Michael-&gt;Robert  
-## [7] Michael-&gt;Laura</code></pre>
+## + edges from 8b91c82 (vertex names):
+## [1] Andrew -&gt;Nancy    Andrew -&gt;Michael  Nancy  -&gt;Jane     Nancy  -&gt;Margaret Nancy  -&gt;Steve   
+## [6] Michael-&gt;Robert   Michael-&gt;Laura</code></pre>
 <p>We now have a directed graph with named vertices, so this should be easy to plot. Let’s use <code>ggplot</code> with a dendrogram (tree) layout, as in Figure <a href="restructuring-data.html#fig:chinook-pretty">5.1</a>.</p>
 <div class="sourceCode" id="cb219"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggraph.data-imaginist.com">ggraph</a></span><span class="op">)</span>
@@ -559,9 +560,9 @@ Figure 5.9: Visualization of the Chinook customer-to-customer network based on a
 </h2>
 <p>In our second example, we will look at how to extract information that sits in semi-structured documents and convert it to a graph-like shape to allow us to understand relationships that interest us. Semi-structured documents are documents which have a certain expected format through which we can reliably identify important actors or entities. These could be legal contracts, financial statements or other types of structured forms. Through extracting entities from these documents, we can identify important relationships between them, such as co-publishing, financial transactions or contractual obligations.</p>
 <p>To illustrate this we will show how to extract information from a TV script in a way where we can determine which characters have spoken in the same scene together, and then use this information to create a network of TV characters. We will use an episode script from the hit TV comedy show <em>Friends</em>. A full set of scripts from all episodes of <em>Friends</em> can be found online at <code>https://fangj.github.io/friends/</code>, and later in this book we will be working with a substantial network of characters from the entire series. For this exercise, however, we will keep it simple and just focus on the character network from the first episode. The script of the first episode can be found at <code>https://fangj.github.io/friends/season/0101.html</code>.</p>
-<div id="scraping-the-character-and-scene-data" class="section level3" number="5.2.1">
+<div id="scraping-data-from-semi-structured-documents" class="section level3" number="5.2.1">
 <h3>
-<span class="header-section-number">5.2.1</span> Scraping the character and scene data<a class="anchor" aria-label="anchor" href="#scraping-the-character-and-scene-data"><i class="fas fa-link"></i></a>
+<span class="header-section-number">5.2.1</span> Scraping data from semi-structured documents<a class="anchor" aria-label="anchor" href="#scraping-data-from-semi-structured-documents"><i class="fas fa-link"></i></a>
 </h3>
 <p>First we will look at how to obtain a list of numbered scenes and the characters in each scene, through ‘scraping’ these details from the online script. To help us with this we will use the <code>rvest</code> R package, which is designed for scraping information from web pages.</p>
 <p>Let’s take a look at the web code for Season 1 Episode 1. You can do this by opening the script webpage in Google Chrome and then pressing CMD+Option+C (or Ctrl+Shift+C in Windows) to open the Elements Console where you can view the HTML code of the page side-by-side with the page itself.</p>
@@ -618,11 +619,12 @@ Figure 5.9: Visualization of the Chinook customer-to-customer network based on a
 <span class="co"># check a sample</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
 <span class="va">nodes_char</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">30</span><span class="op">)</span><span class="op">]</span></code></pre></div>
-<pre><code>##  [1] NA           NA           NA           NA           NA           "Monica"     NA           NA           NA          
-## [10] NA           NA           "Chandler"   NA           NA           NA           NA           NA           NA          
-## [19] NA           NA           NA           NA           NA           "Joey"       "Phoebe"     NA           "New Scene" 
-## [28] NA           NA           "Written by"</code></pre>
-<p>So this is working, but we have more cleaning to do. For example, we will want to get rid of the <code>NA</code> values. We will also see if we take a look that there is a ‘character’ called ‘All’ which probably should not be in our network. We can also see phrases like ‘Written by’ which are not dialogue characters, and strings containing " and " which involves combinations of characters. So we can create special commands to remove any instances of these phrases<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;The limited cleaning commands here work for this specific episode, but they would need to be expanded to be used on more episodes to take into account any unpredictable formatting in the scripts. The reality of most scraping exercises is that some code has to be written to deal with exceptions.&lt;/p&gt;"><sup>30</sup></a>.</p>
+<pre><code>##  [1] NA           NA           NA           NA           NA           "Monica"     NA          
+##  [8] NA           NA           NA           NA           "Chandler"   NA           NA          
+## [15] NA           NA           NA           NA           NA           NA           NA          
+## [22] NA           NA           "Joey"       "Phoebe"     NA           "New Scene"  NA          
+## [29] NA           "Written by"</code></pre>
+<p>So this is working, but we have more cleaning to do. For example, we will want to get rid of the <code>NA</code> values. We will also see if we take a look that there is a ‘character’ called ‘All’ which probably should not be in our network. We can also see phrases like ‘Written by’ which are not dialogue characters, and strings containing " and " which involves combinations of characters. So we can create special commands to remove any instances of these phrases<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;The limited cleaning commands here work for this specific episode, but they would need to be expanded to be used on more episodes to take into account any unpredictable formatting in the scripts. The reality of most scraping exercises is that some code has to be written to deal with exceptions.&lt;/p&gt;"><sup>31</sup></a>.</p>
 <div class="sourceCode" id="cb266"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># remove NAs</span>
 <span class="va">nodes_char_clean1</span> <span class="op">&lt;-</span> <span class="va">nodes_char</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">nodes_char</span><span class="op">)</span><span class="op">]</span> 
@@ -634,8 +636,9 @@ Figure 5.9: Visualization of the Chinook customer-to-customer network based on a
 
 <span class="co"># check </span>
 <span class="va">nodes_char_clean2</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span><span class="op">]</span></code></pre></div>
-<pre><code>##  [1] "Chandler"  "Monica"    "Chandler"  "Monica"    "Phoebe"    "Joey"      "Phoebe"    "Joey"      "Monica"    "Monica"   
-## [11] "Chandler"  "Chandler"  "New Scene" "Ross"      "Joey"      "Chandler"  "Joey"      "Chandler"  "Phoebe"    "Chandler"</code></pre>
+<pre><code>##  [1] "Chandler"  "Monica"    "Chandler"  "Monica"    "Phoebe"    "Joey"      "Phoebe"    "Joey"     
+##  [9] "Monica"    "Monica"    "Chandler"  "Chandler"  "New Scene" "Ross"      "Joey"      "Chandler" 
+## [17] "Joey"      "Chandler"  "Phoebe"    "Chandler"</code></pre>
 <p>Let’s assume our cleaning is done and we have a nice vector that contains either the names of characters that are speaking lines in the episode or “New Scene” to indicate that we are crossing a scene boundary. We now just need to convert this vector into a simple dataframe with two columns for scene and character. We already have our character lists, so we really just need to iterate through our nodes vector and for each entry, count the number of previous occurrences of “New Scene” and add one.</p>
 <div class="sourceCode" id="cb268"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># number each scene by counting previous "New Scene" entries and adding 1</span>
@@ -826,13 +829,13 @@ Figure 5.10: Visualization of the network of characters in Episode 1 of Friends,
 <span id="cb283-12"><a href="restructuring-data.html#cb283-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb283-13"><a href="restructuring-data.html#cb283-13" aria-hidden="true" tabindex="-1"></a><span class="co"># check unique values returned</span></span>
 <span id="cb283-14"><a href="restructuring-data.html#cb283-14" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span>(friends_ep1_list)</span></code></pre></div>
-<pre><code>## {'All', 'Monica', 'Frannie', 'Ross', 'Customer', 'Chandler', 'Priest on TV', 'Joey', 'Chandler ', 'Ross and Rachel', 'Monica ', 'Rachel', 'Phoebe', 'New Scene', 'Waitress', 'Paul'}</code></pre>
+<pre><code>## {'Rachel', 'Chandler ', 'Monica ', 'Frannie', 'Ross and Rachel', 'New Scene', 'Phoebe', 'Joey', 'Ross', 'Monica', 'Customer', 'All', 'Chandler', 'Priest on TV', 'Waitress', 'Paul'}</code></pre>
 <p>This looks promising - new we need to get rid of the ‘All’ entries and entries containing ’ and ’.</p>
 <div class="sourceCode" id="cb285"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb285-1"><a href="restructuring-data.html#cb285-1" aria-hidden="true" tabindex="-1"></a>friends_ep1_list2<span class="op">=</span>[entry.strip() <span class="cf">for</span> entry <span class="kw">in</span> friends_ep1_list </span>
 <span id="cb285-2"><a href="restructuring-data.html#cb285-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"All"</span> <span class="kw">not</span> <span class="kw">in</span> entry <span class="kw">and</span> <span class="st">" and "</span> <span class="kw">not</span> <span class="kw">in</span> entry]</span>
 <span id="cb285-3"><a href="restructuring-data.html#cb285-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb285-4"><a href="restructuring-data.html#cb285-4" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span>(friends_ep1_list2)</span></code></pre></div>
-<pre><code>## {'Monica', 'Frannie', 'Ross', 'Customer', 'Chandler', 'Priest on TV', 'Joey', 'Rachel', 'Phoebe', 'New Scene', 'Waitress', 'Paul'}</code></pre>
+<pre><code>## {'Rachel', 'Frannie', 'New Scene', 'Phoebe', 'Joey', 'Ross', 'Monica', 'Customer', 'Chandler', 'Priest on TV', 'Waitress', 'Paul'}</code></pre>
 <p>Now we are ready to organize our characters by scene. First we do a scene count, then we create a dataframe and obtain unique character lists by scene.</p>
 <div class="sourceCode" id="cb287"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb287-1"><a href="restructuring-data.html#cb287-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb287-2"><a href="restructuring-data.html#cb287-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -971,7 +974,7 @@ For the examples in Questions 6-10, discuss ways that information could be extra
 <h3>
 <span class="header-section-number">5.3.2</span> Data exercises<a class="anchor" aria-label="anchor" href="#data-exercises-3"><i class="fas fa-link"></i></a>
 </h3>
-<p>Load the <code>park_reviews</code> dataset from the <code>onadata</code> package or download it from the internet<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://ona-book.org/data/park_reviews.csv" class="uri"&gt;https://ona-book.org/data/park_reviews.csv&lt;/a&gt;&lt;/p&gt;'><sup>31</sup></a>. This data contains the reviews of a collection of Yelp users on dog parks in the Phoenix, Arizona area.</p>
+<p>Load the <code>park_reviews</code> dataset from the <code>onadata</code> package or download it from the internet<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://ona-book.org/data/park_reviews.csv" class="uri"&gt;https://ona-book.org/data/park_reviews.csv&lt;/a&gt;&lt;/p&gt;'><sup>32</sup></a>. This data contains the reviews of a collection of Yelp users on dog parks in the Phoenix, Arizona area.</p>
 <ol style="list-style-type: decimal">
 <li>Create an edgelist and vertex set that allows you to build a graph showing both the parks and the users as entity types. Include the <code>stars</code> rating as an edge property and ensure that entity types are distinguishable in your data.</li>
 <li>Use your edgelist and vertex set to create a graph object that has edge and vertex properties.</li>
@@ -1010,7 +1013,7 @@ For the examples in Questions 6-10, discuss ways that information could be extra
 </li>
 <li>
 <a class="nav-link" href="#doc-transform"><span class="header-section-number">5.2</span> Transforming data from documents for use in graphs</a><ul class="nav navbar-nav">
-<li><a class="nav-link" href="#scraping-the-character-and-scene-data"><span class="header-section-number">5.2.1</span> Scraping the character and scene data</a></li>
+<li><a class="nav-link" href="#scraping-data-from-semi-structured-documents"><span class="header-section-number">5.2.1</span> Scraping data from semi-structured documents</a></li>
 <li><a class="nav-link" href="#creating-an-edgelist-from-the-scraped-data"><span class="header-section-number">5.2.2</span> Creating an edgelist from the scraped data</a></li>
 <li><a class="nav-link" href="#approaches-in-python"><span class="header-section-number">5.2.3</span> Approaches in Python</a></li>
 </ul>

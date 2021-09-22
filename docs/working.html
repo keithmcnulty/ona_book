@@ -47,7 +47,7 @@
         <ul class="book-toc list-unstyled">
 <li><a class="" href="index.html">Welcome</a></li>
 <li><a class="" href="introduction.html">Introduction</a></li>
-<li><a class="" href="everywhere.html"><span class="header-section-number">1</span> Graphs everywhere!</a></li>
+<li><a class="" href="everywhere.html"><span class="header-section-number">1</span> Graphs Everywhere!</a></li>
 <li><a class="" href="r-intro.html"><span class="header-section-number">2</span> The Basics of the R Programming Language</a></li>
 <li><a class="active" href="working.html"><span class="header-section-number">3</span> Working With Graphs</a></li>
 <li><a class="" href="viz-graphs.html"><span class="header-section-number">4</span> Visualizing Graphs</a></li>
@@ -55,8 +55,9 @@
 <li><a class="" href="paths-distance.html"><span class="header-section-number">6</span> Paths and Distance</a></li>
 <li><a class="" href="vertex-importance.html"><span class="header-section-number">7</span> Vertex Importance and Centrality</a></li>
 <li><a class="" href="community.html"><span class="header-section-number">8</span> Components, Communities and Cliques</a></li>
-<li><a class="" href="similarity.html"><span class="header-section-number">9</span> Assortativity and Similarity of Networks</a></li>
+<li><a class="" href="similarity.html"><span class="header-section-number">9</span> Assortativity and Similarity</a></li>
 <li><a class="" href="databases.html"><span class="header-section-number">10</span> Graphs as Databases</a></li>
+<li><a class="" href="appendix-descriptions-of-data-sets-used.html">Appendix: Descriptions of Data Sets Used</a></li>
 <li><a class="" href="references.html">References</a></li>
 </ul>
 
@@ -73,7 +74,7 @@
 <p>In this chapter we will gain a basic understanding of graphs and how to construct them and work with them in R and in Python. We will introduce the most general way of describing a graph mathematically, and we will then discuss how different types of graphs can be defined by placing more conditions on the most general definition. We will then go on to look at the different options for how a known graph can be described, including edgelists and adjacency matrices. Equipped with this understanding, we will then learn how to create simple graph objects in R and in Python. Unlike the larger examples which we will introduce in later chapters, the data and examples we will use in this chapter are simple and straightforward to work with. The focus here is to make sure that the basic structures and definitions are understood before proceeding further. Readers should not skip this chapter if they intend to fully understand the methods and procedures that will be introduced in later chapters.</p>
 <div id="elementary-graph-theory" class="section level2" number="3.1">
 <h2>
-<span class="header-section-number">3.1</span> Elementary Graph Theory<a class="anchor" aria-label="anchor" href="#elementary-graph-theory"><i class="fas fa-link"></i></a>
+<span class="header-section-number">3.1</span> Elementary graph theory<a class="anchor" aria-label="anchor" href="#elementary-graph-theory"><i class="fas fa-link"></i></a>
 </h2>
 <p>The way that graphs are created, stored and manipulated in data science languages like R and Python bears a strong resemblance to how they are defined and studied algebraically. We will start this section with the general algebraic definition of a graph before we proceed to look at different varieties of graphs and different ways of representing graphs using data.</p>
 <div id="graph-def" class="section level3" number="3.1.1">
@@ -182,7 +183,7 @@ Figure 3.8: Membership of the exclusive class of the author’s favourite boy ba
 </div>
 <div id="vertex-edge-prop" class="section level3" number="3.1.3">
 <h3>
-<span class="header-section-number">3.1.3</span> Vertex and Edge Properties<a class="anchor" aria-label="anchor" href="#vertex-edge-prop"><i class="fas fa-link"></i></a>
+<span class="header-section-number">3.1.3</span> Vertex and edge properties<a class="anchor" aria-label="anchor" href="#vertex-edge-prop"><i class="fas fa-link"></i></a>
 </h3>
 <p>In Section <a href="working.html#graph-def">3.1.1</a> we learned that a graph <span class="math inline">\(G = (V, E)\)</span> consists of a vertex set <span class="math inline">\(V\)</span> and an edge set <span class="math inline">\(E\)</span>. These sets are the minimum components of a graph — the vertices represent the entities in the graph and the edges represent the relationships between the entities.</p>
 <p>We can enhance a graph to provide even richer information on the entities and on the relationships by giving our vertices and edges <em>properties</em>. A vertex property provides more specific information about a vertex and an edge property provides more specific information about the relationship between two vertices.</p>
@@ -367,9 +368,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <p>We now hove our <span class="math inline">\(G_\mathrm{work}\)</span> graph in memory. Before we go any further, let’s take a look at it.</p>
 <div class="sourceCode" id="cb114"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">gwork</span></code></pre></div>
-<pre><code>## IGRAPH 78ab41e UN-- 4 5 -- 
+<pre><code>## IGRAPH cc11cba UN-- 4 5 -- 
 ## + attr: name (v/c)
-## + edges from 78ab41e (vertex names):
+## + edges from cc11cba (vertex names):
 ## [1] David --Zubin  David --Suraya David --Jane   Zubin --Jane   Suraya--Jane</code></pre>
 <p>Let’s start with the string <code>UN--</code> on the first line of the output. This string describes the type of graph this is. The letter <code>U</code> denotes an undirected graph, and <code>N</code> denotes a graph with named vertices. The two other properties, which we will discover later, are currently not present and so are represented by the dashes <code>--</code>. Next we have the number of vertices (4) and edges (5), followed by two further dashes.</p>
 <p>On the next line the attributes of the graph are listed. In this case there is just one attribute <code>name</code>, which is a vertex attribute — denoted by <code>(v/c)</code>. Finally the edges of the graph are given using the vertex names. Note that there is no direction to these edges, so they are denoted with <code>--</code>.</p>
@@ -383,9 +384,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <span class="va">gmanage_edgelist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">gmanage_edgelist</span><span class="op">)</span>
 <span class="op">(</span><span class="va">gmanage</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_edgelist.html">graph_from_edgelist</a></span><span class="op">(</span>el <span class="op">=</span> <span class="va">gmanage_edgelist</span>,
                                        directed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH 2dc396e DN-- 4 3 -- 
+<pre><code>## IGRAPH 53d9c01 DN-- 4 3 -- 
 ## + attr: name (v/c)
-## + edges from 2dc396e (vertex names):
+## + edges from 53d9c01 (vertex names):
 ## [1] Suraya-&gt;David David -&gt;Zubin David -&gt;Jane</code></pre>
 <p>We see a similar output to <code>gwork</code>, except we now have a directed graph, donated by <code>D</code> in the first line, and we see that the edges are now denoted with direction using<br><code><a href="https://rdrr.io/r/base/assignOps.html">-&gt;</a></code>.</p>
 </div>
@@ -405,11 +406,11 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
   adjmatrix <span class="op">=</span> <span class="va">adj_flights</span>,
   mode <span class="op">=</span> <span class="st">"directed"</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH 2acbecd DN-- 3 16 -- 
+<pre><code>## IGRAPH a60cd7d DN-- 3 16 -- 
 ## + attr: name (v/c)
-## + edges from 2acbecd (vertex names):
-##  [1] SFO-&gt;PHL SFO-&gt;PHL SFO-&gt;PHL SFO-&gt;PHL SFO-&gt;TUS SFO-&gt;TUS SFO-&gt;TUS SFO-&gt;TUS PHL-&gt;SFO PHL-&gt;SFO PHL-&gt;SFO PHL-&gt;SFO PHL-&gt;SFO
-## [14] PHL-&gt;TUS TUS-&gt;SFO TUS-&gt;SFO</code></pre>
+## + edges from a60cd7d (vertex names):
+##  [1] SFO-&gt;PHL SFO-&gt;PHL SFO-&gt;PHL SFO-&gt;PHL SFO-&gt;TUS SFO-&gt;TUS SFO-&gt;TUS SFO-&gt;TUS PHL-&gt;SFO PHL-&gt;SFO
+## [11] PHL-&gt;SFO PHL-&gt;SFO PHL-&gt;SFO PHL-&gt;TUS TUS-&gt;SFO TUS-&gt;SFO</code></pre>
 <p>We see the expected directed multigraph with 3 vertices and 16 edges. If we wish to use create the weighted graph in Figure <a href="working.html#fig:weightedflights">3.10</a>, we add <code>weighted = TRUE</code> to the arguments.</p>
 <div class="sourceCode" id="cb120"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># create weighted graph </span>
@@ -418,9 +419,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
   mode <span class="op">=</span> <span class="st">"directed"</span>,
   weighted <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH 6ed8009 DNW- 3 5 -- 
+<pre><code>## IGRAPH 69767d8 DNW- 3 5 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from 6ed8009 (vertex names):
+## + edges from 69767d8 (vertex names):
 ## [1] SFO-&gt;PHL SFO-&gt;TUS PHL-&gt;SFO PHL-&gt;TUS TUS-&gt;SFO</code></pre>
 <p>We now see a graph with only 5 edges but we see the addition of <code>W</code> in our graph type, indicating a weighted graph and we also see a new edge property <code>weight</code>.</p>
 </div>
@@ -451,10 +452,11 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
   directed <span class="op">=</span> <span class="cn">FALSE</span>,
   vertices <span class="op">=</span> <span class="va">vertex_df</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH 1e54458 UN-- 7 8 -- 
+<pre><code>## IGRAPH 8284635 UN-- 7 8 -- 
 ## + attr: name (v/c)
-## + edges from 1e54458 (vertex names):
-## [1] David --Zubin  David --Suraya David --Jane   Zubin --Jane   Suraya--Jane   Sandra--Mae-Li Sandra--Jake   Mae-Li--Jake</code></pre>
+## + edges from 8284635 (vertex names):
+## [1] David --Zubin  David --Suraya David --Jane   Zubin --Jane   Suraya--Jane   Sandra--Mae-Li
+## [7] Sandra--Jake   Mae-Li--Jake</code></pre>
 <div class="thinkahead">
 <p><strong>Playing around:</strong> The functions in this section are not the only functions in the <code>igraph</code> package that build graphs from data, but they are by far the most commonly used ones. By typing <code>?graph_from</code> in your R console and looking at the functions that autocomplete, you can see some of the other functions that build graphs from data. Try playing around with them if you are curious.</p>
 </div>
@@ -485,9 +487,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
   directed <span class="op">=</span> <span class="cn">TRUE</span>,
   vertices <span class="op">=</span> <span class="va">vertex_transfers</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH dea55a1 DN-- 3 4 -- 
+<pre><code>## IGRAPH 6c87ecf DN-- 3 4 -- 
 ## + attr: name (v/c), loc (v/c), cur (e/c), amt (e/n)
-## + edges from dea55a1 (vertex names):
+## + edges from 6c87ecf (vertex names):
 ## [1] A-&gt;A A-&gt;B B-&gt;A B-&gt;C</code></pre>
 <p>We see that the additional edge properties <code>cur</code> and <code>amt</code> and the vertex property <code>loc</code> have been included in the graph. The codes immediately following these properties represent the property type and the data type. We can see that <code>loc</code> is a vertex property of character type (<code>v/c</code>), <code>cur</code> is an edge property of character type (<code>e/c</code>) and <code>amt</code> is an edge property of numeric type (<code>e/n</code>).</p>
 <div class="thinkahead">
@@ -496,11 +498,11 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <p>You can view the vertex and edge sets of a graph using the <code><a href="https://rdrr.io/pkg/igraph/man/V.html">V()</a></code> and <code><a href="https://rdrr.io/pkg/igraph/man/E.html">E()</a></code> functions respectively.</p>
 <div class="sourceCode" id="cb126"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">gtransfers</span><span class="op">)</span></code></pre></div>
-<pre><code>## + 3/3 vertices, named, from dea55a1:
+<pre><code>## + 3/3 vertices, named, from 6c87ecf:
 ## [1] A B C</code></pre>
 <div class="sourceCode" id="cb128"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/E.html">E</a></span><span class="op">(</span><span class="va">gtransfers</span><span class="op">)</span></code></pre></div>
-<pre><code>## + 4/4 edges from dea55a1 (vertex names):
+<pre><code>## + 4/4 edges from 6c87ecf (vertex names):
 ## [1] A-&gt;A A-&gt;B B-&gt;A B-&gt;C</code></pre>
 <p>To see specific properties or attributes within the vertices or edges, the <code><a href="https://rdrr.io/r/base/Extract.html">$</a></code> operator can be used.</p>
 <div class="sourceCode" id="cb130"><pre class="downlit sourceCode r">
@@ -529,9 +531,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 
 <span class="co"># view flightsgraph</span>
 <span class="va">flightsgraph</span></code></pre></div>
-<pre><code>## IGRAPH 8753fba DNW- 3 5 -- 
+<pre><code>## IGRAPH 1171cb8 DNW- 3 5 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from 8753fba (vertex names):
+## + edges from 1171cb8 (vertex names):
 ## [1] SFO-&gt;PHL SFO-&gt;TUS PHL-&gt;SFO PHL-&gt;TUS TUS-&gt;SFO</code></pre>
 <p>We see a weighted graph has been created by adding a <code>weight</code> property to the edges of an unweighted graph.</p>
 <p>A bipartite graph can be created by giving the vertices a <code>type</code> property according to the two disjoint sets of vertices. Let’s use our <span class="math inline">\(G_\mathrm{new}\)</span> bipartite graph again as an example, which we generated earlier as the <code>gnew</code> object. In our vertex set, the first four vertices are from organization A and the final three are from organization B.</p>
@@ -539,10 +541,11 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">gnew</span><span class="op">)</span><span class="op">$</span><span class="va">type</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="fl">4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"B"</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>
 
 <span class="va">gnew</span></code></pre></div>
-<pre><code>## IGRAPH 1e54458 UN-B 7 8 -- 
+<pre><code>## IGRAPH 8284635 UN-B 7 8 -- 
 ## + attr: name (v/c), type (v/c)
-## + edges from 1e54458 (vertex names):
-## [1] David --Zubin  David --Suraya David --Jane   Zubin --Jane   Suraya--Jane   Sandra--Mae-Li Sandra--Jake   Mae-Li--Jake</code></pre>
+## + edges from 8284635 (vertex names):
+## [1] David --Zubin  David --Suraya David --Jane   Zubin --Jane   Suraya--Jane   Sandra--Mae-Li
+## [7] Sandra--Jake   Mae-Li--Jake</code></pre>
 <p>We can see that out graph <code>gnew</code> now has the final of the four graph types: <code>B</code> meaning bipartite.</p>
 <div class="thinkahead">
 <p><strong>Playing around:</strong> Hopefully you can now see that there are many ways to construct your graph. Try using the <code><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame()</a></code> function to create <code>gnew</code> as a bipartite graph at the point of creation.</p>
@@ -576,7 +579,7 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <pre><code>## ['David', 'Jane', 'Zubin', 'Suraya']</code></pre>
 <div class="sourceCode" id="cb141"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb141-1"><a href="working.html#cb141-1" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(gwork.edges)</span></code></pre></div>
 <pre><code>## [('David', 'Zubin'), ('David', 'Suraya'), ('David', 'Jane'), ('Jane', 'Zubin'), ('Jane', 'Suraya')]</code></pre>
-<p>A graph can also be constructed from an edgelist in a Pandas DataFrame. By default the edgelist needs to have the columns <code>source</code> and <code>target</code><a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;These columns can also be named differently and identified via the &lt;code&gt;source&lt;/code&gt; and &lt;code&gt;target&lt;/code&gt; arguments in the &lt;code&gt;from_pandas_edgelist()&lt;/code&gt; function.&lt;/p&gt;"><sup>14</sup></a>.</p>
+<p>A graph can also be constructed from an edgelist in a Pandas DataFrame. By default the edgelist needs to have the columns <code>source</code> and <code>target</code><a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;These columns can also be named differently and identified via the &lt;code&gt;source&lt;/code&gt; and &lt;code&gt;target&lt;/code&gt; arguments in the &lt;code&gt;from_pandas_edgelist()&lt;/code&gt; function.&lt;/p&gt;"><sup>15</sup></a>.</p>
 <div class="sourceCode" id="cb143"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb143-1"><a href="working.html#cb143-1" aria-hidden="true" tabindex="-1"></a>gwork_edgelist<span class="op">=</span><span class="bu">dict</span>(</span>
 <span id="cb143-2"><a href="working.html#cb143-2" aria-hidden="true" tabindex="-1"></a>  source<span class="op">=</span>[<span class="st">"David"</span>, <span class="st">"David"</span>, <span class="st">"David"</span>, <span class="st">"Jane"</span>, <span class="st">"Jane"</span>],</span>
 <span id="cb143-3"><a href="working.html#cb143-3" aria-hidden="true" tabindex="-1"></a>  target<span class="op">=</span>[<span class="st">"Zubin"</span>, <span class="st">"Suraya"</span>, <span class="st">"Jane"</span>, <span class="st">"Zubin"</span>, <span class="st">"Suraya"</span>]</span>
@@ -725,14 +728,14 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <h3>
 <span class="header-section-number">3.4.2</span> Data exercises<a class="anchor" aria-label="anchor" href="#data-exercises-1"><i class="fas fa-link"></i></a>
 </h3>
-<p>Load the <code>koenigsberg</code> edgelist from the <code>onadata</code> package or load it as a dataframe from the internet<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://ona-book.org/data/koenigsberg.csv" class="uri"&gt;https://ona-book.org/data/koenigsberg.csv&lt;/a&gt;&lt;/p&gt;'><sup>15</sup></a>. This is the edgelist for the <em>Bridges of Königsberg</em> problem we looked at in Chapter <a href="everywhere.html#everywhere">1</a>. Use your software of choice for the following exercises.</p>
+<p>Load the <code>koenigsberg</code> edgelist from the <code>onadata</code> package or load it as a dataframe from the internet<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://ona-book.org/data/koenigsberg.csv" class="uri"&gt;https://ona-book.org/data/koenigsberg.csv&lt;/a&gt;&lt;/p&gt;'><sup>16</sup></a>. This is the edgelist for the <em>Bridges of Königsberg</em> problem we looked at in Chapter <a href="everywhere.html#everywhere">1</a>. Use your software of choice for the following exercises.</p>
 <ol style="list-style-type: decimal">
 <li>Create a graph object using this edgelist. Ensure that it is undirected.</li>
 <li>By exploring the graph object you just created, determine how many vertices and edges are in this graph. Does this make sense given the original problem tackled by Euler?</li>
 <li>Obtain a list of the names of the vertices in this graph.</li>
 <li>Find a function or method in your graph package to create the adjacency matrix or adjacency list for this graph. Check the output to see if it makes sense.</li>
 </ol>
-<p>Load the <code>pizza</code> data set from the <code>onadata</code> package or load it as a dataframe from the internet<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://ona-book.org/data/pizza.csv" class="uri"&gt;https://ona-book.org/data/pizza.csv&lt;/a&gt;&lt;/p&gt;'><sup>16</sup></a>. This dataset represents requests made by Reddit users on a thread called <em>Random Acts of Pizza</em> or <em>ROAP</em>, and is part of a larger dataset used for research purposes in <span class="citation"><a href="references.html#ref-altruistic" role="doc-biblioref">Althoff, Danescu-Niculescu-Mizil, and Jurafsky</a> (<a href="references.html#ref-altruistic" role="doc-biblioref">2014</a>)</span>. The <code>requester</code> column represents users who made requests for pizza and the <code>responder</code> column represents users who read the request and responded to the request by giving pizza<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;This data set is only a small subset of the full data set, which included many requests which were not fulfilled. As we all know, a free pizza is a rare thing!&lt;/p&gt;"><sup>17</sup></a>. Other columns represent the request ID and data on the requester at the time the request was made.</p>
+<p>Load the <code>pizza</code> data set from the <code>onadata</code> package or load it as a dataframe from the internet<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://ona-book.org/data/pizza.csv" class="uri"&gt;https://ona-book.org/data/pizza.csv&lt;/a&gt;&lt;/p&gt;'><sup>17</sup></a>. This dataset represents requests made by Reddit users on a thread called <em>Random Acts of Pizza</em> or <em>ROAP</em>, and is part of a larger dataset used for research purposes in <span class="citation"><a href="references.html#ref-altruistic" role="doc-biblioref">Althoff, Danescu-Niculescu-Mizil, and Jurafsky</a> (<a href="references.html#ref-altruistic" role="doc-biblioref">2014</a>)</span>. The <code>requester</code> column represents users who made requests for pizza and the <code>responder</code> column represents users who read the request and responded to the request by giving pizza<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;This data set is only a small subset of the full data set, which included many requests which were not fulfilled. As we all know, a free pizza is a rare thing!&lt;/p&gt;"><sup>18</sup></a>. Other columns represent the request ID and data on the requester at the time the request was made.</p>
 <ol start="5" style="list-style-type: decimal">
 <li>Use an appropriate method to create a graph object using the <code>requester</code> and <code>responder</code> columns in this data set.</li>
 <li>Use the information contained in the graph object to determine how many pizza requests were fulfilled.</li>
@@ -754,10 +757,10 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
       <ul class="nav navbar-nav">
 <li><a class="nav-link" href="#working"><span class="header-section-number">3</span> Working With Graphs</a></li>
 <li>
-<a class="nav-link" href="#elementary-graph-theory"><span class="header-section-number">3.1</span> Elementary Graph Theory</a><ul class="nav navbar-nav">
+<a class="nav-link" href="#elementary-graph-theory"><span class="header-section-number">3.1</span> Elementary graph theory</a><ul class="nav navbar-nav">
 <li><a class="nav-link" href="#graph-def"><span class="header-section-number">3.1.1</span> General definition of a graph</a></li>
 <li><a class="nav-link" href="#graph-types"><span class="header-section-number">3.1.2</span> Types of graphs</a></li>
-<li><a class="nav-link" href="#vertex-edge-prop"><span class="header-section-number">3.1.3</span> Vertex and Edge Properties</a></li>
+<li><a class="nav-link" href="#vertex-edge-prop"><span class="header-section-number">3.1.3</span> Vertex and edge properties</a></li>
 <li><a class="nav-link" href="#rep-graphs"><span class="header-section-number">3.1.4</span> Representations of graphs</a></li>
 </ul>
 </li>

@@ -4,7 +4,7 @@ When we think of a graph, we usually think of a diagram of dots and lines.  Inde
 
 In this chapter we will gain a basic understanding of graphs and how to construct them and work with them in R and in Python.   We will introduce the most general way of describing a graph mathematically, and we will then discuss how different types of graphs can be defined by placing more conditions on the most general definition.  We will then go on to look at the different options for how a known graph can be described, including edgelists and adjacency matrices.  Equipped with this understanding, we will then learn how to create simple graph objects in R and in Python.   Unlike the larger examples which we will introduce in later chapters, the data and examples we will use in this chapter are simple and  straightforward to work with.  The focus here is to make sure that the basic structures and definitions are understood before proceeding further.  Readers should not skip this chapter if they intend to fully understand the methods and procedures that will be introduced in later chapters.
 
-## Elementary Graph Theory
+## Elementary graph theory
 
 The way that graphs are created, stored and manipulated in data science languages like R and Python bears a strong resemblance to how they are defined and studied algebraically.  We will start this section with the general algebraic definition of a graph before we proceed to look at different varieties of graphs and different ways of representing graphs using data.
 
@@ -315,7 +315,7 @@ ggraph(bands, layout = "dendrogram") +
   theme_void()
 ```
 
-### Vertex and Edge Properties {#vertex-edge-prop}
+### Vertex and edge properties {#vertex-edge-prop}
 
 In Section \@ref(graph-def) we learned that a graph $G = (V, E)$ consists of a vertex set $V$ and an edge set $E$.  These sets are the minimum components of a graph --- the vertices represent the entities in the graph and the edges represent the relationships between the entities.  
 
@@ -693,7 +693,7 @@ vertex_transfers <- data.frame(
 
 We see that the additional edge properties `cur` and `amt` and the vertex property `loc` have been included in the graph.  The codes immediately following these properties represent the property type and the data type.  We can see that `loc` is a vertex property of character type (`v/c`), `cur` is an edge property of character type (`e/c`) and `amt` is an edge property of numeric type (`e/n`).
 
-`r if (knitr::is_latex_output()) '<!--'`
+
 :::{.thinkahead data-latex=""}
 **Playing around:** An arbitrary number of properties can be added to the vertices and edges of a graph.  If you label one of the properties as `weight` and if that property is numeric, this will change the type of your graph to `W`, a weighted graph.  Try playing around with this by changing the name of the `amt` column to `weight` in `gtransfers`.
 :::
@@ -749,7 +749,6 @@ gnew
 
 We can see that out graph `gnew` now has the final of the four graph types: `B` meaning bipartite.
 
-`r if (knitr::is_latex_output()) '<!--'`
 :::{.thinkahead data-latex=""}
 **Playing around:** Hopefully you can now see that there are many ways to construct your graph.  Try using the `graph_from_data_frame()` function to create `gnew` as a bipartite graph at the point of creation. 
 :::
@@ -925,7 +924,6 @@ nx.set_edge_attributes(G = transfer, values = transfer_attributes)
 
 While this may look tedious and manual, as we move into adding common properties like node centrality or edge weight to graphs, we will find these to be easy to set because of built-in functions that automatically index their output by the vertices or edges.  For example, we have already seen in Section \@ref(python-graph-from-adjacency) that the function `from_numpy_matrix()` automatically sets a weight according to the number of edges when we set the argument `parallel_edges` to `False`.  Also, if you have edge properties as columns in your Pandas edgelist, you can automatically import them into your graph by setting `edge_attr = True` in the `from_pandas_edgelist()` function in `networkx`.
 
-`r if (knitr::is_latex_output()) '<!--'`
 :::{thinkahead data-latex=""}
 **Playing around:** As with the `igraph` package in R, the `networkx` package in Python contains a whole host of ways to import data into a graph.  While the methods outlined here are likely to be the most common, it's worth taking a look at some of the other functions such as `from_dict_of_dicts()` or `from_dict_of_lists()` to see what is available to you.
 :::
