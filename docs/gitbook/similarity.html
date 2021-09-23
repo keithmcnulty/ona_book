@@ -60,6 +60,15 @@
 <script src="libs/forceNetwork-binding-0.4/forceNetwork.js"></script>
 <script src="libs/sankey-1/sankey.js"></script>
 <script src="libs/sankeyNetwork-binding-0.4/sankeyNetwork.js"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-400FPN6D44"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-400FPN6D44');
+</script>
 
 
 <style type="text/css">
@@ -611,7 +620,7 @@ Figure 9.1: It’s our old friend <span class="math inline">\(G_{14}\)</span> ag
 <span id="cb509-27"><a href="similarity.html#cb509-27" aria-hidden="true" tabindex="-1"></a>nx.set_node_attributes(schoolfriends_rp, name <span class="op">=</span> <span class="st">&quot;class&quot;</span>, values <span class="op">=</span> class_attr)</span></code></pre></div>
 <p>The <code>attribute_assortativity_coefficient()</code> and <code>degree_assortativity_coefficient()</code> functions can be used to calculate categorical assortativity and degree assortativity respectively.</p>
 <div class="sourceCode" id="cb510"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb510-1"><a href="similarity.html#cb510-1" aria-hidden="true" tabindex="-1"></a>nx.attribute_assortativity_coefficient(schoolfriends_fb, <span class="st">&quot;class&quot;</span>)</span></code></pre></div>
-<pre><code>## 0.38336668753682634</code></pre>
+<pre><code>## 0.38336668753682646</code></pre>
 <div class="sourceCode" id="cb512"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb512-1"><a href="similarity.html#cb512-1" aria-hidden="true" tabindex="-1"></a>nx.attribute_assortativity_coefficient(schoolfriends_rp, <span class="st">&quot;class&quot;</span>)</span></code></pre></div>
 <pre><code>## 0.7188918572576617</code></pre>
 <div class="sourceCode" id="cb514"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb514-1"><a href="similarity.html#cb514-1" aria-hidden="true" tabindex="-1"></a>nx.degree_assortativity_coefficient(schoolfriends_fb)</span></code></pre></div>
