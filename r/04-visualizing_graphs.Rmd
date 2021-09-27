@@ -1,7 +1,7 @@
 
 # Visualizing Graphs {#viz-graphs}
 
-Now that we have learned how to define and store graphs, it's time to take a look at ways of visualizing them.  As we noted in earlier chapters, visualization is an important tool that can make graphs and networks real to others.  But visualizations are not always effective.  Graphs can be laid out and visualized in many different ways, and only some of them will effectively communicate the inference or conclusion that the analyst is inviting others to draw about the phenomenon being represented in the graph. 
+Now that we have learned how to define and store graphs, it's time to take a look at ways of visualizing them.  As we noted in earlier chapters, visualization is an important tool that can make graphs and networks real to others.  But visualizations are not always effective.  Graphs can be laid out and visualized in many different ways, and only some of them will effectively communicate the inferences or conclusions that the analyst is inviting others to draw about the phenomena being represented in the graph. 
 
 While a graph is made up of vertices and edges, there are many other factors that will impact how the graph appears.  First, there are cosmetic matters of vertex size, edge thickness, whether or not vertices and edges are labelled, colored and so on.  Second there are matters of layout --- that is, where do we position vertices relative to each other in our visualization. As an example, recall our simple four vertex undirected graph $G_\mathrm{work}$ from Section \@ref(graph-def).  Figure \@ref(fig:two-viz-gwork) shows two different ways of visualizing this graph, where we make different choices on vertex size and on graph layout^[The right hand visualization uses the degree centrality of the vertices to scale their size --- we will learn about this later.  The layouts are also different.  The left hand visualization uses a grid layout while the right hand visualization uses a metric multidimensional scaling (MDS) layout.].  
 
@@ -37,15 +37,15 @@ g1 + g2
 
 The choices of how to visualize a graph are wide and varied, and we will not be covering every single permutation and combination of cosmetics and layouts in the chapter.  Instead, we will focus on learning how to control the most common options.  This will equip the reader well not just for work we do later in this book, but also for when they need to visualize graphs they create as part of their work or study.  We will also cover a variety of graph visualization programming package options in R and in Python.
 
-In this chapter we will work with a relatively famous graph known as *Zachary's Karate Club*.  This graph originates from a piece of research on a karate club by social anthropologist Wayne W. Zachary (@zachary), and is commonly used as an example of a social network in many teaching situations today. The graph contains 34 vertices representing different individuals or actors.  The karate instructor is labelled as 'Mr Hi'.  The club administrator is labelled as 'John A'.  The other 32 actors are labelled Actor 2 thru Actor 33.  Zachary studied the social interactions between the members outside the club meetings, and during his study a conflict arose in the club that eventually led to the group splitting into two - with one group forming a new club around the instructor Mr Hi and the other group dispersing to find new clubs or to give up karate completely.  In this graph, an edge between two vertices means that the two individuals interacted socially outside the club.
+In this chapter we will work with a relatively famous graph known as *Zachary's Karate Club*.  This graph originates from a piece of research on a karate club by social anthropologist Wayne W. Zachary^[@zachary], and is commonly used as an example of a social network in many teaching situations today. The graph contains 34 vertices representing different individuals or actors.  The karate instructor is labelled as 'Mr Hi'.  The club administrator is labelled as 'John A'.  The other 32 actors are labelled 'Actor 2' thru 'Actor 33'.  Zachary studied the social interactions between the members outside the club meetings, and during his study a conflict arose in the club that eventually led to the group splitting into two - with one group forming a new club around the instructor Mr Hi and the other group dispersing to find new clubs or to give up karate completely.  In this graph, an edge between two vertices means that the two individuals interacted socially outside the club.
 
 
 ## Visualizing graphs in R 
 
-Let's load the graph edgelist in R from the `onadata` package or from the internet^[https://ona-book.org/data/karate.csv], and check the first few rows.
+Let's load the `karate` graph edgelist in R from the `onadata` package or from the internet^[https://ona-book.org/data/karate.csv], and check the first few rows.
 
 ```{r}
-# get edgelist data as dataframe
+# get karate edgelist data as dataframe
 karate_edgelist <- read.csv("https://ona-book.org/data/karate.csv")
 
 head(karate_edgelist)
@@ -54,12 +54,23 @@ head(karate_edgelist)
 
 Now let's use our edgelist to create an undirected graph object in `igraph`.
 
-```{r}
+```{r, eval = FALSE}
 library(igraph)
 
 (karate <- igraph::graph_from_data_frame(karate_edgelist, 
                                          directed = FALSE))
 ```
+
+`r if (knitr::is_latex_output()) '\\footnotesize'`
+
+```{r, echo = FALSE}
+library(igraph)
+
+(karate <- igraph::graph_from_data_frame(karate_edgelist, 
+                                         directed = FALSE))
+```
+
+`r if (knitr::is_latex_output()) '\\normalsize'`
 
 We can see that we have an undirected graph with 34 named vertices and 78 edges.  
 
@@ -81,11 +92,11 @@ plot(karate, layout = l)
 
 
 :::{.thinkahead data-latex=""}
-**Playing around:** The previous code chunk fixes the positioning of the vertices on our `karate` graph.  By setting a random seed, we can ensure the same random numbers are generated each time so that this plot is repeatable and reproducible.  Then the `random_layout()` function calculates random x and y coordinates for the vertices, and when we use it in the `plot()` function, it assigns those coordinates in the plot.  As we learn about layouts later in the chapter, we will use this technique a lot.  If you like, try playing around with other layouts now.  A couple of examples are `layout_with_sugiyama()` and `layout_with_dh()`.   
+**Playing around:** The previous code chunk fixes the positioning of the vertices on our `karate` graph.  By setting a random seed, we can ensure the same random numbers are generated each time so that this precise plot is repeatable and reproducible.  Then the `random_layout()` function calculates random x and y coordinates for the vertices, and when we use it in the `plot()` function, it assigns those coordinates in the plot.  As we learn about layouts later in the chapter, we will use this technique a lot.  If you like, try playing around with other layouts now.  A couple of examples are `layout_with_sugiyama()` and `layout_with_dh()`.  Remember to always set the same seed whenever you generate a graph layout calculation to ensure that your visualization in reproducible by yourself or others.  
 :::
 
 
-Looking at Figure \@ref(fig:basic-karate), we note that the labeling of the vertices is somewhat obtrusive and unhelpful to the clarity of the graph.  This will be a common problem with default graph plotting, and with large number of vertices the plot can turn into a messy cloud of overlapping labels.
+Looking at Figure \@ref(fig:basic-karate), we note that the labeling of the vertices is somewhat obtrusive and unhelpful to the clarity of the graph.  This will be a common problem with default graph plotting, and with large number of vertices the plot can easily turn into a messy cloud of overlapping labels.
 
 Vertex labels can be adjusted via properties of the vertices. The most common properties adjusted are as follows:
 
@@ -109,7 +120,7 @@ V(karate)$label <- ifelse(V(karate)$name %in% c("Mr Hi", "John A"),
 # (selected font family needs to be installed on system)
 V(karate)$label.color <- "black"
 V(karate)$label.cex <- 0.8
-V(karate)$label.family <- "Lucinda Console"
+V(karate)$label.family <- "arial"
 
 plot(karate, layout = l)
 
@@ -149,7 +160,7 @@ In a similar way, edges can be changed through adding or editing edge properties
 * `lty`: Line type of edges, with numerous options including `solid`, `dashed`, `dotted`, `dotdash` and `blank`
 * `curved`: Specifies the amount of curvature to apply to the edge, with zero (default) as a straight edge, negative numbers bending clockwise and positive bending anti-clockwise
 
-Note that edges, like vertices, can also have `label` a label property and various label settings like `label.cex` and `label.family`.  Let's adjust our `karate` graph to have blue dashed edges, with the result in \@ref(fig:change-edges-karate).
+Note that edges, like vertices, can also have a `label` property and various label settings like `label.cex` and `label.family`.  Let's adjust our `karate` graph to have blue dashed edges, with the result in Figure  \@ref(fig:change-edges-karate).
 
 ```{r change-edges-karate, fig.cap="Adjusting edge appearance through changing edge properties", fig.align = "center"}
 # change color and linetype of all edges
@@ -209,9 +220,9 @@ plot(karate, layout = sph)
 :::
 
 
-*Force-directed* graph layouts are extremely popular, as they are aesthetically pleasing and they help visualize communities of vertices quite effectively, especially in graphs with low to moderate edge-complexity.  These algorithms emulate physical models like Hooke's law to attract connected vertices together, while at the same time applying repelling forces to all pairs of vertices to try to keep as much space as possible between them.  This calculation is an iterative process where vertex positions are recalculated again and again until equilibrium is reached^[Note that this means that the process is usuallu highly computationally expensive on large graphs and can easily freeze up your machine if you are not careful.].  The result is usually a layout where connected vertices are closer together and where edge-length are approximately equal.  
+*Force-directed* graph layouts are extremely popular, as they are aesthetically pleasing and they help visualize communities of vertices quite effectively, especially in graphs with low to moderate edge-complexity.  These algorithms emulate physical models like Hooke's law to attract connected vertices together, while at the same time applying repelling forces to all pairs of vertices to try to keep as much space as possible between them.  This calculation is an iterative process where vertex positions are recalculated again and again until equilibrium is reached^[Note that this means that the process is usually computationally expensive on large graphs and can easily freeze up your machine if you are not careful.].  The result is usually a layout where connected vertices are closer together and where edge lengths are approximately equal.  
 
-For Zachary's Karate Club study, which was a study of connection and community, we can imagine that a force-directed layout would be a good choice of visualization, and we will find that this is the case for many other network graphs we study.  There are several different implementations of force directed algorithms available.  Perhaps the most popular of these is the Fruchterman-Reingold algorithm.  Figure \@ref(fig:fr-karate) shows our `karate` network with the layout generated by the Fruchterman-Reingold algorithm, and we can see clear communities in the karate club oriented around Mr Hi and John A.
+For Zachary's Karate Club study, which was a study of connection and community, we can imagine that a force-directed layout would be a good choice of visualization, and we will find that this is the case for many other network graphs we study.  There are several different implementations of force-directed algorithms available.  Perhaps the most popular of these is the Fruchterman-Reingold algorithm.  Figure \@ref(fig:fr-karate) shows our `karate` network with the layout generated by the Fruchterman-Reingold algorithm, and we can see clear communities in the karate club oriented around Mr Hi and John A.
 
 ```{r fr-karate, fig.cap=if (knitr::is_html_output()) "Force-directed layout of the `karate` graph according to the Fruchterman-Reingold algorithm" else "Force-directed layout of the \\texttt{karate} graph according to the Fruchterman-Reingold algorithm", fig.align = "center"}
 # F-R algorithm
@@ -223,26 +234,26 @@ plot(karate, layout = fr)
 The Kamada-Kawai algorithm and the GEM algorithm are also commonly used force-directed algorithms and they produce similar types of community structures as in Figures \@ref(fig:kk-karate) and \@ref(fig:gem-karate) respectively.
 
 ```{r kk-karate, fig.cap=if (knitr::is_html_output()) "Force-directed layout of the `karate` graph according to the Kamada-Kawai algorithm" else "Force-directed layout of the \\texttt{karate} graph according to the Kamada-Kawai algorithm", fig.align = "center"}
-## K-K algorithm
+# K-K algorithm
 set.seed(123)
 kk <- layout_with_kk(karate)
 plot(karate, layout = kk)
 ```
 
 ```{r gem-karate, fig.cap=if (knitr::is_html_output()) "Force-directed layout of the `karate` graph according to the GEM algorithm" else "Force-directed layout of the \\texttt{karate} graph according to the GEM algorithm", fig.align = "center"}
-## GEM algorithm
+# GEM algorithm
 set.seed(123)
 gem <- layout_with_gem(karate)
 plot(karate, layout = gem)
 ```
 
-As well as force-directed and shape-oriented layout algorithms, several alternative approaches to layout calculation are also available.  `layout_with_dh()` uses a simulated annealing algorithm developed for nice graph drawing, and `layout_with_mds()` generates vertex coordinates through multi-dimensional scaling based on shortest path distance (which we will look at in a later chapter).  `layout_with sugiyama()` is suitable for directed graphs and minimizes edge crossings by introducing bends on edges --- the multigraph visualization in Figure \@ref(fig:gmulti) was generated using the Sugiyama layout algorithm.
+As well as force-directed and shape-oriented layout algorithms, several alternative approaches to layout calculations are also available.  `layout_with_dh()` uses a simulated annealing algorithm developed for nice graph drawing, and `layout_with_mds()` generates vertex coordinates through multi-dimensional scaling based on shortest path distance (which we will look at in a later chapter).  `layout_with_sugiyama()` is suitable for directed graphs and minimizes edge crossings by introducing bends on edges^[The multigraph visualization in Figure \@ref(fig:gmulti) was generated using the Sugiyama layout algorithm.].
 
-Finally, there are three layout algorithms that are suited for large graphs with many thousands or even millions of edges. One of the biggest problems with visualizing large graphs is the potential for 'hairballs' --- that is, clumps of connected nodes that are so dense they cannot be usefully visualized.  `layout_with_lgl()` uses the Large Graph Layout algorithm which tries to identify clusters of vertices and position the clusters before positioning the individual vertices to minimize the chance of hairballs, while still adhering to the principles of force-directed networks. `layout_with_drl()` and  `layout_with_graphopt()` uses efficient force-directed algorithms which scale well on large graphs.  
+Finally, there are three layout algorithms that are suited for large graphs with many thousands or even millions of edges. One of the biggest problems with visualizing large graphs is the potential for 'hairballs' --- that is, clumps of connected nodes that are so dense they cannot be usefully visualized.  `layout_with_lgl()` uses the Large Graph Layout algorithm which tries to identify clusters of vertices and position the clusters before positioning the individual vertices to minimize the chance of hairballs, while still adhering to the principles of force-directed networks. `layout_with_drl()` and  `layout_with_graphopt()` also use efficient force-directed algorithms which scale well on large graphs.  
 
 
 :::{.thinkahead data-latex=""}
-**Playing around:** Try laying out the `karate` graph using these various algorithms and observe the different appearances.  If you are interested in experimenting with a larger graph, and you have enough computing power that it won't freeze your machine, load the `wikivote` edgelist from the `onadata` package, or download it from the internet^[https://ona-book.org/data/wikivote.csv.  This data set is taken from the Stanford University SNAP library of network data sets]. This network represents votes from Wikipedia members for other members to be made administrators.  Create a directed graph object, and lay it out using `layout_with_graphopt()`.  To help with your visualization, remove the vertex labels, set the node size to 0.5 and set the edge arrow size to 0.1. When you plot this, you should see a great example of a hairball, as in Figure \@ref(fig:hairball-example).   
+**Playing around:** Try laying out the `karate` graph using these various algorithms and observe the different appearances.  If you are interested in experimenting with a larger graph, and you have enough computing power that it won't freeze your machine, load the `wikivote` edgelist from the `onadata` package, or download it from the internet^[https://ona-book.org/data/wikivote.csv]. This network represents votes from Wikipedia members for other members to be made administrators.  Create a directed graph object, and lay it out using `layout_with_graphopt()`.  To help with your visualization, remove the vertex labels, set the node size to 0.5 and set the edge arrow size to 0.1. When you plot this, you should see a great example of a hairball, as in Figure \@ref(fig:hairball-example).   
 :::
 
 
@@ -252,11 +263,11 @@ knitr::include_graphics("www/visualizing-graphs/hairball.png")
 
 In the absence of any information on layout, the `plot()` function in `igraph` will choose an appropriate layout using a logic determined by `layout_nicely()`.  If the graph already has a `layout` attribute, it will use this layout.  Otherwise, if the vertices have `x` and `y` attributes, it will use these as vertex co-ordinates.  Failing both of these, `layout_with_fr()` will be used if the graph has fewer than 1,000 vertices, and `layout_with_drl()` will be used if the graph has more than 1,000 vertices.  Thus, the plot defaults to a form of force-directed layout unless the graph attributes suggest otherwise.  
 
-### Plotting with `ggraph` {#ggraph}
+### Static plotting with `ggraph` {#ggraph}
 
-The `ggraph` package is developed for those who enjoy working with the more general `ggplot2` package, which is a very popular plotting package in R.  To learn `ggplot2` as a foundational package, @ggplot2 is highly recommended.  As with `ggplot2`, `ggraph` provides a grammar for building graph visualizations.  While the native capabilities of `igraph` will suffice in R for most static graph visualizations, `ggraph` could be considered an additional option for those who prefer to use it.  It also integrates well with `ggplot2` which allows further layers to be added to the graph visualization, such as a greater variety of node shapes and the ability to layer networks onto geographic maps with relative ease.
+The `ggraph` package is developed for those who enjoy working with the more general `ggplot2` package, which is a very popular plotting package in R^[To learn `ggplot2` as a foundational package, @ggplot2 is highly recommended.].  As with `ggplot2`, `ggraph` provides a grammar for building graph visualizations.  While the native capabilities of `igraph` will suffice in R for most static graph visualizations, `ggraph` could be considered an additional option for those who prefer to use it.  It also integrates well with `ggplot2` which allows further layers to be added to the graph visualization, such as a greater variety of node shapes and the ability to layer networks onto geographic maps with relative ease.
 
-To build an elementary graph using `ggraph`, we start with an `igraph` object and a layout, and we then progressively add node and edge properties as well as themes and other layers if required.  To illustrate, let's generate a relatively basic visualization of our `karate` graph using `ggraph` as in Figure \@ref(fig:ggraph-basic-karate).  Note that it is customary to add the edges before the nodes so that the nodes are the top layer in the plot.
+To build an elementary graph using `ggraph`, we start with an `igraph` object and a layout, and we then progressively add node and edge properties as well as themes and other layers if required.  To illustrate, let's generate a relatively basic visualization of our `karate` graph using `ggraph` as in Figure \@ref(fig:ggraph-basic-karate).  Note that it is customary to add the edges before the vertices so that the vertices are the top layer in the plot.
 
 ```{r ggraph-basic-karate, fig.align = "center", fig.cap=if (knitr::is_html_output()) {"Elementary visualization of `karate` graph using `ggraph` and the Fruchterman-Reingold algorithm"} else {"Elementary visualization of \\texttt{karate} graph using \\texttt{ggraph} and the Fruchterman-Reingold algorithm"}}
 library(igraph)
@@ -284,7 +295,7 @@ This is not particularly appealing.  However, we can play with properties to imp
 ```{r ggraph-nicer-karate, fig.align = "center", fig.cap=if (knitr::is_html_output()) {"Improved visualization of `karate` graph using node and edge geom functions"} else {"Elementary visualization of \\texttt{karate} graph using node and edge geom functions"}}
 set.seed(123)
 ggraph(karate, layout = "fr") +
-  geom_edge_link(color = "grey", alpha = 0.5) + 
+  geom_edge_link(color = "grey", alpha = 0.7) + 
   geom_node_point(color = "blue", size = 5) +
   theme_void() + 
   labs(title = "Zachary's Karate Club Network")
@@ -298,21 +309,26 @@ V(karate)$leader <- ifelse(V(karate)$name %in% c("Mr Hi", "John A"), 1, 0)
 
 set.seed(123)
 ggraph(karate, layout = "fr") +
-  geom_edge_link(color = "grey", alpha = 0.5) + 
-  geom_node_point(aes(color = as.factor(leader)), size = 5, show.legend = FALSE) +
+  geom_edge_link(color = "grey", alpha = 0.7) + 
+  geom_node_point(aes(color = as.factor(leader)), size = 5, 
+                  show.legend = FALSE) +
   theme_void() + 
   labs(title = "Zachary's Karate Club Network")
 ```
 
-As a further example of using `ggraph`, let's look at a dataset collected during a study of workplace interactions in France in 2015 (@Genois2018).  Load the `workfrance_edgelist` and `workfrance_vertices` data sets from the `onadata` package or download them from the internet^[https://ona-book.org/data/workfrance_edgelist.csv and https://ona-book.org/data/workfrance_vertices.csv].  In this study, employees of a company wore wearable devices to triangulate their location in the building, and edges were defined as any situation where two employees were sharing the same spatial location.  The edgelist contains `from` and `to` columns for the edges, as well as a `mins` column representing the total minutes spent co-located during the study^[This data set has been further processed from the original data set, including limiting the edges to those where the total mco-location time was at least 5 minutes.].  The vertex list contains data on the department of each employee ID.  We will create a basic visualization of this using `ggraph` in Figure \@ref(fig:workfrance-basic).
+As a further example of using `ggraph`, let's look at a dataset collected during a study of workplace interactions in France in 2015^[@Genois2018].  Load the `workfrance_edgelist` and `workfrance_vertices` data sets from the `onadata` package or download them from the internet^[https://ona-book.org/data/workfrance_edgelist.csv and https://ona-book.org/data/workfrance_vertices.csv].  In this study, employees of a company wore wearable devices to triangulate their location in the building, and edges were defined as any situation where two employees were sharing the same spatial location.  The edgelist contains `from` and `to` columns for the edges, as well as a `mins` column representing the total minutes spent co-located during the study^[This data set has been further processed from the original data set, including limiting the edges to those where the total co-location time was at least 5 minutes.].  The vertex list contains ground-truth data on the department of each employee.  We will create a basic visualization of this using `ggraph` in Figure \@ref(fig:workfrance-basic).
 
 ```{r workfrance-basic, fig.align = "center", fig.cap="Connection of employees in a workplace as measured by spatial co-location"}
 
 # get edgelist with mins property
-workfrance_edgelist <- read.csv("https://ona-book.org/data/workfrance_edgelist.csv")
+workfrance_edgelist <- read.csv(
+  "https://ona-book.org/data/workfrance_edgelist.csv"
+)
 
 # get vertex set with dept property
-workfrance_vertices <- read.csv("https://ona-book.org/data/workfrance_vertices.csv")
+workfrance_vertices <- read.csv(
+  "https://ona-book.org/data/workfrance_vertices.csv"
+)
 
 # create undirected graph object
 workfrance <- igraph::graph_from_data_frame(
@@ -324,7 +340,7 @@ workfrance <- igraph::graph_from_data_frame(
 # basic visualization
 set.seed(123)
 ggraph(workfrance, layout = "fr") +
-  geom_edge_link(color = "gray", alpha = 0.2) +
+  geom_edge_link(color = "gray", alpha = 0.7) +
   geom_node_point(color = "blue", size = 5) +
   theme_void()
 ```
@@ -334,26 +350,27 @@ As it stands, this graph does not tell us much, but a couple of simple adjustmen
 ```{r workfrance-additional, fig.align = "center", fig.cap="Connection of employees in a workplace with edge thickness weighted by minutes spent spatially co-located and vertices colored by department"}
 set.seed(123)
 ggraph(workfrance, layout = "fr") +
-  geom_edge_link(color = "gray", alpha = 0.2, aes(width = mins), 
+  geom_edge_link(color = "gray", alpha = 0.7, aes(width = mins), 
                  show.legend = FALSE) +
   geom_node_point(aes(color = dept), size = 5) +
+  labs(color = "Department") +
   theme_void() +
   labs(title = "Spatial co-location of employees in a workplace")
 ```
 
 
 :::{.thinkahead data-latex=""}
-**Thinking ahead:** The graph we have just created in Figure \@ref(fig:workfrance-additional) shows how we have detected a community segmentation of our vertices.  It's relatively clear that individuals in the same department are more likely to be connected.  Community segmentation is an important topic in Organizational Network Analysis which we will study later in this book.  It's not always straightforward to identify drivers of community in networks, but we will learn about a number of community detection algorithms which will segment the graph into different community groups.  As an example, Figure \@ref(fig:workfrance-louvain) shows the results of running the Louvain community detection algorithm on the `workfrance` graph with `mins` as the edge weights.  You can see that the communities detected are strongly aligned with the departments in Figure \@ref(fig:workfrance-additional).    
+**Thinking ahead:** The graph we have just created in Figure \@ref(fig:workfrance-additional) shows how we have detected a community segmentation of our vertices.  It's relatively clear that individuals in the same department are more likely to be connected.  Community segmentation is an important topic in Organizational Network Analysis which we will study later in this book.  It's not always straightforward to identify drivers of community in networks, but we will learn about a number of unsupervised community detection algorithms which will segment the graph into different community groups.  As an example, Figure \@ref(fig:workfrance-louvain) shows the results of running the Louvain community detection algorithm on the `workfrance` graph with `mins` as the edge weights.  You can see that the communities detected are strongly aligned with the departments in Figure \@ref(fig:workfrance-additional).    
 :::
 
 
-```{r workfrance-louvain, echo = FALSE, fig.align = "center", fig.cap="Clusters of employees as detected by the Louvain community detection algorithm.  Note the cluster similarity of communities with the departments in the previous graph."}
+```{r workfrance-louvain, echo = FALSE, fig.align = "center", fig.cap="Clusters of employees as detected by the Louvain unsupervised community detection algorithm.  Note the cluster similarity of communities with the departments in the previous graph."}
 louv <- igraph::cluster_louvain(workfrance, weights = E(workfrance)$mins)
 V(workfrance)$community <- louv$membership
 
 set.seed(123)
 ggraph(workfrance, layout = "fr") +
-  geom_edge_link(color = "gray", alpha = 0.2, aes(width = mins), 
+  geom_edge_link(color = "gray", alpha = 0.7, aes(width = mins), 
                  show.legend = FALSE) +
   geom_node_point(aes(color = as.factor(community)), size = 5) +
   theme_void() +
@@ -368,14 +385,18 @@ ggraph(workfrance, layout = "fr") +
 
 ```{r}
 # download and view london tube vertex data
-londontube_vertices <- read.csv("https://ona-book.org/data/londontube_vertices.csv")
+londontube_vertices <- read.csv(
+  "https://ona-book.org/data/londontube_vertices.csv"
+)
 head(londontube_vertices)
 ```
 The edge list represents `from` and `to` connections between stations, along with the name of the `line` and its official `linecolor` in hex code.
 
 ```{r}
 # download and view london tube edge data
-londontube_edgelist <- read.csv("https://ona-book.org/data/londontube_edgelist.csv")
+londontube_edgelist <- read.csv(
+  "https://ona-book.org/data/londontube_edgelist.csv"
+)
 head(londontube_edgelist)
 ```
 
@@ -429,12 +450,14 @@ tubegraph <- igraph::graph_from_data_frame(d = new_edgelist,
                                            vertices = londontube_vertices,
                                            directed = FALSE)
 
-# layer a London map
+# layer a London map (requires Google Maps API key)
 library(ggmap)
 londonmap <- get_map(location = "London, UK", source = "google")
 
+# visualize using geolocation
 ggmap(londonmap, base_layer = ggraph(tubegraph)) +
-  geom_node_point(aes(x = longitude, y = latitude), color = "black", size = 1) +
+  geom_node_point(aes(x = longitude, y = latitude), 
+                  color = "black", size = 1) +
   geom_edge_link(aes(x = lon_from, y = lat_from,
                      xend = lon_to, yend = lat_to,
                      color = line), width = 1) +
@@ -442,13 +465,13 @@ ggmap(londonmap, base_layer = ggraph(tubegraph)) +
                           values = lines$linecolor)
 ```
 
-Figure \@ref(fig:geo-accurate-tube) looks like the everything is in the right place.  This kind of graphical layering can be extremely important when there is an inherent co-ordinate system lying behind the vertices of your graph and where none of the existing layout algorithms can recreate that co-ordinate system.
+In Figure \@ref(fig:geo-accurate-tube), it looks like everything is in the right place.  This kind of graphical layering can be extremely important when there is an inherent co-ordinate system lying behind the vertices of your graph and where none of the existing layout algorithms can recreate that co-ordinate system.
 
-### Interactive graph visualization in R
+### Interactive graph visualization using `visNetwork`
 
-We have seen earlier how many large networks are too complicated to make sense of visually using static approaches such as the methods we have already reviewed in `igraph` or `ggraph`.  Nevertheless, interactive visualizations of networks can be useful where there is an interest in visual exploration of particular vertices or small sub-networks, even when the overall network is visually complex.  We will touch upon a couple of commonly used interactive graph visualization packages here, all of which use Javascript libraries behind the scenes to create the interactive visualizations.
+We have seen earlier how many large networks are too complicated to make sense of visually using static approaches like those we have already reviewed in `igraph` or `ggraph`.  Nevertheless, interactive visualizations of networks can be useful where there is an interest in visual exploration of particular vertices or small sub-networks, even when the overall network is visually complex.  We will touch upon a couple of commonly used interactive graph visualization packages here, all of which use Javascript libraries behind the scenes to create the interactive visualizations.
 
-`visNetwork` is a simple but effective package which uses the `vis.js` API create HTML widgets containing interactive graph visualizations.  It is fairly easily to use, with its main function `visNetwork()` taking a dataframe of node information and a dataframe of edge information, as well as a few other optional arguments.  The columns in these dataframes are expected to have certain default column names.  Vertices/nodes are expected to at least have an `id` column but can also contain:
+`visNetwork` is a simple but effective package which uses the `vis.js` API to create HTML widgets containing interactive graph visualizations.  It is fairly easily to use, with its main function `visNetwork()` taking a dataframe of node information and a dataframe of edge information, as well as a few other optional arguments.  The columns in these dataframes are expected to have certain default column names.  Vertices/nodes are expected to at least have an `id` column but can also contain:
 
 * `label`: the label of the vertex
 * `group`: the group of the vertex if there are groups
@@ -458,7 +481,7 @@ We have seen earlier how many large networks are too complicated to make sense o
 
 The edge dataframe must contain a `from` and `to` column, and can also contain `label`, `value` and `title` to customize the edges as with the vertices, as well as other properties such as `arrows` or `dashes`.
 
-`r if (knitr::is_html_output()) {"Interactive"}` Figure \@ref(fig:gwork-visnetwork) is a very simple `r if (knitr::is_latex_output()) {"statically rendered"}` example of the `visNetwork` function at work using our $G_\mathrm{work}$ graph from Section \@ref(graph-def).  Note that the `visLayout()` function can be used for various customizations, including passing a random seed variable to `vis.js` to ensure the same result.
+`r if (knitr::is_html_output()) {"Interactive"}` Figure \@ref(fig:gwork-visnetwork) is a very simple `r if (knitr::is_latex_output()) {"statically rendered"}` example of the `visNetwork` function at work using our $G_\mathrm{work}$ graph from Section \@ref(graph-def).  Note that the `visLayout()` function can be used for various customizations, including passing a random seed variable to `vis.js` to ensure reproducibility.
 
 ```{r, eval = FALSE}
 library(visNetwork)
@@ -480,7 +503,7 @@ visNetwork(nodes, edges) |>
 ```
 
 
-```{r gwork-visnetwork, echo = FALSE, fig.align = "center", fig.cap = if (knitr::is_html_output()) {"Simple `visNetwork` rendering of the $G_\\mathrm{work}$ graph"} else {"Simple \\texttt{visNetwork} rendering of the $G_\\mathrm{work}$ graph"}, out.width = if (knitr::is_latex_output()) "80%"}
+```{r gwork-visnetwork, echo = FALSE, fig.align = "center", fig.cap = if (knitr::is_html_output()) {"Simple interactive `visNetwork` rendering of the $G_\\mathrm{work}$ graph.  Try playing with this rendering by zooming in/out or moving nodes."} else {"Static image of \\texttt{visNetwork} rendering of the $G_\\mathrm{work}$ graph"}, out.width = if (knitr::is_latex_output()) "80%"}
 library(visNetwork)
 
 if (knitr::is_html_output()) {
@@ -505,7 +528,7 @@ if (knitr::is_html_output()) {
 ```
 
 
-In fact, assuming that we are working with `igraph` objects, the easiest way to deploy `visNetwork` is to use the `visIgraph()` function, which takes an `igraph` object and restructures it behind the scenes to use the `vis.js` API, even inheriting whatever `igraph` layout you prefer.  Let's recreate our `karate` graph in `visNetwork`, as in `r if (knitr::is_html_output()) {"Interactive"}` Figure \@ref(fig:karate-visnetwork).
+In fact, assuming that we are working with `igraph` objects, the easiest way to deploy `visNetwork` is to use the `visIgraph()` function, which takes an `igraph` object and restructures it behind the scenes to use the `vis.js` API, even inheriting whatever `igraph` layout you prefer.  Let's recreate our `karate` graph in `visNetwork`, as in `r if (knitr::is_html_output()) {"Interactive"}` Figure \@ref(fig:karate-visnetwork)^[Note that if you are passing an `igraph` layout to `visNetwork`, you will need to use the `randomSeed` argument directly in the `visIgraph()` function.].
 
 ```{r, eval = FALSE}
 library(igraph)
@@ -526,14 +549,17 @@ V(karate)$shape <- ifelse(V(karate)$name %in% c("Mr Hi", "John A"),
                           "square", 
                           "circle")
 
+# more visible edges 
+E(karate)$color = "grey"
+E(karate)$width <- 3
+
 # visualize from igraph
-visNetwork::visIgraph(karate, layout = "layout_with_fr") |> 
-  visLayout(randomSeed = 123)
+visNetwork::visIgraph(karate, layout = "layout_with_fr", randomSeed = 123) 
 ```
 
 
 
-```{r karate-visnetwork, echo = FALSE, fig.align = "center", fig.cap = if (knitr::is_html_output()) {"`visNetwork` rendering of the basic `karate` graph using a force-directed layout"} else {"\\texttt{visNetwork} rendering of the basic Karate graph using a force-directed layout"}, out.width = if (knitr::is_latex_output()) "80%"}
+```{r karate-visnetwork, echo = FALSE, fig.align = "center", fig.cap = if (knitr::is_html_output()) {"Interactive `visNetwork` rendering of the basic `karate` graph using a force-directed layout"} else {"Static image of \\texttt{visNetwork} rendering of the basic Karate graph using a force-directed layout"}, out.width = if (knitr::is_latex_output()) "90%"}
 
 if (knitr::is_html_output()) {
   library(igraph)
@@ -553,10 +579,13 @@ if (knitr::is_html_output()) {
   V(karate)$shape <- ifelse(V(karate)$name %in% c("Mr Hi", "John A"),
                             "square", 
                             "circle")
+  
+  # more visible edges 
+  E(karate)$color = "grey"
+  E(karate)$width <- 3
 
 # visualize from igraph
-visNetwork::visIgraph(karate, layout = "layout_with_fr") |> 
-  visLayout(randomSeed = 123)
+visNetwork::visIgraph(karate, layout = "layout_with_fr", randomSeed = 123) 
 } else {
   knitr::include_graphics("www/visualizing-graphs/karate-visnetwork.png")
 }
@@ -565,12 +594,14 @@ visNetwork::visIgraph(karate, layout = "layout_with_fr") |>
 
 
 :::{.thinkahead data-latex=""}
-**Playing around:** The `visNetwork` package allows you to take advantage of a ton of features in the `vis.js` API, including a wide range of graph customization, and the ability to make your graph editable or to add selector menus to search for specific nodes or groups of nodes.  It's worth experimenting with all the different capabilities.  A thorough manual can be found at [https://datastorm-open.github.io/visNetwork/](https://datastorm-open.github.io/visNetwork/).  Why don't you try to recreate the `workfrance` graph from this chapter in `visNetwork`?
+**Playing around:** The `visNetwork` package allows you to take advantage of a ton of features in the `vis.js` API, including a wide range of graph customization, and the ability to make your graph editable or to add selector menus to search for specific nodes or groups of nodes.  It's worth experimenting with all its different capabilities.  A thorough manual can be found at [https://datastorm-open.github.io/visNetwork/](https://datastorm-open.github.io/visNetwork/).  Why don't you try to recreate the `workfrance` graph from this chapter in `visNetwork`?
 :::
+
+### Interactive graph visualization using `networkD3`
 
 The `networkD3` package creates responsive and interactive network visualizations using the `D3` javascript library, which has some beautiful options for common network layouts like force-directed or chord diagrams.
 
-To create a simple force-directed visualization based on an edgelist, use the `simpleNetwork()` function.  All this needs is simple dataframe where by default the first two columns represent the edgelist^[You can use the arguments in the `simpleNetwork()` function to define the Source and Target columns if they are not the first two columns].  Here is an example for the `karate` network, with `r if (knitr::is_latex_output()) {"a static image of"}` the result shown in `r if (knitr::is_html_output()) {"Interactive"}` Figure \@ref(fig:simple-networkD3).  Note that it is not possible to set a random seed with `networkD3`.
+To create a simple force-directed visualization based on an edgelist, use the `simpleNetwork()` function.  All this needs is a simple dataframe where by default the first two columns represent the edgelist^[You can use the arguments in the `simpleNetwork()` function to define the Source and Target columns if they are not the first two columns].  Here is an example for the `karate` network, with `r if (knitr::is_latex_output()) {"a static image of"}` the result shown in `r if (knitr::is_html_output()) {"Interactive"}` Figure \@ref(fig:simple-networkD3).  Note that it is not possible to set a random seed with `networkD3`.
 
 ```{r, eval = FALSE}
 library(networkD3)
@@ -583,7 +614,7 @@ networkD3::simpleNetwork(karate_edgelist)
   
 ```
 
-```{r simple-networkD3, echo = FALSE, fig.align = "center", fig.cap = if (knitr::is_html_output()) {"Simple `networkD3` rendering of the Karate graph"} else {"Simple \\texttt{networkD3} rendering of the Karate graph"}, out.width = if (knitr::is_latex_output()) "80%"}
+```{r simple-networkD3, echo = FALSE, fig.align = "center", fig.cap = if (knitr::is_html_output()) {"Simple interactive `networkD3` rendering of the Karate graph"} else {"Static image of \\texttt{networkD3} rendering of the Karate graph"}, out.width = if (knitr::is_latex_output()) "80%"}
 library(networkD3)
 
 if (knitr::is_html_output()) {
@@ -628,7 +659,7 @@ networkD3::forceNetwork(
 )
 ```
 
-```{r force-networkD3, echo = FALSE, fig.align = "center", fig.cap = if (knitr::is_html_output()) {"Force-directed `networkD3` rendering of the Karate graph"} else {"Force-directed \\texttt{networkD3} rendering of the Karate graph"}, out.width = if (knitr::is_latex_output()) "80%"}
+```{r force-networkD3, echo = FALSE, fig.align = "center", fig.cap = if (knitr::is_html_output()) {"Interactive force-directed `networkD3` rendering of the Karate graph"} else {"Static image of force-directed \\texttt{networkD3} rendering of the Karate graph"}, out.width = if (knitr::is_latex_output()) "80%"}
 if (knitr::is_html_output()) {
   # get karate edgelist
   karate_edgelist <- read.csv("https://ona-book.org/data/karate.csv")
@@ -660,7 +691,7 @@ if (knitr::is_html_output()) {
 }
 ```
 
-Other types of `D3` network visualizations are also available  such as `chordNetwork()`, and `sankeyNetwork()`, with many of these more appropriate for data visualization purposes than for the exploration and analysis of networks.  As a quick example of using `sankeyNetwork()` to visualize data flows, load the `eu_referendum` dataset from the `onadata` package or download it from the internet^[https://ona-book.org/data/eu_referendum.csv].  This shows statistics on voting by region and area in the United Kingdom's 2016 referendum on membership of the European Union.  In this example, we will calculate the Leave and Remain votes by region and visualize them using `sankeyNetwork()`, with `r if (knitr::is_latex_output()) {"a static image of"}` the result shown in `r if (knitr::is_html_output()) {"Interactive"}` Figure \@ref(fig:eu-sankey). It is worth taking a look at the intermediate objects created by this code so you can better understand how to construct the `Nodes` and `Links` dataframes that are commonly expected by `networkD3` functions. 
+Other types of `D3` network visualizations are also available  such as `chordNetwork()`, and `sankeyNetwork()`, with many of these more appropriate for data visualization purposes than for the exploration and analysis of networks.  As a quick example of using `sankeyNetwork()` to visualize data flows, load the `eu_referendum` dataset from the `onadata` package or download it from the internet^[https://ona-book.org/data/eu_referendum.csv].  This shows statistics on voting by region and area in the United Kingdom's 2016 referendum on membership of the European Union.  In this example, we will calculate the 'Leave' and 'Remain' votes by region and visualize them using `sankeyNetwork()`, with `r if (knitr::is_latex_output()) {"a static image of"}` the result shown in `r if (knitr::is_html_output()) {"Interactive"}` Figure \@ref(fig:eu-sankey). It is worth taking a look at the intermediate objects created by this code so you can better understand how to construct the `Nodes` and `Links` dataframes that are commonly expected by `networkD3` functions. 
 
 ```{r, eval = FALSE}
 library(dplyr)
@@ -674,14 +705,14 @@ eu_referendum <- read.csv("https://ona-book.org/data/eu_referendum.csv")
 results <- eu_referendum |>  
   dplyr::group_by(Region) |> 
   dplyr::summarise(Remain = sum(Remain), Leave = sum(Leave)) |> 
-  tidyr::pivot_longer( -Region, names_to = "result", values_to = "votes")
+  tidyr::pivot_longer(-Region, names_to = "result", values_to = "votes")
 
 # create unique regions, "Leave" and "Remain" for nodes dataframe
 regions <- unique(results$Region)
 nodes <- data.frame(node = c(0:13), 
-                  name = c(regions, "Leave", "Remain"))
+                    name = c(regions, "Leave", "Remain"))
 
-#create edges/links dataframe
+# create edges/links dataframe
 results <- results |> 
   dplyr::inner_join(nodes, by = c("Region" = "name")) |> 
   dplyr::inner_join(nodes, by = c("result" = "name"))
@@ -692,12 +723,12 @@ colnames(links) <- c("source", "target", "value")
 # visualize using sankeyNetwork
 networkD3::sankeyNetwork(
   Links = links, Nodes = nodes, Source = 'source', Target = 'target', 
-  Value = 'value', NodeID = 'name', units = 'votes'
+  Value = 'value', NodeID = 'name', units = 'votes', fontSize = 12
 )
 ```
 
 
-```{r eu-sankey, echo = FALSE, fig.align = "center", fig.cap = if (knitr::is_html_output()) {"Visualization of regional vote flows in the UK's European Union Referendum in 2016 using `sankeyNetwork()`"} else {"Visualization of regional vote flows in the UK's European Union Referendum in 2016 using \\texttt{sankeyNetwork()}"}, out.width = if (knitr::is_latex_output()) "80%"}
+```{r eu-sankey, echo = FALSE, fig.align = "center", fig.cap = if (knitr::is_html_output()) {"Interactive visualization of regional vote flows in the UK's European Union Referendum in 2016 using `sankeyNetwork()`"} else {"Static image of visualization of regional vote flows in the UK's European Union Referendum in 2016 using \\texttt{sankeyNetwork()}"}, out.width = if (knitr::is_latex_output()) "90%"}
 if (knitr::is_html_output()) {
   library(dplyr)
   library(networkD3)
@@ -710,14 +741,14 @@ if (knitr::is_html_output()) {
   results <- eu_referendum |>  
     dplyr::group_by(Region) |> 
     dplyr::summarise(Remain = sum(Remain), Leave = sum(Leave)) |> 
-    tidyr::pivot_longer( -Region, names_to = "result", values_to = "votes")
+    tidyr::pivot_longer(-Region, names_to = "result", values_to = "votes")
   
   # create unique regions, "Leave" and "Remain" for nodes dataframe
   regions <- unique(results$Region)
   nodes <- data.frame(node = c(0:13), 
-                    name = c(regions, "Leave", "Remain"))
+                      name = c(regions, "Leave", "Remain"))
   
-  #create edges/links dataframe
+  # create edges/links dataframe
   results <- results |> 
     dplyr::inner_join(nodes, by = c("Region" = "name")) |> 
     dplyr::inner_join(nodes, by = c("result" = "name"))
@@ -728,7 +759,7 @@ if (knitr::is_html_output()) {
   # visualize using sankeyNetwork
   networkD3::sankeyNetwork(
     Links = links, Nodes = nodes, Source = 'source', Target = 'target', 
-    Value = 'value', NodeID = 'name', units = 'votes'
+    Value = 'value', NodeID = 'name', units = 'votes', fontSize = 12
   )
 } else {
   knitr::include_graphics("www/visualizing-graphs/eu-sankey.png")
@@ -737,13 +768,13 @@ if (knitr::is_html_output()) {
 
 
 :::{.thinkahead data-latex=""}
-**Thinking ahead:** As we have shown in the examples in this section, the `networkD3` package offers useful, convenient ways for non-Javascript programmers to make use of many of the great capabilities of the D3 visualization library. See [https://christophergandrud.github.io/networkD3/](https://christophergandrud.github.io/networkD3/) for more examples. However, the package's customization potential is limited.  For those who can program in D3, the scope exists to create amazing interactive graph visualizations, with limitless customization potential.  In the more advanced chapters of this book we will look at an example of how to visualize a network of the characters in the TV show *Friends* by coding natively in Javascript.
+**Thinking ahead:** As we have shown in the examples in this section, the `networkD3` package offers useful, convenient ways for non-Javascript programmers to make use of many of the great capabilities of the D3 visualization library. See [https://christophergandrud.github.io/networkD3/](https://christophergandrud.github.io/networkD3/) for more examples. However, the package's customization potential is limited.  For those who can program in D3, the scope exists to create amazing interactive graph visualizations, with limitless customization potential.
 :::
 
 
 ## Visualizing graphs in Python
 
-We will look at two approaches to graph visualization in Python.  First we will look at static graph plotting via the  `networkx` and `matplotlib` packages.  Then we will look at interactive plotting via the `pyvis` packages. As in the previous section we will work with Zachary's Karate Club to demonstrate most of the visualization options.  Let's load and create that graph object now.
+We will look at two approaches to graph visualization in Python.  First we will look at static graph plotting via the  `networkx` and `matplotlib` packages.  Then we will look at interactive plotting via the `pyvis` package. As in the previous section we will work with Zachary's Karate Club to demonstrate most of the visualization options.  Let's load and create that graph object now.
 
 ```{python}
 import pandas as pd
@@ -759,7 +790,7 @@ source = 'from', target = 'to')
 
 ### Static visualizations using `networkx` and `matplotlib`
 
-The `draw()` function in `networkx` provides a basic visualization of a graph using `matplotlib` using a force-directed "spring" layout, as can be seen in Figure \@ref(fig:pykarate-basic).  Remember also to set a seed to ensure reproducibility of the visualization.
+The `draw()` function in `networkx` provides a basic visualization of a graph in `matplotlib` using a force-directed "spring" layout, as can be seen in Figure \@ref(fig:pykarate-basic).  Remember also to set a seed to ensure reproducibility of the visualization.
 
 ```{python, eval = FALSE}
 import numpy as np
@@ -920,7 +951,7 @@ net.show('out1.html')
 ```
 
 
-```{python, eval = knitr::is_html_output(), echo = FALSE, fig.align = "center", fig.cap = "Simple dynamic visualization of Karate graph using `pyvis` and `networkx`", out.width="80%"}
+```{python, eval = knitr::is_html_output(), echo = FALSE, fig.align = "center", fig.cap = "Simple interactive visualization of Karate graph using `pyvis` and `networkx`", out.width="80%"}
 from pyvis.network import Network
 
 # create pyvis Network object
@@ -933,18 +964,21 @@ net.show('out1.html')
 
 
 
-```{r pykaratevisbasicr, eval = knitr::is_latex_output(), echo = FALSE, fig.align = "center", fig.cap = "Simple dynamic visualization of Karate graph using \\texttt{pyvis} and \\texttt{networkx}", out.width = "80%"}
+```{r pykaratevisbasicr, eval = knitr::is_latex_output(), echo = FALSE, fig.align = "center", fig.cap = "Static image of visualization of Karate graph using \\texttt{pyvis} and \\texttt{networkx}", out.width = "80%"}
 knitr::include_graphics("www/visualizing-graphs/pykaratevisbasic.png")
 ```
 
 
-`pyvis` expects specific names for the visual properties of nodes and edges, for example `color` and `size`.  If these named properties are added to the nodes and edges Dicts of the `networkx` object, they will be passed to `pyvis`. `r if (knitr::is_latex_output()) "Figure \\@ref(fig:pykaratevisadditionalr) shows a static image of the output."`
+`pyvis` expects specific names for the visual properties of nodes and edges, for example `color` and `size`.  If these named properties are added to the nodes and edges dicts of the `networkx` object, they will be passed to `pyvis`. `r if (knitr::is_latex_output()) "Figure \\@ref(fig:pykaratevisadditionalr) shows a static image of the output."`
 
 ```{python, eval = FALSE}
 # adjust colors
 for i in karate.nodes:
-  karate.nodes[i]['size'] = 20 if i == "Mr Hi" or i == "John A" else 10
-  karate.nodes[i]['color'] = "lightblue" if i == "Mr Hi" or i == "John A" else "pink" 
+  karate.nodes[i]['size'] = 20 if i == "Mr Hi" or i == "John A" \
+  else 10
+  
+  karate.nodes[i]['color'] = "lightblue" if i == "Mr Hi" or i == "John A" \
+  else "pink" 
 
 # create edge color
 for i in karate.edges:
@@ -959,11 +993,14 @@ net.show('out2.html')
 ```
 
 
-```{python, eval = knitr::is_html_output(), echo = FALSE, fig.align = "center", fig.cap = "Adjusted dynamic visualization of Karate graph using `pyvis` and `networkx`", out.width="80%"}
+```{python, eval = knitr::is_html_output(), echo = FALSE, fig.align = "center", fig.cap = "Adjusted interactive visualization of Karate graph using `pyvis` and `networkx`", out.width="80%"}
 # adjust colors
 for i in karate.nodes:
-  karate.nodes[i]['size'] = 20 if i == "Mr Hi" or i == "John A" else 10
-  karate.nodes[i]['color'] = "lightblue" if i == "Mr Hi" or i == "John A" else "pink" 
+  karate.nodes[i]['size'] = 20 if i == "Mr Hi" or i == "John A" \
+  else 10
+  
+  karate.nodes[i]['color'] = "lightblue" if i == "Mr Hi" or i == "John A" \
+  else "pink" 
 
 # create edge color
 for i in karate.edges:
@@ -980,7 +1017,7 @@ net.show('out2.html')
 
 
 
-```{r pykaratevisadditionalr, eval = knitr::is_latex_output(), echo = FALSE, fig.align = "center", fig.cap = "Adjusted dynamic visualization of Karate graph using \\texttt{pyvis} and \\texttt{networkx}", out.width = "80%"}
+```{r pykaratevisadditionalr, eval = knitr::is_latex_output(), echo = FALSE, fig.align = "center", fig.cap = "Static image of adjusted visualization of Karate graph using \\texttt{pyvis} and \\texttt{networkx}", out.width = "80%"}
 knitr::include_graphics("www/visualizing-graphs/pykaratevisadditional.png")
 ```
 
@@ -1000,10 +1037,10 @@ knitr::include_graphics("www/visualizing-graphs/pykaratevisadditional.png")
 2.  Describe some ways a graph visualization can be adjusted to reflect different characteristics of the vertices.  For example, how might we represent more 'important' vertices visually? 
 3.  Describe some similar adjustments that could be made to the edges.
 4.  Describe some likely challenges with large graph visualizations which may make it harder to draw conclusions from them.
-5.  What is the difference between a static and a dynamic visualization.  In what ways might dynamic visualization overcome some of the challenges associated with static large graph visualizations?
+5.  What is the difference between a static and a dynamic visualization?  In what ways might dynamic visualizations overcome some of the challenges associated with large static graph visualizations?
 6.  Choose your favorite programming language and list out some package options for how to visualize graphs in that language.
 7.  For each package option you listed, describe what kinds of graphs each package would be best suited for.
-8.  Describe what is meant by a graph layout.  
+8.  Describe what is meant by a graph layout.
 9.  List some layout options which are available in the packages you selected for Questions 6 and 7.
 10. If you visualize the same graph twice using the same layout, the outputs may look different.  Why is this and what can be done to control it?
 
@@ -1011,17 +1048,17 @@ knitr::include_graphics("www/visualizing-graphs/pykaratevisadditional.png")
 
 Load the `madmen_vertices` and `madmen_edges` data sets from the `onadata` package or download them from the internet^[https://ona-book.org/data/madmen_vertices.csv and https://ona-book.org/data/madmen_edges.csv].  This represents a network of characters from the TV show *Mad Men* with two characters connected by an edge if they were involved in a romantic relationship together.
 
-1.  Create a graph object from these data sets.  
+1.  Create a graph object from these data sets.
 2.  Create a basic visualization of the network using one of the methods from this chapter.
 3.  Adjust your visualization to distinguish between Male and Female characters.
 4.  Adjust your visualization to highlight the six main characters.
 5.  Adjust your visualization to differentiate between relationships where the characters were married or not married.
 6.  Experiment with different layouts.  Which one do you prefer and why?
 
-Now load the `schoolfriends_vertices` and `schoolfriends_edgelist` data sets from the `onadata` package or download them from the internet^[https://ona-book.org/data/schoolfriends_vertices.csv and https://ona-book.org/data/schoolfriends_edgelist.csv].  This data set represents friendships reported between schoolchildren in a high school in Marseille, France in 2013.  The vertex set provides the ID, class and gender of each child, and the edgelist has two types of relationship.  The first type is a reported friendship where the `from` ID reported the `to` ID as a friend.  The second type is a known Facebook friendship between the two IDs.
+Now load the `schoolfriends_vertices` and `schoolfriends_edgelist` data sets from the `onadata` package or download them from the internet^[https://ona-book.org/data/schoolfriends_vertices.csv and https://ona-book.org/data/schoolfriends_edgelist.csv].  This data set represents friendships reported between schoolchildren in a high school in Marseille, France in 2013.  The vertex set provides the ID, class and gender of each child, and the edgelist has two types of relationships.  The first type is a reported friendship where the `from` ID reported the `to` ID as a friend.  The second type is a known Facebook friendship between the two IDs.
 
-7.  Create two different graph objects --- one for the reported friendship and the other for the Facebook friendship.  Why is one graph object different from the other?  
-8.  Create a basic visualization of both graphs using a method of your choice. Try to create versions of the graphs that contain isolates (nodes not connected to others) and do not contain isolates.  
+7.  Create two different graph objects --- one for the reported friendship and the other for the Facebook friendship.  Why is one graph object different from the other?
+8.  Create a basic visualization of both graphs using a method of your choice. Try to create versions of the graphs that contain isolates (nodes not connected to others) and do not contain isolates.
 9.  Experiment with different layouts for your visualization.  Which one do you prefer and why?  Do you see any potential communities in these graphs? Which type of friendship appears to be more 'selective' in your opinion?
 10.  Adjust both visualizations to differentiate the vertices by gender.  Which type of relationship is more likely to be gender-agnostic in your opinion?  Try the same question for class differentiation.
 

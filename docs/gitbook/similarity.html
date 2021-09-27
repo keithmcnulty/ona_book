@@ -267,8 +267,9 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="4.1.1" data-path="viz-graphs.html"><a href="viz-graphs.html#native-plotting-igraph"><i class="fa fa-check"></i><b>4.1.1</b> Native plotting in <code>igraph</code></a></li>
 <li class="chapter" data-level="4.1.2" data-path="viz-graphs.html"><a href="viz-graphs.html#layouts"><i class="fa fa-check"></i><b>4.1.2</b> Graph layouts</a></li>
-<li class="chapter" data-level="4.1.3" data-path="viz-graphs.html"><a href="viz-graphs.html#ggraph"><i class="fa fa-check"></i><b>4.1.3</b> Plotting with <code>ggraph</code></a></li>
-<li class="chapter" data-level="4.1.4" data-path="viz-graphs.html"><a href="viz-graphs.html#interactive-graph-visualization-in-r"><i class="fa fa-check"></i><b>4.1.4</b> Interactive graph visualization in R</a></li>
+<li class="chapter" data-level="4.1.3" data-path="viz-graphs.html"><a href="viz-graphs.html#ggraph"><i class="fa fa-check"></i><b>4.1.3</b> Static plotting with <code>ggraph</code></a></li>
+<li class="chapter" data-level="4.1.4" data-path="viz-graphs.html"><a href="viz-graphs.html#interactive-graph-visualization-using-visnetwork"><i class="fa fa-check"></i><b>4.1.4</b> Interactive graph visualization using <code>visNetwork</code></a></li>
+<li class="chapter" data-level="4.1.5" data-path="viz-graphs.html"><a href="viz-graphs.html#interactive-graph-visualization-using-networkd3"><i class="fa fa-check"></i><b>4.1.5</b> Interactive graph visualization using <code>networkD3</code></a></li>
 </ul></li>
 <li class="chapter" data-level="4.2" data-path="viz-graphs.html"><a href="viz-graphs.html#visualizing-graphs-in-python"><i class="fa fa-check"></i><b>4.2</b> Visualizing graphs in Python</a>
 <ul>
@@ -568,7 +569,7 @@ Figure 9.1: It’s our old friend <span class="math inline">\(G_{14}\)</span> ag
 </div>
 <div id="graph-similarity" class="section level2" number="9.3">
 <h2><span class="header-section-number">9.3</span> Graph similarity</h2>
-<p>The general question of whether two graphs which contain vertices representing different entities still exhibit similar internal patterns and structures is of great interest in computer science and image recognition. The <em>graph isomorphism</em> problem, for example, is a computational problem concerned with finding a function that exactly maps the vertices of one graph onto other<a href="#fn65" class="footnote-ref" id="fnref65"><sup>65</sup></a>.</p>
+<p>The general question of whether two graphs which contain vertices representing different entities still exhibit similar internal patterns and structures is of great interest in computer science and image recognition. The <em>graph isomorphism</em> problem, for example, is a computational problem concerned with finding a function that exactly maps the vertices of one graph onto other<a href="#fn70" class="footnote-ref" id="fnref70"><sup>70</sup></a>.</p>
 <p>In organizational network analysis we are usually more concerned with comparing graphs where the vertices represent the same entities (usually people), and where the vertex set is identical but where the edge set may be different. An example of this is our <code>schoolfriends</code> data set from earlier in this chapter, where the vertices are the same set of high school students, but where the edge sets are different according to whether the friendships are Facebook friendships or ‘real’ reported friendships. In this situation we can use a common set similarity metric from set theory to determine how similar our graphs are..</p>
 <p>Let <span class="math inline">\(G_1 = (V, E_1)\)</span> and <span class="math inline">\(G_2 = (V, E_2)\)</span> be two graphs with the same vertex set. The <em>Jaccard similarity</em> of <span class="math inline">\(G_1\)</span> and <span class="math inline">\(G_2\)</span> is the number of edges in <em>both</em> <span class="math inline">\(E_1\)</span> and <span class="math inline">\(E_2\)</span> divided by the number of edges in <em>at least one</em> of <span class="math inline">\(E_1\)</span> and <span class="math inline">\(E_2\)</span>.</p>
 <p>Note that a Jaccard similarity of 1 means that both graphs have identical edge sets and so are identical in structure, and a similarity of 0 means that both graphs have no edges in common. Let’s try this on our <code>schoolfriends</code> graphs. To do a fair comparison, we will redefine our Facebook schoolfriends graph to be a directed graph where edges always go on both directions.</p>
@@ -729,8 +730,8 @@ Newman, M. E. J. 2002. <span>“Assortative Mixing in Networks.”</span> <em>Ph
 </div>
 <div class="footnotes">
 <hr />
-<ol start="65">
-<li id="fn65"><p>The question of whether the graph isomorphism problem can be solved in polynomial time is one of a number of high-profile open graph problems currently.<a href="similarity.html#fnref65" class="footnote-back">↩︎</a></p></li>
+<ol start="70">
+<li id="fn70"><p>The question of whether the graph isomorphism problem can be solved in polynomial time is one of a number of high-profile open graph problems currently.<a href="similarity.html#fnref70" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>

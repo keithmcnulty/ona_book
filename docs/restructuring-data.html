@@ -153,9 +153,9 @@
 <span class="op">(</span><span class="va">orgchart</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>
   d <span class="op">=</span> <span class="va">orgchart_edgelist2</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH 2d8d894 DN-- 8 7 -- 
+<pre><code>## IGRAPH 717bffd DN-- 8 7 -- 
 ## + attr: name (v/c)
-## + edges from 2d8d894 (vertex names):
+## + edges from 717bffd (vertex names):
 ## [1] Andrew -&gt;Nancy    Andrew -&gt;Michael  Nancy  -&gt;Jane     Nancy  -&gt;Margaret Nancy  -&gt;Steve    Michael-&gt;Robert  
 ## [7] Michael-&gt;Laura</code></pre>
 <p>We now have a directed graph with named vertices, so this should be easy to plot. Let’s use <code>ggplot</code> with a dendrogram (tree) layout, as in Figure <a href="restructuring-data.html#fig:chinook-pretty">5.1</a>.</p>
@@ -631,7 +631,7 @@ Figure 5.9: Visualization of the Chinook customer-to-customer network based on a
 ## [10] NA           NA           "Chandler"   NA           NA           NA           NA           NA           NA          
 ## [19] NA           NA           NA           NA           NA           "Joey"       "Phoebe"     NA           "New Scene" 
 ## [28] NA           NA           "Written by"</code></pre>
-<p>So this is working, but we have more cleaning to do. For example, we will want to get rid of the <code>NA</code> values. We will also see if we take a look that there is a ‘character’ called ‘All’ which probably should not be in our network. We can also see phrases like ‘Written by’ which are not dialogue characters, and strings containing " and " which involves combinations of characters. So we can create special commands to remove any instances of these phrases<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;The limited cleaning commands here work for this specific episode, but they would need to be expanded to be used on more episodes to take into account any unpredictable formatting in the scripts. The reality of most scraping exercises is that some code has to be written to deal with exceptions.&lt;/p&gt;"><sup>34</sup></a>.</p>
+<p>So this is working, but we have more cleaning to do. For example, we will want to get rid of the <code>NA</code> values. We will also see if we take a look that there is a ‘character’ called ‘All’ which probably should not be in our network. We can also see phrases like ‘Written by’ which are not dialogue characters, and strings containing " and " which involves combinations of characters. So we can create special commands to remove any instances of these phrases<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;The limited cleaning commands here work for this specific episode, but they would need to be expanded to be used on more episodes to take into account any unpredictable formatting in the scripts. The reality of most scraping exercises is that some code has to be written to deal with exceptions.&lt;/p&gt;"><sup>39</sup></a>.</p>
 <div class="sourceCode" id="cb276"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># remove NAs</span>
 <span class="va">nodes_char_clean1</span> <span class="op">&lt;-</span> <span class="va">nodes_char</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">nodes_char</span><span class="op">)</span><span class="op">]</span> 
@@ -980,7 +980,7 @@ For the examples in Questions 6-10, discuss ways that information could be extra
 <h3>
 <span class="header-section-number">5.3.2</span> Data exercises<a class="anchor" aria-label="anchor" href="#data-exercises-3"><i class="fas fa-link"></i></a>
 </h3>
-<p>Load the <code>park_reviews</code> dataset from the <code>onadata</code> package or download it from the internet<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://ona-book.org/data/park_reviews.csv" class="uri"&gt;https://ona-book.org/data/park_reviews.csv&lt;/a&gt;&lt;/p&gt;'><sup>35</sup></a>. This data contains the reviews of a collection of Yelp users on dog parks in the Phoenix, Arizona area.</p>
+<p>Load the <code>park_reviews</code> dataset from the <code>onadata</code> package or download it from the internet<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://ona-book.org/data/park_reviews.csv" class="uri"&gt;https://ona-book.org/data/park_reviews.csv&lt;/a&gt;&lt;/p&gt;'><sup>40</sup></a>. This data contains the reviews of a collection of Yelp users on dog parks in the Phoenix, Arizona area.</p>
 <ol style="list-style-type: decimal">
 <li>Create an edgelist and vertex set that allows you to build a graph showing both the parks and the users as entity types. Include the <code>stars</code> rating as an edge property and ensure that entity types are distinguishable in your data.</li>
 <li>Use your edgelist and vertex set to create a graph object that has edge and vertex properties.</li>
