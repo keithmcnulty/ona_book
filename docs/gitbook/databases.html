@@ -56,6 +56,10 @@
 <link href="libs/vis-4.20.1/vis.css" rel="stylesheet" />
 <script src="libs/vis-4.20.1/vis.min.js"></script>
 <script src="libs/visNetwork-binding-2.0.9/visNetwork.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 <script src="libs/d3-4.5.0/d3.min.js"></script>
 <script src="libs/forceNetwork-binding-0.4/forceNetwork.js"></script>
 <script src="libs/sankey-1/sankey.js"></script>
@@ -221,11 +225,12 @@ div.csl-indent {
 <li class="chapter" data-level="2.7.1" data-path="r-intro.html"><a href="r-intro.html#plotting-in-base-r"><i class="fa fa-check"></i><b>2.7.1</b> Plotting in base R</a></li>
 <li class="chapter" data-level="2.7.2" data-path="r-intro.html"><a href="r-intro.html#specialist-plotting-and-graphing-packages"><i class="fa fa-check"></i><b>2.7.2</b> Specialist plotting and graphing packages</a></li>
 </ul></li>
-<li class="chapter" data-level="2.8" data-path="r-intro.html"><a href="r-intro.html#documenting-your-work-using-r-markdown"><i class="fa fa-check"></i><b>2.8</b> Documenting your work using R Markdown</a></li>
-<li class="chapter" data-level="2.9" data-path="r-intro.html"><a href="r-intro.html#learning-exercises"><i class="fa fa-check"></i><b>2.9</b> Learning exercises</a>
+<li class="chapter" data-level="2.8" data-path="r-intro.html"><a href="r-intro.html#randomization-in-r"><i class="fa fa-check"></i><b>2.8</b> Randomization in R</a></li>
+<li class="chapter" data-level="2.9" data-path="r-intro.html"><a href="r-intro.html#documenting-your-work-using-r-markdown"><i class="fa fa-check"></i><b>2.9</b> Documenting your work using R Markdown</a></li>
+<li class="chapter" data-level="2.10" data-path="r-intro.html"><a href="r-intro.html#learning-exercises"><i class="fa fa-check"></i><b>2.10</b> Learning exercises</a>
 <ul>
-<li class="chapter" data-level="2.9.1" data-path="r-intro.html"><a href="r-intro.html#discussion-questions"><i class="fa fa-check"></i><b>2.9.1</b> Discussion questions</a></li>
-<li class="chapter" data-level="2.9.2" data-path="r-intro.html"><a href="r-intro.html#data-exercises"><i class="fa fa-check"></i><b>2.9.2</b> Data exercises</a></li>
+<li class="chapter" data-level="2.10.1" data-path="r-intro.html"><a href="r-intro.html#discussion-questions"><i class="fa fa-check"></i><b>2.10.1</b> Discussion questions</a></li>
+<li class="chapter" data-level="2.10.2" data-path="r-intro.html"><a href="r-intro.html#data-exercises"><i class="fa fa-check"></i><b>2.10.2</b> Data exercises</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="working.html"><a href="working.html"><i class="fa fa-check"></i><b>3</b> Working With Graphs</a>
@@ -447,7 +452,7 @@ div.csl-indent {
 <p>In this chapter we look at how organizations can persist data in a graph structure for more efficient analysis and data query. This is a rapidly developing field, and many leading organizations have started implementing graph databases in recent years. There are a variety of technologies available, and no single technology is dominant. We will start with an overview of the space of graph database technology and then proceed to show illustrative examples of one particular well-developed technology — Neo4J graph databases — including how to work with these graph databases in R and in Python. While this chapter is not intended to be a full reference on graph databases, by the end of this chapter readers should have a good sense of the basics of how these powerful emerging technologies operate and how they can be used to make network analysis faster and easier to perform.</p>
 <div id="graph-database-technology" class="section level2" number="10.1">
 <h2><span class="header-section-number">10.1</span> Graph database technology</h2>
-<p>Graph databases store data so that finding <em>relationships</em> is the primary priority. This contrasts with traditional databases where finding a transaction is the primary priority. Most commonly, graph databases take one of two forms: labeled-property graphs or resource description frameworks<a href="#fn63" class="footnote-ref" id="fnref63"><sup>63</sup></a>.</p>
+<p>Graph databases store data so that finding <em>relationships</em> is the primary priority. This contrasts with traditional databases where finding a transaction is the primary priority. Most commonly, graph databases take one of two forms: labeled-property graphs or resource description frameworks<a href="#fn66" class="footnote-ref" id="fnref66"><sup>66</sup></a>.</p>
 <div id="labeled-property-graphs" class="section level3" number="10.1.1">
 <h3><span class="header-section-number">10.1.1</span> Labeled-property graphs</h3>
 <p><strong>Labeled-property graphs</strong> are very similar in structure to the way we have learned about graphs in this book. Entities such as products, customers, employees or organizational units are stored in nodes, and relationships such as ‘purchased,’ ‘member of,’ ‘worked with’ or ‘met with’ are stored in edges. Nodes and edges can contain defined properties allowing users to filter data effectively. These node and edge structures are usually encoded by means of simple JSON documents. This type of graph database is simple and efficient, and also very intuitive to query. However, flexibility can be limited and the upfront design of the graph needs to be considered carefully, because changes to the structure of the database via the introduction of new nodes and new relationships may not be straightforward. For organizational network analysis, such databases are a good choice, however, because of their ease of use and because data structures within organizations are generally quite predictable and manageable. <em>Neo4J</em> is an example of a labeled-property graph database, and is the most popular at the time of the writing of this book.</p>
@@ -486,8 +491,8 @@ Figure 10.3: Results of a query to find the names of actors, movie title and rel
 <h3><span class="header-section-number">10.1.2</span> Resource Description Frameworks (RDFs)</h3>
 <p><strong>Resource Description Frameworks (RDFs)</strong> are highly flexible graph database models that allow the hierarchical ‘spawning’ of new information in a graph by means of the additions of new nodes. This permits the graph to build more easily organically, because there is no need to worry about whether a given node property already exists in the graph — it can simply be added into a new node that is pointed to by the parent node. For example, imagine that a graph contains nodes that represent people, and imagine that we have some information on the preferred names of those people. Imagine that we have this information for some but not all people, and that some people have a preferred name but others do not. In an RDF, we can create new ‘property edge’ called <code>hasPreferredName</code> in which directs to a new node containing the preferred name of the individual.</p>
 <p>This high level of flexibility makes RDFs a great choice for ontologies or knowledge graphs for which their development will be unpredictable and will grow organically over time. The low level simplicity of RDFs is the engine behind this flexibility, but this can translate into a complex query language at a high level, making RDFs challenging to deal with for those without specialized knowledge of them. In particular, it can often be necessary to ‘dictate the traversal route’ of the graph in the query language of an RDF, which will require an extensive knowledge of the graph’s structure.</p>
-<p>An example of an open, widely-used RDF graph is the graph that underlies the Wikipedia online encyclopedia, known as <em>Wikidata</em><a href="#fn64" class="footnote-ref" id="fnref64"><sup>64</sup></a>. This graph gives structure and connection to the various components of Wikipedia’s content. It helps organize common hierarchical elements of articles and helps link related articles as well as the resources inside those articles such as photos, hyperlinks and so on. As Wikipedia is constantly developing and being added to by a thriving community, this underlying graph needs an extremely high degree of flexibility to support it.</p>
-<p>The <em>Wikidata Query Service (WDQS)</em> allows this graph to be queried directly using SPARQL, the standard query language for RDFs. Queries can be submitted at <a href="https://query.wikidata.org/" class="uri">https://query.wikidata.org/</a>, or sent to an API endpoint by an application<a href="#fn65" class="footnote-ref" id="fnref65"><sup>65</sup></a>. Here is an example that will return the top ten countries of the world in terms of the number of current female city mayors recorded in Wikidata.</p>
+<p>An example of an open, widely-used RDF graph is the graph that underlies the Wikipedia online encyclopedia, known as <em>Wikidata</em><a href="#fn67" class="footnote-ref" id="fnref67"><sup>67</sup></a>. This graph gives structure and connection to the various components of Wikipedia’s content. It helps organize common hierarchical elements of articles and helps link related articles as well as the resources inside those articles such as photos, hyperlinks and so on. As Wikipedia is constantly developing and being added to by a thriving community, this underlying graph needs an extremely high degree of flexibility to support it.</p>
+<p>The <em>Wikidata Query Service (WDQS)</em> allows this graph to be queried directly using SPARQL, the standard query language for RDFs. Queries can be submitted at <a href="https://query.wikidata.org/" class="uri">https://query.wikidata.org/</a>, or sent to an API endpoint by an application<a href="#fn68" class="footnote-ref" id="fnref68"><sup>68</sup></a>. Here is an example that will return the top ten countries of the world in terms of the number of current female city mayors recorded in Wikidata.</p>
 <pre><code>SELECT ?countryLabel (count(*) AS ?count)
 WHERE
 {
@@ -517,7 +522,7 @@ LIMIT 10</code></pre>
 </ol>
 <p>This is the core of the query — the remainder simply counts the occurrences of the different country labels and then ranks them descending and returns the top ten. You can see how this query requires quite detailed instruction on how to traverse the graph, and also needs a very detailed knowledge of a bewildering array of codes for properties and values. RDFs are beautiful and extremely powerful relationship storage engines, but there is an extremely high expertise bar to their use.</p>
 <div class="thinkahead">
-<p><strong>Playing around:</strong> The query and traversal complexity of RDFs should not be a barrier to you playing around with them. The Wikidata Query Service has a ton of resources to help you understand how to construct interesting queries. For a start, try submitting the above query to WDQS and check the result. If you thought that was fun, some key resources include a long list of example queries<a href="#fn66" class="footnote-ref" id="fnref66"><sup>66</sup></a> and a Query Builder<a href="#fn67" class="footnote-ref" id="fnref67"><sup>67</sup></a> which can help non-SPARQL experts to build their own queries.</p>
+<p><strong>Playing around:</strong> The query and traversal complexity of RDFs should not be a barrier to you playing around with them. The Wikidata Query Service has a ton of resources to help you understand how to construct interesting queries. For a start, try submitting the above query to WDQS and check the result. If you thought that was fun, some key resources include a long list of example queries<a href="#fn69" class="footnote-ref" id="fnref69"><sup>69</sup></a> and a Query Builder<a href="#fn70" class="footnote-ref" id="fnref70"><sup>70</sup></a> which can help non-SPARQL experts to build their own queries.</p>
 </div>
 </div>
 </div>
@@ -588,26 +593,26 @@ RETURN p1.name AS LIB_name, p2.name AS IND_name;</code></pre>
 </div>
 <div id="working-with-neo4j-using-r" class="section level3" number="10.2.2">
 <h3><span class="header-section-number">10.2.2</span> Working with Neo4J using R</h3>
-<p>The <code>neo4jshell</code> package in R allows you to submit queries to a Neo4J database and retrieve results, among other things<a href="#fn68" class="footnote-ref" id="fnref68"><sup>68</sup></a>. This package requires the <code>cypher-shell</code> command line utility to be installed on your system. You can install the <code>cypher-shell</code> command line utility standalone by downloading and installing from the Neo4J downloads page<a href="#fn69" class="footnote-ref" id="fnref69"><sup>69</sup></a>. Another option is to download and install the full and free Neo4J community server, which will include <code>cypher-shell</code>, from the community server download page<a href="#fn70" class="footnote-ref" id="fnref70"><sup>70</sup></a>.</p>
+<p>The <code>neo4jshell</code> package in R allows you to submit queries to a Neo4J database and retrieve results, among other things<a href="#fn71" class="footnote-ref" id="fnref71"><sup>71</sup></a>. This package requires the <code>cypher-shell</code> command line utility to be installed on your system. You can install the <code>cypher-shell</code> command line utility standalone by downloading and installing from the Neo4J downloads page<a href="#fn72" class="footnote-ref" id="fnref72"><sup>72</sup></a>. Another option is to download and install the full and free Neo4J community server, which will include <code>cypher-shell</code>, from the community server download page<a href="#fn73" class="footnote-ref" id="fnref73"><sup>73</sup></a>.</p>
 <p>For the <code>neo4j_query()</code> query function to work most smoothly, you should ensure the directory containing the <code>cypher-shell</code> executable is in your system <code>PATH</code> environment variable. Otherwise you will need to constantly quote the full path to the <code>cypher-shell</code> executable in the <code>shell_path</code> argument of the function.</p>
 <p>Assuming you have configured <code>cypher-shell</code> on your system, it is very easy to submit queries to your Neo4J instance and retrieve the results as a dataframe. The first step is to configure your Neo4J connection as a list in R.</p>
-<div class="sourceCode" id="cb536"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb536-1"><a href="databases.html#cb536-1" aria-hidden="true" tabindex="-1"></a>neo4j_conn <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb536-2"><a href="databases.html#cb536-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">address =</span> <span class="st">&quot;your_URI&quot;</span>,</span>
-<span id="cb536-3"><a href="databases.html#cb536-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">uid =</span> <span class="st">&quot;your_username&quot;</span>,</span>
-<span id="cb536-4"><a href="databases.html#cb536-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">pwd =</span> <span class="st">&quot;your_password&quot;</span></span>
-<span id="cb536-5"><a href="databases.html#cb536-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb546"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb546-1"><a href="databases.html#cb546-1" aria-hidden="true" tabindex="-1"></a>neo4j_conn <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb546-2"><a href="databases.html#cb546-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">address =</span> <span class="st">&quot;your_URI&quot;</span>,</span>
+<span id="cb546-3"><a href="databases.html#cb546-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">uid =</span> <span class="st">&quot;your_username&quot;</span>,</span>
+<span id="cb546-4"><a href="databases.html#cb546-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">pwd =</span> <span class="st">&quot;your_password&quot;</span></span>
+<span id="cb546-5"><a href="databases.html#cb546-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>In the examples below, we assume that the data has already been loaded to the database using the queries in Section <a href="databases.html#neo4j-browser">10.2.1</a>. If not, you can load the data from R by submitting the same queries using the <code>neo4j_query()</code> function. Assuming the data has already been loaded, we can submit a query to the database and retrieve the results as a dataframe. Let’s submit a query to find out the first degree incoming network of all IND party politicans.</p>
-<div class="sourceCode" id="cb537"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb537-1"><a href="databases.html#cb537-1" aria-hidden="true" tabindex="-1"></a><span class="co"># write cypher query</span></span>
-<span id="cb537-2"><a href="databases.html#cb537-2" aria-hidden="true" tabindex="-1"></a>query <span class="ot">&lt;-</span> <span class="st">&quot;</span></span>
-<span id="cb537-3"><a href="databases.html#cb537-3" aria-hidden="true" tabindex="-1"></a><span class="st">MATCH (p:Person)-[:INTERACTED_WITH]-&gt;({party: &#39;IND&#39;})</span></span>
-<span id="cb537-4"><a href="databases.html#cb537-4" aria-hidden="true" tabindex="-1"></a><span class="st">RETURN DISTINCT p.name AS name, p.party as party</span></span>
-<span id="cb537-5"><a href="databases.html#cb537-5" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span></span>
-<span id="cb537-6"><a href="databases.html#cb537-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb537-7"><a href="databases.html#cb537-7" aria-hidden="true" tabindex="-1"></a><span class="co"># submit to server and retrieve results as dataframe</span></span>
-<span id="cb537-8"><a href="databases.html#cb537-8" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> neo4jshell<span class="sc">::</span><span class="fu">neo4j_query</span>(<span class="at">con =</span> neo4j_conn, <span class="at">qry =</span> query)</span>
-<span id="cb537-9"><a href="databases.html#cb537-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb537-10"><a href="databases.html#cb537-10" aria-hidden="true" tabindex="-1"></a><span class="co"># view first few results</span></span>
-<span id="cb537-11"><a href="databases.html#cb537-11" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(results)</span></code></pre></div>
+<div class="sourceCode" id="cb547"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb547-1"><a href="databases.html#cb547-1" aria-hidden="true" tabindex="-1"></a><span class="co"># write cypher query</span></span>
+<span id="cb547-2"><a href="databases.html#cb547-2" aria-hidden="true" tabindex="-1"></a>query <span class="ot">&lt;-</span> <span class="st">&quot;</span></span>
+<span id="cb547-3"><a href="databases.html#cb547-3" aria-hidden="true" tabindex="-1"></a><span class="st">MATCH (p:Person)-[:INTERACTED_WITH]-&gt;({party: &#39;IND&#39;})</span></span>
+<span id="cb547-4"><a href="databases.html#cb547-4" aria-hidden="true" tabindex="-1"></a><span class="st">RETURN DISTINCT p.name AS name, p.party as party</span></span>
+<span id="cb547-5"><a href="databases.html#cb547-5" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span></span>
+<span id="cb547-6"><a href="databases.html#cb547-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb547-7"><a href="databases.html#cb547-7" aria-hidden="true" tabindex="-1"></a><span class="co"># submit to server and retrieve results as dataframe</span></span>
+<span id="cb547-8"><a href="databases.html#cb547-8" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> neo4jshell<span class="sc">::</span><span class="fu">neo4j_query</span>(<span class="at">con =</span> neo4j_conn, <span class="at">qry =</span> query)</span>
+<span id="cb547-9"><a href="databases.html#cb547-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb547-10"><a href="databases.html#cb547-10" aria-hidden="true" tabindex="-1"></a><span class="co"># view first few results</span></span>
+<span id="cb547-11"><a href="databases.html#cb547-11" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(results)</span></code></pre></div>
 <pre><code>##               name party
 ## 1   Ernie Hardeman   PCP
 ## 2      Kinga Surma   PCP
@@ -616,41 +621,41 @@ RETURN p1.name AS LIB_name, p2.name AS IND_name;</code></pre>
 ## 5       Sara Singh   NDP
 ## 6     Robin Martin   PCP</code></pre>
 <p>In a similar way we can submit an APOC procedure to obtain statistics about the graph. This query gets statistics on the out-degree of the nodes of the graph.</p>
-<div class="sourceCode" id="cb539"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb539-1"><a href="databases.html#cb539-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get out-degree stats</span></span>
-<span id="cb539-2"><a href="databases.html#cb539-2" aria-hidden="true" tabindex="-1"></a>stats <span class="ot">&lt;-</span> neo4jshell<span class="sc">::</span><span class="fu">neo4j_query</span>(</span>
-<span id="cb539-3"><a href="databases.html#cb539-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">con =</span> neo4j_conn, </span>
-<span id="cb539-4"><a href="databases.html#cb539-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">qry =</span> <span class="st">&quot;CALL apoc.stats.degrees(&#39;&gt;&#39;)&quot;</span></span>
-<span id="cb539-5"><a href="databases.html#cb539-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb539-6"><a href="databases.html#cb539-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb539-7"><a href="databases.html#cb539-7" aria-hidden="true" tabindex="-1"></a><span class="co"># extract max, min and mean</span></span>
-<span id="cb539-8"><a href="databases.html#cb539-8" aria-hidden="true" tabindex="-1"></a>stats[<span class="fu">c</span>(<span class="st">&quot;min&quot;</span>, <span class="st">&quot;max&quot;</span>, <span class="st">&quot;mean&quot;</span>), ]</span></code></pre></div>
+<div class="sourceCode" id="cb549"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb549-1"><a href="databases.html#cb549-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get out-degree stats</span></span>
+<span id="cb549-2"><a href="databases.html#cb549-2" aria-hidden="true" tabindex="-1"></a>stats <span class="ot">&lt;-</span> neo4jshell<span class="sc">::</span><span class="fu">neo4j_query</span>(</span>
+<span id="cb549-3"><a href="databases.html#cb549-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">con =</span> neo4j_conn, </span>
+<span id="cb549-4"><a href="databases.html#cb549-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">qry =</span> <span class="st">&quot;CALL apoc.stats.degrees(&#39;&gt;&#39;)&quot;</span></span>
+<span id="cb549-5"><a href="databases.html#cb549-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb549-6"><a href="databases.html#cb549-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb549-7"><a href="databases.html#cb549-7" aria-hidden="true" tabindex="-1"></a><span class="co"># extract max, min and mean</span></span>
+<span id="cb549-8"><a href="databases.html#cb549-8" aria-hidden="true" tabindex="-1"></a>stats[<span class="fu">c</span>(<span class="st">&quot;min&quot;</span>, <span class="st">&quot;max&quot;</span>, <span class="st">&quot;mean&quot;</span>), ]</span></code></pre></div>
 <pre><code>## [1] &quot;7&quot;                 &quot;80&quot;                &quot;56.43518518518518&quot;</code></pre>
 </div>
 <div id="working-with-neo4j-using-python" class="section level3" number="10.2.3">
 <h3><span class="header-section-number">10.2.3</span> Working with Neo4J using Python</h3>
 <p>The <code>py2neo</code> package allows interaction with Neo4J servers from Python. No preconfiguration is required. Connection is established by means of a <code>Graph()</code> object.</p>
-<div class="sourceCode" id="cb541"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb541-1"><a href="databases.html#cb541-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb541-2"><a href="databases.html#cb541-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> py2neo <span class="im">import</span> Graph</span>
-<span id="cb541-3"><a href="databases.html#cb541-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
-<span id="cb541-4"><a href="databases.html#cb541-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb541-5"><a href="databases.html#cb541-5" aria-hidden="true" tabindex="-1"></a><span class="co"># create  connection</span></span>
-<span id="cb541-6"><a href="databases.html#cb541-6" aria-hidden="true" tabindex="-1"></a>neo4j_conn <span class="op">=</span> Graph(</span>
-<span id="cb541-7"><a href="databases.html#cb541-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;your_URI&quot;</span>, </span>
-<span id="cb541-8"><a href="databases.html#cb541-8" aria-hidden="true" tabindex="-1"></a>    auth <span class="op">=</span> (<span class="st">&quot;your_username&quot;</span>, <span class="st">&quot;your_password&quot;</span>)</span>
-<span id="cb541-9"><a href="databases.html#cb541-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb551"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb551-1"><a href="databases.html#cb551-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb551-2"><a href="databases.html#cb551-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> py2neo <span class="im">import</span> Graph</span>
+<span id="cb551-3"><a href="databases.html#cb551-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb551-4"><a href="databases.html#cb551-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb551-5"><a href="databases.html#cb551-5" aria-hidden="true" tabindex="-1"></a><span class="co"># create  connection</span></span>
+<span id="cb551-6"><a href="databases.html#cb551-6" aria-hidden="true" tabindex="-1"></a>neo4j_conn <span class="op">=</span> Graph(</span>
+<span id="cb551-7"><a href="databases.html#cb551-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;your_URI&quot;</span>, </span>
+<span id="cb551-8"><a href="databases.html#cb551-8" aria-hidden="true" tabindex="-1"></a>    auth <span class="op">=</span> (<span class="st">&quot;your_username&quot;</span>, <span class="st">&quot;your_password&quot;</span>)</span>
+<span id="cb551-9"><a href="databases.html#cb551-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>Again, we assume that data has already been loaded to the graph. If this is not the case, submit the data load queries from Section <a href="databases.html#neo4j-browser">10.2.1</a> in the same way as the following examples.</p>
 <p>Results from queries will be returned as a list of dicts, which can be converted into the required format.</p>
-<div class="sourceCode" id="cb542"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb542-1"><a href="databases.html#cb542-1" aria-hidden="true" tabindex="-1"></a><span class="co"># write cypher query</span></span>
-<span id="cb542-2"><a href="databases.html#cb542-2" aria-hidden="true" tabindex="-1"></a>query <span class="op">=</span> <span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb542-3"><a href="databases.html#cb542-3" aria-hidden="true" tabindex="-1"></a><span class="st">MATCH (p:Person)-[:INTERACTED_WITH]-&gt;({party: &#39;IND&#39;})</span></span>
-<span id="cb542-4"><a href="databases.html#cb542-4" aria-hidden="true" tabindex="-1"></a><span class="st">RETURN DISTINCT p.name AS name, p.party as party</span></span>
-<span id="cb542-5"><a href="databases.html#cb542-5" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb542-6"><a href="databases.html#cb542-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb542-7"><a href="databases.html#cb542-7" aria-hidden="true" tabindex="-1"></a><span class="co"># submit to server and retrieve results as list of dicts</span></span>
-<span id="cb542-8"><a href="databases.html#cb542-8" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> neo4j_conn.run(query).data()</span>
-<span id="cb542-9"><a href="databases.html#cb542-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb542-10"><a href="databases.html#cb542-10" aria-hidden="true" tabindex="-1"></a><span class="co"># convert results to pandas DataFrame and view first few rows</span></span>
-<span id="cb542-11"><a href="databases.html#cb542-11" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(results).head()</span></code></pre></div>
+<div class="sourceCode" id="cb552"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb552-1"><a href="databases.html#cb552-1" aria-hidden="true" tabindex="-1"></a><span class="co"># write cypher query</span></span>
+<span id="cb552-2"><a href="databases.html#cb552-2" aria-hidden="true" tabindex="-1"></a>query <span class="op">=</span> <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb552-3"><a href="databases.html#cb552-3" aria-hidden="true" tabindex="-1"></a><span class="st">MATCH (p:Person)-[:INTERACTED_WITH]-&gt;({party: &#39;IND&#39;})</span></span>
+<span id="cb552-4"><a href="databases.html#cb552-4" aria-hidden="true" tabindex="-1"></a><span class="st">RETURN DISTINCT p.name AS name, p.party as party</span></span>
+<span id="cb552-5"><a href="databases.html#cb552-5" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb552-6"><a href="databases.html#cb552-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb552-7"><a href="databases.html#cb552-7" aria-hidden="true" tabindex="-1"></a><span class="co"># submit to server and retrieve results as list of dicts</span></span>
+<span id="cb552-8"><a href="databases.html#cb552-8" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> neo4j_conn.run(query).data()</span>
+<span id="cb552-9"><a href="databases.html#cb552-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb552-10"><a href="databases.html#cb552-10" aria-hidden="true" tabindex="-1"></a><span class="co"># convert results to pandas DataFrame and view first few rows</span></span>
+<span id="cb552-11"><a href="databases.html#cb552-11" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(results).head()</span></code></pre></div>
 <pre><code>##                name party
 ## 0    Ernie Hardeman   PCP
 ## 1       Kinga Surma   PCP
@@ -658,11 +663,11 @@ RETURN p1.name AS LIB_name, p2.name AS IND_name;</code></pre>
 ## 3       Gila Martow   PCP
 ## 4        Sara Singh   NDP</code></pre>
 <p>To run APOC procedures:</p>
-<div class="sourceCode" id="cb544"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb544-1"><a href="databases.html#cb544-1" aria-hidden="true" tabindex="-1"></a><span class="co"># submit APOC procedure</span></span>
-<span id="cb544-2"><a href="databases.html#cb544-2" aria-hidden="true" tabindex="-1"></a>stats <span class="op">=</span> neo4j_conn.run(<span class="st">&quot;CALL apoc.stats.degrees(&#39;&gt;&#39;)&quot;</span>).data()</span>
-<span id="cb544-3"><a href="databases.html#cb544-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb544-4"><a href="databases.html#cb544-4" aria-hidden="true" tabindex="-1"></a><span class="co"># convert results to pandas DataFrame and view first few rows</span></span>
-<span id="cb544-5"><a href="databases.html#cb544-5" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(stats)</span></code></pre></div>
+<div class="sourceCode" id="cb554"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb554-1"><a href="databases.html#cb554-1" aria-hidden="true" tabindex="-1"></a><span class="co"># submit APOC procedure</span></span>
+<span id="cb554-2"><a href="databases.html#cb554-2" aria-hidden="true" tabindex="-1"></a>stats <span class="op">=</span> neo4j_conn.run(<span class="st">&quot;CALL apoc.stats.degrees(&#39;&gt;&#39;)&quot;</span>).data()</span>
+<span id="cb554-3"><a href="databases.html#cb554-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb554-4"><a href="databases.html#cb554-4" aria-hidden="true" tabindex="-1"></a><span class="co"># convert results to pandas DataFrame and view first few rows</span></span>
+<span id="cb554-5"><a href="databases.html#cb554-5" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(stats)</span></code></pre></div>
 <pre><code>##    type direction  total  p50  p75  p90  p95  p99  p999  max  min       mean
 ## 0  None  OUTGOING   6095   59   63   70   71   77    80   80    7  56.435185</code></pre>
 </div>
@@ -692,7 +697,7 @@ RETURN p1.name AS LIB_name, p2.name AS IND_name;</code></pre>
 <li>Try to write a SPARQL query and submit it to Wikidata to find the winners of the first ten Eurovision song contests. Try a similar query to find the winners of all FIFA World Cups.</li>
 <li>Write and submit a Cypher query on the <code>ontariopol</code> data loaded to Neo4J to find all interactions <em>from</em> PCP party politicians <em>to</em> LIB party politicians with a weight of greater than 10.</li>
 <li>Write and submit an APOC procedure on the <code>ontariopol</code> data loaded to Neo4J to obtain the in-degree statistics of the graph.</li>
-<li>Using the online vertex and edge set for the <code>schoolfriends</code> data set<a href="#fn71" class="footnote-ref" id="fnref71"><sup>71</sup></a>, create a new set of nodes in the Neo4J graph called <code>Student</code> nodes. Give these nodes a <code>name</code>, <code>studentClass</code> and <code>studentGender</code> property from the data sets.<br />
+<li>Using the online vertex and edge set for the <code>schoolfriends</code> data set<a href="#fn74" class="footnote-ref" id="fnref74"><sup>74</sup></a>, create a new set of nodes in the Neo4J graph called <code>Student</code> nodes. Give these nodes a <code>name</code>, <code>studentClass</code> and <code>studentGender</code> property from the data sets.<br />
 </li>
 <li>Create <em>undirected</em> edges for the Facebook friendships in the data and call the relationship <code>FACEBOOK_FRIENDS</code>. Create <em>directed</em> edges for the reported friendships and call the relationship <code>REPORTED_FRIEND</code>.</li>
 <li>Write and submit a Cypher query to find all Facebook friends of node 883, and a similar query to find all those who reported node 883 as a friend.</li>
@@ -704,16 +709,16 @@ RETURN p1.name AS LIB_name, p2.name AS IND_name;</code></pre>
 </div>
 <div class="footnotes">
 <hr />
-<ol start="63">
-<li id="fn63"><p>It should be noted that graph database technologies are now emerging that can support both of these forms - most notably AWS Neptune.<a href="databases.html#fnref63" class="footnote-back">↩︎</a></p></li>
-<li id="fn64"><p><a href="https://www.wikidata.org/" class="uri">https://www.wikidata.org/</a><a href="databases.html#fnref64" class="footnote-back">↩︎</a></p></li>
-<li id="fn65"><p>For example, the author of this book has developed an R package called <code>wikifacts</code> which contains a function to submit queries to Wikidata and retrieve the results as a dataframe<a href="databases.html#fnref65" class="footnote-back">↩︎</a></p></li>
-<li id="fn66"><p><a href="https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/queries/examples" class="uri">https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/queries/examples</a><a href="databases.html#fnref66" class="footnote-back">↩︎</a></p></li>
-<li id="fn67"><p><a href="https://query.wikidata.org/querybuilder/?uselang=en" class="uri">https://query.wikidata.org/querybuilder/?uselang=en</a><a href="databases.html#fnref67" class="footnote-back">↩︎</a></p></li>
-<li id="fn68"><p>In full disclosure, this package was developed by the author of this book<a href="databases.html#fnref68" class="footnote-back">↩︎</a></p></li>
-<li id="fn69"><p><a href="https://neo4j.com/download-center/#cyphershell" class="uri">https://neo4j.com/download-center/#cyphershell</a><a href="databases.html#fnref69" class="footnote-back">↩︎</a></p></li>
-<li id="fn70"><p><a href="https://neo4j.com/download-center/#community" class="uri">https://neo4j.com/download-center/#community</a><a href="databases.html#fnref70" class="footnote-back">↩︎</a></p></li>
-<li id="fn71"><p><a href="https://ona-book.org/data/schoolfriends_edgelist.csv" class="uri">https://ona-book.org/data/schoolfriends_edgelist.csv</a> and <a href="https://ona-book.org/data/schoolfriends_vertices.csv" class="uri">https://ona-book.org/data/schoolfriends_vertices.csv</a><a href="databases.html#fnref71" class="footnote-back">↩︎</a></p></li>
+<ol start="66">
+<li id="fn66"><p>It should be noted that graph database technologies are now emerging that can support both of these forms - most notably AWS Neptune.<a href="databases.html#fnref66" class="footnote-back">↩︎</a></p></li>
+<li id="fn67"><p><a href="https://www.wikidata.org/" class="uri">https://www.wikidata.org/</a><a href="databases.html#fnref67" class="footnote-back">↩︎</a></p></li>
+<li id="fn68"><p>For example, the author of this book has developed an R package called <code>wikifacts</code> which contains a function to submit queries to Wikidata and retrieve the results as a dataframe<a href="databases.html#fnref68" class="footnote-back">↩︎</a></p></li>
+<li id="fn69"><p><a href="https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/queries/examples" class="uri">https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/queries/examples</a><a href="databases.html#fnref69" class="footnote-back">↩︎</a></p></li>
+<li id="fn70"><p><a href="https://query.wikidata.org/querybuilder/?uselang=en" class="uri">https://query.wikidata.org/querybuilder/?uselang=en</a><a href="databases.html#fnref70" class="footnote-back">↩︎</a></p></li>
+<li id="fn71"><p>In full disclosure, this package was developed by the author of this book<a href="databases.html#fnref71" class="footnote-back">↩︎</a></p></li>
+<li id="fn72"><p><a href="https://neo4j.com/download-center/#cyphershell" class="uri">https://neo4j.com/download-center/#cyphershell</a><a href="databases.html#fnref72" class="footnote-back">↩︎</a></p></li>
+<li id="fn73"><p><a href="https://neo4j.com/download-center/#community" class="uri">https://neo4j.com/download-center/#community</a><a href="databases.html#fnref73" class="footnote-back">↩︎</a></p></li>
+<li id="fn74"><p><a href="https://ona-book.org/data/schoolfriends_edgelist.csv" class="uri">https://ona-book.org/data/schoolfriends_edgelist.csv</a> and <a href="https://ona-book.org/data/schoolfriends_vertices.csv" class="uri">https://ona-book.org/data/schoolfriends_vertices.csv</a><a href="databases.html#fnref74" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>

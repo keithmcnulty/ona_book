@@ -22,7 +22,9 @@
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.5.1/tabs.js"></script><script src="libs/bs3compat-0.2.5.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
 <script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script><link href="libs/vis-4.20.1/vis.css" rel="stylesheet">
-<script src="libs/vis-4.20.1/vis.min.js"></script><script src="libs/visNetwork-binding-2.0.9/visNetwork.js"></script><script src="libs/d3-4.5.0/d3.min.js"></script><script src="libs/forceNetwork-binding-0.4/forceNetwork.js"></script><script src="libs/sankey-1/sankey.js"></script><script src="libs/sankeyNetwork-binding-0.4/sankeyNetwork.js"></script><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-400FPN6D44"></script><script>
+<script src="libs/vis-4.20.1/vis.min.js"></script><script src="libs/visNetwork-binding-2.0.9/visNetwork.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet">
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script><script src="libs/d3-4.5.0/d3.min.js"></script><script src="libs/forceNetwork-binding-0.4/forceNetwork.js"></script><script src="libs/sankey-1/sankey.js"></script><script src="libs/sankeyNetwork-binding-0.4/sankeyNetwork.js"></script><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-400FPN6D44"></script><script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
@@ -77,12 +79,12 @@
 <span class="header-section-number">3</span> Working With Graphs<a class="anchor" aria-label="anchor" href="#working"><i class="fas fa-link"></i></a>
 </h1>
 <p>When we think of a graph, we usually think of a diagram of dots and lines. Indeed, as we have seen in Chapter <a href="everywhere.html#everywhere">1</a> of this book, the very concept of a graph came into existence in the 1700s when a mathematician tried to solve a problem diagramatically. It makes sense that we think about graphs in this way, because it is intuitive, easy to communicate and in many cases a diagram helps us better address the problem we are solving. However, a diagram is only one way of describing a graph, and it is not particularly scalable. It is easy to draw a diagram for a graph of a few nodes and edges like in our <em>Bridges of Königsberg</em> problem, but what if our problem involved thousands of nodes and millions of edges? Most interesting graphs which we will want to study will be more complex in nature and will contain many hundreds or thousands of nodes and many more edges, and diagrams of graphs of that size are not always useful in helping us solve problems.</p>
-<p>In this chapter we will gain a basic understanding of graphs and how to construct them and work with them in R and in Python. We will introduce the most general way of describing a graph mathematically, and we will then discuss how different types of graphs can be defined by placing more conditions on the most general definition. We will then go on to look at the different options for how a known graph can be described, including edgelists and adjacency matrices. Equipped with this understanding, we will then learn how to create simple graph objects in R and in Python. Unlike the larger examples which we will introduce in later chapters, the data and examples we will use in this chapter are simple and straightforward to work with. The focus here is to make sure that the basic structures and definitions are understood before proceeding further. Readers should not skip this chapter if they intend to fully understand the methods and procedures that will be introduced in later chapters.</p>
+<p>In this chapter we will gain a basic understanding of graphs and how to construct them so that we can work with them analytically. We will introduce the most general way of describing a graph mathematically, and we will then discuss how different types of graphs can be defined by placing more conditions on the most general definition. We will go on to look at the different options for how a known graph can be described, including edgelists and adjacency matrices. Equipped with this understanding, we will then learn how to create graph objects in R and in Python. Unlike the larger examples which we will introduce in later chapters, the data and examples we will use in this chapter are simple and straightforward to work with. The focus here is to make sure that the basic structures and definitions are understood before proceeding further. Readers should not skip this chapter if they intend to fully understand the methods and procedures that will be introduced in later chapters.</p>
 <div id="elementary-graph-theory" class="section level2" number="3.1">
 <h2>
 <span class="header-section-number">3.1</span> Elementary graph theory<a class="anchor" aria-label="anchor" href="#elementary-graph-theory"><i class="fas fa-link"></i></a>
 </h2>
-<p>The way that graphs are created, stored and manipulated in data science languages like R and Python bears a strong resemblance to how they are defined and studied algebraically. We will start this section with the general algebraic definition of a graph before we proceed to look at different varieties of graphs and different ways of representing graphs using data.</p>
+<p>The way that graphs are created, stored and manipulated in data science languages like R and Python bears a strong resemblance to how they are defined and studied algebraically. We will start this section with the general mathematical definition of a graph before we proceed to look at different varieties of graphs and different ways of representing graphs using data.</p>
 <div id="graph-def" class="section level3" number="3.1.1">
 <h3>
 <span class="header-section-number">3.1.1</span> General definition of a graph<a class="anchor" aria-label="anchor" href="#graph-def"><i class="fas fa-link"></i></a>
@@ -91,8 +93,8 @@
 <p>Let’s use an example to illustrate this definition. Figure <a href="working.html#fig:fourpeoplegraph">3.1</a> is a diagram of a graph <span class="math inline">\(G_{\mathrm{work}}\)</span> with four vertices representing four people. An edge connects two vertices if and only if those two people have worked together.</p>
 <div class="figure">
 <span style="display:block;" id="fig:fourpeoplegraph"></span>
-<img src="_main_files/figure-html/fourpeoplegraph-1.png" alt="Four people connected according to whether they have worked together" width="672"><p class="caption">
-Figure 3.1: Four people connected according to whether they have worked together
+<img src="_main_files/figure-html/fourpeoplegraph-1.png" alt="A graph $G_\mathrm{work}$ consisting of four people connected according to whether they have worked together" width="672"><p class="caption">
+Figure 3.1: A graph <span class="math inline">\(G_\mathrm{work}\)</span> consisting of four people connected according to whether they have worked together
 </p>
 </div>
 <p>Our vertex set <span class="math inline">\(V\)</span> for the graph <span class="math inline">\(G_{\mathrm{work}}\)</span> is:</p>
@@ -111,14 +113,14 @@ E = \{\mathrm{David}\longleftrightarrow\mathrm{Zubin}, \mathrm{David}\longleftri
 \end{gather*}\]</span>
 <p>It doesn’t really matter how you choose to notate the vertex and edge sets as long as your notation contains all of the information required to construct the graph.</p>
 <div class="thinkahead">
-<p><strong>Thinking ahead:</strong> If you already know how to load graphs in R or Python, you might want to take a look at a graph object now, and you will see how the object is structured and defined around the two set structure <span class="math inline">\(G = (V, E)\)</span>. For example, try to create a graph from the data for the <em>Bridges of Königsberg</em> problem using the <code>koenigsberg</code> edgelist in the <code>onadata</code> package or downloaded from the internet at <a href="https://ona-data.org/data/koenigsberg.csv" class="uri">https://ona-data.org/data/koenigsberg.csv</a>. Take a look at the vertex set or the edge set to see how they contain the structures discussed above.</p>
+<p><strong>Thinking ahead:</strong> If you already know how to load graphs in R or Python, you might want to take a look at a graph object now, and you will see how the object is structured and defined around the two set structure <span class="math inline">\(G = (V, E)\)</span>. For example, try to create a graph from the data for the <em>Bridges of Königsberg</em> problem using the <code>koenigsberg</code> edgelist in the <code>onadata</code> package or downloaded from the internet at <a href="https://ona-data.org/data/koenigsberg.csv" class="uri">https://ona-data.org/data/koenigsberg.csv</a>. Take a look at the vertex set or the edge set to see how they contain the structures discussed here.</p>
 </div>
 <p>The relationship that we are modeling using our edges in the graph <span class="math inline">\(G_{\mathrm{work}}\)</span> is reciprocal in nature. If David has worked with Zubin, then we automatically conclude that Zubin has worked with David. Therefore there is no need for direction in the edges of <span class="math inline">\(G_{\mathrm{work}}\)</span>. We call such a graph an <em>undirected</em> graph. In an undirected graph, the order of the nodes in each pair in the edge set <span class="math inline">\(E\)</span> is not relevant. For example, <span class="math inline">\(\mathrm{David}\longleftrightarrow\mathrm{Zubin}\)</span> is the same as <span class="math inline">\(\mathrm{Zubin}\longleftrightarrow\mathrm{David}\)</span>.</p>
 <p>A graph where direction is important is called a <em>directed</em> graph. As an example, let’s consider a graph <span class="math inline">\(G_{\mathrm{manage}}\)</span> with the same vertex set of four people but where an edge exists between two people if and only if the first person is the manager of the second person, as in Figure <a href="working.html#fig:fourpeoplemanage">3.2</a>.</p>
 <div class="figure">
 <span style="display:block;" id="fig:fourpeoplemanage"></span>
-<img src="_main_files/figure-html/fourpeoplemanage-1.png" alt="Four people connected according to whether one person manages another" width="672"><p class="caption">
-Figure 3.2: Four people connected according to whether one person manages another
+<img src="_main_files/figure-html/fourpeoplemanage-1.png" alt="A graph $G_\mathrm{manage}$ consisting of four people connected according to whether one person manages another" width="672"><p class="caption">
+Figure 3.2: A graph <span class="math inline">\(G_\mathrm{manage}\)</span> consisting of four people connected according to whether one person manages another
 </p>
 </div>
 <p>Clearly, direction matters in this graph, and therefore we may wish to notate the edge set <span class="math inline">\(E\)</span> for <span class="math inline">\(G_{\mathrm{manage}}\)</span> as:</p>
@@ -126,12 +128,15 @@ Figure 3.2: Four people connected according to whether one person manages anothe
 E = \{\mathrm{Suraya}\longrightarrow\mathrm{David}, \mathrm{David}\longrightarrow\mathrm{Zubin}, \mathrm{David}\longrightarrow\mathrm{Jane}\}
 \]</span></p>
 <p>Note that it is still possible in a directed graph for the edges to point in both directions. While that is unlikely in the case of <span class="math inline">\(G_{\mathrm{manage}}\)</span> because the manager relationship usually only operates in one direction, imagine another graph <span class="math inline">\(G_{\mathrm{like}}\)</span> where an edge exists between two people if and only if the first person has listed the second person as someone they like. It is perfectly possible for edges to exist in both directions between two vertices in a graph like this. For example, it may be that Jane likes Zubin and Zubin likes Jane. However, it is important to note that in such a graph, <span class="math inline">\(\mathrm{Zubin}\longrightarrow\mathrm{Jane}\)</span> and <span class="math inline">\(\mathrm{Jane}\longrightarrow\mathrm{Zubin}\)</span> are considered two <em>different</em> edges.</p>
+<div class="thinkahead">
+<p><strong>Thinking ahead:</strong> The graphs <span class="math inline">\(G_\mathrm{work}\)</span> and <span class="math inline">\(G_\mathrm{manage}\)</span> are called <strong>simple graphs</strong>. A simple graph cannot have more than one edge between any two vertices, and cannot have any ‘loop’ edges from one vertex back to itself. As we are about to learn, not all graphs are simple graphs.</p>
+</div>
 </div>
 <div id="graph-types" class="section level3" number="3.1.2">
 <h3>
 <span class="header-section-number">3.1.2</span> Types of graphs<a class="anchor" aria-label="anchor" href="#graph-types"><i class="fas fa-link"></i></a>
 </h3>
-<p>Equipped with our general definition of a graph, we can now define different varieties of graph by adding or allowing certain conditions on the edges of a general graph. There are many such varieties, but here are a few of the more common graph types.</p>
+<p>Equipped with our general definition of a graph, we can now define different varieties of graphs by adding or allowing certain conditions on the edges of a general graph. There are many such varieties, but here are a few of the more common graph types.</p>
 <p>A <strong>multigraph</strong> is a graph where multiple edges can occur between the same two vertices. Usually this occurs because the edges are defining different kinds of relationships. Travel routes are common examples of multigraphs, where each edge represents a different carrier. For example, Figure <a href="working.html#fig:multiflights">3.3</a> is a graph of flights between the San Francisco (SFO), Philadelphia (PHL) and Tucson (TUS) airports based on a data set from December 2010. The graph is layered onto a map of the United States. Philadelphia to Tucson is not a common route and is only offered by one carrier in one direction, while there are multiple carriers operating in both directions between Philadelphia and San Francisco and between San Francisco and Tucson.</p>
 <div class="figure">
 <span style="display:block;" id="fig:multiflights"></span>
@@ -151,11 +156,11 @@ Figure 3.4: Graph depicting different types of relationships between individuals
 <p><span class="math display">\[
 E = \{\mathrm{David}\longrightarrow\mathrm{Zubin}, \mathrm{David}\longrightarrow\mathrm{David}\}
 \]</span></p>
-<p>An example of where pseudographs frequently occur might be in the analysis of financial transactions. Let’s imagine that we have a graph of three verticies representing different companies A, B and C, where an edge represent a bank transfer from one company to another on a certain day. If a company holds multiple bank accounts, such a graph might look something like Figure <a href="working.html#fig:banktransfer">3.5</a>.</p>
+<p>An example of where pseudographs frequently occur might be in the analysis of financial transactions. Let’s imagine that we have a graph of three verticies representing different companies A, B and C, where an edge represent a bank transfer from one company to another on a certain day. If a company holds multiple bank accounts, such a graph might look something like Figure <a href="working.html#fig:banktransfer">3.5</a>. An edge which connects a vertex to itself is usually called a <em>loop</em>.</p>
 <div class="figure">
 <span style="display:block;" id="fig:banktransfer"></span>
-<img src="_main_files/figure-html/banktransfer-1.png" alt="Pseudograph representing bank transfers between three companies A, B and C" width="672"><p class="caption">
-Figure 3.5: Pseudograph representing bank transfers between three companies A, B and C
+<img src="_main_files/figure-html/banktransfer-1.png" alt="Pseudograph representing bank transfers between three companies A, B and C with a loop on Vertex A" width="672"><p class="caption">
+Figure 3.5: Pseudograph representing bank transfers between three companies A, B and C with a loop on Vertex A
 </p>
 </div>
 <p>A <strong>complete graph</strong> is a graph where all pairs of vertices are connected by an edge. Let’s go back to our four characters in <span class="math inline">\(G_\mathrm{work}\)</span> from Section <a href="working.html#graph-def">3.1.1</a>. You may notice that only one pair of these characters have not worked together. Let’s assume that we return a month later and update our graph, and it seems that Zubin and Suraya have now worked together. This means our graph becomes a complete graph as depicted in Figure <a href="working.html#fig:completework">3.6</a>.</p>
@@ -166,20 +171,19 @@ Figure 3.6: Updated version of <span class="math inline">\(G_\mathrm{work}\)</sp
 </p>
 </div>
 <p>Complete graphs are rare and not very useful in practice, since if you already know that a relationship exists between every pair of vertices, there is not a lot of reason to examine your graph or put it to any practical use. That said, in the field of Graph Theory, it can be important to prove that certain graphs are complete in order to support important theoretical results.</p>
+<div class="thinkahead">
+<p><strong>Thinking ahead:</strong> While entire graphs which are complete are rarely useful in practice, it is often useful to identify sets of vertices inside graphs which together represent a <em>complete subgraph</em>. Such a group of vertices is known as a <em>clique</em>, and we will look at clique discovery in a later chapter.</p>
+</div>
 <p><strong>Bipartite graphs</strong> are graphs that have two disjoint sets of vertices, such that no vertex from one set is connected to any of the vertices in the other set. Imagine we were to add three new individuals to our <span class="math inline">\(G_\mathrm{work}\)</span> graph, and these three individuals all work for a completely different organization to the four people already in the graph. Then the new graph <span class="math inline">\(G_\mathrm{new}\)</span> may look like Figure <a href="working.html#fig:newwork">3.7</a>, with the distinct sets of vertices representing individuals in different organizations.</p>
 <div class="figure">
 <span style="display:block;" id="fig:newwork"></span>
-<img src="_main_files/figure-html/newwork-1.png" alt="A bipartite graph showing working relationships involving individuals in separate organizations A and B" width="672"><p class="caption">
-Figure 3.7: A bipartite graph showing working relationships involving individuals in separate organizations A and B
+<img src="_main_files/figure-html/newwork-1.png" alt="A bipartite graph $G_\mathrm{new}$ showing working relationships involving individuals in separate organizations A and B" width="672"><p class="caption">
+Figure 3.7: A bipartite graph <span class="math inline">\(G_\mathrm{new}\)</span> showing working relationships involving individuals in separate organizations A and B
 </p>
 </div>
 <p>Extending the idea of bipartite graphs, <strong><span class="math inline">\(k\)</span>-partite graphs</strong> are graphs which have <span class="math inline">\(k\)</span> disjoined sets of vertices, where any vertex in one set is not connected to any of the vertices in the other <span class="math inline">\(k - 1\)</span> sets.</p>
-<p><strong>Trees</strong> can be regarded as vertices connected by edges, and so trees are graphs. For example, our graph <span class="math inline">\(G_\mathrm{manage}\)</span> in Section <a href="working.html#graph-def">3.1.1</a> is a tree because it displays a hierarchical management structure between individuals. For a graph to be characterized as a tree it needs to adhere to these conditions:</p>
-<ol style="list-style-type: decimal">
-<li>It is undirected</li>
-<li>There is exactly one path between any pair of vertices</li>
-</ol>
-<p>Usually, trees are graphs where the edges represent some sort of hierarchical or nested relationship. Figure <a href="working.html#fig:boybands">3.8</a> shows a tree graph of my favorite boy bands, where an edge indicates that the vertex below is a member of the vertex above. It seems like five is the magic number for a great boy band.</p>
+<p><strong>Trees</strong> can be regarded as vertices connected by edges, and so trees are graphs. For example, our graph <span class="math inline">\(G_\mathrm{manage}\)</span> in Section <a href="working.html#graph-def">3.1.1</a> is a tree because it displays a hierarchical management structure between individuals. For a graph to be characterized as a tree, there needs to be <em>exactly</em> one path between any pair of vertices when viewed undirected.</p>
+<p>Usually, trees are graphs where the edges represent some sort of hierarchical or nested relationship. Figure <a href="working.html#fig:boybands">3.8</a> shows a tree graph of the author’s favorite boy bands, where an edge indicates that the vertex below is a member of the vertex above. It seems like five is the magic number for a great boy band.</p>
 <div class="figure">
 <span style="display:block;" id="fig:boybands"></span>
 <img src="_main_files/figure-html/boybands-1.png" alt="Membership of the exclusive class of the author's favourite boy bands can be represented as a tree graph" width="672"><p class="caption">
@@ -191,9 +195,9 @@ Figure 3.8: Membership of the exclusive class of the author’s favourite boy ba
 <h3>
 <span class="header-section-number">3.1.3</span> Vertex and edge properties<a class="anchor" aria-label="anchor" href="#vertex-edge-prop"><i class="fas fa-link"></i></a>
 </h3>
-<p>In Section <a href="working.html#graph-def">3.1.1</a> we learned that a graph <span class="math inline">\(G = (V, E)\)</span> consists of a vertex set <span class="math inline">\(V\)</span> and an edge set <span class="math inline">\(E\)</span>. These sets are the minimum components of a graph — the vertices represent the entities in the graph and the edges represent the relationships between the entities.</p>
+<p>In Section <a href="working.html#graph-def">3.1.1</a> we learned that a graph <span class="math inline">\(G = (V, E)\)</span> consists of a vertex set <span class="math inline">\(V\)</span> and an edge set <span class="math inline">\(E\)</span>. These sets are the minimum elements of a graph—the vertices represent the entities in the graph and the edges represent the relationships between the entities.</p>
 <p>We can enhance a graph to provide even richer information on the entities and on the relationships by giving our vertices and edges <em>properties</em>. A vertex property provides more specific information about a vertex and an edge property provides more specific information about the relationship between two vertices.</p>
-<p>As an example, let’s return to our directed graph in Figure <a href="working.html#fig:banktransfer">3.5</a>, which represents bank transfers between companies A, B, and C. In this graph, we only know from the edges that transfers took place, but we do not know how much money was involved in each transfer, and in what currency the transfer was made. If we wanted to capture this information, we could give each edge properties called <code>amt</code> and <code>cur</code> and store the transfer amount and currency in those edge properties. Similarly, we don’t know a great deal about the companies represented by the vertices. Maybe we would like to know where they are located? If so, we can create a vertex property called <code>loc</code> and store the location in that vertex property.</p>
+<p>As an example, let’s return to our directed pseudograph in Figure <a href="working.html#fig:banktransfer">3.5</a>, which represents bank transfers between companies A, B, and C. In this graph, we only know from the edges that transfers took place, but we do not know how much money was involved in each transfer, and in what currency the transfer was made. If we wanted to capture this information, we could give each edge properties called <code>amt</code> and <code>cur</code> and store the transfer amount and currency in those edge properties. Similarly, we don’t know a great deal about the companies represented by the vertices. Maybe we would like to know where they are located? If so, we can create a vertex property called <code>loc</code> and store the location in that vertex property.</p>
 <p>Figure <a href="working.html#fig:enhancedcompanytransfers">3.9</a> shows this enhanced graph with the vertex and edge properties added diagramatically.</p>
 <div class="figure">
 <span style="display:block;" id="fig:enhancedcompanytransfers"></span>
@@ -214,9 +218,9 @@ E_\mathrm{amt} &amp;= \{150000, 570000, 230000, 175000\}
 \]</span></p>
 <p>Note that the vertex property set <span class="math inline">\(V_\mathrm{loc}\)</span> has the same number of elements as <span class="math inline">\(V\)</span> and the associated properties appear in the same order as the vertices of <span class="math inline">\(V\)</span>. Note also a similar size and order for the edge property sets <span class="math inline">\(E_\mathrm{cur}\)</span> and <span class="math inline">\(E_\mathrm{amt}\)</span>. This notation system allows us to provide all the information we need in a reliable way for any number of vertex or edge properties.</p>
 <div class="thinkahead">
-<p><strong>Thinking ahead:</strong> If you know how to, load up graph of romantic relationships in the TV Series <em>Mad Men</em> using the <code>madmen_edgelist</code> data set from the <code>onadata</code> package or by downloading it from <a href="https://ona-book.org/data/madmen_edgelist.csv" class="uri">https://ona-book.org/data/madmen_edgelist.csv</a>. Try to create a graph that contains the <code>Married</code> edge property and then try to query your graph to determine which relationships were marriage relationships.</p>
+<p><strong>Thinking ahead:</strong> If you know how to, load up the graph of romantic relationships in the TV Series <em>Mad Men</em> using the <code>madmen_edgelist</code> data set from the <code>onadata</code> package or by downloading it from <a href="https://ona-book.org/data/madmen_edgelist.csv" class="uri">https://ona-book.org/data/madmen_edgelist.csv</a>. Try to create a graph that contains the <code>Married</code> edge property and then try to query your graph to determine which relationships were marriage relationships.</p>
 </div>
-<p>One of the most common edge properties we will come across is <strong>edge weight</strong>. Weighted edges are edges which are given a numeric value to represent an important construct such as edge importance or connection strength. This can often be used to simplify otherwise complex graphs, and will be frequently used in calculations related to centrality and community. As an example, returning to our flights graph, instead of creating an edge for each carrier, we could simplify our graph by creating one edge per route and giving it a weight according to the number of carriers on that route. Such a graph would look like Figure <a href="working.html#fig:weightedflights">3.10</a>.</p>
+<p>One of the most common edge properties we will come across is <strong>edge weight</strong>. Weighted edges are edges which are given a numeric value to represent an important construct such as edge importance or connection strength. This can often be used to simplify otherwise complex graphs, and will be frequently used in calculations related to centrality and community. As an example, returning to our flights graph in Figure <a href="working.html#fig:multiflights">3.3</a>, instead of creating an edge for each carrier, we could simplify our graph by creating one edge per route and giving it a weight according to the number of carriers on that route. Such a graph would look like Figure <a href="working.html#fig:weightedflights">3.10</a>.</p>
 <div class="figure">
 <span style="display:block;" id="fig:weightedflights"></span>
 <img src="_main_files/figure-html/weightedflights-1.png" alt="Simplifying the flights graph using weighted edges to represent the number of carriers on each route.  Edge thickness represents weight." width="672"><p class="caption">
@@ -228,8 +232,8 @@ Figure 3.10: Simplifying the flights graph using weighted edges to represent the
 <h3>
 <span class="header-section-number">3.1.4</span> Representations of graphs<a class="anchor" aria-label="anchor" href="#rep-graphs"><i class="fas fa-link"></i></a>
 </h3>
-<p>So far in this chapter we have seen two common ways of representing a graph. The first, and most well known way, is a diagram. The second is as an algebraic structure consisting of a vertex set and an edge set <span class="math inline">\(G = (V, E)\)</span>. As we discussed at the beginning of this chapter, diagrams are useful for visualizing und understanding simple graphs, but less useful for storing graph data and working with large graphs. When working with graphs in the field of data science, the two most common sources of graph data will be edgelists and adjacency matrices.</p>
-<p>An <strong>edgelist</strong> is the edge set <span class="math inline">\(E\)</span> in our graph <span class="math inline">\(G = (V, E)\)</span>. If we don’t care about <em>isolates</em> — that is, vertices not connected to any other vertices — then our vertex set <span class="math inline">\(V\)</span> can be derived directly from <span class="math inline">\(E\)</span>. This means that the edgelist is all that is needed to build a graph provided you are happy to ignore isolates. It’s common that an analyst is happy to ignore isolates because they are often only interested in the connections or relationships in the data. Let’s look at an example.</p>
+<p>So far in this chapter we have seen two common ways of representing a graph. The first, and most well known way, is a diagram. The second is an algebraic structure <span class="math inline">\(G = (V, E)\)</span> consisting (at a minimum) of a vertex set <span class="math inline">\(V\)</span> and an edge set <span class="math inline">\(E\)</span>. As we discussed at the beginning of this chapter, diagrams are useful for visualizing und understanding small graphs, but less useful for storing graph data and working with large graphs. When working with graphs in the field of data science, the two most common sources of graph data will be edgelists and adjacency matrices.</p>
+<p>An <strong>edgelist</strong> is the edge set <span class="math inline">\(E\)</span> in our graph <span class="math inline">\(G = (V, E)\)</span>. If we don’t care about <em>isolates</em><a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;Isolates, also known as singletons, are vertices which are not connected to any other vertices. Many real life graphs contain isolates which will often be removed in order to better focus on connected components.&lt;/p&gt;"><sup>16</sup></a>, then our vertex set <span class="math inline">\(V\)</span> can be derived directly from <span class="math inline">\(E\)</span>. This means that the edgelist is all that is needed to build a graph provided you are happy to ignore isolates. It is common that an analyst is happy to ignore isolates because we are often only interested in the connections or relationships in the data. Let’s look at an example.</p>
 <p>Recall our edge set <span class="math inline">\(E\)</span> in the graph <span class="math inline">\(G_\mathrm{work} = (V, E)\)</span> from Section <a href="working.html#graph-def">3.1.1</a>:</p>
 <span class="math display">\[\begin{gather*}
 E = \{\mathrm{David}\longleftrightarrow\mathrm{Zubin}, \mathrm{David}\longleftrightarrow\mathrm{Suraya}, \mathrm{Suraya}\longleftrightarrow\mathrm{Jane}, \\
@@ -240,10 +244,10 @@ E = \{\mathrm{David}\longleftrightarrow\mathrm{Zubin}, \mathrm{David}\longleftri
 V = \{\mathrm{David}, \mathrm{Suraya}, \mathrm{Jane}, \mathrm{Zubin}\}
 \]</span></p>
 <p>and we now have obtained everything we need for our graph from the edgelist.</p>
-<p>Edgelists typically take the form of at two columns of data, usually labelled ‘from’ and ‘to.’ Therefore our edgelist for <span class="math inline">\(G_\mathrm{work}\)</span> would look like Table <a href="working.html#tab:workedgelist">3.1</a>.</p>
-<div class="inline-table"><table class="table table-sm">
+<p>Edgelists typically take the form of two columns of data, usually labelled ‘from’ and ‘to’ or ‘source’ and ‘target.’ Therefore our edgelist for <span class="math inline">\(G_\mathrm{work}\)</span> would look like Table <a href="working.html#tab:workedgelist">3.1</a>.</p>
+<div class="inline-table"><table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:workedgelist">Table 3.1: </span>Edgelist for the <span class="math inline">\(G_\mathrm{work}\)</span> graph
+<span id="tab:workedgelist">Table 3.1: </span>Edgelist for <span class="math inline">\(G_\mathrm{work}\)</span>
 </caption>
 <thead><tr>
 <th style="text-align:left;">
@@ -297,9 +301,9 @@ Suraya
 </tbody>
 </table></div>
 <div class="thinkahead">
-<p><strong>Thinking ahead:</strong> If you still have the <em>Bridges of Königsberg</em> data loaded as a graph in R or Python from earlier, you should be able to generate its edgelist easily. Try to find the right function to use to do this within your package of choice.</p>
+<p><strong>Playing around:</strong> If you still have the <em>Bridges of Königsberg</em> data loaded as a graph in R or Python from earlier, you should be able to generate its edgelist easily. Try to find the right function to use to do this within your package of choice.</p>
 </div>
-<p>An <strong>adjacency matrix</strong> is a square matrix with the vertices indexing the rows and columns, and where the <span class="math inline">\((i, j)\)</span>-th entry of the matrix represents the number of edges from vertex <span class="math inline">\(i\)</span> to vertex <span class="math inline">\(j\)</span>. As an example, using our simple graph <span class="math inline">\(G_\mathrm{work}\)</span> again from Section <a href="working.html#graph-def">3.1.1</a>, the adjacency matrix would look like this:</p>
+<p>An <strong>adjacency matrix</strong> is a square matrix with the vertices indexing the rows and columns, and where the <span class="math inline">\((i, j)\)</span>-th entry of the matrix represents the number of edges from vertex <span class="math inline">\(i\)</span> to vertex <span class="math inline">\(j\)</span>. As an example, using our graph <span class="math inline">\(G_\mathrm{work}\)</span> again from Section <a href="working.html#graph-def">3.1.1</a>, the adjacency matrix would look like this:</p>
 <p><span class="math display">\[
 \begin{array}{ccccc}
       &amp; \mathrm{David} &amp; \mathrm{Jane} &amp; \mathrm{Zubin} &amp; \mathrm{Suraya} \\
@@ -329,7 +333,7 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
       \mathrm{Suraya} &amp; 1 &amp; . &amp; . &amp; . 
 \end{array}
 \]</span></p>
-<p>If a graph is a pseudograph, then the diagonal entries may be greater than zero, and multigraphs can have entries that are any non-negative integer. Here is the adjacency matrix for our flight network graph:</p>
+<p>If a graph is a pseudograph, then the diagonal entries may be greater than zero, and multigraphs can have entries that are any non-negative integer. Here is the adjacency matrix for our flight network graph in Figure <a href="working.html#fig:multiflights">3.3</a>:</p>
 <p><span class="math display">\[
 \begin{array}{cccc}
       &amp; \mathrm{SFO} &amp; \mathrm{PHL} &amp; \mathrm{TUS} \\
@@ -353,7 +357,7 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <span class="header-section-number">3.2.1</span> Creating a graph from an edgelist<a class="anchor" aria-label="anchor" href="#creating-a-graph-from-an-edgelist"><i class="fas fa-link"></i></a>
 </h3>
 <p>Let’s start by manually creating an edgelist for our <span class="math inline">\(G_\mathrm{work}\)</span> graph from Section <a href="working.html#graph-def">3.1.1</a> as a dataframe in R. We can see this edgelist in Table <a href="working.html#tab:workedgelist">3.1</a>. Remember that <span class="math inline">\(G_\mathrm{work}\)</span> is an undirected graph, so we do not need to worry about edge direction when we create this edgelist.</p>
-<div class="sourceCode" id="cb111"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb119"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">(</span><span class="va">gwork_edgelist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
   from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"David"</span>, <span class="st">"David"</span>, <span class="st">"David"</span>, <span class="st">"Jane"</span>, <span class="st">"Jane"</span><span class="op">)</span>,
   to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Zubin"</span>, <span class="st">"Suraya"</span>, <span class="st">"Jane"</span>, <span class="st">"Zubin"</span>, <span class="st">"Suraya"</span><span class="op">)</span>
@@ -365,23 +369,23 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 ## 4  Jane  Zubin
 ## 5  Jane Suraya</code></pre>
 <p>This looks right. Now we are going to load the <code>igraph</code> package and use the function <code><a href="https://rdrr.io/pkg/igraph/man/graph_from_edgelist.html">graph_from_edgelist()</a></code> to create an undirected graph object from this edgelist. This function expects to receive the edgelist as a matrix, and so we will need to convert our <code>gwork_edgelist</code> dataframe to a matrix before we use it in the function.</p>
-<div class="sourceCode" id="cb113"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb121"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://igraph.org">igraph</a></span><span class="op">)</span>
 
 <span class="va">gwork_edgelist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">gwork_edgelist</span><span class="op">)</span>
 <span class="va">gwork</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_edgelist.html">graph_from_edgelist</a></span><span class="op">(</span>el <span class="op">=</span> <span class="va">gwork_edgelist</span>, 
                                      directed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
-<p>We now hove our <span class="math inline">\(G_\mathrm{work}\)</span> graph in memory. Before we go any further, let’s take a look at it.</p>
-<div class="sourceCode" id="cb114"><pre class="downlit sourceCode r">
+<p>We now have our <span class="math inline">\(G_\mathrm{work}\)</span> graph in memory. Before we go any further, let’s take a look at it.</p>
+<div class="sourceCode" id="cb122"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">gwork</span></code></pre></div>
-<pre><code>## IGRAPH 484cf0a UN-- 4 5 -- 
+<pre><code>## IGRAPH 35c97d4 UN-- 4 5 -- 
 ## + attr: name (v/c)
-## + edges from 484cf0a (vertex names):
+## + edges from 35c97d4 (vertex names):
 ## [1] David --Zubin  David --Suraya David --Jane   Zubin --Jane   Suraya--Jane</code></pre>
 <p>Let’s start with the string <code>UN--</code> on the first line of the output. This string describes the type of graph this is. The letter <code>U</code> denotes an undirected graph, and <code>N</code> denotes a graph with named vertices. The two other properties, which we will discover later, are currently not present and so are represented by the dashes <code>--</code>. Next we have the number of vertices (4) and edges (5), followed by two further dashes.</p>
-<p>On the next line the attributes of the graph are listed. In this case there is just one attribute <code>name</code>, which is a vertex attribute — denoted by <code>(v/c)</code>. Finally the edges of the graph are given using the vertex names. Note that there is no direction to these edges, so they are denoted with <code>--</code>.</p>
+<p>On the next line the attributes of the graph are listed. In this case there is just one attribute <code>name</code>, which is a vertex attribute of character type — denoted by <code>(v/c)</code>. Finally the edges of the graph are given using the vertex names. Note that there is no direction to these edges, so they are denoted with <code>--</code>.</p>
 <p>Let’s try the same thing but this time with our directed graph <span class="math inline">\(G_\mathrm{manage}\)</span> from Section <a href="working.html#graph-def">3.1.1</a>.</p>
-<div class="sourceCode" id="cb116"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb124"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">gmanage_edgelist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
   from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Suraya"</span>, <span class="st">"David"</span>, <span class="st">"David"</span><span class="op">)</span>,
   to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"David"</span>, <span class="st">"Zubin"</span>, <span class="st">"Jane"</span><span class="op">)</span>
@@ -390,18 +394,18 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <span class="va">gmanage_edgelist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">gmanage_edgelist</span><span class="op">)</span>
 <span class="op">(</span><span class="va">gmanage</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_edgelist.html">graph_from_edgelist</a></span><span class="op">(</span>el <span class="op">=</span> <span class="va">gmanage_edgelist</span>,
                                        directed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH 35f9508 DN-- 4 3 -- 
+<pre><code>## IGRAPH 89f254e DN-- 4 3 -- 
 ## + attr: name (v/c)
-## + edges from 35f9508 (vertex names):
+## + edges from 89f254e (vertex names):
 ## [1] Suraya-&gt;David David -&gt;Zubin David -&gt;Jane</code></pre>
-<p>We see a similar output to <code>gwork</code>, except we now have a directed graph, donated by <code>D</code> in the first line, and we see that the edges are now denoted with direction using<br><code><a href="https://rdrr.io/r/base/assignOps.html">-&gt;</a></code>.</p>
+<p>We see a similar output to <code>gwork</code>, except we now have a directed graph, donated by <code>D</code> in the first line, and we see that the edges are now denoted with direction using <code><a href="https://rdrr.io/r/base/assignOps.html">-&gt;</a></code>.</p>
 </div>
 <div id="creating-a-graph-from-an-adjacency-matrix" class="section level3" number="3.2.2">
 <h3>
 <span class="header-section-number">3.2.2</span> Creating a graph from an adjacency matrix<a class="anchor" aria-label="anchor" href="#creating-a-graph-from-an-adjacency-matrix"><i class="fas fa-link"></i></a>
 </h3>
 <p>Similarly, we can create a graph from data provided in an adjacency matrix. Let’s manually create an adjacency matrix for our flights graph in Figure <a href="working.html#fig:multiflights">3.3</a>, and then we can use the <code><a href="https://rdrr.io/pkg/igraph/man/graph_from_adjacency_matrix.html">graph_from_adjacency_matrix()</a></code> function in <code>igraph</code> to create a graph object from the matrix.</p>
-<div class="sourceCode" id="cb118"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb126"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># create 3x3 adjacency matrix</span>
 <span class="va">adj_flights</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">5</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">4</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">3</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">adj_flights</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"SFO"</span>, <span class="st">"PHL"</span>, <span class="st">"TUS"</span><span class="op">)</span>
@@ -412,32 +416,41 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
   adjmatrix <span class="op">=</span> <span class="va">adj_flights</span>,
   mode <span class="op">=</span> <span class="st">"directed"</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH dc3ff9c DN-- 3 16 -- 
+<pre><code>## IGRAPH d2cc5f1 DN-- 3 16 -- 
 ## + attr: name (v/c)
-## + edges from dc3ff9c (vertex names):
+## + edges from d2cc5f1 (vertex names):
 ##  [1] SFO-&gt;PHL SFO-&gt;PHL SFO-&gt;PHL SFO-&gt;PHL SFO-&gt;TUS SFO-&gt;TUS SFO-&gt;TUS SFO-&gt;TUS PHL-&gt;SFO PHL-&gt;SFO PHL-&gt;SFO PHL-&gt;SFO PHL-&gt;SFO
 ## [14] PHL-&gt;TUS TUS-&gt;SFO TUS-&gt;SFO</code></pre>
-<p>We see the expected directed multigraph with 3 vertices and 16 edges. If we wish to use create the weighted graph in Figure <a href="working.html#fig:weightedflights">3.10</a>, we add <code>weighted = TRUE</code> to the arguments.</p>
-<div class="sourceCode" id="cb120"><pre class="downlit sourceCode r">
+<p>We see the expected directed multigraph with 3 vertices and 16 edges. If we wish to create the weighted graph in Figure <a href="working.html#fig:weightedflights">3.10</a>, we add <code>weighted = TRUE</code> to the arguments.</p>
+<div class="sourceCode" id="cb128"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># create weighted graph </span>
-<span class="op">(</span><span class="va">flightgraph</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_adjacency_matrix.html">graph_from_adjacency_matrix</a></span><span class="op">(</span>
+<span class="op">(</span><span class="va">flightgraph_weighted</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_adjacency_matrix.html">graph_from_adjacency_matrix</a></span><span class="op">(</span>
   adjmatrix <span class="op">=</span> <span class="va">adj_flights</span>,
   mode <span class="op">=</span> <span class="st">"directed"</span>,
   weighted <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH c29f9d1 DNW- 3 5 -- 
+<pre><code>## IGRAPH 9e475f5 DNW- 3 5 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from c29f9d1 (vertex names):
+## + edges from 9e475f5 (vertex names):
 ## [1] SFO-&gt;PHL SFO-&gt;TUS PHL-&gt;SFO PHL-&gt;TUS TUS-&gt;SFO</code></pre>
-<p>We now see a graph with only 5 edges but we see the addition of <code>W</code> in our graph type, indicating a weighted graph and we also see a new edge property <code>weight</code>.</p>
+<p>We now see a graph with only 5 edges but we see the addition of <code>W</code> in our graph type, indicating a weighted graph. We also see a new edge property of numeric type called <code>weight</code>. In situations where we want to simplify multiple edges to single edges without worrying about weight, the <code><a href="https://rdrr.io/pkg/igraph/man/simplify.html">simplify()</a></code> function in <code>igraph</code> works well, with the <code>remove.multiple</code> argument set to <code>TRUE</code>.</p>
+<div class="sourceCode" id="cb130"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="op">(</span><span class="va">flightgraph_simple</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/simplify.html">simplify</a></span><span class="op">(</span>
+  <span class="va">flightgraph</span>,
+  remove.multiple <span class="op">=</span> <span class="cn">TRUE</span>
+<span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code>## IGRAPH f78bd26 DN-- 3 5 -- 
+## + attr: name (v/c)
+## + edges from f78bd26 (vertex names):
+## [1] SFO-&gt;PHL SFO-&gt;TUS PHL-&gt;SFO PHL-&gt;TUS TUS-&gt;SFO</code></pre>
 </div>
 <div id="creating-a-graph-from-a-dataframe" class="section level3" number="3.2.3">
 <h3>
 <span class="header-section-number">3.2.3</span> Creating a graph from a dataframe<a class="anchor" aria-label="anchor" href="#creating-a-graph-from-a-dataframe"><i class="fas fa-link"></i></a>
 </h3>
-<p>As we noted in Section <a href="working.html#rep-graphs">3.1.4</a>, edgelists are usually sufficient to descibe a graph when isolates are not of concern. The function <code><a href="https://rdrr.io/pkg/igraph/man/graph_from_edgelist.html">graph_from_edgelist()</a></code> works fine for this purpose, but is lacking in flexibility when graphs contain isolates or other properties that you would ideally like to load on creation. However, the function <code><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame()</a></code> allows you to create a more flexible graph directly from dataframes containing the required data.</p>
+<p>As we noted in Section <a href="working.html#rep-graphs">3.1.4</a>, edgelists are usually sufficient to descibe a graph when isolates are not of concern. The function <code><a href="https://rdrr.io/pkg/igraph/man/graph_from_edgelist.html">graph_from_edgelist()</a></code> works fine for this purpose, but is lacking in flexibility when graphs contain isolates or where vertices have properties that you would ideally like to load on creation. The function <code><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame()</a></code> allows you to create a more flexible graph directly from dataframes containing the required data.</p>
 <p>Let’s create our bipartite graph <span class="math inline">\(G_\mathrm{new}\)</span> from Figure <a href="working.html#fig:newwork">3.7</a> using this function. At a minimum, this function requires a dataframe of edges, and will also accept a dataframe of vertices if needed.</p>
-<div class="sourceCode" id="cb122"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb132"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># edge dataframe</span>
 <span class="va">edge_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
   from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"David"</span>, <span class="st">"David"</span>, <span class="st">"David"</span>, <span class="st">"Jane"</span>, <span class="st">"Jane"</span>, 
@@ -458,9 +471,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
   directed <span class="op">=</span> <span class="cn">FALSE</span>,
   vertices <span class="op">=</span> <span class="va">vertex_df</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH 2bcaefe UN-- 7 8 -- 
+<pre><code>## IGRAPH 9866998 UN-- 7 8 -- 
 ## + attr: name (v/c)
-## + edges from 2bcaefe (vertex names):
+## + edges from 9866998 (vertex names):
 ## [1] David --Zubin  David --Suraya David --Jane   Zubin --Jane   Suraya--Jane   Sandra--Mae-Li Sandra--Jake   Mae-Li--Jake</code></pre>
 <div class="thinkahead">
 <p><strong>Playing around:</strong> The functions in this section are not the only functions in the <code>igraph</code> package that build graphs from data, but they are by far the most commonly used ones. By typing <code>?graph_from</code> in your R console and looking at the functions that autocomplete, you can see some of the other functions that build graphs from data. Try playing around with them if you are curious.</p>
@@ -471,7 +484,7 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <span class="header-section-number">3.2.4</span> Adding properties to the vertices and edges<a class="anchor" aria-label="anchor" href="#adding-properties-to-the-vertices-and-edges"><i class="fas fa-link"></i></a>
 </h3>
 <p>Vertex and edge properties can be added to a new graph at the point of creation or can be added progressively to an existing graph. To add properties at the same time as creating a graph, simply include these properties as columns in the edge or vertex dataframes in the <code><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame()</a></code> function. Let’s recreate our financial transaction graph including the edge and vertex properties from Figure <a href="working.html#fig:enhancedcompanytransfers">3.9</a>.</p>
-<div class="sourceCode" id="cb124"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb134"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># dataframe of edges and properties </span>
 <span class="va">edge_transfers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
   from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"B"</span><span class="op">)</span>,
@@ -480,7 +493,7 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
   amt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">150000</span>, <span class="fl">570000</span>, <span class="fl">230000</span>, <span class="fl">175000</span><span class="op">)</span>
 <span class="op">)</span>
 
-<span class="co"># dataframe of edges and properties </span>
+<span class="co"># dataframe of vertices and properties </span>
 <span class="va">vertex_transfers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
   name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span><span class="op">)</span>,
   loc <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"USA"</span>, <span class="st">"UK"</span>, <span class="st">"France"</span><span class="op">)</span>
@@ -492,32 +505,32 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
   directed <span class="op">=</span> <span class="cn">TRUE</span>,
   vertices <span class="op">=</span> <span class="va">vertex_transfers</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH f96ba3e DN-- 3 4 -- 
+<pre><code>## IGRAPH 48c1e0b DN-- 3 4 -- 
 ## + attr: name (v/c), loc (v/c), cur (e/c), amt (e/n)
-## + edges from f96ba3e (vertex names):
+## + edges from 48c1e0b (vertex names):
 ## [1] A-&gt;A A-&gt;B B-&gt;A B-&gt;C</code></pre>
 <p>We see that the additional edge properties <code>cur</code> and <code>amt</code> and the vertex property <code>loc</code> have been included in the graph. The codes immediately following these properties represent the property type and the data type. We can see that <code>loc</code> is a vertex property of character type (<code>v/c</code>), <code>cur</code> is an edge property of character type (<code>e/c</code>) and <code>amt</code> is an edge property of numeric type (<code>e/n</code>).</p>
 <div class="thinkahead">
-<p><strong>Playing around:</strong> An arbitrary number of properties can be added to the vertices and edges of a graph. If you label one of the properties as <code>weight</code> and if that property is numeric, this will change the type of your graph to <code>W</code>, a weighted graph. Try playing around with this by changing the name of the <code>amt</code> column to <code>weight</code> in <code>gtransfers</code>.</p>
+<p><strong>Playing around:</strong> An arbitrary number of properties can be added to the vertices and edges of a graph. If you label one of the properties as <code>weight</code> and if that property is numeric, this will change the type of your graph to <code>W</code>, a weighted graph. Try playing around with this by changing the name of the <code>amt</code> column to <code>weight</code> in <code>gtransfers</code>. Also, earlier we introduced the <code><a href="https://rdrr.io/pkg/igraph/man/simplify.html">simplify()</a></code> function in <code>igraph</code>. The <code><a href="https://rdrr.io/pkg/igraph/man/simplify.html">simplify()</a></code> function helps turn a graph with multiple edges or with loops into a simple graph using the arguments <code>remove.multiple = TRUE</code> and <code>remove.loops = TRUE</code>. However, be careful when using this function if your graph has properties stored in the edges which you need to preserve. Play around with using this function on the <code>gtransfers</code> graph above and see what happens. Experiment with the <code>edge.attr.comb</code> argument to try to control how the attributes are dealt with when combining the edges.</p>
 </div>
 <p>You can view the vertex and edge sets of a graph using the <code><a href="https://rdrr.io/pkg/igraph/man/V.html">V()</a></code> and <code><a href="https://rdrr.io/pkg/igraph/man/E.html">E()</a></code> functions respectively.</p>
-<div class="sourceCode" id="cb126"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb136"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">gtransfers</span><span class="op">)</span></code></pre></div>
-<pre><code>## + 3/3 vertices, named, from f96ba3e:
+<pre><code>## + 3/3 vertices, named, from 48c1e0b:
 ## [1] A B C</code></pre>
-<div class="sourceCode" id="cb128"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb138"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/E.html">E</a></span><span class="op">(</span><span class="va">gtransfers</span><span class="op">)</span></code></pre></div>
-<pre><code>## + 4/4 edges from f96ba3e (vertex names):
+<pre><code>## + 4/4 edges from 48c1e0b (vertex names):
 ## [1] A-&gt;A A-&gt;B B-&gt;A B-&gt;C</code></pre>
 <p>To see specific properties or attributes within the vertices or edges, the <code><a href="https://rdrr.io/r/base/Extract.html">$</a></code> operator can be used.</p>
-<div class="sourceCode" id="cb130"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb140"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">gtransfers</span><span class="op">)</span><span class="op">$</span><span class="va">name</span></code></pre></div>
 <pre><code>## [1] "A" "B" "C"</code></pre>
-<div class="sourceCode" id="cb132"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb142"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/E.html">E</a></span><span class="op">(</span><span class="va">gtransfers</span><span class="op">)</span><span class="op">$</span><span class="va">amt</span></code></pre></div>
 <pre><code>## [1] 150000 570000 230000 175000</code></pre>
 <p>Vertex and edge properties can be written into an existing graph directly in this way, providing the properties have the correct length and order. As an example, here is another way of creating our weighted flights graph from Figure <a href="working.html#fig:weightedflights">3.10</a>.</p>
-<div class="sourceCode" id="cb134"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb144"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># create unweighted graph from routes edgelist</span>
 <span class="va">edge_routes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
   from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"SFO"</span>, <span class="st">"SFO"</span>, <span class="st">"PHL"</span>, <span class="st">"PHL"</span>, <span class="st">"TUS"</span><span class="op">)</span>,
@@ -536,21 +549,21 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 
 <span class="co"># view flightsgraph</span>
 <span class="va">flightsgraph</span></code></pre></div>
-<pre><code>## IGRAPH 36dc44b DNW- 3 5 -- 
+<pre><code>## IGRAPH 04eb9ea DNW- 3 5 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from 36dc44b (vertex names):
+## + edges from 04eb9ea (vertex names):
 ## [1] SFO-&gt;PHL SFO-&gt;TUS PHL-&gt;SFO PHL-&gt;TUS TUS-&gt;SFO</code></pre>
 <p>We see a weighted graph has been created by adding a <code>weight</code> property to the edges of an unweighted graph.</p>
 <p>A bipartite graph can be created by giving the vertices a <code>type</code> property according to the two disjoint sets of vertices. Let’s use our <span class="math inline">\(G_\mathrm{new}\)</span> bipartite graph again as an example, which we generated earlier as the <code>gnew</code> object. In our vertex set, the first four vertices are from organization A and the final three are from organization B.</p>
-<div class="sourceCode" id="cb136"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb146"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">gnew</span><span class="op">)</span><span class="op">$</span><span class="va">type</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="fl">4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"B"</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>
 
 <span class="va">gnew</span></code></pre></div>
-<pre><code>## IGRAPH 2bcaefe UN-B 7 8 -- 
+<pre><code>## IGRAPH 9866998 UN-B 7 8 -- 
 ## + attr: name (v/c), type (v/c)
-## + edges from 2bcaefe (vertex names):
+## + edges from 9866998 (vertex names):
 ## [1] David --Zubin  David --Suraya David --Jane   Zubin --Jane   Suraya--Jane   Sandra--Mae-Li Sandra--Jake   Mae-Li--Jake</code></pre>
-<p>We can see that out graph <code>gnew</code> now has the final of the four graph types: <code>B</code> meaning bipartite.</p>
+<p>We can see that our graph <code>gnew</code> now has the final of the four graph types: <code>B</code> meaning bipartite.</p>
 <div class="thinkahead">
 <p><strong>Playing around:</strong> Hopefully you can now see that there are many ways to construct your graph. Try using the <code><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame()</a></code> function to create <code>gnew</code> as a bipartite graph at the point of creation.</p>
 </div>
@@ -565,54 +578,55 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <h3>
 <span class="header-section-number">3.3.1</span> Creating a graph from an edgelist<a class="anchor" aria-label="anchor" href="#creating-a-graph-from-an-edgelist-1"><i class="fas fa-link"></i></a>
 </h3>
-<p>A graph can be constructed from an edgelist in a Python dict. Let’s create our undirected graph <span class="math inline">\(G_\mathrm{work}\)</span> from Section <a href="working.html#graph-def">3.1.1</a>.</p>
-<div class="sourceCode" id="cb138"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb138-1"><a href="working.html#cb138-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb138-2"><a href="working.html#cb138-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
-<span id="cb138-3"><a href="working.html#cb138-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb138-4"><a href="working.html#cb138-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create edgelist as dict</span></span>
-<span id="cb138-5"><a href="working.html#cb138-5" aria-hidden="true" tabindex="-1"></a>gwork_edgelist <span class="op">=</span> <span class="bu">dict</span>(</span>
-<span id="cb138-6"><a href="working.html#cb138-6" aria-hidden="true" tabindex="-1"></a>  David <span class="op">=</span> [<span class="st">"Zubin"</span>, <span class="st">"Suraya"</span>, <span class="st">"Jane"</span>],</span>
-<span id="cb138-7"><a href="working.html#cb138-7" aria-hidden="true" tabindex="-1"></a>  Jane <span class="op">=</span> [<span class="st">"Zubin"</span>, <span class="st">"Suraya"</span>]</span>
-<span id="cb138-8"><a href="working.html#cb138-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb138-9"><a href="working.html#cb138-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb138-10"><a href="working.html#cb138-10" aria-hidden="true" tabindex="-1"></a><span class="co"># create graph dict</span></span>
-<span id="cb138-11"><a href="working.html#cb138-11" aria-hidden="true" tabindex="-1"></a>gwork <span class="op">=</span> nx.Graph(gwork_edgelist)</span></code></pre></div>
+<p>A graph can be constructed from an edgelist in a Python dictionary. Let’s create our undirected graph <span class="math inline">\(G_\mathrm{work}\)</span> from Section <a href="working.html#graph-def">3.1.1</a>.</p>
+<div class="sourceCode" id="cb148"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb148-1"><a href="working.html#cb148-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb148-2"><a href="working.html#cb148-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
+<span id="cb148-3"><a href="working.html#cb148-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb148-4"><a href="working.html#cb148-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create edgelist as dict</span></span>
+<span id="cb148-5"><a href="working.html#cb148-5" aria-hidden="true" tabindex="-1"></a>gwork_edgelist <span class="op">=</span> <span class="bu">dict</span>(</span>
+<span id="cb148-6"><a href="working.html#cb148-6" aria-hidden="true" tabindex="-1"></a>  David <span class="op">=</span> [<span class="st">"Zubin"</span>, <span class="st">"Suraya"</span>, <span class="st">"Jane"</span>],</span>
+<span id="cb148-7"><a href="working.html#cb148-7" aria-hidden="true" tabindex="-1"></a>  Jane <span class="op">=</span> [<span class="st">"Zubin"</span>, <span class="st">"Suraya"</span>]</span>
+<span id="cb148-8"><a href="working.html#cb148-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb148-9"><a href="working.html#cb148-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb148-10"><a href="working.html#cb148-10" aria-hidden="true" tabindex="-1"></a><span class="co"># create graph dict</span></span>
+<span id="cb148-11"><a href="working.html#cb148-11" aria-hidden="true" tabindex="-1"></a>gwork <span class="op">=</span> nx.Graph(gwork_edgelist)</span></code></pre></div>
 <p>To view the edges or vertices/nodes, these can be seen as attributes of the <code>gwork</code> object.</p>
-<div class="sourceCode" id="cb139"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb139-1"><a href="working.html#cb139-1" aria-hidden="true" tabindex="-1"></a><span class="co"># see vertices and edges as lists</span></span>
-<span id="cb139-2"><a href="working.html#cb139-2" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(gwork.nodes)</span></code></pre></div>
+<div class="sourceCode" id="cb149"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb149-1"><a href="working.html#cb149-1" aria-hidden="true" tabindex="-1"></a><span class="co"># see vertices as list</span></span>
+<span id="cb149-2"><a href="working.html#cb149-2" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(gwork.nodes)</span></code></pre></div>
 <pre><code>## ['David', 'Jane', 'Zubin', 'Suraya']</code></pre>
-<div class="sourceCode" id="cb141"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb141-1"><a href="working.html#cb141-1" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(gwork.edges)</span></code></pre></div>
-<pre><code>## [('David', 'Zubin'), ('David', 'Suraya'), ('David', 'Jane'), ('Jane', 'Zubin'), ('Jane', 'Suraya')]</code></pre>
-<p>A graph can also be constructed from an edgelist in a Pandas DataFrame. By default the edgelist needs to have the columns <code>source</code> and <code>target</code><a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;These columns can also be named differently and identified via the &lt;code&gt;source&lt;/code&gt; and &lt;code&gt;target&lt;/code&gt; arguments in the &lt;code&gt;from_pandas_edgelist()&lt;/code&gt; function.&lt;/p&gt;"><sup>15</sup></a>.</p>
-<div class="sourceCode" id="cb143"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb143-1"><a href="working.html#cb143-1" aria-hidden="true" tabindex="-1"></a>gwork_edgelist<span class="op">=</span><span class="bu">dict</span>(</span>
-<span id="cb143-2"><a href="working.html#cb143-2" aria-hidden="true" tabindex="-1"></a>  source<span class="op">=</span>[<span class="st">"David"</span>, <span class="st">"David"</span>, <span class="st">"David"</span>, <span class="st">"Jane"</span>, <span class="st">"Jane"</span>],</span>
-<span id="cb143-3"><a href="working.html#cb143-3" aria-hidden="true" tabindex="-1"></a>  target<span class="op">=</span>[<span class="st">"Zubin"</span>, <span class="st">"Suraya"</span>, <span class="st">"Jane"</span>, <span class="st">"Zubin"</span>, <span class="st">"Suraya"</span>]</span>
-<span id="cb143-4"><a href="working.html#cb143-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb143-5"><a href="working.html#cb143-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb143-6"><a href="working.html#cb143-6" aria-hidden="true" tabindex="-1"></a><span class="co">#create edgelist as Pandas DataFrame</span></span>
-<span id="cb143-7"><a href="working.html#cb143-7" aria-hidden="true" tabindex="-1"></a>gwork_edgelist <span class="op">=</span> pd.DataFrame(gwork_edgelist)</span>
-<span id="cb143-8"><a href="working.html#cb143-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb143-9"><a href="working.html#cb143-9" aria-hidden="true" tabindex="-1"></a><span class="co"># create graph from Pandas DataFrame</span></span>
-<span id="cb143-10"><a href="working.html#cb143-10" aria-hidden="true" tabindex="-1"></a>gwork <span class="op">=</span> nx.from_pandas_edgelist(gwork_edgelist)</span></code></pre></div>
+<div class="sourceCode" id="cb151"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb151-1"><a href="working.html#cb151-1" aria-hidden="true" tabindex="-1"></a><span class="co"># list some edges</span></span>
+<span id="cb151-2"><a href="working.html#cb151-2" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(gwork.edges)[<span class="dv">0</span>:<span class="dv">3</span>]</span></code></pre></div>
+<pre><code>## [('David', 'Zubin'), ('David', 'Suraya'), ('David', 'Jane')]</code></pre>
+<p>A graph can also be constructed from an edgelist in a Pandas DataFrame. By default the edgelist needs to have the columns <code>source</code> and <code>target</code><a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;These columns can also be named differently and identified via the &lt;code&gt;source&lt;/code&gt; and &lt;code&gt;target&lt;/code&gt; arguments in the &lt;code&gt;from_pandas_edgelist()&lt;/code&gt; function.&lt;/p&gt;"><sup>17</sup></a>.</p>
+<div class="sourceCode" id="cb153"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb153-1"><a href="working.html#cb153-1" aria-hidden="true" tabindex="-1"></a>gwork_edgelist<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb153-2"><a href="working.html#cb153-2" aria-hidden="true" tabindex="-1"></a>  source<span class="op">=</span>[<span class="st">"David"</span>, <span class="st">"David"</span>, <span class="st">"David"</span>, <span class="st">"Jane"</span>, <span class="st">"Jane"</span>],</span>
+<span id="cb153-3"><a href="working.html#cb153-3" aria-hidden="true" tabindex="-1"></a>  target<span class="op">=</span>[<span class="st">"Zubin"</span>, <span class="st">"Suraya"</span>, <span class="st">"Jane"</span>, <span class="st">"Zubin"</span>, <span class="st">"Suraya"</span>]</span>
+<span id="cb153-4"><a href="working.html#cb153-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb153-5"><a href="working.html#cb153-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb153-6"><a href="working.html#cb153-6" aria-hidden="true" tabindex="-1"></a><span class="co">#create edgelist as Pandas DataFrame</span></span>
+<span id="cb153-7"><a href="working.html#cb153-7" aria-hidden="true" tabindex="-1"></a>gwork_edgelist <span class="op">=</span> pd.DataFrame(gwork_edgelist)</span>
+<span id="cb153-8"><a href="working.html#cb153-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb153-9"><a href="working.html#cb153-9" aria-hidden="true" tabindex="-1"></a><span class="co"># create graph from Pandas DataFrame</span></span>
+<span id="cb153-10"><a href="working.html#cb153-10" aria-hidden="true" tabindex="-1"></a>gwork <span class="op">=</span> nx.from_pandas_edgelist(gwork_edgelist)</span></code></pre></div>
 <p>By default these functions uses a <code>Graph()</code> class to create an undirected graph. Various methods exist to check the type of graph. For example:</p>
-<div class="sourceCode" id="cb144"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb144-1"><a href="working.html#cb144-1" aria-hidden="true" tabindex="-1"></a>gwork.is_directed()</span></code></pre></div>
+<div class="sourceCode" id="cb154"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb154-1"><a href="working.html#cb154-1" aria-hidden="true" tabindex="-1"></a>gwork.is_directed()</span></code></pre></div>
 <pre><code>## False</code></pre>
-<div class="sourceCode" id="cb146"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb146-1"><a href="working.html#cb146-1" aria-hidden="true" tabindex="-1"></a>gwork.is_multigraph()</span></code></pre></div>
+<div class="sourceCode" id="cb156"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb156-1"><a href="working.html#cb156-1" aria-hidden="true" tabindex="-1"></a>gwork.is_multigraph()</span></code></pre></div>
 <pre><code>## False</code></pre>
 <p>To create our directed graph <span class="math inline">\(G_\mathrm{manage}\)</span>, we use the <code>DiGraph()</code> class.</p>
-<div class="sourceCode" id="cb148"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb148-1"><a href="working.html#cb148-1" aria-hidden="true" tabindex="-1"></a>gmanage_edgelist<span class="op">=</span><span class="bu">dict</span>(</span>
-<span id="cb148-2"><a href="working.html#cb148-2" aria-hidden="true" tabindex="-1"></a>  David<span class="op">=</span>[<span class="st">"Zubin"</span>, <span class="st">"Jane"</span>],</span>
-<span id="cb148-3"><a href="working.html#cb148-3" aria-hidden="true" tabindex="-1"></a>  Suraya<span class="op">=</span>[<span class="st">"David"</span>]</span>
-<span id="cb148-4"><a href="working.html#cb148-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb148-5"><a href="working.html#cb148-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb148-6"><a href="working.html#cb148-6" aria-hidden="true" tabindex="-1"></a><span class="co"># create directed graph</span></span>
-<span id="cb148-7"><a href="working.html#cb148-7" aria-hidden="true" tabindex="-1"></a>gmanage<span class="op">=</span>nx.DiGraph(gmanage_edgelist)</span>
-<span id="cb148-8"><a href="working.html#cb148-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb148-9"><a href="working.html#cb148-9" aria-hidden="true" tabindex="-1"></a><span class="co"># check edges</span></span>
-<span id="cb148-10"><a href="working.html#cb148-10" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(gmanage.edges)</span></code></pre></div>
+<div class="sourceCode" id="cb158"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb158-1"><a href="working.html#cb158-1" aria-hidden="true" tabindex="-1"></a>gmanage_edgelist<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb158-2"><a href="working.html#cb158-2" aria-hidden="true" tabindex="-1"></a>  David<span class="op">=</span>[<span class="st">"Zubin"</span>, <span class="st">"Jane"</span>],</span>
+<span id="cb158-3"><a href="working.html#cb158-3" aria-hidden="true" tabindex="-1"></a>  Suraya<span class="op">=</span>[<span class="st">"David"</span>]</span>
+<span id="cb158-4"><a href="working.html#cb158-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb158-5"><a href="working.html#cb158-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb158-6"><a href="working.html#cb158-6" aria-hidden="true" tabindex="-1"></a><span class="co"># create directed graph</span></span>
+<span id="cb158-7"><a href="working.html#cb158-7" aria-hidden="true" tabindex="-1"></a>gmanage<span class="op">=</span>nx.DiGraph(gmanage_edgelist)</span>
+<span id="cb158-8"><a href="working.html#cb158-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb158-9"><a href="working.html#cb158-9" aria-hidden="true" tabindex="-1"></a><span class="co"># check edges</span></span>
+<span id="cb158-10"><a href="working.html#cb158-10" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(gmanage.edges)</span></code></pre></div>
 <pre><code>## [('David', 'Zubin'), ('David', 'Jane'), ('Suraya', 'David')]</code></pre>
-<div class="sourceCode" id="cb150"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb150-1"><a href="working.html#cb150-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check directed</span></span>
-<span id="cb150-2"><a href="working.html#cb150-2" aria-hidden="true" tabindex="-1"></a>gmanage.is_directed()</span></code></pre></div>
+<div class="sourceCode" id="cb160"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb160-1"><a href="working.html#cb160-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check directed</span></span>
+<span id="cb160-2"><a href="working.html#cb160-2" aria-hidden="true" tabindex="-1"></a>gmanage.is_directed()</span></code></pre></div>
 <pre><code>## True</code></pre>
 </div>
 <div id="python-graph-from-adjacency" class="section level3" number="3.3.2">
@@ -620,87 +634,87 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <span class="header-section-number">3.3.2</span> Creating a graph from an adjacency matrix<a class="anchor" aria-label="anchor" href="#python-graph-from-adjacency"><i class="fas fa-link"></i></a>
 </h3>
 <p>The function <code>from_numpy_matrix()</code> allows the construction of a graph from an adjacency matrix created using <code>numpy</code>. Let’s construct our directed multigraph for flight carriers from Figure <a href="working.html#fig:multiflights">3.3</a> in this way.</p>
-<div class="sourceCode" id="cb152"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb152-1"><a href="working.html#cb152-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb152-2"><a href="working.html#cb152-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb152-3"><a href="working.html#cb152-3" aria-hidden="true" tabindex="-1"></a><span class="co"># create adjacency matrix</span></span>
-<span id="cb152-4"><a href="working.html#cb152-4" aria-hidden="true" tabindex="-1"></a>adj_flights <span class="op">=</span> np.reshape((<span class="dv">0</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">0</span>), (<span class="dv">3</span>,<span class="dv">3</span>))</span>
-<span id="cb152-5"><a href="working.html#cb152-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb152-6"><a href="working.html#cb152-6" aria-hidden="true" tabindex="-1"></a><span class="co"># generate directed multigraph </span></span>
-<span id="cb152-7"><a href="working.html#cb152-7" aria-hidden="true" tabindex="-1"></a>multiflights <span class="op">=</span> nx.from_numpy_matrix(adj_flights, parallel_edges<span class="op">=</span><span class="va">True</span>, </span>
-<span id="cb152-8"><a href="working.html#cb152-8" aria-hidden="true" tabindex="-1"></a>create_using<span class="op">=</span>nx.MultiDiGraph())</span>
-<span id="cb152-9"><a href="working.html#cb152-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb152-10"><a href="working.html#cb152-10" aria-hidden="true" tabindex="-1"></a><span class="co"># name nodes</span></span>
-<span id="cb152-11"><a href="working.html#cb152-11" aria-hidden="true" tabindex="-1"></a>label_mapping <span class="op">=</span> {<span class="dv">0</span>: <span class="st">"SFO"</span>, <span class="dv">1</span>: <span class="st">"PHL"</span>, <span class="dv">2</span>: <span class="st">"TUS"</span>}</span>
-<span id="cb152-12"><a href="working.html#cb152-12" aria-hidden="true" tabindex="-1"></a>multiflights <span class="op">=</span> nx.relabel_nodes(multiflights, label_mapping)</span>
-<span id="cb152-13"><a href="working.html#cb152-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb152-14"><a href="working.html#cb152-14" aria-hidden="true" tabindex="-1"></a><span class="co"># check edges</span></span>
-<span id="cb152-15"><a href="working.html#cb152-15" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(multiflights.edges)</span></code></pre></div>
-<pre><code>## [('SFO', 'PHL', 0), ('SFO', 'PHL', 1), ('SFO', 'PHL', 2), ('SFO', 'PHL', 3), ('SFO', 'TUS', 0), ('SFO', 'TUS', 1), ('SFO', 'TUS', 2), ('SFO', 'TUS', 3), ('PHL', 'SFO', 0), ('PHL', 'SFO', 1), ('PHL', 'SFO', 2), ('PHL', 'SFO', 3), ('PHL', 'SFO', 4), ('PHL', 'TUS', 0), ('TUS', 'SFO', 0), ('TUS', 'SFO', 1)]</code></pre>
+<div class="sourceCode" id="cb162"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb162-1"><a href="working.html#cb162-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb162-2"><a href="working.html#cb162-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb162-3"><a href="working.html#cb162-3" aria-hidden="true" tabindex="-1"></a><span class="co"># create adjacency matrix</span></span>
+<span id="cb162-4"><a href="working.html#cb162-4" aria-hidden="true" tabindex="-1"></a>adj_flights <span class="op">=</span> np.reshape((<span class="dv">0</span>,<span class="dv">4</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">0</span>), (<span class="dv">3</span>,<span class="dv">3</span>))</span>
+<span id="cb162-5"><a href="working.html#cb162-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb162-6"><a href="working.html#cb162-6" aria-hidden="true" tabindex="-1"></a><span class="co"># generate directed multigraph </span></span>
+<span id="cb162-7"><a href="working.html#cb162-7" aria-hidden="true" tabindex="-1"></a>multiflights <span class="op">=</span> nx.from_numpy_matrix(adj_flights, parallel_edges<span class="op">=</span><span class="va">True</span>, </span>
+<span id="cb162-8"><a href="working.html#cb162-8" aria-hidden="true" tabindex="-1"></a>create_using<span class="op">=</span>nx.MultiDiGraph())</span>
+<span id="cb162-9"><a href="working.html#cb162-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb162-10"><a href="working.html#cb162-10" aria-hidden="true" tabindex="-1"></a><span class="co"># name nodes</span></span>
+<span id="cb162-11"><a href="working.html#cb162-11" aria-hidden="true" tabindex="-1"></a>label_mapping <span class="op">=</span> {<span class="dv">0</span>: <span class="st">"SFO"</span>, <span class="dv">1</span>: <span class="st">"PHL"</span>, <span class="dv">2</span>: <span class="st">"TUS"</span>}</span>
+<span id="cb162-12"><a href="working.html#cb162-12" aria-hidden="true" tabindex="-1"></a>multiflights <span class="op">=</span> nx.relabel_nodes(multiflights, label_mapping)</span>
+<span id="cb162-13"><a href="working.html#cb162-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb162-14"><a href="working.html#cb162-14" aria-hidden="true" tabindex="-1"></a><span class="co"># check some edges</span></span>
+<span id="cb162-15"><a href="working.html#cb162-15" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(multiflights.edges)[<span class="dv">0</span>:<span class="dv">3</span>]</span></code></pre></div>
+<pre><code>## [('SFO', 'PHL', 0), ('SFO', 'PHL', 1), ('SFO', 'PHL', 2)]</code></pre>
 <p>To generate the graph with only single weighted edges as in Figure <a href="working.html#fig:weightedflights">3.10</a>, simply change the <code>parallel_edges</code> argument and use the <code>DiGraph()</code> class. This will map the entries in the matrix to a <code>weight</code> edge attribute.</p>
-<div class="sourceCode" id="cb154"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb154-1"><a href="working.html#cb154-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create with single weighted edges</span></span>
-<span id="cb154-2"><a href="working.html#cb154-2" aria-hidden="true" tabindex="-1"></a>multiflights <span class="op">=</span> nx.from_numpy_matrix(adj_flights, parallel_edges<span class="op">=</span><span class="va">False</span>, </span>
-<span id="cb154-3"><a href="working.html#cb154-3" aria-hidden="true" tabindex="-1"></a>create_using<span class="op">=</span>nx.DiGraph())</span>
-<span id="cb154-4"><a href="working.html#cb154-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb154-5"><a href="working.html#cb154-5" aria-hidden="true" tabindex="-1"></a><span class="co"># name nodes</span></span>
-<span id="cb154-6"><a href="working.html#cb154-6" aria-hidden="true" tabindex="-1"></a>label_mapping <span class="op">=</span> {<span class="dv">0</span>: <span class="st">"SFO"</span>, <span class="dv">1</span>: <span class="st">"PHL"</span>, <span class="dv">2</span>: <span class="st">"TUS"</span>}</span>
-<span id="cb154-7"><a href="working.html#cb154-7" aria-hidden="true" tabindex="-1"></a>multiflights <span class="op">=</span> nx.relabel_nodes(multiflights, label_mapping)</span>
-<span id="cb154-8"><a href="working.html#cb154-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb154-9"><a href="working.html#cb154-9" aria-hidden="true" tabindex="-1"></a><span class="co"># check edges</span></span>
-<span id="cb154-10"><a href="working.html#cb154-10" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(multiflights.edges)</span></code></pre></div>
+<div class="sourceCode" id="cb164"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb164-1"><a href="working.html#cb164-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create with single weighted edges</span></span>
+<span id="cb164-2"><a href="working.html#cb164-2" aria-hidden="true" tabindex="-1"></a>multiflights <span class="op">=</span> nx.from_numpy_matrix(adj_flights, parallel_edges<span class="op">=</span><span class="va">False</span>, </span>
+<span id="cb164-3"><a href="working.html#cb164-3" aria-hidden="true" tabindex="-1"></a>create_using<span class="op">=</span>nx.DiGraph())</span>
+<span id="cb164-4"><a href="working.html#cb164-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb164-5"><a href="working.html#cb164-5" aria-hidden="true" tabindex="-1"></a><span class="co"># name nodes</span></span>
+<span id="cb164-6"><a href="working.html#cb164-6" aria-hidden="true" tabindex="-1"></a>label_mapping <span class="op">=</span> {<span class="dv">0</span>: <span class="st">"SFO"</span>, <span class="dv">1</span>: <span class="st">"PHL"</span>, <span class="dv">2</span>: <span class="st">"TUS"</span>}</span>
+<span id="cb164-7"><a href="working.html#cb164-7" aria-hidden="true" tabindex="-1"></a>multiflights <span class="op">=</span> nx.relabel_nodes(multiflights, label_mapping)</span>
+<span id="cb164-8"><a href="working.html#cb164-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb164-9"><a href="working.html#cb164-9" aria-hidden="true" tabindex="-1"></a><span class="co"># check edges</span></span>
+<span id="cb164-10"><a href="working.html#cb164-10" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(multiflights.edges)</span></code></pre></div>
 <pre><code>## [('SFO', 'PHL'), ('SFO', 'TUS'), ('PHL', 'SFO'), ('PHL', 'TUS'), ('TUS', 'SFO')]</code></pre>
-<div class="sourceCode" id="cb156"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb156-1"><a href="working.html#cb156-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check weights of edges</span></span>
-<span id="cb156-2"><a href="working.html#cb156-2" aria-hidden="true" tabindex="-1"></a>[multiflights.edges[i][<span class="st">'weight'</span>] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">list</span>(multiflights.edges)]</span></code></pre></div>
+<div class="sourceCode" id="cb166"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb166-1"><a href="working.html#cb166-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check weights of edges</span></span>
+<span id="cb166-2"><a href="working.html#cb166-2" aria-hidden="true" tabindex="-1"></a>[multiflights.edges[i][<span class="st">'weight'</span>] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">list</span>(multiflights.edges)]</span></code></pre></div>
 <pre><code>## [4, 4, 5, 1, 2]</code></pre>
 </div>
 <div id="adding-vertex-and-edge-properties-to-a-graph" class="section level3" number="3.3.3">
 <h3>
 <span class="header-section-number">3.3.3</span> Adding vertex and edge properties to a graph<a class="anchor" aria-label="anchor" href="#adding-vertex-and-edge-properties-to-a-graph"><i class="fas fa-link"></i></a>
 </h3>
-<p>The easiest way to add attributes to the vertices and edges is to use the <code>set_node_attributes()</code> and <code>set_edge_attributes()</code> functions respectively. Vertex/node attributes must be passed as a dict with the nodes as keys. Let’s build our simple financial transactions graph as in Figure <a href="working.html#fig:enhancedcompanytransfers">3.9</a>.</p>
-<div class="sourceCode" id="cb158"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb158-1"><a href="working.html#cb158-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create dict of edgelist</span></span>
-<span id="cb158-2"><a href="working.html#cb158-2" aria-hidden="true" tabindex="-1"></a>transfer_edgelist <span class="op">=</span> <span class="bu">dict</span>(</span>
-<span id="cb158-3"><a href="working.html#cb158-3" aria-hidden="true" tabindex="-1"></a>  A <span class="op">=</span> [<span class="st">"A"</span>, <span class="st">"B"</span>],</span>
-<span id="cb158-4"><a href="working.html#cb158-4" aria-hidden="true" tabindex="-1"></a>  B <span class="op">=</span> [<span class="st">"A"</span>, <span class="st">"C"</span>]</span>
-<span id="cb158-5"><a href="working.html#cb158-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb158-6"><a href="working.html#cb158-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb158-7"><a href="working.html#cb158-7" aria-hidden="true" tabindex="-1"></a><span class="co"># create directed graph</span></span>
-<span id="cb158-8"><a href="working.html#cb158-8" aria-hidden="true" tabindex="-1"></a>transfer<span class="op">=</span>nx.DiGraph(transfer_edgelist)</span>
-<span id="cb158-9"><a href="working.html#cb158-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb158-10"><a href="working.html#cb158-10" aria-hidden="true" tabindex="-1"></a><span class="co">#view vertices</span></span>
-<span id="cb158-11"><a href="working.html#cb158-11" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(transfer.nodes)</span></code></pre></div>
+<p>The easiest way to add attributes to the vertices and edges is to use the <code>set_node_attributes()</code> and <code>set_edge_attributes()</code> functions respectively. Vertex/node attributes must be passed as a dict with the nodes as keys. Let’s build our financial transactions graph as in Figure <a href="working.html#fig:enhancedcompanytransfers">3.9</a>.</p>
+<div class="sourceCode" id="cb168"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb168-1"><a href="working.html#cb168-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create dict of edgelist</span></span>
+<span id="cb168-2"><a href="working.html#cb168-2" aria-hidden="true" tabindex="-1"></a>transfer_edgelist <span class="op">=</span> <span class="bu">dict</span>(</span>
+<span id="cb168-3"><a href="working.html#cb168-3" aria-hidden="true" tabindex="-1"></a>  A <span class="op">=</span> [<span class="st">"A"</span>, <span class="st">"B"</span>],</span>
+<span id="cb168-4"><a href="working.html#cb168-4" aria-hidden="true" tabindex="-1"></a>  B <span class="op">=</span> [<span class="st">"A"</span>, <span class="st">"C"</span>]</span>
+<span id="cb168-5"><a href="working.html#cb168-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb168-6"><a href="working.html#cb168-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb168-7"><a href="working.html#cb168-7" aria-hidden="true" tabindex="-1"></a><span class="co"># create directed graph</span></span>
+<span id="cb168-8"><a href="working.html#cb168-8" aria-hidden="true" tabindex="-1"></a>transfer<span class="op">=</span>nx.DiGraph(transfer_edgelist)</span>
+<span id="cb168-9"><a href="working.html#cb168-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb168-10"><a href="working.html#cb168-10" aria-hidden="true" tabindex="-1"></a><span class="co"># view vertices</span></span>
+<span id="cb168-11"><a href="working.html#cb168-11" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(transfer.nodes)</span></code></pre></div>
 <pre><code>## ['A', 'B', 'C']</code></pre>
-<div class="sourceCode" id="cb160"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb160-1"><a href="working.html#cb160-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add attribute loc to vertices</span></span>
-<span id="cb160-2"><a href="working.html#cb160-2" aria-hidden="true" tabindex="-1"></a>loc_attributes <span class="op">=</span> <span class="bu">dict</span>(A <span class="op">=</span> <span class="st">"USA"</span>, B <span class="op">=</span> <span class="st">"UK"</span>, C <span class="op">=</span> <span class="st">"France"</span>)</span>
-<span id="cb160-3"><a href="working.html#cb160-3" aria-hidden="true" tabindex="-1"></a>nx.set_node_attributes(G <span class="op">=</span> transfer, name <span class="op">=</span> <span class="st">"loc"</span>,</span>
-<span id="cb160-4"><a href="working.html#cb160-4" aria-hidden="true" tabindex="-1"></a>values <span class="op">=</span> loc_attributes)</span>
-<span id="cb160-5"><a href="working.html#cb160-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb160-6"><a href="working.html#cb160-6" aria-hidden="true" tabindex="-1"></a><span class="co"># check </span></span>
-<span id="cb160-7"><a href="working.html#cb160-7" aria-hidden="true" tabindex="-1"></a>[transfer.nodes[i][<span class="st">'loc'</span>] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">list</span>(transfer.nodes)]</span></code></pre></div>
+<div class="sourceCode" id="cb170"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb170-1"><a href="working.html#cb170-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add attribute loc to vertices</span></span>
+<span id="cb170-2"><a href="working.html#cb170-2" aria-hidden="true" tabindex="-1"></a>loc_attributes <span class="op">=</span> <span class="bu">dict</span>(A <span class="op">=</span> <span class="st">"USA"</span>, B <span class="op">=</span> <span class="st">"UK"</span>, C <span class="op">=</span> <span class="st">"France"</span>)</span>
+<span id="cb170-3"><a href="working.html#cb170-3" aria-hidden="true" tabindex="-1"></a>nx.set_node_attributes(G <span class="op">=</span> transfer, name <span class="op">=</span> <span class="st">"loc"</span>,</span>
+<span id="cb170-4"><a href="working.html#cb170-4" aria-hidden="true" tabindex="-1"></a>values <span class="op">=</span> loc_attributes)</span>
+<span id="cb170-5"><a href="working.html#cb170-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb170-6"><a href="working.html#cb170-6" aria-hidden="true" tabindex="-1"></a><span class="co"># check </span></span>
+<span id="cb170-7"><a href="working.html#cb170-7" aria-hidden="true" tabindex="-1"></a>[transfer.nodes[i][<span class="st">'loc'</span>] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">list</span>(transfer.nodes)]</span></code></pre></div>
 <pre><code>## ['USA', 'UK', 'France']</code></pre>
 <p>Note that multiple attributes can be set at once by passing a dict of dicts.</p>
-<div class="sourceCode" id="cb162"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb162-1"><a href="working.html#cb162-1" aria-hidden="true" tabindex="-1"></a><span class="co">#view edges</span></span>
-<span id="cb162-2"><a href="working.html#cb162-2" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(transfer.edges)</span></code></pre></div>
+<div class="sourceCode" id="cb172"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb172-1"><a href="working.html#cb172-1" aria-hidden="true" tabindex="-1"></a><span class="co"># view edges</span></span>
+<span id="cb172-2"><a href="working.html#cb172-2" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(transfer.edges)</span></code></pre></div>
 <pre><code>## [('A', 'A'), ('A', 'B'), ('B', 'A'), ('B', 'C')]</code></pre>
-<div class="sourceCode" id="cb164"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb164-1"><a href="working.html#cb164-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add attributes to edges</span></span>
-<span id="cb164-2"><a href="working.html#cb164-2" aria-hidden="true" tabindex="-1"></a>transfer_attributes <span class="op">=</span> {</span>
-<span id="cb164-3"><a href="working.html#cb164-3" aria-hidden="true" tabindex="-1"></a>  (<span class="st">'A'</span>, <span class="st">'A'</span>): {<span class="st">"cur"</span>: <span class="st">"USD"</span>, <span class="st">"amt"</span>: <span class="dv">150000</span>}, </span>
-<span id="cb164-4"><a href="working.html#cb164-4" aria-hidden="true" tabindex="-1"></a>  (<span class="st">'A'</span>, <span class="st">'B'</span>): {<span class="st">"cur"</span>: <span class="st">"USD"</span>, <span class="st">"amt"</span>: <span class="dv">570000</span>},</span>
-<span id="cb164-5"><a href="working.html#cb164-5" aria-hidden="true" tabindex="-1"></a>  (<span class="st">'B'</span>, <span class="st">'A'</span>): {<span class="st">"cur"</span>: <span class="st">"GBP"</span>, <span class="st">"amt"</span>: <span class="dv">230000</span>}, </span>
-<span id="cb164-6"><a href="working.html#cb164-6" aria-hidden="true" tabindex="-1"></a>  (<span class="st">'B'</span>, <span class="st">'C'</span>): {<span class="st">"cur"</span>: <span class="st">"GBP"</span>, <span class="st">"amt"</span>: <span class="dv">175000</span>}</span>
-<span id="cb164-7"><a href="working.html#cb164-7" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb164-8"><a href="working.html#cb164-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb164-9"><a href="working.html#cb164-9" aria-hidden="true" tabindex="-1"></a><span class="co"># set edge attributes</span></span>
-<span id="cb164-10"><a href="working.html#cb164-10" aria-hidden="true" tabindex="-1"></a>nx.set_edge_attributes(G <span class="op">=</span> transfer, values <span class="op">=</span> transfer_attributes)</span>
-<span id="cb164-11"><a href="working.html#cb164-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb164-12"><a href="working.html#cb164-12" aria-hidden="true" tabindex="-1"></a><span class="co"># check</span></span>
-<span id="cb164-13"><a href="working.html#cb164-13" aria-hidden="true" tabindex="-1"></a>[transfer.edges[i][<span class="st">'cur'</span>] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">list</span>(transfer.edges)]</span></code></pre></div>
+<div class="sourceCode" id="cb174"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb174-1"><a href="working.html#cb174-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add attributes to edges</span></span>
+<span id="cb174-2"><a href="working.html#cb174-2" aria-hidden="true" tabindex="-1"></a>transfer_attributes <span class="op">=</span> {</span>
+<span id="cb174-3"><a href="working.html#cb174-3" aria-hidden="true" tabindex="-1"></a>  (<span class="st">'A'</span>, <span class="st">'A'</span>): {<span class="st">"cur"</span>: <span class="st">"USD"</span>, <span class="st">"amt"</span>: <span class="dv">150000</span>}, </span>
+<span id="cb174-4"><a href="working.html#cb174-4" aria-hidden="true" tabindex="-1"></a>  (<span class="st">'A'</span>, <span class="st">'B'</span>): {<span class="st">"cur"</span>: <span class="st">"USD"</span>, <span class="st">"amt"</span>: <span class="dv">570000</span>},</span>
+<span id="cb174-5"><a href="working.html#cb174-5" aria-hidden="true" tabindex="-1"></a>  (<span class="st">'B'</span>, <span class="st">'A'</span>): {<span class="st">"cur"</span>: <span class="st">"GBP"</span>, <span class="st">"amt"</span>: <span class="dv">230000</span>}, </span>
+<span id="cb174-6"><a href="working.html#cb174-6" aria-hidden="true" tabindex="-1"></a>  (<span class="st">'B'</span>, <span class="st">'C'</span>): {<span class="st">"cur"</span>: <span class="st">"GBP"</span>, <span class="st">"amt"</span>: <span class="dv">175000</span>}</span>
+<span id="cb174-7"><a href="working.html#cb174-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb174-8"><a href="working.html#cb174-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb174-9"><a href="working.html#cb174-9" aria-hidden="true" tabindex="-1"></a><span class="co"># set edge attributes</span></span>
+<span id="cb174-10"><a href="working.html#cb174-10" aria-hidden="true" tabindex="-1"></a>nx.set_edge_attributes(G <span class="op">=</span> transfer, values <span class="op">=</span> transfer_attributes)</span>
+<span id="cb174-11"><a href="working.html#cb174-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb174-12"><a href="working.html#cb174-12" aria-hidden="true" tabindex="-1"></a><span class="co"># check</span></span>
+<span id="cb174-13"><a href="working.html#cb174-13" aria-hidden="true" tabindex="-1"></a>[transfer.edges[i][<span class="st">'cur'</span>] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">list</span>(transfer.edges)]</span></code></pre></div>
 <pre><code>## ['USD', 'USD', 'GBP', 'GBP']</code></pre>
-<div class="sourceCode" id="cb166"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb166-1"><a href="working.html#cb166-1" aria-hidden="true" tabindex="-1"></a>[transfer.edges[i][<span class="st">'amt'</span>] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">list</span>(transfer.edges)]</span></code></pre></div>
+<div class="sourceCode" id="cb176"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb176-1"><a href="working.html#cb176-1" aria-hidden="true" tabindex="-1"></a>[transfer.edges[i][<span class="st">'amt'</span>] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">list</span>(transfer.edges)]</span></code></pre></div>
 <pre><code>## [150000, 570000, 230000, 175000]</code></pre>
 <p>While this may look tedious and manual, as we move into adding common properties like node centrality or edge weight to graphs, we will find these to be easy to set because of built-in functions that automatically index their output by the vertices or edges. For example, we have already seen in Section <a href="working.html#python-graph-from-adjacency">3.3.2</a> that the function <code>from_numpy_matrix()</code> automatically sets a weight according to the number of edges when we set the argument <code>parallel_edges</code> to <code>False</code>. Also, if you have edge properties as columns in your Pandas edgelist, you can automatically import them into your graph by setting <code>edge_attr = True</code> in the <code>from_pandas_edgelist()</code> function in <code>networkx</code>.</p>
-<p>:::{thinkahead data-latex=""}
-<strong>Playing around:</strong> As with the <code>igraph</code> package in R, the <code>networkx</code> package in Python contains a whole host of ways to import data into a graph. While the methods outlined here are likely to be the most common, it’s worth taking a look at some of the other functions such as <code>from_dict_of_dicts()</code> or <code>from_dict_of_lists()</code> to see what is available to you.
-:::</p>
+<div class="thinkahead">
+<p><strong>Playing around:</strong> As with the <code>igraph</code> package in R, the <code>networkx</code> package in Python contains a whole host of ways to import data into a graph. While the methods outlined here are likely to be the most common, it’s worth taking a look at some of the other functions such as <code>from_dict_of_dicts()</code> or <code>from_dict_of_lists()</code> to see what is available to you.</p>
+</div>
 </div>
 </div>
 <div id="learning-exercises-1" class="section level2" number="3.4">
@@ -724,7 +738,7 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <li><p>A graph where the vertices are a group of colleagues and where an edge exists between vertex A and B if at least one email message has been sent from colleague A to colleague B.</p></li>
 <li><p>A graph where the vertices are train stations in the US, Japan and Russia and where an edge exists if a direct train route exists between two vertices.</p></li>
 <li><p>What criteria must a graph satisfy to be called a tree?</p></li>
-<li><p>Give two different ways to construct the graph described in Question 3.</p></li>
+<li><p>Give two different ways to construct the graph described in Question 3 above.</p></li>
 <li><p>Can you think of three things in your everyday life that could be represented by graphs? What would the vertices and edges represent? What kinds of graph would be best for each case?</p></li>
 </ol>
 </div>
@@ -732,20 +746,19 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <h3>
 <span class="header-section-number">3.4.2</span> Data exercises<a class="anchor" aria-label="anchor" href="#data-exercises-1"><i class="fas fa-link"></i></a>
 </h3>
-<p>Load the <code>koenigsberg</code> edgelist from the <code>onadata</code> package or load it as a dataframe from the internet<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://ona-book.org/data/koenigsberg.csv" class="uri"&gt;https://ona-book.org/data/koenigsberg.csv&lt;/a&gt;&lt;/p&gt;'><sup>16</sup></a>. This is the edgelist for the <em>Bridges of Königsberg</em> problem we looked at in Chapter <a href="everywhere.html#everywhere">1</a>. Use your software of choice for the following exercises.</p>
+<p>Load the <code>koenigsberg</code> edgelist from the <code>onadata</code> package or load it as a dataframe from the internet<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://ona-book.org/data/koenigsberg.csv" class="uri"&gt;https://ona-book.org/data/koenigsberg.csv&lt;/a&gt;&lt;/p&gt;'><sup>18</sup></a>. This is the edgelist for the <em>Bridges of Königsberg</em> problem we looked at in Chapter <a href="everywhere.html#everywhere">1</a>. Use your software of choice for the following exercises.</p>
 <ol style="list-style-type: decimal">
 <li>Create a graph object using this edgelist. Ensure that it is undirected.</li>
 <li>By exploring the graph object you just created, determine how many vertices and edges are in this graph. Does this make sense given the original problem tackled by Euler?</li>
 <li>Obtain a list of the names of the vertices in this graph.</li>
 <li>Find a function or method in your graph package to create the adjacency matrix or adjacency list for this graph. Check the output to see if it makes sense.</li>
 </ol>
-<p>Load the <code>pizza</code> data set from the <code>onadata</code> package or load it as a dataframe from the internet<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://ona-book.org/data/pizza.csv" class="uri"&gt;https://ona-book.org/data/pizza.csv&lt;/a&gt;&lt;/p&gt;'><sup>17</sup></a>. This dataset represents requests made by Reddit users on a thread called <em>Random Acts of Pizza</em> or <em>ROAP</em>, and is part of a larger dataset used for research purposes in <span class="citation"><a href="references.html#ref-altruistic" role="doc-biblioref">Althoff, Danescu-Niculescu-Mizil, and Jurafsky</a> (<a href="references.html#ref-altruistic" role="doc-biblioref">2014</a>)</span>. The <code>requester</code> column represents users who made requests for pizza and the <code>responder</code> column represents users who read the request and responded to the request by giving pizza<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;This data set is only a small subset of the full data set, which included many requests which were not fulfilled. As we all know, a free pizza is a rare thing!&lt;/p&gt;"><sup>18</sup></a>. Other columns represent the request ID and data on the requester at the time the request was made.</p>
+<p>Load the <code>pizza</code> data set from the <code>onadata</code> package or load it as a dataframe from the internet<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://ona-book.org/data/pizza.csv" class="uri"&gt;https://ona-book.org/data/pizza.csv&lt;/a&gt;&lt;/p&gt;'><sup>19</sup></a>. This dataset represents requests made by Reddit users on a thread called <em>Random Acts of Pizza</em> or <em>ROAP</em>, and is part of a larger dataset used for research purposes<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;span class="citation"&gt;&lt;a href="references.html#ref-altruistic" role="doc-biblioref"&gt;Althoff, Danescu-Niculescu-Mizil, and Jurafsky&lt;/a&gt; (&lt;a href="references.html#ref-altruistic" role="doc-biblioref"&gt;2014&lt;/a&gt;)&lt;/span&gt;&lt;/p&gt;'><sup>20</sup></a>. The <code>requester</code> column represents users who made requests for pizza and the <code>responder</code> column represents users who read the request and responded to the request by giving pizza<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;This data set is only a small subset of the full data set, which included many requests which were not fulfilled. As we all know, a free pizza is a rare thing!&lt;/p&gt;"><sup>21</sup></a>. Other columns represent the request ID and data on the requester at the time the request was made.</p>
 <ol start="5" style="list-style-type: decimal">
 <li>Use an appropriate method to create a graph object using the <code>requester</code> and <code>responder</code> columns in this data set.</li>
 <li>Use the information contained in the graph object to determine how many pizza requests were fulfilled.</li>
 <li>Determine using the information in the graph whether anyone fulfilled more than one pizza request.</li>
-<li>Using an appropriate method, add the other columns in the <code>pizza</code> data set as edge properties.<br>
-</li>
+<li>Using an appropriate method, add the other columns in the <code>pizza</code> data set as edge properties.</li>
 <li>Use the edge properties of your graph object to determine which request ID had the largest number of requester votes.</li>
 <li>Use the edge properties of your graph object to determine which request ID had the largest number of requester subreddits.</li>
 </ol>

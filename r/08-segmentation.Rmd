@@ -378,7 +378,7 @@ To visualize the network community structure, we can create a color mapping agai
 plt.cla()
 ```
 
-```{python karate-py-conn, fig.align = "center", fig.cap = "Best Louvain partition of the `karate` graph"}
+```{python, eval = FALSE}
 import matplotlib.pyplot as plt
 from matplotlib import cm
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap
@@ -400,6 +400,34 @@ np.random.seed(123)
 nx.draw_spring(karate, labels = nodelabels, cmap = viridis,
 node_color = communities, edge_color = "grey")
 plt.show()
+```
+
+```{python, echo = FALSE, results = FALSE}
+import matplotlib.pyplot as plt
+from matplotlib import cm
+from matplotlib.colors import ListedColormap, LinearSegmentedColormap
+
+# create dict with labels only for Mr Hi and John A
+node = list(karate.nodes)
+labels = [i if i == "Mr Hi" or i == "John A" else "" for i in karate.nodes]
+nodelabels = dict(zip(node, labels))
+
+# create and order community mappings
+communities = louvain_comms.to_node_community_map()
+communities = [communities[k].pop() for k in node]
+
+# create color map
+viridis = cm.get_cmap('viridis', max(communities) + 1)
+
+# visualize
+np.random.seed(123)
+nx.draw_spring(karate, labels = nodelabels, cmap = viridis,
+node_color = communities, edge_color = "grey")
+plt.savefig("www/segmentation/karate-py-conn.png", bbox_inches = "tight")
+```
+
+```{r karate-py-conn, echo = FALSE, fig.align="center", fig.cap="Best Louvain partition of the `karate` graph", out.width = "90%"}
+knitr::include_graphics("www/segmentation/karate-py-conn.png")
 ```
 
 :::{.thinkahead data-latex=""}

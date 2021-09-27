@@ -2,11 +2,11 @@
 
 When we think of a graph, we usually think of a diagram of dots and lines.  Indeed, as we have seen in Chapter \@ref(everywhere) of this book, the very concept of a graph came into existence in the 1700s when a mathematician tried to solve a problem diagramatically.   It makes sense that we think about graphs in this way, because it is intuitive, easy to communicate and in many cases a diagram helps us better address the problem we are solving. However, a diagram is only one way of describing a graph, and it is not particularly scalable.  It is easy to draw a diagram for a graph of a few nodes and edges like in our *Bridges of K&ouml;nigsberg* problem, but what if our problem involved thousands of nodes and millions of edges?  Most interesting graphs which we will want to study will be more complex in nature and will contain many hundreds or thousands of nodes and many more edges, and diagrams of graphs of that size are not always useful in helping us solve problems.  
 
-In this chapter we will gain a basic understanding of graphs and how to construct them and work with them in R and in Python.   We will introduce the most general way of describing a graph mathematically, and we will then discuss how different types of graphs can be defined by placing more conditions on the most general definition.  We will then go on to look at the different options for how a known graph can be described, including edgelists and adjacency matrices.  Equipped with this understanding, we will then learn how to create simple graph objects in R and in Python.   Unlike the larger examples which we will introduce in later chapters, the data and examples we will use in this chapter are simple and  straightforward to work with.  The focus here is to make sure that the basic structures and definitions are understood before proceeding further.  Readers should not skip this chapter if they intend to fully understand the methods and procedures that will be introduced in later chapters.
+In this chapter we will gain a basic understanding of graphs and how to construct them so that we can work with them analytically.   We will introduce the most general way of describing a graph mathematically, and we will then discuss how different types of graphs can be defined by placing more conditions on the most general definition.  We will go on to look at the different options for how a known graph can be described, including edgelists and adjacency matrices.  Equipped with this understanding, we will then learn how to create graph objects in R and in Python.   Unlike the larger examples which we will introduce in later chapters, the data and examples we will use in this chapter are simple and  straightforward to work with.  The focus here is to make sure that the basic structures and definitions are understood before proceeding further.  Readers should not skip this chapter if they intend to fully understand the methods and procedures that will be introduced in later chapters.
 
 ## Elementary graph theory
 
-The way that graphs are created, stored and manipulated in data science languages like R and Python bears a strong resemblance to how they are defined and studied algebraically.  We will start this section with the general algebraic definition of a graph before we proceed to look at different varieties of graphs and different ways of representing graphs using data.
+The way that graphs are created, stored and manipulated in data science languages like R and Python bears a strong resemblance to how they are defined and studied algebraically.  We will start this section with the general mathematical definition of a graph before we proceed to look at different varieties of graphs and different ways of representing graphs using data.
 
 ### General definition of a graph {#graph-def}
 
@@ -14,7 +14,7 @@ A graph $G$ consists of two sets.  The first set $V$ is known as the *vertex* se
 
 Let's use an example to illustrate this definition.  Figure \@ref(fig:fourpeoplegraph) is a diagram of a graph $G_{\mathrm{work}}$ with four vertices representing four people.  An edge connects two vertices if and only if those two people have worked together.
 
-```{r fourpeoplegraph, echo = FALSE, fig.cap="Four people connected according to whether they have worked together"}
+```{r fourpeoplegraph, echo = FALSE, fig.cap="A graph $G_\\mathrm{work}$ consisting of four people connected according to whether they have worked together"}
 library(igraph)
 library(ggraph)
 
@@ -66,7 +66,7 @@ It doesn't really matter how you choose to notate the vertex and edge sets as lo
 
 
 :::{.thinkahead data-latex=""}
-**Thinking ahead:** If you already know how to load graphs in R or Python, you might want to take a look at a graph object now, and you will see how the object is structured and defined around the two set structure $G = (V, E)$.  For example, try to create a graph from the data for the *Bridges of K&ouml;nigsberg* problem using the `koenigsberg` edgelist in the `onadata` package or downloaded from the internet at https://ona-data.org/data/koenigsberg.csv.  Take a look at the vertex set or the edge set to see how they contain the structures discussed above.  
+**Thinking ahead:** If you already know how to load graphs in R or Python, you might want to take a look at a graph object now, and you will see how the object is structured and defined around the two set structure $G = (V, E)$.  For example, try to create a graph from the data for the *Bridges of K&ouml;nigsberg* problem using the `koenigsberg` edgelist in the `onadata` package or downloaded from the internet at https://ona-data.org/data/koenigsberg.csv.  Take a look at the vertex set or the edge set to see how they contain the structures discussed here.  
 :::
 
 
@@ -74,7 +74,7 @@ The relationship that we are modeling using our edges in the graph $G_{\mathrm{w
 
 A graph where direction is important is called a *directed* graph.  As an example, let's consider a graph $G_{\mathrm{manage}}$ with the same vertex set of four people but where an edge exists between two people if and only if the first person is the manager of the second person, as in Figure \@ref(fig:fourpeoplemanage).
 
-```{r fourpeoplemanage, echo = FALSE, fig.cap="Four people connected according to whether one person manages another"}
+```{r fourpeoplemanage, echo = FALSE, fig.cap="A graph $G_\\mathrm{manage}$ consisting of four people connected according to whether one person manages another"}
 library(igraph)
 library(ggraph)
 
@@ -104,9 +104,13 @@ $$
 
 Note that it is still possible in a directed graph for the edges to point in both directions.  While that is unlikely in the case of $G_{\mathrm{manage}}$ because the manager relationship usually only operates in one direction, imagine another graph $G_{\mathrm{like}}$ where an edge exists between two people if and only if the first person has listed the second person as someone they like.  It is perfectly possible for edges to exist in both directions between two vertices in a graph like this.  For example, it may be that Jane likes Zubin and Zubin likes Jane.  However, it is important to note that in such a graph, $\mathrm{Zubin}\longrightarrow\mathrm{Jane}$ and $\mathrm{Jane}\longrightarrow\mathrm{Zubin}$ are considered two *different* edges.
 
+:::{.thinkahead data-latex=""}
+**Thinking ahead:** The graphs $G_\mathrm{work}$ and $G_\mathrm{manage}$ are called **simple graphs**.  A simple graph cannot have more than one edge between any two vertices, and cannot have any 'loop' edges from one vertex back to itself.  As we are about to learn, not all graphs are simple graphs.    
+:::
+
 ### Types of graphs {#graph-types}
 
-Equipped with our general definition of a graph, we can now define different varieties of graph by adding or allowing certain conditions on the edges of a general graph.  There are many such varieties, but here are a few of the more common graph types.
+Equipped with our general definition of a graph, we can now define different varieties of graphs by adding or allowing certain conditions on the edges of a general graph.  There are many such varieties, but here are a few of the more common graph types.
 
 A **multigraph** is a graph where multiple edges can occur between the same two vertices.  Usually this occurs because the edges are defining different kinds of relationships.  Travel routes are common examples of multigraphs, where each edge represents a different carrier.  For example, Figure \@ref(fig:multiflights) is a graph of flights between the San Francisco (SFO), Philadelphia (PHL) and Tucson (TUS) airports based on a data set from December 2010.  The graph is layered onto a map of the United States.  Philadelphia to Tucson is not a common route and is only offered by one carrier in one direction, while there are multiple carriers operating in both directions between Philadelphia and San Francisco and between San Francisco and Tucson.
 
@@ -212,9 +216,9 @@ $$
 E = \{\mathrm{David}\longrightarrow\mathrm{Zubin}, \mathrm{David}\longrightarrow\mathrm{David}\}
 $$
 
-An example of where pseudographs frequently occur might be in the analysis of financial transactions.  Let's imagine that we have a graph of three verticies representing different companies A, B and C, where an edge represent a bank transfer from one company to another on a certain day.  If a company holds multiple bank accounts, such a graph might look something like Figure \@ref(fig:banktransfer). 
+An example of where pseudographs frequently occur might be in the analysis of financial transactions.  Let's imagine that we have a graph of three verticies representing different companies A, B and C, where an edge represent a bank transfer from one company to another on a certain day.  If a company holds multiple bank accounts, such a graph might look something like Figure \@ref(fig:banktransfer).  An edge which connects a vertex to itself is usually called a *loop*. 
 
-```{r banktransfer, echo = FALSE, fig.cap = "Pseudograph representing bank transfers between three companies A, B and C"}
+```{r banktransfer, echo = FALSE, fig.cap = "Pseudograph representing bank transfers between three companies A, B and C with a loop on Vertex A"}
 library(igraph)
 library(ggraph)
 
@@ -259,11 +263,15 @@ ggraph(fourpeoplegraph, layout = "kk") +
 
 ```
 
-Complete graphs are rare and not very useful in practice, since if you already know that a relationship exists between every pair of vertices, there is not a lot of reason to examine your graph or put it to any practical use.  That said, in the field of Graph Theory, it can be important to prove that certain graphs are complete in order to support important theoretical results.
+Complete graphs are rare and not very useful in practice, since if you already know that a relationship exists between every pair of vertices, there is not a lot of reason to examine your graph or put it to any practical use.  That said, in the field of Graph Theory, it can be important to prove that certain graphs are complete in order to support important theoretical results.  
+
+:::{.thinkahead data-latex=""}
+**Thinking ahead:** While entire graphs which are complete are rarely useful in practice, it is often useful to identify sets of vertices inside graphs which together represent a *complete subgraph*.  Such a group of vertices is known as a *clique*, and we will look at clique discovery in a later chapter.
+:::
 
 **Bipartite graphs** are graphs that have two disjoint sets of vertices, such that no vertex from one set is connected to any of the vertices in the other set.  Imagine we were to add three new individuals to our $G_\mathrm{work}$ graph, and these three individuals all work for a completely different organization to the four people already in the graph.  Then the new graph $G_\mathrm{new}$ may look like Figure \@ref(fig:newwork), with the distinct sets of vertices representing individuals in different organizations.
 
-```{r newwork, echo = FALSE, fig.cap = "A bipartite graph showing working relationships involving individuals in separate organizations A and B"}
+```{r newwork, echo = FALSE, fig.cap = "A bipartite graph $G_\\mathrm{new}$ showing working relationships involving individuals in separate organizations A and B"}
 library(igraph)
 library(ggraph)
 
@@ -287,12 +295,9 @@ ggraph(sevenpeoplegraph) +
 
 Extending the idea of bipartite graphs, **$k$-partite graphs** are graphs which have $k$ disjoined sets of vertices, where any vertex in one set is not connected to any of the vertices in the other $k - 1$ sets.
 
-**Trees** can be regarded as vertices connected by edges, and so trees are graphs.  For example, our graph $G_\mathrm{manage}$ in Section \@ref(graph-def) is a tree because it displays a hierarchical management structure between individuals.  For a graph to be characterized as a tree it needs to adhere to these conditions:
+**Trees** can be regarded as vertices connected by edges, and so trees are graphs.  For example, our graph $G_\mathrm{manage}$ in Section \@ref(graph-def) is a tree because it displays a hierarchical management structure between individuals.  For a graph to be characterized as a tree, there needs to be *exactly* one path between any pair of vertices when viewed undirected.  
 
-1.  It is undirected
-2.  There is exactly one path between any pair of vertices
-
-Usually, trees are graphs where the edges represent some sort of hierarchical or nested relationship.  Figure \@ref(fig:boybands) shows a tree graph of my favorite boy bands, where an edge indicates that the vertex below is a member of the vertex above.  It seems like five is the magic number for a great boy band.
+Usually, trees are graphs where the edges represent some sort of hierarchical or nested relationship.  Figure \@ref(fig:boybands) shows a tree graph of the author's favorite boy bands, where an edge indicates that the vertex below is a member of the vertex above.  It seems like five is the magic number for a great boy band.
 
 ```{r boybands, echo = FALSE, fig.cap = "Membership of the exclusive class of the author's favourite boy bands can be represented as a tree graph"}
 bands <- data.frame(
@@ -317,11 +322,11 @@ ggraph(bands, layout = "dendrogram") +
 
 ### Vertex and edge properties {#vertex-edge-prop}
 
-In Section \@ref(graph-def) we learned that a graph $G = (V, E)$ consists of a vertex set $V$ and an edge set $E$.  These sets are the minimum components of a graph --- the vertices represent the entities in the graph and the edges represent the relationships between the entities.  
+In Section \@ref(graph-def) we learned that a graph $G = (V, E)$ consists of a vertex set $V$ and an edge set $E$.  These sets are the minimum elements of a graph---the vertices represent the entities in the graph and the edges represent the relationships between the entities.  
 
 We can enhance a graph to provide even richer information on the entities and on the relationships by giving our vertices and edges *properties*.  A vertex property provides more specific information about a vertex and an edge property provides more specific information about the relationship between two vertices.
 
-As an example, let's return to our directed graph in Figure \@ref(fig:banktransfer), which represents bank transfers between companies A, B, and C.  In this graph, we only know from the edges that transfers took place, but we do not know how much money was involved in each transfer, and in what currency the transfer was made.  If we wanted to capture this information, we could give each edge properties called `amt` and `cur` and store the transfer amount and currency in those edge properties.  Similarly, we don't know a great deal about the companies represented by the vertices.  Maybe we would like to know where they are located?  If so, we can create a vertex property called `loc` and store the location in that vertex property.  
+As an example, let's return to our directed pseudograph in Figure \@ref(fig:banktransfer), which represents bank transfers between companies A, B, and C.  In this graph, we only know from the edges that transfers took place, but we do not know how much money was involved in each transfer, and in what currency the transfer was made.  If we wanted to capture this information, we could give each edge properties called `amt` and `cur` and store the transfer amount and currency in those edge properties.  Similarly, we don't know a great deal about the companies represented by the vertices.  Maybe we would like to know where they are located?  If so, we can create a vertex property called `loc` and store the location in that vertex property.  
 
 Figure \@ref(fig:enhancedcompanytransfers) shows this enhanced graph with the vertex and edge properties added diagramatically.
 
@@ -377,11 +382,11 @@ $$
 Note that the vertex property set $V_\mathrm{loc}$ has the same number of elements as $V$ and the associated properties appear in the same order as the vertices of $V$.  Note also a similar size and order for the edge property sets $E_\mathrm{cur}$ and $E_\mathrm{amt}$.   This notation system allows us to provide all the information we need in a reliable way for any number of vertex or edge properties.
 
 :::{.thinkahead data-latex=""}
-**Thinking ahead:** If you know how to, load up graph of romantic relationships in the TV Series *Mad Men* using the `madmen_edgelist` data set from the `onadata` package or by downloading it from https://ona-book.org/data/madmen_edgelist.csv.  Try to create a graph that contains the `Married` edge property and then try to query your graph to determine which relationships were marriage relationships.
+**Thinking ahead:** If you know how to, load up the graph of romantic relationships in the TV Series *Mad Men* using the `madmen_edgelist` data set from the `onadata` package or by downloading it from https://ona-book.org/data/madmen_edgelist.csv.  Try to create a graph that contains the `Married` edge property and then try to query your graph to determine which relationships were marriage relationships.
 :::
 
 
-One of the most common edge properties we will come across is **edge weight**.  Weighted edges are edges which are given a numeric value to represent an important construct such as edge importance or connection strength. This can often be used to simplify otherwise complex graphs, and will be frequently used in calculations related to centrality and community.  As an example, returning to our flights graph, instead of creating an edge for each carrier, we could simplify our graph by creating one edge per route and giving it a weight according to the number of carriers on that route.  Such a graph would look like Figure \@ref(fig:weightedflights).
+One of the most common edge properties we will come across is **edge weight**.  Weighted edges are edges which are given a numeric value to represent an important construct such as edge importance or connection strength. This can often be used to simplify otherwise complex graphs, and will be frequently used in calculations related to centrality and community.  As an example, returning to our flights graph in Figure \@ref(fig:multiflights), instead of creating an edge for each carrier, we could simplify our graph by creating one edge per route and giving it a weight according to the number of carriers on that route.  Such a graph would look like Figure \@ref(fig:weightedflights).
 
 ```{r weightedflights, echo = FALSE, fig.cap="Simplifying the flights graph using weighted edges to represent the number of carriers on each route.  Edge thickness represents weight."}
 library(igraph)
@@ -449,9 +454,9 @@ ggplot() +
 
 ### Representations of graphs {#rep-graphs}
 
-So far in this chapter we have seen two common ways of representing a graph.  The first, and most well known way, is a diagram.  The second is as an algebraic structure consisting of a vertex set and an edge set $G = (V, E)$.  As we discussed at the beginning of this chapter, diagrams are useful for visualizing und understanding simple graphs, but less useful for storing graph data and working with large graphs.  When working with graphs in the field of data science, the two most common sources of graph data will be edgelists and adjacency matrices.  
+So far in this chapter we have seen two common ways of representing a graph.  The first, and most well known way, is a diagram.  The second is an algebraic structure $G = (V, E)$ consisting (at a minimum) of a vertex set $V$ and an edge set $E$.  As we discussed at the beginning of this chapter, diagrams are useful for visualizing und understanding small graphs, but less useful for storing graph data and working with large graphs.  When working with graphs in the field of data science, the two most common sources of graph data will be edgelists and adjacency matrices.  
 
-An **edgelist** is the edge set $E$ in our graph $G = (V, E)$.  If we don't care about *isolates* --- that is, vertices not connected to any other vertices --- then our vertex set $V$ can be derived directly from $E$.  This means that the edgelist is all that is needed to build a graph provided you are happy to ignore isolates.  It's common that an analyst is happy to ignore isolates because they are often only interested in the connections or relationships in the data.   Let's look at an example.
+An **edgelist** is the edge set $E$ in our graph $G = (V, E)$.  If we don't care about *isolates*^[Isolates, also known as singletons, are vertices which are not connected to any other vertices.  Many real life graphs contain isolates which will often be removed in order to better focus on connected components.], then our vertex set $V$ can be derived directly from $E$.  This means that the edgelist is all that is needed to build a graph provided you are happy to ignore isolates.  It is common that an analyst is happy to ignore isolates because we are often only interested in the connections or relationships in the data.   Let's look at an example.
 
 Recall our edge set $E$ in the graph $G_\mathrm{work} = (V, E)$ from Section \@ref(graph-def):
 
@@ -470,31 +475,36 @@ $$
 
 and we now have obtained everything we need for our graph from the edgelist.
 
-Edgelists typically take the form of at two columns of data, usually labelled 'from' and 'to'.  Therefore our edgelist for $G_\mathrm{work}$ would look like Table \@ref(tab:workedgelist).
+Edgelists typically take the form of two columns of data, usually labelled 'from' and 'to' or 'source' and 'target'.  Therefore our edgelist for $G_\mathrm{work}$ would look like Table \@ref(tab:workedgelist).
 
-```{r workedgelist, echo = FALSE}
+
+```{r workedgelist, echo = FALSE, out.width="60%"}
 library(kableExtra)
+
 fourpeople <- data.frame(
   from = c("David", "David", "David", "Jane", "Jane"),
   to = c("Zubin", "Suraya", "Jane", "Zubin", "Suraya")
 )
 
 if (knitr::is_latex_output()) {
-  knitr::kable(fourpeople, caption ="Edgelist for the $G_\\mathrm{work}$ graph") |> 
-  row_spec(0, bold = TRUE)
+  knitr::kable(fourpeople, format = "latex", booktabs = TRUE,
+               caption = "Edgelist for $G_\\mathrm{work}$",
+               position = "!b")
 } else {
-  knitr::kable(fourpeople, caption ="Edgelist for the $G_\\mathrm{work}$ graph")
+  knitr::kable(fourpeople, booktabs = TRUE, format = "html",
+               caption = "Edgelist for $G_\\mathrm{work}$") |> 
+    kable_styling(position = "center")
 }
 
 ```
 
 
 :::{.thinkahead data-latex=""}
-**Thinking ahead:** If you still have the *Bridges of K&ouml;nigsberg* data loaded as a graph in R or Python from earlier, you should be able to generate its edgelist easily.  Try to find the right function to use to do this within your package of choice.
+**Playing around:** If you still have the *Bridges of K&ouml;nigsberg* data loaded as a graph in R or Python from earlier, you should be able to generate its edgelist easily.  Try to find the right function to use to do this within your package of choice.
 :::
 
 
-An **adjacency matrix** is a square matrix with the vertices indexing the rows and columns, and where the $(i, j)$-th entry of the matrix represents the number of edges from vertex $i$ to vertex $j$.  As an example, using our simple graph $G_\mathrm{work}$ again from Section \@ref(graph-def), the adjacency matrix would look like this:
+An **adjacency matrix** is a square matrix with the vertices indexing the rows and columns, and where the $(i, j)$-th entry of the matrix represents the number of edges from vertex $i$ to vertex $j$.  As an example, using our graph $G_\mathrm{work}$ again from Section \@ref(graph-def), the adjacency matrix would look like this:
 
 $$
 \begin{array}{ccccc}
@@ -530,7 +540,7 @@ $$
 \end{array}
 $$
 
-If a graph is a pseudograph, then the diagonal entries may be greater than zero, and multigraphs can have entries that are any non-negative integer.  Here is the adjacency matrix for our flight network graph:
+If a graph is a pseudograph, then the diagonal entries may be greater than zero, and multigraphs can have entries that are any non-negative integer.  Here is the adjacency matrix for our flight network graph in Figure \@ref(fig:multiflights):
 
 $$
 \begin{array}{cccc}
@@ -572,7 +582,7 @@ gwork <- igraph::graph_from_edgelist(el = gwork_edgelist,
                                      directed = FALSE)
 ```
 
-We now hove our $G_\mathrm{work}$ graph in memory.  Before we go any further, let's take a look at it.
+We now have our $G_\mathrm{work}$ graph in memory.  Before we go any further, let's take a look at it.
 
 ```{r}
 gwork
@@ -580,7 +590,7 @@ gwork
 
 Let's start with the string `UN--` on the first line of the output.  This string describes the type of graph this is.  The letter `U` denotes an undirected graph, and `N` denotes a graph with named vertices.  The two other properties, which we will discover later, are currently not present and so are represented by the dashes `--`.  Next we have the number of vertices (4) and edges (5), followed by two further dashes.
 
-On the next line the attributes of the graph are listed.  In this case there is just one attribute `name`, which is a vertex attribute --- denoted by `(v/c)`.  Finally the edges of the graph are given using the vertex names.  Note that there is no direction to these edges, so they are denoted with `--`.
+On the next line the attributes of the graph are listed.  In this case there is just one attribute `name`, which is a vertex attribute of character type --- denoted by `(v/c)`.  Finally the edges of the graph are given using the vertex names.  Note that there is no direction to these edges, so they are denoted with `--`.
 
 Let's try the same thing but this time with our directed graph $G_\mathrm{manage}$ from Section \@ref(graph-def).
 
@@ -595,14 +605,13 @@ gmanage_edgelist <- as.matrix(gmanage_edgelist)
                                        directed = TRUE))
 ```
 
-We see a similar output to `gwork`, except we now have a directed graph, donated by `D` in the first line, and we see that the edges are now denoted with direction using \
-`->`.
+We see a similar output to `gwork`, except we now have a directed graph, donated by `D` in the first line, and we see that the edges are now denoted with direction using `->`.
 
 ### Creating a graph from an adjacency matrix
 
 Similarly, we can create a graph from data provided in an adjacency matrix.  Let's manually create an adjacency matrix for our flights graph in Figure \@ref(fig:multiflights), and then we can use the `graph_from_adjacency_matrix()` function in `igraph` to create a graph object from the matrix.
 
-```{r}
+```{r, eval = FALSE}
 # create 3x3 adjacency matrix
 adj_flights <- matrix(c(0, 5, 2, 4, 0, 0, 4, 1, 0), nrow = 3, ncol = 3)
 rownames(adj_flights) <- c("SFO", "PHL", "TUS")
@@ -613,29 +622,51 @@ colnames(adj_flights) <- rownames(adj_flights)
   adjmatrix = adj_flights,
   mode = "directed"
 ))
-
 ```
 
-We see the expected directed multigraph with 3 vertices and 16 edges.  If we wish to use create the weighted graph in Figure \@ref(fig:weightedflights), we add `weighted = TRUE` to the arguments.
+`r if (knitr::is_latex_output()) '\\footnotesize'`
+
+```{r, echo = FALSE}
+# create 3x3 adjacency matrix
+adj_flights <- matrix(c(0, 5, 2, 4, 0, 0, 4, 1, 0), nrow = 3, ncol = 3)
+rownames(adj_flights) <- c("SFO", "PHL", "TUS")
+colnames(adj_flights) <- rownames(adj_flights)
+
+# create multigraph from adjacency matrix
+(flightgraph <- igraph::graph_from_adjacency_matrix(
+  adjmatrix = adj_flights,
+  mode = "directed"
+))
+```
+
+`r if (knitr::is_latex_output()) '\\normalsize'`
+
+We see the expected directed multigraph with 3 vertices and 16 edges.  If we wish to create the weighted graph in Figure \@ref(fig:weightedflights), we add `weighted = TRUE` to the arguments.
 
 ```{r}
 # create weighted graph 
-(flightgraph <- igraph::graph_from_adjacency_matrix(
+(flightgraph_weighted <- igraph::graph_from_adjacency_matrix(
   adjmatrix = adj_flights,
   mode = "directed",
   weighted = TRUE
 ))
 ```
+We now see a graph with only 5 edges but we see the addition of `W` in our graph type, indicating a weighted graph. We also see a new edge property of numeric type called `weight`.  In situations where we want to simplify multiple edges to single edges without worrying about weight, the `simplify()` function in `igraph` works well, with the `remove.multiple` argument set to `TRUE`.
 
-We now see a graph with only 5 edges but we see the addition of `W` in our graph type, indicating a weighted graph and we also see a new edge property `weight`.
+```{r}
+(flightgraph_simple <- igraph::simplify(
+  flightgraph,
+  remove.multiple = TRUE
+))
+```
 
 ### Creating a graph from a dataframe
 
-As we noted in Section \@ref(rep-graphs), edgelists are usually sufficient to descibe a graph when isolates are not of concern.  The function `graph_from_edgelist()` works fine for this purpose, but is lacking in flexibility when graphs contain isolates or other properties that you would ideally like to load on creation.  However, the function `graph_from_data_frame()` allows you to create a more flexible graph directly from dataframes containing the required data.
+As we noted in Section \@ref(rep-graphs), edgelists are usually sufficient to descibe a graph when isolates are not of concern.  The function `graph_from_edgelist()` works fine for this purpose, but is lacking in flexibility when graphs contain isolates or where vertices have properties that you would ideally like to load on creation.  The function `graph_from_data_frame()` allows you to create a more flexible graph directly from dataframes containing the required data.
 
 Let's create our bipartite graph $G_\mathrm{new}$ from Figure \@ref(fig:newwork) using this function.  At a minimum, this function requires a dataframe of edges, and will also accept a dataframe of vertices if needed.
 
-```{r}
+```{r, eval = FALSE}
 # edge dataframe
 edge_df <- data.frame(
   from = c("David", "David", "David", "Jane", "Jane", 
@@ -658,6 +689,32 @@ vertex_df <- data.frame(
 ))
 ```
 
+`r if (knitr::is_latex_output()) '\\footnotesize'`
+
+```{r, echo = FALSE}
+# edge dataframe
+edge_df <- data.frame(
+  from = c("David", "David", "David", "Jane", "Jane", 
+           "Sandra", "Sandra", "Mae-Li"),
+  to = c("Zubin", "Suraya", "Jane", "Zubin", "Suraya", 
+         "Mae-Li", "Jake", "Jake")
+)
+
+# vertex dataframe
+vertex_df <- data.frame(
+  name = c("David", "Zubin", "Suraya", "Jane", 
+           "Sandra", "Mae-Li", "Jake")
+)
+
+# create graph
+(gnew <- igraph::graph_from_data_frame(
+  d = edge_df,
+  directed = FALSE,
+  vertices = vertex_df
+))
+```
+
+`r if (knitr::is_latex_output()) '\\normalsize'`
 
 :::{.thinkahead data-latex=""}
 **Playing around:** The functions in this section are not the only functions in the `igraph` package that build graphs from data, but they are by far the most commonly used ones.  By typing `?graph_from` in your R console and looking at the functions that autocomplete, you can see some of the other functions that build graphs from data.  Try playing around with them if you are curious.
@@ -676,7 +733,7 @@ edge_transfers <- data.frame(
   amt = c(150000, 570000, 230000, 175000)
 )
 
-# dataframe of edges and properties 
+# dataframe of vertices and properties 
 vertex_transfers <- data.frame(
   name = c("A", "B", "C"),
   loc = c("USA", "UK", "France")
@@ -695,7 +752,7 @@ We see that the additional edge properties `cur` and `amt` and the vertex proper
 
 
 :::{.thinkahead data-latex=""}
-**Playing around:** An arbitrary number of properties can be added to the vertices and edges of a graph.  If you label one of the properties as `weight` and if that property is numeric, this will change the type of your graph to `W`, a weighted graph.  Try playing around with this by changing the name of the `amt` column to `weight` in `gtransfers`.
+**Playing around:** An arbitrary number of properties can be added to the vertices and edges of a graph.  If you label one of the properties as `weight` and if that property is numeric, this will change the type of your graph to `W`, a weighted graph.  Try playing around with this by changing the name of the `amt` column to `weight` in `gtransfers`.  Also, earlier we introduced the `simplify()` function in `igraph`.  The `simplify()` function helps turn a graph with multiple edges or with loops into a simple graph using the arguments `remove.multiple = TRUE` and `remove.loops = TRUE`.  However, be careful when using this function if your graph has properties stored in the edges which you need to preserve.  Play around with using this function on the `gtransfers` graph above and see what happens.  Experiment with the `edge.attr.comb` argument to try to control how the attributes are dealt with when combining the edges.
 :::
 
 
@@ -741,13 +798,23 @@ We see a weighted graph has been created by adding a `weight` property to the ed
 
 A bipartite graph can be created by giving the vertices a `type` property according to the two disjoint sets of vertices.  Let's use our $G_\mathrm{new}$ bipartite graph again as an example, which we generated earlier as the `gnew` object.  In our vertex set, the first four vertices are from organization A and the final three are from organization B.
 
-```{r}
+```{r, eval = FALSE}
 V(gnew)$type = c(rep("A", 4), rep("B", 3))
 
 gnew
 ```
 
-We can see that out graph `gnew` now has the final of the four graph types: `B` meaning bipartite.
+`r if (knitr::is_latex_output()) '\\footnotesize'`
+```{r, echo = FALSE}
+V(gnew)$type = c(rep("A", 4), rep("B", 3))
+
+gnew
+```
+
+`r if (knitr::is_latex_output()) '\\normalsize'`
+
+
+We can see that our graph `gnew` now has the final of the four graph types: `B` meaning bipartite.
 
 :::{.thinkahead data-latex=""}
 **Playing around:** Hopefully you can now see that there are many ways to construct your graph.  Try using the `graph_from_data_frame()` function to create `gnew` as a bipartite graph at the point of creation. 
@@ -760,7 +827,7 @@ In this book we will use the `networkx` package in Python to create graphs.  A v
 
 ### Creating a graph from an edgelist
 
-A graph can be constructed from an edgelist in a Python dict.  Let's create our undirected graph $G_\mathrm{work}$ from Section \@ref(graph-def).
+A graph can be constructed from an edgelist in a Python dictionary.  Let's create our undirected graph $G_\mathrm{work}$ from Section \@ref(graph-def).
 
 ```{python}
 import pandas as pd
@@ -780,9 +847,13 @@ To view the edges or vertices/nodes, these can be seen as attributes of the `gwo
 
 
 ```{python}
-# see vertices and edges as lists
+# see vertices as list
 list(gwork.nodes)
-list(gwork.edges)
+```
+
+```{python}
+# list some edges
+list(gwork.edges)[0:3]
 ```
 
 A graph can also be constructed from an edgelist in a Pandas DataFrame.  By default the edgelist needs to have the columns `source` and `target`^[These columns can also be named differently and identified via the `source` and `target` arguments in the `from_pandas_edgelist()` function.].
@@ -845,8 +916,8 @@ create_using=nx.MultiDiGraph())
 label_mapping = {0: "SFO", 1: "PHL", 2: "TUS"}
 multiflights = nx.relabel_nodes(multiflights, label_mapping)
 
-# check edges
-list(multiflights.edges)
+# check some edges
+list(multiflights.edges)[0:3]
 ```
 
 To generate the graph with only single weighted edges as in Figure \@ref(fig:weightedflights), simply change the `parallel_edges` argument and use the `DiGraph()` class.  This will map the entries in the matrix to a `weight` edge attribute.
@@ -871,7 +942,7 @@ list(multiflights.edges)
 
 ### Adding vertex and edge properties to a graph
 
-The easiest way to add attributes to the vertices and edges is to use the `set_node_attributes()` and `set_edge_attributes()` functions respectively.  Vertex/node attributes must be passed as a dict with the nodes as keys.  Let's build our simple financial transactions graph as in Figure \@ref(fig:enhancedcompanytransfers).
+The easiest way to add attributes to the vertices and edges is to use the `set_node_attributes()` and `set_edge_attributes()` functions respectively.  Vertex/node attributes must be passed as a dict with the nodes as keys.  Let's build our financial transactions graph as in Figure \@ref(fig:enhancedcompanytransfers).
 
 ```{python}
 # create dict of edgelist
@@ -883,7 +954,7 @@ transfer_edgelist = dict(
 # create directed graph
 transfer=nx.DiGraph(transfer_edgelist)
 
-#view vertices
+# view vertices
 list(transfer.nodes)
 ```
 
@@ -900,7 +971,7 @@ values = loc_attributes)
 Note that multiple attributes can be set at once by passing a dict of dicts.
 
 ```{python}
-#view edges
+# view edges
 list(transfer.edges)
 ```
 
@@ -924,7 +995,7 @@ nx.set_edge_attributes(G = transfer, values = transfer_attributes)
 
 While this may look tedious and manual, as we move into adding common properties like node centrality or edge weight to graphs, we will find these to be easy to set because of built-in functions that automatically index their output by the vertices or edges.  For example, we have already seen in Section \@ref(python-graph-from-adjacency) that the function `from_numpy_matrix()` automatically sets a weight according to the number of edges when we set the argument `parallel_edges` to `False`.  Also, if you have edge properties as columns in your Pandas edgelist, you can automatically import them into your graph by setting `edge_attr = True` in the `from_pandas_edgelist()` function in `networkx`.
 
-:::{thinkahead data-latex=""}
+:::{.thinkahead data-latex=""}
 **Playing around:** As with the `igraph` package in R, the `networkx` package in Python contains a whole host of ways to import data into a graph.  While the methods outlined here are likely to be the most common, it's worth taking a look at some of the other functions such as `from_dict_of_dicts()` or `from_dict_of_lists()` to see what is available to you.
 :::
 
@@ -945,7 +1016,7 @@ For each of the following real-world cases, what kind of graph would be the best
 7.  A graph where the vertices are train stations in the US, Japan and Russia and where an edge exists if a direct train route exists between two vertices.  
 
 8.  What criteria must a graph satisfy to be called a tree?
-9.  Give two different ways to construct the graph described in Question 3.
+9.  Give two different ways to construct the graph described in Question 3 above.
 10.  Can you think of three things in your everyday life that could be represented by graphs?  What would the vertices and edges represent?  What kinds of graph would be best for each case?
 
 ### Data exercises
@@ -957,12 +1028,12 @@ Load the `koenigsberg` edgelist from the `onadata` package or load it as a dataf
 3.  Obtain a list of the names of the vertices in this graph.
 4.  Find a function or method in your graph package to create the adjacency matrix or adjacency list for this graph.  Check the output to see if it makes sense.
 
-Load the `pizza` data set from the `onadata` package or load it as a dataframe from the internet^[https://ona-book.org/data/pizza.csv].  This dataset represents requests made by Reddit users on a thread called *Random Acts of Pizza* or *ROAP*, and is part of a larger dataset used for research purposes in @altruistic.  The `requester` column represents users who made requests for pizza and the `responder` column represents users who read the request and responded to the request by giving pizza^[This data set is only a small subset of the full data set, which included many requests which were not fulfilled.   As we all know, a free pizza is a rare thing!].  Other columns represent the request ID and data on the requester at the time the request was made.
+Load the `pizza` data set from the `onadata` package or load it as a dataframe from the internet^[https://ona-book.org/data/pizza.csv].  This dataset represents requests made by Reddit users on a thread called *Random Acts of Pizza* or *ROAP*, and is part of a larger dataset used for research purposes^[@altruistic].  The `requester` column represents users who made requests for pizza and the `responder` column represents users who read the request and responded to the request by giving pizza^[This data set is only a small subset of the full data set, which included many requests which were not fulfilled.   As we all know, a free pizza is a rare thing!].  Other columns represent the request ID and data on the requester at the time the request was made.
 
 5. Use an appropriate method to create a graph object using the `requester` and `responder` columns in this data set.
 6. Use the information contained in the graph object to determine how many pizza requests were fulfilled.
 7. Determine using the information in the graph whether anyone fulfilled more than one pizza request.
-8. Using an appropriate method, add the other columns in the `pizza` data set as edge properties.   
+8. Using an appropriate method, add the other columns in the `pizza` data set as edge properties.
 9. Use the edge properties of your graph object to determine which request ID had the largest number of requester votes.
 10. Use the edge properties of your graph object to determine which request ID had the largest number of requester subreddits.
 

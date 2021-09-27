@@ -56,6 +56,10 @@
 <link href="libs/vis-4.20.1/vis.css" rel="stylesheet" />
 <script src="libs/vis-4.20.1/vis.min.js"></script>
 <script src="libs/visNetwork-binding-2.0.9/visNetwork.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 <script src="libs/d3-4.5.0/d3.min.js"></script>
 <script src="libs/forceNetwork-binding-0.4/forceNetwork.js"></script>
 <script src="libs/sankey-1/sankey.js"></script>
@@ -221,11 +225,12 @@ div.csl-indent {
 <li class="chapter" data-level="2.7.1" data-path="r-intro.html"><a href="r-intro.html#plotting-in-base-r"><i class="fa fa-check"></i><b>2.7.1</b> Plotting in base R</a></li>
 <li class="chapter" data-level="2.7.2" data-path="r-intro.html"><a href="r-intro.html#specialist-plotting-and-graphing-packages"><i class="fa fa-check"></i><b>2.7.2</b> Specialist plotting and graphing packages</a></li>
 </ul></li>
-<li class="chapter" data-level="2.8" data-path="r-intro.html"><a href="r-intro.html#documenting-your-work-using-r-markdown"><i class="fa fa-check"></i><b>2.8</b> Documenting your work using R Markdown</a></li>
-<li class="chapter" data-level="2.9" data-path="r-intro.html"><a href="r-intro.html#learning-exercises"><i class="fa fa-check"></i><b>2.9</b> Learning exercises</a>
+<li class="chapter" data-level="2.8" data-path="r-intro.html"><a href="r-intro.html#randomization-in-r"><i class="fa fa-check"></i><b>2.8</b> Randomization in R</a></li>
+<li class="chapter" data-level="2.9" data-path="r-intro.html"><a href="r-intro.html#documenting-your-work-using-r-markdown"><i class="fa fa-check"></i><b>2.9</b> Documenting your work using R Markdown</a></li>
+<li class="chapter" data-level="2.10" data-path="r-intro.html"><a href="r-intro.html#learning-exercises"><i class="fa fa-check"></i><b>2.10</b> Learning exercises</a>
 <ul>
-<li class="chapter" data-level="2.9.1" data-path="r-intro.html"><a href="r-intro.html#discussion-questions"><i class="fa fa-check"></i><b>2.9.1</b> Discussion questions</a></li>
-<li class="chapter" data-level="2.9.2" data-path="r-intro.html"><a href="r-intro.html#data-exercises"><i class="fa fa-check"></i><b>2.9.2</b> Data exercises</a></li>
+<li class="chapter" data-level="2.10.1" data-path="r-intro.html"><a href="r-intro.html#discussion-questions"><i class="fa fa-check"></i><b>2.10.1</b> Discussion questions</a></li>
+<li class="chapter" data-level="2.10.2" data-path="r-intro.html"><a href="r-intro.html#data-exercises"><i class="fa fa-check"></i><b>2.10.2</b> Data exercises</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="working.html"><a href="working.html"><i class="fa fa-check"></i><b>3</b> Working With Graphs</a>
@@ -914,11 +919,12 @@ Figure 2.7: Simple histogram of <code>Ozone</code> in the <code>airquality</code
 </div>
 <p>And finally, we create our box and whisker plot using the same principles, with the result in <a href="r-intro.html#fig:ggplot-box">2.8</a>.</p>
 <div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="r-intro.html#cb105-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create boxplot of Ozone by Month</span></span>
-<span id="cb105-2"><a href="r-intro.html#cb105-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> airquality, <span class="fu">aes</span>(<span class="at">x =</span> Month, <span class="at">y =</span> Ozone)) <span class="sc">+</span></span>
+<span id="cb105-2"><a href="r-intro.html#cb105-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> airquality, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.factor</span>(Month), <span class="at">y =</span> Ozone)) <span class="sc">+</span></span>
 <span id="cb105-3"><a href="r-intro.html#cb105-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="at">color =</span> <span class="st">&quot;pink&quot;</span>) <span class="sc">+</span></span>
 <span id="cb105-4"><a href="r-intro.html#cb105-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
 <span id="cb105-5"><a href="r-intro.html#cb105-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Boxplot of Ozone Levels by Month&quot;</span>,</span>
-<span id="cb105-6"><a href="r-intro.html#cb105-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Ozone levels&quot;</span>)</span></code></pre></div>
+<span id="cb105-6"><a href="r-intro.html#cb105-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Month&quot;</span>,</span>
+<span id="cb105-7"><a href="r-intro.html#cb105-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Ozone levels&quot;</span>)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:ggplot-box"></span>
 <img src="_main_files/figure-html/ggplot-box-1.png" alt="Simple boxplot of `Ozone` against `Month` in the `airquality` data set using `ggplot2`" width="672" />
 <p class="caption">
@@ -927,8 +933,41 @@ Figure 2.8: Simple boxplot of <code>Ozone</code> against <code>Month</code> in t
 </div>
 </div>
 </div>
-<div id="documenting-your-work-using-r-markdown" class="section level2" number="2.8">
-<h2><span class="header-section-number">2.8</span> Documenting your work using R Markdown</h2>
+<div id="randomization-in-r" class="section level2" number="2.8">
+<h2><span class="header-section-number">2.8</span> Randomization in R</h2>
+<p>An important element of many processes in mathematics and statistics is randomization. Being able to generate random numbers is an important part of sampling or initiating processes or algorithms. We will also see later in this book that randomization is an important element of many graph algorithms, including visualization layout algorithms. In the following code we randomly sample 3 rows from the <code>airquality</code> data set using the <code>sample()</code> function.</p>
+<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="r-intro.html#cb106-1" aria-hidden="true" tabindex="-1"></a>airquality[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(airquality), <span class="dv">3</span>), ]</span></code></pre></div>
+<pre><code>##    Ozone Solar.R Wind Temp Month Day
+## 93    39      83  6.9   81     8   1
+## 86   108     223  8.0   85     7  25
+## 9      8      19 20.1   61     5   9</code></pre>
+<p>We do this a second time and note a different output because the sampling is random.</p>
+<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="r-intro.html#cb108-1" aria-hidden="true" tabindex="-1"></a>airquality[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(airquality), <span class="dv">3</span>), ]</span></code></pre></div>
+<pre><code>##     Ozone Solar.R Wind Temp Month Day
+## 86    108     223  8.0   85     7  25
+## 41     39     323 11.5   87     6  10
+## 137     9      24 10.9   71     9  14</code></pre>
+<p>Random number generation can be problematic when you want to precisely replicate work done previously by yourself or others. If the previous work depended on random number generation, then your output will probably not match the previous output and it will be difficult to tell if this is because of an error you made or simply because of different random numbers.</p>
+<p>You can control random number generation by manually setting a random seed. In fact, random number generation in statistical software is rarely truly random, and is actually <em>pseudorandom</em>. Pseudorandomization is a simulated process that is ‘seeded’ using a vector of values. By default this vector is generated from the precise system time at a given moment, but its generation can also be controlled manually by a user. A given seed will always produce the same results from randomization, and so manually setting a seed can be an effective way to ensure precise reproducibility of work.</p>
+<p>Again, let’s generate three random rows from our <code>airquality</code> data set, but this time we manually set the same seed before each sampling process. You can use any number of your choice to manually set a seed.</p>
+<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="r-intro.html#cb110-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sample 1</span></span>
+<span id="cb110-2"><a href="r-intro.html#cb110-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb110-3"><a href="r-intro.html#cb110-3" aria-hidden="true" tabindex="-1"></a>airquality[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(airquality), <span class="dv">3</span>), ]</span></code></pre></div>
+<pre><code>##     Ozone Solar.R Wind Temp Month Day
+## 49     20      37  9.2   65     6  18
+## 120    76     203  9.7   97     8  28
+## 82     16       7  6.9   74     7  21</code></pre>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="r-intro.html#cb112-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sample 2</span></span>
+<span id="cb112-2"><a href="r-intro.html#cb112-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb112-3"><a href="r-intro.html#cb112-3" aria-hidden="true" tabindex="-1"></a>airquality[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(airquality), <span class="dv">3</span>), ]</span></code></pre></div>
+<pre><code>##     Ozone Solar.R Wind Temp Month Day
+## 49     20      37  9.2   65     6  18
+## 120    76     203  9.7   97     8  28
+## 82     16       7  6.9   74     7  21</code></pre>
+<p>Note that a random seed resets after every call that requires randomization<a href="#fn13" class="footnote-ref" id="fnref13"><sup>13</sup></a>. Therefore it is important to set a random seed before every random process to ensure full reproducibility.</p>
+</div>
+<div id="documenting-your-work-using-r-markdown" class="section level2" number="2.9">
+<h2><span class="header-section-number">2.9</span> Documenting your work using R Markdown</h2>
 <p>For anyone performing any sort of analysis using a statistical programming language, appropriate documentation and reproducibility of the work is essential to its success and longevity. If your code is not easily obtained or run by others, it is likely to have a very limited impact and lifetime. Learning how to create integrated documents that contain both text and code is critical to providing access to your code and narration of your work.</p>
 <p>R Markdown is a package which allows you to create integrated documents containing both formatted text and executed code. It is, in my opinion, one of the best resources available currently for this purpose. This entire book has been created using R Markdown. You can start an R Markdown document in RStudio by installing the <code>rmarkdown</code> package and then opening a new R Markdown document file, which will have the suffix <code>.Rmd</code>.</p>
 <p>R Markdown documents always start with a particular heading type called a YAML header, which contains overall information on the document you are creating. Care must be taken with the precise formatting of the YAML header, as it is sensitive to spacing and indentation. Usually a basic YAML header is created for you in RStudio when you start a new <code>.Rmd</code> file. Here is an example.</p>
@@ -951,7 +990,7 @@ Here is a nice picture about this sub-topic.
 ![](path/to/image)</code></pre>
 <p>Code can be written and executed and the results displayed inline using backticks. For example, recalling our <code>chinook_employees</code> dataset from earlier and writing</p>
 <pre><code>`r nrow(chinook_employees)`</code></pre>
-<p>inline will display 8 in the final document<a href="#fn13" class="footnote-ref" id="fnref13"><sup>13</sup></a>. Entire code blocks can be included and executed by using triple-backticks. The following code block:</p>
+<p>inline will display 8 in the final document<a href="#fn14" class="footnote-ref" id="fnref14"><sup>14</sup></a>. Entire code blocks can be included and executed by using triple-backticks. The following code block:</p>
 <pre><code>```{r}
 # show the first three rows of chinook_employees
 head(chinook_employees, 3)
@@ -965,10 +1004,10 @@ head(chinook_employees, 3)
 <p>The process of compiling your R Markdown code to produce a document is known as ‘knitting.’ To create a knitted document, you simply need to click on the ‘Knit’ button in RStudio that appears above your R Markdown code.</p>
 <p>If you are not familiar with R Markdown, I strongly encourage you to learn it alongside R and to challenge yourself to write up any practice exercises you take on in this book using R Markdown. Useful cheat sheets and reference guides for R Markdown formatting and commands are available through the Cheatsheets section of the Help menu in RStudio. I also recommend <span class="citation"><a href="#ref-rmarkdown" role="doc-biblioref">Xie, Dervieux, and Riederer</a> (<a href="#ref-rmarkdown" role="doc-biblioref">2020</a>)</span> for a really thorough instruction and reference guide.</p>
 </div>
-<div id="learning-exercises" class="section level2" number="2.9">
-<h2><span class="header-section-number">2.9</span> Learning exercises</h2>
-<div id="discussion-questions" class="section level3" number="2.9.1">
-<h3><span class="header-section-number">2.9.1</span> Discussion questions</h3>
+<div id="learning-exercises" class="section level2" number="2.10">
+<h2><span class="header-section-number">2.10</span> Learning exercises</h2>
+<div id="discussion-questions" class="section level3" number="2.10.1">
+<h3><span class="header-section-number">2.10.1</span> Discussion questions</h3>
 <ol style="list-style-type: decimal">
 <li>Describe the following data types: numeric, character, logical, factor.</li>
 <li>Why is a vector known as a homogeneous data structure?</li>
@@ -984,14 +1023,14 @@ head(chinook_employees, 3)
 <li>What is R Markdown, and why is it useful to someone performing analysis using programming languages?</li>
 </ol>
 </div>
-<div id="data-exercises" class="section level3" number="2.9.2">
-<h3><span class="header-section-number">2.9.2</span> Data exercises</h3>
+<div id="data-exercises" class="section level3" number="2.10.2">
+<h3><span class="header-section-number">2.10.2</span> Data exercises</h3>
 <ol style="list-style-type: decimal">
 <li>Create a character vector called <code>my_names</code> that contains all your first, middle and last names as elements. Calculate the length of <code>my_names</code>.</li>
 <li>Create a second numeric vector called <code>which</code> which corresponds to <code>my_names</code>. The entries should be the position of each name in the order of your full name. Verify that it has the same length as <code>my_names</code>.</li>
 <li>Create a dataframe called <code>names</code>, which consists of the two vectors <code>my_names</code> and <code>which</code> as columns. Calculate the dimensions of <code>names</code>.</li>
 <li>Create a new dataframe <code>new_names</code> with the <code>which</code> column converted to character type. Verify that your command worked using <code>str()</code>.</li>
-<li>Load the <code>chinook_customers</code> data set via the <code>onadata</code> package or download it from the internet<a href="#fn14" class="footnote-ref" id="fnref14"><sup>14</sup></a>. Calculate the dimensions of <code>chinook_customers</code> and view the first three rows only.</li>
+<li>Load the <code>chinook_customers</code> data set via the <code>onadata</code> package or download it from the internet<a href="#fn15" class="footnote-ref" id="fnref15"><sup>15</sup></a>. Calculate the dimensions of <code>chinook_customers</code> and view the first three rows only.</li>
 <li>View a statistical summary of all of the columns of <code>chinook_customers</code>. Determine if there are any missing values.</li>
 <li>View the subset of <code>chinook_customers</code> for values of <code>SupportRepId</code> equal to 3.</li>
 <li>Install and load the package <code>dplyr</code>. Look up the help for the <code>filter()</code> function in this package and try to use it to repeat the task in the previous question.</li>
@@ -1025,8 +1064,9 @@ Xie, Yihui, Christophe Dervieux, and Emily Riederer. 2020. <em>R Markdown Cookbo
 <li id="fn10"><p>R also has some built-in data sets for testing and playing with. For example, later in this chapter we will use the built-in <code>airquality</code> data set to do some plotting. You can see this data set simply by typing <code>airquality</code> into the terminal. You can type <code>data()</code> to see a full list of built-in data sets.<a href="r-intro.html#fnref10" class="footnote-back">↩︎</a></p></li>
 <li id="fn11"><p>It actually has a broader definition but is mostly used for showing the first rows of a dataframe.<a href="r-intro.html#fnref11" class="footnote-back">↩︎</a></p></li>
 <li id="fn12"><p>Note that in this book I am using the ‘native pipe’ operator which was introduced into R as of Version 4.1.0. If you are using a prior version of R, or if you have old habits you would like to stick with, you can use the prior pipe operator that is only available when it is loaded as part of the <code>magrittr</code> or <code>dplyr</code> packages, and which is notated as <code>%&gt;%</code><a href="r-intro.html#fnref12" class="footnote-back">↩︎</a></p></li>
-<li id="fn13"><p>This assumes the dataset has been loaded afresh without removing any data from it<a href="r-intro.html#fnref13" class="footnote-back">↩︎</a></p></li>
-<li id="fn14"><p><a href="https://ona-book.org/data/chinook_customers.csv" class="uri">https://ona-book.org/data/chinook_customers.csv</a><a href="r-intro.html#fnref14" class="footnote-back">↩︎</a></p></li>
+<li id="fn13"><p>If you want to see this, you can type <code>x &lt;- .Random.seed</code> in your console and it will store the current vector being used for randomization. Then run a random sample function, after which the vector will regenerate. Then store it again as <code>y &lt;- .Random.seed</code> and check <code>sum(x != y)</code>. This should be non-zero.<a href="r-intro.html#fnref13" class="footnote-back">↩︎</a></p></li>
+<li id="fn14"><p>This assumes the dataset has been loaded afresh without removing any data from it<a href="r-intro.html#fnref14" class="footnote-back">↩︎</a></p></li>
+<li id="fn15"><p><a href="https://ona-book.org/data/chinook_customers.csv" class="uri">https://ona-book.org/data/chinook_customers.csv</a><a href="r-intro.html#fnref15" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>

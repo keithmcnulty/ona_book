@@ -56,6 +56,10 @@
 <link href="libs/vis-4.20.1/vis.css" rel="stylesheet" />
 <script src="libs/vis-4.20.1/vis.min.js"></script>
 <script src="libs/visNetwork-binding-2.0.9/visNetwork.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 <script src="libs/d3-4.5.0/d3.min.js"></script>
 <script src="libs/forceNetwork-binding-0.4/forceNetwork.js"></script>
 <script src="libs/sankey-1/sankey.js"></script>
@@ -221,11 +225,12 @@ div.csl-indent {
 <li class="chapter" data-level="2.7.1" data-path="r-intro.html"><a href="r-intro.html#plotting-in-base-r"><i class="fa fa-check"></i><b>2.7.1</b> Plotting in base R</a></li>
 <li class="chapter" data-level="2.7.2" data-path="r-intro.html"><a href="r-intro.html#specialist-plotting-and-graphing-packages"><i class="fa fa-check"></i><b>2.7.2</b> Specialist plotting and graphing packages</a></li>
 </ul></li>
-<li class="chapter" data-level="2.8" data-path="r-intro.html"><a href="r-intro.html#documenting-your-work-using-r-markdown"><i class="fa fa-check"></i><b>2.8</b> Documenting your work using R Markdown</a></li>
-<li class="chapter" data-level="2.9" data-path="r-intro.html"><a href="r-intro.html#learning-exercises"><i class="fa fa-check"></i><b>2.9</b> Learning exercises</a>
+<li class="chapter" data-level="2.8" data-path="r-intro.html"><a href="r-intro.html#randomization-in-r"><i class="fa fa-check"></i><b>2.8</b> Randomization in R</a></li>
+<li class="chapter" data-level="2.9" data-path="r-intro.html"><a href="r-intro.html#documenting-your-work-using-r-markdown"><i class="fa fa-check"></i><b>2.9</b> Documenting your work using R Markdown</a></li>
+<li class="chapter" data-level="2.10" data-path="r-intro.html"><a href="r-intro.html#learning-exercises"><i class="fa fa-check"></i><b>2.10</b> Learning exercises</a>
 <ul>
-<li class="chapter" data-level="2.9.1" data-path="r-intro.html"><a href="r-intro.html#discussion-questions"><i class="fa fa-check"></i><b>2.9.1</b> Discussion questions</a></li>
-<li class="chapter" data-level="2.9.2" data-path="r-intro.html"><a href="r-intro.html#data-exercises"><i class="fa fa-check"></i><b>2.9.2</b> Data exercises</a></li>
+<li class="chapter" data-level="2.10.1" data-path="r-intro.html"><a href="r-intro.html#discussion-questions"><i class="fa fa-check"></i><b>2.10.1</b> Discussion questions</a></li>
+<li class="chapter" data-level="2.10.2" data-path="r-intro.html"><a href="r-intro.html#data-exercises"><i class="fa fa-check"></i><b>2.10.2</b> Data exercises</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="working.html"><a href="working.html"><i class="fa fa-check"></i><b>3</b> Working With Graphs</a>
@@ -486,7 +491,7 @@ Figure 6.1: The <span class="math inline">\(G_{14}\)</span> graph
 <li>We cannot find an unsearched immediate neighbor of Vertex 3. So we move back to Vertex 4.</li>
 <li>We select Vertex 5 as an unsearched immediate neighbor of Vertex 4. We have found Vertex 5 and therefore a path exists between Vertex 9 and Vertex 5.</li>
 </ol>
-<p>It appears that the breadth-first approach is quicker and more computationally efficient than the depth-first approach, but this really depends on the specifics of the search. Breadth-first searches like to stay close to the starting node, and gradually increase their search radius. Depth-first searches like to ‘run away and come back.’ In our <span class="math inline">\(G_{14}\)</span> example above, because the network is very small and all nodes are within a short path from Vertex 9, a breadth-first search will usually find the target vertex quickly compared to a depth-first search, whose speed will depend on the route it takes. However, when target nodes are very ‘far away’ in the network, depth-first approaches can be more efficient. On average, however, computation time complexity for both search types is similar<a href="#fn33" class="footnote-ref" id="fnref33"><sup>33</sup></a>.</p>
+<p>It appears that the breadth-first approach is quicker and more computationally efficient than the depth-first approach, but this really depends on the specifics of the search. Breadth-first searches like to stay close to the starting node, and gradually increase their search radius. Depth-first searches like to ‘run away and come back.’ In our <span class="math inline">\(G_{14}\)</span> example above, because the network is very small and all nodes are within a short path from Vertex 9, a breadth-first search will usually find the target vertex quickly compared to a depth-first search, whose speed will depend on the route it takes. However, when target nodes are very ‘far away’ in the network, depth-first approaches can be more efficient. On average, however, computation time complexity for both search types is similar<a href="#fn36" class="footnote-ref" id="fnref36"><sup>36</sup></a>.</p>
 <div class="thinkahead">
 <p><strong>Thinking ahead:</strong> Consider the <em>smallest number of edges</em> that need to be traversed to get from Vertex 9 to Vertex 5 in our <span class="math inline">\(G_{14}\)</span> graph. Work out what you think that is, and then try to use a depth-first search to move from Vertex 9 to Vertex 5 in different ways. Will the depth-first search always return a path with the smallest number of edges? Why or why not? What about the breadth-first search?</p>
 </div>
@@ -537,7 +542,7 @@ Figure 6.3: Distance needs to be treated with care in weighted graphs. In this c
 <div class="thinkahead">
 <p><strong>Playing around:</strong> Try to repeat the process of Dijkstra’s algorithm for the weighted graph <span class="math inline">\(G_{14W}\)</span>. Which vertex has the shortest distance from Vertex 9 and which vertex has the longest distance?</p>
 </div>
-<p>Single source shortest path algorithms like Dijkstra’s algorithm can be used to solve the all pairs distance problem by simply repeating the algorithm for each vertex in the graph. For large graphs, however, this can be inefficient, which explains why alternative algorithms have been developed for the all pairs problem<a href="#fn34" class="footnote-ref" id="fnref34"><sup>34</sup></a>.</p>
+<p>Single source shortest path algorithms like Dijkstra’s algorithm can be used to solve the all pairs distance problem by simply repeating the algorithm for each vertex in the graph. For large graphs, however, this can be inefficient, which explains why alternative algorithms have been developed for the all pairs problem<a href="#fn37" class="footnote-ref" id="fnref37"><sup>37</sup></a>.</p>
 </div>
 <div id="graph-diameter-and-density" class="section level3" number="6.1.4">
 <h3><span class="header-section-number">6.1.4</span> Graph diameter and density</h3>
@@ -545,7 +550,7 @@ Figure 6.3: Distance needs to be treated with care in weighted graphs. In this c
 <p>The diameter of a social network is an intuitive measure of the overall ‘closeness’ of the individuals in that network. Networks with smaller diameters can be often be considered as more ‘close-knit’ communities. However, care needs to be taken in interpreting the diameter of a network, particularly given that other measures may be more representative of how close-knit a community is. Common alternative metrics used to assess overall network ‘closeness’ include:</p>
 <ul>
 <li>Average distance between all pairs of vertices</li>
-<li>The <strong>density</strong> of the network, which is defined as the number of edges divided by the total possible number of edges in a graph<a href="#fn35" class="footnote-ref" id="fnref35"><sup>35</sup></a>. A complete graph, for example, would have a density of 1. Graphs with lower density are called <em>sparse graphs</em>.</li>
+<li>The <strong>density</strong> of the network, which is defined as the number of edges divided by the total possible number of edges in a graph<a href="#fn38" class="footnote-ref" id="fnref38"><sup>38</sup></a>. A complete graph, for example, would have a density of 1. Graphs with lower density are called <em>sparse graphs</em>.</li>
 </ul>
 <p>Consider the two graphs in Figure <a href="paths-distance.html#fig:dens-ex">6.4</a>. In the first graph, the diameter is 5 and in the second the diameter is 4. However, the average distance between vertices in the first graph is 2.38 and in the second graph it is 2.49. Both graphs have the same density of 0.2. Therefore, one measure would regard the first graph as ‘closer,’ another would regard the second graph as closer, and the third measure would regard them as the same.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:dens-ex"></span>
@@ -563,12 +568,12 @@ Figure 6.4: Two graphs illustrating how closeness can be measured in different w
 <h2><span class="header-section-number">6.2</span> Calculating paths, distance, diameter and density</h2>
 <div id="calculating-in-r" class="section level3" number="6.2.1">
 <h3><span class="header-section-number">6.2.1</span> Calculating in R</h3>
-<p>Thanks to packages like <code>igraph</code> in R, it is much easier to calculate path, distance and density metrics than to understand the theory behind them. In this section we will illustrate various functions that can be used to easily calculate these metrics. Before we begin, let’s create the graphs <span class="math inline">\(G_{14}\)</span> and <span class="math inline">\(G_{14W}\)</span> from the previous section by loading the <code>g14_edgelist</code> dataset from the <code>onadata</code> package or by downloading it from the internet<a href="#fn36" class="footnote-ref" id="fnref36"><sup>36</sup></a>.</p>
-<div class="sourceCode" id="cb295"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb295-1"><a href="paths-distance.html#cb295-1" aria-hidden="true" tabindex="-1"></a><span class="co"># download the edgelist</span></span>
-<span id="cb295-2"><a href="paths-distance.html#cb295-2" aria-hidden="true" tabindex="-1"></a>g14_edgelist <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://ona-book.org/data/g14_edgelist.csv&quot;</span>)</span>
-<span id="cb295-3"><a href="paths-distance.html#cb295-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb295-4"><a href="paths-distance.html#cb295-4" aria-hidden="true" tabindex="-1"></a><span class="co"># view head</span></span>
-<span id="cb295-5"><a href="paths-distance.html#cb295-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(g14_edgelist)</span></code></pre></div>
+<p>Thanks to packages like <code>igraph</code> in R, it is much easier to calculate path, distance and density metrics than to understand the theory behind them. In this section we will illustrate various functions that can be used to easily calculate these metrics. Before we begin, let’s create the graphs <span class="math inline">\(G_{14}\)</span> and <span class="math inline">\(G_{14W}\)</span> from the previous section by loading the <code>g14_edgelist</code> dataset from the <code>onadata</code> package or by downloading it from the internet<a href="#fn39" class="footnote-ref" id="fnref39"><sup>39</sup></a>.</p>
+<div class="sourceCode" id="cb305"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb305-1"><a href="paths-distance.html#cb305-1" aria-hidden="true" tabindex="-1"></a><span class="co"># download the edgelist</span></span>
+<span id="cb305-2"><a href="paths-distance.html#cb305-2" aria-hidden="true" tabindex="-1"></a>g14_edgelist <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://ona-book.org/data/g14_edgelist.csv&quot;</span>)</span>
+<span id="cb305-3"><a href="paths-distance.html#cb305-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb305-4"><a href="paths-distance.html#cb305-4" aria-hidden="true" tabindex="-1"></a><span class="co"># view head</span></span>
+<span id="cb305-5"><a href="paths-distance.html#cb305-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(g14_edgelist)</span></code></pre></div>
 <pre><code>##   from to weight
 ## 1    9 10      4
 ## 2   10 11      1
@@ -577,65 +582,65 @@ Figure 6.4: Two graphs illustrating how closeness can be measured in different w
 ## 5    9 13      3
 ## 6   13 14      2</code></pre>
 <p>Let’s start by creating the weighted <span class="math inline">\(G_{14W}\)</span> graph from the previous section.</p>
-<div class="sourceCode" id="cb297"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb297-1"><a href="paths-distance.html#cb297-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create weighted graph</span></span>
-<span id="cb297-2"><a href="paths-distance.html#cb297-2" aria-hidden="true" tabindex="-1"></a>(g14w <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(g14_edgelist, <span class="at">directed =</span> <span class="cn">FALSE</span>))</span></code></pre></div>
-<pre><code>## IGRAPH 2686c38 UNW- 14 18 -- 
+<div class="sourceCode" id="cb307"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb307-1"><a href="paths-distance.html#cb307-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create weighted graph</span></span>
+<span id="cb307-2"><a href="paths-distance.html#cb307-2" aria-hidden="true" tabindex="-1"></a>(g14w <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(g14_edgelist, <span class="at">directed =</span> <span class="cn">FALSE</span>))</span></code></pre></div>
+<pre><code>## IGRAPH acc39d8 UNW- 14 18 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from 2686c38 (vertex names):
+## + edges from acc39d8 (vertex names):
 ##  [1] 9 --10 10--11 11--12 10--12 9 --13 13--14 9 --8  9 --7  8 --7  4 --6  4 --7  8 --4  6 --7  4 --1  4 --2  4 --3  4 --5 
 ## [18] 1 --2</code></pre>
 <p>The <code>all_simple_paths()</code> function in <code>igraph</code> returns all paths from a specified vertex, and expects at least an <code>igraph</code> object and a vertex name for the <code>from</code> vertex as arguments. If the <code>to</code> argument specifies a vertex, then the function will return only paths between the <code>from</code> and <code>to</code> vertex. Otherwise it will return a list containing all paths from the specified vertex to all other vertices. Note that these functions expect the vertex name as a character string.</p>
-<div class="sourceCode" id="cb299"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb299-1"><a href="paths-distance.html#cb299-1" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">all_simple_paths</span>(g14w, <span class="at">from =</span> <span class="st">&quot;9&quot;</span>, <span class="at">to =</span> <span class="st">&quot;4&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb309"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb309-1"><a href="paths-distance.html#cb309-1" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">all_simple_paths</span>(g14w, <span class="at">from =</span> <span class="st">&quot;9&quot;</span>, <span class="at">to =</span> <span class="st">&quot;4&quot;</span>)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 3/14 vertices, named, from 2686c38:
+## + 3/14 vertices, named, from acc39d8:
 ## [1] 9 8 4
 ## 
 ## [[2]]
-## + 4/14 vertices, named, from 2686c38:
+## + 4/14 vertices, named, from acc39d8:
 ## [1] 9 8 7 4
 ## 
 ## [[3]]
-## + 5/14 vertices, named, from 2686c38:
+## + 5/14 vertices, named, from acc39d8:
 ## [1] 9 8 7 6 4
 ## 
 ## [[4]]
-## + 4/14 vertices, named, from 2686c38:
+## + 4/14 vertices, named, from acc39d8:
 ## [1] 9 7 8 4
 ## 
 ## [[5]]
-## + 3/14 vertices, named, from 2686c38:
+## + 3/14 vertices, named, from acc39d8:
 ## [1] 9 7 4
 ## 
 ## [[6]]
-## + 4/14 vertices, named, from 2686c38:
+## + 4/14 vertices, named, from acc39d8:
 ## [1] 9 7 6 4</code></pre>
 <p>We see that this agrees with our manual calculations in Section <a href="paths-distance.html#traversal">6.1.1</a>, and is the same whether or not the edges are weighted. This function is easy to use in the case of undirected graphs. When using with digraphs, there is an additional argument called <code>mode</code>, specifying the direction of the paths you are seeking. <code>out</code>, <code>in</code>, <code>all</code> or <code>total</code> are the accepted values for this argument.</p>
 <p>The <code>all_shortest_paths()</code> function performs the same task as the previous function but restricts the output to paths of the shortest length. This function returns a list of objects, but the paths can be found in the <code>res</code> element of the list.</p>
-<div class="sourceCode" id="cb301"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb301-1"><a href="paths-distance.html#cb301-1" aria-hidden="true" tabindex="-1"></a>shortest_9to4 <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">all_shortest_paths</span>(g14w, <span class="at">from =</span> <span class="st">&quot;9&quot;</span>, <span class="at">to =</span> <span class="st">&quot;4&quot;</span>)</span>
-<span id="cb301-2"><a href="paths-distance.html#cb301-2" aria-hidden="true" tabindex="-1"></a>shortest_9to4<span class="sc">$</span>res</span></code></pre></div>
+<div class="sourceCode" id="cb311"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb311-1"><a href="paths-distance.html#cb311-1" aria-hidden="true" tabindex="-1"></a>shortest_9to4 <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">all_shortest_paths</span>(g14w, <span class="at">from =</span> <span class="st">&quot;9&quot;</span>, <span class="at">to =</span> <span class="st">&quot;4&quot;</span>)</span>
+<span id="cb311-2"><a href="paths-distance.html#cb311-2" aria-hidden="true" tabindex="-1"></a>shortest_9to4<span class="sc">$</span>res</span></code></pre></div>
 <pre><code>## [[1]]
-## + 3/14 vertices, named, from 2686c38:
+## + 3/14 vertices, named, from acc39d8:
 ## [1] 9 8 4
 ## 
 ## [[2]]
-## + 3/14 vertices, named, from 2686c38:
+## + 3/14 vertices, named, from acc39d8:
 ## [1] 9 7 4
 ## 
 ## [[3]]
-## + 4/14 vertices, named, from 2686c38:
+## + 4/14 vertices, named, from acc39d8:
 ## [1] 9 8 7 4</code></pre>
 <p>Note that the function has returned the shortest path according to edge weights. To ignore edge weights, simply set <code>weights = NA</code>. This is equivalent to calculating shortest paths in our unweighted <span class="math inline">\(G_{14}\)</span> graph.</p>
-<div class="sourceCode" id="cb303"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb303-1"><a href="paths-distance.html#cb303-1" aria-hidden="true" tabindex="-1"></a>shortest_9to4_uw <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">all_shortest_paths</span>(g14w, <span class="at">from =</span> <span class="st">&quot;9&quot;</span>, <span class="at">to =</span> <span class="st">&quot;4&quot;</span>, <span class="at">weights =</span> <span class="cn">NA</span>)</span>
-<span id="cb303-2"><a href="paths-distance.html#cb303-2" aria-hidden="true" tabindex="-1"></a>shortest_9to4_uw<span class="sc">$</span>res</span></code></pre></div>
+<div class="sourceCode" id="cb313"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb313-1"><a href="paths-distance.html#cb313-1" aria-hidden="true" tabindex="-1"></a>shortest_9to4_uw <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">all_shortest_paths</span>(g14w, <span class="at">from =</span> <span class="st">&quot;9&quot;</span>, <span class="at">to =</span> <span class="st">&quot;4&quot;</span>, <span class="at">weights =</span> <span class="cn">NA</span>)</span>
+<span id="cb313-2"><a href="paths-distance.html#cb313-2" aria-hidden="true" tabindex="-1"></a>shortest_9to4_uw<span class="sc">$</span>res</span></code></pre></div>
 <pre><code>## [[1]]
-## + 3/14 vertices, named, from 2686c38:
+## + 3/14 vertices, named, from acc39d8:
 ## [1] 9 7 4
 ## 
 ## [[2]]
-## + 3/14 vertices, named, from 2686c38:
+## + 3/14 vertices, named, from acc39d8:
 ## [1] 9 8 4</code></pre>
 <p>The <code>distances()</code> function calculates distance in a graph. By default it calculates the distance between all pairs of vertices and returns the results as a distance matrix.</p>
-<div class="sourceCode" id="cb305"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb305-1"><a href="paths-distance.html#cb305-1" aria-hidden="true" tabindex="-1"></a><span class="fu">distances</span>(g14w)</span></code></pre></div>
+<div class="sourceCode" id="cb315"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb315-1"><a href="paths-distance.html#cb315-1" aria-hidden="true" tabindex="-1"></a><span class="fu">distances</span>(g14w)</span></code></pre></div>
 <pre><code>##    9 10 11 13 8  4  6  1 12 14 7  2  3  5
 ## 9  0  4  5  3 2  5  5  6  5  5 3  6  6  7
 ## 10 4  0  1  7 6  9  9 10  1  9 7 10 10 11
@@ -652,36 +657,36 @@ Figure 6.4: Two graphs illustrating how closeness can be measured in different w
 ## 3  6 10 11  9 4  1  2  2 11 11 3  2  0  3
 ## 5  7 11 12 10 5  2  3  3 12 12 4  3  3  0</code></pre>
 <p>Again, specific subsets of vertices can be selected and the function will return a matrix for just those subsets, and the same <code>mode</code> argument can be used for digraphs. Weights can be ignored by setting <code>weights = NA</code>. The algorithm used to calculate shortest path is automatically selected, but can be specified using the <code>algorithm</code> argument.</p>
-<div class="sourceCode" id="cb307"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb307-1"><a href="paths-distance.html#cb307-1" aria-hidden="true" tabindex="-1"></a><span class="fu">distances</span>(g14w, <span class="at">v =</span> <span class="st">&quot;9&quot;</span>, <span class="at">to =</span> <span class="st">&quot;4&quot;</span>, <span class="at">weights =</span> <span class="cn">NA</span>, <span class="at">algorithm =</span> <span class="st">&quot;bellman-ford&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb317"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb317-1"><a href="paths-distance.html#cb317-1" aria-hidden="true" tabindex="-1"></a><span class="fu">distances</span>(g14w, <span class="at">v =</span> <span class="st">&quot;9&quot;</span>, <span class="at">to =</span> <span class="st">&quot;4&quot;</span>, <span class="at">weights =</span> <span class="cn">NA</span>, <span class="at">algorithm =</span> <span class="st">&quot;bellman-ford&quot;</span>)</span></code></pre></div>
 <pre><code>##   4
 ## 9 2</code></pre>
 <p>The <code>mean_distance()</code> function calculates the average distance between all pairs of vertices. Note that this function does not consider edge weights.</p>
-<div class="sourceCode" id="cb309"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb309-1"><a href="paths-distance.html#cb309-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean_distance</span>(g14w)</span></code></pre></div>
+<div class="sourceCode" id="cb319"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb319-1"><a href="paths-distance.html#cb319-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean_distance</span>(g14w)</span></code></pre></div>
 <pre><code>## [1] 2.736264</code></pre>
 <p>To consider edge weights in calculating average distance, you should take the mean of the off-diagonal elements of the distance matrix. This is most easily done by extracting the lower and upper triangles of the distance matrix.</p>
-<div class="sourceCode" id="cb311"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb311-1"><a href="paths-distance.html#cb311-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get lower and upper triangles of weighted distance matrix </span></span>
-<span id="cb311-2"><a href="paths-distance.html#cb311-2" aria-hidden="true" tabindex="-1"></a>dist <span class="ot">&lt;-</span> <span class="fu">distances</span>(g14w)</span>
-<span id="cb311-3"><a href="paths-distance.html#cb311-3" aria-hidden="true" tabindex="-1"></a>off_diag_dist <span class="ot">&lt;-</span> dist[<span class="fu">upper.tri</span>(dist) <span class="sc">|</span> <span class="fu">lower.tri</span>(dist)] </span>
-<span id="cb311-4"><a href="paths-distance.html#cb311-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb311-5"><a href="paths-distance.html#cb311-5" aria-hidden="true" tabindex="-1"></a><span class="co"># calcuate mean</span></span>
-<span id="cb311-6"><a href="paths-distance.html#cb311-6" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(off_diag_dist)</span></code></pre></div>
+<div class="sourceCode" id="cb321"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb321-1"><a href="paths-distance.html#cb321-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get lower and upper triangles of weighted distance matrix </span></span>
+<span id="cb321-2"><a href="paths-distance.html#cb321-2" aria-hidden="true" tabindex="-1"></a>dist <span class="ot">&lt;-</span> <span class="fu">distances</span>(g14w)</span>
+<span id="cb321-3"><a href="paths-distance.html#cb321-3" aria-hidden="true" tabindex="-1"></a>off_diag_dist <span class="ot">&lt;-</span> dist[<span class="fu">upper.tri</span>(dist) <span class="sc">|</span> <span class="fu">lower.tri</span>(dist)] </span>
+<span id="cb321-4"><a href="paths-distance.html#cb321-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb321-5"><a href="paths-distance.html#cb321-5" aria-hidden="true" tabindex="-1"></a><span class="co"># calcuate mean</span></span>
+<span id="cb321-6"><a href="paths-distance.html#cb321-6" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(off_diag_dist)</span></code></pre></div>
 <pre><code>## [1] 6.208791</code></pre>
 <p>Graph diameter can be calculated using the <code>diameter()</code> function, and is equal to the maximal element of the distance matrix. Again, weights can be ignored by setting <code>weights = NA</code>.</p>
-<div class="sourceCode" id="cb313"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb313-1"><a href="paths-distance.html#cb313-1" aria-hidden="true" tabindex="-1"></a><span class="fu">diameter</span>(g14w)</span></code></pre></div>
+<div class="sourceCode" id="cb323"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb323-1"><a href="paths-distance.html#cb323-1" aria-hidden="true" tabindex="-1"></a><span class="fu">diameter</span>(g14w)</span></code></pre></div>
 <pre><code>## [1] 12</code></pre>
 <p>If a graph is not connected, the <code>diameter()</code> function will return the diameter of the largest connected component by default. The function <code>farthest_vertices()</code> will return a pair vertices at either end of a diameter path, and the function <code>get_diameter()</code> will return a full diameter path.</p>
-<div class="sourceCode" id="cb315"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb315-1"><a href="paths-distance.html#cb315-1" aria-hidden="true" tabindex="-1"></a><span class="fu">farthest_vertices</span>(g14w, <span class="at">weights =</span> <span class="cn">NA</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb325"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb325-1"><a href="paths-distance.html#cb325-1" aria-hidden="true" tabindex="-1"></a><span class="fu">farthest_vertices</span>(g14w, <span class="at">weights =</span> <span class="cn">NA</span>)</span></code></pre></div>
 <pre><code>## $vertices
-## + 2/14 vertices, named, from 2686c38:
+## + 2/14 vertices, named, from acc39d8:
 ## [1] 11 1 
 ## 
 ## $distance
 ## [1] 5</code></pre>
-<div class="sourceCode" id="cb317"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb317-1"><a href="paths-distance.html#cb317-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_diameter</span>(g14w, <span class="at">weights =</span> <span class="cn">NA</span>)</span></code></pre></div>
-<pre><code>## + 6/14 vertices, named, from 2686c38:
+<div class="sourceCode" id="cb327"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb327-1"><a href="paths-distance.html#cb327-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_diameter</span>(g14w, <span class="at">weights =</span> <span class="cn">NA</span>)</span></code></pre></div>
+<pre><code>## + 6/14 vertices, named, from acc39d8:
 ## [1] 11 10 9  8  4  1</code></pre>
 <p>Finally, the <code>edge_density()</code> function will calculate the density of the graph. You can find the formula for edge density in an earlier footnote in this chapter and if you like you can verify this manually for our <span class="math inline">\(G_{14W}\)</span> graph.</p>
-<div class="sourceCode" id="cb319"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb319-1"><a href="paths-distance.html#cb319-1" aria-hidden="true" tabindex="-1"></a><span class="fu">edge_density</span>(g14w)</span></code></pre></div>
+<div class="sourceCode" id="cb329"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb329-1"><a href="paths-distance.html#cb329-1" aria-hidden="true" tabindex="-1"></a><span class="fu">edge_density</span>(g14w)</span></code></pre></div>
 <pre><code>## [1] 0.1978022</code></pre>
 <div class="thinkahead">
 <p><strong>Playing around:</strong> The <code>distance()</code> function allows you to select from three algorithms to use: Dijkstra, Bellman-Ford and Johnson. If you are interested in computation speed you could try an experiment on a large graph to see which one is faster. The <code>microbenchmark</code> package in R is useful for running a computation many times and benchmarking its average speed. You could try creating a directed graph from the <code>wikivote</code> data set in the <code>onadata</code> package or via the internet at <a href="https://ona-book.org/wikivote.csv" class="uri">https://ona-book.org/wikivote.csv</a>, calculating the distance matrix using each of the three algorithms and benchmarking the speed. I found the Johnson algorithm to be about four times faster than the others. Don’t try this, however, if you are on a low memory or slow CPU computer.</p>
@@ -690,68 +695,68 @@ Figure 6.4: Two graphs illustrating how closeness can be measured in different w
 <div id="calculating-in-python" class="section level3" number="6.2.2">
 <h3><span class="header-section-number">6.2.2</span> Calculating in Python</h3>
 <p>The functions in the <code>networkx</code> package in Python are very similar to those in <code>igraph</code> in R. First let’s load our weighted graph <span class="math inline">\(G_{14W}\)</span>.</p>
-<div class="sourceCode" id="cb321"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb321-1"><a href="paths-distance.html#cb321-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
-<span id="cb321-2"><a href="paths-distance.html#cb321-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb321-3"><a href="paths-distance.html#cb321-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb321-4"><a href="paths-distance.html#cb321-4" aria-hidden="true" tabindex="-1"></a>g14w_edges <span class="op">=</span> pd.read_csv(<span class="st">&quot;https://ona-book.org/data/g14_edgelist.csv&quot;</span>)</span>
-<span id="cb321-5"><a href="paths-distance.html#cb321-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb321-6"><a href="paths-distance.html#cb321-6" aria-hidden="true" tabindex="-1"></a>g14w <span class="op">=</span> nx.from_pandas_edgelist(g14w_edges, source <span class="op">=</span> <span class="st">&quot;from&quot;</span>, target <span class="op">=</span> <span class="st">&quot;to&quot;</span>, </span>
-<span id="cb321-7"><a href="paths-distance.html#cb321-7" aria-hidden="true" tabindex="-1"></a>edge_attr <span class="op">=</span> <span class="va">True</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb331"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb331-1"><a href="paths-distance.html#cb331-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
+<span id="cb331-2"><a href="paths-distance.html#cb331-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb331-3"><a href="paths-distance.html#cb331-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb331-4"><a href="paths-distance.html#cb331-4" aria-hidden="true" tabindex="-1"></a>g14w_edges <span class="op">=</span> pd.read_csv(<span class="st">&quot;https://ona-book.org/data/g14_edgelist.csv&quot;</span>)</span>
+<span id="cb331-5"><a href="paths-distance.html#cb331-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb331-6"><a href="paths-distance.html#cb331-6" aria-hidden="true" tabindex="-1"></a>g14w <span class="op">=</span> nx.from_pandas_edgelist(g14w_edges, source <span class="op">=</span> <span class="st">&quot;from&quot;</span>, target <span class="op">=</span> <span class="st">&quot;to&quot;</span>, </span>
+<span id="cb331-7"><a href="paths-distance.html#cb331-7" aria-hidden="true" tabindex="-1"></a>edge_attr <span class="op">=</span> <span class="va">True</span>)</span></code></pre></div>
 <p>To calculate all simple paths between two specified nodes, use the <code>all_simple_paths()</code> function.</p>
-<div class="sourceCode" id="cb322"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb322-1"><a href="paths-distance.html#cb322-1" aria-hidden="true" tabindex="-1"></a>simple_paths <span class="op">=</span> nx.all_simple_paths(G <span class="op">=</span> g14w, source <span class="op">=</span> <span class="dv">9</span>, target <span class="op">=</span> <span class="dv">4</span>)</span>
-<span id="cb322-2"><a href="paths-distance.html#cb322-2" aria-hidden="true" tabindex="-1"></a>[path <span class="cf">for</span> path <span class="kw">in</span> simple_paths]</span></code></pre></div>
+<div class="sourceCode" id="cb332"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb332-1"><a href="paths-distance.html#cb332-1" aria-hidden="true" tabindex="-1"></a>simple_paths <span class="op">=</span> nx.all_simple_paths(G <span class="op">=</span> g14w, source <span class="op">=</span> <span class="dv">9</span>, target <span class="op">=</span> <span class="dv">4</span>)</span>
+<span id="cb332-2"><a href="paths-distance.html#cb332-2" aria-hidden="true" tabindex="-1"></a>[path <span class="cf">for</span> path <span class="kw">in</span> simple_paths]</span></code></pre></div>
 <pre><code>## [[9, 8, 7, 4], [9, 8, 7, 6, 4], [9, 8, 4], [9, 7, 8, 4], [9, 7, 4], [9, 7, 6, 4]]</code></pre>
 <p>To calculate all shortest paths between two specified nodes, use the <code>all_shortest_paths()</code> function. By default this will ignore edge weights.</p>
-<div class="sourceCode" id="cb324"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb324-1"><a href="paths-distance.html#cb324-1" aria-hidden="true" tabindex="-1"></a>shortest_paths_uw <span class="op">=</span> nx.all_shortest_paths(G <span class="op">=</span> g14w, source <span class="op">=</span> <span class="dv">9</span>, target <span class="op">=</span> <span class="dv">4</span>)</span>
-<span id="cb324-2"><a href="paths-distance.html#cb324-2" aria-hidden="true" tabindex="-1"></a>[path <span class="cf">for</span> path <span class="kw">in</span> shortest_paths_uw]</span></code></pre></div>
+<div class="sourceCode" id="cb334"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb334-1"><a href="paths-distance.html#cb334-1" aria-hidden="true" tabindex="-1"></a>shortest_paths_uw <span class="op">=</span> nx.all_shortest_paths(G <span class="op">=</span> g14w, source <span class="op">=</span> <span class="dv">9</span>, target <span class="op">=</span> <span class="dv">4</span>)</span>
+<span id="cb334-2"><a href="paths-distance.html#cb334-2" aria-hidden="true" tabindex="-1"></a>[path <span class="cf">for</span> path <span class="kw">in</span> shortest_paths_uw]</span></code></pre></div>
 <pre><code>## [[9, 8, 4], [9, 7, 4]]</code></pre>
 <p>To consider edge weights, use the name of the weight attribute as the value of the <code>weight</code> argument.</p>
-<div class="sourceCode" id="cb326"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb326-1"><a href="paths-distance.html#cb326-1" aria-hidden="true" tabindex="-1"></a>shortest_paths_w <span class="op">=</span> nx.all_shortest_paths(G <span class="op">=</span> g14w, source <span class="op">=</span> <span class="dv">9</span>, target <span class="op">=</span> <span class="dv">4</span>,</span>
-<span id="cb326-2"><a href="paths-distance.html#cb326-2" aria-hidden="true" tabindex="-1"></a>weight <span class="op">=</span> <span class="st">&#39;weight&#39;</span>)</span>
-<span id="cb326-3"><a href="paths-distance.html#cb326-3" aria-hidden="true" tabindex="-1"></a>[path <span class="cf">for</span> path <span class="kw">in</span> shortest_paths_w]</span></code></pre></div>
+<div class="sourceCode" id="cb336"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb336-1"><a href="paths-distance.html#cb336-1" aria-hidden="true" tabindex="-1"></a>shortest_paths_w <span class="op">=</span> nx.all_shortest_paths(G <span class="op">=</span> g14w, source <span class="op">=</span> <span class="dv">9</span>, target <span class="op">=</span> <span class="dv">4</span>,</span>
+<span id="cb336-2"><a href="paths-distance.html#cb336-2" aria-hidden="true" tabindex="-1"></a>weight <span class="op">=</span> <span class="st">&#39;weight&#39;</span>)</span>
+<span id="cb336-3"><a href="paths-distance.html#cb336-3" aria-hidden="true" tabindex="-1"></a>[path <span class="cf">for</span> path <span class="kw">in</span> shortest_paths_w]</span></code></pre></div>
 <pre><code>## [[9, 8, 4], [9, 7, 4], [9, 8, 7, 4]]</code></pre>
 <p>For undirected graphs, the <code>shortest_path()</code> function will calculate a single shortest path for every pair of vertices in the graph, returning the paths in a dict. You can also specify source and target node subsets.</p>
-<div class="sourceCode" id="cb328"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb328-1"><a href="paths-distance.html#cb328-1" aria-hidden="true" tabindex="-1"></a>shortest_paths_from9 <span class="op">=</span> nx.shortest_path(g14w, source <span class="op">=</span> <span class="dv">9</span>, weight <span class="op">=</span> <span class="st">&#39;weight&#39;</span>)</span>
-<span id="cb328-2"><a href="paths-distance.html#cb328-2" aria-hidden="true" tabindex="-1"></a>shortest_paths_from9</span></code></pre></div>
+<div class="sourceCode" id="cb338"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb338-1"><a href="paths-distance.html#cb338-1" aria-hidden="true" tabindex="-1"></a>shortest_paths_from9 <span class="op">=</span> nx.shortest_path(g14w, source <span class="op">=</span> <span class="dv">9</span>, weight <span class="op">=</span> <span class="st">&#39;weight&#39;</span>)</span>
+<span id="cb338-2"><a href="paths-distance.html#cb338-2" aria-hidden="true" tabindex="-1"></a>shortest_paths_from9</span></code></pre></div>
 <pre><code>## {9: [9], 10: [9, 10], 13: [9, 13], 8: [9, 8], 7: [9, 7], 4: [9, 8, 4], 14: [9, 13, 14], 6: [9, 7, 6], 11: [9, 10, 11], 12: [9, 10, 12], 1: [9, 8, 4, 1], 2: [9, 8, 4, 2], 3: [9, 8, 4, 3], 5: [9, 8, 4, 5]}</code></pre>
 <p>For directed graphs, various algorithm-specific functions are available, such as <code>dijkstra_path()</code>, <code>bellman_ford_path()</code> and many others.</p>
 <p>Distances can be calculated using the <code>shortest_path_length()</code> function, either to produce all distances or to focus on a specific source and/or target. This will return a dict if single source/target, or a tuple otherwise.</p>
-<div class="sourceCode" id="cb330"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb330-1"><a href="paths-distance.html#cb330-1" aria-hidden="true" tabindex="-1"></a>distances_from9 <span class="op">=</span> nx.shortest_path_length(g14w, source <span class="op">=</span> <span class="dv">9</span>, weight <span class="op">=</span> <span class="st">&#39;weight&#39;</span>)</span>
-<span id="cb330-2"><a href="paths-distance.html#cb330-2" aria-hidden="true" tabindex="-1"></a>distances_from9</span></code></pre></div>
+<div class="sourceCode" id="cb340"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb340-1"><a href="paths-distance.html#cb340-1" aria-hidden="true" tabindex="-1"></a>distances_from9 <span class="op">=</span> nx.shortest_path_length(g14w, source <span class="op">=</span> <span class="dv">9</span>, weight <span class="op">=</span> <span class="st">&#39;weight&#39;</span>)</span>
+<span id="cb340-2"><a href="paths-distance.html#cb340-2" aria-hidden="true" tabindex="-1"></a>distances_from9</span></code></pre></div>
 <pre><code>## {9: 0, 8: 2, 13: 3, 7: 3, 10: 4, 4: 5, 14: 5, 6: 5, 11: 5, 12: 5, 1: 6, 2: 6, 3: 6, 5: 7}</code></pre>
 <p>Average distance can be calculated using the <code>average_shortest_path_length()</code> function. Include weights as an argument to get average weighted distance.</p>
-<div class="sourceCode" id="cb332"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb332-1"><a href="paths-distance.html#cb332-1" aria-hidden="true" tabindex="-1"></a>nx.average_shortest_path_length(g14w, weight <span class="op">=</span> <span class="st">&#39;weight&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb342"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb342-1"><a href="paths-distance.html#cb342-1" aria-hidden="true" tabindex="-1"></a>nx.average_shortest_path_length(g14w, weight <span class="op">=</span> <span class="st">&#39;weight&#39;</span>)</span></code></pre></div>
 <pre><code>## 6.208791208791209</code></pre>
 <p>Diameter can be calculated using the <code>diameter()</code> function, but this will only compute unweighted diameter.</p>
-<div class="sourceCode" id="cb334"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb334-1"><a href="paths-distance.html#cb334-1" aria-hidden="true" tabindex="-1"></a>nx.diameter(g14w)</span></code></pre></div>
+<div class="sourceCode" id="cb344"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb344-1"><a href="paths-distance.html#cb344-1" aria-hidden="true" tabindex="-1"></a>nx.diameter(g14w)</span></code></pre></div>
 <pre><code>## 5</code></pre>
 <p>To calculate weighted diameter, simple take the maximum value of the weighted distances across all pairs.</p>
-<div class="sourceCode" id="cb336"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb336-1"><a href="paths-distance.html#cb336-1" aria-hidden="true" tabindex="-1"></a>distances <span class="op">=</span> nx.shortest_path_length(g14w, weight <span class="op">=</span> <span class="st">&#39;weight&#39;</span>)</span>
-<span id="cb336-2"><a href="paths-distance.html#cb336-2" aria-hidden="true" tabindex="-1"></a><span class="bu">max</span>([<span class="bu">max</span>(distance[<span class="dv">1</span>].values()) <span class="cf">for</span> distance <span class="kw">in</span> distances])</span></code></pre></div>
+<div class="sourceCode" id="cb346"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb346-1"><a href="paths-distance.html#cb346-1" aria-hidden="true" tabindex="-1"></a>distances <span class="op">=</span> nx.shortest_path_length(g14w, weight <span class="op">=</span> <span class="st">&#39;weight&#39;</span>)</span>
+<span id="cb346-2"><a href="paths-distance.html#cb346-2" aria-hidden="true" tabindex="-1"></a><span class="bu">max</span>([<span class="bu">max</span>(distance[<span class="dv">1</span>].values()) <span class="cf">for</span> distance <span class="kw">in</span> distances])</span></code></pre></div>
 <pre><code>## 12</code></pre>
 <p>Finally, edge density can be calculated using the <code>density()</code> function.</p>
-<div class="sourceCode" id="cb338"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb338-1"><a href="paths-distance.html#cb338-1" aria-hidden="true" tabindex="-1"></a>nx.density(g14w)</span></code></pre></div>
+<div class="sourceCode" id="cb348"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb348-1"><a href="paths-distance.html#cb348-1" aria-hidden="true" tabindex="-1"></a>nx.density(g14w)</span></code></pre></div>
 <pre><code>## 0.1978021978021978</code></pre>
 </div>
 </div>
 <div id="illustrative-6" class="section level2" number="6.3">
 <h2><span class="header-section-number">6.3</span> Examples of uses</h2>
 <p>To illustrate uses of paths and distance in organizational settings, we will go through a couple of examples. We will look at real data from the <code>workfrance</code> graph which we introduced earlier in Section <a href="viz-graphs.html#ggraph">4.1.3</a>. The <code>workfrance</code> data set contains information captured in an experimental study in an office building in France. Vertices in this data set represent individual employees and edges exist between employees if they have spent a minimum amount of time together in the same place in the building. Let’s download the data and create the graph in R.</p>
-<div class="sourceCode" id="cb340"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb340-1"><a href="paths-distance.html#cb340-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb340-2"><a href="paths-distance.html#cb340-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb340-3"><a href="paths-distance.html#cb340-3" aria-hidden="true" tabindex="-1"></a><span class="co"># download workfrance data sets</span></span>
-<span id="cb340-4"><a href="paths-distance.html#cb340-4" aria-hidden="true" tabindex="-1"></a>workfrance_edges <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://ona-book.org/data/workfrance_edgelist.csv&quot;</span>)</span>
-<span id="cb340-5"><a href="paths-distance.html#cb340-5" aria-hidden="true" tabindex="-1"></a>workfrance_vertices <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://ona-book.org/data/workfrance_vertices.csv&quot;</span>)</span>
-<span id="cb340-6"><a href="paths-distance.html#cb340-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb340-7"><a href="paths-distance.html#cb340-7" aria-hidden="true" tabindex="-1"></a><span class="co"># create graph</span></span>
-<span id="cb340-8"><a href="paths-distance.html#cb340-8" aria-hidden="true" tabindex="-1"></a>(workfrance <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(</span>
-<span id="cb340-9"><a href="paths-distance.html#cb340-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">d =</span> workfrance_edges,</span>
-<span id="cb340-10"><a href="paths-distance.html#cb340-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">vertices =</span> workfrance_vertices,</span>
-<span id="cb340-11"><a href="paths-distance.html#cb340-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">directed =</span> <span class="cn">FALSE</span></span>
-<span id="cb340-12"><a href="paths-distance.html#cb340-12" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
-<pre><code>## IGRAPH 3f45578 UN-- 211 932 -- 
+<div class="sourceCode" id="cb350"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb350-1"><a href="paths-distance.html#cb350-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb350-2"><a href="paths-distance.html#cb350-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb350-3"><a href="paths-distance.html#cb350-3" aria-hidden="true" tabindex="-1"></a><span class="co"># download workfrance data sets</span></span>
+<span id="cb350-4"><a href="paths-distance.html#cb350-4" aria-hidden="true" tabindex="-1"></a>workfrance_edges <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://ona-book.org/data/workfrance_edgelist.csv&quot;</span>)</span>
+<span id="cb350-5"><a href="paths-distance.html#cb350-5" aria-hidden="true" tabindex="-1"></a>workfrance_vertices <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://ona-book.org/data/workfrance_vertices.csv&quot;</span>)</span>
+<span id="cb350-6"><a href="paths-distance.html#cb350-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb350-7"><a href="paths-distance.html#cb350-7" aria-hidden="true" tabindex="-1"></a><span class="co"># create graph</span></span>
+<span id="cb350-8"><a href="paths-distance.html#cb350-8" aria-hidden="true" tabindex="-1"></a>(workfrance <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(</span>
+<span id="cb350-9"><a href="paths-distance.html#cb350-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">d =</span> workfrance_edges,</span>
+<span id="cb350-10"><a href="paths-distance.html#cb350-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">vertices =</span> workfrance_vertices,</span>
+<span id="cb350-11"><a href="paths-distance.html#cb350-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">directed =</span> <span class="cn">FALSE</span></span>
+<span id="cb350-12"><a href="paths-distance.html#cb350-12" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
+<pre><code>## IGRAPH cf95e6c UN-- 211 932 -- 
 ## + attr: name (v/c), dept (v/c), mins (e/n)
-## + edges from 3f45578 (vertex names):
+## + edges from cf95e6c (vertex names):
 ##  [1] 3   --159  253 --3    3   --447  3   --498  3   --694  3   --751  3   --859  3   --908  14  --18   99  --14   14  --441 
 ## [12] 520 --14   14  --544  14  --653  14  --998  15  --120  15  --160  15  --162  15  --178  15  --259  15  --261  15  --295 
 ## [23] 15  --353  15  --372  15  --464  15  --491  15  --498  15  --909  15  --1090 39  --18   99  --18   429 --18   488 --18  
@@ -762,38 +767,38 @@ Figure 6.4: Two graphs illustrating how closeness can be measured in different w
 ## [78] 55  --110  55  --164  447 --55   634 --55   55  --985  1245--55   59  --285  59  --790  59  --793  59  --866  59  --889 
 ## + ... omitted several edges</code></pre>
 <p>We have built a graph with 211 vertices and 932 edges. The vertices have a <code>dept</code> property which indicates the department the person works in, and the edges have a <code>mins</code> property which indicates the amount of time spent together in the same place. The <code>mins</code> property could be considered a measure of how strong the connection between two individuals is, so let’s make it a weight in the graph.</p>
-<div class="sourceCode" id="cb342"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb342-1"><a href="paths-distance.html#cb342-1" aria-hidden="true" tabindex="-1"></a><span class="fu">E</span>(workfrance)<span class="sc">$</span>weight <span class="ot">&lt;-</span> <span class="fu">E</span>(workfrance)<span class="sc">$</span>mins</span></code></pre></div>
+<div class="sourceCode" id="cb352"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb352-1"><a href="paths-distance.html#cb352-1" aria-hidden="true" tabindex="-1"></a><span class="fu">E</span>(workfrance)<span class="sc">$</span>weight <span class="ot">&lt;-</span> <span class="fu">E</span>(workfrance)<span class="sc">$</span>mins</span></code></pre></div>
 <div id="facilitating-introductions-in-a-workplace" class="section level3" number="6.3.1">
 <h3><span class="header-section-number">6.3.1</span> Facilitating introductions in a workplace</h3>
 <p>A simple use case of shortest paths is to help connect individuals via common connections or intermediaries. Let’s take two vertices from our <code>workfrance</code> graph who are from different departments. Let’s select vertices 3 and 55. Let’s see what departments they are in.</p>
-<div class="sourceCode" id="cb343"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb343-1"><a href="paths-distance.html#cb343-1" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(workfrance)<span class="sc">$</span>dept[<span class="fu">V</span>(workfrance)<span class="sc">$</span>name <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;3&quot;</span>, <span class="st">&quot;55&quot;</span>)]</span></code></pre></div>
+<div class="sourceCode" id="cb353"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb353-1"><a href="paths-distance.html#cb353-1" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(workfrance)<span class="sc">$</span>dept[<span class="fu">V</span>(workfrance)<span class="sc">$</span>name <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;3&quot;</span>, <span class="st">&quot;55&quot;</span>)]</span></code></pre></div>
 <pre><code>## [1] &quot;DMI&quot; &quot;SSI&quot;</code></pre>
 <p>Now let’s determine the unweighted distance between these two employees in the network.</p>
-<div class="sourceCode" id="cb345"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb345-1"><a href="paths-distance.html#cb345-1" aria-hidden="true" tabindex="-1"></a><span class="fu">distances</span>(workfrance, <span class="at">v =</span> <span class="st">&quot;3&quot;</span>, <span class="at">to =</span> <span class="st">&quot;55&quot;</span>, <span class="at">weights =</span> <span class="cn">NA</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb355"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb355-1"><a href="paths-distance.html#cb355-1" aria-hidden="true" tabindex="-1"></a><span class="fu">distances</span>(workfrance, <span class="at">v =</span> <span class="st">&quot;3&quot;</span>, <span class="at">to =</span> <span class="st">&quot;55&quot;</span>, <span class="at">weights =</span> <span class="cn">NA</span>)</span></code></pre></div>
 <pre><code>##   55
 ## 3  2</code></pre>
 <p>These two individuals have an unweighted distance of 2 in the network, meaning they can connect through one intermediary. Now we can use our <code>all_shortest_paths()</code> function to determine who the common intermediary is.</p>
-<div class="sourceCode" id="cb347"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb347-1"><a href="paths-distance.html#cb347-1" aria-hidden="true" tabindex="-1"></a><span class="fu">all_shortest_paths</span>(workfrance, <span class="at">from =</span> <span class="st">&quot;3&quot;</span>, <span class="at">to =</span> <span class="st">&quot;55&quot;</span>, <span class="at">weight =</span> <span class="cn">NA</span>)<span class="sc">$</span>res </span></code></pre></div>
+<div class="sourceCode" id="cb357"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb357-1"><a href="paths-distance.html#cb357-1" aria-hidden="true" tabindex="-1"></a><span class="fu">all_shortest_paths</span>(workfrance, <span class="at">from =</span> <span class="st">&quot;3&quot;</span>, <span class="at">to =</span> <span class="st">&quot;55&quot;</span>, <span class="at">weight =</span> <span class="cn">NA</span>)<span class="sc">$</span>res </span></code></pre></div>
 <pre><code>## [[1]]
-## + 3/211 vertices, named, from 3f45578:
+## + 3/211 vertices, named, from cf95e6c:
 ## [1] 3   447 55</code></pre>
 <p>There is one common intermediary: employee 447. Therefore, if employees 3 and 55 do not know each other, employee 447 may be able to introduce them. Note that there may be more than one suggestion for intermediaries. For example:</p>
-<div class="sourceCode" id="cb349"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb349-1"><a href="paths-distance.html#cb349-1" aria-hidden="true" tabindex="-1"></a>(paths <span class="ot">&lt;-</span> <span class="fu">all_shortest_paths</span>(workfrance, <span class="at">from =</span> <span class="st">&quot;3&quot;</span>, <span class="at">to =</span> <span class="st">&quot;290&quot;</span>, <span class="at">weight =</span> <span class="cn">NA</span>)<span class="sc">$</span>res )</span></code></pre></div>
+<div class="sourceCode" id="cb359"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb359-1"><a href="paths-distance.html#cb359-1" aria-hidden="true" tabindex="-1"></a>(paths <span class="ot">&lt;-</span> <span class="fu">all_shortest_paths</span>(workfrance, <span class="at">from =</span> <span class="st">&quot;3&quot;</span>, <span class="at">to =</span> <span class="st">&quot;290&quot;</span>, <span class="at">weight =</span> <span class="cn">NA</span>)<span class="sc">$</span>res )</span></code></pre></div>
 <pre><code>## [[1]]
-## + 3/211 vertices, named, from 3f45578:
+## + 3/211 vertices, named, from cf95e6c:
 ## [1] 3   859 290
 ## 
 ## [[2]]
-## + 3/211 vertices, named, from 3f45578:
+## + 3/211 vertices, named, from cf95e6c:
 ## [1] 3   694 290</code></pre>
 <p>In this case, we could consider using the edge weights to rank the intermediary options, on the basis that higher weights may indicate stronger connections. Let’s visualize these two options by looking at the subgraph with edge weights in Figure <a href="paths-distance.html#fig:intermediary">6.5</a>.</p>
-<div class="sourceCode" id="cb351"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb351-1"><a href="paths-distance.html#cb351-1" aria-hidden="true" tabindex="-1"></a>subgraph <span class="ot">&lt;-</span> <span class="fu">induced_subgraph</span>(workfrance, <span class="at">vids =</span> <span class="fu">c</span>(<span class="st">&quot;3&quot;</span>, <span class="st">&quot;290&quot;</span>, <span class="st">&quot;694&quot;</span>, <span class="st">&quot;859&quot;</span>))</span>
-<span id="cb351-2"><a href="paths-distance.html#cb351-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb351-3"><a href="paths-distance.html#cb351-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(subgraph) <span class="sc">+</span></span>
-<span id="cb351-4"><a href="paths-distance.html#cb351-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_edge_link</span>(<span class="fu">aes</span>(<span class="at">edge_width =</span> weight, <span class="at">label =</span> weight), <span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>,</span>
-<span id="cb351-5"><a href="paths-distance.html#cb351-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb351-6"><a href="paths-distance.html#cb351-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_label</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">fill =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="fu">aes</span>(<span class="at">label =</span> name)) <span class="sc">+</span></span>
-<span id="cb351-7"><a href="paths-distance.html#cb351-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_void</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb361"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb361-1"><a href="paths-distance.html#cb361-1" aria-hidden="true" tabindex="-1"></a>subgraph <span class="ot">&lt;-</span> <span class="fu">induced_subgraph</span>(workfrance, <span class="at">vids =</span> <span class="fu">c</span>(<span class="st">&quot;3&quot;</span>, <span class="st">&quot;290&quot;</span>, <span class="st">&quot;694&quot;</span>, <span class="st">&quot;859&quot;</span>))</span>
+<span id="cb361-2"><a href="paths-distance.html#cb361-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb361-3"><a href="paths-distance.html#cb361-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(subgraph) <span class="sc">+</span></span>
+<span id="cb361-4"><a href="paths-distance.html#cb361-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_edge_link</span>(<span class="fu">aes</span>(<span class="at">edge_width =</span> weight, <span class="at">label =</span> weight), <span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>,</span>
+<span id="cb361-5"><a href="paths-distance.html#cb361-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb361-6"><a href="paths-distance.html#cb361-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_label</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">fill =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="fu">aes</span>(<span class="at">label =</span> name)) <span class="sc">+</span></span>
+<span id="cb361-7"><a href="paths-distance.html#cb361-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_void</span>()</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:intermediary"></span>
 <img src="_main_files/figure-html/intermediary-1.png" alt="Selecting an intermediary according to higher edge weights" width="672" />
 <p class="caption">
@@ -807,51 +812,51 @@ Figure 6.5: Selecting an intermediary according to higher edge weights
 </div>
 <div id="workplace-distance" class="section level3" number="6.3.2">
 <h3><span class="header-section-number">6.3.2</span> Finding distant colleagues in a workplace</h3>
-<p>Now, imagine that a professional event is being organized in the office building in France, where employees will be assigned to one of 21 tables of ten people<a href="#fn37" class="footnote-ref" id="fnref37"><sup>37</sup></a>. You have been asked to try to help ensure that the tables contain a good mix of individuals and to avoid tables where everyone knows each other very well.</p>
+<p>Now, imagine that a professional event is being organized in the office building in France, where employees will be assigned to one of 21 tables of ten people<a href="#fn40" class="footnote-ref" id="fnref40"><sup>40</sup></a>. You have been asked to try to help ensure that the tables contain a good mix of individuals and to avoid tables where everyone knows each other very well.</p>
 <p>Before we start, we should check whether this graph has any disconnected components.</p>
-<div class="sourceCode" id="cb352"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb352-1"><a href="paths-distance.html#cb352-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.connected</span>(workfrance)</span></code></pre></div>
+<div class="sourceCode" id="cb362"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb362-1"><a href="paths-distance.html#cb362-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.connected</span>(workfrance)</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>So there are no disconnected components in this graph. Let’s also look at the diameter of this graph to get a sense of the maximum possible distance between any pair of individuals.</p>
-<div class="sourceCode" id="cb354"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb354-1"><a href="paths-distance.html#cb354-1" aria-hidden="true" tabindex="-1"></a><span class="fu">diameter</span>(workfrance, <span class="at">weights =</span> <span class="cn">NA</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb364"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb364-1"><a href="paths-distance.html#cb364-1" aria-hidden="true" tabindex="-1"></a><span class="fu">diameter</span>(workfrance, <span class="at">weights =</span> <span class="cn">NA</span>)</span></code></pre></div>
 <pre><code>## [1] 6</code></pre>
-<p>As a first step, we can pick 21 people who have an unweighted distance of 1 from each other and sit them all at a different table. That would certainly be a good starting point. We can use the <code>neighbors()</code> function in <code>igraph</code> and look for a vertex that has the most neighbors<a href="#fn38" class="footnote-ref" id="fnref38"><sup>38</sup></a>.</p>
-<div class="sourceCode" id="cb356"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb356-1"><a href="paths-distance.html#cb356-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create vectors to capture name and no of neighbours</span></span>
-<span id="cb356-2"><a href="paths-distance.html#cb356-2" aria-hidden="true" tabindex="-1"></a>v_name <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb356-3"><a href="paths-distance.html#cb356-3" aria-hidden="true" tabindex="-1"></a>n_neighbors <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb356-4"><a href="paths-distance.html#cb356-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb356-5"><a href="paths-distance.html#cb356-5" aria-hidden="true" tabindex="-1"></a><span class="co"># capture name and no of neighbours for every vertex</span></span>
-<span id="cb356-6"><a href="paths-distance.html#cb356-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (v <span class="cf">in</span> <span class="fu">V</span>(workfrance)<span class="sc">$</span>name) {</span>
-<span id="cb356-7"><a href="paths-distance.html#cb356-7" aria-hidden="true" tabindex="-1"></a>    v_name <span class="ot">&lt;-</span> <span class="fu">append</span>(v_name, v)</span>
-<span id="cb356-8"><a href="paths-distance.html#cb356-8" aria-hidden="true" tabindex="-1"></a>    n_neighbors <span class="ot">&lt;-</span> <span class="fu">append</span>(n_neighbors, <span class="fu">length</span>(<span class="fu">neighbors</span>(workfrance, v)))</span>
-<span id="cb356-9"><a href="paths-distance.html#cb356-9" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb356-10"><a href="paths-distance.html#cb356-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb356-11"><a href="paths-distance.html#cb356-11" aria-hidden="true" tabindex="-1"></a><span class="co"># find the max</span></span>
-<span id="cb356-12"><a href="paths-distance.html#cb356-12" aria-hidden="true" tabindex="-1"></a>v_name[<span class="fu">which.max</span>(n_neighbors)]</span></code></pre></div>
+<p>As a first step, we can pick 21 people who have an unweighted distance of 1 from each other and sit them all at a different table. That would certainly be a good starting point. We can use the <code>neighbors()</code> function in <code>igraph</code> and look for a vertex that has the most neighbors<a href="#fn41" class="footnote-ref" id="fnref41"><sup>41</sup></a>.</p>
+<div class="sourceCode" id="cb366"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb366-1"><a href="paths-distance.html#cb366-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create vectors to capture name and no of neighbours</span></span>
+<span id="cb366-2"><a href="paths-distance.html#cb366-2" aria-hidden="true" tabindex="-1"></a>v_name <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb366-3"><a href="paths-distance.html#cb366-3" aria-hidden="true" tabindex="-1"></a>n_neighbors <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb366-4"><a href="paths-distance.html#cb366-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb366-5"><a href="paths-distance.html#cb366-5" aria-hidden="true" tabindex="-1"></a><span class="co"># capture name and no of neighbours for every vertex</span></span>
+<span id="cb366-6"><a href="paths-distance.html#cb366-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (v <span class="cf">in</span> <span class="fu">V</span>(workfrance)<span class="sc">$</span>name) {</span>
+<span id="cb366-7"><a href="paths-distance.html#cb366-7" aria-hidden="true" tabindex="-1"></a>    v_name <span class="ot">&lt;-</span> <span class="fu">append</span>(v_name, v)</span>
+<span id="cb366-8"><a href="paths-distance.html#cb366-8" aria-hidden="true" tabindex="-1"></a>    n_neighbors <span class="ot">&lt;-</span> <span class="fu">append</span>(n_neighbors, <span class="fu">length</span>(<span class="fu">neighbors</span>(workfrance, v)))</span>
+<span id="cb366-9"><a href="paths-distance.html#cb366-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb366-10"><a href="paths-distance.html#cb366-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb366-11"><a href="paths-distance.html#cb366-11" aria-hidden="true" tabindex="-1"></a><span class="co"># find the max</span></span>
+<span id="cb366-12"><a href="paths-distance.html#cb366-12" aria-hidden="true" tabindex="-1"></a>v_name[<span class="fu">which.max</span>(n_neighbors)]</span></code></pre></div>
 <pre><code>## [1] &quot;603&quot;</code></pre>
 <p>It looks like employee 603 has the most neighbors - let’s find out how many.</p>
-<div class="sourceCode" id="cb358"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb358-1"><a href="paths-distance.html#cb358-1" aria-hidden="true" tabindex="-1"></a>n_neighbors[<span class="fu">which.max</span>(n_neighbors)]</span></code></pre></div>
+<div class="sourceCode" id="cb368"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb368-1"><a href="paths-distance.html#cb368-1" aria-hidden="true" tabindex="-1"></a>n_neighbors[<span class="fu">which.max</span>(n_neighbors)]</span></code></pre></div>
 <pre><code>## [1] 28</code></pre>
 <p>We could pick any 20 from the neighbors of employee 603 and that would be a great starting point for our 21 tables. Let’s pick those with the highest <code>mins</code> property (assuming that this represents a closer relationship). We can use the <code>inc()</code> function to get all edges containing employee 603 and then select those that have the highest <code>mins</code> property.</p>
-<div class="sourceCode" id="cb360"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb360-1"><a href="paths-distance.html#cb360-1" aria-hidden="true" tabindex="-1"></a>edges603 <span class="ot">&lt;-</span> <span class="fu">E</span>(workfrance)[<span class="fu">inc</span>(<span class="st">&quot;603&quot;</span>)]</span>
-<span id="cb360-2"><a href="paths-distance.html#cb360-2" aria-hidden="true" tabindex="-1"></a>(top_edges603 <span class="ot">&lt;-</span> edges603[<span class="fu">order</span>(<span class="fu">sort</span>(edges603<span class="sc">$</span>mins, <span class="at">decreasing =</span> <span class="cn">TRUE</span>))][<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>])</span></code></pre></div>
-<pre><code>## + 20/932 edges from 3f45578 (vertex names):
+<div class="sourceCode" id="cb370"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb370-1"><a href="paths-distance.html#cb370-1" aria-hidden="true" tabindex="-1"></a>edges603 <span class="ot">&lt;-</span> <span class="fu">E</span>(workfrance)[<span class="fu">inc</span>(<span class="st">&quot;603&quot;</span>)]</span>
+<span id="cb370-2"><a href="paths-distance.html#cb370-2" aria-hidden="true" tabindex="-1"></a>(top_edges603 <span class="ot">&lt;-</span> edges603[<span class="fu">order</span>(<span class="fu">sort</span>(edges603<span class="sc">$</span>mins, <span class="at">decreasing =</span> <span class="cn">TRUE</span>))][<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>])</span></code></pre></div>
+<pre><code>## + 20/932 edges from cf95e6c (vertex names):
 ##  [1] 603--1392 603--1323 603--1362 859--603  603--954  603--1245 603--779  603--649  691--603  694--603  706--603  603--725 
 ## [13] 487--603  420--603  428--603  387--603  401--603  603--272  290--603  346--603</code></pre>
 <p>Now we have the ‘closest’ 20 people to employee 603. Let’s create an edge subgraph and extract the vertices.</p>
-<div class="sourceCode" id="cb362"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb362-1"><a href="paths-distance.html#cb362-1" aria-hidden="true" tabindex="-1"></a>subgraph603 <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">subgraph.edges</span>(workfrance, <span class="at">eid =</span> top_edges603)</span>
-<span id="cb362-2"><a href="paths-distance.html#cb362-2" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(subgraph603)<span class="sc">$</span>name</span></code></pre></div>
+<div class="sourceCode" id="cb372"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb372-1"><a href="paths-distance.html#cb372-1" aria-hidden="true" tabindex="-1"></a>subgraph603 <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">subgraph.edges</span>(workfrance, <span class="at">eid =</span> top_edges603)</span>
+<span id="cb372-2"><a href="paths-distance.html#cb372-2" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(subgraph603)<span class="sc">$</span>name</span></code></pre></div>
 <pre><code>##  [1] &quot;290&quot;  &quot;420&quot;  &quot;428&quot;  &quot;691&quot;  &quot;706&quot;  &quot;694&quot;  &quot;859&quot;  &quot;346&quot;  &quot;387&quot;  &quot;401&quot;  &quot;487&quot;  &quot;603&quot;  &quot;649&quot;  &quot;725&quot;  &quot;779&quot;  &quot;954&quot;  &quot;1245&quot;
 ## [18] &quot;1323&quot; &quot;1362&quot; &quot;1392&quot; &quot;272&quot;</code></pre>
 <p>We can also look at the departments of these individuals:</p>
-<div class="sourceCode" id="cb364"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb364-1"><a href="paths-distance.html#cb364-1" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(subgraph603)<span class="sc">$</span>dept</span></code></pre></div>
+<div class="sourceCode" id="cb374"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb374-1"><a href="paths-distance.html#cb374-1" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(subgraph603)<span class="sc">$</span>dept</span></code></pre></div>
 <pre><code>##  [1] &quot;DG&quot;   &quot;DISQ&quot; &quot;DISQ&quot; &quot;DISQ&quot; &quot;DMCT&quot; &quot;DMI&quot;  &quot;DMI&quot;  &quot;DST&quot;  &quot;DST&quot;  &quot;DST&quot;  &quot;DST&quot;  &quot;DST&quot;  &quot;DST&quot;  &quot;DST&quot;  &quot;DST&quot;  &quot;DST&quot;  &quot;DST&quot; 
 ## [18] &quot;DST&quot;  &quot;DST&quot;  &quot;DST&quot;  &quot;SRH&quot;</code></pre>
 <p>We see some considerable department similarity, which makes sense. Now that we have found the first person for each table, we will want to try to make sure that we sit that person with nine other people who have some distance from them, and to minimize neighbors sitting at the same table. Let’s start with our first employee 603, and call this Table 1. Because there are only 21 tables but employee 603 has 28 neighbors, we might be willing to allow one neighbor to sit at Table 1. Let’s sit them with the neighbor who shared the least minutes.</p>
-<div class="sourceCode" id="cb366"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb366-1"><a href="paths-distance.html#cb366-1" aria-hidden="true" tabindex="-1"></a>edges603[<span class="fu">which.min</span>(edges603<span class="sc">$</span>mins)]</span></code></pre></div>
-<pre><code>## + 1/932 edge from 3f45578 (vertex names):
+<div class="sourceCode" id="cb376"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb376-1"><a href="paths-distance.html#cb376-1" aria-hidden="true" tabindex="-1"></a>edges603[<span class="fu">which.min</span>(edges603<span class="sc">$</span>mins)]</span></code></pre></div>
+<pre><code>## + 1/932 edge from cf95e6c (vertex names):
 ## [1] 77--603</code></pre>
 <p>So we will sit employee 603 with employee 77. Now we can select a third individual who has a reasonable distance in the network from both employee 603 and employee 77. Let’s look at all these distances.</p>
-<div class="sourceCode" id="cb368"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb368-1"><a href="paths-distance.html#cb368-1" aria-hidden="true" tabindex="-1"></a>(distance603_77 <span class="ot">&lt;-</span> <span class="fu">distances</span>(workfrance, <span class="at">v =</span> <span class="fu">c</span>(<span class="st">&quot;603&quot;</span>, <span class="st">&quot;77&quot;</span>), <span class="at">weights =</span> <span class="cn">NA</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb378"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb378-1"><a href="paths-distance.html#cb378-1" aria-hidden="true" tabindex="-1"></a>(distance603_77 <span class="ot">&lt;-</span> <span class="fu">distances</span>(workfrance, <span class="at">v =</span> <span class="fu">c</span>(<span class="st">&quot;603&quot;</span>, <span class="st">&quot;77&quot;</span>), <span class="at">weights =</span> <span class="cn">NA</span>))</span></code></pre></div>
 <pre><code>##     89 97 118 220 378 656 720 741 886 1204 1209 1492 290 502 47 119 198 213 253 267 270 343 366 420 428 445 478 520 525 660
 ## 603  3  2   2   2   3   3   3   2   3    2    3    4   1   4  2   2   2   2   2   1   2   2   2   1   1   2   2   2   2   2
 ## 77   2  1   2   1   2   2   2   2   2    1    2    3   2   4  3   3   3   3   3   2   3   3   3   2   2   3   3   3   2   3
@@ -874,41 +879,41 @@ Figure 6.5: Selecting an intermediary according to higher edge weights
 ## 603   3   2   2   3   2   2   3   3   2   2   3    2  2   2   1   2   3   2   2   2   2  2   3   3   3   2   4   3
 ## 77    3   3   3   3   3   3   4   4   2   3   4    3  2   3   2   3   3   3   3   3   3  3   4   3   3   2   4   2</code></pre>
 <p>We could use the mean of the distances to decide on the person with the furthest distance from those already selected.</p>
-<div class="sourceCode" id="cb370"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb370-1"><a href="paths-distance.html#cb370-1" aria-hidden="true" tabindex="-1"></a><span class="fu">which.max</span>(<span class="fu">colMeans</span>(distance603_77))</span></code></pre></div>
+<div class="sourceCode" id="cb380"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb380-1"><a href="paths-distance.html#cb380-1" aria-hidden="true" tabindex="-1"></a><span class="fu">which.max</span>(<span class="fu">colMeans</span>(distance603_77))</span></code></pre></div>
 <pre><code>## 502 
 ##  14</code></pre>
 <p>We can select employee 502 for the third seat, and we iterate to find the remainder of the people at the table. In this iteration, we make sure that the same person does not arise twice in the calculations.</p>
-<div class="sourceCode" id="cb372"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb372-1"><a href="paths-distance.html#cb372-1" aria-hidden="true" tabindex="-1"></a>table1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;603&quot;</span>, <span class="st">&quot;77&quot;</span>, <span class="st">&quot;502&quot;</span>)</span>
-<span id="cb372-2"><a href="paths-distance.html#cb372-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">10</span>) {</span>
-<span id="cb372-3"><a href="paths-distance.html#cb372-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># get most distant person</span></span>
-<span id="cb372-4"><a href="paths-distance.html#cb372-4" aria-hidden="true" tabindex="-1"></a>    new <span class="ot">&lt;-</span> <span class="fu">distances</span>(workfrance, <span class="at">v =</span> table1, <span class="at">weights =</span> <span class="cn">NA</span>) <span class="sc">|</span><span class="er">&gt;</span> </span>
-<span id="cb372-5"><a href="paths-distance.html#cb372-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">colMeans</span>() <span class="sc">|</span><span class="er">&gt;</span> </span>
-<span id="cb372-6"><a href="paths-distance.html#cb372-6" aria-hidden="true" tabindex="-1"></a>        <span class="fu">which.max</span>() <span class="sc">|</span><span class="er">&gt;</span> </span>
-<span id="cb372-7"><a href="paths-distance.html#cb372-7" aria-hidden="true" tabindex="-1"></a>        <span class="fu">names</span>()</span>
-<span id="cb372-8"><a href="paths-distance.html#cb372-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># if the person is not new, take them out of the graph and get another distant person</span></span>
-<span id="cb372-9"><a href="paths-distance.html#cb372-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (new <span class="sc">%in%</span> table1) {</span>
-<span id="cb372-10"><a href="paths-distance.html#cb372-10" aria-hidden="true" tabindex="-1"></a>        workfrance2 <span class="ot">&lt;-</span> <span class="fu">induced_subgraph</span>(workfrance, <span class="at">vids =</span> <span class="fu">V</span>(workfrance)[<span class="fu">V</span>(workfrance)<span class="sc">$</span>name <span class="sc">!=</span> new])</span>
-<span id="cb372-11"><a href="paths-distance.html#cb372-11" aria-hidden="true" tabindex="-1"></a>        table1[i] <span class="ot">&lt;-</span> <span class="fu">distances</span>(workfrance2, <span class="at">v =</span> table1[table1 <span class="sc">!=</span> new], <span class="at">weights =</span> <span class="cn">NA</span>) <span class="sc">|</span><span class="er">&gt;</span> </span>
-<span id="cb372-12"><a href="paths-distance.html#cb372-12" aria-hidden="true" tabindex="-1"></a>            <span class="fu">colMeans</span>() <span class="sc">|</span><span class="er">&gt;</span> </span>
-<span id="cb372-13"><a href="paths-distance.html#cb372-13" aria-hidden="true" tabindex="-1"></a>            <span class="fu">which.max</span>() <span class="sc">|</span><span class="er">&gt;</span> </span>
-<span id="cb372-14"><a href="paths-distance.html#cb372-14" aria-hidden="true" tabindex="-1"></a>            <span class="fu">names</span>()</span>
-<span id="cb372-15"><a href="paths-distance.html#cb372-15" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
-<span id="cb372-16"><a href="paths-distance.html#cb372-16" aria-hidden="true" tabindex="-1"></a>        table1[i] <span class="ot">&lt;-</span> new</span>
-<span id="cb372-17"><a href="paths-distance.html#cb372-17" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb372-18"><a href="paths-distance.html#cb372-18" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb372-19"><a href="paths-distance.html#cb372-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb372-20"><a href="paths-distance.html#cb372-20" aria-hidden="true" tabindex="-1"></a>table1</span></code></pre></div>
+<div class="sourceCode" id="cb382"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb382-1"><a href="paths-distance.html#cb382-1" aria-hidden="true" tabindex="-1"></a>table1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;603&quot;</span>, <span class="st">&quot;77&quot;</span>, <span class="st">&quot;502&quot;</span>)</span>
+<span id="cb382-2"><a href="paths-distance.html#cb382-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">10</span>) {</span>
+<span id="cb382-3"><a href="paths-distance.html#cb382-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># get most distant person</span></span>
+<span id="cb382-4"><a href="paths-distance.html#cb382-4" aria-hidden="true" tabindex="-1"></a>    new <span class="ot">&lt;-</span> <span class="fu">distances</span>(workfrance, <span class="at">v =</span> table1, <span class="at">weights =</span> <span class="cn">NA</span>) <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb382-5"><a href="paths-distance.html#cb382-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">colMeans</span>() <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb382-6"><a href="paths-distance.html#cb382-6" aria-hidden="true" tabindex="-1"></a>        <span class="fu">which.max</span>() <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb382-7"><a href="paths-distance.html#cb382-7" aria-hidden="true" tabindex="-1"></a>        <span class="fu">names</span>()</span>
+<span id="cb382-8"><a href="paths-distance.html#cb382-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># if the person is not new, take them out of the graph and get another distant person</span></span>
+<span id="cb382-9"><a href="paths-distance.html#cb382-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (new <span class="sc">%in%</span> table1) {</span>
+<span id="cb382-10"><a href="paths-distance.html#cb382-10" aria-hidden="true" tabindex="-1"></a>        workfrance2 <span class="ot">&lt;-</span> <span class="fu">induced_subgraph</span>(workfrance, <span class="at">vids =</span> <span class="fu">V</span>(workfrance)[<span class="fu">V</span>(workfrance)<span class="sc">$</span>name <span class="sc">!=</span> new])</span>
+<span id="cb382-11"><a href="paths-distance.html#cb382-11" aria-hidden="true" tabindex="-1"></a>        table1[i] <span class="ot">&lt;-</span> <span class="fu">distances</span>(workfrance2, <span class="at">v =</span> table1[table1 <span class="sc">!=</span> new], <span class="at">weights =</span> <span class="cn">NA</span>) <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb382-12"><a href="paths-distance.html#cb382-12" aria-hidden="true" tabindex="-1"></a>            <span class="fu">colMeans</span>() <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb382-13"><a href="paths-distance.html#cb382-13" aria-hidden="true" tabindex="-1"></a>            <span class="fu">which.max</span>() <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb382-14"><a href="paths-distance.html#cb382-14" aria-hidden="true" tabindex="-1"></a>            <span class="fu">names</span>()</span>
+<span id="cb382-15"><a href="paths-distance.html#cb382-15" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb382-16"><a href="paths-distance.html#cb382-16" aria-hidden="true" tabindex="-1"></a>        table1[i] <span class="ot">&lt;-</span> new</span>
+<span id="cb382-17"><a href="paths-distance.html#cb382-17" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb382-18"><a href="paths-distance.html#cb382-18" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb382-19"><a href="paths-distance.html#cb382-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb382-20"><a href="paths-distance.html#cb382-20" aria-hidden="true" tabindex="-1"></a>table1</span></code></pre></div>
 <pre><code>##  [1] &quot;603&quot; &quot;77&quot;  &quot;502&quot; &quot;533&quot; &quot;496&quot; &quot;970&quot; &quot;165&quot; &quot;677&quot; &quot;977&quot; &quot;38&quot;</code></pre>
 <p>Now let’s assign a <code>table</code> property to the <code>workfrance</code> graph and take a look at where our members of Table 1 appear, as in Figure <a href="paths-distance.html#fig:table1">6.6</a>.</p>
-<div class="sourceCode" id="cb374"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb374-1"><a href="paths-distance.html#cb374-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add a table property to workfrance graph</span></span>
-<span id="cb374-2"><a href="paths-distance.html#cb374-2" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(workfrance)<span class="sc">$</span>table <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(workfrance)<span class="sc">$</span>name <span class="sc">%in%</span> table1, <span class="st">&quot;1&quot;</span>, <span class="st">&quot;2-21&quot;</span>)</span>
-<span id="cb374-3"><a href="paths-distance.html#cb374-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb374-4"><a href="paths-distance.html#cb374-4" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize</span></span>
-<span id="cb374-5"><a href="paths-distance.html#cb374-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(workfrance, <span class="at">layout =</span> <span class="st">&quot;fr&quot;</span>) <span class="sc">+</span></span>
-<span id="cb374-6"><a href="paths-distance.html#cb374-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb374-7"><a href="paths-distance.html#cb374-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">4</span>, <span class="fu">aes</span>(<span class="at">color =</span> <span class="fu">as.factor</span>(table))) <span class="sc">+</span></span>
-<span id="cb374-8"><a href="paths-distance.html#cb374-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">color =</span> <span class="st">&quot;Table&quot;</span>) <span class="sc">+</span></span>
-<span id="cb374-9"><a href="paths-distance.html#cb374-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_void</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb384"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb384-1"><a href="paths-distance.html#cb384-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add a table property to workfrance graph</span></span>
+<span id="cb384-2"><a href="paths-distance.html#cb384-2" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(workfrance)<span class="sc">$</span>table <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(workfrance)<span class="sc">$</span>name <span class="sc">%in%</span> table1, <span class="st">&quot;1&quot;</span>, <span class="st">&quot;2-21&quot;</span>)</span>
+<span id="cb384-3"><a href="paths-distance.html#cb384-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb384-4"><a href="paths-distance.html#cb384-4" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize</span></span>
+<span id="cb384-5"><a href="paths-distance.html#cb384-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(workfrance, <span class="at">layout =</span> <span class="st">&quot;fr&quot;</span>) <span class="sc">+</span></span>
+<span id="cb384-6"><a href="paths-distance.html#cb384-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb384-7"><a href="paths-distance.html#cb384-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">4</span>, <span class="fu">aes</span>(<span class="at">color =</span> <span class="fu">as.factor</span>(table))) <span class="sc">+</span></span>
+<span id="cb384-8"><a href="paths-distance.html#cb384-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">color =</span> <span class="st">&quot;Table&quot;</span>) <span class="sc">+</span></span>
+<span id="cb384-9"><a href="paths-distance.html#cb384-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_void</span>()</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:table1"></span>
 <img src="_main_files/figure-html/table1-1.png" alt="Individuals selected for Table 1 based on optimizing for distance" width="672" />
 <p class="caption">
@@ -916,10 +921,10 @@ Figure 6.6: Individuals selected for Table 1 based on optimizing for distance
 </p>
 </div>
 <p>It looks as if we have done a good job of maximizing for distance in the network in our Table 1 selection. Let’s check the average distance among the employees at Table 1.</p>
-<div class="sourceCode" id="cb375"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb375-1"><a href="paths-distance.html#cb375-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">distances</span>(workfrance, <span class="at">v =</span> table1, <span class="at">to =</span> table1, <span class="at">weights =</span> <span class="cn">NA</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb385"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb385-1"><a href="paths-distance.html#cb385-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">distances</span>(workfrance, <span class="at">v =</span> table1, <span class="at">to =</span> table1, <span class="at">weights =</span> <span class="cn">NA</span>))</span></code></pre></div>
 <pre><code>## [1] 3.96</code></pre>
 <p>Given that the diameter of the graph is 6, and that we decided to include a pair of individuals with a distance of 1 on this table, a mean distance of 3.96 seems pretty good. Let’s look at the department mix of our ten people at Table 1.</p>
-<div class="sourceCode" id="cb377"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb377-1"><a href="paths-distance.html#cb377-1" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(workfrance)<span class="sc">$</span>dept[<span class="fu">V</span>(workfrance)<span class="sc">$</span>name <span class="sc">%in%</span> table1]</span></code></pre></div>
+<div class="sourceCode" id="cb387"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb387-1"><a href="paths-distance.html#cb387-1" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(workfrance)<span class="sc">$</span>dept[<span class="fu">V</span>(workfrance)<span class="sc">$</span>name <span class="sc">%in%</span> table1]</span></code></pre></div>
 <pre><code>##  [1] &quot;DG&quot;   &quot;DMCT&quot; &quot;DMI&quot;  &quot;DMI&quot;  &quot;DSE&quot;  &quot;DST&quot;  &quot;DST&quot;  &quot;SFLE&quot; &quot;SFLE&quot; &quot;SSI&quot;</code></pre>
 <p>We have seven departments represented at a table of ten, which seems another good indication of a diverse table. This gives you a sense of how you can use paths and distance as a mathematical model for familiarity in a network. If you are interested in continuing this process to fill further tables, see the exercises at the end of this chapter.</p>
 </div>
@@ -949,12 +954,12 @@ Figure 6.6: Individuals selected for Table 1 based on optimizing for distance
 <li>Create a subgraph of <span class="math inline">\(G_{14W}\)</span> consisting only of vertices 6-14. Use an appropriate procedure to cacluate the unweighted and weighted distances between all pairs of vertices in this subgraph.</li>
 <li>Calculate the unweighted and weighted diameter of the subgraph from the previous exercise, and calculate its density.</li>
 </ol>
-<p>For Exercises 5 to 7, load the <code>friends_tv_edgelist</code> data set from the <code>onadata</code> package or download it from the internet<a href="#fn39" class="footnote-ref" id="fnref39"><sup>39</sup></a>. This is a full network of all characters appearing in every season of the <em>Friends</em> TV series based on characters speaking in the same scene together. Each edge has a weight according to the number of scenes those characters both spoke in together, but ignore this for this set of exercises and simply create an unweighted, undirected graph from this edgelist.</p>
+<p>For Exercises 5 to 7, load the <code>friends_tv_edgelist</code> data set from the <code>onadata</code> package or download it from the internet<a href="#fn42" class="footnote-ref" id="fnref42"><sup>42</sup></a>. This is a full network of all characters appearing in every season of the <em>Friends</em> TV series based on characters speaking in the same scene together. Each edge has a weight according to the number of scenes those characters both spoke in together, but ignore this for this set of exercises and simply create an unweighted, undirected graph from this edgelist.</p>
 <ol start="5" style="list-style-type: decimal">
 <li>Check whether the <em>Friends</em> network is connected and calculate the diameter of the network. Find a path with length equal to the diameter. The diameter is surprisingly small for a network of this size. Why might this be?</li>
 <li>Find all <em>simple</em> paths from Billy Crystal to Mr Bing and from Janice to Mrs Bing. Try to calculate what proportion of the connections have distance 2 in this graph. The results may help with the answer to the previous question.</li>
 <li>Calculate the density of the network. Create a subgraph consisting of the six main characters Monica, Chandler, Phoebe, Ross, Rachel and Joey. Calculate the density of this subgraph. What term would you use to describe this subgraph?</li>
-<li>A ‘clique’ is a subgraph which is complete (that is, all vertices are connected to each other and the density is 1). Can you find a clique in the <em>Friends</em> graph that does not contain any of the main characters<a href="#fn40" class="footnote-ref" id="fnref40"><sup>40</sup></a>?<br />
+<li>A ‘clique’ is a subgraph which is complete (that is, all vertices are connected to each other and the density is 1). Can you find a clique in the <em>Friends</em> graph that does not contain any of the main characters<a href="#fn43" class="footnote-ref" id="fnref43"><sup>43</sup></a>?<br />
 </li>
 <li>Create a new subgraph by removing the six main characters from the original graph. Check whether this subgraph is connected. What can you conclude from this?</li>
 <li>Calculate the largest diameter of connected components of this new graph. Find the pair of characters associated with this diameter path. Find the largest clique in this graph.</li>
@@ -976,15 +981,15 @@ Ugander, Johan, Brian Karrer, Lars Backstrom, and Cameron Marlow. 2011. <span>�
 </div>
 <div class="footnotes">
 <hr />
-<ol start="33">
-<li id="fn33"><p>The computation time complexity for both search types is proportional to the square of the number of vertices in the graph when an adjacency matrix is used.<a href="paths-distance.html#fnref33" class="footnote-back">↩︎</a></p></li>
-<li id="fn34"><p>Basic time complexity for Dijkstra’s algorithm for a single source vertex is proportional to the square of the number of vertices in the graph. As a comparison, basic time complexity for the all pairs Floyd-Warshall algorithm is proportional to the cube of the number of vertices in the graph. Based on this, you would expect both algorithms to calculate all pairs distance in approximately the same computation time, but numerous modern computational methods have been able to cut these computation time significantly for different varieties of large graphs. Johnson’s algorithm, for example, is known to perform particularly well on sparse graphs.<a href="paths-distance.html#fnref34" class="footnote-back">↩︎</a></p></li>
-<li id="fn35"><p>If <span class="math inline">\(|V|\)</span> is the number of vertices in a directed graph, then the number of possible edges is <span class="math inline">\(|V|(|V| - 1)\)</span>, and in an undirected graph it is <span class="math inline">\(\frac{|V|(|V| - 1)}{2}\)</span>. Therefore, if <span class="math inline">\(|E|\)</span> is the number of edges, we can derive the formula for density <span class="math inline">\(D\)</span> as <span class="math inline">\(\frac{|E|}{|V|(|V| - 1)}\)</span> for a directed graph and <span class="math inline">\(\frac{2|E|}{|V|(|V| - 1)}\)</span> for an undirected graph.<a href="paths-distance.html#fnref35" class="footnote-back">↩︎</a></p></li>
-<li id="fn36"><p><a href="https://ona-book.org/data/g14_edgelist.csv" class="uri">https://ona-book.org/data/g14_edgelist.csv</a><a href="paths-distance.html#fnref36" class="footnote-back">↩︎</a></p></li>
-<li id="fn37"><p>We can assume the 211th person is hosting the event.<a href="paths-distance.html#fnref37" class="footnote-back">↩︎</a></p></li>
-<li id="fn38"><p>You can also use the <code>degree()</code> function for this — more in the next chapter.<a href="paths-distance.html#fnref38" class="footnote-back">↩︎</a></p></li>
-<li id="fn39"><p><a href="https://ona-book.org/data/friends_tv_edgelist.csv" class="uri">https://ona-book.org/data/friends_tv_edgelist.csv</a><a href="paths-distance.html#fnref39" class="footnote-back">↩︎</a></p></li>
-<li id="fn40"><p>We are getting a little ahead of ourselves with cliques, and we will look at these more in a later chapter, but you might want to try to find some functions in your software of choice for finding cliques.<a href="paths-distance.html#fnref40" class="footnote-back">↩︎</a></p></li>
+<ol start="36">
+<li id="fn36"><p>The computation time complexity for both search types is proportional to the square of the number of vertices in the graph when an adjacency matrix is used.<a href="paths-distance.html#fnref36" class="footnote-back">↩︎</a></p></li>
+<li id="fn37"><p>Basic time complexity for Dijkstra’s algorithm for a single source vertex is proportional to the square of the number of vertices in the graph. As a comparison, basic time complexity for the all pairs Floyd-Warshall algorithm is proportional to the cube of the number of vertices in the graph. Based on this, you would expect both algorithms to calculate all pairs distance in approximately the same computation time, but numerous modern computational methods have been able to cut these computation time significantly for different varieties of large graphs. Johnson’s algorithm, for example, is known to perform particularly well on sparse graphs.<a href="paths-distance.html#fnref37" class="footnote-back">↩︎</a></p></li>
+<li id="fn38"><p>If <span class="math inline">\(|V|\)</span> is the number of vertices in a directed graph, then the number of possible edges is <span class="math inline">\(|V|(|V| - 1)\)</span>, and in an undirected graph it is <span class="math inline">\(\frac{|V|(|V| - 1)}{2}\)</span>. Therefore, if <span class="math inline">\(|E|\)</span> is the number of edges, we can derive the formula for density <span class="math inline">\(D\)</span> as <span class="math inline">\(\frac{|E|}{|V|(|V| - 1)}\)</span> for a directed graph and <span class="math inline">\(\frac{2|E|}{|V|(|V| - 1)}\)</span> for an undirected graph.<a href="paths-distance.html#fnref38" class="footnote-back">↩︎</a></p></li>
+<li id="fn39"><p><a href="https://ona-book.org/data/g14_edgelist.csv" class="uri">https://ona-book.org/data/g14_edgelist.csv</a><a href="paths-distance.html#fnref39" class="footnote-back">↩︎</a></p></li>
+<li id="fn40"><p>We can assume the 211th person is hosting the event.<a href="paths-distance.html#fnref40" class="footnote-back">↩︎</a></p></li>
+<li id="fn41"><p>You can also use the <code>degree()</code> function for this — more in the next chapter.<a href="paths-distance.html#fnref41" class="footnote-back">↩︎</a></p></li>
+<li id="fn42"><p><a href="https://ona-book.org/data/friends_tv_edgelist.csv" class="uri">https://ona-book.org/data/friends_tv_edgelist.csv</a><a href="paths-distance.html#fnref42" class="footnote-back">↩︎</a></p></li>
+<li id="fn43"><p>We are getting a little ahead of ourselves with cliques, and we will look at these more in a later chapter, but you might want to try to find some functions in your software of choice for finding cliques.<a href="paths-distance.html#fnref43" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>

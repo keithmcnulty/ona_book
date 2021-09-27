@@ -551,15 +551,49 @@ And finally, we create our box and whisker plot using the same principles, with 
 
 ```{r ggplot-box, fig.cap=if (knitr::is_latex_output()) {"Simple boxplot of \\texttt{Ozone} against \\texttt{Month} in the \\texttt{airquality} data set using \\texttt{ggplot2}"} else {"Simple boxplot of `Ozone` against `Month` in the `airquality` data set using `ggplot2`"}, fig.align = "center", out.width = if (knitr::is_latex_output()) {"90%"}}
 # create boxplot of Ozone by Month
-ggplot(data = airquality, aes(x = Month, y = Ozone)) +
+ggplot(data = airquality, aes(x = as.factor(Month), y = Ozone)) +
   geom_boxplot(fill = "lightblue", color = "pink") +
   theme_minimal() +
   labs(title = "Boxplot of Ozone Levels by Month",
+       x = "Month",
        y = "Ozone levels")
 
 
 ```
 
+## Randomization in R
+
+An important element of many processes in mathematics and statistics is randomization.  Being able to generate random numbers is an important part of sampling or initiating processes or algorithms.  We will also see later in this book that randomization is an important element of many graph algorithms, including visualization layout algorithms.  In the following code we randomly sample 3 rows from the `airquality` data set using the `sample()` function.
+
+```{r}
+airquality[sample(1:nrow(airquality), 3), ]
+```
+
+We do this a second time and note a different output because the sampling is random.
+
+```{r}
+airquality[sample(1:nrow(airquality), 3), ]
+```
+
+Random number generation can be problematic when you want to precisely replicate work done previously by yourself or others.  If the previous work depended on random number generation, then your output will probably not match the previous output and it will be difficult to tell if this is because of an error you made or simply because of different random numbers.
+
+You can control random number generation by manually setting a random seed.  In fact, random number generation in statistical software is rarely truly random, and is actually *pseudorandom*.  Pseudorandomization is a simulated process that is 'seeded' using a vector of values.  By default this vector is generated from the precise system time at a given moment, but its generation can also be controlled manually by a user.  A given seed will always produce the same results from randomization, and so manually setting a seed can be an effective way to ensure precise reproducibility of work. 
+
+Again, let's generate three random rows from our `airquality` data set, but this time we manually set the same seed before each sampling process.  You can use any number of your choice to manually set a seed.
+
+```{r}
+# sample 1
+set.seed(123)
+airquality[sample(1:nrow(airquality), 3), ]
+```
+
+```{r}
+# sample 2
+set.seed(123)
+airquality[sample(1:nrow(airquality), 3), ]
+```
+
+Note that a random seed resets after every call that requires randomization^[If you want to see this, you can type `x <- .Random.seed` in your console and it will store the current vector being used for randomization.  Then run a random sample function, after which the vector will regenerate.  Then store it again as `y <- .Random.seed` and check `sum(x != y)`.  This should be non-zero.].  Therefore it is important to set a random seed before every random process to ensure full reproducibility.  
 
 ## Documenting your work using R Markdown
 
@@ -650,7 +684,7 @@ If you are not familiar with R Markdown, I strongly encourage you to learn it al
 2.  Create a second numeric vector called `which` which corresponds to `my_names`. The entries should be the position of each name in the order of your full name.  Verify that it has the same length as `my_names`.
 3.  Create a dataframe called `names`, which consists of the two vectors `my_names` and `which` as columns.  Calculate the dimensions of `names`.
 4.  Create a new dataframe `new_names` with the `which` column converted to character type.  Verify that your command worked using `str()`.
-5.  `r if (knitr::is_latex_output()) '\\index{data sets!ugtests@\\texttt{chinook_customers}}'`Load the `chinook_customers` data set via the `onadata` package or download it from the internet^[https://ona-book.org/data/chinook_customers.csv].  Calculate the dimensions of `chinook_customers` and view the first three rows only. 
+5.  Load the `chinook_customers` data set via the `onadata` package or download it from the internet^[https://ona-book.org/data/chinook_customers.csv].  Calculate the dimensions of `chinook_customers` and view the first three rows only. 
 6.  View a statistical summary of all of the columns of `chinook_customers`.  Determine if there are any missing values.
 7.  View the subset of `chinook_customers` for values of `SupportRepId` equal to 3.
 8.  Install and load the package `dplyr`.  Look up the help for the `filter()` function in this package and try to use it to repeat the task in the previous question.

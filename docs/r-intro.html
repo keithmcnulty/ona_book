@@ -22,7 +22,9 @@
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.5.1/tabs.js"></script><script src="libs/bs3compat-0.2.5.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
 <script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script><link href="libs/vis-4.20.1/vis.css" rel="stylesheet">
-<script src="libs/vis-4.20.1/vis.min.js"></script><script src="libs/visNetwork-binding-2.0.9/visNetwork.js"></script><script src="libs/d3-4.5.0/d3.min.js"></script><script src="libs/forceNetwork-binding-0.4/forceNetwork.js"></script><script src="libs/sankey-1/sankey.js"></script><script src="libs/sankeyNetwork-binding-0.4/sankeyNetwork.js"></script><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-400FPN6D44"></script><script>
+<script src="libs/vis-4.20.1/vis.min.js"></script><script src="libs/visNetwork-binding-2.0.9/visNetwork.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet">
+<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script><script src="libs/d3-4.5.0/d3.min.js"></script><script src="libs/forceNetwork-binding-0.4/forceNetwork.js"></script><script src="libs/sankey-1/sankey.js"></script><script src="libs/sankeyNetwork-binding-0.4/sankeyNetwork.js"></script><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-400FPN6D44"></script><script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
@@ -649,10 +651,11 @@ Figure 2.7: Simple histogram of <code>Ozone</code> in the <code>airquality</code
 <p>And finally, we create our box and whisker plot using the same principles, with the result in <a href="r-intro.html#fig:ggplot-box">2.8</a>.</p>
 <div class="sourceCode" id="cb105"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># create boxplot of Ozone by Month</span>
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">airquality</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Month</span>, y <span class="op">=</span> <span class="va">Ozone</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">airquality</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">Month</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">Ozone</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"lightblue"</span>, color <span class="op">=</span> <span class="st">"pink"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Boxplot of Ozone Levels by Month"</span>,
+       x <span class="op">=</span> <span class="st">"Month"</span>,
        y <span class="op">=</span> <span class="st">"Ozone levels"</span><span class="op">)</span></code></pre></div>
 <div class="figure" style="text-align: center">
 <span style="display:block;" id="fig:ggplot-box"></span>
@@ -662,9 +665,48 @@ Figure 2.8: Simple boxplot of <code>Ozone</code> against <code>Month</code> in t
 </div>
 </div>
 </div>
-<div id="documenting-your-work-using-r-markdown" class="section level2" number="2.8">
+<div id="randomization-in-r" class="section level2" number="2.8">
 <h2>
-<span class="header-section-number">2.8</span> Documenting your work using R Markdown<a class="anchor" aria-label="anchor" href="#documenting-your-work-using-r-markdown"><i class="fas fa-link"></i></a>
+<span class="header-section-number">2.8</span> Randomization in R<a class="anchor" aria-label="anchor" href="#randomization-in-r"><i class="fas fa-link"></i></a>
+</h2>
+<p>An important element of many processes in mathematics and statistics is randomization. Being able to generate random numbers is an important part of sampling or initiating processes or algorithms. We will also see later in this book that randomization is an important element of many graph algorithms, including visualization layout algorithms. In the following code we randomly sample 3 rows from the <code>airquality</code> data set using the <code><a href="https://rdrr.io/r/base/sample.html">sample()</a></code> function.</p>
+<div class="sourceCode" id="cb106"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">airquality</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">airquality</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span>, <span class="op">]</span></code></pre></div>
+<pre><code>##    Ozone Solar.R Wind Temp Month Day
+## 93    39      83  6.9   81     8   1
+## 86   108     223  8.0   85     7  25
+## 9      8      19 20.1   61     5   9</code></pre>
+<p>We do this a second time and note a different output because the sampling is random.</p>
+<div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">airquality</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">airquality</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span>, <span class="op">]</span></code></pre></div>
+<pre><code>##     Ozone Solar.R Wind Temp Month Day
+## 86    108     223  8.0   85     7  25
+## 41     39     323 11.5   87     6  10
+## 137     9      24 10.9   71     9  14</code></pre>
+<p>Random number generation can be problematic when you want to precisely replicate work done previously by yourself or others. If the previous work depended on random number generation, then your output will probably not match the previous output and it will be difficult to tell if this is because of an error you made or simply because of different random numbers.</p>
+<p>You can control random number generation by manually setting a random seed. In fact, random number generation in statistical software is rarely truly random, and is actually <em>pseudorandom</em>. Pseudorandomization is a simulated process that is ‘seeded’ using a vector of values. By default this vector is generated from the precise system time at a given moment, but its generation can also be controlled manually by a user. A given seed will always produce the same results from randomization, and so manually setting a seed can be an effective way to ensure precise reproducibility of work.</p>
+<p>Again, let’s generate three random rows from our <code>airquality</code> data set, but this time we manually set the same seed before each sampling process. You can use any number of your choice to manually set a seed.</p>
+<div class="sourceCode" id="cb110"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># sample 1</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<span class="va">airquality</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">airquality</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span>, <span class="op">]</span></code></pre></div>
+<pre><code>##     Ozone Solar.R Wind Temp Month Day
+## 49     20      37  9.2   65     6  18
+## 120    76     203  9.7   97     8  28
+## 82     16       7  6.9   74     7  21</code></pre>
+<div class="sourceCode" id="cb112"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># sample 2</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<span class="va">airquality</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">airquality</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span>, <span class="op">]</span></code></pre></div>
+<pre><code>##     Ozone Solar.R Wind Temp Month Day
+## 49     20      37  9.2   65     6  18
+## 120    76     203  9.7   97     8  28
+## 82     16       7  6.9   74     7  21</code></pre>
+<p>Note that a random seed resets after every call that requires randomization<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;If you want to see this, you can type &lt;code&gt;x &amp;lt;- .Random.seed&lt;/code&gt; in your console and it will store the current vector being used for randomization. Then run a random sample function, after which the vector will regenerate. Then store it again as &lt;code&gt;y &amp;lt;- .Random.seed&lt;/code&gt; and check &lt;code&gt;sum(x != y)&lt;/code&gt;. This should be non-zero.&lt;/p&gt;"><sup>13</sup></a>. Therefore it is important to set a random seed before every random process to ensure full reproducibility.</p>
+</div>
+<div id="documenting-your-work-using-r-markdown" class="section level2" number="2.9">
+<h2>
+<span class="header-section-number">2.9</span> Documenting your work using R Markdown<a class="anchor" aria-label="anchor" href="#documenting-your-work-using-r-markdown"><i class="fas fa-link"></i></a>
 </h2>
 <p>For anyone performing any sort of analysis using a statistical programming language, appropriate documentation and reproducibility of the work is essential to its success and longevity. If your code is not easily obtained or run by others, it is likely to have a very limited impact and lifetime. Learning how to create integrated documents that contain both text and code is critical to providing access to your code and narration of your work.</p>
 <p>R Markdown is a package which allows you to create integrated documents containing both formatted text and executed code. It is, in my opinion, one of the best resources available currently for this purpose. This entire book has been created using R Markdown. You can start an R Markdown document in RStudio by installing the <code>rmarkdown</code> package and then opening a new R Markdown document file, which will have the suffix <code>.Rmd</code>.</p>
@@ -688,7 +730,7 @@ Here is a nice picture about this sub-topic.
 ![](path/to/image)</code></pre>
 <p>Code can be written and executed and the results displayed inline using backticks. For example, recalling our <code>chinook_employees</code> dataset from earlier and writing</p>
 <pre><code>`r nrow(chinook_employees)`</code></pre>
-<p>inline will display 8 in the final document<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;This assumes the dataset has been loaded afresh without removing any data from it&lt;/p&gt;"><sup>13</sup></a>. Entire code blocks can be included and executed by using triple-backticks. The following code block:</p>
+<p>inline will display 8 in the final document<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;This assumes the dataset has been loaded afresh without removing any data from it&lt;/p&gt;"><sup>14</sup></a>. Entire code blocks can be included and executed by using triple-backticks. The following code block:</p>
 <pre><code>```{r}
 # show the first three rows of chinook_employees
 head(chinook_employees, 3)
@@ -702,13 +744,13 @@ head(chinook_employees, 3)
 <p>The process of compiling your R Markdown code to produce a document is known as ‘knitting.’ To create a knitted document, you simply need to click on the ‘Knit’ button in RStudio that appears above your R Markdown code.</p>
 <p>If you are not familiar with R Markdown, I strongly encourage you to learn it alongside R and to challenge yourself to write up any practice exercises you take on in this book using R Markdown. Useful cheat sheets and reference guides for R Markdown formatting and commands are available through the Cheatsheets section of the Help menu in RStudio. I also recommend <span class="citation"><a href="references.html#ref-rmarkdown" role="doc-biblioref">Xie, Dervieux, and Riederer</a> (<a href="references.html#ref-rmarkdown" role="doc-biblioref">2020</a>)</span> for a really thorough instruction and reference guide.</p>
 </div>
-<div id="learning-exercises" class="section level2" number="2.9">
+<div id="learning-exercises" class="section level2" number="2.10">
 <h2>
-<span class="header-section-number">2.9</span> Learning exercises<a class="anchor" aria-label="anchor" href="#learning-exercises"><i class="fas fa-link"></i></a>
+<span class="header-section-number">2.10</span> Learning exercises<a class="anchor" aria-label="anchor" href="#learning-exercises"><i class="fas fa-link"></i></a>
 </h2>
-<div id="discussion-questions" class="section level3" number="2.9.1">
+<div id="discussion-questions" class="section level3" number="2.10.1">
 <h3>
-<span class="header-section-number">2.9.1</span> Discussion questions<a class="anchor" aria-label="anchor" href="#discussion-questions"><i class="fas fa-link"></i></a>
+<span class="header-section-number">2.10.1</span> Discussion questions<a class="anchor" aria-label="anchor" href="#discussion-questions"><i class="fas fa-link"></i></a>
 </h3>
 <ol style="list-style-type: decimal">
 <li>Describe the following data types: numeric, character, logical, factor.</li>
@@ -725,16 +767,16 @@ head(chinook_employees, 3)
 <li>What is R Markdown, and why is it useful to someone performing analysis using programming languages?</li>
 </ol>
 </div>
-<div id="data-exercises" class="section level3" number="2.9.2">
+<div id="data-exercises" class="section level3" number="2.10.2">
 <h3>
-<span class="header-section-number">2.9.2</span> Data exercises<a class="anchor" aria-label="anchor" href="#data-exercises"><i class="fas fa-link"></i></a>
+<span class="header-section-number">2.10.2</span> Data exercises<a class="anchor" aria-label="anchor" href="#data-exercises"><i class="fas fa-link"></i></a>
 </h3>
 <ol style="list-style-type: decimal">
 <li>Create a character vector called <code>my_names</code> that contains all your first, middle and last names as elements. Calculate the length of <code>my_names</code>.</li>
 <li>Create a second numeric vector called <code>which</code> which corresponds to <code>my_names</code>. The entries should be the position of each name in the order of your full name. Verify that it has the same length as <code>my_names</code>.</li>
 <li>Create a dataframe called <code>names</code>, which consists of the two vectors <code>my_names</code> and <code>which</code> as columns. Calculate the dimensions of <code>names</code>.</li>
 <li>Create a new dataframe <code>new_names</code> with the <code>which</code> column converted to character type. Verify that your command worked using <code><a href="https://rdrr.io/r/utils/str.html">str()</a></code>.</li>
-<li>Load the <code>chinook_customers</code> data set via the <code>onadata</code> package or download it from the internet<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://ona-book.org/data/chinook_customers.csv" class="uri"&gt;https://ona-book.org/data/chinook_customers.csv&lt;/a&gt;&lt;/p&gt;'><sup>14</sup></a>. Calculate the dimensions of <code>chinook_customers</code> and view the first three rows only.</li>
+<li>Load the <code>chinook_customers</code> data set via the <code>onadata</code> package or download it from the internet<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://ona-book.org/data/chinook_customers.csv" class="uri"&gt;https://ona-book.org/data/chinook_customers.csv&lt;/a&gt;&lt;/p&gt;'><sup>15</sup></a>. Calculate the dimensions of <code>chinook_customers</code> and view the first three rows only.</li>
 <li>View a statistical summary of all of the columns of <code>chinook_customers</code>. Determine if there are any missing values.</li>
 <li>View the subset of <code>chinook_customers</code> for values of <code>SupportRepId</code> equal to 3.</li>
 <li>Install and load the package <code>dplyr</code>. Look up the help for the <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> function in this package and try to use it to repeat the task in the previous question.</li>
@@ -789,11 +831,12 @@ head(chinook_employees, 3)
 <li><a class="nav-link" href="#specialist-plotting-and-graphing-packages"><span class="header-section-number">2.7.2</span> Specialist plotting and graphing packages</a></li>
 </ul>
 </li>
-<li><a class="nav-link" href="#documenting-your-work-using-r-markdown"><span class="header-section-number">2.8</span> Documenting your work using R Markdown</a></li>
+<li><a class="nav-link" href="#randomization-in-r"><span class="header-section-number">2.8</span> Randomization in R</a></li>
+<li><a class="nav-link" href="#documenting-your-work-using-r-markdown"><span class="header-section-number">2.9</span> Documenting your work using R Markdown</a></li>
 <li>
-<a class="nav-link" href="#learning-exercises"><span class="header-section-number">2.9</span> Learning exercises</a><ul class="nav navbar-nav">
-<li><a class="nav-link" href="#discussion-questions"><span class="header-section-number">2.9.1</span> Discussion questions</a></li>
-<li><a class="nav-link" href="#data-exercises"><span class="header-section-number">2.9.2</span> Data exercises</a></li>
+<a class="nav-link" href="#learning-exercises"><span class="header-section-number">2.10</span> Learning exercises</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#discussion-questions"><span class="header-section-number">2.10.1</span> Discussion questions</a></li>
+<li><a class="nav-link" href="#data-exercises"><span class="header-section-number">2.10.2</span> Data exercises</a></li>
 </ul>
 </li>
 </ul>
