@@ -58,8 +58,6 @@
 <script src="libs/visNetwork-binding-2.0.9/visNetwork.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
-<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
-<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 <script src="libs/d3-4.5.0/d3.min.js"></script>
 <script src="libs/forceNetwork-binding-0.4/forceNetwork.js"></script>
 <script src="libs/sankey-1/sankey.js"></script>
@@ -179,7 +177,10 @@ div.csl-indent {
 <li><a href="./">Handbook of Regression Modeling in People Analytics</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#note-on-data"><i class="fa fa-check"></i>Note on data</a></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i>Introduction</a></li>
 <li class="chapter" data-level="1" data-path="everywhere.html"><a href="everywhere.html"><i class="fa fa-check"></i><b>1</b> Graphs Everywhere!</a>
 <ul>
@@ -273,8 +274,8 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="4.2" data-path="viz-graphs.html"><a href="viz-graphs.html#visualizing-graphs-in-python"><i class="fa fa-check"></i><b>4.2</b> Visualizing graphs in Python</a>
 <ul>
-<li class="chapter" data-level="4.2.1" data-path="viz-graphs.html"><a href="viz-graphs.html#static-visualizations-using-networkx-and-matplotlib"><i class="fa fa-check"></i><b>4.2.1</b> Static visualizations using <code>networkx</code> and <code>matplotlib</code></a></li>
-<li class="chapter" data-level="4.2.2" data-path="viz-graphs.html"><a href="viz-graphs.html#dynamic-visualization-using-networkx-and-pyvis"><i class="fa fa-check"></i><b>4.2.2</b> Dynamic visualization using <code>networkx</code> and <code>pyvis</code></a></li>
+<li class="chapter" data-level="4.2.1" data-path="viz-graphs.html"><a href="viz-graphs.html#static-plotting-using-networkx-and-matplotlib"><i class="fa fa-check"></i><b>4.2.1</b> Static plotting using <code>networkx</code> and <code>matplotlib</code></a></li>
+<li class="chapter" data-level="4.2.2" data-path="viz-graphs.html"><a href="viz-graphs.html#interactive-visualization-using-networkx-and-pyvis"><i class="fa fa-check"></i><b>4.2.2</b> Interactive visualization using <code>networkx</code> and <code>pyvis</code></a></li>
 </ul></li>
 <li class="chapter" data-level="4.3" data-path="viz-graphs.html"><a href="viz-graphs.html#learning-exercises-2"><i class="fa fa-check"></i><b>4.3</b> Learning exercises</a>
 <ul>
@@ -286,7 +287,7 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="5.1" data-path="restructuring-data.html"><a href="restructuring-data.html#transforming-data-in-rectangular-tables-for-use-in-graphs"><i class="fa fa-check"></i><b>5.1</b> Transforming data in rectangular tables for use in graphs</a>
 <ul>
-<li class="chapter" data-level="5.1.1" data-path="restructuring-data.html"><a href="restructuring-data.html#creating-a-simple-graph-of-the-chinook-management-hierarchy"><i class="fa fa-check"></i><b>5.1.1</b> Creating a simple graph of the Chinook management hierarchy</a></li>
+<li class="chapter" data-level="5.1.1" data-path="restructuring-data.html"><a href="restructuring-data.html#creating-a-simple-graph-of-a-management-hierarchy"><i class="fa fa-check"></i><b>5.1.1</b> Creating a simple graph of a management hierarchy</a></li>
 <li class="chapter" data-level="5.1.2" data-path="restructuring-data.html"><a href="restructuring-data.html#connecting-customers-through-sales-reps"><i class="fa fa-check"></i><b>5.1.2</b> Connecting customers through sales reps</a></li>
 <li class="chapter" data-level="5.1.3" data-path="restructuring-data.html"><a href="restructuring-data.html#common-purchases"><i class="fa fa-check"></i><b>5.1.3</b> Connecting customers through common purchases</a></li>
 <li class="chapter" data-level="5.1.4" data-path="restructuring-data.html"><a href="restructuring-data.html#approaches-using-python"><i class="fa fa-check"></i><b>5.1.4</b> Approaches using Python</a></li>
@@ -422,7 +423,6 @@ div.csl-indent {
 <li class="chapter" data-level="10.4.2" data-path="databases.html"><a href="databases.html#data-exercises-8"><i class="fa fa-check"></i><b>10.4.2</b> Data exercises</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="appendix-descriptions-of-data-sets-used.html"><a href="appendix-descriptions-of-data-sets-used.html"><i class="fa fa-check"></i>Appendix: Descriptions of Data Sets Used</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -622,7 +622,7 @@ Figure 2.1: The RStudio IDE
 <p>The dataframe is the most common data structure used by analysts in R, due to its similarity to data tables found in databases and spreadsheets. We will work with dataframes a lot in this book, so let’s get to know them.</p>
 <div id="loading-and-tidying-data-in-dataframes" class="section level3" number="2.4.1">
 <h3><span class="header-section-number">2.4.1</span> Loading and tidying data in dataframes</h3>
-<p>To work with data in R, you usually need to pull it in from an outside source into a dataframe<a href="#fn10" class="footnote-ref" id="fnref10"><sup>10</sup></a>. R facilitates numerous ways of importing data from simple <code>.csv</code> files, from Excel files, from online sources or from databases. Let’s load a data set that we will use later—the <code>chinook_employees</code> data set, which contains information on employees of a sales company. The <code>read.csv()</code> function can accept a URL address of the file if it is online.</p>
+<p>To work with data in R, you usually need to pull it in from an outside source into a dataframe<a href="#fn11" class="footnote-ref" id="fnref11"><sup>11</sup></a>. R facilitates numerous ways of importing data from simple <code>.csv</code> files, from Excel files, from online sources or from databases. Let’s load a data set that we will use later—the <code>chinook_employees</code> data set, which contains information on employees of a sales company. The <code>read.csv()</code> function can accept a URL address of the file if it is online.</p>
 <div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="r-intro.html#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># url of data set </span></span>
 <span id="cb51-2"><a href="r-intro.html#cb51-2" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">&quot;https://ona-book.org/data/chinook_employees.csv&quot;</span></span>
 <span id="cb51-3"><a href="r-intro.html#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="co"># load the data set and store it as a dataframe called workfrance_edges</span></span>
@@ -738,7 +738,7 @@ Figure 2.1: The RStudio IDE
 <p>In the code so far we have used a variety of functions. For example <code>head()</code>, <code>subset()</code>, <code>rbind()</code>. Functions are operations that take certain defined inputs and return an output. Functions exist to perform common useful operations.</p>
 <div id="using-functions" class="section level3" number="2.5.1">
 <h3><span class="header-section-number">2.5.1</span> Using functions</h3>
-<p>Functions usually take one or more arguments. Often there are a large number of arguments that a function can take, but many are optional and not required to be specified by the user. For example, the function <code>head()</code>, which displays the first rows of a dataframe<a href="#fn11" class="footnote-ref" id="fnref11"><sup>11</sup></a>, has only one required argument <code>x</code>: the name of the dataframe. A second argument is optional, <code>n</code>: the number of rows to display. If <code>n</code> is not entered, it is assumed to have the default value <code>n = 6</code>.</p>
+<p>Functions usually take one or more arguments. Often there are a large number of arguments that a function can take, but many are optional and not required to be specified by the user. For example, the function <code>head()</code>, which displays the first rows of a dataframe<a href="#fn12" class="footnote-ref" id="fnref12"><sup>12</sup></a>, has only one required argument <code>x</code>: the name of the dataframe. A second argument is optional, <code>n</code>: the number of rows to display. If <code>n</code> is not entered, it is assumed to have the default value <code>n = 6</code>.</p>
 <p>When running a function, you can either specify the arguments by name or you can enter them in order without their names. If you enter arguments without naming them, R expects the arguments to be entered in exactly the right order.</p>
 <div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="r-intro.html#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="co"># see the head of chinook_employees, with the default of six rows</span></span>
 <span id="cb82-2"><a href="r-intro.html#cb82-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(chinook_employees)</span></code></pre></div>
@@ -829,7 +829,7 @@ Figure 2.2: Results of a search for the <code>head()</code> function in the RStu
 <span id="cb94-3"><a href="r-intro.html#cb94-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">subset</span>(<span class="at">subset =</span> chinook_employees<span class="sc">$</span>EmployeeId <span class="sc">&lt;</span> <span class="dv">5</span>) <span class="sc">|</span><span class="er">&gt;</span> </span>
 <span id="cb94-4"><a href="r-intro.html#cb94-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">toupper</span>() </span></code></pre></div>
 <pre><code>## [1] &quot;EDWARDS&quot; &quot;PEACOCK&quot; &quot;PARK&quot;</code></pre>
-<p>The pipe operator is very widely used because it helps to make code more readable, it reduces complexity, and it helps orient around a common ‘grammar’ for the manipulation of data. The pipe operator helps you structure your code more clearly around nouns (objects), verbs (functions) and adverbs (arguments of functions). One of the most developed sets of packages in R that follows these principles is the <code>tidyverse</code> family of packages, which I encourage you to explore<a href="#fn12" class="footnote-ref" id="fnref12"><sup>12</sup></a>.</p>
+<p>The pipe operator is very widely used because it helps to make code more readable, it reduces complexity, and it helps orient around a common ‘grammar’ for the manipulation of data. The pipe operator helps you structure your code more clearly around nouns (objects), verbs (functions) and adverbs (arguments of functions). One of the most developed sets of packages in R that follows these principles is the <code>tidyverse</code> family of packages, which I encourage you to explore<a href="#fn13" class="footnote-ref" id="fnref13"><sup>13</sup></a>.</p>
 </div>
 </div>
 <div id="errors-warnings-and-messages" class="section level2" number="2.6">
@@ -965,7 +965,7 @@ Figure 2.8: Simple boxplot of <code>Ozone</code> against <code>Month</code> in t
 ## 49     20      37  9.2   65     6  18
 ## 120    76     203  9.7   97     8  28
 ## 82     16       7  6.9   74     7  21</code></pre>
-<p>Note that a random seed resets after every call that requires randomization<a href="#fn13" class="footnote-ref" id="fnref13"><sup>13</sup></a>. Therefore it is important to set a random seed before every random process to ensure full reproducibility.</p>
+<p>Note that a random seed resets after every call that requires randomization<a href="#fn14" class="footnote-ref" id="fnref14"><sup>14</sup></a>. Therefore it is important to set a random seed before every random process to ensure full reproducibility.</p>
 </div>
 <div id="documenting-your-work-using-r-markdown" class="section level2" number="2.9">
 <h2><span class="header-section-number">2.9</span> Documenting your work using R Markdown</h2>
@@ -991,7 +991,7 @@ Here is a nice picture about this sub-topic.
 ![](path/to/image)</code></pre>
 <p>Code can be written and executed and the results displayed inline using backticks. For example, recalling our <code>chinook_employees</code> dataset from earlier and writing</p>
 <pre><code>`r nrow(chinook_employees)`</code></pre>
-<p>inline will display 8 in the final document<a href="#fn14" class="footnote-ref" id="fnref14"><sup>14</sup></a>. Entire code blocks can be included and executed by using triple-backticks. The following code block:</p>
+<p>inline will display 8 in the final document<a href="#fn15" class="footnote-ref" id="fnref15"><sup>15</sup></a>. Entire code blocks can be included and executed by using triple-backticks. The following code block:</p>
 <pre><code>```{r}
 # show the first three rows of chinook_employees
 head(chinook_employees, 3)
@@ -1031,7 +1031,7 @@ head(chinook_employees, 3)
 <li>Create a second numeric vector called <code>which</code> which corresponds to <code>my_names</code>. The entries should be the position of each name in the order of your full name. Verify that it has the same length as <code>my_names</code>.</li>
 <li>Create a dataframe called <code>names</code>, which consists of the two vectors <code>my_names</code> and <code>which</code> as columns. Calculate the dimensions of <code>names</code>.</li>
 <li>Create a new dataframe <code>new_names</code> with the <code>which</code> column converted to character type. Verify that your command worked using <code>str()</code>.</li>
-<li>Load the <code>chinook_customers</code> data set via the <code>onadata</code> package or download it from the internet<a href="#fn15" class="footnote-ref" id="fnref15"><sup>15</sup></a>. Calculate the dimensions of <code>chinook_customers</code> and view the first three rows only.</li>
+<li>Load the <code>chinook_customers</code> data set via the <code>onadata</code> package or download it from the internet<a href="#fn16" class="footnote-ref" id="fnref16"><sup>16</sup></a>. Calculate the dimensions of <code>chinook_customers</code> and view the first three rows only.</li>
 <li>View a statistical summary of all of the columns of <code>chinook_customers</code>. Determine if there are any missing values.</li>
 <li>View the subset of <code>chinook_customers</code> for values of <code>SupportRepId</code> equal to 3.</li>
 <li>Install and load the package <code>dplyr</code>. Look up the help for the <code>filter()</code> function in this package and try to use it to repeat the task in the previous question.</li>
@@ -1061,13 +1061,13 @@ Xie, Yihui, Christophe Dervieux, and Emily Riederer. 2020. <em>R Markdown Cookbo
 </div>
 <div class="footnotes">
 <hr />
-<ol start="10">
-<li id="fn10"><p>R also has some built-in data sets for testing and playing with. For example, later in this chapter we will use the built-in <code>airquality</code> data set to do some plotting. You can see this data set simply by typing <code>airquality</code> into the terminal. You can type <code>data()</code> to see a full list of built-in data sets.<a href="r-intro.html#fnref10" class="footnote-back">↩︎</a></p></li>
-<li id="fn11"><p>It actually has a broader definition but is mostly used for showing the first rows of a dataframe.<a href="r-intro.html#fnref11" class="footnote-back">↩︎</a></p></li>
-<li id="fn12"><p>Note that in this book I am using the ‘native pipe’ operator which was introduced into R as of Version 4.1.0. If you are using a prior version of R, or if you have old habits you would like to stick with, you can use the prior pipe operator that is only available when it is loaded as part of the <code>magrittr</code> or <code>dplyr</code> packages, and which is notated as <code>%&gt;%</code><a href="r-intro.html#fnref12" class="footnote-back">↩︎</a></p></li>
-<li id="fn13"><p>If you want to see this, you can type <code>x &lt;- .Random.seed</code> in your console and it will store the current vector being used for randomization. Then run a random sample function, after which the vector will regenerate. Then store it again as <code>y &lt;- .Random.seed</code> and check <code>sum(x != y)</code>. This should be non-zero.<a href="r-intro.html#fnref13" class="footnote-back">↩︎</a></p></li>
-<li id="fn14"><p>This assumes the dataset has been loaded afresh without removing any data from it<a href="r-intro.html#fnref14" class="footnote-back">↩︎</a></p></li>
-<li id="fn15"><p><a href="https://ona-book.org/data/chinook_customers.csv" class="uri">https://ona-book.org/data/chinook_customers.csv</a><a href="r-intro.html#fnref15" class="footnote-back">↩︎</a></p></li>
+<ol start="11">
+<li id="fn11"><p>R also has some built-in data sets for testing and playing with. For example, later in this chapter we will use the built-in <code>airquality</code> data set to do some plotting. You can see this data set simply by typing <code>airquality</code> into the terminal. You can type <code>data()</code> to see a full list of built-in data sets.<a href="r-intro.html#fnref11" class="footnote-back">↩︎</a></p></li>
+<li id="fn12"><p>It actually has a broader definition but is mostly used for showing the first rows of a dataframe.<a href="r-intro.html#fnref12" class="footnote-back">↩︎</a></p></li>
+<li id="fn13"><p>Note that in this book I am using the ‘native pipe’ operator which was introduced into R as of Version 4.1.0. If you are using a prior version of R, or if you have old habits you would like to stick with, you can use the prior pipe operator that is only available when it is loaded as part of the <code>magrittr</code> or <code>dplyr</code> packages, and which is notated as <code>%&gt;%</code><a href="r-intro.html#fnref13" class="footnote-back">↩︎</a></p></li>
+<li id="fn14"><p>If you want to see this, you can type <code>x &lt;- .Random.seed</code> in your console and it will store the current vector being used for randomization. Then run a random sample function, after which the vector will regenerate. Then store it again as <code>y &lt;- .Random.seed</code> and check <code>sum(x != y)</code>. This should be non-zero.<a href="r-intro.html#fnref14" class="footnote-back">↩︎</a></p></li>
+<li id="fn15"><p>This assumes the dataset has been loaded afresh without removing any data from it<a href="r-intro.html#fnref15" class="footnote-back">↩︎</a></p></li>
+<li id="fn16"><p><a href="https://ona-book.org/data/chinook_customers.csv" class="uri">https://ona-book.org/data/chinook_customers.csv</a><a href="r-intro.html#fnref16" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>

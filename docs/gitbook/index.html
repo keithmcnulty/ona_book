@@ -58,8 +58,6 @@
 <script src="libs/visNetwork-binding-2.0.9/visNetwork.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
-<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
-<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 <script src="libs/d3-4.5.0/d3.min.js"></script>
 <script src="libs/forceNetwork-binding-0.4/forceNetwork.js"></script>
 <script src="libs/sankey-1/sankey.js"></script>
@@ -179,7 +177,10 @@ div.csl-indent {
 <li><a href="./">Handbook of Regression Modeling in People Analytics</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#note-on-data"><i class="fa fa-check"></i>Note on data</a></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i>Introduction</a></li>
 <li class="chapter" data-level="1" data-path="everywhere.html"><a href="everywhere.html"><i class="fa fa-check"></i><b>1</b> Graphs Everywhere!</a>
 <ul>
@@ -273,8 +274,8 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="4.2" data-path="viz-graphs.html"><a href="viz-graphs.html#visualizing-graphs-in-python"><i class="fa fa-check"></i><b>4.2</b> Visualizing graphs in Python</a>
 <ul>
-<li class="chapter" data-level="4.2.1" data-path="viz-graphs.html"><a href="viz-graphs.html#static-visualizations-using-networkx-and-matplotlib"><i class="fa fa-check"></i><b>4.2.1</b> Static visualizations using <code>networkx</code> and <code>matplotlib</code></a></li>
-<li class="chapter" data-level="4.2.2" data-path="viz-graphs.html"><a href="viz-graphs.html#dynamic-visualization-using-networkx-and-pyvis"><i class="fa fa-check"></i><b>4.2.2</b> Dynamic visualization using <code>networkx</code> and <code>pyvis</code></a></li>
+<li class="chapter" data-level="4.2.1" data-path="viz-graphs.html"><a href="viz-graphs.html#static-plotting-using-networkx-and-matplotlib"><i class="fa fa-check"></i><b>4.2.1</b> Static plotting using <code>networkx</code> and <code>matplotlib</code></a></li>
+<li class="chapter" data-level="4.2.2" data-path="viz-graphs.html"><a href="viz-graphs.html#interactive-visualization-using-networkx-and-pyvis"><i class="fa fa-check"></i><b>4.2.2</b> Interactive visualization using <code>networkx</code> and <code>pyvis</code></a></li>
 </ul></li>
 <li class="chapter" data-level="4.3" data-path="viz-graphs.html"><a href="viz-graphs.html#learning-exercises-2"><i class="fa fa-check"></i><b>4.3</b> Learning exercises</a>
 <ul>
@@ -286,7 +287,7 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="5.1" data-path="restructuring-data.html"><a href="restructuring-data.html#transforming-data-in-rectangular-tables-for-use-in-graphs"><i class="fa fa-check"></i><b>5.1</b> Transforming data in rectangular tables for use in graphs</a>
 <ul>
-<li class="chapter" data-level="5.1.1" data-path="restructuring-data.html"><a href="restructuring-data.html#creating-a-simple-graph-of-the-chinook-management-hierarchy"><i class="fa fa-check"></i><b>5.1.1</b> Creating a simple graph of the Chinook management hierarchy</a></li>
+<li class="chapter" data-level="5.1.1" data-path="restructuring-data.html"><a href="restructuring-data.html#creating-a-simple-graph-of-a-management-hierarchy"><i class="fa fa-check"></i><b>5.1.1</b> Creating a simple graph of a management hierarchy</a></li>
 <li class="chapter" data-level="5.1.2" data-path="restructuring-data.html"><a href="restructuring-data.html#connecting-customers-through-sales-reps"><i class="fa fa-check"></i><b>5.1.2</b> Connecting customers through sales reps</a></li>
 <li class="chapter" data-level="5.1.3" data-path="restructuring-data.html"><a href="restructuring-data.html#common-purchases"><i class="fa fa-check"></i><b>5.1.3</b> Connecting customers through common purchases</a></li>
 <li class="chapter" data-level="5.1.4" data-path="restructuring-data.html"><a href="restructuring-data.html#approaches-using-python"><i class="fa fa-check"></i><b>5.1.4</b> Approaches using Python</a></li>
@@ -422,7 +423,6 @@ div.csl-indent {
 <li class="chapter" data-level="10.4.2" data-path="databases.html"><a href="databases.html#data-exercises-8"><i class="fa fa-check"></i><b>10.4.2</b> Data exercises</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="appendix-descriptions-of-data-sets-used.html"><a href="appendix-descriptions-of-data-sets-used.html"><i class="fa fa-check"></i>Appendix: Descriptions of Data Sets Used</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -448,14 +448,18 @@ div.csl-indent {
 </div>
 <div id="welcome" class="section level1 unnumbered">
 <h1>Welcome</h1>
-<p>Welcome to the website of the book <em>Handbook of Graphs and Networks in People Analytics</em> by <a href="https://www.linkedin.com/in/keith-mcnulty/">Keith McNulty</a>.</p>
+<p>Welcome to the website of the book <em>Handbook of Graphs and Networks in People Analytics</em> by <a href="https://www.linkedin.com/in/keith-mcnulty/">Keith McNulty</a>. This is the second volume in a series of technical textbooks for professionals working in analytics. To view or order a print copy of the first volume, please go to its website: <a href="https://peopleanalytics-regression-book.org">Handbook of Regression Modeling in People Analytics</a>.</p>
 <div class="infobox caution">
 <p><strong>Note</strong>: This book is to be published by Chapman &amp; Hall/CRC Press in 2022. The online version of this book is free to read here (thanks to Chapman &amp; Hall/CRC), and licensed under the <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>. If you have any feedback, please feel free to <a href="https://github.com/keithmcnulty/ona_book/issues">file an issue on GitHub</a>. Thank you!</p>
 </div>
 <p>The book is available in <a href="https://ona-book.org">bootstrap format</a> or in a more plain <a href="https://ona-book.org/gitbook">gitbook format</a>.</p>
+<div id="note-on-data" class="section level2 unnumbered">
+<h2>Note on data</h2>
+<p>It is my intention to make all the data sets in the book available in convenient and self-contained packages in R and Python to coincide with the print release of this book in 2022. In the meantime, the datasets are all accessible via the URLs provided and you can always access them by following the code examples.</p>
 <p>Many thanks!</p>
-<p><em>Last updated: 27 September 2021</em></p>
+<p><em>Last updated: 13 October 2021</em></p>
 
+</div>
 </div>
             </section>
 

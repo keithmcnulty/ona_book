@@ -788,7 +788,7 @@ karate = nx.from_pandas_edgelist(karate_edgelist,
 source = 'from', target = 'to')
 ```
 
-### Static visualizations using `networkx` and `matplotlib`
+### Static plotting using `networkx` and `matplotlib`
 
 The `draw()` function in `networkx` provides a basic visualization of a graph in `matplotlib` using a force-directed "spring" layout, as can be seen in Figure \@ref(fig:pykarate-basic).  Remember also to set a seed to ensure reproducibility of the visualization.
 
@@ -933,11 +933,11 @@ knitr::include_graphics("www/visualizing-graphs/pykarateshell-1.png")
 
 
 
-### Dynamic visualization using `networkx` and `pyvis`
+### Interactive visualization using `networkx` and `pyvis`
 
-Similar to the `visNetwork` package in R, the `pyvis` package provides an API allowing the creation of dynamic graphs using the `vis.js` Javascript library.  As you will mostly be creating graph objects using `networkx`, the easiest way to use `pyvis` is to take advantage of its `networkx` integration.
+Similar to the `visNetwork` package in R, the `pyvis` package provides an API allowing the creation of interacive graphs using the `vis.js` Javascript library.  As you will mostly be creating graph objects using `networkx`, the easiest way to use `pyvis` is to take advantage of its `networkx` integration.
 
-To visualize a `networkx` graph using `pyvis`, start by creating a `Network()` class and then use the `from_nx()` method to import the `networkx` object.  The `show()` method will render a dynamic plot.  `r if (knitr::is_latex_output()) "Figure \\@ref(fig:pykaratevisbasicr) shows a static image of the output."`
+To visualize a `networkx` graph using `pyvis`, start by creating a `Network()` class and then use the `from_nx()` method to import the `networkx` object.  The `show()` method will render an interactive plot.  `r if (knitr::is_latex_output()) "Figure \\@ref(fig:pykaratevisbasicr) shows a static image of the output."`
 
 ```{python, eval = FALSE}
 from pyvis.network import Network
@@ -1037,7 +1037,7 @@ knitr::include_graphics("www/visualizing-graphs/pykaratevisadditional.png")
 2.  Describe some ways a graph visualization can be adjusted to reflect different characteristics of the vertices.  For example, how might we represent more 'important' vertices visually? 
 3.  Describe some similar adjustments that could be made to the edges.
 4.  Describe some likely challenges with large graph visualizations which may make it harder to draw conclusions from them.
-5.  What is the difference between a static and a dynamic visualization?  In what ways might dynamic visualizations overcome some of the challenges associated with large static graph visualizations?
+5.  What is the difference between a static and an iteractive visualization?  In what ways might interactive visualizations overcome some of the challenges associated with large static graph visualizations?
 6.  Choose your favorite programming language and list out some package options for how to visualize graphs in that language.
 7.  For each package option you listed, describe what kinds of graphs each package would be best suited for.
 8.  Describe what is meant by a graph layout.

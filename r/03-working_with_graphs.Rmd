@@ -651,12 +651,11 @@ We see the expected directed multigraph with 3 vertices and 16 edges.  If we wis
   weighted = TRUE
 ))
 ```
-We now see a graph with only 5 edges but we see the addition of `W` in our graph type, indicating a weighted graph. We also see a new edge property of numeric type called `weight`.  In situations where we want to simplify multiple edges to single edges without worrying about weight, the `simplify()` function in `igraph` works well, with the `remove.multiple` argument set to `TRUE`.
+We now see a graph with only 5 edges but we see the addition of `W` in our graph type, indicating a weighted graph. We also see a new edge property of numeric type called `weight`.  In situations where we want to simplify multiple edges to single edges without worrying about weight, the `simplify()` function in `igraph` works well. By default, `simplify()` will collapse multiple edges to a single edge and remove  any loop edges from vertices to themselves in order to create a simple graph^[If you only want to do one of these---such as remove loops but not multiples---you can set this in the function arguments using `remove.multiples = FALSE` or `remove.loops = FALSE`.].
 
 ```{r}
 (flightgraph_simple <- igraph::simplify(
-  flightgraph,
-  remove.multiple = TRUE
+  flightgraph
 ))
 ```
 
@@ -752,7 +751,7 @@ We see that the additional edge properties `cur` and `amt` and the vertex proper
 
 
 :::{.thinkahead data-latex=""}
-**Playing around:** An arbitrary number of properties can be added to the vertices and edges of a graph.  If you label one of the properties as `weight` and if that property is numeric, this will change the type of your graph to `W`, a weighted graph.  Try playing around with this by changing the name of the `amt` column to `weight` in `gtransfers`.  Also, earlier we introduced the `simplify()` function in `igraph`.  The `simplify()` function helps turn a graph with multiple edges or with loops into a simple graph using the arguments `remove.multiple = TRUE` and `remove.loops = TRUE`.  However, be careful when using this function if your graph has properties stored in the edges which you need to preserve.  Play around with using this function on the `gtransfers` graph above and see what happens.  Experiment with the `edge.attr.comb` argument to try to control how the attributes are dealt with when combining the edges.
+**Playing around:** An arbitrary number of properties can be added to the vertices and edges of a graph.  If you label one of the properties as `weight` and if that property is numeric, this will change the type of your graph to `W`, a weighted graph.  Try playing around with this by changing the name of the `amt` column to `weight` in `gtransfers`.  Also, earlier we introduced the `simplify()` function in `igraph`.  The `simplify()` function helps turn a graph with multiple edges or with loops into a simple graph.  However, be careful when using this function if your graph has properties stored in the edges which you need to preserve.  Play around with using this function on the `gtransfers` graph above and see what happens.  Experiment with the `edge.attr.comb` function argument to try to control how the attributes are dealt with when collapsing the edges.
 :::
 
 

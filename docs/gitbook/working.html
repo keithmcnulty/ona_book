@@ -58,8 +58,6 @@
 <script src="libs/visNetwork-binding-2.0.9/visNetwork.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
-<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
-<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 <script src="libs/d3-4.5.0/d3.min.js"></script>
 <script src="libs/forceNetwork-binding-0.4/forceNetwork.js"></script>
 <script src="libs/sankey-1/sankey.js"></script>
@@ -179,7 +177,10 @@ div.csl-indent {
 <li><a href="./">Handbook of Regression Modeling in People Analytics</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#note-on-data"><i class="fa fa-check"></i>Note on data</a></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i>Introduction</a></li>
 <li class="chapter" data-level="1" data-path="everywhere.html"><a href="everywhere.html"><i class="fa fa-check"></i><b>1</b> Graphs Everywhere!</a>
 <ul>
@@ -273,8 +274,8 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="4.2" data-path="viz-graphs.html"><a href="viz-graphs.html#visualizing-graphs-in-python"><i class="fa fa-check"></i><b>4.2</b> Visualizing graphs in Python</a>
 <ul>
-<li class="chapter" data-level="4.2.1" data-path="viz-graphs.html"><a href="viz-graphs.html#static-visualizations-using-networkx-and-matplotlib"><i class="fa fa-check"></i><b>4.2.1</b> Static visualizations using <code>networkx</code> and <code>matplotlib</code></a></li>
-<li class="chapter" data-level="4.2.2" data-path="viz-graphs.html"><a href="viz-graphs.html#dynamic-visualization-using-networkx-and-pyvis"><i class="fa fa-check"></i><b>4.2.2</b> Dynamic visualization using <code>networkx</code> and <code>pyvis</code></a></li>
+<li class="chapter" data-level="4.2.1" data-path="viz-graphs.html"><a href="viz-graphs.html#static-plotting-using-networkx-and-matplotlib"><i class="fa fa-check"></i><b>4.2.1</b> Static plotting using <code>networkx</code> and <code>matplotlib</code></a></li>
+<li class="chapter" data-level="4.2.2" data-path="viz-graphs.html"><a href="viz-graphs.html#interactive-visualization-using-networkx-and-pyvis"><i class="fa fa-check"></i><b>4.2.2</b> Interactive visualization using <code>networkx</code> and <code>pyvis</code></a></li>
 </ul></li>
 <li class="chapter" data-level="4.3" data-path="viz-graphs.html"><a href="viz-graphs.html#learning-exercises-2"><i class="fa fa-check"></i><b>4.3</b> Learning exercises</a>
 <ul>
@@ -286,7 +287,7 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="5.1" data-path="restructuring-data.html"><a href="restructuring-data.html#transforming-data-in-rectangular-tables-for-use-in-graphs"><i class="fa fa-check"></i><b>5.1</b> Transforming data in rectangular tables for use in graphs</a>
 <ul>
-<li class="chapter" data-level="5.1.1" data-path="restructuring-data.html"><a href="restructuring-data.html#creating-a-simple-graph-of-the-chinook-management-hierarchy"><i class="fa fa-check"></i><b>5.1.1</b> Creating a simple graph of the Chinook management hierarchy</a></li>
+<li class="chapter" data-level="5.1.1" data-path="restructuring-data.html"><a href="restructuring-data.html#creating-a-simple-graph-of-a-management-hierarchy"><i class="fa fa-check"></i><b>5.1.1</b> Creating a simple graph of a management hierarchy</a></li>
 <li class="chapter" data-level="5.1.2" data-path="restructuring-data.html"><a href="restructuring-data.html#connecting-customers-through-sales-reps"><i class="fa fa-check"></i><b>5.1.2</b> Connecting customers through sales reps</a></li>
 <li class="chapter" data-level="5.1.3" data-path="restructuring-data.html"><a href="restructuring-data.html#common-purchases"><i class="fa fa-check"></i><b>5.1.3</b> Connecting customers through common purchases</a></li>
 <li class="chapter" data-level="5.1.4" data-path="restructuring-data.html"><a href="restructuring-data.html#approaches-using-python"><i class="fa fa-check"></i><b>5.1.4</b> Approaches using Python</a></li>
@@ -422,7 +423,6 @@ div.csl-indent {
 <li class="chapter" data-level="10.4.2" data-path="databases.html"><a href="databases.html#data-exercises-8"><i class="fa fa-check"></i><b>10.4.2</b> Data exercises</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="appendix-descriptions-of-data-sets-used.html"><a href="appendix-descriptions-of-data-sets-used.html"><i class="fa fa-check"></i>Appendix: Descriptions of Data Sets Used</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -453,7 +453,7 @@ div.csl-indent {
 <p>A graph <span class="math inline">\(G\)</span> consists of two sets. The first set <span class="math inline">\(V\)</span> is known as the <em>vertex</em> set or <em>node</em> set. The second set <span class="math inline">\(E\)</span> is known as the <em>edge</em> set, and consists of pairs of elements of <span class="math inline">\(V\)</span>. Given that a graph is made up of these two sets, we will often notate our graph as <span class="math inline">\(G = (V, E)\)</span>. If two vertices appear as a pair in E, then those vertices are said to be <em>adjacent</em> or <em>connected</em> vertices.</p>
 <p>Let’s use an example to illustrate this definition. Figure <a href="working.html#fig:fourpeoplegraph">3.1</a> is a diagram of a graph <span class="math inline">\(G_{\mathrm{work}}\)</span> with four vertices representing four people. An edge connects two vertices if and only if those two people have worked together.</p>
 <div class="figure"><span style="display:block;" id="fig:fourpeoplegraph"></span>
-<img src="_main_files/figure-html/fourpeoplegraph-1.png" alt="A graph $G_\mathrm{work}$ consisting of four people connected according to whether they have worked together" width="672" />
+<img src="_main_files/figure-html/fourpeoplegraph-1.png" alt="A graph $G_\mathrm{work}$ consisting of four people connected according to whether they have worked together" width="90%" />
 <p class="caption">
 Figure 3.1: A graph <span class="math inline">\(G_\mathrm{work}\)</span> consisting of four people connected according to whether they have worked together
 </p>
@@ -479,7 +479,7 @@ E = \{\mathrm{David}\longleftrightarrow\mathrm{Zubin}, \mathrm{David}\longleftri
 <p>The relationship that we are modeling using our edges in the graph <span class="math inline">\(G_{\mathrm{work}}\)</span> is reciprocal in nature. If David has worked with Zubin, then we automatically conclude that Zubin has worked with David. Therefore there is no need for direction in the edges of <span class="math inline">\(G_{\mathrm{work}}\)</span>. We call such a graph an <em>undirected</em> graph. In an undirected graph, the order of the nodes in each pair in the edge set <span class="math inline">\(E\)</span> is not relevant. For example, <span class="math inline">\(\mathrm{David}\longleftrightarrow\mathrm{Zubin}\)</span> is the same as <span class="math inline">\(\mathrm{Zubin}\longleftrightarrow\mathrm{David}\)</span>.</p>
 <p>A graph where direction is important is called a <em>directed</em> graph. As an example, let’s consider a graph <span class="math inline">\(G_{\mathrm{manage}}\)</span> with the same vertex set of four people but where an edge exists between two people if and only if the first person is the manager of the second person, as in Figure <a href="working.html#fig:fourpeoplemanage">3.2</a>.</p>
 <div class="figure"><span style="display:block;" id="fig:fourpeoplemanage"></span>
-<img src="_main_files/figure-html/fourpeoplemanage-1.png" alt="A graph $G_\mathrm{manage}$ consisting of four people connected according to whether one person manages another" width="672" />
+<img src="_main_files/figure-html/fourpeoplemanage-1.png" alt="A graph $G_\mathrm{manage}$ consisting of four people connected according to whether one person manages another" width="90%" />
 <p class="caption">
 Figure 3.2: A graph <span class="math inline">\(G_\mathrm{manage}\)</span> consisting of four people connected according to whether one person manages another
 </p>
@@ -498,14 +498,14 @@ E = \{\mathrm{Suraya}\longrightarrow\mathrm{David}, \mathrm{David}\longrightarro
 <p>Equipped with our general definition of a graph, we can now define different varieties of graphs by adding or allowing certain conditions on the edges of a general graph. There are many such varieties, but here are a few of the more common graph types.</p>
 <p>A <strong>multigraph</strong> is a graph where multiple edges can occur between the same two vertices. Usually this occurs because the edges are defining different kinds of relationships. Travel routes are common examples of multigraphs, where each edge represents a different carrier. For example, Figure <a href="working.html#fig:multiflights">3.3</a> is a graph of flights between the San Francisco (SFO), Philadelphia (PHL) and Tucson (TUS) airports based on a data set from December 2010. The graph is layered onto a map of the United States. Philadelphia to Tucson is not a common route and is only offered by one carrier in one direction, while there are multiple carriers operating in both directions between Philadelphia and San Francisco and between San Francisco and Tucson.</p>
 <div class="figure"><span style="display:block;" id="fig:multiflights"></span>
-<img src="_main_files/figure-html/multiflights-1.png" alt="Carrier routes operating between three US airports in December 2010" width="672" />
+<img src="_main_files/figure-html/multiflights-1.png" alt="Carrier routes operating between three US airports in December 2010" width="90%" />
 <p class="caption">
 Figure 3.3: Carrier routes operating between three US airports in December 2010
 </p>
 </div>
 <p>Multigraphs are also commonly used when individuals or entities can be related to each other in different ways. For example, imagine if we were to combine our <span class="math inline">\(G_{\mathrm{work}}\)</span> and <span class="math inline">\(G_{\mathrm{manage}}\)</span> graphs from Section <a href="working.html#graph-def">3.1.1</a> into one single directed graph depicting both ‘worked with’ and ‘manages’ relationships. It might look like Figure <a href="working.html#fig:gmulti">3.4</a>.</p>
 <div class="figure"><span style="display:block;" id="fig:gmulti"></span>
-<img src="_main_files/figure-html/gmulti-1.png" alt="Graph depicting different types of relationships between individuals" width="672" />
+<img src="_main_files/figure-html/gmulti-1.png" alt="Graph depicting different types of relationships between individuals" width="90%" />
 <p class="caption">
 Figure 3.4: Graph depicting different types of relationships between individuals
 </p>
@@ -517,14 +517,14 @@ E = \{\mathrm{David}\longrightarrow\mathrm{Zubin}, \mathrm{David}\longrightarrow
 \]</span></p>
 <p>An example of where pseudographs frequently occur might be in the analysis of financial transactions. Let’s imagine that we have a graph of three verticies representing different companies A, B and C, where an edge represent a bank transfer from one company to another on a certain day. If a company holds multiple bank accounts, such a graph might look something like Figure <a href="working.html#fig:banktransfer">3.5</a>. An edge which connects a vertex to itself is usually called a <em>loop</em>.</p>
 <div class="figure"><span style="display:block;" id="fig:banktransfer"></span>
-<img src="_main_files/figure-html/banktransfer-1.png" alt="Pseudograph representing bank transfers between three companies A, B and C with a loop on Vertex A" width="672" />
+<img src="_main_files/figure-html/banktransfer-1.png" alt="Pseudograph representing bank transfers between three companies A, B and C with a loop on Vertex A" width="90%" />
 <p class="caption">
 Figure 3.5: Pseudograph representing bank transfers between three companies A, B and C with a loop on Vertex A
 </p>
 </div>
 <p>A <strong>complete graph</strong> is a graph where all pairs of vertices are connected by an edge. Let’s go back to our four characters in <span class="math inline">\(G_\mathrm{work}\)</span> from Section <a href="working.html#graph-def">3.1.1</a>. You may notice that only one pair of these characters have not worked together. Let’s assume that we return a month later and update our graph, and it seems that Zubin and Suraya have now worked together. This means our graph becomes a complete graph as depicted in Figure <a href="working.html#fig:completework">3.6</a>.</p>
 <div class="figure"><span style="display:block;" id="fig:completework"></span>
-<img src="_main_files/figure-html/completework-1.png" alt="Updated version of $G_\mathrm{work}$ with one additional edge to make it a complete graph" width="672" />
+<img src="_main_files/figure-html/completework-1.png" alt="Updated version of $G_\mathrm{work}$ with one additional edge to make it a complete graph" width="90%" />
 <p class="caption">
 Figure 3.6: Updated version of <span class="math inline">\(G_\mathrm{work}\)</span> with one additional edge to make it a complete graph
 </p>
@@ -535,7 +535,7 @@ Figure 3.6: Updated version of <span class="math inline">\(G_\mathrm{work}\)</sp
 </div>
 <p><strong>Bipartite graphs</strong> are graphs that have two disjoint sets of vertices, such that no vertex from one set is connected to any of the vertices in the other set. Imagine we were to add three new individuals to our <span class="math inline">\(G_\mathrm{work}\)</span> graph, and these three individuals all work for a completely different organization to the four people already in the graph. Then the new graph <span class="math inline">\(G_\mathrm{new}\)</span> may look like Figure <a href="working.html#fig:newwork">3.7</a>, with the distinct sets of vertices representing individuals in different organizations.</p>
 <div class="figure"><span style="display:block;" id="fig:newwork"></span>
-<img src="_main_files/figure-html/newwork-1.png" alt="A bipartite graph $G_\mathrm{new}$ showing working relationships involving individuals in separate organizations A and B" width="672" />
+<img src="_main_files/figure-html/newwork-1.png" alt="A bipartite graph $G_\mathrm{new}$ showing working relationships involving individuals in separate organizations A and B" width="90%" />
 <p class="caption">
 Figure 3.7: A bipartite graph <span class="math inline">\(G_\mathrm{new}\)</span> showing working relationships involving individuals in separate organizations A and B
 </p>
@@ -544,7 +544,7 @@ Figure 3.7: A bipartite graph <span class="math inline">\(G_\mathrm{new}\)</span
 <p><strong>Trees</strong> can be regarded as vertices connected by edges, and so trees are graphs. For example, our graph <span class="math inline">\(G_\mathrm{manage}\)</span> in Section <a href="working.html#graph-def">3.1.1</a> is a tree because it displays a hierarchical management structure between individuals. For a graph to be characterized as a tree, there needs to be <em>exactly</em> one path between any pair of vertices when viewed undirected.</p>
 <p>Usually, trees are graphs where the edges represent some sort of hierarchical or nested relationship. Figure <a href="working.html#fig:boybands">3.8</a> shows a tree graph of the author’s favorite boy bands, where an edge indicates that the vertex below is a member of the vertex above. It seems like five is the magic number for a great boy band.</p>
 <div class="figure"><span style="display:block;" id="fig:boybands"></span>
-<img src="_main_files/figure-html/boybands-1.png" alt="Membership of the exclusive class of the author's favourite boy bands can be represented as a tree graph" width="672" />
+<img src="_main_files/figure-html/boybands-1.png" alt="Membership of the exclusive class of the author's favourite boy bands can be represented as a tree graph" width="90%" />
 <p class="caption">
 Figure 3.8: Membership of the exclusive class of the author’s favourite boy bands can be represented as a tree graph
 </p>
@@ -557,7 +557,7 @@ Figure 3.8: Membership of the exclusive class of the author’s favourite boy ba
 <p>As an example, let’s return to our directed pseudograph in Figure <a href="working.html#fig:banktransfer">3.5</a>, which represents bank transfers between companies A, B, and C. In this graph, we only know from the edges that transfers took place, but we do not know how much money was involved in each transfer, and in what currency the transfer was made. If we wanted to capture this information, we could give each edge properties called <code>amt</code> and <code>cur</code> and store the transfer amount and currency in those edge properties. Similarly, we don’t know a great deal about the companies represented by the vertices. Maybe we would like to know where they are located? If so, we can create a vertex property called <code>loc</code> and store the location in that vertex property.</p>
 <p>Figure <a href="working.html#fig:enhancedcompanytransfers">3.9</a> shows this enhanced graph with the vertex and edge properties added diagramatically.</p>
 <div class="figure"><span style="display:block;" id="fig:enhancedcompanytransfers"></span>
-<img src="_main_files/figure-html/enhancedcompanytransfers-1.png" alt="Graph of bank transfers between companies A, B and C with additional information stored as vertex and edge properties" width="672" />
+<img src="_main_files/figure-html/enhancedcompanytransfers-1.png" alt="Graph of bank transfers between companies A, B and C with additional information stored as vertex and edge properties" width="90%" />
 <p class="caption">
 Figure 3.9: Graph of bank transfers between companies A, B and C with additional information stored as vertex and edge properties
 </p>
@@ -579,7 +579,7 @@ E_\mathrm{amt} &amp;= \{150000, 570000, 230000, 175000\}
 </div>
 <p>One of the most common edge properties we will come across is <strong>edge weight</strong>. Weighted edges are edges which are given a numeric value to represent an important construct such as edge importance or connection strength. This can often be used to simplify otherwise complex graphs, and will be frequently used in calculations related to centrality and community. As an example, returning to our flights graph in Figure <a href="working.html#fig:multiflights">3.3</a>, instead of creating an edge for each carrier, we could simplify our graph by creating one edge per route and giving it a weight according to the number of carriers on that route. Such a graph would look like Figure <a href="working.html#fig:weightedflights">3.10</a>.</p>
 <div class="figure"><span style="display:block;" id="fig:weightedflights"></span>
-<img src="_main_files/figure-html/weightedflights-1.png" alt="Simplifying the flights graph using weighted edges to represent the number of carriers on each route.  Edge thickness represents weight." width="672" />
+<img src="_main_files/figure-html/weightedflights-1.png" alt="Simplifying the flights graph using weighted edges to represent the number of carriers on each route.  Edge thickness represents weight." width="90%" />
 <p class="caption">
 Figure 3.10: Simplifying the flights graph using weighted edges to represent the number of carriers on each route. Edge thickness represents weight.
 </p>
@@ -588,7 +588,7 @@ Figure 3.10: Simplifying the flights graph using weighted edges to represent the
 <div id="rep-graphs" class="section level3" number="3.1.4">
 <h3><span class="header-section-number">3.1.4</span> Representations of graphs</h3>
 <p>So far in this chapter we have seen two common ways of representing a graph. The first, and most well known way, is a diagram. The second is an algebraic structure <span class="math inline">\(G = (V, E)\)</span> consisting (at a minimum) of a vertex set <span class="math inline">\(V\)</span> and an edge set <span class="math inline">\(E\)</span>. As we discussed at the beginning of this chapter, diagrams are useful for visualizing und understanding small graphs, but less useful for storing graph data and working with large graphs. When working with graphs in the field of data science, the two most common sources of graph data will be edgelists and adjacency matrices.</p>
-<p>An <strong>edgelist</strong> is the edge set <span class="math inline">\(E\)</span> in our graph <span class="math inline">\(G = (V, E)\)</span>. If we don’t care about <em>isolates</em><a href="#fn16" class="footnote-ref" id="fnref16"><sup>16</sup></a>, then our vertex set <span class="math inline">\(V\)</span> can be derived directly from <span class="math inline">\(E\)</span>. This means that the edgelist is all that is needed to build a graph provided you are happy to ignore isolates. It is common that an analyst is happy to ignore isolates because we are often only interested in the connections or relationships in the data. Let’s look at an example.</p>
+<p>An <strong>edgelist</strong> is the edge set <span class="math inline">\(E\)</span> in our graph <span class="math inline">\(G = (V, E)\)</span>. If we don’t care about <em>isolates</em><a href="#fn17" class="footnote-ref" id="fnref17"><sup>17</sup></a>, then our vertex set <span class="math inline">\(V\)</span> can be derived directly from <span class="math inline">\(E\)</span>. This means that the edgelist is all that is needed to build a graph provided you are happy to ignore isolates. It is common that an analyst is happy to ignore isolates because we are often only interested in the connections or relationships in the data. Let’s look at an example.</p>
 <p>Recall our edge set <span class="math inline">\(E\)</span> in the graph <span class="math inline">\(G_\mathrm{work} = (V, E)\)</span> from Section <a href="working.html#graph-def">3.1.1</a>:</p>
 <span class="math display">\[\begin{gather*}
 E = \{\mathrm{David}\longleftrightarrow\mathrm{Zubin}, \mathrm{David}\longleftrightarrow\mathrm{Suraya}, \mathrm{Suraya}\longleftrightarrow\mathrm{Jane}, \\
@@ -728,9 +728,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <span id="cb121-5"><a href="working.html#cb121-5" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">directed =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <p>We now have our <span class="math inline">\(G_\mathrm{work}\)</span> graph in memory. Before we go any further, let’s take a look at it.</p>
 <div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb122-1"><a href="working.html#cb122-1" aria-hidden="true" tabindex="-1"></a>gwork</span></code></pre></div>
-<pre><code>## IGRAPH e871c78 UN-- 4 5 -- 
+<pre><code>## IGRAPH a288341 UN-- 4 5 -- 
 ## + attr: name (v/c)
-## + edges from e871c78 (vertex names):
+## + edges from a288341 (vertex names):
 ## [1] David --Zubin  David --Suraya David --Jane   Zubin --Jane   Suraya--Jane</code></pre>
 <p>Let’s start with the string <code>UN--</code> on the first line of the output. This string describes the type of graph this is. The letter <code>U</code> denotes an undirected graph, and <code>N</code> denotes a graph with named vertices. The two other properties, which we will discover later, are currently not present and so are represented by the dashes <code>--</code>. Next we have the number of vertices (4) and edges (5), followed by two further dashes.</p>
 <p>On the next line the attributes of the graph are listed. In this case there is just one attribute <code>name</code>, which is a vertex attribute of character type — denoted by <code>(v/c)</code>. Finally the edges of the graph are given using the vertex names. Note that there is no direction to these edges, so they are denoted with <code>--</code>.</p>
@@ -743,9 +743,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <span id="cb124-6"><a href="working.html#cb124-6" aria-hidden="true" tabindex="-1"></a>gmanage_edgelist <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(gmanage_edgelist)</span>
 <span id="cb124-7"><a href="working.html#cb124-7" aria-hidden="true" tabindex="-1"></a>(gmanage <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_edgelist</span>(<span class="at">el =</span> gmanage_edgelist,</span>
 <span id="cb124-8"><a href="working.html#cb124-8" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">directed =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
-<pre><code>## IGRAPH e634535 DN-- 4 3 -- 
+<pre><code>## IGRAPH 3296e8a DN-- 4 3 -- 
 ## + attr: name (v/c)
-## + edges from e634535 (vertex names):
+## + edges from 3296e8a (vertex names):
 ## [1] Suraya-&gt;David David -&gt;Zubin David -&gt;Jane</code></pre>
 <p>We see a similar output to <code>gwork</code>, except we now have a directed graph, donated by <code>D</code> in the first line, and we see that the edges are now denoted with direction using <code>-&gt;</code>.</p>
 </div>
@@ -762,9 +762,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <span id="cb126-8"><a href="working.html#cb126-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">adjmatrix =</span> adj_flights,</span>
 <span id="cb126-9"><a href="working.html#cb126-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">mode =</span> <span class="st">&quot;directed&quot;</span></span>
 <span id="cb126-10"><a href="working.html#cb126-10" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
-<pre><code>## IGRAPH cbd6448 DN-- 3 16 -- 
+<pre><code>## IGRAPH a46abdd DN-- 3 16 -- 
 ## + attr: name (v/c)
-## + edges from cbd6448 (vertex names):
+## + edges from a46abdd (vertex names):
 ##  [1] SFO-&gt;PHL SFO-&gt;PHL SFO-&gt;PHL SFO-&gt;PHL SFO-&gt;TUS SFO-&gt;TUS SFO-&gt;TUS SFO-&gt;TUS PHL-&gt;SFO PHL-&gt;SFO PHL-&gt;SFO PHL-&gt;SFO PHL-&gt;SFO
 ## [14] PHL-&gt;TUS TUS-&gt;SFO TUS-&gt;SFO</code></pre>
 <p>We see the expected directed multigraph with 3 vertices and 16 edges. If we wish to create the weighted graph in Figure <a href="working.html#fig:weightedflights">3.10</a>, we add <code>weighted = TRUE</code> to the arguments.</p>
@@ -774,18 +774,17 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <span id="cb128-4"><a href="working.html#cb128-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">mode =</span> <span class="st">&quot;directed&quot;</span>,</span>
 <span id="cb128-5"><a href="working.html#cb128-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">weighted =</span> <span class="cn">TRUE</span></span>
 <span id="cb128-6"><a href="working.html#cb128-6" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
-<pre><code>## IGRAPH 742decd DNW- 3 5 -- 
+<pre><code>## IGRAPH a735032 DNW- 3 5 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from 742decd (vertex names):
+## + edges from a735032 (vertex names):
 ## [1] SFO-&gt;PHL SFO-&gt;TUS PHL-&gt;SFO PHL-&gt;TUS TUS-&gt;SFO</code></pre>
-<p>We now see a graph with only 5 edges but we see the addition of <code>W</code> in our graph type, indicating a weighted graph. We also see a new edge property of numeric type called <code>weight</code>. In situations where we want to simplify multiple edges to single edges without worrying about weight, the <code>simplify()</code> function in <code>igraph</code> works well, with the <code>remove.multiple</code> argument set to <code>TRUE</code>.</p>
+<p>We now see a graph with only 5 edges but we see the addition of <code>W</code> in our graph type, indicating a weighted graph. We also see a new edge property of numeric type called <code>weight</code>. In situations where we want to simplify multiple edges to single edges without worrying about weight, the <code>simplify()</code> function in <code>igraph</code> works well. By default, <code>simplify()</code> will collapse multiple edges to a single edge and remove any loop edges from vertices to themselves in order to create a simple graph<a href="#fn18" class="footnote-ref" id="fnref18"><sup>18</sup></a>.</p>
 <div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb130-1"><a href="working.html#cb130-1" aria-hidden="true" tabindex="-1"></a>(flightgraph_simple <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">simplify</span>(</span>
-<span id="cb130-2"><a href="working.html#cb130-2" aria-hidden="true" tabindex="-1"></a>  flightgraph,</span>
-<span id="cb130-3"><a href="working.html#cb130-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">remove.multiple =</span> <span class="cn">TRUE</span></span>
-<span id="cb130-4"><a href="working.html#cb130-4" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
-<pre><code>## IGRAPH 0e44e0f DN-- 3 5 -- 
+<span id="cb130-2"><a href="working.html#cb130-2" aria-hidden="true" tabindex="-1"></a>  flightgraph</span>
+<span id="cb130-3"><a href="working.html#cb130-3" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
+<pre><code>## IGRAPH 54bc131 DN-- 3 5 -- 
 ## + attr: name (v/c)
-## + edges from 0e44e0f (vertex names):
+## + edges from 54bc131 (vertex names):
 ## [1] SFO-&gt;PHL SFO-&gt;TUS PHL-&gt;SFO PHL-&gt;TUS TUS-&gt;SFO</code></pre>
 </div>
 <div id="creating-a-graph-from-a-dataframe" class="section level3" number="3.2.3">
@@ -812,9 +811,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <span id="cb132-18"><a href="working.html#cb132-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">directed =</span> <span class="cn">FALSE</span>,</span>
 <span id="cb132-19"><a href="working.html#cb132-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">vertices =</span> vertex_df</span>
 <span id="cb132-20"><a href="working.html#cb132-20" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
-<pre><code>## IGRAPH 32d9081 UN-- 7 8 -- 
+<pre><code>## IGRAPH 190292f UN-- 7 8 -- 
 ## + attr: name (v/c)
-## + edges from 32d9081 (vertex names):
+## + edges from 190292f (vertex names):
 ## [1] David --Zubin  David --Suraya David --Jane   Zubin --Jane   Suraya--Jane   Sandra--Mae-Li Sandra--Jake   Mae-Li--Jake</code></pre>
 <div class="thinkahead">
 <p><strong>Playing around:</strong> The functions in this section are not the only functions in the <code>igraph</code> package that build graphs from data, but they are by far the most commonly used ones. By typing <code>?graph_from</code> in your R console and looking at the functions that autocomplete, you can see some of the other functions that build graphs from data. Try playing around with them if you are curious.</p>
@@ -843,20 +842,20 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <span id="cb134-18"><a href="working.html#cb134-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">directed =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb134-19"><a href="working.html#cb134-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">vertices =</span> vertex_transfers</span>
 <span id="cb134-20"><a href="working.html#cb134-20" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
-<pre><code>## IGRAPH 16a47bc DN-- 3 4 -- 
+<pre><code>## IGRAPH 43c4802 DN-- 3 4 -- 
 ## + attr: name (v/c), loc (v/c), cur (e/c), amt (e/n)
-## + edges from 16a47bc (vertex names):
+## + edges from 43c4802 (vertex names):
 ## [1] A-&gt;A A-&gt;B B-&gt;A B-&gt;C</code></pre>
 <p>We see that the additional edge properties <code>cur</code> and <code>amt</code> and the vertex property <code>loc</code> have been included in the graph. The codes immediately following these properties represent the property type and the data type. We can see that <code>loc</code> is a vertex property of character type (<code>v/c</code>), <code>cur</code> is an edge property of character type (<code>e/c</code>) and <code>amt</code> is an edge property of numeric type (<code>e/n</code>).</p>
 <div class="thinkahead">
-<p><strong>Playing around:</strong> An arbitrary number of properties can be added to the vertices and edges of a graph. If you label one of the properties as <code>weight</code> and if that property is numeric, this will change the type of your graph to <code>W</code>, a weighted graph. Try playing around with this by changing the name of the <code>amt</code> column to <code>weight</code> in <code>gtransfers</code>. Also, earlier we introduced the <code>simplify()</code> function in <code>igraph</code>. The <code>simplify()</code> function helps turn a graph with multiple edges or with loops into a simple graph using the arguments <code>remove.multiple = TRUE</code> and <code>remove.loops = TRUE</code>. However, be careful when using this function if your graph has properties stored in the edges which you need to preserve. Play around with using this function on the <code>gtransfers</code> graph above and see what happens. Experiment with the <code>edge.attr.comb</code> argument to try to control how the attributes are dealt with when combining the edges.</p>
+<p><strong>Playing around:</strong> An arbitrary number of properties can be added to the vertices and edges of a graph. If you label one of the properties as <code>weight</code> and if that property is numeric, this will change the type of your graph to <code>W</code>, a weighted graph. Try playing around with this by changing the name of the <code>amt</code> column to <code>weight</code> in <code>gtransfers</code>. Also, earlier we introduced the <code>simplify()</code> function in <code>igraph</code>. The <code>simplify()</code> function helps turn a graph with multiple edges or with loops into a simple graph. However, be careful when using this function if your graph has properties stored in the edges which you need to preserve. Play around with using this function on the <code>gtransfers</code> graph above and see what happens. Experiment with the <code>edge.attr.comb</code> function argument to try to control how the attributes are dealt with when collapsing the edges.</p>
 </div>
 <p>You can view the vertex and edge sets of a graph using the <code>V()</code> and <code>E()</code> functions respectively.</p>
 <div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb136-1"><a href="working.html#cb136-1" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(gtransfers)</span></code></pre></div>
-<pre><code>## + 3/3 vertices, named, from 16a47bc:
+<pre><code>## + 3/3 vertices, named, from 43c4802:
 ## [1] A B C</code></pre>
 <div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb138-1"><a href="working.html#cb138-1" aria-hidden="true" tabindex="-1"></a><span class="fu">E</span>(gtransfers)</span></code></pre></div>
-<pre><code>## + 4/4 edges from 16a47bc (vertex names):
+<pre><code>## + 4/4 edges from 43c4802 (vertex names):
 ## [1] A-&gt;A A-&gt;B B-&gt;A B-&gt;C</code></pre>
 <p>To see specific properties or attributes within the vertices or edges, the <code>$</code> operator can be used.</p>
 <div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb140-1"><a href="working.html#cb140-1" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(gtransfers)<span class="sc">$</span>name</span></code></pre></div>
@@ -882,18 +881,18 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <span id="cb144-16"><a href="working.html#cb144-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb144-17"><a href="working.html#cb144-17" aria-hidden="true" tabindex="-1"></a><span class="co"># view flightsgraph</span></span>
 <span id="cb144-18"><a href="working.html#cb144-18" aria-hidden="true" tabindex="-1"></a>flightsgraph</span></code></pre></div>
-<pre><code>## IGRAPH 928b324 DNW- 3 5 -- 
+<pre><code>## IGRAPH efa7a1b DNW- 3 5 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from 928b324 (vertex names):
+## + edges from efa7a1b (vertex names):
 ## [1] SFO-&gt;PHL SFO-&gt;TUS PHL-&gt;SFO PHL-&gt;TUS TUS-&gt;SFO</code></pre>
 <p>We see a weighted graph has been created by adding a <code>weight</code> property to the edges of an unweighted graph.</p>
 <p>A bipartite graph can be created by giving the vertices a <code>type</code> property according to the two disjoint sets of vertices. Let’s use our <span class="math inline">\(G_\mathrm{new}\)</span> bipartite graph again as an example, which we generated earlier as the <code>gnew</code> object. In our vertex set, the first four vertices are from organization A and the final three are from organization B.</p>
 <div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb146-1"><a href="working.html#cb146-1" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(gnew)<span class="sc">$</span>type <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">&quot;A&quot;</span>, <span class="dv">4</span>), <span class="fu">rep</span>(<span class="st">&quot;B&quot;</span>, <span class="dv">3</span>))</span>
 <span id="cb146-2"><a href="working.html#cb146-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb146-3"><a href="working.html#cb146-3" aria-hidden="true" tabindex="-1"></a>gnew</span></code></pre></div>
-<pre><code>## IGRAPH 32d9081 UN-B 7 8 -- 
+<pre><code>## IGRAPH 190292f UN-B 7 8 -- 
 ## + attr: name (v/c), type (v/c)
-## + edges from 32d9081 (vertex names):
+## + edges from 190292f (vertex names):
 ## [1] David --Zubin  David --Suraya David --Jane   Zubin --Jane   Suraya--Jane   Sandra--Mae-Li Sandra--Jake   Mae-Li--Jake</code></pre>
 <p>We can see that our graph <code>gnew</code> now has the final of the four graph types: <code>B</code> meaning bipartite.</p>
 <div class="thinkahead">
@@ -925,7 +924,7 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <div class="sourceCode" id="cb151"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb151-1"><a href="working.html#cb151-1" aria-hidden="true" tabindex="-1"></a><span class="co"># list some edges</span></span>
 <span id="cb151-2"><a href="working.html#cb151-2" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(gwork.edges)[<span class="dv">0</span>:<span class="dv">3</span>]</span></code></pre></div>
 <pre><code>## [(&#39;David&#39;, &#39;Zubin&#39;), (&#39;David&#39;, &#39;Suraya&#39;), (&#39;David&#39;, &#39;Jane&#39;)]</code></pre>
-<p>A graph can also be constructed from an edgelist in a Pandas DataFrame. By default the edgelist needs to have the columns <code>source</code> and <code>target</code><a href="#fn17" class="footnote-ref" id="fnref17"><sup>17</sup></a>.</p>
+<p>A graph can also be constructed from an edgelist in a Pandas DataFrame. By default the edgelist needs to have the columns <code>source</code> and <code>target</code><a href="#fn19" class="footnote-ref" id="fnref19"><sup>19</sup></a>.</p>
 <div class="sourceCode" id="cb153"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb153-1"><a href="working.html#cb153-1" aria-hidden="true" tabindex="-1"></a>gwork_edgelist<span class="op">=</span><span class="bu">dict</span>(</span>
 <span id="cb153-2"><a href="working.html#cb153-2" aria-hidden="true" tabindex="-1"></a>  source<span class="op">=</span>[<span class="st">&quot;David&quot;</span>, <span class="st">&quot;David&quot;</span>, <span class="st">&quot;David&quot;</span>, <span class="st">&quot;Jane&quot;</span>, <span class="st">&quot;Jane&quot;</span>],</span>
 <span id="cb153-3"><a href="working.html#cb153-3" aria-hidden="true" tabindex="-1"></a>  target<span class="op">=</span>[<span class="st">&quot;Zubin&quot;</span>, <span class="st">&quot;Suraya&quot;</span>, <span class="st">&quot;Jane&quot;</span>, <span class="st">&quot;Zubin&quot;</span>, <span class="st">&quot;Suraya&quot;</span>]</span>
@@ -1064,14 +1063,14 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 </div>
 <div id="data-exercises-1" class="section level3" number="3.4.2">
 <h3><span class="header-section-number">3.4.2</span> Data exercises</h3>
-<p>Load the <code>koenigsberg</code> edgelist from the <code>onadata</code> package or load it as a dataframe from the internet<a href="#fn18" class="footnote-ref" id="fnref18"><sup>18</sup></a>. This is the edgelist for the <em>Bridges of Königsberg</em> problem we looked at in Chapter <a href="everywhere.html#everywhere">1</a>. Use your software of choice for the following exercises.</p>
+<p>Load the <code>koenigsberg</code> edgelist from the <code>onadata</code> package or load it as a dataframe from the internet<a href="#fn20" class="footnote-ref" id="fnref20"><sup>20</sup></a>. This is the edgelist for the <em>Bridges of Königsberg</em> problem we looked at in Chapter <a href="everywhere.html#everywhere">1</a>. Use your software of choice for the following exercises.</p>
 <ol style="list-style-type: decimal">
 <li>Create a graph object using this edgelist. Ensure that it is undirected.</li>
 <li>By exploring the graph object you just created, determine how many vertices and edges are in this graph. Does this make sense given the original problem tackled by Euler?</li>
 <li>Obtain a list of the names of the vertices in this graph.</li>
 <li>Find a function or method in your graph package to create the adjacency matrix or adjacency list for this graph. Check the output to see if it makes sense.</li>
 </ol>
-<p>Load the <code>pizza</code> data set from the <code>onadata</code> package or load it as a dataframe from the internet<a href="#fn19" class="footnote-ref" id="fnref19"><sup>19</sup></a>. This dataset represents requests made by Reddit users on a thread called <em>Random Acts of Pizza</em> or <em>ROAP</em>, and is part of a larger dataset used for research purposes<a href="#fn20" class="footnote-ref" id="fnref20"><sup>20</sup></a>. The <code>requester</code> column represents users who made requests for pizza and the <code>responder</code> column represents users who read the request and responded to the request by giving pizza<a href="#fn21" class="footnote-ref" id="fnref21"><sup>21</sup></a>. Other columns represent the request ID and data on the requester at the time the request was made.</p>
+<p>Load the <code>pizza</code> data set from the <code>onadata</code> package or load it as a dataframe from the internet<a href="#fn21" class="footnote-ref" id="fnref21"><sup>21</sup></a>. This dataset represents requests made by Reddit users on a thread called <em>Random Acts of Pizza</em> or <em>ROAP</em>, and is part of a larger dataset used for research purposes<a href="#fn22" class="footnote-ref" id="fnref22"><sup>22</sup></a>. The <code>requester</code> column represents users who made requests for pizza and the <code>responder</code> column represents users who read the request and responded to the request by giving pizza<a href="#fn23" class="footnote-ref" id="fnref23"><sup>23</sup></a>. Other columns represent the request ID and data on the requester at the time the request was made.</p>
 <ol start="5" style="list-style-type: decimal">
 <li>Use an appropriate method to create a graph object using the <code>requester</code> and <code>responder</code> columns in this data set.</li>
 <li>Use the information contained in the graph object to determine how many pizza requests were fulfilled.</li>
@@ -1092,13 +1091,14 @@ Althoff, Tim, Cristian Danescu-Niculescu-Mizil, and Dan Jurafsky. 2014. <span>�
 </div>
 <div class="footnotes">
 <hr />
-<ol start="16">
-<li id="fn16"><p>Isolates, also known as singletons, are vertices which are not connected to any other vertices. Many real life graphs contain isolates which will often be removed in order to better focus on connected components.<a href="working.html#fnref16" class="footnote-back">↩︎</a></p></li>
-<li id="fn17"><p>These columns can also be named differently and identified via the <code>source</code> and <code>target</code> arguments in the <code>from_pandas_edgelist()</code> function.<a href="working.html#fnref17" class="footnote-back">↩︎</a></p></li>
-<li id="fn18"><p><a href="https://ona-book.org/data/koenigsberg.csv" class="uri">https://ona-book.org/data/koenigsberg.csv</a><a href="working.html#fnref18" class="footnote-back">↩︎</a></p></li>
-<li id="fn19"><p><a href="https://ona-book.org/data/pizza.csv" class="uri">https://ona-book.org/data/pizza.csv</a><a href="working.html#fnref19" class="footnote-back">↩︎</a></p></li>
-<li id="fn20"><p><span class="citation"><a href="#ref-altruistic" role="doc-biblioref">Althoff, Danescu-Niculescu-Mizil, and Jurafsky</a> (<a href="#ref-altruistic" role="doc-biblioref">2014</a>)</span><a href="working.html#fnref20" class="footnote-back">↩︎</a></p></li>
-<li id="fn21"><p>This data set is only a small subset of the full data set, which included many requests which were not fulfilled. As we all know, a free pizza is a rare thing!<a href="working.html#fnref21" class="footnote-back">↩︎</a></p></li>
+<ol start="17">
+<li id="fn17"><p>Isolates, also known as singletons, are vertices which are not connected to any other vertices. Many real life graphs contain isolates which will often be removed in order to better focus on connected components.<a href="working.html#fnref17" class="footnote-back">↩︎</a></p></li>
+<li id="fn18"><p>If you only want to do one of these—such as remove loops but not multiples—you can set this in the function arguments using <code>remove.multiples = FALSE</code> or <code>remove.loops = FALSE</code>.<a href="working.html#fnref18" class="footnote-back">↩︎</a></p></li>
+<li id="fn19"><p>These columns can also be named differently and identified via the <code>source</code> and <code>target</code> arguments in the <code>from_pandas_edgelist()</code> function.<a href="working.html#fnref19" class="footnote-back">↩︎</a></p></li>
+<li id="fn20"><p><a href="https://ona-book.org/data/koenigsberg.csv" class="uri">https://ona-book.org/data/koenigsberg.csv</a><a href="working.html#fnref20" class="footnote-back">↩︎</a></p></li>
+<li id="fn21"><p><a href="https://ona-book.org/data/pizza.csv" class="uri">https://ona-book.org/data/pizza.csv</a><a href="working.html#fnref21" class="footnote-back">↩︎</a></p></li>
+<li id="fn22"><p><span class="citation"><a href="#ref-altruistic" role="doc-biblioref">Althoff, Danescu-Niculescu-Mizil, and Jurafsky</a> (<a href="#ref-altruistic" role="doc-biblioref">2014</a>)</span><a href="working.html#fnref22" class="footnote-back">↩︎</a></p></li>
+<li id="fn23"><p>This data set is only a small subset of the full data set, which included many requests which were not fulfilled. As we all know, a free pizza is a rare thing!<a href="working.html#fnref23" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>

@@ -26,36 +26,36 @@ comp2 <- igraph::graph_from_data_frame(edges, directed = TRUE)
 
 set.seed(123)
 ggraph(comp1, layout = "kk") +
-  geom_edge_link(color = "grey", alpha = 0.7) +
+  geom_edge_link(color = "grey") +
   geom_node_point(color = "lightblue", size = 6) +
   geom_node_text(aes(label = name)) +
   theme_void()
 ```
 
-```{r component2, echo = FALSE, fig.align = "center", fig.cap = "A directed graph with three connected components, one strongly connected, one weakly connected and one unilaterallu connected"}
+```{r component2, echo = FALSE, fig.align = "center", fig.cap = "A directed graph with three connected components, one strongly connected, one weakly connected and one unilaterally connected"}
 set.seed(123)
 ggraph(comp2, layout = "kk") +
-  geom_edge_link(color = "grey", alpha = 0.7, arrow = arrow()) +
+  geom_edge_link(color = "grey", arrow = arrow()) +
   geom_node_point(color = "lightblue", size = 6) +
   geom_node_text(aes(label = name)) +
   theme_void()
 ```
 
-Connected components of disconnected graphs are important to identify, because many of the measures we have learned so far break down for disconnected graphs.  For example, the diameter of a disconnected graph is defined as infinite by mathematical convention, but this is not a useful practical measure. Usually when we want to know the diameter of a graph, we want to understand that largest *finite* distance between any two vertices,  which translates to the diameter of the largest connected component in the graph.  Therefore most calculations of diameter in disconnected graphs require us to be able to identify the largest connected component. 
+Connected components of disconnected graphs are important to identify, because many of the measures we have learned so far break down for disconnected graphs.  For example, the diameter of a disconnected graph is theoretically defined as infinite by mathematical convention, but this is not a useful practical measure. Usually when we want to know the diameter of a graph, we want to understand the largest *finite* distance between any two vertices,  which translates to the diameter of the largest connected component in the graph.  Therefore most calculations of diameter in disconnected graphs require us to be able to identify the largest connected component. 
 
 It is not too difficult to think of an algorithm that can determine all the connected components of a graph.  If you are interested in this see the exercises at the end of this chapter.
 
 :::{.thinkahead data-latex=""}
-**Playing around**:  Go back and try to find some examples in earlier chapters of graphs that are disconnected, and calculate the diameter that is returned by the functions in R or Python packages.  For example, you could try the Random Acts of Pizza graph from the exercises at the end of Chapter \@ref(viz-graphs) or the graph of reported friendships from the `schoolfriends` data set at the end of the previous chapter.  What do these functions return?
+**Playing around**:  Go back and try to find some examples in earlier chapters of graphs that are disconnected, and calculate the diameter that is returned by the functions in R or Python packages.  For example, you could try the Random Acts of Pizza graph from the exercises at the end of Chapter \@ref(viz-graphs) or the graph of reported friendships from the `schoolfriends` data set at the end of the previous chapter.  What do diameter functions return for these graphs?
 :::
 
 ### Vertex partitioning
 
 Often graphs will be connected but we still want to divide the vertices up into mutually exclusive subgroups of interest.  Such a division is called a **partition** of a graph.  In a partition, all vertices must be in one and only one subgroup.  Partitions are created through making cuts in a graph.
 
-A **cut** in a graph $G$ is a set of edges that divide the vertices of $G$ into two disjoint subsets.  The number of edges is known as the size of the cut.  In Figure \@ref(fig:cutex), edges e3, e4 and e5 divide the graph into two disjoint connected sets and represents a cut of size 3. 
+A **cut** in a graph $G$ is a set of edges that divide the vertices of $G$ into two disjoint subsets.  The number of edges is known as the *size* of the cut.  In Figure \@ref(fig:cutex), edges e3, e4 and e5 divide the graph into two disjoint connected sets and represents a cut of size 3. 
 
-A **minimum cut** is a cut where no other cut exists in $G$ with a smaller number of edges.  In Figure \@ref(fig:cutex), it should not be difficult to see that mimimum cuts have size 1 can be achieved with either e1 or e2.  In both cases these minimum cuts divide the graph into a connected component and an isolate^[Maximum cuts are cuts where no other cuts exist with a greater number of edges.  Maximum cuts in graphs are extremely challenging. Luckily, we rarely need them in organizational network analysis.].  
+A **minimum cut** is a cut where no other cut exists in $G$ with a smaller number of edges.  In Figure \@ref(fig:cutex), it should not be difficult to see that mimimum cuts have size 1 and can be achieved with either e1 or e2.  In both cases these minimum cuts divide the graph into a connected component and an isolate^[Maximum cuts are cuts where no other cuts exist with a greater number of edges.  Maximum cuts in graphs are extremely challenging to determine. Luckily, we rarely need them in organizational network analysis.].  
 
 ```{r cutex, echo = FALSE, fig.align = "center", fig.cap = "Cuts are defined by edges that split the vertices of a graph into disjoint subsets"}
 cutex_edges <- data.frame(
@@ -68,7 +68,7 @@ cutex <- igraph::graph_from_data_frame(cutex_edges, directed = FALSE)
 
 set.seed(123)
 ggraph(cutex, layout = "fr") +
-  geom_edge_link(aes(label = label), color = "grey", alpha = 0.7) +
+  geom_edge_link(aes(label = label), color = "grey") +
   geom_node_point(color = "lightblue", size = 6) +
   geom_node_text(aes(label = name)) +
   theme_void()
@@ -80,27 +80,27 @@ In directed graphs, cuts can be defined according to the direction of edges, and
 
 ### Vertex clustering and community detection
 
-Vertex **clustering** refers to the process of partitioning a graph in order to satisfy a certain objective. Most commonly in organizational network analysis, that objective is to achieve a high edge density between the vertices inside a cluster, and a low edge density between vertices that are in different clusters.  Such highly connected clusters are usually referred to as communities and the process of determining optimal communities in a graph is knows as **community detection**^[The meaning of 'high' and 'low' edge density is relative and really depends on the nature of the graph, and algorithms will do their best to find communities which maximize the difference between in-community density and cross-community density, even though some or all of these communities may not end up having have particularly high edge density].  Community detection is an unsupervised process.  When we perform community detection on a graph, we do not know in advance how many communities we seek to find or the size of those communities.
+Vertex **clustering** refers to the process of partitioning a graph in order to satisfy a certain objective. Most commonly in organizational network analysis, that objective is to achieve a high edge density between the vertices inside a cluster, and a low edge density between vertices that are in different clusters.  Such highly connected clusters are usually referred to as **communities** and the process of determining optimal communities in a graph is knows as **community detection** or **community discovery**^[The meaning of 'high' and 'low' edge density is relative and really depends on the nature of the graph, and algorithms will do their best to find communities which maximize the difference between in-community density and cross-community density, even though some or all of these communities may not end up having have particularly high edge density].  Community detection is an unsupervised process.  When we perform community detection on a graph, we do not know in advance how many communities we seek to find or the size of those communities.
 
-The most commonly used (and fastest) community detection algorithm is the Louvain algorithm.  The Louvain algorithm accepts a graph and partitions it into subsets of vertices by trying to maximize the *modularity* of the graph.  Modularity measures how dense the connections are within subsets of vertices in a graph by comparing the density to that which would be expected from a random graph.  In an unweighted and undirected graph, modularity takes a value between -0.5 and +1.  Any value above zero means that the the vertices inside the subgroups are more densely connected than would be expected by chance.  The higher the modularity of a graph, the more connected the vertices are inside the subgroups compared to between the subgroups, and therefore the more certain we can be that the subgroups represent genuine communities.  The approximate steps of the Louvain algorithm are in two phases as follows:
+The most commonly used (and fastest) community detection algorithm is the Louvain algorithm.  The Louvain algorithm  partitions a graph into subsets of vertices by trying to maximize the *modularity* of the graph.  Modularity measures how dense the connections are within subsets of vertices in a graph by comparing the density to that which would be expected from a random graph.  In an unweighted and undirected graph, modularity takes a value between -0.5 and +1.  Any value above zero means that the the vertices inside the subgroups are more densely connected than would be expected by chance.  The higher the modularity of a graph, the more connected the vertices are inside the subgroups compared to between the subgroups, and therefore the more certain we can be that the subgroups represent genuine communities of more intense connection.  The approximate steps of the Louvain algorithm are in two phases as follows:
 
 1.  The algorithm starts with each vertex in its own community.
-2.  Vertices are moved into other communities and modularity is calculated.  
+2.  Vertices are moved into other communities and modularity is calculated.
 3.  When the algorithm reaches a point where further vertex moves do not increase modularity, it finishes its first phase.
 4.  In the second phase, the communities resulting from the first phase are aggregated to form a simpler pseudograph where each vertex represents a community, where loop edges on a vertex are weighted by the total number of edges inside that community, and where edges between vertices are weighted by the total number of edges between those communities^[This also works with weighted edges, assuming that weights represent 'closeness' of connection, which they usually do in organizational contexts.].  In this heuristic step, vertices are moved in this simpler graph with the aim of improving modularity.  That is, communities may be combined if modularity is improved.
 5.  Phases 1 and 2 are repeated until modularity cannot be further improved.
 
 A more recently developed community detection algorithm which improves on the Louvain algorithm is the Leiden algorithm.  The Leiden algorithm operates similarly to Louvain, but has an additional refinement process at the end of the first phase which helps increase the options for improved modularity in the second phase.  The Leiden algorithm will always achieve results as good as the Louvain algorithm, and in many cases may detect communities which are better connected than those detected by Louvain.
 
-Both the Louvain and Leiden algorithms are good options for performing community detection in an organizational context.  However, there are numerous other options, many of which are available in common data science packages.   For example, the Girvan-Newman algorithm operates in a very different way by starting with an entire graph and progressively removing important edges to potentially reveal high modularity subgroups.  For more detailed reference on the Louvain and Leiden algorithms see @traag and for more general insight into a broader range of community detection algorithms, see @yang. 
+Both the Louvain and Leiden algorithms are good options for performing community detection in an organizational context.  However, there are numerous other options, many of which are available in common data science packages.   For example, the Girvan-Newman algorithm operates in a very different way by starting with an entire graph and progressively removing important edges to potentially reveal high modularity subgroups.  For a more detailed reference on the Louvain and Leiden algorithms see @traag and for more general insight into a broader range of community detection algorithms, see @yang. 
 
-One important aspect of community detection which is often not understood is that community detection algorithms classify vertices into subgroups, but offer no direct insight into the *nature* of those subgroups.  Further analytic techniques need to be applied to help describe the subgroups in a meaningful way.  For example, the subgroups could be compared to known characteristics of the network (such as department in the `workfrance` graph or class in the `schoolfriends` graph).  We will examine this using an example later in this chapter.
+One important aspect of community detection which is often not understood is that community detection algorithms classify vertices into subgroups, but offer no direct insight into the *nature* of those subgroups.  Further analytic techniques need to be applied to help describe the subgroups in a meaningful way.  For example, the subgroups could be compared to known 'ground truth' characteristics of the network (such as department in the `workfrance` graph or class in the `schoolfriends` graph).  We will examine this using an example later in this chapter.
 
 ### Cliques
 
 A **clique** is a subset of vertices in an undirected graph whose induced subgraph is complete.  That is, the induced subgraph has an edge density of 1.  This is best understood as the most intense possible type of community in an undirected graph.  A **maximal clique** is a clique which cannot be extended by adding another vertex.  A **largest clique** is a clique with the greatest number of vertices of all cliques in the graph.  
 
-In Figure \@ref(fig:cutex), the following are maximal cliques:  $B \longleftrightarrow C$, $A \longleftrightarrow C$, $C \longleftrightarrow E \longleftrightarrow F$ and $C \longleftrightarrow D \longleftrightarrow F$ because no other vertex can be added to these cliques without creating an incomplete graph.  $C \longleftrightarrow E \longleftrightarrow F$ and $C \longleftrightarrow D \longleftrightarrow F$ are largest cliques because there is no other clique in the graph that has more than three vertices.
+In Figure \@ref(fig:cutex), the following are maximal cliques:  $B \longleftrightarrow C$, $A \longleftrightarrow C$, $C \longleftrightarrow E \longleftrightarrow F$ and $C \longleftrightarrow D \longleftrightarrow F$ because no other vertex can be added to these cliques without creating an incomplete graph.  $C \longleftrightarrow E \longleftrightarrow F$ and $C \longleftrightarrow D \longleftrightarrow F$ are largest cliques because there is no clique in the graph that has more than three vertices.
 
 Finding a single maximal clique in an undirected graph is not a complex problem and can be done quickly using a standard search algorithm starting on an arbitrary vertex. However, finding maximal cliques of a specified size, or all maximal cliques, as well as finding largest cliques, are problems whose complexity increases with the size and density of a graph.  Care should be taken in attempting these algorithms on very large graphs. 
 
@@ -115,13 +115,15 @@ Finding a single maximal clique in an undirected graph is not a complex problem 
 
 To illustrate the `components()` function in `igraph` we will load up the `schoolfriends` edgelist dataset from an earlier chapter.  We will use reported friendships, create a directed graph and visualize it as in Figure \@ref(fig:viz-schoolfriends-rp).
 
-```{r viz-schoolfriends-rp, fig.align = "center", fig.cap = "The directed graph of reported friendships from the `schoolfriends` data set"}
+```{r viz-schoolfriends-rp, fig.align = "center", fig.cap = "The directed graph of reported friendships from our French high school"}
 library(igraph)
 library(ggraph)
 library(dplyr)
 
 # get schoolfriends edgelist
-schoolfriends_edgelist <- read.csv("https://ona-book.org/data/schoolfriends_edgelist.csv")
+schoolfriends_edgelist <- read.csv(
+  "https://ona-book.org/data/schoolfriends_edgelist.csv"
+)
 
 # just use reported friendships
 schoolfriends_reported <- schoolfriends_edgelist |> 
@@ -133,9 +135,9 @@ schoolfriends_rp <- igraph::graph_from_data_frame(schoolfriends_reported)
 # visualize
 set.seed(123)
 ggraph(schoolfriends_rp) + 
-  geom_edge_link(color = "grey", alpha = 0.7, 
+  geom_edge_link(color = "grey",
                  arrow = arrow(length = unit(0.2, "cm"))) +
-  geom_node_point(size = 2, color = "lightblue") +
+  geom_node_point(size = 2, color = "blue") +
   theme_void()
 ```
 
@@ -169,7 +171,7 @@ V(schoolfriends_rp)$component <- schoolfriends_components$membership
 
 # visualize
 ggraph(schoolfriends_rp) + 
-  geom_edge_link(color = "grey", alpha = 0.7, 
+  geom_edge_link(color = "grey", 
                  arrow = arrow(length = unit(0.2, "cm"))) +
   geom_node_point(size = 2, aes(color = as.factor(component))) +
   labs(color = "Component") +
@@ -177,14 +179,14 @@ ggraph(schoolfriends_rp) +
 ```
 
 :::{.thinkahead data-latex=""}
-**Playing around:** Weakly connected components of a directed graph are easier to spot with the naked eye compared to strongly connected components.  Why?  Remind yourself of the definition of weakly connected from earlier in this chapter.  Try to repeat this analysis to visualize all strongly connected components in the reported `schoolfriends`graph and see the difference.
+**Playing around:** Weakly connected components of a directed graph are easier to spot with the naked eye compared to strongly connected components.  Why?  Remind yourself of the definition of weakly connected from earlier in this chapter.  Try to repeat this analysis to visualize all strongly connected components in the reported `schoolfriends` graph and see the difference.
 :::
 
 ### Partioning and community detection in R
 
-For the next few examples we will return to *Zachary's Karate Club* network from Chapter \@ref(viz-graphs).  Let's load up and visualize that directed graph and mark the known leading actors Mr Hi and John A with larger vertices, as in Figure \@ref(fig:karate8).
+For the next few examples we will return to *Zachary's Karate Club* network from Chapter \@ref(viz-graphs).  Let's load up and visualize that undirected graph and mark the known leading actors Mr Hi and John A with larger vertices, as in Figure \@ref(fig:karate8).
 
-```{r karate8, fig.align = "center", fig.cap = "The `karate` graph with Mr Hi and John A indicated with larger vertices"}
+```{r karate8, fig.align = "center", fig.cap = "Zachary's Karate Club graph with Mr Hi and John A indicated with larger vertices"}
 # get karate edgelist
 karate_edges <- read.csv("https://ona-book.org/data/karate.csv")
 
@@ -197,17 +199,23 @@ V(karate)$leader <- ifelse(V(karate)$name %in% c("Mr Hi", "John A"), 1, 0)
 # visualize
 set.seed(123)
 ggraph(karate, layout = "fr") +
-  geom_edge_link(color =  "grey", alpha = 0.7) +
-  geom_node_point(aes(size = as.factor(leader)), color = "lightblue",
+  geom_edge_link(color =  "grey") +
+  geom_node_point(aes(size = as.factor(leader)), color = "blue",
                   show.legend = FALSE) +
   theme_void()
 ```
 
 Minimum cuts in graphs can be found using the `min_cut()` function in `igraph`.  This will return the number of edges in the minimum cut, unless you use the `value.only = FALSE` argument, in which case it will return more information on the cut,
 
-```{r}
+```{r, eval = FALSE}
 igraph::min_cut(karate, value.only = FALSE)
 ```
+
+`r if (knitr::is_latex_output()) '\\footnotesize'`
+```{r, echo = FALSE}
+igraph::min_cut(karate, value.only = FALSE)
+```
+`r if (knitr::is_latex_output()) '\\normalsize'`
 
 We see that a minimum cut exists of size 1 between Mr Hi and Actor 12.
 
@@ -229,10 +237,10 @@ sizes(communities)
 
 We have four detected communities of varying sizes.  As before, we can color code to visualize these, as in Figure \@ref(fig:karate-communities).
 
-```{r karate-communities, fig.align="center", fig.cap = "Communities of the `karate` graph as detected by the Louvain algorithm"}
+```{r karate-communities, fig.align="center", fig.cap = "Communities of Zachary's Karate Club as detected by the Louvain algorithm"}
 set.seed(123)
 ggraph(karate, layout = "fr") +
-  geom_edge_link(color =  "grey", alpha = 0.7) +
+  geom_edge_link(color =  "grey") +
   geom_node_point(aes(size = as.factor(leader), color = as.factor(community)),
                   show.legend = FALSE) +
   theme_void()
@@ -249,7 +257,7 @@ The `cliques()` and `max_cliques()` function in `igraph` identifies all cliques 
 max_cliques(karate, min = 5, max = 5)
 ```
 
-The `largest_cliques()` finds all largest cliques in a graph.
+The `largest_cliques()` function finds all largest cliques in a graph.
 
 ```{r}
 largest_cliques(karate)
@@ -268,17 +276,21 @@ clique_num(karate)
 
 For *undirected graphs*, the `networkx` function `number_connected_components()` returns the number of connected components in the graph while the `connected_components()` function returns the vertices in each connected component.  
 
-For *directed graphs*, the similar functions identify weakly and strongly connected components.  Let's use the reported friendships from the `schoolfriends` data set as an example.
+For *directed graphs*, similar functions identify weakly and strongly connected components.  Let's use the reported friendships from the `schoolfriends` data set as an example.
 
 ```{python}
 import pandas as pd
 import networkx as nx
 
 # get schoolfriends edgelist
-schoolfriends_edges = pd.read_csv("https://ona-book.org/data/schoolfriends_edgelist.csv")
+schoolfriends_edges = pd.read_csv(
+  "https://ona-book.org/data/schoolfriends_edgelist.csv"
+)
 
 # use only reported friendships
-schoolfriends_reported = schoolfriends_edges[schoolfriends_edges.type == "reported"]
+schoolfriends_reported = schoolfriends_edges[
+  schoolfriends_edges.type == "reported"
+]
 
 # create directed graph
 schoolfriends_rp = nx.from_pandas_edgelist(
@@ -329,10 +341,10 @@ nx.minimum_edge_cut(karate)
 len(nx.minimum_edge_cut(karate))
 ```
 
-Various built-in community detection algorithms are available in the the `networkx.community` module, such as the Girvan-Newman edge betweenness algorithm.  This generates communities by progressively removing edges with the highest edge betweenness centrality.  It returns an iterator object where the first element is the result of the first edge removal, and subsequent elements are the result of progressive edge removal.
+Various built-in community detection algorithms are available in the `networkx.community` module, such as the Girvan-Newman edge betweenness algorithm.  This generates communities by progressively removing edges with the highest edge betweenness centrality.  It returns an iterator object where the first element is the result of the first edge removal, and subsequent elements are the result of progressive edge removal.
 
-```{python}
-# get communities based on girvan-newman and sort according to no of communities
+```{python, wrap = TRUE}
+# get communities based on girvan-newman and sort by no of communities
 communities = sorted(
   nx.community.girvan_newman(karate), 
   key = len
@@ -362,7 +374,7 @@ louvain_comms = algorithms.louvain(karate)
 
 `louvain_comms` is a clustering object that has a lot of useful properties and methods.  To see the communities:
 
-```{python}
+```{python, wrap = TRUE}
 louvain_comms.communities
 ```
 
@@ -393,11 +405,11 @@ communities = louvain_comms.to_node_community_map()
 communities = [communities[k].pop() for k in node]
 
 # create color map
-viridis = cm.get_cmap('viridis', max(communities) + 1)
+pastel2 = cm.get_cmap('Pastel2', max(communities) + 1)
 
 # visualize
 np.random.seed(123)
-nx.draw_spring(karate, labels = nodelabels, cmap = viridis,
+nx.draw_spring(karate, labels = nodelabels, cmap = pastel2,
 node_color = communities, edge_color = "grey")
 plt.show()
 ```
@@ -417,21 +429,21 @@ communities = louvain_comms.to_node_community_map()
 communities = [communities[k].pop() for k in node]
 
 # create color map
-viridis = cm.get_cmap('viridis', max(communities) + 1)
+pastel2 = cm.get_cmap('Pastel2', max(communities) + 1)
 
 # visualize
 np.random.seed(123)
-nx.draw_spring(karate, labels = nodelabels, cmap = viridis,
+nx.draw_spring(karate, labels = nodelabels, cmap = pastel2,
 node_color = communities, edge_color = "grey")
 plt.savefig("www/segmentation/karate-py-conn.png", bbox_inches = "tight")
 ```
 
-```{r karate-py-conn, echo = FALSE, fig.align="center", fig.cap="Best Louvain partition of the `karate` graph", out.width = "90%"}
+```{r karate-py-conn, echo = FALSE, fig.align="center", fig.cap="Best Louvain partition of Zachary's Karate Club graph", out.width = "90%"}
 knitr::include_graphics("www/segmentation/karate-py-conn.png")
 ```
 
 :::{.thinkahead data-latex=""}
-**Playing around:** The options for community detection algorithms in the `cdlib` Python package are incredible.  Consider playing around with some different algorithm.  For example, you could try to visualize the community structure based on the Leiden algorithm.  It's also worth spending a little time exploring the technical documentation for the  `cdlib` package^[https://cdlib.readthedocs.io/en/latest] to see the range of methods available.
+**Playing around:** The options for community detection algorithms in the `cdlib` Python package are extensive.  Consider playing around with some different algorithms.  For example, you could try to visualize the community structure based on the Leiden algorithm.  It's also worth spending a little time exploring the technical documentation for the  `cdlib` package^[https://cdlib.readthedocs.io/en/latest] to see the range of methods available.
 :::
 
 ### Finding cliques in Python
@@ -467,14 +479,18 @@ In this section we will illustrate the implementation and interpretation of comm
 
 ### Detecting communities and cliques among Facebook friends {#schoolfriend-community}
 
-Let's reload our Facebook schoolfriends graph so that we can investigate communities and cliques inside it.
+Let's reload our Facebook school friends graph and remove any isolates so that we can investigate communities and cliques inside it.
 
 ```{r}
 # get schoolfriends data
-schoolfriends_edgelist <- read.csv("https://ona-book.org/data/schoolfriends_edgelist.csv")
-schoolfriends_vertices <- read.csv("https://ona-book.org/data/schoolfriends_vertices.csv")
+schoolfriends_edgelist <- read.csv(
+  "https://ona-book.org/data/schoolfriends_edgelist.csv"
+)
+schoolfriends_vertices <- read.csv(
+  "https://ona-book.org/data/schoolfriends_vertices.csv"
+)
 
-# facebook only
+# facebook friendships only
 schoolfriends_facebook <- schoolfriends_edgelist |> 
   dplyr::filter(type == "facebook")
 
@@ -516,6 +532,7 @@ V(schoolfriends_fb)$clique6 <- ifelse(
   V(schoolfriends_fb) %in% cliques[[6]], 1, 0
 )
 
+# visualize
 set.seed(123)
 ggraph(schoolfriends_fb, layout = "fr") +
   geom_edge_link(color = "grey", alpha = 0.7) +
@@ -532,14 +549,14 @@ Now let's use the Louvain algorithm to detect communities in our graph.
 # get optimal louvain communities
 communities <- igraph::cluster_louvain(schoolfriends_fb)
 
-# assign as a vertex property
+# assign community as a vertex property
 V(schoolfriends_fb)$community <- membership(communities)
 
 # how many communities?
 length(unique(V(schoolfriends_fb)$community))
 ```
 
-Six communities have been identified.  Let's compare the modularity of this community structure to the known communities of class and gender.
+Six communities have been identified.  Let's compare the modularity of this community structure to the known ground truth communities of class and gender.
 
 ```{r}
 # modularity of louvain
@@ -556,12 +573,13 @@ modularity(schoolfriends_fb, as.integer(as.factor(V(schoolfriends_fb)$class)))
 modularity(schoolfriends_fb, as.integer(as.factor(V(schoolfriends_fb)$gender)))
 ```
 
-This community structure is certainly a better indicator of Facebook subgroups than gender or class.  We can visualize the class structure side by side with the Louvain community structure to try to interpret it, as in Figure \@ref(fig:schoolfriends-louvain).
+This community structure is certainly a better indicator of connected Facebook subgroups than gender or class.  We can visualize the class structure side by side with the Louvain community structure to try to interpret it, as in Figure \@ref(fig:schoolfriends-louvain).
 
-```{r schoolfriends-louvain, fig.align = "center", fig.cap = "Optimal Louvain communities in the Facebook schoolfriends graph (left) versus class communities (right)"}
+```{r schoolfriends-louvain, fig.align = "center", fig.cap = "Optimal Louvain communities in the Facebook schoolfriends graph (left) versus ground truth class communities (right)"}
+# use patchwork package for combining plots easily
 library(patchwork)
 
-# louvain communities
+# visualize louvain communities
 set.seed(123)
 g1 <- ggraph(schoolfriends_fb, layout = "fr") +
   geom_edge_link(color = "grey", alpha = 0.7) +
@@ -569,7 +587,7 @@ g1 <- ggraph(schoolfriends_fb, layout = "fr") +
                   show.legend = FALSE) +
   theme_void()
 
-# class communities
+# visualize ground truth class communities
 set.seed(123)
 g2 <- ggraph(schoolfriends_fb, layout = "fr") +
   geom_edge_link(color = "grey", alpha = 0.7) +
@@ -577,10 +595,12 @@ g2 <- ggraph(schoolfriends_fb, layout = "fr") +
                   show.legend = FALSE) +
   theme_void()
 
+# display side by side
 g1 + g2
 
 ```
-Visually, we can see that the Louvain community structure is a much better representation of dense friendship groups compared to the class structure, indicating that Facebook friendships tend to span across class structures.  We can also see that one of the Louvain communities contains the clique we identified earlier. 
+
+Visually, we can see that the Louvain community structure is a much better representation of dense friendship groups compared to the ground truth class structure, indicating that Facebook friendships tend to span across those class structures.  We can also see that one of the Louvain communities contains the clique we identified earlier. 
 
 
 ### Detecting politically aligned communities on Twitter
@@ -589,10 +609,14 @@ The `ontariopol_edgelist` and `ontariopol_vertices` data sets represent tweeting
 
 ```{r}
 # get edgelist and vertex data
-ontariopol_edges <- read.csv("https://ona-book.org/data/ontariopol_edgelist.csv")
-ontariopol_vertices <- read.csv("https://ona-book.org/data/ontariopol_vertices.csv") 
+ontariopol_edges <- read.csv(
+  "https://ona-book.org/data/ontariopol_edgelist.csv"
+)
+ontariopol_vertices <- read.csv(
+  "https://ona-book.org/data/ontariopol_vertices.csv"
+) 
 
-# create graph
+# create undirected graph
 (ontariopol <- igraph::graph_from_data_frame(
   d = ontariopol_edges,
   vertices = ontariopol_vertices, 
@@ -619,7 +643,7 @@ V(ontariopol)$community <- membership(communities)
 length(unique(V(ontariopol)$community))
 ```
 
-We see six commmunities.  Let's compare the modularity of this community structure to the political party structure.
+We see six commmunities.  Let's compare the modularity of this community structure to the ground truth political party structure.
 
 ```{r}
 # louvain modularity
@@ -637,23 +661,24 @@ modularity(ontariopol,
 
 We see very similar modularity.  Let's visualize the Louvain community and party structure side-by-side as in Figure \@ref(fig:ontariopol-communities).
 
-```{r ontariopol-communities, fig.align = "center", fig.cap = "Twitter interaction of Ontario politicians segmented by their Louvain communities (left) and their political parties (right).  Louvain does a good job of identifying political alignment."}
-# louvain communities
+```{r ontariopol-communities, fig.align = "center", fig.cap = "Twitter interaction of Ontario politicians segmented by their Louvain communities (left) and their ground truth political parties (right).  Louvain does a good job of identifying political alignment."}
+# visualize louvain communities
 set.seed(123)
 g1 <- ggraph(ontariopol, layout = "fr") +
-  geom_edge_link(color = "grey", alpha = 0.5) +
+  geom_edge_link(color = "grey", alpha = 0.7) +
   geom_node_point(size = 2, aes(color = as.factor(community)),
                   show.legend = FALSE) +
   theme_void()
 
-# class communities
+# visualize ground truth political party communities
 set.seed(123)
 g2 <- ggraph(ontariopol, layout = "fr") +
-  geom_edge_link(color = "grey", alpha = 0.5) +
+  geom_edge_link(color = "grey", alpha = 0.7) +
   geom_node_point(size = 2, aes(color = party),
                   show.legend = FALSE) +
   theme_void()
 
+# display side by side
 g1 + g2
 ```
 
@@ -670,14 +695,15 @@ V(ontariopol)$clique24 <- ifelse(
   V(ontariopol) %in% cliques[[24]], 1, 0
 )
 
-# visualize
+# visualize clique
 set.seed(123)
 g1 <- ggraph(ontariopol, layout = "fr") +
-  geom_edge_link(color = "grey", alpha = 0.5) +
+  geom_edge_link(color = "grey", alpha = 0.7) +
   geom_node_point(size = 2, aes(color = as.factor(clique24)),
                   show.legend = FALSE) +
   theme_void()
 
+# visualize ground truth political parties
 set.seed(123)
 g2 <- ggraph(ontariopol, layout = "fr") +
   geom_edge_link(color = "grey", alpha = 0.5) +
@@ -703,8 +729,8 @@ g1 + g2
 5. What is meant by a community of vertices?  What objective are we usually trying to achieve when we detect communities in a graph?
 6. Describe your understanding of the term 'modularity' as it relates to community detection in graphs.
 7. Name a common community detection algorithm and describe how it works.
-8. What do we mean when we describe the a community detection process as 'unsupervised'?   
-9. What is meant be a clique in an undirected graph?  
+8. What do we mean when we describe a community detection process as 'unsupervised'?
+9. What is meant by the term 'clique' in an undirected graph?
 10. What is a maximal clique and a largest clique in a graph?  Are maximal cliques always largest cliques?  Why or why not?
 
 ### Data exercises
@@ -720,7 +746,7 @@ For exercises 4-10, load the `email_edgelist` and `email_vertices` data sets fro
 4. Determine the connected components of this network and reduce the network to its largest connected component.
 5. Use the Louvain algorithm to determine a vertex partition/community structure with optimal modularity in this network. 
 6. Compare the modularity of the Louvain community structure with that of the ground truth department structure.
-7. Visualize the graph color-coded by Louvain community, and visualize separately color-coded by ground truth department.  Compare the visualizations.  Can you describe any of the Louvain communities in terms of departments?
+7. Visualize the graph color-coded by Louvain community, and then visualize the graph separately color-coded by ground truth department.  Compare the visualizations.  Can you describe any of the Louvain communities in terms of departments?
 8. Create a dataframe containing the community and department for each vertex.  Manipulate this dataframe to show the percentage of individuals from each department in each community.  Try to visalize this using a heatmap or other style of visualization and try to use this to describe the communities in terms of departments.
 9.  Find the largest clique size in the graph.  How many such largest cliques are there?  What do you think a clique represents in this context?
 10. Try to visualize the members of these cliques in the context of the entire graph.  What can you conclude?

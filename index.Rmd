@@ -6,6 +6,8 @@ site: bookdown::bookdown_site
 always_allow_html: true
 documentclass: krantz
 bibliography: r/book.bib
+params:
+  colorblind: no
 fig-caption: yes
 link-citations: yes
 github-repo: keithmcnulty/ona_book
@@ -26,9 +28,16 @@ if (knitr::is_latex_output()) {
   options(width = 100)
 }
 
+if (params$colorblind) {
+  scale_colour_discrete <- function(...) {
+    scale_colour_manual(..., values = colorBlindness::Blue2DarkRed12Steps)
+  }
+}
+
 # set this next variable to false to avoid evaluating computationally heavy chunks
 eval_heavy_chunks <- TRUE
 
+knitr::opts_chunk$set(out.width = "90%")
 # knitr::opts_chunk$set(dpi=300)
 
 # bookdown::render_book("index.Rmd", output_format = "bookdown::bs4_book", config_file = "_bookdown_bs4.yml")
@@ -39,7 +48,7 @@ eval_heavy_chunks <- TRUE
 `r if (knitr::is_latex_output()) '<!--'`
 # Welcome {-}
 
-Welcome to the website of the book *Handbook of Graphs and Networks in People Analytics* by [Keith McNulty](https://www.linkedin.com/in/keith-mcnulty/).  
+Welcome to the website of the book *Handbook of Graphs and Networks in People Analytics* by [Keith McNulty](https://www.linkedin.com/in/keith-mcnulty/).  This is the second volume in a series of technical textbooks for professionals working in analytics.  To view or order a print copy of the first volume, please go to its website: [Handbook of Regression Modeling in People Analytics](https://peopleanalytics-regression-book.org).
 
 ::: {.infobox .caution}
 **Note**: This book is to be published by Chapman & Hall/CRC Press in 2022.  The online version of this book is free to read here (thanks to Chapman & Hall/CRC), and licensed under the [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-nc-sa/4.0/). If you have any feedback, please feel free to [file an issue on GitHub](https://github.com/keithmcnulty/ona_book/issues). Thank you!
@@ -47,10 +56,11 @@ Welcome to the website of the book *Handbook of Graphs and Networks in People An
 
 The book is available in [bootstrap format](https://ona-book.org) or in a more plain [gitbook format](https://ona-book.org/gitbook).
 
+## Note on data {-}
+It is my intention to make all the data sets in the book available in convenient and self-contained packages in R and Python to coincide with the print release of this book in 2022.  In the meantime, the datasets are all accessible via the URLs provided and you can always access them by following the code examples.
+
 Many thanks!
 
 *Last updated: `r format(Sys.Date(), "%d %B %Y")`*
 
 `r if (knitr::is_latex_output()) '-->'`
-
-

@@ -1,12 +1,12 @@
 # Paths and Distance {#paths-distance}
 
-Over the course of the earlier chapters, as we learned how to transform data into graph-friendly structures and how to create and visualize graphs, we started to see some concepts emerge informally which we will now start to formally describe and support by means of some mathematical definition and measurement.  For example, we have seen that vertices can be connected directly or indirectly to other vertices by means of a single edge or a series of edges.  We have seen visually that there can be greater 'distance' between some vertices in graphs compared to others, and in some cases it is simply not possible to get from one vertex to another along any edges in a graph. 
+Over the course of the earlier chapters, as we learned how to transform data into graph-friendly structures and how to create and visualize graphs, we started to see some concepts emerge informally which we will now start to formally describe and support by means of some mathematical definition and measurement.  For example, we have seen that vertices can be connected directly or indirectly to other vertices by means of a single edge or a series of edges.  We have observed visually that there can be greater 'distance' between some vertices in graphs compared to others, and in some cases it is simply not possible to get from one vertex to another along any edges in a graph. 
 
 The process of moving from vertex to vertex along edges in a graph is known as *graph traversal*.  Graph traversal is an extremely important topic that underlies any sort of graph search algorithm.  Graph search algorithms, in turn, are foundational in determining the optimal or shortest paths between pairs of vertices, or the set of shortest paths from a given vertex to all other vertices.  Shortest paths are themselves important in the definition of distance and diameter in networks.  Distance and diameter are useful and intuitive measurements that are frequently used in understanding 'closeness' or 'familiarity' between vertices or in the overall network, and in determining different degrees of influence between vertices.
 
 In this chapter we will progressively look at each of these concepts, so that the reader has a good understanding of their meaning and how they are derived, before we delve into the convenient functions in R and Python which can calculate paths, distance and diameter.  Then, towards the end of the chapter, we will look at some short case studies which put these concepts to use in the analysis of a network of office workers.
 
-The early work in this chapter will use a graph we we will call $G_{14}$, and which is shown in Figure \@ref(fig:g14). This graph contains fourteen vertices labelled 1 thru 14, where all vertices are connected to at least one other vertex in the network.  This is known as a *connected graph*.  
+The early work in this chapter will use a graph which we will call $G_{14}$, and which is shown in Figure \@ref(fig:g14). This graph contains fourteen vertices labelled 1 thru 14, where all vertices are connected to at least one other vertex in the network.  This is known as a *connected graph*.  
 
 ```{r g14, echo = FALSE, fig.align = "center", fig.cap = "The $G_{14}$ graph"}
 library(igraph)
@@ -98,7 +98,7 @@ set.seed(123)
     theme_void())
 ```
 
-The list of all simple paths from Vertex 9 to Vertex 4 and their lengths are as follows:
+The list of all simple paths from Vertex 9 to Vertex 4 in $G_{14W}$ and their lengths are as follows:
 
 * $9 \longleftrightarrow 8 \longleftrightarrow 4$ (Length 5)
 * $9 \longleftrightarrow 7 \longleftrightarrow 4$ (Length 5)
@@ -109,7 +109,7 @@ The list of all simple paths from Vertex 9 to Vertex 4 and their lengths are as 
 
 The **distance** between vertices $A$ and $B$ --- sometimes notated as $d(A, B)$ --- is the length of the shortest path between $A$ and $B$.  Note that there is no requirement for a unique shortest path, and the shortest path could be traversed in more than one way in a graph.  In our unweighted graph $G_{14}$ the distance between Vertex 9 and Vertex 4 is 2.  In the weighted graph $G_{14W}$ the distance between Vertex 9 and Vertex 4 is 5.  If no path exists between $A$ and $B$ then the distance is called 'infinite' or denoted as $\infty$ by convention.  If $A$ and $B$ are vertices of an undirected graph, then $d(A, B) = d(B, A)$.  However, this may not be true for a directed graph.
 
-Distance is an extremely important concept in graphs and has many practical applications.  In physical networks like road or rail networks, distance is meant quite literally with greater distances between vertices usually translating to greater time taken to travel between those vertices.  In social networks distance can relate to the 'familiarity' or 'commonality' between two individuals.  Greater distance between individuals in a network usually implies lower likelihood that those individuals know each other in real life, or lower likelihood that information given to one individual will find its way to other individuals.   In graphs that represent the knowledge or interests of individuals (such as 'likes' in social networks or in knowledge graphs), greater distance between an individual and a topic, event or product usually implies that the individual is less likely to be interested in that topic, event or product.  The utility of graph distance measures in fields like transport, communications, marketing, sociology and psychology should therefore be quite obvious.  
+Distance is an extremely important concept in graphs and has many practical applications.  In physical networks like road or rail networks, distance is meant quite literally with greater distances between vertices usually translating to greater time taken or more resources used to traverse between those vertices.  In social networks distance can relate to the 'familiarity' or 'commonality' between two individuals.  Greater distance between individuals in a network usually implies lower likelihood that those individuals know each other in real life, or lower likelihood that information given to one individual will find its way to other individuals.   In graphs that represent the knowledge or interests of individuals (such as 'likes' in social networks or in knowledge graphs), greater distance between an individual and a topic, event or product usually implies that the individual is less likely to be interested in that topic, event or product.  The utility of graph distance measures in fields like transport, communications, marketing, sociology and psychology should therefore be quite obvious.  
 
 Distance in weighted graphs needs to be treated with care, particularly in sociological and psychological contexts.  Often unweighted distance will be more relevant than weighted distance.  For example, if edges are weighted according to the 'strength' of a connection between individuals, then the weighted distance between two individuals might be the result of a sequence of multiple edges with low weights, even if those individuals are directly connected by an edge with a higher weight.  A simple example of this is in Figure \@ref(fig:weightdist), where the weighted distance from $A$ to $B$ is 2, which arises via the path $A \longleftrightarrow C \longleftrightarrow B$, despite the fact that $A$ and $B$ are adjacent vertices.  It is important to understand the meaning of 'weight' in your research context before determining if weighted or unweighted distance is appropriate.
 
@@ -134,10 +134,10 @@ Due to the importance of distance in graphs, various algorithms have been develo
 
 Dijkstra's algorithm is perhaps the most well-known (and most established) shortest path algorithm, and the easiest to explain.  Let's take a look at how this algorithm works by using our unweighted $G_{14}$ graph as an illustrative example.   Dijkstra's algorithm accepts a single initial vertex and calculates the distance between that vertex and all other vertices in the graph.  Let's use Vertex 9 as our initial vertex.  Dijkstra's algorithm operates in a series of iterative steps as follows:
 
-1.  We assign a tentative distance between Vertex 9 and itself as zero, and between Vertex 9 and all other vertices as $\infty$.  We then mark Node 9 as searched.
-2.  Move to each of the neighbors of Vertex 9, and calculate the length of the path from Vertex 9 to each of those neighbours and update the tentative distance to this length.  In this case we give a tentative distance of 1 to vertices 7, 8, 10 and 13.  We then mark these vertices as searched.  
+1.  We assign a tentative distance between Vertex 9 and itself as zero, and between Vertex 9 and all other vertices as $\infty$.  We then mark Vertex 9 as searched.
+2.  Move to each of the neighbors of Vertex 9, and calculate the length of the path from Vertex 9 to each of those neighbours and update the tentative distance to this length.  In this case we give a tentative distance of 1 to vertices 7, 8, 10 and 13.  We then mark these vertices as searched.
 3.  We next go to each of the vertices 7, 8, 10 and 13 in turn, marking each one as current as we proceed.  For each current vertex, we calculate the length of the shortest path from Vertex 9 to each of the unsearched neighbors of the current vertex which  *pass through the current vertex*.  If that length is smaller than the existing tentative distance, update the tentative distance with this length.  If we move to Vertex 7 first, we see two unsearched neighbors: vertices 4 and 6.  The distance from Vertex 9 to both these vertices passing through Vertex 7 is 2, which is less than $\infty$, and so we update the tentative distances from Vertex 9 to vertices 4 and 6 to 2. 
-4.  In a similar fashion we update the tentative distances from Vertex 9 to vertices 11, 12 and 14 to 2.  
+4.  In a similar fashion we update the tentative distances from Vertex 9 to vertices 11, 12 and 14 to 2.
 5.  We mark vertices 4, 6, 11, 12 and 14 as searched and move to these vertices as current vertices and repeat the process for their neighbors.  In this way we update the tentative distance from Vertex 9 to vertices 1, 2, 3 and 5 to 3.  We mark vertices 1, 2, 3 and 5 as searched.
 6.  We have now searched all vertices in the graph, and the tentative distances between Vertex 9 and all other vertices are now assigned as the final distances.
 
@@ -147,13 +147,13 @@ Dijkstra's algorithm is perhaps the most well-known (and most established) short
 :::
 
 
-Single source shortest path algorithms like Dijkstra's algorithm can be used to solve the all pairs distance problem by simply repeating the algorithm for each vertex in the graph.  For large graphs, however, this can be inefficient, which explains why alternative algorithms have been developed for the all pairs problem^[Basic time complexity for Dijkstra's algorithm for a single source vertex is proportional to the square of the number of vertices in the graph.  As a comparison, basic time complexity for the all pairs Floyd-Warshall algorithm is proportional to the cube of the number of vertices in the graph.  Based on this, you would expect both algorithms to calculate all pairs distance in approximately the same computation time, but numerous modern computational methods have been able to cut these computation time significantly for different varieties of large graphs.  Johnson's algorithm, for example, is known to perform particularly well on sparse graphs.].  
+Single source shortest path algorithms like Dijkstra's algorithm can be used to solve the all pairs distance problem by simply repeating the algorithm for each vertex in the graph.  For large graphs, however, this can be inefficient, which explains why alternative algorithms have been developed for the all pairs problem^[Basic time complexity for Dijkstra's algorithm for a single source vertex is proportional to the square of the number of vertices in the graph.  As a comparison, basic time complexity for the all pairs Floyd-Warshall algorithm is proportional to the cube of the number of vertices in the graph.  Based on this, you would expect both algorithms to calculate all pairs distance in approximately the same computation time, but numerous modern computational methods have been able to cut these computation times significantly for different varieties of large graphs.  Johnson's algorithm, for example, is known to perform particularly well on sparse graphs.].  
 
 ### Graph diameter and density
 
 The *diameter* of a graph $G$ is the maximum distance between any pair of vertices in $G$.  Alternatively stated, it is the longest shortest path between vertices in $G$.  If a graph is not a connected graph, then by definition its diameter is infinite.  Diameter is usually only a useful measure in connected graphs, or in studying connected subgraphs of larger graphs.
 
-The diameter of a social network is an intuitive measure of the overall 'closeness' of the individuals in that network.  Networks with smaller diameters can be often be considered as more 'close-knit' communities.  However, care needs to be taken in interpreting the diameter of a network, particularly given that other measures may be more representative of how close-knit a community is.  Common alternative metrics used to assess overall network 'closeness' include:
+The diameter of a social network is an intuitive measure of the overall 'closeness' of the individuals in that network.  Networks with smaller diameters can often be considered as more 'close-knit' communities.  However, care needs to be taken in interpreting the diameter of a network, particularly given that other measures may be more representative of how close-knit a community is.  Common alternative metrics used to assess overall network 'closeness' include:
 
 * Average distance between all pairs of vertices
 * The **density** of the network, which is defined as the number of edges divided by the total possible number of edges in a graph^[If $|V|$ is the number of vertices in a directed graph, then the number of possible edges is $|V|(|V| - 1)$, and in an undirected graph it is $\frac{|V|(|V| - 1)}{2}$.  Therefore, if $|E|$ is the number of edges, we can derive the formula for density $D$ as $\frac{|E|}{|V|(|V| - 1)}$ for a directed graph and $\frac{2|E|}{|V|(|V| - 1)}$ for an undirected graph.].  A complete graph, for example, would have a density of 1.  Graphs with lower density are called *sparse graphs*.
@@ -193,7 +193,7 @@ g1 + g2
 
 
 :::{.thinkahead data-latex=""}
-**Playing around:** Graph distance and diameter is of great interest in everyday life.  You may know the theory of the *six degrees of separation*, which suggests that the entire world is a connected graph where a path exists between any two people via at most six intermediaries.  Alternatively stated, the world is a connected graph with a diameter of 7.   Several industry-specific case studies of this have arisen for research and just for fun.  The first was a 1969 paper by two psychologists (@millgram), which used an experiment of chain letters to determine that the average distance between people in a population in Nebraska and Massachusetts was 6.2.  A 2011 study of the Facebook graph (@ugander2011anatomy) determined that the Facebook member network was almost fully connected with 99.91% of vertices in a connected subgraph, and that the average distance between vertices was 4.7.  In the entertainment industry, the *Bacon number* is used to denote the distance between an individual and the actor Kevin Bacon, based on participation in the same movie or TV production.  In academia, the *Erd&ouml;s number* is used to denote the distance between an individual and the mathematician Paul Erd&ouml;s.  Both Bacon and Erd&ouml;s have arisen as central points because they were highly active in their disciplines and as a result have high centrality in their network.  We will look at centrality in the next chapter, but if you are interested you can find the Bacon number of any actor by visiting https://oracleofbacon.org/.       
+**Playing around:** Graph distance and diameter is of great interest in everyday life.  You may know the theory of the *six degrees of separation*, which suggests that the entire world is a connected graph where the distance between any two people is at most 6.  Alternatively stated, the world is a connected graph with a diameter of no more than 6.   Several industry-specific case studies of this have arisen for research and just for fun.  The first was a 1969 paper by two psychologists (@millgram), which used an experiment of chain letters to determine that the average distance between people in a population in Nebraska and Massachusetts was 6.2.  A 2011 study of the Facebook graph (@ugander2011anatomy) determined that the Facebook member network was almost fully connected with 99.91% of vertices in a connected subgraph, and that the average distance between vertices was 4.7.  In the entertainment industry, the *Bacon number* is used to denote the distance between an individual and the actor Kevin Bacon, based on participation in the same movie or TV production.  In academia, the *Erd&ouml;s number* is used to denote the distance between an individual and the mathematician Paul Erd&ouml;s.  Both Bacon and Erd&ouml;s have arisen as central points because they were highly active in their disciplines and as a result have high centrality in their network.  We will look at centrality in the next chapter, but if you are interested you can find the Bacon number of any actor by visiting https://oracleofbacon.org/^[Music lovers may also be interested in the Six Degrees of Kanye West graph at http://sixdegreesofkanyewest.com/].       
 :::
 
 
@@ -212,12 +212,20 @@ head(g14_edgelist)
 ```
 Let's start by creating the weighted $G_{14W}$ graph from the previous section.
 
-```{r}
+```{r, eval = FALSE}
 # create weighted graph
 (g14w <- igraph::graph_from_data_frame(g14_edgelist, directed = FALSE))
 ```
 
-The `all_simple_paths()` function in `igraph` returns all paths from a specified vertex, and expects at least an `igraph` object and a vertex name for the `from` vertex as arguments.  If the `to` argument specifies a vertex, then the function will return only paths between the `from` and `to` vertex.  Otherwise it will return a list containing all paths from the specified vertex to all other vertices.  Note that these functions expect the vertex name as a character string.
+`r if (knitr::is_latex_output()) '\\footnotesize'`
+```{r, echo = FALSE}
+# create weighted graph
+(g14w <- igraph::graph_from_data_frame(g14_edgelist, directed = FALSE))
+```
+`r if (knitr::is_latex_output()) '\\normalsize'`
+
+
+The `all_simple_paths()` function in `igraph` returns all paths from a specified vertex, and expects at least an `igraph` object and a vertex name for the `from` vertex as arguments.  If the `to` argument specifies a vertex, then the function will return only paths between the `from` and `to` vertices.  Otherwise it will return a list containing all paths from the specified vertex to all other vertices.  Note that these functions expect the vertex name as a character string.
 
 ```{r}
 igraph::all_simple_paths(g14w, from = "9", to = "4")
@@ -235,7 +243,8 @@ shortest_9to4$res
 Note that the function has returned the shortest path according to edge weights.  To ignore edge weights, simply set `weights = NA`.  This is equivalent to calculating shortest paths in our unweighted $G_{14}$ graph.
 
 ```{r}
-shortest_9to4_uw <- igraph::all_shortest_paths(g14w, from = "9", to = "4", weights = NA)
+shortest_9to4_uw <- igraph::all_shortest_paths(g14w, from = "9", to = "4", 
+                                               weights = NA)
 shortest_9to4_uw$res
 ```
 
@@ -292,13 +301,13 @@ edge_density(g14w)
 
 
 :::{.thinkahead data-latex=""}
-**Playing around:** The `distance()` function allows you to select from three algorithms to use:  Dijkstra, Bellman-Ford and Johnson.  If you are interested in computation speed you could try an experiment on a large graph to see which one is faster.  The `microbenchmark` package in R is useful for running a computation many times and benchmarking its average speed.  You could try creating a directed graph from the `wikivote` data set in the `onadata` package or via the internet at https://ona-book.org/wikivote.csv, calculating the distance matrix using each of the three algorithms and benchmarking the speed.  I found the Johnson algorithm to be about four times faster than the others.  Don't try this, however, if you are on a low memory or slow CPU computer.
+**Playing around:** The `distance()` function in `igraph` allows you to select from three algorithms to use:  Dijkstra, Bellman-Ford and Johnson.  If you are interested in computation speed you could try an experiment on a large graph to see which one is faster.  The `microbenchmark` package in R is useful for running a computation many times and benchmarking its average speed.  You could try creating a directed graph from the `wikivote` data set in the `onadata` package or via the internet^[https://ona-book.org/wikivote.csv], calculating the distance matrix using each of the three algorithms and benchmarking the speed.  I found the Johnson algorithm to be about four times faster than the others.  Don't try this, however, if you are on a low memory or slow CPU computer.
 :::
 
 
 ### Calculating in Python
 
-The functions in the `networkx` package in Python are very similar to those in `igraph` in R.  First let's load our weighted graph $G_{14W}$.
+The functions for path, distance, density and diameter in the `networkx` package in Python are very similar to those in `igraph` in R.  First let's load our weighted graph $G_{14W}$.
 
 ```{python}
 import networkx as nx
@@ -336,17 +345,26 @@ For undirected graphs, the `shortest_path()` function will calculate a single sh
 
 ```{python}
 shortest_paths_from9 = nx.shortest_path(g14w, source = 9, weight = 'weight')
-shortest_paths_from9
+
+# view one path to vertex 11
+shortest_paths_from9.get(11)
 ```
 
 For directed graphs, various algorithm-specific functions are available, such as `dijkstra_path()`, `bellman_ford_path()` and many others.
 
-Distances can be calculated using the `shortest_path_length()` function, either to produce all distances or to focus on a specific source and/or target.  This will return a dict if single source/target, or a tuple otherwise.
+Distances can be calculated using the `shortest_path_length()` function, either to produce all distances or to focus on a specific source and/or target.  This will return a dict if a single source or target is provided, or a tuple otherwise.
 
-```{python}
+```{python, eval = FALSE}
 distances_from9 = nx.shortest_path_length(g14w, source = 9, weight = 'weight')
 distances_from9
 ```
+
+`r if (knitr::is_latex_output()) '\\small'`
+```{python, echo = FALSE}
+distances_from9 = nx.shortest_path_length(g14w, source = 9, weight = 'weight')
+distances_from9
+```
+`r if (knitr::is_latex_output()) '\\normalsize'`
 
 Average distance can be calculated using the `average_shortest_path_length()` function.  Include weights as an argument to get average weighted distance.
 
@@ -360,7 +378,7 @@ Diameter can be calculated using the `diameter()` function, but this will only c
 nx.diameter(g14w)
 ```
 
-To calculate weighted diameter, simple take the maximum value of the weighted distances across all pairs.
+To calculate weighted diameter, simply take the maximum value of the weighted distances across all pairs.
 
 ```{python}
 distances = nx.shortest_path_length(g14w, weight = 'weight')
@@ -378,12 +396,16 @@ nx.density(g14w)
 To illustrate uses of paths and distance in organizational settings, we will go through a couple of examples.  We will look at real data from the `workfrance` graph which we introduced earlier in Section \@ref(ggraph).  The `workfrance` data set contains information captured in an experimental study in an office building in France.  Vertices in this data set represent individual employees and edges exist between employees if they have spent a minimum amount of time together in the same place in the building.  Let's download the data and create the graph in R.
 
 
-```{r}
+```{r, eval = FALSE}
 set.seed(123)
 
 # download workfrance data sets
-workfrance_edges <- read.csv("https://ona-book.org/data/workfrance_edgelist.csv")
-workfrance_vertices <- read.csv("https://ona-book.org/data/workfrance_vertices.csv")
+workfrance_edges <- read.csv(
+    "https://ona-book.org/data/workfrance_edgelist.csv"
+)
+workfrance_vertices <- read.csv(
+    "https://ona-book.org/data/workfrance_vertices.csv"
+)
 
 # create graph
 (workfrance <- igraph::graph_from_data_frame(
@@ -393,7 +415,28 @@ workfrance_vertices <- read.csv("https://ona-book.org/data/workfrance_vertices.c
 ))
 ```
 
-We have built a graph with 211 vertices and 932 edges.  The vertices have a `dept` property which indicates the department the person works in, and the edges have a `mins` property which indicates the amount of time spent together in the same place.  The `mins` property could be considered a measure of how strong the connection between two individuals is, so let's make it a weight in the graph.
+`r if (knitr::is_latex_output()) '\\footnotesize'`
+```{r, echo = FALSE}
+set.seed(123)
+
+# download workfrance data sets
+workfrance_edges <- read.csv(
+    "https://ona-book.org/data/workfrance_edgelist.csv"
+)
+workfrance_vertices <- read.csv(
+    "https://ona-book.org/data/workfrance_vertices.csv"
+)
+
+# create graph
+(workfrance <- igraph::graph_from_data_frame(
+    d = workfrance_edges,
+    vertices = workfrance_vertices,
+    directed = FALSE
+))
+```
+`r if (knitr::is_latex_output()) '\\normalsize'`
+
+We have built a graph with 211 vertices and 932 edges.  The vertices have a `dept` property which indicates the department the person works in, and the edges have a `mins` property which indicates the number of minutes spent together in the same place.  The `mins` property could be considered a measure of how strong the connection between two individuals is, so let's make it a weight in the graph.
 
 ```{r}
 E(workfrance)$weight <- E(workfrance)$mins
@@ -422,7 +465,8 @@ all_shortest_paths(workfrance, from = "3", to = "55", weight = NA)$res
 There is one common intermediary: employee 447.  Therefore, if employees 3 and 55 do not know each other, employee 447 may be able to introduce them.  Note that there may be more than one suggestion for intermediaries.  For example: 
 
 ```{r}
-(paths <- all_shortest_paths(workfrance, from = "3", to = "290", weight = NA)$res )
+(paths <- all_shortest_paths(workfrance, from = "3", to = "290", 
+                             weight = NA)$res)
 ```
 
 In this case, we could consider using the edge weights to rank the intermediary options, on the basis that higher weights may indicate stronger connections. Let's visualize these two options by looking at the subgraph with edge weights in Figure \@ref(fig:intermediary).
@@ -431,8 +475,8 @@ In this case, we could consider using the edge weights to rank the intermediary 
 subgraph <- induced_subgraph(workfrance, vids = c("3", "290", "694", "859"))
 
 ggraph(subgraph) +
-    geom_edge_link(aes(edge_width = weight, label = weight), color = "grey", alpha = 0.7,
-                   show.legend = FALSE) +
+    geom_edge_link(aes(edge_width = weight, label = weight), color = "grey", 
+                   alpha = 0.7, show.legend = FALSE) +
     geom_node_label(size = 3, fill = "lightblue", aes(label = name)) +
     theme_void()
 ```
@@ -440,7 +484,7 @@ Here we may recommend employee 859 first on the basis of higher edge weights and
 
 
 :::{.thinkahead data-latex=""}
-**Playing around:** You may have seen this kind of 'introduction' system at work through social networks such as *LinkedIn*, which can suggest how to be introduced to another member via a common connection.  You may also have seen the distance of an individual relative to you in the network, with direct connections (distance of 1) labelled as 1st, connections of connections (distance of 2) labelled as 2nd, and so on.  These massive networks rarely calculate distances of greater than 3 or suggest connection paths with more than one intermediary because of the massive computational cost of doing so.  If you have a *LinkedIn* profile, you may want to go and explore your second order connections and view the intermediaries who can connect you.  This is the equivalent of looking at all the shortest paths between you and that individual in the network.  
+**Playing around:** You may have seen this kind of 'introduction' system at work through social networks such as *LinkedIn*, which can suggest how to be introduced to another member via a common connection.  You may also have seen the distance of an individual from you in the network, with direct connections (distance of 1) labelled as 1st, connections of connections (distance of 2) labelled as 2nd, and so on.  These huge networks rarely calculate distances of greater than 3 or suggest connection paths with more than one intermediary because of the massive computational cost of doing so.  If you have a *LinkedIn* profile, you may want to go and explore your second order connections and view the intermediaries who can connect you.  This is the equivalent of looking at all the shortest paths between you and that individual in the network.  
 :::
 
 
@@ -485,25 +529,46 @@ n_neighbors[which.max(n_neighbors)]
 
 We could pick any 20 from the neighbors of employee 603 and that would be a great starting point for our 21 tables.  Let's pick those with the highest `mins` property (assuming that this represents a closer relationship).  We can use the `inc()` function to get all edges containing employee 603 and then select those that have the highest `mins` property.
 
-```{r}
+```{r, eval = FALSE}
 edges603 <- E(workfrance)[inc("603")]
 (top_edges603 <- edges603[order(sort(edges603$mins, decreasing = TRUE))][1:20])
 ```
 
+`r if (knitr::is_latex_output()) '\\footnotesize'`
+```{r, echo = FALSE}
+edges603 <- E(workfrance)[inc("603")]
+(top_edges603 <- edges603[order(sort(edges603$mins, decreasing = TRUE))][1:20])
+```
+`r if (knitr::is_latex_output()) '\\normalsize'`
+
+
 Now we have the 'closest' 20 people to employee 603.  Let's create an edge subgraph and extract the vertices.
 
-```{r}
+```{r, eval = FALSE}
 subgraph603 <- igraph::subgraph.edges(workfrance, eid = top_edges603)
 V(subgraph603)$name
 ```
 
+`r if (knitr::is_latex_output()) '\\footnotesize'`
+```{r, echo = FALSE}
+subgraph603 <- igraph::subgraph.edges(workfrance, eid = top_edges603)
+V(subgraph603)$name
+```
+`r if (knitr::is_latex_output()) '\\normalsize'`
+
 We can also look at the departments of these individuals:
 
-```{r}
+```{r, eval = FALSE}
 V(subgraph603)$dept
 ```
 
-We see some considerable department similarity, which makes sense.  Now that we have found the first person for each table, we will want to try to make sure that we sit that person with nine other people who have some distance from them, and to minimize neighbors sitting at the same table.  Let's start with our first employee 603, and call this Table 1.  Because there are only 21 tables but employee 603 has 28 neighbors, we might be willing to allow one neighbor to sit at Table 1.  Let's sit them with the neighbor who shared the least minutes.
+`r if (knitr::is_latex_output()) '\\footnotesize'`
+```{r, echo = FALSE}
+V(subgraph603)$dept
+```
+`r if (knitr::is_latex_output()) '\\normalsize'`
+
+We see some considerable department similarity, which makes sense.  Now that we have found the first person for each table, we will want to try to make sure that we sit that person with nine other people who have some distance from them, and to minimize neighbors sitting at the same table.  Let's start with our first employee 603, and call this Table 1.  Because there are only 21 tables but employee 603 has 28 neighbors, we might be willing to allow one neighbor to sit at Table 1.  Let's sit them with the neighbor with whom they spent the least minutes.
 
 ```{r}
 edges603[which.min(edges603$mins)]
@@ -511,9 +576,15 @@ edges603[which.min(edges603$mins)]
 
 So we will sit employee 603 with employee 77.  Now we can select a third individual who has a reasonable distance in the network from both employee 603 and employee 77.  Let's look at all these distances.
 
-```{r}
+```{r, eval = FALSE}
 (distance603_77 <- distances(workfrance, v = c("603", "77"), weights = NA))
 ```
+
+`r if (knitr::is_latex_output()) '\\footnotesize'`
+```{r, echo = FALSE}
+(distance603_77 <- distances(workfrance, v = c("603", "77"), weights = NA))
+```
+`r if (knitr::is_latex_output()) '\\normalsize'`
 
 We could use the mean of the distances to decide on the person with the furthest distance from those already selected.
 
@@ -525,24 +596,23 @@ We can select employee 502 for the third seat, and we iterate to find the remain
 
 ```{r}
 table1 <- c("603", "77", "502")
+
+# complete remainder of table
 for (i in 4:10) {
-    # get most distant person
-    new <- distances(workfrance, v = table1, weights = NA) |> 
+    # get distances from already chosen table members
+    dists <- distances(workfrance, v = table1, weights = NA) 
+    # get vertices with the maximum mean distance excluding already chosen
+    new <- dists |>
+        as.data.frame() |> 
+        subset(select = !(colnames(dists) %in% table1)) |> 
         colMeans() |> 
         which.max() |> 
         names()
-    # if the person is not new, take them out of the graph and get another distant person
-    if (new %in% table1) {
-        workfrance2 <- induced_subgraph(workfrance, vids = V(workfrance)[V(workfrance)$name != new])
-        table1[i] <- distances(workfrance2, v = table1[table1 != new], weights = NA) |> 
-            colMeans() |> 
-            which.max() |> 
-            names()
-    } else {
-        table1[i] <- new
-    }
+    # add first of these to table
+    table1[i] <- new[1]
 }
 
+# view complete table 1
 table1
 ```
 
@@ -553,8 +623,9 @@ Now let's assign a `table` property to the `workfrance` graph and take a look at
 V(workfrance)$table <- ifelse(V(workfrance)$name %in% table1, "1", "2-21")
 
 # visualize
+set.seed(123)
 ggraph(workfrance, layout = "fr") +
-    geom_edge_link(color = "grey", alpha = 0.5) +
+    geom_edge_link(color = "grey", alpha = 0.7) +
     geom_node_point(size = 4, aes(color = as.factor(table))) +
     labs(color = "Table") +
     theme_void()
@@ -593,7 +664,7 @@ We have seven departments represented at a table of ten, which seems another goo
 
 1.  Use appropriate functions to determine all simple paths and all shortest paths between Vertices 1 and 13 in $G_{14}$ and check that the output agrees with your manual calculation in Discussion Question 9.
 2.  Use appropriate functions to determine all shortest weighted paths between Vertices 1 and 13 in $G_{14W}$ and check that the output agrees with your manual calculation in Discussion Question 10.
-3.  Create a subgraph of $G_{14W}$ consisting only of vertices 6-14.  Use an appropriate procedure to cacluate the unweighted and weighted distances between all pairs of vertices in this subgraph.
+3.  Create a subgraph of $G_{14W}$ consisting only of vertices 6 thru 14.  Use an appropriate procedure to calculate the unweighted and weighted distances between all pairs of vertices in this subgraph.
 4.  Calculate the unweighted and weighted diameter of the subgraph from the previous exercise, and calculate its density.
 
 For Exercises 5 to 7, load the `friends_tv_edgelist` data set from the `onadata` package or download it from the internet^[https://ona-book.org/data/friends_tv_edgelist.csv].  This is a full network of all characters appearing in every season of the *Friends* TV series based on characters speaking in the same scene together. Each edge has a weight according to the number of scenes those characters both spoke in together, but ignore this for this set of exercises and simply create an unweighted, undirected graph from this edgelist.
@@ -601,11 +672,11 @@ For Exercises 5 to 7, load the `friends_tv_edgelist` data set from the `onadata`
 5.  Check whether the *Friends* network is connected and calculate the diameter of the network. Find a path with length equal to the diameter.  The diameter is surprisingly small for a network of this size.  Why might this be?
 6.  Find all *simple* paths from Billy Crystal to Mr Bing and from Janice to Mrs Bing.  Try to calculate what proportion of the connections have distance 2 in this graph.   The results may help with the answer to the previous question.
 7.  Calculate the density of the network.  Create a subgraph consisting of the six main characters Monica, Chandler, Phoebe, Ross, Rachel and Joey.  Calculate the density of this subgraph.  What term would you use to describe this subgraph? 
-8.  A 'clique' is a subgraph which is complete (that is, all vertices are connected to each other and the density is 1).  Can you find a clique in the *Friends* graph that does not contain any of the main characters^[We are getting a little ahead of ourselves with cliques, and we will look at these more in a later chapter, but you might want to try to find some functions in your software of choice for finding cliques.]?  
+8.  A 'clique' in a graph is a subgraph which is complete (that is, all vertices are connected to each other and the density is 1).  Can you find a clique in the *Friends* graph that does not contain any of the main characters^[We are getting a little ahead of ourselves with cliques, and we will look at these more in a later chapter, but you might want to try to find some functions in your software of choice for finding cliques.]?
 9.  Create a new subgraph by removing the six main characters from the original graph.  Check whether this subgraph is connected.  What can you conclude from this?
 10.  Calculate the largest diameter of connected components of this new graph.  Find the pair of characters associated with this diameter path.  Find the largest clique in this graph.
 11. **Extension:**  Extend the example in Section \@ref(workplace-distance) by creating a second table for the event.  Remember that this second table cannot include anyone selected for Table 1.  Explore your results by visualizing them and analyzing the average distance for Table 2 and the mix of departments for Table 2.
-12.  **Extension:** Repeat the process in Question 11 to try to fill all 21 tables at the event.  Visualize your results with the vertices color coded by table number.
+12.  **Extension:** Repeat the process in Question 11 to try to fill all 21 tables at the event.  Visualize your results with the vertices color coded by table number.  Calculate the mean distances for each table.  Do you notice anything interesting?  Can you think of ways to improve this method?
 
 
 

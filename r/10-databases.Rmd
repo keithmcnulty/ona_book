@@ -3,16 +3,16 @@
 Over the course of the early chapters of this book we established a certain workflow for doing graph analysis, as follows:
 
 1.  If necessary, transform existing transactional data into a graph-like structure that better allows the analysis of relationships in the data (Chapter \@ref(restructuring-data)).
-2.  Load data into (temporary) graph structures inside data science languages like R or Python (Chapter \@ref(working)).
+2.  Load the transformed data into (temporary) graph structures inside data science languages like R or Python (Chapter \@ref(working)).
 3.  Create visualizations, perform analysis or run algorithms based on those temporary structures (Chapter \@ref(viz-graphs) and Chapters \@ref(paths-distance) to \@ref(similarity)).
 
 This workflow is perfectly fine for one-off or temporary network analysis, such as an academic project or an experimental analytic effort.  However, for organizations whose use of graph methods is maturing, it will become wasteful, inefficient and unnecessarily repetitive to ask analysts to follow this workflow for repeated similar analyses. We have already seen in Chapter \@ref(restructuring-data) that the steps involved in transforming rectangular data into a graph-like structure are far from trivial.  Therefore, as the use of graphs for analytic purposes matures, it becomes natural to ask whether the data can be persisted in a graph-like structure in order to be permanently available in that structure for rapid querying or easier, faster analysis.
 
-In this chapter we look at how organizations can persist data in a graph structure for more efficient analysis and data query.  This is a rapidly developing field, and many leading organizations have started implementing graph databases in recent years.  There are a variety of technologies available, and no single technology is dominant.  We will start with an overview of the space of graph database technology and then proceed to show illustrative examples of one particular well-developed technology --- Neo4J graph databases --- including how to work with these graph databases in R and in Python.  While this chapter is not intended to be a full reference on graph databases, by the end of this chapter readers should have a good sense of the basics of how these powerful emerging technologies operate and how they can be used to make network analysis faster and easier to perform.
+In this chapter we look at how organizations can persist data in a graph structure for more efficient analysis and data query.  This is a rapidly developing field, and many leading organizations have started implementing graph databases in recent years.  There are a variety of technologies available, and no single technology is dominant.  We will start with an overview of the space of graph database technology and then proceed to show illustrative examples of one particular well-developed technology---*Neo4J* graph databases---including how to work with these graph databases in R and in Python.  While this chapter is not intended to be a full reference on graph databases, by the end of this chapter readers should have a good sense of the basics of how these powerful emerging technologies operate and how they can be used to make network analysis faster and easier to perform.
 
 ## Graph database technology
 
-Graph databases store data so that finding *relationships* is the primary priority.  This contrasts with traditional databases where finding a transaction is the primary priority.  Most commonly, graph databases take one of two forms:  labeled-property graphs or resource description frameworks^[It should be noted that graph database technologies are now emerging that can support both of these forms - most notably AWS Neptune.].
+Graph databases store data so that finding *relationships* is the primary priority.  This contrasts with traditional databases where finding transactions is the primary priority.  Most commonly, graph databases take one of two forms:  labeled-property graphs or resource description frameworks^[It should be noted that graph database technologies are now emerging that can support both of these forms - most notably AWS Neptune.].
 
 ### Labeled-property graphs
 
@@ -20,11 +20,11 @@ Graph databases store data so that finding *relationships* is the primary priori
 
 One of the features of labeled-property graphs which make them easier to use in general is the ability to write queries using intuitive query languages.  The *Cypher* query language for Neo4J graph databases is a good example.  A common graph database used for teaching Cypher is the `movies` database, which contains information on relationships between a small number of people in the entertainment industry and the movies they have participated in.  Figure \@ref(fig:movies-schema) is a schema diagram of the types of nodes and relationships stored in this graph database.
 
-```{r movies-schema, echo = FALSE, fig.align = "center", fig.cap = "Graph schema of the `movies` database"}
+```{r movies-schema, echo = FALSE, fig.align = "center", fig.cap = if (knitr::is_html_output()) {"Graph schema of the `movies` database"} else {"Graph schema of the \\texttt{movies} database"}}
 knitr::include_graphics("www/databases/movies-schema.png")
 ```
 
-We can see that there are two types of node: Person and Movie.  We can also see that a Person can follow another Person, while there are five relationship types between a Person and a Movie.  Cypher uses ASCII art to make queries easier to understand and write.  Nodes are written in parentheses such as `(p:Person)` and relationships are written in lines or arrows such as `-[:ACTED_IN]->`.  The following Cypher query will return the graph of all people who acted in movies in the database which were directed by Clint Eastwood, with the results displayed in Figure \@ref(fig:clinteastwood).
+We can see that there are two types of node: `Person` and `Movie`.  We can also see that a `Person` can follow another `Person`, while there are five relationship types between a `Person` and a `Movie`.  Cypher uses ASCII art to make queries easier to understand and write.  Nodes are written in parentheses such as `(p:Person)` and relationships are written in lines or arrows such as `-[:ACTED_IN]->`.  The following Cypher query will return the graph of all people who acted in movies in the database which were directed by Clint Eastwood, with the results displayed in Figure \@ref(fig:clinteastwood).
 
 ```
 MATCH (p1:Person)-[:ACTED_IN]->(m:Movie)
@@ -32,11 +32,11 @@ MATCH (m:Movie)<-[:DIRECTED]-(p2:Person {name: "Clint Eastwood"})
 RETURN p1, m
 ```
 
-```{r clinteastwood, echo = FALSE, fig.align = "center", fig.cap = "Graph of actors in movies directed by Clint Eastwood from `movies` graph database", out.width="90%"}
+```{r clinteastwood, echo = FALSE, fig.align = "center", fig.cap = if (knitr::is_html_output()) {"Graph of actors in movies directed by Clint Eastwood from `movies` graph database"} else {"Graph of actors in movies directed by Clint Eastwood from \\texttt{movies} graph database"}, out.width="90%"}
 knitr::include_graphics("www/databases/clinteastwood.png")
 ```
 
-Each node or relationship may contain properties which can be accessed and returned in queries.  For example, the Movie node has a `released` property, so this query will return the actor name, movie title and movie release data, and the result looks like Figure \@ref(fig:clint-results).
+Each node or relationship may contain properties which can be accessed and returned in queries.  For example, `Movie` nodes have `title` and `released` properties, while `Person` nodes have a `name` property.  This query will return the actor name, movie title and movie release data, and the result looks like Figure \@ref(fig:clint-results).
 
 ```
 MATCH (p1:Person)-[:ACTED_IN]->(m:Movie)
@@ -44,17 +44,17 @@ MATCH (m:Movie)<-[:DIRECTED]-(p2:Person {name: "Clint Eastwood"})
 RETURN p1.name AS actor, m.title AS movie, m.released AS released
 ```
 
-```{r clint-results, echo = FALSE, fig.align = "center", fig.cap = "Results of a query to find the names of actors, movie title and release date for movies directed by Clint Eastwood in `movies` database"}
+```{r clint-results, echo = FALSE, fig.align = "center", fig.cap = if (knitr::is_html_output()) {"Results of a query to find the names of actors, movie title and release date for movies directed by Clint Eastwood in the `movies` database"} else {"Results of a query to find the names of actors, movie title and release date for movies directed by Clint Eastwood in the \\texttt{movies} database"}}
 knitr::include_graphics("www/databases/clint-results.png")
 ```
 
 :::{.thinkahead data-latex=""}
-**Thinking ahead:** Neo4J offers a free, sandbox web-based environment with which to learn about its graph database structure and to learn how to write Cypher queries.  In includes some interesting graph data sets related to social media analysis, crime investigation, fraud detection, sport and many others.  You can start projects in this sandbox and interact with them over the web for a limited period (after which you need to restart a project).  You can access the sandbox at https://neo4j.com/sandbox.  Later in this chapter we will go into more detail about working with Neo4J graph databases including how to interact with them in R and Python, and how to run queries and algorithms against them. 
+**Thinking ahead:** Neo4J offers a free, sandbox web-based environment through which to learn about its graph database structure and to learn how to write Cypher queries.  It includes some interesting graph data sets related to social media analysis, crime investigation, fraud detection, sport and many others.  You can start projects in this sandbox and interact with them over the web for a limited period (after which you need to restart a project).  You can access the sandbox at https://neo4j.com/sandbox.  Later in this chapter we will go into more detail about working with Neo4J graph databases including how to interact with them in R and in Python, and how to run queries and algorithms against them. 
 :::
 
 ### Resource Description Frameworks (RDFs)
 
-**Resource Description Frameworks (RDFs)** are highly flexible graph database models that allow the hierarchical 'spawning' of new information in a graph by means of the additions of new nodes.  This permits the graph to build more easily organically, because there is no need to worry about whether a given node property already exists in the graph --- it can simply be added into a new node that is pointed to by the parent node.  For example, imagine that a graph contains nodes that represent people, and imagine that we have some information on the preferred names of those people.  Imagine that we have this information for some but not all people, and that some people have a preferred name but others do not.  In an RDF, we can create new 'property edge' called `hasPreferredName` in which directs to a new node containing the preferred name of the individual.  
+**Resource Description Frameworks (RDFs)** are highly flexible graph database models that allow the hierarchical 'spawning' of new information in a graph by means of the addition of new nodes.  This permits the graph to build more easily organically, because there is no need to worry about whether a given node property already exists in the graph --- it can simply be added into a new node that is pointed to by the parent node.  For example, imagine that a graph contains nodes that represent people, and imagine that we have some information on the preferred names of those people.  Imagine that we have this information for some but not all people, and that some people have a preferred name but others do not.  In an RDF, we can create new 'property edge' called `hasPreferredName` which directs to a new node containing the preferred name of the individual.  
 
 This high level of flexibility makes RDFs a great choice for ontologies or knowledge graphs for which their development will be unpredictable and will grow organically over time.  The low level simplicity of RDFs is the engine behind this flexibility, but this can translate into a complex query language at a high level, making RDFs challenging to deal with for those without specialized knowledge of them.  In particular, it can often be necessary to 'dictate the traversal route' of the graph in the query language of an RDF, which will require an extensive knowledge of the graph's structure.
 
@@ -89,10 +89,10 @@ Briefly described, the `WHERE` component of this query instructs a graph travers
 3.  Follow to retrieve the value of the `hog` nodes (call this `mayor`)
 4.  `mayor` must have a 'sex or gender' property edge that directs to 'female'
 5.  Filter results so that `hog` has no 'end date' property edge going from it (that is, current heads of government)
-6.  Follow 'country' property edge from remaining `city` nodes (call the resulting nodes `country`)
+6.  Follow 'country' property edges from remaining `city` nodes (call the resulting nodes `country`)
 7.  Get the English labels of the `country` nodes.
 
-This is the core of the query --- the remainder simply counts the occurrences of the different country labels and then ranks them descending and returns the top ten.  You can see how this query requires quite detailed instruction on how to traverse the graph, and also needs a very detailed knowledge of a bewildering array of codes for properties and values.  RDFs are beautiful and extremely powerful relationship storage engines, but there is an extremely high expertise bar to their use.
+This is the core of the query --- the remainder simply counts the occurrences of the different country labels and then ranks them in descending order and returns the top ten.  You can see how this query requires quite detailed instruction on how to traverse the graph, and also needs a very detailed knowledge of a bewildering array of codes for properties and values.  RDFs are beautiful and extremely powerful relationship storage engines, but there is a high expertise bar to their use.
 
 :::{.thinkahead data-latex=""}
 **Playing around:** The query and traversal complexity of RDFs should not be a barrier to you playing around with them.  The Wikidata Query Service has a ton of resources to help you understand how to construct interesting queries. For a start, try submitting the above query to WDQS and check the result.  If you thought that was fun, some key resources include a long list of example queries^[https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/queries/examples] and a Query Builder^[https://query.wikidata.org/querybuilder/?uselang=en] which can help non-SPARQL experts to build their own queries.
@@ -100,15 +100,15 @@ This is the core of the query --- the remainder simply counts the occurrences of
 
 ## Example: how to work with a Neo4J graph database
 
-In this section we will briefly review some ways to work with a Neo4J graph database in order to illustrate how data can be moved into a persistent graph structure for regular query and analysis.  First we will look at how to interact with the database via a web browser interface.  Then we will look at how to load and query data via R and Python.
+In this section we will briefly review some ways to work with a Neo4J graph database in order to illustrate how data can be moved into a persistent graph structure for regular query and analysis.  First we will look at how to interact with the database via a web browser interface.  Then we will look at how to load and query data programmatically via R and Python.
 
 In order to follow the instructions in this section, you will need to set up a free Neo4J Aura graph database.  This is a limited instance of a Neo4J graph database hosted on the cloud and offered to developers and learners for free.  To do this, follow these steps:
 
-1.  Go to the Neo4J Aura site a https://neo4j.com/cloud/aura/ and click 'Start Free'.
+1.  Go to the Neo4J Aura site at https://neo4j.com/cloud/aura/ and click 'Start Free'.
 2.  Register for free database in a region of your choice and give your database a name.
 3.  Make a record of your database URI, your username and your password.  In the following instructions we will refer to these as `your_URI`, `your_username` and `your_password`.
 
-In the following examples we will load our `ontariopol` dataset of the Ontario state politician twitter network from Chapter \@ref(community) into a Neo4J graph database and do some querying against the database.
+In the following examples we will load our `ontariopol` dataset of the Ontario state politician Twitter network from Chapter \@ref(community) into a Neo4J graph database and do some querying against the database.
 
 ### Using the browser interface {#neo4j-browser}
 
@@ -120,7 +120,7 @@ Navigate to your free database instance by visting the Neo4J Aura site, selectin
 knitr::include_graphics("www/databases/interface.png")
 ```
 
-Cypher queries can be entered in the box at the top.  To break a line without submitting the query press Shift+Enter.  To submit the query press Enter or click the play icon.  But before we can start submitting queries we need to load some data into the database.  Among many formats, data can be loaded into Neo4J from an online `csv` file.  Use the following query to load all the vertices from our `ontariopol` data set.
+Cypher queries can be entered in the box at the top^[Multiple queries can be submitted together providing they are separated by a semicolon.  Generally it is good practice to always end a query with a semicolon.].  To break a line without submitting the query press Shift+Enter.  To submit the query press Ctrl+Enter or click the play icon.  Before we can start submitting queries we need to load some data into the database.  Among many formats, data can be loaded into Neo4J from an online `csv` file.  Use the following query to load all the vertices from our `ontariopol` data set.
 
 ```
 LOAD CSV WITH HEADERS 
@@ -143,7 +143,7 @@ MATCH (p:Person)
 RETURN p.name;
 ```
 
-This query should return the `name` property of all `Person` nodes in the graph.  Now we need to add the edges using this query.
+This query should return the `name` property of all `Person` nodes in the graph.  Now we need to add the edges using this query:
 
 ```
 LOAD CSV WITH HEADERS 
@@ -161,13 +161,13 @@ We can now look at our database schema using the following query:
 CALL db.schema.visualization();
 ```
 
-This should show a very simple schema with one node type and one edge type.  By clicking on the database icon in the top left, you should see further information panel, which should confirm the details of the nodes, the relationships and the properties in the graph, as in Figure \@ref(fig:database-info).
+This should show a very simple schema with one node type and one edge type.  By clicking on the database icon in the top left, you should see a further information panel, which should confirm the details of the nodes, the relationships and the properties in the graph, as in Figure \@ref(fig:database-info).
 
 ```{r database-info, echo = FALSE, fig.align = "center", fig.cap = "The database information panel"}
 knitr::include_graphics("www/databases/database-info.png")
 ```
 
-Congratulations!  You've loaded the data into the graph.  Now let's run a query to find the top five politicians who interacted with Christine Elliott based on weight (excluding Christine Elliott herself).
+Congratulations!  You've loaded the data into the graph database.  Now let's run a query to find the top five politicians who interacted with Christine Elliott based on weight (excluding Christine Elliott herself).
 
 ```
 MATCH (p:Person)-[i:INTERACTED_WITH]->({name: "Christine Elliott"})
@@ -196,7 +196,7 @@ CALL apoc.stats.degrees()
 
 ### Working with Neo4J using R
 
-The `neo4jshell` package in R allows you to submit queries to a Neo4J database and retrieve results, among other things^[In full disclosure, this package was developed by the author of this book].  This package requires the `cypher-shell` command line utility to be installed on your system.  You can install the `cypher-shell` command line utility standalone by downloading and installing from the Neo4J downloads page^[https://neo4j.com/download-center/#cyphershell].  Another option is to download and install the full and free Neo4J community server, which will include `cypher-shell`, from the community server download page^[https://neo4j.com/download-center/#community].
+The `neo4jshell` package in R allows you to submit queries to a Neo4J database and retrieve results, among other things^[In full disclosure, this package was developed by the author of this book.].  This package requires the `cypher-shell` command line utility to be installed on your system.  You can install the `cypher-shell` command line utility standalone by downloading and installing from the Neo4J downloads page^[https://neo4j.com/download-center/#cyphershell].  Another option is to download and install the full and free Neo4J community server, which will include `cypher-shell`, from the community server download page^[https://neo4j.com/download-center/#community].
 
 For the `neo4j_query()` query function to work most smoothly, you should ensure the directory containing the `cypher-shell` executable is in your system `PATH` environment variable.  Otherwise you will need to constantly quote the full path to the `cypher-shell` executable in the `shell_path` argument of the function.
 
@@ -224,7 +224,7 @@ In the examples below, we assume that the data has already been loaded to the da
 # write cypher query
 query <- "
 MATCH (p:Person)-[:INTERACTED_WITH]->({party: 'IND'})
-RETURN DISTINCT p.name AS name, p.party as party
+RETURN DISTINCT p.name AS name, p.party as party;
 "
 
 # submit to server and retrieve results as dataframe
@@ -240,7 +240,7 @@ In a similar way we can submit an APOC procedure to obtain statistics about the 
 # get out-degree stats
 stats <- neo4jshell::neo4j_query(
   con = neo4j_conn, 
-  qry = "CALL apoc.stats.degrees('>')"
+  qry = "CALL apoc.stats.degrees('>');"
 )
 
 # extract max, min and mean
@@ -283,7 +283,7 @@ Results from queries will be returned as a list of dicts, which can be converted
 # write cypher query
 query = """
 MATCH (p:Person)-[:INTERACTED_WITH]->({party: 'IND'})
-RETURN DISTINCT p.name AS name, p.party as party
+RETURN DISTINCT p.name AS name, p.party as party;
 """
 
 # submit to server and retrieve results as list of dicts
@@ -297,19 +297,19 @@ To run APOC procedures:
 
 ```{python}
 # submit APOC procedure
-stats = neo4j_conn.run("CALL apoc.stats.degrees('>')").data()
+stats = neo4j_conn.run("CALL apoc.stats.degrees('>');").data()
 
-# convert results to pandas DataFrame and view first few rows
+# convert results to pandas DataFrame
 pd.DataFrame(stats)
 ```
 
 ## Moving to persistent graph data in organizations
 
-The material in this chapter is intended as a brief introduction to the idea of persisting data in a graph database.  For organizations who are repeatedly conducting analysis on connections and relationships, this is a natural step to make such analysis more 'oven ready'.  Common transformations which need to be done on data in traditional rectangular databases in order to allow the analysis of connections can be done automatically at regular intervals  (weekly, monthly or whatever makes sense based on reporting cadences) and incrementally added to the graph database.  An automated ETL (Extract, Transform, Load) process can be set up in R, Python or another platform and timed to run on servers at specified intervals to extract the data from the rectanguar databases, perform the necessary transformations to create the data on vertices, edges and properties and then load the data to the graph database.  
+The material in this chapter is intended as a brief introduction to the idea of persisting data in a graph database.  For organizations who are repeatedly conducting analysis on connections and relationships, this is a natural step to make such analysis more 'oven ready'.  Common transformations which need to be done on data in traditional rectangular databases in order to allow the analysis of connections can be done automatically at regular intervals  (weekly, monthly or whatever makes sense based on reporting cadences) and incrementally added to the graph database.  An automated ETL (Extract, Transform, Load) process can be set up in R, Python or another platform and timed to run on servers at specified intervals to extract the data from the rectangular databases, perform the necessary transformations to create the data on vertices, edges and properties and then load the data to the graph database.  
 
-It should be noted that a graph database is extremely flexible in its ability to store many types of data for many use cases in the same schema.  Imagine, for example that we wanted to add the data from out `schoolfriends` graph to the same graph schema where we loaded the `ontariopol` data.  These are completely different networks, but they can easily coexist in the same graph database.  There are many options for how the database could be designed to facilitate this. For example, instead of a single `Person` node there could be different `Politician` and `Student` nodes.  Or we could add a `type` property to a `Person` node which could have the value `politican` or `student`.  Or we could create new `Politican` and `Student` nodes and have edges with the relationship `IS_A` connecting them in a more RDF like approach.   
+It should be noted that a graph database is extremely flexible in its ability to store many types of data for many use cases in the same schema.  Imagine, for example that we wanted to add the data from our `schoolfriends` graph to the same graph schema where we loaded the `ontariopol` data.  These are completely different networks, but they can easily coexist in the same graph database.  There are many options for how the database could be designed to facilitate this. For example, instead of a single `Person` node there could be different `Politician` and `Student` nodes.  Or we could add a `type` property to a `Person` node which could have the value `politican` or `student`.  Or we could create new `Politican` and `Student` nodes and have edges with the relationship `IS_A` connecting them in a more RDF-like approach.   
 
-In all of these cases the two networks can live in the same database but never interfere with each other, and this model can be scaled arbitrarily as long as it is designed appropriately.  This plethora of options means that graph databases often require more up-front schema design consideration compared to traditional databases.  Changes in the organizations data that inevitably occur over time will need to be added to the schema, and some designs will make it more or less easy to do this.  
+In all of these cases the two networks can live in the same database but never interfere with each other, and this model can be scaled arbitrarily as long as it is designed appropriately^[Alternatively, if different network data is being used for completely different use cases, many graph database products also offer multi-tenancy, allowing you to host separate graph databases on the same database server].  This plethora of options means that graph databases often require more up-front schema design consideration compared to traditional databases.  Changes in the organizations data that inevitably occur over time will need to be added to the schema, and some designs will make it more or less easy to do this.  
 
 ## Learning exercises
 
@@ -317,20 +317,20 @@ In all of these cases the two networks can live in the same database but never i
 
 1.  Why are graph databases an attractive option for organizations who are regularly performing analysis on connections?
 2.  Describe labeled-property graphs and resource description frameworks (RDFs) and explain some differences between them as graph database technologies, including some pros and cons of their use.
-3.  Find some examples of real-life use cases of RDFs.  Why are RDFs good choices for these use cases?
+3.  Find some examples of real life use cases of RDFs.  Why are RDFs good choices for these use cases?
 4.  Search some examples of labeled-property graph technologies.  What query languages do each use? 
-5.  Describe how Cypher queries are constructed intuitively using ACSII art.  Can you find any other query languages that use ASCII art?  How similar or different are these languages?
+5.  Describe how Cypher queries are constructed intuitively using ASCII art.  Can you find any other query languages that use ASCII art?  How similar or different are these languages?
 
 ### Data exercises
 
-For exercises related to Neo4J, try completing this in the browser and also using either R or Python.  Remember that is you are loading data to the graph, be careful to ensure that any previous load of the same data is deleted before reload.  If you need to, you can search for help online for Cypher deletion queries, but note that edges must be deleted before nodes.
+For exercises related to Neo4J, try completing this in the browser and also using either R or Python.  Remember that if you are loading data to the graph, be careful to ensure that any previous load of the same data is deleted before reload.  If you need to, you can search for help online for Cypher deletion queries, but note that edges must be deleted before nodes.
 
 1.  Try to write a SPARQL query and submit it to Wikidata to find the winners of the first ten Eurovision song contests.  Try a similar query to find the winners of all FIFA World Cups.
 2.  Write and submit a Cypher query on the `ontariopol` data loaded to Neo4J to find all interactions *from* PCP party politicians *to* LIB party politicians with a weight of greater than 10.
 3.  Write and submit an APOC procedure on the `ontariopol` data loaded to Neo4J to obtain the in-degree statistics of the graph.
-4.  Using the online vertex and edge set for the `schoolfriends` data set^[https://ona-book.org/data/schoolfriends_edgelist.csv and https://ona-book.org/data/schoolfriends_vertices.csv], create a new set of nodes in the Neo4J graph called `Student` nodes.  Give these nodes a `name`, `studentClass` and `studentGender` property from the data sets.  
+4.  Using the online vertex and edge set for the `schoolfriends` data set^[https://ona-book.org/data/schoolfriends_edgelist.csv and https://ona-book.org/data/schoolfriends_vertices.csv], create a new set of nodes in the Neo4J graph called `Student` nodes.  Give these nodes a `name`, `studentClass` and `studentGender` property from the data sets.
 5.  Create *undirected* edges for the Facebook friendships in the data and call the relationship `FACEBOOK_FRIENDS`.  Create *directed* edges for the reported friendships and call the relationship `REPORTED_FRIEND`.
 6.  Write and submit a Cypher query to find all Facebook friends of node 883, and a similar query to find all those who reported node 883 as a friend.
-7.  Write and submit an APOC procedure to find the node degree statistics for the Facebook friendships.  Write and submit separate procedures for the incoming and outgoing reported freindships.
+7.  Write and submit an APOC procedure to find the node degree statistics for the Facebook friendships.  Write and submit separate procedures for the incoming and outgoing reported friendships.
 
 

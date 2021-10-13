@@ -58,8 +58,6 @@
 <script src="libs/visNetwork-binding-2.0.9/visNetwork.js"></script>
 <script src="libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
-<link href="libs/bsTable-3.3.7/bootstrapTable.min.css" rel="stylesheet" />
-<script src="libs/bsTable-3.3.7/bootstrapTable.js"></script>
 <script src="libs/d3-4.5.0/d3.min.js"></script>
 <script src="libs/forceNetwork-binding-0.4/forceNetwork.js"></script>
 <script src="libs/sankey-1/sankey.js"></script>
@@ -179,7 +177,10 @@ div.csl-indent {
 <li><a href="./">Handbook of Regression Modeling in People Analytics</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#note-on-data"><i class="fa fa-check"></i>Note on data</a></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i>Introduction</a></li>
 <li class="chapter" data-level="1" data-path="everywhere.html"><a href="everywhere.html"><i class="fa fa-check"></i><b>1</b> Graphs Everywhere!</a>
 <ul>
@@ -273,8 +274,8 @@ div.csl-indent {
 </ul></li>
 <li class="chapter" data-level="4.2" data-path="viz-graphs.html"><a href="viz-graphs.html#visualizing-graphs-in-python"><i class="fa fa-check"></i><b>4.2</b> Visualizing graphs in Python</a>
 <ul>
-<li class="chapter" data-level="4.2.1" data-path="viz-graphs.html"><a href="viz-graphs.html#static-visualizations-using-networkx-and-matplotlib"><i class="fa fa-check"></i><b>4.2.1</b> Static visualizations using <code>networkx</code> and <code>matplotlib</code></a></li>
-<li class="chapter" data-level="4.2.2" data-path="viz-graphs.html"><a href="viz-graphs.html#dynamic-visualization-using-networkx-and-pyvis"><i class="fa fa-check"></i><b>4.2.2</b> Dynamic visualization using <code>networkx</code> and <code>pyvis</code></a></li>
+<li class="chapter" data-level="4.2.1" data-path="viz-graphs.html"><a href="viz-graphs.html#static-plotting-using-networkx-and-matplotlib"><i class="fa fa-check"></i><b>4.2.1</b> Static plotting using <code>networkx</code> and <code>matplotlib</code></a></li>
+<li class="chapter" data-level="4.2.2" data-path="viz-graphs.html"><a href="viz-graphs.html#interactive-visualization-using-networkx-and-pyvis"><i class="fa fa-check"></i><b>4.2.2</b> Interactive visualization using <code>networkx</code> and <code>pyvis</code></a></li>
 </ul></li>
 <li class="chapter" data-level="4.3" data-path="viz-graphs.html"><a href="viz-graphs.html#learning-exercises-2"><i class="fa fa-check"></i><b>4.3</b> Learning exercises</a>
 <ul>
@@ -286,7 +287,7 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="5.1" data-path="restructuring-data.html"><a href="restructuring-data.html#transforming-data-in-rectangular-tables-for-use-in-graphs"><i class="fa fa-check"></i><b>5.1</b> Transforming data in rectangular tables for use in graphs</a>
 <ul>
-<li class="chapter" data-level="5.1.1" data-path="restructuring-data.html"><a href="restructuring-data.html#creating-a-simple-graph-of-the-chinook-management-hierarchy"><i class="fa fa-check"></i><b>5.1.1</b> Creating a simple graph of the Chinook management hierarchy</a></li>
+<li class="chapter" data-level="5.1.1" data-path="restructuring-data.html"><a href="restructuring-data.html#creating-a-simple-graph-of-a-management-hierarchy"><i class="fa fa-check"></i><b>5.1.1</b> Creating a simple graph of a management hierarchy</a></li>
 <li class="chapter" data-level="5.1.2" data-path="restructuring-data.html"><a href="restructuring-data.html#connecting-customers-through-sales-reps"><i class="fa fa-check"></i><b>5.1.2</b> Connecting customers through sales reps</a></li>
 <li class="chapter" data-level="5.1.3" data-path="restructuring-data.html"><a href="restructuring-data.html#common-purchases"><i class="fa fa-check"></i><b>5.1.3</b> Connecting customers through common purchases</a></li>
 <li class="chapter" data-level="5.1.4" data-path="restructuring-data.html"><a href="restructuring-data.html#approaches-using-python"><i class="fa fa-check"></i><b>5.1.4</b> Approaches using Python</a></li>
@@ -422,7 +423,6 @@ div.csl-indent {
 <li class="chapter" data-level="10.4.2" data-path="databases.html"><a href="databases.html#data-exercises-8"><i class="fa fa-check"></i><b>10.4.2</b> Data exercises</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="appendix-descriptions-of-data-sets-used.html"><a href="appendix-descriptions-of-data-sets-used.html"><i class="fa fa-check"></i>Appendix: Descriptions of Data Sets Used</a></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 </ul>
 
@@ -452,13 +452,17 @@ div.csl-indent {
 <p>But here’s the problem: few people really know how to do network analysis. It is still considered by many as a deep specialism or even a ‘dark art.’ It shouldn’t be. More academic students and researchers should know how to apply graph theory and methods to their work. More business analytics professionals should know how to store and analyze data that is not in traditional rectangular form and which focuses on connection rather than transaction. More companies and organizations should be thinking about how their data can be structured and analyzed to tell them more about how people, skills and knowledge connect and how this can influence key positive and negative institutional outcomes. What’s more, they should not need expensive and inflexible network analysis and visualization software offered by vendors to do this, when the best tools are freely available open source and just require a little bit of programming skill to make full use of them.</p>
 <p>This book aims to make the field of graph and network analysis more approachable to students and professionals by explaining the most important elements of theory and sharing common methodologies using open source programming languages like R and Python. It does so by explaining theory in as much detail as is necessary to support analytical curiosity and interpretation, and by using a wide array of example data sets and code snippets to demonstrate the specific implementation and interpretation of methodologies. Those who start the book will learn about simple but important steps like creating graphs from data sources and visualizing them intuitively. Those who finish the book will learn about important measures like graph density and centrality and useful algorithms for partitioning graphs and identifying communities in complex populations. As you will see as you read on, these methods have many exciting applications. In organization settings — my personal speciality — they can be applied to problems of onboarding new hires, encouraging diverse collaboration and interaction, finding efficient communication strategies, identifying new organizational structures that better reflect the flow of work, detecting intensely collaborative groups, connecting individuals with common interests, finding potential leaders and many other problems.</p>
 <p>There is no way that this book could be a complete overview of graph theory and methods — at least not without the printer running out of ink. There are many, many elements of graph theory and methodology that are not covered in this book. My focus has been primarily on teaching the most critical elements for those who will use graphs in a sociological, psychological or organizational context. This book will improve over time, so if you feel I have missed anything very important, or if you spot errors or have any other suggestions, please do get in touch by leaving an issue on the book’s Github repository<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. If you use the contents of this book or any examples from it for teaching purposes, you don’t need to ask my permission to do so, but I would ask that you reference this book as the source.</p>
-<p>It just remains for me to thank the people who have contributed to making this book better by reading early drafts, or by suggesting new examples. … …</p>
+<p>It just remains for me to thank various people and groups which helped me make this book a reality. Various individuals have contributed to making this book better by reading early drafts, or by trying out code, offering encouragement or suggesting new examples: in particular <a href="https://www.linkedin.com/in/liz-romero-664a6533/">Liz Romero</a>, <a href="https://www.linkedin.com/in/ramsayrk/">Rachel Ramsay</a>, <a href="https://www.linkedin.com/in/christopherabelanger/">Christopher Belanger</a>, <a href="https://www.linkedin.com/in/jenna-eagleson/">Jenna Eagleson</a>, <a href="https://www.linkedin.com/in/bennetvoorhees/">Bennet Voorhees</a>. Nothing in this book would be possible without the fantastic packages that exist in languages like R and Python for working with graphs, and so the authors and contributors of open source packages like <code>igraph</code>, <code>networkx</code>, <code>ggraph</code>, <code>pyvis</code>, <code>visNetwork</code> and <code>networkD3</code> deserve thanks. I am grateful to the Stanford Network Analysis Project (SNAP) and the SocioPatterns collaboration<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> for the datasets they make available to the public, many of which I have used as examples in this book. As always, my thanks to all the developers who work on the <code>rmarkdown</code> and <code>bookdown</code> R packages which allow me to write and format these technical books with much less complexity than would otherwise be the case.</p>
+<p>For me there is no doubt that network analysis is the most exciting, most fun and fastest developing field in People Analytics. I hope you have as much fun learning from this book as I did writing it.</p>
+<p>Keith McNulty<br />
+October 2021</p>
 
 </div>
 <div class="footnotes">
 <hr />
 <ol start="1">
 <li id="fn1"><p><a href="https://github.com/keithmcnulty/ona_book" class="uri">https://github.com/keithmcnulty/ona_book</a><a href="introduction.html#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p><a href="http://www.sociopatterns.org/" class="uri">http://www.sociopatterns.org/</a><a href="introduction.html#fnref2" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
