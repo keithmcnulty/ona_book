@@ -91,7 +91,7 @@ Figure 7.1: The <span class="math inline">\(G_{14}\)</span> graph with four vert
 <span class="header-section-number">7.1</span> Vertex centrality measures in graphs<a class="anchor" aria-label="anchor" href="#vertex-centrality-measures-in-graphs"><i class="fas fa-link"></i></a>
 </h2>
 <p>As we look at the <span class="math inline">\(G_{14}\)</span> graph in Figure <a href="vertex-importance.html#fig:g14-colored">7.1</a>, we see the colored nodes seem to occupy prominent roles in the connective structure of the graph. If we removed Vertex 9, for example, we would split our graph into three disconnected components. Vertex 4 seems to be connected to a lot of immediate neighbours, and we would also split the graph if we removed it, leaving behind some isolates<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;Recall that isolates are vertices that are not connected to any other vertices.&lt;/p&gt;"><sup>55</sup></a>. Vertex 7 seems to occupy a stealthy position from which to efficiently reach other vertices, while Vertex 8 seems to sit in between those other three and probably can’t be ignored for that reason alone.</p>
-<p>What if these vertices represented people in an organization? Would the departure of Vertex 4 mean that Vertices 1, 2, 3 and 5 lose their entire connection to the remainder of the organization? Would the departure of Vertex 9 split the organizatio in terms of the flow of work? If we wanted to distribute important information across the organization by means of these connections, which vertex would be a good place to start? By understanding centrality we can start to appreciate the possible impact of changes to the network, or identify important or influential actors in the network.</p>
+<p>What if these vertices represented people in an organization? Would the departure of Vertex 4 mean that Vertices 1, 2, 3 and 5 lose their entire connection to the remainder of the organization? Would the departure of Vertex 9 split the organization in terms of the flow of work? If we wanted to distribute important information across the organization by means of these connections, which vertex would be a good place to start? By understanding centrality we can start to appreciate the possible impact of changes to the network, or identify important or influential actors in the network.</p>
 <div id="degree-centrality" class="section level3" number="7.1.1">
 <h3>
 <span class="header-section-number">7.1.1</span> Degree centrality<a class="anchor" aria-label="anchor" href="#degree-centrality"><i class="fas fa-link"></i></a>
@@ -182,7 +182,7 @@ If we require that <span class="math inline">\(x\)</span> can only have positive
 <code class="sourceCode R"><span class="co"># 2nd order ego network of Vertex 4</span>
 <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/ego.html">ego</a></span><span class="op">(</span><span class="va">g14</span>, order <span class="op">=</span> <span class="fl">2</span>, nodes <span class="op">=</span> <span class="st">"4"</span><span class="op">)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 9/14 vertices, named, from d3ee301:
+## + 9/14 vertices, named, from 606c762:
 ## [1] 4 8 6 1 7 2 3 5 9</code></pre>
 <div class="sourceCode" id="cb393"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># size of ego network</span>
