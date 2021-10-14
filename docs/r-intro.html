@@ -671,16 +671,16 @@ Figure 2.8: Simple boxplot of <code>Ozone</code> against <code>Month</code> in t
 <div class="sourceCode" id="cb109"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">airquality</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">airquality</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span>, <span class="op">]</span></code></pre></div>
 <pre><code>##     Ozone Solar.R Wind Temp Month Day
-## 104    44     192 11.5   86     8  12
-## 153    20     223 11.5   68     9  30
-## 68     77     276  5.1   88     7   7</code></pre>
+## 136    28     238  6.3   77     9  13
+## 38     29     127  9.7   82     6   7
+## 106    65     157  9.7   80     8  14</code></pre>
 <p>We do this a second time and note a different output because the sampling is random.</p>
 <div class="sourceCode" id="cb111"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">airquality</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">airquality</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span>, <span class="op">]</span></code></pre></div>
 <pre><code>##     Ozone Solar.R Wind Temp Month Day
-## 146    36     139 10.3   81     9  23
-## 105    28     273 11.5   82     8  13
-## 135    21     259 15.5   76     9  12</code></pre>
+## 1      41     190  7.4   67     5   1
+## 40     71     291 13.8   90     6   9
+## 137     9      24 10.9   71     9  14</code></pre>
 <p>Random number generation can be problematic when you want to precisely replicate work done previously by yourself or others. If the previous work depended on random number generation, then your output will probably not match the previous output and it will be difficult to tell if this is because of an error you made or simply because of different random numbers.</p>
 <p>You can control random number generation by manually setting a random seed. In fact, random number generation in statistical software is rarely truly random, and is actually <em>pseudorandom</em>. Pseudorandomization is a simulated process that is ‘seeded’ using a vector of values. By default this vector is generated from the precise system time at a given moment, but its generation can also be controlled manually by a user. A given seed will always produce the same results from randomization, and so manually setting a seed can be an effective way to ensure precise reproducibility of work.</p>
 <p>Again, let’s generate three random rows from our <code>airquality</code> data set, but this time we manually set the same seed before each sampling process. You can use any number of your choice to manually set a seed.</p>
