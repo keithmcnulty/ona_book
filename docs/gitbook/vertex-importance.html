@@ -534,7 +534,7 @@ If we require that <span class="math inline">\(x\)</span> can only have positive
 <div class="sourceCode" id="cb391"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb391-1"><a href="vertex-importance.html#cb391-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2nd order ego network of Vertex 4</span></span>
 <span id="cb391-2"><a href="vertex-importance.html#cb391-2" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">ego</span>(g14, <span class="at">order =</span> <span class="dv">2</span>, <span class="at">nodes =</span> <span class="st">&quot;4&quot;</span>)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 9/14 vertices, named, from 040f813:
+## + 9/14 vertices, named, from 7e10a8c:
 ## [1] 4 8 6 1 7 2 3 5 9</code></pre>
 <div class="sourceCode" id="cb393"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb393-1"><a href="vertex-importance.html#cb393-1" aria-hidden="true" tabindex="-1"></a><span class="co"># size of ego network</span></span>
 <span id="cb393-2"><a href="vertex-importance.html#cb393-2" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">ego_size</span>(g14, <span class="at">order =</span> <span class="dv">2</span>, <span class="at">nodes =</span> <span class="st">&quot;4&quot;</span>)</span></code></pre></div>
@@ -550,10 +550,10 @@ If we require that <span class="math inline">\(x\)</span> can only have positive
 <p>Finally, eigenvector centrality can be calculated using the <code>eigen_centrality()</code> function. Note that this returns a list including various details about the computation<a href="#fn56" class="footnote-ref" id="fnref56"><sup>56</sup></a>. To see the actual centralities, you should call the <code>vector</code> element of the output list. Note also that this function scales the values by default so that the maximum eigenvector centrality is 1. To avoid this, set <code>scale = FALSE</code>.</p>
 <div class="sourceCode" id="cb399"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb399-1"><a href="vertex-importance.html#cb399-1" aria-hidden="true" tabindex="-1"></a>eigens <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">eigen_centrality</span>(g14, <span class="at">scale =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb399-2"><a href="vertex-importance.html#cb399-2" aria-hidden="true" tabindex="-1"></a>eigens<span class="sc">$</span>vector</span></code></pre></div>
-<pre><code>##          9         10         11         13          8          4          6          1         12         14          7 
-## 0.30157876 0.11585270 0.04773223 0.09618665 0.37800315 0.55038069 0.29000589 0.22676118 0.04773223 0.02806617 0.44350955 
-##          2          3          5 
-## 0.22676118 0.16059484 0.16059484</code></pre>
+<pre><code>##          9         10         11         13          8          4          6 
+## 0.30157876 0.11585270 0.04773223 0.09618665 0.37800315 0.55038069 0.29000589 
+##          1         12         14          7          2          3          5 
+## 0.22676118 0.04773223 0.02806617 0.44350955 0.22676118 0.16059484 0.16059484</code></pre>
 <p>We can see confirmation here that Vertex 4 has the highest eigenvector centrality.</p>
 <div class="thinkahead">
 <p><strong>Playing around:</strong> There are a few other centrality-like measures available in <code>igraph</code> which you could explore and try to understand. Examples include <code>page_rank()</code> for Google’s measure of importance of a web page, and <code>hub_score()</code> and <code>authority_score()</code> for directed networks. Consider testing these out on some datasets, like the <code>wikivote</code> data set from the <code>onadata</code> package or downloaded from the internet<a href="#fn57" class="footnote-ref" id="fnref57"><sup>57</sup></a>.</p>

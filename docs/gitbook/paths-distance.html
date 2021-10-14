@@ -584,61 +584,61 @@ Figure 6.4: Two graphs illustrating how closeness can be measured in different w
 <p>Let’s start by creating the weighted <span class="math inline">\(G_{14W}\)</span> graph from the previous section.</p>
 <div class="sourceCode" id="cb307"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb307-1"><a href="paths-distance.html#cb307-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create weighted graph</span></span>
 <span id="cb307-2"><a href="paths-distance.html#cb307-2" aria-hidden="true" tabindex="-1"></a>(g14w <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(g14_edgelist, <span class="at">directed =</span> <span class="cn">FALSE</span>))</span></code></pre></div>
-<pre><code>## IGRAPH 5549639 UNW- 14 18 -- 
+<pre><code>## IGRAPH cf3c492 UNW- 14 18 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from 5549639 (vertex names):
-##  [1] 9 --10 10--11 11--12 10--12 9 --13 13--14 9 --8  9 --7  8 --7  4 --6  4 --7  8 --4  6 --7  4 --1  4 --2  4 --3  4 --5 
-## [18] 1 --2</code></pre>
+## + edges from cf3c492 (vertex names):
+##  [1] 9 --10 10--11 11--12 10--12 9 --13 13--14 9 --8  9 --7  8 --7  4 --6  4 --7 
+## [12] 8 --4  6 --7  4 --1  4 --2  4 --3  4 --5  1 --2</code></pre>
 <p>The <code>all_simple_paths()</code> function in <code>igraph</code> returns all paths from a specified vertex, and expects at least an <code>igraph</code> object and a vertex name for the <code>from</code> vertex as arguments. If the <code>to</code> argument specifies a vertex, then the function will return only paths between the <code>from</code> and <code>to</code> vertices. Otherwise it will return a list containing all paths from the specified vertex to all other vertices. Note that these functions expect the vertex name as a character string.</p>
 <div class="sourceCode" id="cb309"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb309-1"><a href="paths-distance.html#cb309-1" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">all_simple_paths</span>(g14w, <span class="at">from =</span> <span class="st">&quot;9&quot;</span>, <span class="at">to =</span> <span class="st">&quot;4&quot;</span>)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 3/14 vertices, named, from 5549639:
+## + 3/14 vertices, named, from cf3c492:
 ## [1] 9 8 4
 ## 
 ## [[2]]
-## + 4/14 vertices, named, from 5549639:
+## + 4/14 vertices, named, from cf3c492:
 ## [1] 9 8 7 4
 ## 
 ## [[3]]
-## + 5/14 vertices, named, from 5549639:
+## + 5/14 vertices, named, from cf3c492:
 ## [1] 9 8 7 6 4
 ## 
 ## [[4]]
-## + 4/14 vertices, named, from 5549639:
+## + 4/14 vertices, named, from cf3c492:
 ## [1] 9 7 8 4
 ## 
 ## [[5]]
-## + 3/14 vertices, named, from 5549639:
+## + 3/14 vertices, named, from cf3c492:
 ## [1] 9 7 4
 ## 
 ## [[6]]
-## + 4/14 vertices, named, from 5549639:
+## + 4/14 vertices, named, from cf3c492:
 ## [1] 9 7 6 4</code></pre>
 <p>We see that this agrees with our manual calculations in Section <a href="paths-distance.html#traversal">6.1.1</a>, and is the same whether or not the edges are weighted. This function is easy to use in the case of undirected graphs. When using with digraphs, there is an additional argument called <code>mode</code>, specifying the direction of the paths you are seeking. <code>out</code>, <code>in</code>, <code>all</code> or <code>total</code> are the accepted values for this argument.</p>
 <p>The <code>all_shortest_paths()</code> function performs the same task as the previous function but restricts the output to paths of the shortest length. This function returns a list of objects, but the paths can be found in the <code>res</code> element of the list.</p>
 <div class="sourceCode" id="cb311"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb311-1"><a href="paths-distance.html#cb311-1" aria-hidden="true" tabindex="-1"></a>shortest_9to4 <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">all_shortest_paths</span>(g14w, <span class="at">from =</span> <span class="st">&quot;9&quot;</span>, <span class="at">to =</span> <span class="st">&quot;4&quot;</span>)</span>
 <span id="cb311-2"><a href="paths-distance.html#cb311-2" aria-hidden="true" tabindex="-1"></a>shortest_9to4<span class="sc">$</span>res</span></code></pre></div>
 <pre><code>## [[1]]
-## + 3/14 vertices, named, from 5549639:
+## + 3/14 vertices, named, from cf3c492:
 ## [1] 9 8 4
 ## 
 ## [[2]]
-## + 3/14 vertices, named, from 5549639:
+## + 3/14 vertices, named, from cf3c492:
 ## [1] 9 7 4
 ## 
 ## [[3]]
-## + 4/14 vertices, named, from 5549639:
+## + 4/14 vertices, named, from cf3c492:
 ## [1] 9 8 7 4</code></pre>
 <p>Note that the function has returned the shortest path according to edge weights. To ignore edge weights, simply set <code>weights = NA</code>. This is equivalent to calculating shortest paths in our unweighted <span class="math inline">\(G_{14}\)</span> graph.</p>
 <div class="sourceCode" id="cb313"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb313-1"><a href="paths-distance.html#cb313-1" aria-hidden="true" tabindex="-1"></a>shortest_9to4_uw <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">all_shortest_paths</span>(g14w, <span class="at">from =</span> <span class="st">&quot;9&quot;</span>, <span class="at">to =</span> <span class="st">&quot;4&quot;</span>, </span>
 <span id="cb313-2"><a href="paths-distance.html#cb313-2" aria-hidden="true" tabindex="-1"></a>                                               <span class="at">weights =</span> <span class="cn">NA</span>)</span>
 <span id="cb313-3"><a href="paths-distance.html#cb313-3" aria-hidden="true" tabindex="-1"></a>shortest_9to4_uw<span class="sc">$</span>res</span></code></pre></div>
 <pre><code>## [[1]]
-## + 3/14 vertices, named, from 5549639:
+## + 3/14 vertices, named, from cf3c492:
 ## [1] 9 7 4
 ## 
 ## [[2]]
-## + 3/14 vertices, named, from 5549639:
+## + 3/14 vertices, named, from cf3c492:
 ## [1] 9 8 4</code></pre>
 <p>The <code>distances()</code> function calculates distance in a graph. By default it calculates the distance between all pairs of vertices and returns the results as a distance matrix.</p>
 <div class="sourceCode" id="cb315"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb315-1"><a href="paths-distance.html#cb315-1" aria-hidden="true" tabindex="-1"></a><span class="fu">distances</span>(g14w)</span></code></pre></div>
@@ -678,13 +678,13 @@ Figure 6.4: Two graphs illustrating how closeness can be measured in different w
 <p>If a graph is not connected, the <code>diameter()</code> function will return the diameter of the largest connected component by default. The function <code>farthest_vertices()</code> will return a pair vertices at either end of a diameter path, and the function <code>get_diameter()</code> will return a full diameter path.</p>
 <div class="sourceCode" id="cb325"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb325-1"><a href="paths-distance.html#cb325-1" aria-hidden="true" tabindex="-1"></a><span class="fu">farthest_vertices</span>(g14w, <span class="at">weights =</span> <span class="cn">NA</span>)</span></code></pre></div>
 <pre><code>## $vertices
-## + 2/14 vertices, named, from 5549639:
+## + 2/14 vertices, named, from cf3c492:
 ## [1] 11 1 
 ## 
 ## $distance
 ## [1] 5</code></pre>
 <div class="sourceCode" id="cb327"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb327-1"><a href="paths-distance.html#cb327-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_diameter</span>(g14w, <span class="at">weights =</span> <span class="cn">NA</span>)</span></code></pre></div>
-<pre><code>## + 6/14 vertices, named, from 5549639:
+<pre><code>## + 6/14 vertices, named, from cf3c492:
 ## [1] 11 10 9  8  4  1</code></pre>
 <p>Finally, the <code>edge_density()</code> function will calculate the density of the graph. You can find the formula for edge density in an earlier footnote in this chapter and if you like you can verify this manually for our <span class="math inline">\(G_{14W}\)</span> graph.</p>
 <div class="sourceCode" id="cb329"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb329-1"><a href="paths-distance.html#cb329-1" aria-hidden="true" tabindex="-1"></a><span class="fu">edge_density</span>(g14w)</span></code></pre></div>
@@ -761,17 +761,17 @@ Figure 6.4: Two graphs illustrating how closeness can be measured in different w
 <span id="cb350-14"><a href="paths-distance.html#cb350-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">vertices =</span> workfrance_vertices,</span>
 <span id="cb350-15"><a href="paths-distance.html#cb350-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">directed =</span> <span class="cn">FALSE</span></span>
 <span id="cb350-16"><a href="paths-distance.html#cb350-16" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
-<pre><code>## IGRAPH 7d952d4 UN-- 211 932 -- 
+<pre><code>## IGRAPH 6119bfd UN-- 211 932 -- 
 ## + attr: name (v/c), dept (v/c), mins (e/n)
-## + edges from 7d952d4 (vertex names):
-##  [1] 3   --159  253 --3    3   --447  3   --498  3   --694  3   --751  3   --859  3   --908  14  --18   99  --14   14  --441 
-## [12] 520 --14   14  --544  14  --653  14  --998  15  --120  15  --160  15  --162  15  --178  15  --259  15  --261  15  --295 
-## [23] 15  --353  15  --372  15  --464  15  --491  15  --498  15  --909  15  --1090 39  --18   99  --18   429 --18   488 --18  
-## [34] 527 --18   18  --621  18  --650  753 --18   18  --797  18  --845  99  --27   160 --27   259 --27   295 --27   27  --346 
-## [45] 27  --1392 34  --156  34  --250  34  --259  34  --489  34  --615  34  --694  34  --884  34  --959  219 --38   38  --435 
-## [56] 39  --71   39  --72   39  --99   118 --39   39  --219  39  --339  39  --407  39  --468  39  --871  39  --939  43  --285 
-## [67] 43  --339  43  --809  43  --866  43  --985  118 --47   47  --366  47  --691  54  --74   54  --134  54  --158  54  --236 
-## [78] 55  --110  55  --164  447 --55   634 --55   55  --985  1245--55   59  --285  59  --790  59  --793  59  --866  59  --889 
+## + edges from 6119bfd (vertex names):
+##  [1] 3  --159  253--3    3  --447  3  --498  3  --694  3  --751  3  --859 
+##  [8] 3  --908  14 --18   99 --14   14 --441  520--14   14 --544  14 --653 
+## [15] 14 --998  15 --120  15 --160  15 --162  15 --178  15 --259  15 --261 
+## [22] 15 --295  15 --353  15 --372  15 --464  15 --491  15 --498  15 --909 
+## [29] 15 --1090 39 --18   99 --18   429--18   488--18   527--18   18 --621 
+## [36] 18 --650  753--18   18 --797  18 --845  99 --27   160--27   259--27  
+## [43] 295--27   27 --346  27 --1392 34 --156  34 --250  34 --259  34 --489 
+## [50] 34 --615  34 --694  34 --884  34 --959  219--38   38 --435  39 --71  
 ## + ... omitted several edges</code></pre>
 <p>We have built a graph with 211 vertices and 932 edges. The vertices have a <code>dept</code> property which indicates the department the person works in, and the edges have a <code>mins</code> property which indicates the number of minutes spent together in the same place. The <code>mins</code> property could be considered a measure of how strong the connection between two individuals is, so let’s make it a weight in the graph.</p>
 <div class="sourceCode" id="cb352"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb352-1"><a href="paths-distance.html#cb352-1" aria-hidden="true" tabindex="-1"></a><span class="fu">E</span>(workfrance)<span class="sc">$</span>weight <span class="ot">&lt;-</span> <span class="fu">E</span>(workfrance)<span class="sc">$</span>mins</span></code></pre></div>
@@ -787,17 +787,17 @@ Figure 6.4: Two graphs illustrating how closeness can be measured in different w
 <p>These two individuals have an unweighted distance of 2 in the network, meaning they can connect through one intermediary. Now we can use our <code>all_shortest_paths()</code> function to determine who the common intermediary is.</p>
 <div class="sourceCode" id="cb357"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb357-1"><a href="paths-distance.html#cb357-1" aria-hidden="true" tabindex="-1"></a><span class="fu">all_shortest_paths</span>(workfrance, <span class="at">from =</span> <span class="st">&quot;3&quot;</span>, <span class="at">to =</span> <span class="st">&quot;55&quot;</span>, <span class="at">weight =</span> <span class="cn">NA</span>)<span class="sc">$</span>res </span></code></pre></div>
 <pre><code>## [[1]]
-## + 3/211 vertices, named, from 7d952d4:
+## + 3/211 vertices, named, from 6119bfd:
 ## [1] 3   447 55</code></pre>
 <p>There is one common intermediary: employee 447. Therefore, if employees 3 and 55 do not know each other, employee 447 may be able to introduce them. Note that there may be more than one suggestion for intermediaries. For example:</p>
 <div class="sourceCode" id="cb359"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb359-1"><a href="paths-distance.html#cb359-1" aria-hidden="true" tabindex="-1"></a>(paths <span class="ot">&lt;-</span> <span class="fu">all_shortest_paths</span>(workfrance, <span class="at">from =</span> <span class="st">&quot;3&quot;</span>, <span class="at">to =</span> <span class="st">&quot;290&quot;</span>, </span>
 <span id="cb359-2"><a href="paths-distance.html#cb359-2" aria-hidden="true" tabindex="-1"></a>                             <span class="at">weight =</span> <span class="cn">NA</span>)<span class="sc">$</span>res)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 3/211 vertices, named, from 7d952d4:
+## + 3/211 vertices, named, from 6119bfd:
 ## [1] 3   859 290
 ## 
 ## [[2]]
-## + 3/211 vertices, named, from 7d952d4:
+## + 3/211 vertices, named, from 6119bfd:
 ## [1] 3   694 290</code></pre>
 <p>In this case, we could consider using the edge weights to rank the intermediary options, on the basis that higher weights may indicate stronger connections. Let’s visualize these two options by looking at the subgraph with edge weights in Figure <a href="paths-distance.html#fig:intermediary">6.5</a>.</p>
 <div class="sourceCode" id="cb361"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb361-1"><a href="paths-distance.html#cb361-1" aria-hidden="true" tabindex="-1"></a>subgraph <span class="ot">&lt;-</span> <span class="fu">induced_subgraph</span>(workfrance, <span class="at">vids =</span> <span class="fu">c</span>(<span class="st">&quot;3&quot;</span>, <span class="st">&quot;290&quot;</span>, <span class="st">&quot;694&quot;</span>, <span class="st">&quot;859&quot;</span>))</span>
@@ -847,45 +847,58 @@ Figure 6.5: Selecting an intermediary according to higher edge weights
 <p>We could pick any 20 from the neighbors of employee 603 and that would be a great starting point for our 21 tables. Let’s pick those with the highest <code>mins</code> property (assuming that this represents a closer relationship). We can use the <code>inc()</code> function to get all edges containing employee 603 and then select those that have the highest <code>mins</code> property.</p>
 <div class="sourceCode" id="cb370"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb370-1"><a href="paths-distance.html#cb370-1" aria-hidden="true" tabindex="-1"></a>edges603 <span class="ot">&lt;-</span> <span class="fu">E</span>(workfrance)[<span class="fu">inc</span>(<span class="st">&quot;603&quot;</span>)]</span>
 <span id="cb370-2"><a href="paths-distance.html#cb370-2" aria-hidden="true" tabindex="-1"></a>(top_edges603 <span class="ot">&lt;-</span> edges603[<span class="fu">order</span>(<span class="fu">sort</span>(edges603<span class="sc">$</span>mins, <span class="at">decreasing =</span> <span class="cn">TRUE</span>))][<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>])</span></code></pre></div>
-<pre><code>## + 20/932 edges from 7d952d4 (vertex names):
-##  [1] 603--1392 603--1323 603--1362 859--603  603--954  603--1245 603--779  603--649  691--603  694--603  706--603  603--725 
-## [13] 487--603  420--603  428--603  387--603  401--603  603--272  290--603  346--603</code></pre>
+<pre><code>## + 20/932 edges from 6119bfd (vertex names):
+##  [1] 603--1392 603--1323 603--1362 859--603  603--954  603--1245 603--779 
+##  [8] 603--649  691--603  694--603  706--603  603--725  487--603  420--603 
+## [15] 428--603  387--603  401--603  603--272  290--603  346--603</code></pre>
 <p>Now we have the ‘closest’ 20 people to employee 603. Let’s create an edge subgraph and extract the vertices.</p>
 <div class="sourceCode" id="cb372"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb372-1"><a href="paths-distance.html#cb372-1" aria-hidden="true" tabindex="-1"></a>subgraph603 <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">subgraph.edges</span>(workfrance, <span class="at">eid =</span> top_edges603)</span>
 <span id="cb372-2"><a href="paths-distance.html#cb372-2" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(subgraph603)<span class="sc">$</span>name</span></code></pre></div>
-<pre><code>##  [1] &quot;290&quot;  &quot;420&quot;  &quot;428&quot;  &quot;691&quot;  &quot;706&quot;  &quot;694&quot;  &quot;859&quot;  &quot;346&quot;  &quot;387&quot;  &quot;401&quot;  &quot;487&quot;  &quot;603&quot;  &quot;649&quot;  &quot;725&quot;  &quot;779&quot;  &quot;954&quot;  &quot;1245&quot;
-## [18] &quot;1323&quot; &quot;1362&quot; &quot;1392&quot; &quot;272&quot;</code></pre>
+<pre><code>##  [1] &quot;290&quot;  &quot;420&quot;  &quot;428&quot;  &quot;691&quot;  &quot;706&quot;  &quot;694&quot;  &quot;859&quot;  &quot;346&quot;  &quot;387&quot;  &quot;401&quot;  &quot;487&quot; 
+## [12] &quot;603&quot;  &quot;649&quot;  &quot;725&quot;  &quot;779&quot;  &quot;954&quot;  &quot;1245&quot; &quot;1323&quot; &quot;1362&quot; &quot;1392&quot; &quot;272&quot;</code></pre>
 <p>We can also look at the departments of these individuals:</p>
 <div class="sourceCode" id="cb374"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb374-1"><a href="paths-distance.html#cb374-1" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(subgraph603)<span class="sc">$</span>dept</span></code></pre></div>
-<pre><code>##  [1] &quot;DG&quot;   &quot;DISQ&quot; &quot;DISQ&quot; &quot;DISQ&quot; &quot;DMCT&quot; &quot;DMI&quot;  &quot;DMI&quot;  &quot;DST&quot;  &quot;DST&quot;  &quot;DST&quot;  &quot;DST&quot;  &quot;DST&quot;  &quot;DST&quot;  &quot;DST&quot;  &quot;DST&quot;  &quot;DST&quot;  &quot;DST&quot; 
-## [18] &quot;DST&quot;  &quot;DST&quot;  &quot;DST&quot;  &quot;SRH&quot;</code></pre>
+<pre><code>##  [1] &quot;DG&quot;   &quot;DISQ&quot; &quot;DISQ&quot; &quot;DISQ&quot; &quot;DMCT&quot; &quot;DMI&quot;  &quot;DMI&quot;  &quot;DST&quot;  &quot;DST&quot;  &quot;DST&quot;  &quot;DST&quot; 
+## [12] &quot;DST&quot;  &quot;DST&quot;  &quot;DST&quot;  &quot;DST&quot;  &quot;DST&quot;  &quot;DST&quot;  &quot;DST&quot;  &quot;DST&quot;  &quot;DST&quot;  &quot;SRH&quot;</code></pre>
 <p>We see some considerable department similarity, which makes sense. Now that we have found the first person for each table, we will want to try to make sure that we sit that person with nine other people who have some distance from them, and to minimize neighbors sitting at the same table. Let’s start with our first employee 603, and call this Table 1. Because there are only 21 tables but employee 603 has 28 neighbors, we might be willing to allow one neighbor to sit at Table 1. Let’s sit them with the neighbor with whom they spent the least minutes.</p>
 <div class="sourceCode" id="cb376"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb376-1"><a href="paths-distance.html#cb376-1" aria-hidden="true" tabindex="-1"></a>edges603[<span class="fu">which.min</span>(edges603<span class="sc">$</span>mins)]</span></code></pre></div>
-<pre><code>## + 1/932 edge from 7d952d4 (vertex names):
+<pre><code>## + 1/932 edge from 6119bfd (vertex names):
 ## [1] 77--603</code></pre>
 <p>So we will sit employee 603 with employee 77. Now we can select a third individual who has a reasonable distance in the network from both employee 603 and employee 77. Let’s look at all these distances.</p>
 <div class="sourceCode" id="cb378"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb378-1"><a href="paths-distance.html#cb378-1" aria-hidden="true" tabindex="-1"></a>(distance603_77 <span class="ot">&lt;-</span> <span class="fu">distances</span>(workfrance, <span class="at">v =</span> <span class="fu">c</span>(<span class="st">&quot;603&quot;</span>, <span class="st">&quot;77&quot;</span>), <span class="at">weights =</span> <span class="cn">NA</span>))</span></code></pre></div>
-<pre><code>##     89 97 118 220 378 656 720 741 886 1204 1209 1492 290 502 47 119 198 213 253 267 270 343 366 420 428 445 478 520 525 660
-## 603  3  2   2   2   3   3   3   2   3    2    3    4   1   4  2   2   2   2   2   1   2   2   2   1   1   2   2   2   2   2
-## 77   2  1   2   1   2   2   2   2   2    1    2    3   2   4  3   3   3   3   3   2   3   3   3   2   2   3   3   3   2   3
-##     691 836 39 43 59 63 72 80 122 211 219 246 257 285 339 407 466 468 533 702 706 753 784 790 793 809 866 871 889 894 923 939
-## 603   1   2  2  3  3  3  2  2   2   3   3   2   2   3   2   2   3   2   4   3   1   2   2   3   3   3   3   3   2   2   2   3
-## 77    2   3  3  3  3  2  2  3   1   3   3   3   3   3   3   2   3   3   3   4   2   2   3   3   3   3   3   3   2   3   3   2
-##     3 15 34 54 74 79 99 120 131 134 141 156 158 159 160 162 165 178 183 193 205 236 242 250 259 261 295 333 353 372 425 447
-## 603 2  3  2  3  2  3  1   2   3   3   2   2   3   2   2   2   4   3   2   3   3   2   4   3   2   2   2   2   3   2   4   3
-## 77  2  2  2  2  1  2  2   2   3   3   2   2   2   1   2   1   3   3   2   2   3   3   3   2   1   2   2   2   2   2   3   3
-##     453 460 464 489 491 498 574 615 642 677 694 751 763 859 880 884 909 959 1067 1090 1164 1238 1342 38 172 184 210 222 248
-## 603   2   3   3   3   3   3   3   3   3   3   1   3   3   1   3   3   2   3    2    3    2    3    2  4   3   3   1   3   3
-## 77    2   3   2   2   2   2   2   2   2   4   2   2   2   2   2   2   3   2    2    3    3    2    1  3   4   4   2   4   4
-##     252 269 275 322 374 424 465 477 486 504 510 513 527 577 634 638 674 743 771 867 882 893 908 921 1485 27 71 77 147 215 346
-## 603   2   3   2   3   3   2   3   3   3   3   3   3   3   3   2   3   3   2   3   3   2   3   2   3    2  2  1  1   1   1   1
-## 77    3   4   3   3   4   3   4   4   3   4   4   4   3   4   3   4   4   3   4   4   3   4   3   3    3  2  2  0   2   1   1
-##     387 401 426 429 487 488 580 582 603 649 725 779 954 1245 1323 1362 1392 14 181 441 544 778 998 1260 106 245 435 440 117
-## 603   1   1   2   2   1   2   2   2   0   1   1   1   1    1    1    1    1  2   2   3   3   3   3    3   3   3   3   2   1
-## 77    2   2   2   1   2   2   2   2   1   1   2   2   2    2    2    2    2  3   3   4   4   3   4    4   3   3   2   2   2
-##     197 200 413 432 461 475 496 626 653 874 977 1414 18 232 272 531 621 650 744 797 845 55 110 164 173 628 970 985
-## 603   3   2   2   3   2   2   3   3   2   2   3    2  2   2   1   2   3   2   2   2   2  2   3   3   3   2   4   3
-## 77    3   3   3   3   3   3   4   4   2   3   4    3  2   3   2   3   3   3   3   3   3  3   4   3   3   2   4   2</code></pre>
+<pre><code>##     89 97 118 220 378 656 720 741 886 1204 1209 1492 290 502 47 119 198 213 253
+## 603  3  2   2   2   3   3   3   2   3    2    3    4   1   4  2   2   2   2   2
+## 77   2  1   2   1   2   2   2   2   2    1    2    3   2   4  3   3   3   3   3
+##     267 270 343 366 420 428 445 478 520 525 660 691 836 39 43 59 63 72 80 122 211
+## 603   1   2   2   2   1   1   2   2   2   2   2   1   2  2  3  3  3  2  2   2   3
+## 77    2   3   3   3   2   2   3   3   3   2   3   2   3  3  3  3  2  2  3   1   3
+##     219 246 257 285 339 407 466 468 533 702 706 753 784 790 793 809 866 871 889
+## 603   3   2   2   3   2   2   3   2   4   3   1   2   2   3   3   3   3   3   2
+## 77    3   3   3   3   3   2   3   3   3   4   2   2   3   3   3   3   3   3   2
+##     894 923 939 3 15 34 54 74 79 99 120 131 134 141 156 158 159 160 162 165 178
+## 603   2   2   3 2  3  2  3  2  3  1   2   3   3   2   2   3   2   2   2   4   3
+## 77    3   3   2 2  2  2  2  1  2  2   2   3   3   2   2   2   1   2   1   3   3
+##     183 193 205 236 242 250 259 261 295 333 353 372 425 447 453 460 464 489 491
+## 603   2   3   3   2   4   3   2   2   2   2   3   2   4   3   2   3   3   3   3
+## 77    2   2   3   3   3   2   1   2   2   2   2   2   3   3   2   3   2   2   2
+##     498 574 615 642 677 694 751 763 859 880 884 909 959 1067 1090 1164 1238 1342
+## 603   3   3   3   3   3   1   3   3   1   3   3   2   3    2    3    2    3    2
+## 77    2   2   2   2   4   2   2   2   2   2   2   3   2    2    3    3    2    1
+##     38 172 184 210 222 248 252 269 275 322 374 424 465 477 486 504 510 513 527
+## 603  4   3   3   1   3   3   2   3   2   3   3   2   3   3   3   3   3   3   3
+## 77   3   4   4   2   4   4   3   4   3   3   4   3   4   4   3   4   4   4   3
+##     577 634 638 674 743 771 867 882 893 908 921 1485 27 71 77 147 215 346 387 401
+## 603   3   2   3   3   2   3   3   2   3   2   3    2  2  1  1   1   1   1   1   1
+## 77    4   3   4   4   3   4   4   3   4   3   3    3  2  2  0   2   1   1   2   2
+##     426 429 487 488 580 582 603 649 725 779 954 1245 1323 1362 1392 14 181 441
+## 603   2   2   1   2   2   2   0   1   1   1   1    1    1    1    1  2   2   3
+## 77    2   1   2   2   2   2   1   1   2   2   2    2    2    2    2  3   3   4
+##     544 778 998 1260 106 245 435 440 117 197 200 413 432 461 475 496 626 653 874
+## 603   3   3   3    3   3   3   3   2   1   3   2   2   3   2   2   3   3   2   2
+## 77    4   3   4    4   3   3   2   2   2   3   3   3   3   3   3   4   4   2   3
+##     977 1414 18 232 272 531 621 650 744 797 845 55 110 164 173 628 970 985
+## 603   3    2  2   2   1   2   3   2   2   2   2  2   3   3   3   2   4   3
+## 77    4    3  2   3   2   3   3   3   3   3   3  3   4   3   3   2   4   2</code></pre>
 <p>We could use the mean of the distances to decide on the person with the furthest distance from those already selected.</p>
 <div class="sourceCode" id="cb380"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb380-1"><a href="paths-distance.html#cb380-1" aria-hidden="true" tabindex="-1"></a><span class="fu">which.max</span>(<span class="fu">colMeans</span>(distance603_77))</span></code></pre></div>
 <pre><code>## 502 
