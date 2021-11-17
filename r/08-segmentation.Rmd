@@ -1,16 +1,16 @@
 # Components, Communities and Cliques {#community}
 
-The study of group dynamics would be pretty ineffective if we were not able to identify and study important subgroups.  Networks of people are often made up of subsets that interact more intensely among each other than they do with the rest of the network, and it is often very important in research and analysis to identify or approximate these subsets as best as possible so that they can be studied more closely.  In complex networks, this is not an easy task.  Most of the computational methods we have available to us for finding densely connected subsets of vertices (usually called *communities*) are iterative approximations which make use of heuristics^[Heuristics are methodological 'shortcuts' which can vastly reduce the complexity of a problem but usually sacrifice some element of accuracy in doing so.] and are rarely 100% accurate^[Many problems of graph 'clustering' --- that is, finding partitions of a graph that maximise intra-group density but minimize between-group density --- have already been shown to be NP-hard].  However, in the study of networks in the organizational sciences, we do not need high levels of precision to be able to draw valuable insights, and therefore these modern approximation techniques are very powerful tools for us to have at our disposal.
+The study of group dynamics would be pretty ineffective if we were not able to identify and study important subgroups.  Networks of people are often made up of subsets that interact more intensely among each other than they do with the rest of the network, and it is often very important in research and analysis to identify or approximate these subsets as best as possible so that they can be studied more closely.  In complex networks, this is not an easy task.  Most of the computational methods we have available to us for finding `r if (knitr::is_latex_output()) '\\index{community}'`densely connected subsets of vertices (usually called *communities*) are iterative approximations which make use of heuristics^[Heuristics are methodological 'shortcuts' which can vastly reduce the complexity of a problem but usually sacrifice some element of accuracy in doing so.] and are rarely `r if (knitr::is_latex_output()) '\\index{graph!clustering}'`100% accurate^[Many problems of graph 'clustering' --- that is, finding partitions of a graph that maximise intra-group density but minimize between-group density --- have already been shown to be NP-hard].  However, in the study of networks in the organizational sciences, we do not need high levels of precision to be able to draw valuable insights, and therefore these modern approximation techniques are very powerful tools for us to have at our disposal.
 
-In the work we have done thus far in the book, we have already been exposed to subgraphs --- we have used induced vertex subgraphs containing a specified set of vertices and all edges between them.  However, in these situations we were able to specify the precise subset of vertices that we were interested in.  In this chapter we will look at methods to identify or 'detect' subsets of vertices based on certain properties of the induced subgraphs of those vertices.  We will start with simpler problems such as identifying subsets of vertices which are completely disconnected from others, and then we will proceed to look at graph partitioning and the identification of cliques and communities of vertices which, though not disconnected from other parts of the graph, have higher levels of density between each other than with the rest of the network.
+In the work we have done thus far in the book, we have already been exposed to `r if (knitr::is_latex_output()) '\\index{graph!subgraph}'`subgraphs --- we have used induced vertex subgraphs containing a specified set of vertices and all edges between them.  However, in these situations we were able to specify the precise subset of vertices that we were interested in.  In this chapter we will look at methods to identify or 'detect' subsets of vertices based on certain properties of the induced subgraphs of those vertices.  We will start with simpler problems such as identifying subsets of vertices which are completely disconnected from others, and then we will proceed to look at graph `r if (knitr::is_latex_output()) '\\index{partition (of a graph)}'`partitioning and the identification of cliques and communities of vertices which, though not disconnected from other parts of the graph, have higher levels of density between each other than with the rest of the network.
 
 ## Theory of components, partitions and clusters
 
 ### Connected components of graphs
 
-We learned earlier that a graph $G$ is **connected** if a path exists between any pair of vertices $u$ and $v$ in $G$.  If $G$ is a directed graph, we say $G$ is **weakly connected** if it would be connected when viewed as an undirected graph.  We say that $G$ is **strongly connected** if a path exists *from* $u$ *to* $v$ for any pair of vertices $u$ and $v$ in $G$. We say $G$ is **unilaterally connected** if a path exists *either* from $u$ and $v$ *or* from $v$ to $u$ for any pair of vertices $u$ and $v$ in $G$.  
+`r if (knitr::is_latex_output()) '\\index{graph!connected}'`We learned earlier that a graph $G$ is **connected** if a path exists between any pair of vertices $u$ and $v$ in $G$.  If $G$ is a directed graph, we say $G$ is `r if (knitr::is_latex_output()) '\\index{graph!weakly connected}'`**weakly connected** if it would be connected when viewed as an undirected graph.  We say that $G$ is `r if (knitr::is_latex_output()) '\\index{graph!strongly connected}'`**strongly connected** if a path exists *from* $u$ *to* $v$ for any pair of vertices $u$ and $v$ in $G$. We say $G$ is `r if (knitr::is_latex_output()) '\\index{graph!unilaterally connected}'`**unilaterally connected** if a path exists *either* from $u$ and $v$ *or* from $v$ to $u$ for any pair of vertices $u$ and $v$ in $G$.  
 
-A **connected component** of a graph is a connected subset of vertices, none of which are connected to any other vertex in the graph.  As an example, the undirected graph in Figure \@ref(fig:component1) consists of three connected components, each with three vertices.  In the directed graph in Figure \@ref(fig:component2), one component is strongly connected ($A \longrightarrow B \longrightarrow C \longrightarrow A$), one is unilaterally connected ($D \longrightarrow E \longrightarrow F$) and the third is weakly connected ($G \longrightarrow I \longleftarrow H$).
+A `r if (knitr::is_latex_output()) '\\index{connected component}'`**connected component** of a graph is a connected subset of vertices, none of which are connected to any other vertex in the graph.  As an example, the undirected graph in Figure \@ref(fig:component1) consists of three connected components, each with three vertices.  In the directed graph in Figure \@ref(fig:component2), one component is strongly connected ($A \longrightarrow B \longrightarrow C \longrightarrow A$), one is unilaterally connected ($D \longrightarrow E \longrightarrow F$) and the third is weakly connected ($G \longrightarrow I \longleftarrow H$).
 
 ```{r component1, echo = FALSE, fig.align = "center", fig.cap = "A graph with three connected components, each containing three vertices"}
 library(igraph)
@@ -46,16 +46,16 @@ Connected components of disconnected graphs are important to identify, because m
 It is not too difficult to think of an algorithm that can determine all the connected components of a graph.  If you are interested in this see the exercises at the end of this chapter.
 
 :::{.thinkahead data-latex=""}
-**Playing around**:  Go back and try to find some examples in earlier chapters of graphs that are disconnected, and calculate the diameter that is returned by the functions in R or Python packages.  For example, you could try the Random Acts of Pizza graph from the exercises at the end of Chapter \@ref(viz-graphs) or the graph of reported friendships from the `schoolfriends` data set at the end of the previous chapter.  What do diameter functions return for these graphs?
+**Playing around**:  Go back and try to find some examples in earlier chapters of graphs that are disconnected, and calculate the `r if (knitr::is_latex_output()) '\\index{diameter (of a graph)}'`diameter that is returned by the functions in R or Python packages.  For example, you could try the Random Acts of Pizza graph from the exercises at the end of Chapter \@ref(viz-graphs) or the graph of reported friendships from the `schoolfriends` data set at the end of the previous chapter.  What do diameter functions return for these graphs?
 :::
 
 ### Vertex partitioning
 
-Often graphs will be connected but we still want to divide the vertices up into mutually exclusive subgroups of interest.  Such a division is called a **partition** of a graph.  In a partition, all vertices must be in one and only one subgroup.  Partitions are created through making cuts in a graph.
+`r if (knitr::is_latex_output()) '\\index{partition (of a graph)}'`Often graphs will be connected but we still want to divide the vertices up into mutually exclusive subgroups of interest.  Such a division is called a **partition** of a graph.  In a partition, all vertices must be in one and only one subgroup.  Partitions are created through making cuts in a graph.
 
-A **cut** in a graph $G$ is a set of edges that divide the vertices of $G$ into two disjoint subsets.  The number of edges is known as the *size* of the cut.  In Figure \@ref(fig:cutex), edges e3, e4 and e5 divide the graph into two disjoint connected sets and represents a cut of size 3. 
+`r if (knitr::is_latex_output()) '\\index{cut (of a graph)}'`A **cut** in a graph $G$ is a set of edges that divide the vertices of $G$ into two disjoint subsets.  The number of edges is known as the `r if (knitr::is_latex_output()) '\\index{cut size}'`*size* of the cut.  In Figure \@ref(fig:cutex), edges e3, e4 and e5 divide the graph into two disjoint connected sets and represents a cut of size 3. 
 
-A **minimum cut** is a cut where no other cut exists in $G$ with a smaller number of edges.  In Figure \@ref(fig:cutex), it should not be difficult to see that mimimum cuts have size 1 and can be achieved with either e1 or e2.  In both cases these minimum cuts divide the graph into a connected component and an isolate^[Maximum cuts are cuts where no other cuts exist with a greater number of edges.  Maximum cuts in graphs are extremely challenging to determine. Luckily, we rarely need them in organizational network analysis.].  
+A `r if (knitr::is_latex_output()) '\\index{minimum cut}'`**minimum cut** is a cut where no other cut exists in $G$ with a smaller number of edges.  In Figure \@ref(fig:cutex), it should not be difficult to see that mimimum cuts have size 1 and can be achieved with either e1 or e2.  In both cases these minimum cuts divide the graph into a connected component and an isolate^[Maximum cuts are cuts where no other cuts exist with a greater number of edges.  Maximum cuts in graphs are extremely challenging to determine. Luckily, we rarely need them in organizational network analysis.].  
 
 ```{r cutex, echo = FALSE, fig.align = "center", fig.cap = "Cuts are defined by edges that split the vertices of a graph into disjoint subsets"}
 cutex_edges <- data.frame(
@@ -80,9 +80,9 @@ In directed graphs, cuts can be defined according to the direction of edges, and
 
 ### Vertex clustering and community detection
 
-Vertex **clustering** refers to the process of partitioning a graph in order to satisfy a certain objective. Most commonly in organizational network analysis, that objective is to achieve a high edge density between the vertices inside a cluster, and a low edge density between vertices that are in different clusters.  Such highly connected clusters are usually referred to as **communities** and the process of determining optimal communities in a graph is knows as **community detection** or **community discovery**^[The meaning of 'high' and 'low' edge density is relative and really depends on the nature of the graph, and algorithms will do their best to find communities which maximize the difference between in-community density and cross-community density, even though some or all of these communities may not end up having have particularly high edge density].  Community detection is an unsupervised process.  When we perform community detection on a graph, we do not know in advance how many communities we seek to find or the size of those communities.
+Vertex `r if (knitr::is_latex_output()) '\\index{graph!clustering}'`**clustering** refers to the process of partitioning a graph in order to satisfy a certain objective. Most commonly in organizational network analysis, that objective is to achieve a high `r if (knitr::is_latex_output()) '\\index{density (of a graph)}'`edge density between the vertices inside a cluster, and a low edge density between vertices that are in different clusters.  Such highly connected clusters are usually referred to as `r if (knitr::is_latex_output()) '\\index{community}'`**communities** and the process of determining optimal communities in a graph is knows as `r if (knitr::is_latex_output()) '\\index{community detection}'`**community detection** or **community discovery**^[The meaning of 'high' and 'low' edge density is relative and really depends on the nature of the graph, and algorithms will do their best to find communities which maximize the difference between in-community density and cross-community density, even though some or all of these communities may not end up having have particularly high edge density].  Community detection is an unsupervised process.  When we perform community detection on a graph, we do not know in advance how many communities we seek to find or the size of those communities.
 
-The most commonly used (and fastest) community detection algorithm is the Louvain algorithm.  The Louvain algorithm  partitions a graph into subsets of vertices by trying to maximize the *modularity* of the graph.  Modularity measures how dense the connections are within subsets of vertices in a graph by comparing the density to that which would be expected from a random graph.  In an unweighted and undirected graph, modularity takes a value between -0.5 and +1.  Any value above zero means that the the vertices inside the subgroups are more densely connected than would be expected by chance.  The higher the modularity of a graph, the more connected the vertices are inside the subgroups compared to between the subgroups, and therefore the more certain we can be that the subgroups represent genuine communities of more intense connection.  The approximate steps of the Louvain algorithm are in two phases as follows:
+The most commonly used (and fastest) community detection algorithm is the `r if (knitr::is_latex_output()) '\\index{algorithm!Louvain}'`Louvain algorithm.  The Louvain algorithm  partitions a graph into subsets of vertices by trying to maximize the `r if (knitr::is_latex_output()) '\\index{modularity}'`*modularity* of the graph.  Modularity measures how dense the connections are within subsets of vertices in a graph by comparing the density to that which would be expected from a random graph.  In an unweighted and undirected graph, modularity takes a value between -0.5 and +1.  Any value above zero means that the the vertices inside the subgroups are more densely connected than would be expected by chance.  The higher the modularity of a graph, the more connected the vertices are inside the subgroups compared to between the subgroups, and therefore the more certain we can be that the subgroups represent genuine communities of more intense connection.  The approximate steps of the Louvain algorithm are in two phases as follows:
 
 1.  The algorithm starts with each vertex in its own community.
 2.  Vertices are moved into other communities and modularity is calculated.
@@ -90,22 +90,22 @@ The most commonly used (and fastest) community detection algorithm is the Louvai
 4.  In the second phase, the communities resulting from the first phase are aggregated to form a simpler pseudograph where each vertex represents a community, where loop edges on a vertex are weighted by the total number of edges inside that community, and where edges between vertices are weighted by the total number of edges between those communities^[This also works with weighted edges, assuming that weights represent 'closeness' of connection, which they usually do in organizational contexts.].  In this heuristic step, vertices are moved in this simpler graph with the aim of improving modularity.  That is, communities may be combined if modularity is improved.
 5.  Phases 1 and 2 are repeated until modularity cannot be further improved.
 
-A more recently developed community detection algorithm which improves on the Louvain algorithm is the Leiden algorithm.  The Leiden algorithm operates similarly to Louvain, but has an additional refinement process at the end of the first phase which helps increase the options for improved modularity in the second phase.  The Leiden algorithm will always achieve results as good as the Louvain algorithm, and in many cases may detect communities which are better connected than those detected by Louvain.
+A more recently developed community detection algorithm which improves on the Louvain algorithm is the `r if (knitr::is_latex_output()) '\\index{algorithm!Leiden}'`Leiden algorithm.  The Leiden algorithm operates similarly to Louvain, but has an additional refinement process at the end of the first phase which helps increase the options for improved modularity in the second phase.  The Leiden algorithm will always achieve results as good as the Louvain algorithm, and in many cases may detect communities which are better connected than those detected by Louvain.
 
-Both the Louvain and Leiden algorithms are good options for performing community detection in an organizational context.  However, there are numerous other options, many of which are available in common data science packages.   For example, the Girvan-Newman algorithm operates in a very different way by starting with an entire graph and progressively removing important edges to potentially reveal high modularity subgroups.  For a more detailed reference on the Louvain and Leiden algorithms see @traag and for more general insight into a broader range of community detection algorithms, see @yang. 
+Both the Louvain and Leiden algorithms are good options for performing community detection in an organizational context.  However, there are numerous other options, many of which are available in common data science packages.   For example, the `r if (knitr::is_latex_output()) '\\index{algorithm!Girvan-Newman}'`Girvan-Newman algorithm operates in a very different way by starting with an entire graph and progressively removing important edges to potentially reveal high modularity subgroups.  For a more detailed reference on the Louvain and Leiden algorithms see @traag and for more general insight into a broader range of community detection algorithms, see @yang. 
 
 One important aspect of community detection which is often not understood is that community detection algorithms classify vertices into subgroups, but offer no direct insight into the *nature* of those subgroups.  Further analytic techniques need to be applied to help describe the subgroups in a meaningful way.  For example, the subgroups could be compared to known 'ground truth' characteristics of the network (such as department in the `workfrance` graph or class in the `schoolfriends` graph).  We will examine this using an example later in this chapter.
 
 ### Cliques
 
-A **clique** is a subset of vertices in an undirected graph whose induced subgraph is complete.  That is, the induced subgraph has an edge density of 1.  This is best understood as the most intense possible type of community in an undirected graph.  A **maximal clique** is a clique which cannot be extended by adding another vertex.  A **largest clique** is a clique with the greatest number of vertices of all cliques in the graph.  
+`r if (knitr::is_latex_output()) '\\index{clique (in a graph)}'`A **clique** is a subset of vertices in an undirected graph whose induced subgraph is complete.  That is, the induced subgraph has an edge density of 1.  This is best understood as the most intense possible type of community in an undirected graph.  A `r if (knitr::is_latex_output()) '\\index{maximal clique}'`**maximal clique** is a clique which cannot be extended by adding another vertex.  A **largest clique** is a clique with the greatest number of vertices of all cliques in the graph.  
 
 In Figure \@ref(fig:cutex), the following are maximal cliques:  $B \longleftrightarrow C$, $A \longleftrightarrow C$, $C \longleftrightarrow E \longleftrightarrow F$ and $C \longleftrightarrow D \longleftrightarrow F$ because no other vertex can be added to these cliques without creating an incomplete graph.  $C \longleftrightarrow E \longleftrightarrow F$ and $C \longleftrightarrow D \longleftrightarrow F$ are largest cliques because there is no clique in the graph that has more than three vertices.
 
 Finding a single maximal clique in an undirected graph is not a complex problem and can be done quickly using a standard search algorithm starting on an arbitrary vertex. However, finding maximal cliques of a specified size, or all maximal cliques, as well as finding largest cliques, are problems whose complexity increases with the size and density of a graph.  Care should be taken in attempting these algorithms on very large graphs. 
 
 :::{.thinkahead data-latex=""}
-**Thinking ahead:**  Go back to the graph of *Zachary's Karate Club* in Chapter \@ref(viz-graphs).  Can you identify some maximal cliques?  What do you think is the size of the largest clique?  Thinking about this will give you a sense of how hard the largest clique problem might be on very large graphs.  We will use this as an example later in the chapter.
+**Thinking ahead:**  Go back to the graph of `r if (knitr::is_latex_output()) "\\index{Zachary's Karate Club}"`*Zachary's Karate Club* in Chapter \@ref(viz-graphs).  Can you identify some maximal cliques?  What do you think is the size of the largest clique?  Thinking about this will give you a sense of how hard the largest clique problem might be on very large graphs.  We will use this as an example later in the chapter.
 :::
 
 
@@ -113,7 +113,8 @@ Finding a single maximal clique in an undirected graph is not a complex problem 
 
 ### Finding connected components of disconnected graphs
 
-To illustrate the `components()` function in `igraph` we will load up the `schoolfriends` edgelist dataset from an earlier chapter.  We will use reported friendships, create a directed graph and visualize it as in Figure \@ref(fig:viz-schoolfriends-rp).
+`r if (knitr::is_latex_output()) '\\index{connected component!calculating in R}'`
+To illustrate the `components()` function in `igraph` we will load up the `r if (knitr::is_latex_output()) '\\index{data sets!schoolfriends@\\texttt{schoolfriends}}'``schoolfriends` edgelist dataset from an earlier chapter.  We will use reported friendships, create a directed graph and visualize it as in Figure \@ref(fig:viz-schoolfriends-rp).
 
 ```{r viz-schoolfriends-rp, fig.align = "center", fig.cap = "The directed graph of reported friendships from our French high school"}
 library(igraph)
@@ -184,7 +185,7 @@ ggraph(schoolfriends_rp) +
 
 ### Partioning and community detection in R
 
-For the next few examples we will return to *Zachary's Karate Club* network from Chapter \@ref(viz-graphs).  Let's load up and visualize that undirected graph and mark the known leading actors Mr Hi and John A with larger vertices, as in Figure \@ref(fig:karate8).
+`r if (knitr::is_latex_output()) '\\index{data sets!karate@\\texttt{karate}}'`For the next few examples we will return to *Zachary's Karate Club* network from Chapter \@ref(viz-graphs).  Let's load up and visualize that undirected graph and mark the known leading actors Mr Hi and John A with larger vertices, as in Figure \@ref(fig:karate8).
 
 ```{r karate8, fig.align = "center", fig.cap = "Zachary's Karate Club graph with Mr Hi and John A indicated with larger vertices"}
 # get karate edgelist
@@ -205,6 +206,7 @@ ggraph(karate, layout = "fr") +
   theme_void()
 ```
 
+`r if (knitr::is_latex_output()) '\\index{cut (of a graph)!caclulating in R}'`
 Minimum cuts in graphs can be found using the `min_cut()` function in `igraph`.  This will return the number of edges in the minimum cut, unless you use the `value.only = FALSE` argument, in which case it will return more information on the cut,
 
 ```{r, eval = FALSE}
@@ -219,6 +221,7 @@ igraph::min_cut(karate, value.only = FALSE)
 
 We see that a minimum cut exists of size 1 between Mr Hi and Actor 12.
 
+`r if (knitr::is_latex_output()) '\\index{community detection!calculating in R}'`
 The Louvain community detection algorithm can be run using the `cluster_louvain()` function.  `weights` can be added as an argument, or will be used by default if the graph has a `weight` edge attribute (set `weight = NA` to avoid this).   This will produce a list of community groups.  The best way to record the resulting community membership is to assign it as a vertex property using the `membership()` function.    
 
 ```{r}
@@ -229,7 +232,7 @@ communities <- cluster_louvain(karate)
 V(karate)$community <- membership(communities)
 ```
 
-Before visualizing the communities, we can see how many they are and their size^[We can also see the modularity of the partition by calling the `modularity()` function.]:
+`r if (knitr::is_latex_output()) '\\index{modularity!calculating in R}'`Before visualizing the communities, we can see how many they are and their size^[We can also see the modularity of the partition by calling the `modularity()` function.]:
 
 ```{r}
 sizes(communities)
@@ -251,6 +254,8 @@ ggraph(karate, layout = "fr") +
 
 ### Finding cliques in R
 
+`r if (knitr::is_latex_output()) '\\index{clique (in a graph)!calculating in R}'`
+`r if (knitr::is_latex_output()) '\\index{maximal clique!calculating in R}'`
 The `cliques()` and `max_cliques()` function in `igraph` identifies all cliques or maximal cliques respectively, with a specified maximum or minimum size if desired.  It is advisable to specify a size for cliques of interest because otherwise a long list might be returned, including many single node cliques.
 
 ```{r}
@@ -274,6 +279,7 @@ clique_num(karate)
 
 ### Finding connected components using Python
 
+`r if (knitr::is_latex_output()) '\\index{connected component!calculating in Python}'`
 For *undirected graphs*, the `networkx` function `number_connected_components()` returns the number of connected components in the graph while the `connected_components()` function returns the vertices in each connected component.  
 
 For *directed graphs*, similar functions identify weakly and strongly connected components.  Let's use the reported friendships from the `schoolfriends` data set as an example.
@@ -323,6 +329,7 @@ subgraphs[2].nodes
 
 ### Partitioning and community detection using Python
 
+`r if (knitr::is_latex_output()) '\\index{cut (of a graph)!calculating in Python}'`
 `networkx` has numerous algorithmic functions for exploring edge cuts on graphs, including to find the minimum edge cut.  You can consult the reference documentation^[https://networkx.org/documentation/stable/reference/algorithms/cuts.html] to learn about the various functions available.  Let's use the `karate` dataset to demonstrate how to find a minimum cut.  
 
 ```{python}
@@ -341,7 +348,8 @@ nx.minimum_edge_cut(karate)
 len(nx.minimum_edge_cut(karate))
 ```
 
-Various built-in community detection algorithms are available in the `networkx.community` module, such as the Girvan-Newman edge betweenness algorithm.  This generates communities by progressively removing edges with the highest edge betweenness centrality.  It returns an iterator object where the first element is the result of the first edge removal, and subsequent elements are the result of progressive edge removal.
+`r if (knitr::is_latex_output()) '\\index{community detection!calculating in Python}'`
+Various built-in community detection algorithms are available in the `networkx.community` module, such as the `r if (knitr::is_latex_output()) '\\index{algorithm!Girvan-Newman}'`Girvan-Newman edge betweenness algorithm.  This generates communities by progressively removing edges with the highest edge betweenness centrality.  It returns an iterator object where the first element is the result of the first edge removal, and subsequent elements are the result of progressive edge removal.
 
 ```{python, wrap = TRUE}
 # get communities based on girvan-newman and sort by no of communities
@@ -356,7 +364,7 @@ communities[0]
 
 We see that the first split leads to two communities, one around John A and the other around Mr Hi.
 
-The `cdlib` package in Python contains a very wide range of community detection algorithms that work with the `networkx` package, including the Louvain and Leiden algorithms as well as many others.  In this example we create a Louvain partition of the `karate` graph using `cdlib`.
+The `r if (knitr::is_latex_output()) '\\index{packages!Python!cdlib@\\texttt{cdlib}}'``cdlib` package in Python contains a very wide range of community detection algorithms that work with the `networkx` package, including the Louvain and Leiden algorithms as well as many others.  In this example we create a Louvain partition of the `karate` graph using `cdlib`.
 
 ```{python, echo = FALSE}
 plt.cla()
@@ -378,7 +386,7 @@ louvain_comms = algorithms.louvain(karate)
 louvain_comms.communities
 ```
 
-We see four communities.  The modularity of the resulting community structure can be calculated using the `newman_girvan_modularity()` method.
+`r if (knitr::is_latex_output()) '\\index{modularity!calculating in Python}'`We see four communities.  The modularity of the resulting community structure can be calculated using the `newman_girvan_modularity()` method.
 
 ```{python}
 louvain_comms.newman_girvan_modularity()
@@ -443,11 +451,13 @@ knitr::include_graphics("www/segmentation/karate-py-conn.png")
 ```
 
 :::{.thinkahead data-latex=""}
-**Playing around:** The options for community detection algorithms in the `cdlib` Python package are extensive.  Consider playing around with some different algorithms.  For example, you could try to visualize the community structure based on the Leiden algorithm.  It's also worth spending a little time exploring the technical documentation for the  `cdlib` package^[https://cdlib.readthedocs.io/en/latest] to see the range of methods available.
+**Playing around:** The options for community detection algorithms in the `cdlib` Python package are extensive.  Consider playing around with some different algorithms.  For example, you could try to visualize the community structure based on the `r if (knitr::is_latex_output()) '\\index{algorithm!Leiden}'`Leiden algorithm.  It's also worth spending a little time exploring the technical documentation for the  `cdlib` package^[https://cdlib.readthedocs.io/en/latest] to see the range of methods available.
 :::
 
 ### Finding cliques in Python
 
+`r if (knitr::is_latex_output()) '\\index{clique (in a graph)!calculating in Python}'`
+`r if (knitr::is_latex_output()) '\\index{maximal clique!calculating in Python}'`
 All maximal cliques in a graph can be calculated using the `find_cliques()` function:
 
 ```{python}
@@ -479,7 +489,7 @@ In this section we will illustrate the implementation and interpretation of comm
 
 ### Detecting communities and cliques among Facebook friends {#schoolfriend-community}
 
-Let's reload our Facebook school friends graph and remove any isolates so that we can investigate communities and cliques inside it.
+Let's reload our `r if (knitr::is_latex_output()) '\\index{data sets!schoolfriends@\\texttt{schoolfriends}}'`Facebook school friends graph and remove any isolates so that we can investigate communities and cliques inside it.
 
 ```{r}
 # get schoolfriends data
@@ -543,7 +553,7 @@ ggraph(schoolfriends_fb, layout = "fr") +
 
 ```
 
-Now let's use the Louvain algorithm to detect communities in our graph.
+Now let's use the `r if (knitr::is_latex_output()) '\\index{algorithm!Louvain}'`Louvain algorithm to detect communities in our graph.
 
 ```{r}
 # get optimal louvain communities
@@ -556,7 +566,7 @@ V(schoolfriends_fb)$community <- membership(communities)
 length(unique(V(schoolfriends_fb)$community))
 ```
 
-Six communities have been identified.  Let's compare the modularity of this community structure to the known ground truth communities of class and gender.
+Six communities have been identified.  Let's compare the `r if (knitr::is_latex_output()) '\\index{modularity}'`modularity of this community structure to the known ground truth communities of class and gender.
 
 ```{r}
 # modularity of louvain
@@ -605,7 +615,7 @@ Visually, we can see that the Louvain community structure is a much better repre
 
 ### Detecting politically aligned communities on Twitter
 
-The `ontariopol_edgelist` and `ontariopol_vertices` data sets represent tweeting activity between Ontario province politicians in Canada as captured in September 2021 and spanning several prior years of activity.  Although the Twitter graph is a directed graph, we will set this network up as undirected, with two politicians connected if there has been an interaction between them by means of one mentioning the other in a tweet or one replying to a tweet from the other.  The `weight` property represents the number of interactions and is therefore a measure of the connection strength. 
+The `r if (knitr::is_latex_output()) '\\index{data sets!ontariopol@\\texttt{ontariopol}}'``ontariopol_edgelist` and `ontariopol_vertices` data sets represent tweeting activity between Ontario province politicians in Canada as captured in September 2021 and spanning several prior years of activity.  Although the Twitter graph is a directed graph, we will set this network up as undirected, with two politicians connected if there has been an interaction between them by means of one mentioning the other in a tweet or one replying to a tweet from the other.  The `weight` property represents the number of interactions and is therefore a measure of the connection strength. 
 
 ```{r}
 # get edgelist and vertex data
@@ -630,7 +640,7 @@ We have an undirected, weighted graph, with `screen_name` and `party` vertex pro
 is.connected(ontariopol)
 ```
 
-Now we use the Louvain algorithm to detect an optimal community structure in our graph.  Since the graph has a `weight` property, our modularity calculations will include edge weight.
+Now we use the `r if (knitr::is_latex_output()) '\\index{algorithm!Louvain}'`Louvain algorithm to detect an optimal community structure in our graph.  Since the graph has a `weight` property, our modularity calculations will include edge weight.
 
 ```{r}
 # find optimal communities
@@ -643,7 +653,7 @@ V(ontariopol)$community <- membership(communities)
 length(unique(V(ontariopol)$community))
 ```
 
-We see six commmunities.  Let's compare the modularity of this community structure to the ground truth political party structure.
+We see six commmunities.  Let's compare the `r if (knitr::is_latex_output()) '\\index{modularity}'`modularity of this community structure to the ground truth political party structure.
 
 ```{r}
 # louvain modularity
@@ -735,13 +745,13 @@ g1 + g2
 
 ### Data exercises
 
-For Exercises 1-3, load the `wikivote` edgelist from the `onadata` package or download it from the internet^[https://ona-book.org/data/wikivote.csv].  Recall that this data set represents votes from Wikipedia members to other Wikipedia members to nominate the `to` member to administrator status.  Create a directed graph from this data set.  Be careful with trying to visualize this graph as it is large.
+For Exercises 1-3, load the `r if (knitr::is_latex_output()) '\\index{data sets!wikivote@\\texttt{wikivote}}'``wikivote` edgelist from the `onadata` package or download it from the internet^[https://ona-book.org/data/wikivote.csv].  Recall that this data set represents votes from Wikipedia members to other Wikipedia members to nominate the `to` member to administrator status.  Create a directed graph from this data set.  Be careful with trying to visualize this graph as it is large.
 
 1. Determine how many weakly connected components there are in this graph.  How large is the largest component?
 2. Determine how many strongly connected components there are in this graph.  How large is the largest component?
 3. Describe how you would explain and interepret the difference between your results for Questions 1 and 2.
 
-For exercises 4-10, load the `email_edgelist` and `email_vertices` data sets from the `onadata` package or download them from the internet^[https://ona-book.org/daya/email_edgelist.csv and https://ona-book.org/data/email_vertices.csv].  This data set represents a network of emails sent between members of a large research institution.  The department of each member is included in the vertex data set.  Create an undirected graph from this data^[Note that the visualizations in these exercises might be demanding on low-memory/low-CPU machines. Proceed with caution.].
+For exercises 4-10, load the `r if (knitr::is_latex_output()) '\\index{data sets!email@\\texttt{email}}'``email_edgelist` and `email_vertices` data sets from the `onadata` package or download them from the internet^[https://ona-book.org/daya/email_edgelist.csv and https://ona-book.org/data/email_vertices.csv].  This data set represents a network of emails sent between members of a large research institution.  The department of each member is included in the vertex data set.  Create an undirected graph from this data^[Note that the visualizations in these exercises might be demanding on low-memory/low-CPU machines. Proceed with caution.].
 
 4. Determine the connected components of this network and reduce the network to its largest connected component.
 5. Use the Louvain algorithm to determine a vertex partition/community structure with optimal modularity in this network. 

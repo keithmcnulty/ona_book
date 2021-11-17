@@ -1,24 +1,24 @@
 # Restructuring Data For Use in Graphs {#restructuring-data}
 
-So far we have learned how to define and visualize graphs to allow us to work with them and to gain some basic insights from them.  But we have made a really big assumption in doing so.  We have assumed that the data we need to create our graph is always available in exactly the form in which we will need it.  Usually this is an edgelist or a set of dataframes of edges and vertices.  In reality, only certain types of data exist in this form by default.  Typically, electronic communication data will often --- though not always --- have a 'from' and 'to' structure because that is how communication works and because many of the underlying systems like email, calendar or other communication networks are already built on databases that have a graph-like structure.
+So far we have learned how to define and visualize graphs to allow us to work with them and to gain some basic insights from them.  But we have made a really big assumption in doing so.  We have assumed that the data we need to create our graph is always available in exactly the form in which we will need it.  Usually this is an edgelist or a set of dataframes of edges and vertices.  In reality, only certain types of data exist in this form by default.  Typically, electronic communication data will often --- though not always --- have a 'from' and 'to' structure because that is how communication works and because many of the underlying systems like email, calendar or other `r if (knitr::is_latex_output()) '\\index{network!communication}'`communication networks are already built on databases that have a graph-like structure.
 
 However, there are a lot of problems where we may want to apply graph theory, but where the data does not exist in a way that makes it easy to create a graph.  In these situations we will need to *transform* the data from its existing shape to a graph-friendly shape---a set of vertices and edges.
 
 There are two important considerations in transforming data into a graph-friendly structure. Both of these considerations depend on the problem you are trying to solve with the graph, as follows:
 
-1.  What entities am I interested in connecting?  These will be the vertices of your graph.  This could be a single entity type like a set of people, or it could be multiple entity types, such as connecting people to organizational units.  Complex graphs will usually involve multiple entity types.
+1.  What entities am I interested in connecting?  These will be the `r if (knitr::is_latex_output()) '\\index{vertex!as data entity}'`vertices of your graph.  This could be a single entity type like a set of people, or it could be multiple entity types, such as connecting people to organizational units.  Complex graphs will usually involve multiple entity types.
 
-2.  How do I define the relationship between the vertices?  These will be the edges of your graph.  Again, there can be multiple relationship types, such as 'reports to' or 'works with', depending on how complex your graph needs to be.  
+2.  How do I define the relationship between the vertices?  These will be the `r if (knitr::is_latex_output()) '\\index{edge!as relationship between entities}'`edges of your graph.  Again, there can be multiple relationship types, such as 'reports to' or 'works with', depending on how complex your graph needs to be.  
 
-In addition to these fundamental considerations, there are also questions of design in how you construct your graph.  This is because there is often more than one option for how you can model the entities and relationships you are interested in.  For example, imagine that you have two types of relationships where 'works with' means that two people have worked together on the same project and 'located with' means that two people are based in the same location.  One option for modeling these in a single graph is to have a single entity type (person) connected with edges that have a 'relationship type' property ('works with' or 'located with').  Another option is to have several entity types---person, project and location---as vertices, and to connect people to projects and locations using a single edge type that means 'is a member of'.   In the first option the relationships are modeled directly, but in the second they are modeled indirectly.  Both may work equally well for the problem that is being solved by the graph, but one choice may be more useful or efficient than another.
+In addition to these fundamental considerations, there are also questions of `r if (knitr::is_latex_output()) '\\index{graph!design considerations}'`design in how you construct your graph.  This is because there is often more than one option for how you can model the entities and relationships you are interested in.  For example, imagine that you have two types of relationships where 'works with' means that two people have worked together on the same project and 'located with' means that two people are based in the same location.  One option for modeling these in a single graph is to have a single entity type (person) connected with edges that have a 'relationship type' property ('works with' or 'located with').  Another option is to have several entity types---person, project and location---as vertices, and to connect people to projects and locations using a single edge type that means 'is a member of'.   In the first option the relationships are modeled directly, but in the second they are modeled indirectly.  Both may work equally well for the problem that is being solved by the graph, but one choice may be more useful or efficient than another.
 
 To be able to go about these sorts of transformations requires technical and data design skills and judgment.  There is no 'one size fits all' solution.  The transformations required and how you go about them depends a great deal on the context and the purpose of the work.  Nevertheless, in this chapter we will demonstrate two examples which reflect common situations where data needs to be transformed from a graph-unfriendly to a graph-friendly structure.  Working through these examples should illustrate a simple design process to follow and help demonstrate typical data transformation methods that could be applied in other common situations.
 
-In the first example, we will study a situation where data exists in traditional rectangular tables, but where we need to transform it in order to understand connections that we cannot understand directly from the tables themselves.  This is extremely common in practice and many organizations perform these sorts of transformations in order to populate graph databases from more traditional data sources.  In the second example, we will study how to extract information from documents in a way that helps us understand connections between entities in those documents.  This is another common situation that has strong applications in general, but has particular potential in the fields of law and crime investigation. Both these examples will be demonstrated in detail using R, and the last section of the chapter will provide examples of how to perform similar transformations using Python.  
+In the first example, we will study a situation where data exists in traditional rectangular tables, but where we need to transform it in order to understand connections that we cannot understand directly from the tables themselves.  This is extremely common in practice and many organizations perform these sorts of transformations in order to populate graph databases from more traditional data sources.  In the second example, we will study how to extract information from documents in a way that helps us understand connections between entities in those documents.  This is another common situation that has strong applications in general, but has particular potential in the fields of `r if (knitr::is_latex_output()) '\\index{graph!in crime investigation}'`law and crime investigation. Both these examples will be demonstrated in detail using R, and the last section of the chapter will provide examples of how to perform similar transformations using Python.  
 
 ## Transforming data in rectangular tables for use in graphs
 
-In this example we are going to use some simplified tables from the *Chinook* database^[You can find and download the full version of the *Chinook* open-source SQLite database at https://www.sqlitetutorial.net/sqlite-sample-database/] - an open source database which contains records of the customers, employees and transactions of a music sales company.  We will be working with four simplified tables from this database which you can load from the `onadata` package now or download from the internet as follows:
+`r if (knitr::is_latex_output()) '\\index{data sets!chinook@\\texttt{chinook}}'`In this example we are going to use some simplified tables from the *Chinook* database^[You can find and download the full version of the *Chinook* open-source SQLite database at https://www.sqlitetutorial.net/sqlite-sample-database/] - an open source database which contains records of the customers, employees and transactions of a music sales company.  We will be working with four simplified tables from this database which you can load from the `onadata` package now or download from the internet as follows:
 
 ```{r}
 # download chinook database tables
@@ -67,7 +67,7 @@ library(igraph)
 
 ```
 
-We now have a directed graph with named vertices, so this should be easy to plot.  Let's use `ggplot` with a dendrogram (tree) layout, as in Figure \@ref(fig:chinook-pretty).  
+We now have a directed graph with named vertices, so this should be easy to plot.  Let's use `r if (knitr::is_latex_output()) '\\index{packages!R!ggplot2@\\texttt{ggplot2}}'``ggplot` with a `r if (knitr::is_latex_output()) '\\index{graph!dendrogram} \\index{graph!tree}'`dendrogram (tree) layout, as in Figure \@ref(fig:chinook-pretty).  
 
 
 ```{r chinook-pretty, fig.align = "center", fig.cap = "Management hierarchy of Chinook as a tree (dendrogram)"}
@@ -89,7 +89,7 @@ Now let's try to build a graph based an a slightly more complex definition of co
 head(chinook_customers)
 ```
 
-We see a `SupportRepId` field which corresponds to the `EmployeeId` field in the `chinook_employees` table.  We can join these tables to get an edgelist of customers to support reps.  Let's also create full names for better reference.
+`r if (knitr::is_latex_output()) '\\index{packages!R!dplyr@\\texttt{dplyr}}'`We see a `SupportRepId` field which corresponds to the `EmployeeId` field in the `chinook_employees` table.  We can join these tables to get an edgelist of customers to support reps.  Let's also create full names for better reference.
 
 ```{r}
 # create customer to support rep edgelist
@@ -156,7 +156,7 @@ customer_network_edgelist <- cust_cust |>
 head(customer_network_edgelist)
 ```
 
-Now we have a network edgelist we can work with, and we have `RepName` available to use as an edge property.  Note that relationships will appear in both directions in this dataset, but we can take care of that by choosing to represent them in an undirected graph.  Let's build and visualize the graph, as in Figure \@ref(fig:cust-cust).  We see a tripartite graph consisting of three complete subgraphs with the edges color coded by the support rep.
+Now we have a network edgelist we can work with, and we have `RepName` available to use as an edge property.  Note that relationships will appear in both directions in this dataset, but we can take care of that by choosing to represent them in an undirected graph.  Let's build and visualize the graph, as in Figure \@ref(fig:cust-cust).  We see a tripartite graph consisting of three `r if (knitr::is_latex_output()) '\\index{graph!complete}'`complete subgraphs with the edges color coded by the support rep.
 
 ```{r cust-cust, fig.align="center", fig.cap = "Customer-to-customer network for Chinook based on customers sharing the same sales rep"}
 # create igraph object
@@ -175,7 +175,7 @@ ggraph(customer_network) +
 
 
 :::{.thinkahead data-latex=""}
-**Thinking ahead:** Recall from Section \@ref(graph-types) that a complete graph is a graph where every pair of vertices are connected by an edge.  Can you see how it follows from the shape of the graph in Figure \@ref(fig:cust-rep) that when we transform the data to produce Figure \@ref(fig:cust-cust), we expect to produce complete subgraphs?  Can you also see how visually dense those complete subgraphs are?  We will look at the measurement of density in graphs later, but a complete graph will always have a density of 1.
+**Thinking ahead:** Recall from Section \@ref(graph-types) that a complete graph is a graph where every pair of vertices are connected by an edge.  Can you see how it follows from the shape of the graph in Figure \@ref(fig:cust-rep) that when we transform the data to produce Figure \@ref(fig:cust-cust), we expect to produce complete subgraphs?  Can you also see how visually dense those complete subgraphs are?  We will look at the measurement of `r if (knitr::is_latex_output()) '\\index{density (of a graph)}'`density in graphs later, but a complete graph will always have a density of 1.
 :::
 
 
@@ -259,7 +259,7 @@ The issue with this data set is that it will count every instance of a common it
 cust_item_network <- cust_cust_itemjoin |> 
   dplyr::group_by(Cust1 = pmin(CustName1, CustName2), 
                   Cust2 = pmax(CustName1, CustName2)) |> 
-  summarise(TrackId = unique(TrackId), .groups = 'drop')
+  dplyr::summarise(TrackId = unique(TrackId), .groups = 'drop')
 
 # view head
 head(cust_item_network)
@@ -303,7 +303,7 @@ ggraph(custtocust_network) +
 
 ```
 
-If we wish, we can restrict the definition of connection.  For example, we may define it as 'purchased at least two items in common', as in Figure \@ref(fig:cust-item-two).  We can use the `subgraph()` function in `igraph` for this, and the result reveals a bipartite graph, indicating that there are two independent groups of customers who are related according to some commonality in music purchasing.
+If we wish, we can restrict the definition of connection.  For example, we may define it as 'purchased at least two items in common', as in Figure \@ref(fig:cust-item-two).  We can use the `subgraph()` function in `igraph` for this, and the result reveals a `r if (knitr::is_latex_output()) '\\index{graph!bipartite}'`bipartite graph, indicating that there are two independent groups of customers who are related according to some commonality in music purchasing.
 
 ```{r cust-item-two, fig.align = "center", fig.cap = "Chinook customer-to-customer network based at least two common items purchased"}
 # select edges that have Item value of at least 2
@@ -322,7 +322,7 @@ ggraph(two_item_graph, layout = "fr") +
 
 ### Approaches using Python
 
-To illustrate similar approaches in Python, we will redo the work in Section \@ref(common-purchases).  First we will download the various datasets.
+`r if (knitr::is_latex_output()) '\\index{packages!Python!pandas@\\texttt{pandas}}'``r if (knitr::is_latex_output()) '\\index{packages!Python!numpy@\\texttt{numpy}}'`To illustrate similar approaches in Python, we will redo the work in Section \@ref(common-purchases).  First we will download the various datasets.
 
 ```{python}
 import pandas as pd
@@ -527,7 +527,7 @@ To illustrate this we will show how to extract information from a TV script in a
 
 ### Scraping data from semi-structured documents
 
-First we will look at how to obtain a list of numbered scenes and the characters in each scene, through 'scraping' these details from the online script.  To help us with this we will use the `rvest` R package, which is designed for scraping information from web pages.
+`r if (knitr::is_latex_output()) '\\index{scraping}'`First we will look at how to obtain a list of numbered scenes and the characters in each scene, through 'scraping' these details from the online script.  To help us with this we will use the `r if (knitr::is_latex_output()) '\\index{packages!R!rvest@\\texttt{rvest}}'``rvest` R package, which is designed for scraping information from web pages.
 
 Let’s take a look at the web code for Season 1 Episode 1. You can do this by opening the script webpage in Google Chrome and then pressing Cmd+Option+C (or Ctrl+Shift+C in Windows) to open the Elements Console where you can view the HTML code of the page side-by-side with the page itself.  This should look like Figure \@ref(fig:chrome-console).
 
@@ -574,9 +574,9 @@ sum(nodes_newscene == "New Scene")
 
 That worked nicely. Now, you might also have noticed that, for dialogue purposes, character names precede a colon at the beginning of a line. So that might be a nice way to extract the names of characters with speaking parts in a scene (although it might give us a few other things that have preceded colons in the script which we do not want, but we can deal with that later).
 
-So what we will do is use regular expression syntax (regex) to tell R that we are looking for anything at the beginning of a line preceding a colon. We will use a lookahead regex string as follows: `^[A-Za-z ]+(?=:)`.
+`r if (knitr::is_latex_output()) '\\index{regular expression syntax (regex)}'`So what we will do is use regular expression syntax (regex) to tell R that we are looking for anything at the beginning of a line preceding a colon. We will use a lookahead regex string as follows: `^[A-Za-z ]+(?=:)`.
 
-Let’s look at that string and make sure we know what it means. The`r if (knitr::is_latex_output()) '\\newline'` `^[A-Za-z ]+` component means ‘find any sub-string of alphabetic text of any length including spaces at the beginning of a string’. The part in parentheses `(?=:)` is known as a lookahead --- it means look ahead of that sub-string of text and find situations where a colon is the next character. This is therefore instructing R to find any string of alphabetic text at the start of a line that precedes a colon and return it. If we use the R package `stringr` and its function `str_extract()` with this regex syntax, it will go through every entry of the `nodes` vector and transform it to just the first string of text found before a colon. If no such string is found it will return an `NA` value. This is great for us because we know that, for the purpose of dialogue, characters names are always at the start of nodes, so we certainly won’t miss any if we just take the first instance in each line. We should also, for safety, not mess with the scene breaks we have put into our vector.
+Let’s look at that string and make sure we know what it means. The`r if (knitr::is_latex_output()) '\\newline'` `^[A-Za-z ]+` component means ‘find any sub-string of alphabetic text of any length including spaces at the beginning of a string’. The part in parentheses `(?=:)` is known as a lookahead --- it means look ahead of that sub-string of text and find situations where a colon is the next character. This is therefore instructing R to find any string of alphabetic text at the start of a line that precedes a colon and return it. If we use the R package `r if (knitr::is_latex_output()) '\\index{packages!R!stringr@\\texttt{stringr}}'``stringr` and its function `str_extract()` with this regex syntax, it will go through every entry of the `nodes` vector and transform it to just the first string of text found before a colon. If no such string is found it will return an `NA` value. This is great for us because we know that, for the purpose of dialogue, characters names are always at the start of nodes, so we certainly won’t miss any if we just take the first instance in each line. We should also, for safety, not mess with the scene breaks we have put into our vector.
 
 ```{r}
 library(stringr)
@@ -656,7 +656,7 @@ head(results, 10)
 
 ### Creating an edgelist from the scraped data
 
-Now we have scraped the data of characters who have spoken in each numbered scene, we can now try to build an edgelist between characters based on whether they have both spoken in the same scene.  We can also consider adding a weight to each edge based on the number of scenes in which both characters have spoken.
+Now we have scraped the data of characters who have spoken in each numbered scene, we can now try to build an `r if (knitr::is_latex_output()) '\\index{edgelist}'`edgelist between characters based on whether they have both spoken in the same scene.  We can also consider adding a `r if (knitr::is_latex_output()) '\\index{edge!weight}'`weight to each edge based on the number of scenes in which both characters have spoken.
 
 To do this, we will need to generate a set of unique pairs from the list of characters in each scene.  To illustrate, let's look at the characters in Scene 11:
 
@@ -756,7 +756,7 @@ ggraph(friends_ep1_network) +
 
 ### Approaches in Python
 
-To repeat the work in the previous sections in Python, we will use the `BeautifulSoup` package to scrape our web script of the first episode of *Friends*.
+To repeat the work in the previous sections in Python, we will use the `r if (knitr::is_latex_output()) '\\index{packages!Python!BeautifulSoup@\\texttt{BeautifulSoup}}'``BeautifulSoup` package to scrape our web script of the first episode of *Friends*.
 
 ```{python}
 import requests
@@ -950,7 +950,7 @@ For the examples in Questions 6-10, discuss ways that information could be extra
 
 ### Data exercises
 
-Load the `park_reviews` dataset from the `onadata` package or download it from the internet^[https://ona-book.org/data/park_reviews.csv].  This data contains the reviews of a collection of Yelp users on dog parks in the Phoenix, Arizona area.
+Load the `r if (knitr::is_latex_output()) '\\index{data sets!parkreviews@\\texttt{park\\_reviews}}'``park_reviews` dataset from the `onadata` package or download it from the internet^[https://ona-book.org/data/park_reviews.csv].  This data contains the reviews of a collection of Yelp users on dog parks in the Phoenix, Arizona area.
 
 1. Create an edgelist and vertex set that allows you to build a graph showing both the parks and the users as entity types.  Include the `stars` rating as an edge property and ensure that entity types are distinguishable in your data.
 2. Use your edgelist and vertex set to create a graph object that has edge and vertex properties.

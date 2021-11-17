@@ -179,7 +179,7 @@ div.csl-indent {
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a>
 <ul>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#note-on-data"><i class="fa fa-check"></i>Note on data</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#notes-on-data-used-in-this-book"><i class="fa fa-check"></i>Notes on data used in this book</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#technical-note-for-r-users"><i class="fa fa-check"></i>Technical note for R users</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i>Introduction</a></li>
@@ -612,20 +612,18 @@ Figure 8.6: Zachary’s Karate Club graph with Mr Hi and John A indicated with l
 ## [1] 1
 ## 
 ## $cut
-## + 1/78 edge from aac1f69 (vertex names):
+## + 1/78 edge from b381d74 (vertex names):
 ## [1] Mr Hi--Actor 12
 ## 
 ## $partition1
-## + 1/34 vertex, named, from aac1f69:
+## + 1/34 vertex, named, from b381d74:
 ## [1] Actor 12
 ## 
 ## $partition2
-## + 33/34 vertices, named, from aac1f69:
-##  [1] Mr Hi    Actor 2  Actor 3  Actor 4  Actor 5  Actor 6  Actor 7  Actor 9 
-##  [9] Actor 10 Actor 14 Actor 15 Actor 16 Actor 19 Actor 20 Actor 21 Actor 23
-## [17] Actor 24 Actor 25 Actor 26 Actor 27 Actor 28 Actor 29 Actor 30 Actor 31
-## [25] Actor 32 Actor 33 Actor 8  Actor 11 Actor 13 Actor 18 Actor 22 Actor 17
-## [33] John A</code></pre>
+## + 33/34 vertices, named, from b381d74:
+##  [1] Mr Hi    Actor 2  Actor 3  Actor 4  Actor 5  Actor 6  Actor 7  Actor 9  Actor 10 Actor 14 Actor 15 Actor 16 Actor 19
+## [14] Actor 20 Actor 21 Actor 23 Actor 24 Actor 25 Actor 26 Actor 27 Actor 28 Actor 29 Actor 30 Actor 31 Actor 32 Actor 33
+## [27] Actor 8  Actor 11 Actor 13 Actor 18 Actor 22 Actor 17 John A</code></pre>
 <p>We see that a minimum cut exists of size 1 between Mr Hi and Actor 12.</p>
 <p>The Louvain community detection algorithm can be run using the <code>cluster_louvain()</code> function. <code>weights</code> can be added as an argument, or will be used by default if the graph has a <code>weight</code> edge attribute (set <code>weight = NA</code> to avoid this). This will produce a list of community groups. The best way to record the resulting community membership is to assign it as a vertex property using the <code>membership()</code> function.</p>
 <div class="sourceCode" id="cb438"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb438-1"><a href="community.html#cb438-1" aria-hidden="true" tabindex="-1"></a><span class="co"># detect communities using Louvain</span></span>
@@ -660,20 +658,20 @@ Figure 8.7: Communities of Zachary’s Karate Club as detected by the Louvain al
 <p>The <code>cliques()</code> and <code>max_cliques()</code> function in <code>igraph</code> identifies all cliques or maximal cliques respectively, with a specified maximum or minimum size if desired. It is advisable to specify a size for cliques of interest because otherwise a long list might be returned, including many single node cliques.</p>
 <div class="sourceCode" id="cb442"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb442-1"><a href="community.html#cb442-1" aria-hidden="true" tabindex="-1"></a><span class="fu">max_cliques</span>(karate, <span class="at">min =</span> <span class="dv">5</span>, <span class="at">max =</span> <span class="dv">5</span>)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 5/34 vertices, named, from aac1f69:
+## + 5/34 vertices, named, from b381d74:
 ## [1] Actor 2  Mr Hi    Actor 4  Actor 3  Actor 14
 ## 
 ## [[2]]
-## + 5/34 vertices, named, from aac1f69:
+## + 5/34 vertices, named, from b381d74:
 ## [1] Actor 2 Mr Hi   Actor 4 Actor 3 Actor 8</code></pre>
 <p>The <code>largest_cliques()</code> function finds all largest cliques in a graph.</p>
 <div class="sourceCode" id="cb444"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb444-1"><a href="community.html#cb444-1" aria-hidden="true" tabindex="-1"></a><span class="fu">largest_cliques</span>(karate)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 5/34 vertices, named, from aac1f69:
+## + 5/34 vertices, named, from b381d74:
 ## [1] Actor 8 Mr Hi   Actor 2 Actor 3 Actor 4
 ## 
 ## [[2]]
-## + 5/34 vertices, named, from aac1f69:
+## + 5/34 vertices, named, from b381d74:
 ## [1] Actor 4  Mr Hi    Actor 2  Actor 3  Actor 14</code></pre>
 <p>We see that the maximal cliques of size 5 that we identified are also the largest cliques in the <code>karate graph</code>, and they have four out of 5 vertices in common. The function <code>clique_num()</code> returns the size of the largest clique.</p>
 <div class="sourceCode" id="cb446"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb446-1"><a href="community.html#cb446-1" aria-hidden="true" tabindex="-1"></a><span class="fu">clique_num</span>(karate)</span></code></pre></div>
@@ -747,7 +745,7 @@ Figure 8.7: Communities of Zachary’s Karate Club as detected by the Louvain al
 <span id="cb458-6"><a href="community.html#cb458-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb458-7"><a href="community.html#cb458-7" aria-hidden="true" tabindex="-1"></a><span class="co"># view communities from first edge removal</span></span>
 <span id="cb458-8"><a href="community.html#cb458-8" aria-hidden="true" tabindex="-1"></a>communities[<span class="dv">0</span>]</span></code></pre></div>
-<pre><code>## ({&#39;Actor 6&#39;, &#39;Actor 20&#39;, &#39;Actor 14&#39;, &#39;Actor 11&#39;, &#39;Actor 18&#39;, &#39;Actor 4&#39;, &#39;Actor 2&#39;, &#39;Actor 7&#39;, &#39;Actor 17&#39;, &#39;Actor 22&#39;, &#39;Mr Hi&#39;, &#39;Actor 5&#39;, &#39;Actor 13&#39;, &#39;Actor 12&#39;, &#39;Actor 8&#39;}, {&#39;Actor 28&#39;, &#39;Actor 19&#39;, &#39;Actor 3&#39;, &#39;Actor 25&#39;, &#39;Actor 9&#39;, &#39;Actor 31&#39;, &#39;Actor 15&#39;, &#39;Actor 29&#39;, &#39;Actor 23&#39;, &#39;Actor 33&#39;, &#39;Actor 16&#39;, &#39;John A&#39;, &#39;Actor 32&#39;, &#39;Actor 30&#39;, &#39;Actor 26&#39;, &#39;Actor 27&#39;, &#39;Actor 24&#39;, &#39;Actor 10&#39;, &#39;Actor 21&#39;})</code></pre>
+<pre><code>## ({&#39;Actor 11&#39;, &#39;Mr Hi&#39;, &#39;Actor 6&#39;, &#39;Actor 2&#39;, &#39;Actor 8&#39;, &#39;Actor 7&#39;, &#39;Actor 22&#39;, &#39;Actor 20&#39;, &#39;Actor 14&#39;, &#39;Actor 18&#39;, &#39;Actor 5&#39;, &#39;Actor 12&#39;, &#39;Actor 4&#39;, &#39;Actor 13&#39;, &#39;Actor 17&#39;}, {&#39;Actor 9&#39;, &#39;Actor 26&#39;, &#39;Actor 15&#39;, &#39;Actor 10&#39;, &#39;Actor 28&#39;, &#39;Actor 27&#39;, &#39;Actor 19&#39;, &#39;Actor 29&#39;, &#39;Actor 16&#39;, &#39;Actor 30&#39;, &#39;Actor 3&#39;, &#39;Actor 31&#39;, &#39;Actor 25&#39;, &#39;Actor 33&#39;, &#39;Actor 24&#39;, &#39;Actor 32&#39;, &#39;John A&#39;, &#39;Actor 23&#39;, &#39;Actor 21&#39;})</code></pre>
 <p>We see that the first split leads to two communities, one around John A and the other around Mr Hi.</p>
 <p>The <code>cdlib</code> package in Python contains a very wide range of community detection algorithms that work with the <code>networkx</code> package, including the Louvain and Leiden algorithms as well as many others. In this example we create a Louvain partition of the <code>karate</code> graph using <code>cdlib</code>.</p>
 <div class="sourceCode" id="cb460"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb460-1"><a href="community.html#cb460-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> cdlib <span class="im">import</span> algorithms</span>
@@ -806,7 +804,7 @@ Figure 8.8: Best Louvain partition of Zachary’s Karate Club graph
 <pre><code>## 36</code></pre>
 <div class="sourceCode" id="cb468"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb468-1"><a href="community.html#cb468-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get largest clique</span></span>
 <span id="cb468-2"><a href="community.html#cb468-2" aria-hidden="true" tabindex="-1"></a>maximal_cliques[<span class="bu">len</span>(maximal_cliques) <span class="op">-</span> <span class="dv">1</span>]</span></code></pre></div>
-<pre><code>## [&#39;Actor 2&#39;, &#39;Mr Hi&#39;, &#39;Actor 3&#39;, &#39;Actor 4&#39;, &#39;Actor 14&#39;]</code></pre>
+<pre><code>## [&#39;Mr Hi&#39;, &#39;Actor 2&#39;, &#39;Actor 3&#39;, &#39;Actor 4&#39;, &#39;Actor 14&#39;]</code></pre>
 <p>Alternatively there are functions that can calculate the number of cliques, the size of the largest clique, and can extract the graph of the largest clique.</p>
 <div class="sourceCode" id="cb470"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb470-1"><a href="community.html#cb470-1" aria-hidden="true" tabindex="-1"></a>nx.graph_number_of_cliques(karate)</span></code></pre></div>
 <pre><code>## 36</code></pre>
@@ -845,27 +843,27 @@ Figure 8.8: Best Louvain partition of Zachary’s Karate Club graph
 <p>We now have a connected, undirected graph of 156 vertices, with class and gender as vertex properties. First, let’s detemine the largest clique in the graph.</p>
 <div class="sourceCode" id="cb475"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb475-1"><a href="community.html#cb475-1" aria-hidden="true" tabindex="-1"></a>(cliques <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">largest_cliques</span>(schoolfriends_fb))</span></code></pre></div>
 <pre><code>## [[1]]
-## + 14/156 vertices, named, from bbdc684:
+## + 14/156 vertices, named, from 46e54ae:
 ##  [1] 525  797  466  376  638  841  1423 1218 769  440  125  325  694  245 
 ## 
 ## [[2]]
-## + 14/156 vertices, named, from bbdc684:
+## + 14/156 vertices, named, from 46e54ae:
 ##  [1] 245  564  1218 440  466  376  841  1237 1423 769  624  125  325  694 
 ## 
 ## [[3]]
-## + 14/156 vertices, named, from bbdc684:
+## + 14/156 vertices, named, from 46e54ae:
 ##  [1] 245  797  466  376  841  1423 1218 624  440  125  638  325  694  769 
 ## 
 ## [[4]]
-## + 14/156 vertices, named, from bbdc684:
+## + 14/156 vertices, named, from 46e54ae:
 ##  [1] 245  797  466  376  841  1423 1218 624  440  125  638  325  694  1067
 ## 
 ## [[5]]
-## + 14/156 vertices, named, from bbdc684:
+## + 14/156 vertices, named, from 46e54ae:
 ##  [1] 245  1067 466  376  841  1237 1423 1218 624  440  125  638  325  694 
 ## 
 ## [[6]]
-## + 14/156 vertices, named, from bbdc684:
+## + 14/156 vertices, named, from 46e54ae:
 ##  [1] 245  638  466  376  841  1237 1423 1218 769  624  440  125  325  694</code></pre>
 <p>We see six cliques of 14 individuals, all of which have considerable overlap. We can take a look at the class and gender of one of these cliques.</p>
 <div class="sourceCode" id="cb477"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb477-1"><a href="community.html#cb477-1" aria-hidden="true" tabindex="-1"></a><span class="co"># subgraph for clique 6</span></span>
@@ -977,17 +975,17 @@ Figure 8.10: Optimal Louvain communities in the Facebook schoolfriends graph (le
 <span id="cb489-12"><a href="community.html#cb489-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">vertices =</span> ontariopol_vertices, </span>
 <span id="cb489-13"><a href="community.html#cb489-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">directed =</span> <span class="cn">FALSE</span></span>
 <span id="cb489-14"><a href="community.html#cb489-14" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
-<pre><code>## IGRAPH b68dc94 UNW- 108 6095 -- 
+<pre><code>## IGRAPH 4f27b1f UNW- 108 6095 -- 
 ## + attr: name (v/c), screen_name (v/c), party (v/c), weight (e/n)
-## + edges from b68dc94 (vertex names):
-##  [1] Deepak Anand--Doug Ford             Deepak Anand--Victor Fedeli        
-##  [3] Deepak Anand--Deepak Anand          Deepak Anand--Monte McNaughton     
-##  [5] Deepak Anand--Christine Elliott     Deepak Anand--Stephen Lecce        
-##  [7] Deepak Anand--Rod Phillips          Deepak Anand--Lisa MacLeod         
-##  [9] Deepak Anand--Michael Tibollo       Deepak Anand--Peter Bethlenfalvy   
-## [11] Deepak Anand--Raymond Sung Joon Cho Deepak Anand--Rudy Cuzzetto        
-## [13] Deepak Anand--Caroline Mulroney     Deepak Anand--Sheref Sabawy        
-## [15] Deepak Anand--Nina Tangri           Deepak Anand--Jill Dunlop          
+## + edges from 4f27b1f (vertex names):
+##  [1] Deepak Anand--Doug Ford               Deepak Anand--Victor Fedeli           Deepak Anand--Deepak Anand           
+##  [4] Deepak Anand--Monte McNaughton        Deepak Anand--Christine Elliott       Deepak Anand--Stephen Lecce          
+##  [7] Deepak Anand--Rod Phillips            Deepak Anand--Lisa MacLeod            Deepak Anand--Michael Tibollo        
+## [10] Deepak Anand--Peter Bethlenfalvy      Deepak Anand--Raymond Sung Joon Cho   Deepak Anand--Rudy Cuzzetto          
+## [13] Deepak Anand--Caroline Mulroney       Deepak Anand--Sheref Sabawy           Deepak Anand--Nina Tangri            
+## [16] Deepak Anand--Jill Dunlop             Deepak Anand--Todd Smith              Deepak Anand--Kinga Surma            
+## [19] Deepak Anand--Lisa Thompson           Deepak Anand--Kaleed Rasheed          Deepak Anand--Steve Clark            
+## [22] Deepak Anand--Ernie Hardeman          Deepak Anand--Natalia Kusendova       Deepak Anand--Prabmeet Singh Sarkaria
 ## + ... omitted several edges</code></pre>
 <p>We have an undirected, weighted graph, with <code>screen_name</code> and <code>party</code> vertex properties. First, we check if our graph is connected:</p>
 <div class="sourceCode" id="cb491"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb491-1"><a href="community.html#cb491-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.connected</span>(ontariopol)</span></code></pre></div>

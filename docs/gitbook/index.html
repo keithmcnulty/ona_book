@@ -179,7 +179,7 @@ div.csl-indent {
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a>
 <ul>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#note-on-data"><i class="fa fa-check"></i>Note on data</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#notes-on-data-used-in-this-book"><i class="fa fa-check"></i>Notes on data used in this book</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#technical-note-for-r-users"><i class="fa fa-check"></i>Technical note for R users</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i>Introduction</a></li>
@@ -454,15 +454,51 @@ div.csl-indent {
 <p><strong>Note</strong>: This book is to be published by Chapman &amp; Hall/CRC Press in 2022. The online version of this book is free to read here (thanks to Chapman &amp; Hall/CRC), and licensed under the <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>. If you have any feedback, please feel free to <a href="https://github.com/keithmcnulty/ona_book/issues">file an issue on GitHub</a>. Thank you!</p>
 </div>
 <p>The book is available in <a href="https://ona-book.org">bootstrap format</a> or in a more plain <a href="https://ona-book.org/gitbook">gitbook format</a>.</p>
-<div id="note-on-data" class="section level2 unnumbered">
-<h2>Note on data</h2>
+<div id="notes-on-data-used-in-this-book" class="section level2 unnumbered">
+<h2>Notes on data used in this book</h2>
 <p>It is my intention to make all the data sets in the book available in convenient and self-contained packages in R and Python to coincide with the print release of this book in 2022. In the meantime, the datasets are all accessible via the URLs provided and you can always access them by following the code examples.</p>
+<!--
+For R and Python users, each of the data sets used in this book can be downloaded individually by following the code in each chapter.  Alternatively, if you intend to work through all the chapters, all datasets can be downloaded in advance by installing the `onadata` package.
+
+For R users, this can be installed as follows:
+
+
+```r
+# install onadata package
+install.packages("onadata")
+library(onadata)
+
+# see a list of data sets
+data(package = "onadata")
+
+# find out more about a specific data set ('karate' example)
+help(karate)
+```
+
+For Python users, use `pip install onadata` to install the package into your environment. Then, to use the package:
+
+
+```python
+# import onadata package
+import onadata as ona
+import pandas as pd
+
+# see a list of data sets
+ona.list_sets()
+
+# load data into a dataframe
+df = ona.karate()
+
+# find out more about a specific data set ('karate' example)
+ona.karate().info()
+```
+-->
 </div>
 <div id="technical-note-for-r-users" class="section level2 unnumbered">
 <h2>Technical note for R users</h2>
 <p>This book uses the new native pipe operator <code>|&gt;</code> which was introduced in R version 4.1.0. Users using an older version of R, or who wish to use the alternative pipe operator <code>%&gt;%</code> can simply replace this in all code. However, an appropriate library containing <code>%&gt;%</code> will need to be loaded, such as <code>magrittr</code>, <code>dplyr</code> or <code>tidyverse</code>.</p>
 <p>Many thanks!</p>
-<p><em>Last updated: 14 October 2021</em></p>
+<p><em>Last updated: 17 November 2021</em></p>
 
 </div>
 </div>

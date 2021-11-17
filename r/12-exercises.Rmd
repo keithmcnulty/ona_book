@@ -1,1 +1,101 @@
 # Further Exercises for Practice {#exercises}
+
+In this chapter we present a series of further exercises supplemental to the end-of-chapter exercises in this book.  While the prior exercises were focused on specific techniques and methodologies, the purpose of these exercises is to apply a broad range of network analysis techniques to a problem.  To encourage critical thinking, the guidance for these exercises is more limited and directional rather than specific in nature.  A big part of becoming a competent network analyst is the ability to understand real world questions and translate them into an appropriate analytic approach before executing the techniques involved in that approach.  These exercises will encourage you to do both of these, and you could also consider extending your work past the given questions in each example to investigate other aspects of the networks which might interest you.       
+
+To this end, the reader is encouraged reader to tackle these exercises by documenting them appropriately using an R Markdown document or a Jupyter Notebook.  There are two very important advantages to working from a vertical document from the very beginning of your work.  First, your analytic decisions and methodological approach are captured well, meaning it is easy to revisit and adjust the work later, or to pick up where you last left it.  Second, you are forced to think about the communication of your work to 'laypeople' who may not be interested in the intricacies of the code, but will be interested in understanding how you went about solving the problem more broadly.  For your work to have true impact, you need to be able to explain it well to varied audiences.  The examples in this chapter will help you exercise those muscles.
+
+## Friendships among Scottish teenage girls {#s50}
+
+Load the `r if (knitr::is_latex_output()) '\\index{data sets!s50@\\texttt{s50}}'``s50_edges` and `s50_vertices` data sets from the `ona_data` package or download them from the internet^[https://ona-book.org/data/s50_edges.csv and https://ona-book.org/data/s50_vertices.csv].  This data extract comes from a study of a group of Scottish teenage girls in the 1990s and as part of the Teenage Friends and Lifestyle Study^[Many papers have been published around this study, for example @teenlifestyle].  
+
+The edgelist represents pair of subjects whom the researchers deemed to be friends with each other.  The vertex data set contains information on a number of factors related to each subject:
+
+* `smoke` represents the frequency with which the subject smoked cigarettes, where 1 means never, 2 means occasionally and 3 means regularly
+* `alcohol` represents the frequency with which the subject drank alcohol, ranging from 1 (never) to 5 (more than once a week)
+* `drugs` represents the frequency with which the subject took cannabis, ranging from 1 (never) to 4 (regularly)
+* `sport` represents the frequency with which the subject participated in sporting activities, where 1 means not regularly and 2 means regularly
+
+1. Create a graph object and a network visualization from this data.  Use visualization techniques to investigate the degree to which different lifestyle factors influence the friendships of the subjects in this study.  Bear in mind that the lifestyle properties of the vertices are on differing scales and consider how you could compare them fairly when judging the influence they have on friendships. 
+
+2. Consider how to use mathematical measures to illustrate how the lifestyle factors influence the formation of friendships among the subjects.  Which measures would you use?  Calculate these measures and determine what conclusions you can make from the results.  
+
+3. Use appropriate methodologies to find more intensely connected subgroups than those represented by the disconnected components of this graph. Use visualization techniques to compare those subgroups to the ground truth lifestyle properties of the vertices. Calculate similar mathematical measures as in Exercise 2 to compare your new subgroup structure to that of the ground truth lifestyle factors.   What can you conclude?  
+
+## Interactions between dolphins in Doubtful Sound, New Zealand {#dolphins}
+
+Load the `r if (knitr::is_latex_output()) '\\index{data sets!dolphins@\\texttt{dolphins}}'``dolphins` data set from the `onadata` package or download it from the internet^[https://ona-book.org/data/dolphins.csv].  This edge list represents a network of dolphins monitored by researchers in the Doubtful Sound, New Zealand^[@dolphinpaper]. An edge between two dolphins indicates that researchers observed them interacting frequently.
+
+1.  Visualize this network and use your visualization to hypothesize which dolphins play an important role in the overall connectedness of the population.
+
+2.  Use appropriate metrics to quantify the importance of each dolphin in connecting other dolphins in this network.  Adjust your visualization to illustrate this metric.
+
+3.  Use appropriate methodologies to identify communities of dolphins that interact more densely.  Use appropriate metrics to rank the interaction density of each community you identify.  
+
+4.  Identify the most central dolphins for each of the communities you identify.
+
+5.  Do you think there is any evidence of preferential attachment among dolphins in this population.  Why?  Use an appropriate metric to confirm or reject your hypothesis.      
+
+## Character interaction in Victor Hugo's *Les Miserables*
+
+Load the `r if (knitr::is_latex_output()) '\\index{data sets!lesmis@\\texttt{lesmis}}'``lesmis` data set from the `onadata` package ot download it from the internet^[https://ona-book.org/data/lesmis.csv].  This edge list represents the network of characters in the novel *Les Miserables* by Victor Hugo^[This dataset is taken from @lesmispaper].  An edge exists between two characters if they interact with each other in the book, and the `weight` column indicates the number of interactions.
+
+1.  Using appropriate measures, find some of the most central characters in the book and see if this aligns with your memory of the book or with an online synopsis if you have not read it.
+
+2.  Find the largest cliques in the character network.  Research the members online to see if you can associate these cliques with the plot of the book.
+
+3.  Use an appropriate method to identify communities of characters and find the most central character for each community.  Ask yourself how well-aligned this is with the plot of the book (or ask someone who knows the book).  How do the communities change if you consider the weight of the connection between characters?
+
+4.  Visualize the network in a way that identifies the communities.  Consider ways to further enhance the visualization.  For example, how might you illustrate connection weight?
+
+5.  Do you think that interactions between characters in a novel would be degree assortative, degree disassortative, or neutral?  Use an appropriate metric to confirm or reject your hypothesis in the case of this novel.
+
+## Communication between criminals involved in a drug importation operation
+
+Load the `r if (knitr::is_latex_output()) '\\index{data sets!caviar@\\texttt{caviar}}'``caviar_start`, `caviar_middle` and `caviar_end` data sets from the `ona_data` package or download them from the internet^[https://ona-book.org/caviar_start.csv, https://ona-book.org/caviar_middle.csv and https://ona-book.org/caviar_end.csv].  These data sets are formed from Operation Caviar, a 2 year international covert police investigation into the illegal importation of hash and cocaine in Montreal^[This is taken from @insidecriminalnetworks.]. During this investigation, illegal shipments were seized but police did not make any arrests, instead choosing to covertly track the communication between suspects via wiretaps. 
+
+These edge lists represent the flow of communication as of the first seizure, the fifth seizure and the eleventh and final seizure after which arrests were made.  The edge weights represent the frequency of calls from one suspect to the other. As you analyze this data, consider what is possible in treating the network as directed versus undirected.
+
+1.  Visualize the development of this network over the three stages provided.  Consider ways to illustrate the importance of various participants.  For example, how can you show what happens to important initial participants as the investigation develops?
+
+2.  Compare your visualizations and use them to try to describe how the network has developed.  Remember that participants will have been aware of police attention because their shipments were seized.  What information can you determine from your visualizations that helps you understand how the network has adapted?
+
+3.  Consider how you can use specific metrics to help illustrate and support any of the conclusions you make from Question 2.  For example, how can you illustrate changes in the overall complexity of the communication between participants?  What measures might help you understand the different roles of individuals as receivers of information versus suppliers of information?
+
+4.  By changing the type of the network object if you need to, consider ways to identify communication subgroups, and determine who may be considered ringleaders of the criminal operation based on this.
+
+5.  Imagine you are supporting the investigation team as a crime analyst after the final seizure but before arrests are to be  made.  Write a report with all of your conclusions from this analysis and with supporting visualizations and metrics.  Focus your report firstly on the characteristics of the final network and which participants should be prioritized for arrest or may be important as informants.  Secondly, provide insight into how the network has developed to try to evade law enforcement over the course of the investigation. 
+
+## Academic collaboration between network scientists
+
+Load the `r if (knitr::is_latex_output()) '\\index{data sets!netscience@\\texttt{netscience}}'``netscience` data set from the `onadata` package or download it from the internet^[https://ona-book.org/data/netscience.csv].  This edge list represents collaboration between 1,589 academics working in the field of network science^[Published in @physrev]. An edge exists if the two individuals have collaborated through co-authoring at least one paper, and the edge weight in this network is a measure of the strength of the collaboration --- it is the number of papers co-authored together normalized for the total number of authors on each paper, so that more exclusive collaboration drives higher weight.
+
+1.  Visualize this network and describe its structure.
+
+2.  Find the largest group in the network where each individual has collaborated with each other individual.  Use visualization techniques to illustrate where precisely in the network this group lies.
+
+3.  Identify the most central individuals for each of the five largest connected components using a variety of measures.  Determine the extent to which the degree centrality of two individuals in this network influences their likelihood of co-authoring.  
+
+4.  Focus on the largest connected component of this network and identify subgroups of more intense collaboration within it.  Visualize this component with the subgroups illustrated.
+
+5.  Identify a pair of scientists in the largest connected component who have the largest distance between them.  Identify a path to connect these two scientists through intermediate collaborators.
+
+## Other sources of data for practice
+
+Numerous public sources of data for graph and network analysis are available where you can find resources for further practice if you need to, and many of the data sets in this book are drawn from these sources.  If you are interested in exploring them, here is a list of some of the better ones:
+
+* The Stanford Large Network Dataset Collection (http://snap.stanford.edu/data/index.html) is part of SNAP, the Stanford Network Analysis Project, and contains a wide range of large network data sets of various types.
+
+* CASOS, the Center for Computational Analysis of Social and Organizational Systems at Carnegie Mellon University (http://www.casos.cs.cmu.edu/) contains a large collection of classic and modern social network analysis data sets.
+
+* SocioPatterns --- a research collaboration which focuses on face-to-face and close proximity interactions between people --- has numerous interesting data sets on its website at http://www.sociopatterns.org/.
+
+* The Network Data Repository (https://networkrepository.com/) has a huge range of network datasets across a very wide array of disciplines.
+
+Graph data can be found in a variety of different formats to reflect different computational tools used for graphs over the years.  In the vast majority of cases, R and Python will have packages which can work the the relevant format.  For example, files with a `.gml` extension can be loaded directly in `igraph` as a graph object using the `read_graph()` function with the argument `format = "gml"` and `networkx` has a similar function called `read_gml()`.  
+
+
+
+
+
+
+

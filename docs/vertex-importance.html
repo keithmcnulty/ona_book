@@ -182,7 +182,7 @@ If we require that <span class="math inline">\(x\)</span> can only have positive
 <code class="sourceCode R"><span class="co"># 2nd order ego network of Vertex 4</span>
 <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/ego.html">ego</a></span><span class="op">(</span><span class="va">g14</span>, order <span class="op">=</span> <span class="fl">2</span>, nodes <span class="op">=</span> <span class="st">"4"</span><span class="op">)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 9/14 vertices, named, from fb8ebbe:
+## + 9/14 vertices, named, from acae051:
 ## [1] 4 8 6 1 7 2 3 5 9</code></pre>
 <div class="sourceCode" id="cb393"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># size of ego network</span>
@@ -202,10 +202,10 @@ If we require that <span class="math inline">\(x\)</span> can only have positive
 <div class="sourceCode" id="cb399"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">eigens</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/eigen_centrality.html">eigen_centrality</a></span><span class="op">(</span><span class="va">g14</span>, scale <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 <span class="va">eigens</span><span class="op">$</span><span class="va">vector</span></code></pre></div>
-<pre><code>##          9         10         11         13          8          4          6 
-## 0.30157876 0.11585270 0.04773223 0.09618665 0.37800315 0.55038069 0.29000589 
-##          1         12         14          7          2          3          5 
-## 0.22676118 0.04773223 0.02806617 0.44350955 0.22676118 0.16059484 0.16059484</code></pre>
+<pre><code>##          9         10         11         13          8          4          6          1         12         14          7 
+## 0.30157876 0.11585270 0.04773223 0.09618665 0.37800315 0.55038069 0.29000589 0.22676118 0.04773223 0.02806617 0.44350955 
+##          2          3          5 
+## 0.22676118 0.16059484 0.16059484</code></pre>
 <p>We can see confirmation here that Vertex 4 has the highest eigenvector centrality.</p>
 <div class="thinkahead">
 <p><strong>Playing around:</strong> There are a few other centrality-like measures available in <code>igraph</code> which you could explore and try to understand. Examples include <code><a href="https://rdrr.io/pkg/igraph/man/page_rank.html">page_rank()</a></code> for Google’s measure of importance of a web page, and <code><a href="https://rdrr.io/pkg/igraph/man/hub_score.html">hub_score()</a></code> and <code><a href="https://rdrr.io/pkg/igraph/man/authority_score.html">authority_score()</a></code> for directed networks. Consider testing these out on some datasets, like the <code>wikivote</code> data set from the <code>onadata</code> package or downloaded from the internet<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://ona-book.org/data/wikivote.csv" class="uri"&gt;https://ona-book.org/data/wikivote.csv&lt;/a&gt;&lt;/p&gt;'><sup>57</sup></a>.</p>
@@ -260,7 +260,7 @@ If we require that <span class="math inline">\(x\)</span> can only have positive
 <span class="header-section-number">7.2.3</span> Illustrating centrality in graph visualizations<a class="anchor" aria-label="anchor" href="#illustrating-centrality-in-graph-visualizations"><i class="fas fa-link"></i></a>
 </h3>
 <p>As we reviewed in Chapter <a href="viz-graphs.html#viz-graphs">4</a>, we will often make adjustments when visualizing graphs to illustrate certain aspects of the graph’s structure. For example, we highlight certain vertices with color or adjust the thickness of certain edges. When we want to visually illustrate the importance or influence of vertices in graphs, we will often do so using centrality measures. The two most common methods are to adjust vertex size according to centrality or to use a centrality-related color scale. We will illustrate a couple of examples using <code>ggraph</code> in R to show some of the options available.</p>
-<p>For greatest efficientcy, it’s always a good idea to add centralities as vertex properties in graphs. Let’s add a few of these now in our <span class="math inline">\(G_{14}\)</span> graph.</p>
+<p>For greatest efficiency, it’s always a good idea to add centralities as vertex properties in graphs. Let’s add a few of these now in our <span class="math inline">\(G_{14}\)</span> graph.</p>
 <div class="sourceCode" id="cb413"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">g14</span><span class="op">)</span><span class="op">$</span><span class="va">degree</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/degree.html">degree</a></span><span class="op">(</span><span class="va">g14</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">g14</span><span class="op">)</span><span class="op">$</span><span class="va">betweenness</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/betweenness.html">betweenness</a></span><span class="op">(</span><span class="va">g14</span><span class="op">)</span>

@@ -179,7 +179,7 @@ div.csl-indent {
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a>
 <ul>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#note-on-data"><i class="fa fa-check"></i>Note on data</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#notes-on-data-used-in-this-book"><i class="fa fa-check"></i>Notes on data used in this book</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#technical-note-for-r-users"><i class="fa fa-check"></i>Technical note for R users</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i>Introduction</a></li>
@@ -473,17 +473,17 @@ Figure 4.1: Two different ways of visualizing the <span class="math inline">\(G_
 <span id="cb180-2"><a href="viz-graphs.html#cb180-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb180-3"><a href="viz-graphs.html#cb180-3" aria-hidden="true" tabindex="-1"></a>(karate <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(karate_edgelist, </span>
 <span id="cb180-4"><a href="viz-graphs.html#cb180-4" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">directed =</span> <span class="cn">FALSE</span>))</span></code></pre></div>
-<pre><code>## IGRAPH 8f6721d UN-- 34 78 -- 
+<pre><code>## IGRAPH b20ed16 UN-- 34 78 -- 
 ## + attr: name (v/c)
-## + edges from 8f6721d (vertex names):
-##  [1] Mr Hi  --Actor 2  Mr Hi  --Actor 3  Mr Hi  --Actor 4  Mr Hi  --Actor 5 
-##  [5] Mr Hi  --Actor 6  Mr Hi  --Actor 7  Mr Hi  --Actor 8  Mr Hi  --Actor 9 
-##  [9] Mr Hi  --Actor 11 Mr Hi  --Actor 12 Mr Hi  --Actor 13 Mr Hi  --Actor 14
-## [13] Mr Hi  --Actor 18 Mr Hi  --Actor 20 Mr Hi  --Actor 22 Mr Hi  --Actor 32
-## [17] Actor 2--Actor 3  Actor 2--Actor 4  Actor 2--Actor 8  Actor 2--Actor 14
-## [21] Actor 2--Actor 18 Actor 2--Actor 20 Actor 2--Actor 22 Actor 2--Actor 31
-## [25] Actor 3--Actor 4  Actor 3--Actor 8  Actor 3--Actor 9  Actor 3--Actor 10
-## [29] Actor 3--Actor 14 Actor 3--Actor 28 Actor 3--Actor 29 Actor 3--Actor 33
+## + edges from b20ed16 (vertex names):
+##  [1] Mr Hi   --Actor 2  Mr Hi   --Actor 3  Mr Hi   --Actor 4  Mr Hi   --Actor 5  Mr Hi   --Actor 6  Mr Hi   --Actor 7 
+##  [7] Mr Hi   --Actor 8  Mr Hi   --Actor 9  Mr Hi   --Actor 11 Mr Hi   --Actor 12 Mr Hi   --Actor 13 Mr Hi   --Actor 14
+## [13] Mr Hi   --Actor 18 Mr Hi   --Actor 20 Mr Hi   --Actor 22 Mr Hi   --Actor 32 Actor 2 --Actor 3  Actor 2 --Actor 4 
+## [19] Actor 2 --Actor 8  Actor 2 --Actor 14 Actor 2 --Actor 18 Actor 2 --Actor 20 Actor 2 --Actor 22 Actor 2 --Actor 31
+## [25] Actor 3 --Actor 4  Actor 3 --Actor 8  Actor 3 --Actor 9  Actor 3 --Actor 10 Actor 3 --Actor 14 Actor 3 --Actor 28
+## [31] Actor 3 --Actor 29 Actor 3 --Actor 33 Actor 4 --Actor 8  Actor 4 --Actor 13 Actor 4 --Actor 14 Actor 5 --Actor 7 
+## [37] Actor 5 --Actor 11 Actor 6 --Actor 7  Actor 6 --Actor 11 Actor 6 --Actor 17 Actor 7 --Actor 17 Actor 9 --Actor 31
+## [43] Actor 9 --Actor 33 Actor 9 --John A   Actor 10--John A   Actor 14--John A   Actor 15--Actor 33 Actor 15--John A  
 ## + ... omitted several edges</code></pre>
 <p>We can see that we have an undirected graph with 34 named vertices and 78 edges.</p>
 <div id="native-plotting-igraph" class="section level3" number="4.1.1">
@@ -779,7 +779,7 @@ Figure 4.16: Connection of employees in a workplace with edge thickness weighted
 </p>
 </div>
 <div class="thinkahead">
-<p><strong>Thinking ahead:</strong> The graph we have just created in Figure <a href="viz-graphs.html#fig:workfrance-additional">4.16</a> shows how we have detected a community segmentation of our vertices. It’s relatively clear that individuals in the same department are more likely to be connected. Community segmentation is an important topic in Organizational Network Analysis which we will study later in this book. It’s not always straightforward to identify drivers of community in networks, but we will learn about a number of unsupervised community detection algorithms which will segment the graph into different community groups. As an example, Figure <a href="viz-graphs.html#fig:workfrance-louvain">4.17</a> shows the results of running the Louvain community detection algorithm on the <code>workfrance</code> graph with <code>mins</code> as the edge weights. You can see that the communities detected are strongly aligned with the departments in Figure <a href="viz-graphs.html#fig:workfrance-additional">4.16</a>.</p>
+<p><strong>Thinking ahead:</strong> The graph we have just created in Figure <a href="viz-graphs.html#fig:workfrance-additional">4.16</a> shows how we have detected a community partition of our vertices. It’s relatively clear that individuals in the same department are more likely to be connected. Community detection is an important topic in Organizational Network Analysis which we will study later in this book. It’s not always straightforward to identify drivers of community in networks, but we will learn about a number of unsupervised community detection algorithms which will partition the graph into different community groups. As an example, Figure <a href="viz-graphs.html#fig:workfrance-louvain">4.17</a> shows the results of running the Louvain community detection algorithm on the <code>workfrance</code> graph with <code>mins</code> as the edge weights. You can see that the communities detected are strongly aligned with the departments in Figure <a href="viz-graphs.html#fig:workfrance-additional">4.16</a>.</p>
 </div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:workfrance-louvain"></span>
 <img src="_main_files/figure-html/workfrance-louvain-1.png" alt="Clusters of employees as detected by the Louvain unsupervised community detection algorithm.  Note the cluster similarity of communities with the departments in the previous graph." width="90%" />

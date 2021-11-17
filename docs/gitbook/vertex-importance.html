@@ -179,7 +179,7 @@ div.csl-indent {
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a>
 <ul>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#note-on-data"><i class="fa fa-check"></i>Note on data</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#notes-on-data-used-in-this-book"><i class="fa fa-check"></i>Notes on data used in this book</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#technical-note-for-r-users"><i class="fa fa-check"></i>Technical note for R users</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i>Introduction</a></li>
@@ -534,7 +534,7 @@ If we require that <span class="math inline">\(x\)</span> can only have positive
 <div class="sourceCode" id="cb391"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb391-1"><a href="vertex-importance.html#cb391-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2nd order ego network of Vertex 4</span></span>
 <span id="cb391-2"><a href="vertex-importance.html#cb391-2" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">ego</span>(g14, <span class="at">order =</span> <span class="dv">2</span>, <span class="at">nodes =</span> <span class="st">&quot;4&quot;</span>)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 9/14 vertices, named, from 7e10a8c:
+## + 9/14 vertices, named, from d2ee9a3:
 ## [1] 4 8 6 1 7 2 3 5 9</code></pre>
 <div class="sourceCode" id="cb393"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb393-1"><a href="vertex-importance.html#cb393-1" aria-hidden="true" tabindex="-1"></a><span class="co"># size of ego network</span></span>
 <span id="cb393-2"><a href="vertex-importance.html#cb393-2" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">ego_size</span>(g14, <span class="at">order =</span> <span class="dv">2</span>, <span class="at">nodes =</span> <span class="st">&quot;4&quot;</span>)</span></code></pre></div>
@@ -550,10 +550,10 @@ If we require that <span class="math inline">\(x\)</span> can only have positive
 <p>Finally, eigenvector centrality can be calculated using the <code>eigen_centrality()</code> function. Note that this returns a list including various details about the computation<a href="#fn56" class="footnote-ref" id="fnref56"><sup>56</sup></a>. To see the actual centralities, you should call the <code>vector</code> element of the output list. Note also that this function scales the values by default so that the maximum eigenvector centrality is 1. To avoid this, set <code>scale = FALSE</code>.</p>
 <div class="sourceCode" id="cb399"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb399-1"><a href="vertex-importance.html#cb399-1" aria-hidden="true" tabindex="-1"></a>eigens <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">eigen_centrality</span>(g14, <span class="at">scale =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb399-2"><a href="vertex-importance.html#cb399-2" aria-hidden="true" tabindex="-1"></a>eigens<span class="sc">$</span>vector</span></code></pre></div>
-<pre><code>##          9         10         11         13          8          4          6 
-## 0.30157876 0.11585270 0.04773223 0.09618665 0.37800315 0.55038069 0.29000589 
-##          1         12         14          7          2          3          5 
-## 0.22676118 0.04773223 0.02806617 0.44350955 0.22676118 0.16059484 0.16059484</code></pre>
+<pre><code>##          9         10         11         13          8          4          6          1         12         14          7 
+## 0.30157876 0.11585270 0.04773223 0.09618665 0.37800315 0.55038069 0.29000589 0.22676118 0.04773223 0.02806617 0.44350955 
+##          2          3          5 
+## 0.22676118 0.16059484 0.16059484</code></pre>
 <p>We can see confirmation here that Vertex 4 has the highest eigenvector centrality.</p>
 <div class="thinkahead">
 <p><strong>Playing around:</strong> There are a few other centrality-like measures available in <code>igraph</code> which you could explore and try to understand. Examples include <code>page_rank()</code> for Google’s measure of importance of a web page, and <code>hub_score()</code> and <code>authority_score()</code> for directed networks. Consider testing these out on some datasets, like the <code>wikivote</code> data set from the <code>onadata</code> package or downloaded from the internet<a href="#fn57" class="footnote-ref" id="fnref57"><sup>57</sup></a>.</p>
@@ -604,7 +604,7 @@ If we require that <span class="math inline">\(x\)</span> can only have positive
 <div id="illustrating-centrality-in-graph-visualizations" class="section level3" number="7.2.3">
 <h3><span class="header-section-number">7.2.3</span> Illustrating centrality in graph visualizations</h3>
 <p>As we reviewed in Chapter <a href="viz-graphs.html#viz-graphs">4</a>, we will often make adjustments when visualizing graphs to illustrate certain aspects of the graph’s structure. For example, we highlight certain vertices with color or adjust the thickness of certain edges. When we want to visually illustrate the importance or influence of vertices in graphs, we will often do so using centrality measures. The two most common methods are to adjust vertex size according to centrality or to use a centrality-related color scale. We will illustrate a couple of examples using <code>ggraph</code> in R to show some of the options available.</p>
-<p>For greatest efficientcy, it’s always a good idea to add centralities as vertex properties in graphs. Let’s add a few of these now in our <span class="math inline">\(G_{14}\)</span> graph.</p>
+<p>For greatest efficiency, it’s always a good idea to add centralities as vertex properties in graphs. Let’s add a few of these now in our <span class="math inline">\(G_{14}\)</span> graph.</p>
 <div class="sourceCode" id="cb413"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb413-1"><a href="vertex-importance.html#cb413-1" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g14)<span class="sc">$</span>degree <span class="ot">&lt;-</span> <span class="fu">degree</span>(g14)</span>
 <span id="cb413-2"><a href="vertex-importance.html#cb413-2" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g14)<span class="sc">$</span>betweenness <span class="ot">&lt;-</span> <span class="fu">betweenness</span>(g14)</span>
 <span id="cb413-3"><a href="vertex-importance.html#cb413-3" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g14)<span class="sc">$</span>eigen <span class="ot">&lt;-</span> <span class="fu">eigen_centrality</span>(g14)<span class="sc">$</span>vector</span></code></pre></div>

@@ -2,11 +2,11 @@
 
 It follows from much of the earlier work we have been doing in this book that the vertices of a graph can provide rich information about a network, its structure and its dynamics.  In sociology and psychology contexts, this is particularly true, because more often than not vertices represent people.  The fact that people play different roles and have different influences inside groups and communities has motivated centuries of sociological and psychological research, so it is unsurprising that the concept of vertex importance and influence is of great interest in the study of people or organizational networks.
 
-But importance and influence are not precisely defined concepts, and to make them real within the context of graphs and networks we need to find some sort of mathematical definition for them.  In many visual graph layouts, more important or influential vertices that have stronger roles in overall connectivity will usually be positioned towards the center of a group of other vertices^[If you want to see an earlier example of this, take a look at Figure \@ref(fig:fr-karate) for Zachary's Karate Club network and note the positions of the influential actors Mr Hi and John A.].  Intuitively therefore, we use the term 'centrality' to describe the importance or influence of a vertex in the connected structure of a graph. 
+But importance and influence are not precisely defined concepts, and to make them real within the context of graphs and networks we need to find some sort of mathematical definition for them.  In many visual graph layouts, more important or influential vertices that have stronger roles in overall connectivity will usually be positioned towards the center of a group of other vertices^[If you want to see an earlier example of this, take a look at Figure \@ref(fig:fr-karate) for Zachary's Karate Club network and note the positions of the influential actors Mr Hi and John A.].  Intuitively therefore, we use the term `r if (knitr::is_latex_output()) '\\index{centrality}'`'centrality' to describe the importance or influence of a vertex in the connected structure of a graph. 
 
 In this chapter we will go through the most common types of centrality that can be measured for vertices in graphs, and discuss how they can be interpreted in the context of people or organizational networks.  We will show how to calculate different types of centrality in R or Python and how to illustrate centrality in graph visualizations. We will then reprise our example of the French office building network from the previous chapter to illustrate the utility of centrality in network analysis.
 
-In this chapter we will use the $G_{14}$ graph which we introduced in the previous chapter, which is an undirected and unweighted graph.  Most centrality measures are valid and easily calculated for directed graphs, and will depend on defining the direction of the edges to consider. Figure \@ref(fig:g14-colored) shows the $G_{14}$ graph with four vertices of interest colored differently from other vertices.
+In this chapter we will use the $G_{14}$ graph which we introduced in the previous chapter, which is an undirected and unweighted graph.  Most centrality measures are valid and easily calculated for directed graphs, and will depend on defining the direction of the edges to consider. Figure \@ref(fig:g14-colored) shows the $G_{14}$ graph with four vertices of interest colored differently from other vertices.`r if (knitr::is_latex_output()) '\\index{data sets!g14@\\texttt{g14}}'`
 
 ```{r g14-colored, echo = FALSE, fig.align = "center", fig.cap = "The $G_{14}$ graph with four vertices of interest colored differently"}
 library(igraph)
@@ -47,21 +47,21 @@ layout <- create_layout(g14, layout = 'igraph', algorithm = 'lgl')
 
 ## Vertex centrality measures in graphs
 
-As we look at the $G_{14}$ graph in Figure \@ref(fig:g14-colored), we see the colored nodes seem to occupy prominent roles in the connective structure of the graph.  If we removed Vertex 9, for example, we would split our graph into three disconnected components.  Vertex 4 seems to be connected to a lot of immediate neighbours, and we would also split the graph if we removed it, leaving behind some isolates^[Recall that isolates are vertices that are not connected to any other vertices.].  Vertex 7 seems to occupy a stealthy position from which to efficiently reach other vertices, while Vertex 8 seems to sit in between those other three and probably can't be ignored for that reason alone.  
+As we look at the $G_{14}$ graph in Figure \@ref(fig:g14-colored), we see the colored nodes seem to occupy prominent roles in the connective structure of the graph.  If we removed Vertex 9, for example, we would split our graph into three disconnected components.  Vertex 4 seems to be connected to a lot of immediate neighbours, and we would also split the graph if we removed it, leaving behind some `r if (knitr::is_latex_output()) '\\index{isolates}'`isolates^[Recall that isolates are vertices that are not connected to any other vertices.].  Vertex 7 seems to occupy a stealthy position from which to efficiently reach other vertices, while Vertex 8 seems to sit in between those other three and probably can't be ignored for that reason alone.  
 
 What if these vertices represented people in an organization?  Would the departure of Vertex 4 mean that Vertices 1, 2, 3 and 5 lose their entire connection to the remainder of the organization?  Would the departure of Vertex 9 split the organization in terms of the flow of work?  If we wanted to distribute important information across the organization by means of these connections, which vertex would be a good place to start?  By understanding centrality we can start to appreciate the possible impact of changes to the network, or identify important or influential actors in the network.
 
 ### Degree centrality
 
-The **degree centrality** or **valence** of a vertex $v$ is the number of edges connected to $v$.  Alternatively stated, in an unweighted and undirected graph it is simply the number of neighbors of $v$ or the number of vertices of distance 1 from $v$.  For example, the degree centrality of Vertex 8 in $G_{14}$ is 3, and for Vertex 4 it is 7.  It should not be difficult to see that Vertex 4 has the highest degree centrality in $G_{14}$.
+`r if (knitr::is_latex_output()) '\\index{centrality!degree}'`The **degree centrality** or **valence** of a vertex $v$ is the number of edges connected to $v$.  Alternatively stated, in an unweighted and undirected graph it is simply the number of neighbors of $v$ or the number of vertices of distance 1 from $v$.  For example, the degree centrality of Vertex 8 in $G_{14}$ is 3, and for Vertex 4 it is 7.  It should not be difficult to see that Vertex 4 has the highest degree centrality in $G_{14}$.
 
 Degree centrality is a measure of immediate connection in a network.  It could be interpreted as immediate reach in a social network.  Its precise interpretation depends strongly on the nature of the connection.  In a network of academic co-authoring, someone with high degree centrality has collaborated directly with a larger number of other academics.  In our French office building network from Section \@ref(illustrative-6), someone of high degree centrality is likely to be well-known socially to a greater number of colleagues.    
 
-Related to degree centrality is *ego size*.  The $n$-th order ego network of a given vertex $v$ is a set including $v$ itself and all vertices of distance at most $n$ from $v$.  The $n$-th order ego size is the number of vertices in the $n$-th order ego network.  In $G_{14}$, Vertex 8 has a 1st order ego size of 4, a 2nd order ego size of 11, and a third order ego size of 14 (the entire graph).  It easily follows that the 1st order ego size of a vertex is one greater than the degree centrality of the vertex.
+`r if (knitr::is_latex_output()) '\\index{ego network}'``r if (knitr::is_latex_output()) '\\index{ego size}'`Related to degree centrality is *ego size*.  The $n$-th order ego network of a given vertex $v$ is a set including $v$ itself and all vertices of distance at most $n$ from $v$.  The $n$-th order ego size is the number of vertices in the $n$-th order ego network.  In $G_{14}$, Vertex 8 has a 1st order ego size of 4, a 2nd order ego size of 11, and a third order ego size of 14 (the entire graph).  It easily follows that the 1st order ego size of a vertex is one greater than the degree centrality of the vertex.
 
 ### Closeness centrality
 
-The **closeness centrality** of a vertex $v$ in a connected graph is the inverse of the sum of the distances from $v$ to all other vertices. Let's take a moment to understand this better by looking at an example.  We will calculate the closeness centrality of Vertex 8 from $G_{14}$.  Vertex 8 has the following distances to other vertices:
+`r if (knitr::is_latex_output()) '\\index{centrality!closeness}'`The **closeness centrality** of a vertex $v$ in a connected graph is the inverse of the sum of the distances from $v$ to all other vertices. Let's take a moment to understand this better by looking at an example.  We will calculate the closeness centrality of Vertex 8 from $G_{14}$.  Vertex 8 has the following distances to other vertices:
 
 * Distance 1 to vertices 4, 7 and 9
 * Distance 2 to vertices 1, 2, 3, 5, 6, 10 and 13
@@ -73,7 +73,7 @@ Closeness centrality is a measure of how efficiently the entire graph can be tra
 
 ### Betweenness centrality
 
-The **betweenness centrality** of a vertex $v$ is calculated by taking each pair of other vertices $x$ and $y$, calculating the number of shortest paths between $x$ and $y$ that go through $v$, dividing by the total number of shortest paths between $x$ and $y$, then summing over all such pairs of vertices in the graph.  We can use the following process to manually calculate this for Vertex 8 in $G_{14}$:
+`r if (knitr::is_latex_output()) '\\index{centrality!betweenness}'`The **betweenness centrality** of a vertex $v$ is calculated by taking each pair of other vertices $x$ and $y$, calculating the number of shortest paths between $x$ and $y$ that go through $v$, dividing by the total number of shortest paths between $x$ and $y$, then summing over all such pairs of vertices in the graph.  We can use the following process to manually calculate this for Vertex 8 in $G_{14}$:
 
 * If we look at all pairs of vertices 9 thru 14, we conclude that 8 is not on any shortest paths between these vertices  (betweenness centrality: 0). 
 * Similarly for vertices 1 thru 7 we conclude that Vertex 8 is not on any of these shortest paths either (betweenness centrality: 0).
@@ -93,7 +93,7 @@ Betweenness centrality is a measure of how important a given vertex is in connec
 
 ### Eigenvector centrality
 
-The **Eigenvector centrality** or **relative centrality** or **prestige** of a vertex is a measure of how connected the vertex is to other influential vertices.  It is impossible to define this without a little linear algebra.  
+`r if (knitr::is_latex_output()) '\\index{centrality!eigenvector}'`The **Eigenvector centrality** or **relative centrality** or **prestige** of a vertex is a measure of how connected the vertex is to other influential vertices.  It is impossible to define this without a little linear algebra.  
 
 Recall from Section \@ref(rep-graphs) that the adjacency matrix $A = (a_{ij})$ for an unweighted graph $G$ containing $p$ vertices is defined as $a_{ij} = 1$ if $i$ and $j$ are adjacent vertices in $G$ and 0 otherwise.  A vector $x = (x_1, x_2, ...,x_p)$ and scalar value $\lambda$ are considered an eigenvector and eigenvalue of $A$ if they satisfy the equation
 
@@ -108,11 +108,11 @@ $$
 
 Because this is solving for a system of linear equations with coefficients that relate to the connectedness of neighbouring vertices, its solution is a measure of the relative influence of a vertex as a function of the influences of the vertices it is connected to.  Vertices can have high influence through being connected to a lot of other vertices with low influence, or through being connected to a small number of highly influential vertices.  Vertex 10 in $G_{14}$ has an eigenvector centrality of 0.12, and Vertex 2 has an eigenvector centrality of 0.23.  This makes sense because Vertex 2 is connected to Vertex 4, which we already know has the highest degree centrality in the network.  Intuitively, it shouldn't be too hard to appreciate that Vertex 4 has the highest eigenvector centrality in $G_{14}$.
 
-In directed graphs, eigenvector centrality gives rise to interesting measures of different types of influence.  For example, imagine a citation network where certain authors are regularly citing a lot of influential articles.  These authors are known as *hubs*, and their *outgoing* eigenvector centrality will be high.  *Hub score* is the outgoing eigenvector centrality of a vertex.  Meanwhile, authors who have high incoming eigenvector centrality will be frequently referenced by hubs, and these authors are known as *authorities*.  *Authority score* is the *incoming* eigenvector centrality of a vertex.  These types of measures are becoming increasingly adopted in fields such as bibliometrics.  Note that in undirected graphs the hub score, authority score and eigenvector centrality of vertices are identical.
+In directed graphs, eigenvector centrality gives rise to interesting measures of different types of influence.  For example, imagine a citation network where certain authors are regularly citing a lot of influential articles.  These authors are known as *hubs*, and their *outgoing* eigenvector centrality will be high.  `r if (knitr::is_latex_output()) '\\index{centrality!hub score}'`*Hub score* is the outgoing eigenvector centrality of a vertex.  Meanwhile, authors who have high incoming eigenvector centrality will be frequently referenced by hubs, and these authors are known as *authorities*.  `r if (knitr::is_latex_output()) '\\index{centrality!authority score}'`*Authority score* is the *incoming* eigenvector centrality of a vertex.  These types of measures are becoming increasingly adopted in fields such as bibliometrics.  Note that in undirected graphs the hub score, authority score and eigenvector centrality of vertices are identical.
 
 
 :::{.thinkahead data-latex=""}
-**Playing around:** We have not looked at the impact of edge weights on centrality in this chapter.  This is because it is unusual to consider edge weights in centrality measures.  Nonetheless, most centrality measures do have approaches to consider edge weights, and this is a topic of ongoing research.  Usually in these situations, edge weights are transformed to be cost functions --- for example by inverting them --- so that edges with higher weights are considered 'preferable' in graph traversal.  To see what I mean, go back and have a look at the $G_{14W}$ weighted graph from the previous chapter.  Pick pairs of vertices and see what the shortest path between them would be using the sum of weights of edges, and what it would be using the sum of the inverse weights of edges.    
+`r if (knitr::is_latex_output()) '\\index{centrality!considering edge weights}'`**Playing around:** We have not looked at the impact of edge weights on centrality in this chapter.  This is because it is unusual to consider edge weights in centrality measures.  Nonetheless, most centrality measures do have approaches to consider edge weights, and this is a topic of ongoing research.  Usually in these situations, edge weights are transformed to be cost functions --- for example by inverting them --- so that edges with higher weights are considered 'preferable' in graph traversal.  To see what I mean, go back and have a look at the $G_{14W}$ weighted graph from the previous chapter.  Pick pairs of vertices and see what the shortest path between them would be using the sum of weights of edges, and what it would be using the sum of the inverse weights of edges.    
 :::
 
 
@@ -120,6 +120,7 @@ In directed graphs, eigenvector centrality gives rise to interesting measures of
 
 ### Calculating in R
 
+`r if (knitr::is_latex_output()) '\\index{centrality!calculating in R|(}'`
 Degree centrality can be calculated for a specific set of vertices using the `degree()` function in `igraph`.  By default, the degree centrality will be calculated for all vertices. Let's load up our $G_{14}$ graph to demonstrate as we did in the previous chapter.
 
 ```{r}
@@ -182,8 +183,11 @@ We can see confirmation here that Vertex 4 has the highest eigenvector centralit
 **Playing around:** There are a few other centrality-like measures available in `igraph` which you could explore and try to understand.  Examples include `page_rank()` for Google's measure of importance of a web page, and `hub_score()` and `authority_score()` for directed networks.  Consider testing these out on some datasets, like the `wikivote` data set from the `onadata` package or downloaded from the internet^[https://ona-book.org/data/wikivote.csv].
 :::
 
+`r if (knitr::is_latex_output()) '\\index{centrality!calculating in R|)}'`
+
 ### Calculating in Python
 
+`r if (knitr::is_latex_output()) '\\index{centrality!calculating in Python|(}'`
 Again, as in the work in the previous chapter, centrality functions in `networkx` are very similar to those in `igraph`.  The `degree()` function calculates degree centrality for all vertices by default, or you can specify a list of vertices.
 
 ```{python}
@@ -243,11 +247,14 @@ Closeness, betweenness and eigenvector centrality are calculated using *incoming
 **Playing around**:  `networkx` has a very wide range of centrality measures available.  Visit the Centrality section of its documentation^[https://networkx.org] and have a look at the options. Many of these are very specific to graph use cases in different industries and disciplines, but see if you can understand them and even give them a try with a data set.
 :::
 
+`r if (knitr::is_latex_output()) '\\index{centrality!calculating in Python|)}'`
+
 ### Illustrating centrality in graph visualizations
 
+`r if (knitr::is_latex_output()) '\\index{centrality!illustrating visually|(}'`
 As we reviewed in Chapter \@ref(viz-graphs), we will often make adjustments when visualizing graphs to illustrate certain aspects of the graph's structure.  For example, we highlight certain vertices with color or adjust the thickness of certain edges.  When we want to visually illustrate the importance or influence of vertices in graphs, we will often do so using centrality measures.  The two most common methods are to adjust vertex size according to centrality or to use a centrality-related color scale.  We will illustrate a couple of examples using `ggraph` in R to show some of the options available.
 
-For greatest efficientcy, it's always a good idea to add centralities as vertex properties in graphs.  Let's add a few of these now in our $G_{14}$ graph.
+For greatest efficiency, it's always a good idea to add centralities as vertex properties in graphs.  Let's add a few of these now in our $G_{14}$ graph.
 
 ```{r}
 V(g14)$degree <- degree(g14)
@@ -284,10 +291,11 @@ ggraph(g14, layout = "lgl") +
 **Playing around:**. Play around with different ways of visualizing the centralities of vertices in $G_{14}$.  Try using color, size or both.  And also try the different types of centrality to see if the look of the graph changes substantially between them.
 :::
 
+`r if (knitr::is_latex_output()) '\\index{centrality!illustrating visually|)}'`
 
 ## Examples of uses {#illustrative-7}
 
-In this section we will reprise the `workfrance` unweighted graph from the previous chapter, and use it to illustrate some common uses for centrality measures.  First we will look at how to find network-wide and department level 'superconnectors', then we will look at how to find potential socially-influential actors in a network.  Let's load up the `workfrance` graph again.
+In this section we will reprise the `r if (knitr::is_latex_output()) '\\index{data sets!workfrance@\\texttt{workfrance}}'``workfrance` unweighted graph from the previous chapter, and use it to illustrate some common uses for centrality measures.  First we will look at how to find network-wide and department level 'superconnectors', then we will look at how to find potential socially-influential actors in a network.  Let's load up the `workfrance` graph again.
 
 ```{r}
 set.seed(123)
@@ -477,7 +485,7 @@ This time we see that our three most influential individuals are all in the same
 4.  Find the mean eigenvector centrality of all vertices in $G_{14}$.  Do this twice, raw and normalized.
 5.  Visualize $G_{14}$ with the size of the vertices scaled to their eigenvector centrality and the color scaled to their closeness centrality.
 
-For questions 6 to 10, create an undirected graph from the Facebook friendships in the `schoolfriends_edgelist` and `schoolfriends_vertices` datasets in the `onadata` package or downloaded from the internet^[https://ona-book.org/data/schoolfriends_edgelist.csv and https://ona-book.org/data/schoolfriends_vertices.csv].  Recall from the exercises in Chapter \@ref(viz-graphs) that this data contains information on friendships between students in a French high school.  Make sure not to include the reported friendships in this graph.  There are a lot of isolates in this graph because it only represents 'known' Facebook friendships, and you should remove isolates before proceeding^[One easy way to identify isolates in a graph object `G` in R is to identify them using `isolates <- which(degree(G) == 0)`, and then remove them using `G_new <- remove.vertices(G, isolates)`.].
+For questions 6 to 10, create an undirected graph from the Facebook friendships in the `r if (knitr::is_latex_output()) '\\index{data sets!schoolfriends@\\texttt{schoolfriends}}'``schoolfriends_edgelist` and `schoolfriends_vertices` datasets in the `onadata` package or downloaded from the internet^[https://ona-book.org/data/schoolfriends_edgelist.csv and https://ona-book.org/data/schoolfriends_vertices.csv].  Recall from the exercises in Chapter \@ref(viz-graphs) that this data contains information on friendships between students in a French high school.  Make sure not to include the reported friendships in this graph.  There are a lot of isolates in this graph because it only represents 'known' Facebook friendships, and you should remove isolates before proceeding^[One easy way to identify isolates in a graph object `G` in R is to identify them using `isolates <- which(degree(G) == 0)`, and then remove them using `G_new <- remove.vertices(G, isolates)`.].
 
 6.  Identify the top three individuals with the most Facebook connections.
 7.  Determine 1st order and 2nd order ego sizes of the individual with the most Facebook connections.  What proportion of the total connected population is included in these ego networks?
