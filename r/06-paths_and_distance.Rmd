@@ -24,6 +24,7 @@ set.seed(123)
     geom_node_label(aes(label = name), fill = "lightblue") +
     theme_void())
 ```
+
 ## Theory of graph traversal, paths and distance
 
 ### Paths and graph traversal {#traversal}
@@ -243,7 +244,8 @@ shortest_9to4$res
 Note that the function has returned the shortest path according to edge weights.  To ignore edge weights, simply set `weights = NA`.  This is equivalent to calculating shortest paths in our unweighted $G_{14}$ graph.
 
 ```{r}
-shortest_9to4_uw <- igraph::all_shortest_paths(g14w, from = "9", to = "4", 
+shortest_9to4_uw <- igraph::all_shortest_paths(g14w, 
+                                               from = "9", to = "4", 
                                                weights = NA)
 shortest_9to4_uw$res
 ```
@@ -257,7 +259,8 @@ distances(g14w)
 Again, specific subsets of vertices can be selected and the function will return a matrix for just those subsets, and the same `mode` argument can be used for digraphs.  Weights can be ignored by setting `weights = NA`. The algorithm used to calculate shortest path is automatically selected, but can be specified using the `algorithm` argument.
 
 ```{r}
-distances(g14w, v = "9", to = "4", weights = NA, algorithm = "bellman-ford")
+distances(g14w, v = "9", to = "4", weights = NA, 
+          algorithm = "bellman-ford")
 ```
 
 The `mean_distance()` function calculates the average distance between all pairs of vertices. Note that this function does not consider edge weights.
@@ -315,8 +318,8 @@ import pandas as pd
 
 g14w_edges = pd.read_csv("https://ona-book.org/data/g14_edgelist.csv")
 
-g14w = nx.from_pandas_edgelist(g14w_edges, source = "from", target = "to", 
-edge_attr = True)
+g14w = nx.from_pandas_edgelist(g14w_edges, source = "from", 
+target = "to", edge_attr = True)
 ```
 
 `r if (knitr::is_latex_output()) '\\index{path!calculating in Python}'`To calculate all simple paths between two specified nodes, use the `all_simple_paths()` function.
@@ -329,22 +332,24 @@ simple_paths = nx.all_simple_paths(G = g14w, source = 9, target = 4)
 To calculate all shortest paths between two specified nodes, use the `all_shortest_paths()` function.  By default this will ignore edge weights.
 
 ```{python}
-shortest_paths_uw = nx.all_shortest_paths(G = g14w, source = 9, target = 4)
+shortest_paths_uw = nx.all_shortest_paths(G = g14w, source = 9, 
+target = 4)
 [path for path in shortest_paths_uw]
 ```
 
 To consider edge weights, use the name of the weight attribute as the value of the `weight` argument.
 
 ```{python}
-shortest_paths_w = nx.all_shortest_paths(G = g14w, source = 9, target = 4,
-weight = 'weight')
+shortest_paths_w = nx.all_shortest_paths(G = g14w, source = 9, 
+target = 4, weight = 'weight')
 [path for path in shortest_paths_w]
 ```
 
 For undirected graphs, the `shortest_path()` function will calculate a single shortest path for every pair of vertices in the graph, returning the paths in a dict.  You can also specify source and target node subsets. 
 
 ```{python}
-shortest_paths_from9 = nx.shortest_path(g14w, source = 9, weight = 'weight')
+shortest_paths_from9 = nx.shortest_path(g14w, source = 9, 
+weight = 'weight')
 
 # view one path to vertex 11
 shortest_paths_from9.get(11)
@@ -355,7 +360,8 @@ For directed graphs, various algorithm-specific functions are available, such as
 `r if (knitr::is_latex_output()) '\\index{distance (in a graph)!calculating in Python}'`Distances can be calculated using the `shortest_path_length()` function, either to produce all distances or to focus on a specific source and/or target.  This will return a dict if a single source or target is provided, or a tuple otherwise.
 
 ```{python, eval = FALSE}
-distances_from9 = nx.shortest_path_length(g14w, source = 9, weight = 'weight')
+distances_from9 = nx.shortest_path_length(g14w, source = 9, 
+weight = 'weight')
 distances_from9
 ```
 
@@ -472,14 +478,17 @@ There is one common intermediary: employee 447.  Therefore, if employees 3 and 5
 In this case, we could consider using the edge weights to rank the intermediary options, on the basis that higher weights may indicate stronger connections. Let's visualize these two options by looking at the subgraph with edge weights in Figure \@ref(fig:intermediary).
 
 ```{r intermediary, fig.align = "center", fig.cap = "Selecting an intermediary according to higher edge weights"}
-subgraph <- induced_subgraph(workfrance, vids = c("3", "290", "694", "859"))
+subgraph <- induced_subgraph(workfrance, 
+                             vids = c("3", "290", "694", "859"))
 
 ggraph(subgraph) +
-    geom_edge_link(aes(edge_width = weight, label = weight), color = "grey", 
-                   alpha = 0.7, show.legend = FALSE) +
+    geom_edge_link(aes(edge_width = weight, label = weight), 
+                   color = "grey", alpha = 0.7, 
+                   show.legend = FALSE) +
     geom_node_label(size = 3, fill = "lightblue", aes(label = name)) +
     theme_void()
 ```
+
 Here we may recommend employee 859 first on the basis of higher edge weights and therefore possibly greater familiarity with employees 3 and 290.
 
 
@@ -514,7 +523,8 @@ n_neighbors <- c()
 # capture name and no of neighbours for every vertex
 for (v in V(workfrance)$name) {
     v_name <- append(v_name, v)
-    n_neighbors <- append(n_neighbors, length(neighbors(workfrance, v)))
+    n_neighbors <- append(n_neighbors, 
+                          length(neighbors(workfrance, v)))
 }
 
 # find the max
@@ -531,13 +541,15 @@ We could pick any 20 from the neighbors of employee 603 and that would be a grea
 
 ```{r, eval = FALSE}
 edges603 <- E(workfrance)[inc("603")]
-(top_edges603 <- edges603[order(sort(edges603$mins, decreasing = TRUE))][1:20])
+sort603_mins <- sort(edges603$mins, decreasing = TRUE)
+(top_edges603 <- edges603[order(sort603_mins)][1:20])
 ```
 
 `r if (knitr::is_latex_output()) '\\footnotesize'`
 ```{r, echo = FALSE}
 edges603 <- E(workfrance)[inc("603")]
-(top_edges603 <- edges603[order(sort(edges603$mins, decreasing = TRUE))][1:20])
+sort603_mins <- sort(edges603$mins, decreasing = TRUE)
+(top_edges603 <- edges603[order(sort603_mins)][1:20])
 ```
 `r if (knitr::is_latex_output()) '\\normalsize'`
 
@@ -577,7 +589,8 @@ edges603[which.min(edges603$mins)]
 So we will sit employee 603 with employee 77.  Now we can select a third individual who has a reasonable distance in the network from both employee 603 and employee 77.  Let's look at all these distances.
 
 ```{r, eval = FALSE}
-(distance603_77 <- distances(workfrance, v = c("603", "77"), weights = NA))
+(distance603_77 <- distances(workfrance, v = c("603", "77"), 
+                             weights = NA))
 ```
 
 `r if (knitr::is_latex_output()) '\\footnotesize'`
@@ -601,7 +614,7 @@ table1 <- c("603", "77", "502")
 for (i in 4:10) {
     # get distances from already chosen table members
     dists <- distances(workfrance, v = table1, weights = NA) 
-    # get vertices with the maximum mean distance excluding already chosen
+    # get vertices with maximum mean distance excluding already chosen
     new <- dists |>
         as.data.frame() |> 
         subset(select = !(colnames(dists) %in% table1)) |> 
@@ -620,7 +633,9 @@ Now let's assign a `table` property to the `workfrance` graph and take a look at
 
 ```{r table1, fig.align = "center", fig.cap = "Individuals selected for Table 1 based on optimizing for distance"}
 # add a table property to workfrance graph
-V(workfrance)$table <- ifelse(V(workfrance)$name %in% table1, "1", "2-21")
+V(workfrance)$table <- ifelse(
+    V(workfrance)$name %in% table1, "1", "2-21"
+)
 
 # visualize
 set.seed(123)

@@ -195,11 +195,14 @@ import networkx as nx
 import pandas as pd
 
 # download edgelist and remove weights
-g14_edgelist = pd.read_csv("https://ona-book.org/data/g14_edgelist.csv")
+g14_edgelist = pd.read_csv(
+  "https://ona-book.org/data/g14_edgelist.csv"
+)
 g14_undirected = g14_edgelist.drop('weight', axis = 1)
 
 # create undirected g14 graph
-g14 = nx.from_pandas_edgelist(g14_undirected, source = 'from', target = 'to')
+g14 = nx.from_pandas_edgelist(g14_undirected, source = 'from', 
+target = 'to')
 
 # calculate degree centrality of Vertices 4 and 9
 nx.degree(g14, [4, 9])
@@ -389,8 +392,11 @@ In Figure \@ref(fig:workfrance-superconnectors), we create a graph of the `workf
 V(workfrance)$betweenness <- betweenness(workfrance)
 
 # label only if a top3 superconnector
-V(workfrance)$btwn_label <- ifelse(V(workfrance)$name %in% top3_workfrance,
-                              V(workfrance)$name, "")
+V(workfrance)$btwn_label <- ifelse(
+  V(workfrance)$name %in% top3_workfrance,
+  V(workfrance)$name, 
+  ""
+)
 
 # visualize
 set.seed(123)

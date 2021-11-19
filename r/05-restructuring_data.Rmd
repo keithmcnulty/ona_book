@@ -22,10 +22,18 @@ In the first example, we will study a situation where data exists in traditional
 
 ```{r}
 # download chinook database tables
-chinook_employees <- read.csv("https://ona-book.org/data/chinook_employees.csv")
-chinook_customers <- read.csv("https://ona-book.org/data/chinook_customers.csv")
-chinook_invoices <- read.csv("https://ona-book.org/data/chinook_invoices.csv")
-chinook_items <- read.csv("https://ona-book.org/data/chinook_items.csv")
+chinook_employees <- read.csv(
+  "https://ona-book.org/data/chinook_employees.csv"
+)
+chinook_customers <- read.csv(
+  "https://ona-book.org/data/chinook_customers.csv"
+)
+chinook_invoices <- read.csv(
+  "https://ona-book.org/data/chinook_invoices.csv"
+)
+chinook_items <- read.csv(
+  "https://ona-book.org/data/chinook_items.csv"
+)
 ```
 
 ### Creating a simple graph of a management hierarchy
@@ -38,14 +46,29 @@ head(chinook_employees)
 
 We can easily create a graph of the management relationships using this table.  In such a graph, we would have a single entity type (the employee) as the vertices and the management relationship ('is a manager of') as the edges.  For simplicity. let's use first names as vertex names.  By joining our data on itself, using `EmployeeId = ReportsTo`, we can create two columns with the first names of those in each management relationship.   
 
-```{r}
+```{r, eval = FALSE}
 # load dplyr for tidy manipulation in this chapter
 library(dplyr)
 
 # create edgelist
 (orgchart_edgelist1 <- chinook_employees |> 
-  dplyr::inner_join(chinook_employees, by = c("EmployeeId" = "ReportsTo")))
+  dplyr::inner_join(chinook_employees, 
+                    by = c("EmployeeId" = "ReportsTo")))
 ```
+
+`r if (knitr::is_latex_output()) '\\footnotesize'`
+
+```{r, echo = FALSE}
+# load dplyr for tidy manipulation in this chapter
+library(dplyr)
+
+# create edgelist
+(orgchart_edgelist1 <- chinook_employees |> 
+  dplyr::inner_join(chinook_employees, 
+                    by = c("EmployeeId" = "ReportsTo")))
+```
+
+`r if (knitr::is_latex_output()) '\\normalsize'`
 
 We can see that the `FirstName.x` column is the manager and so should be the `from` column and the `Firstname.y` column should be the `to` column in our edgelist.  We should also remove rows were there is no edge.
 
@@ -57,7 +80,7 @@ We can see that the `FirstName.x` column is the manager and so should be the `fr
 
 Now we can create a directed `igraph` object using the 'is a manager of' relationship.
 
-```{r}
+```{r, eval = FALSE}
 library(igraph)
 
 # create orgchart graph
@@ -66,6 +89,19 @@ library(igraph)
 ))
 
 ```
+`r if (knitr::is_latex_output()) '\\footnotesize'`
+
+```{r, echo = FALSE}
+library(igraph)
+
+# create orgchart graph
+(orgchart <- igraph::graph_from_data_frame(
+  d = orgchart_edgelist2
+))
+
+```
+
+`r if (knitr::is_latex_output()) '\\normalsize'`
 
 We now have a directed graph with named vertices, so this should be easy to plot.  Let's use `r if (knitr::is_latex_output()) '\\index{packages!R!ggplot2@\\texttt{ggplot2}}'``ggplot` with a `r if (knitr::is_latex_output()) '\\index{graph!dendrogram} \\index{graph!tree}'`dendrogram (tree) layout, as in Figure \@ref(fig:chinook-pretty).  
 
@@ -94,7 +130,8 @@ head(chinook_customers)
 ```{r}
 # create customer to support rep edgelist
 cust_reps <- chinook_customers |> 
-  dplyr::inner_join(chinook_employees, by = c("SupportRepId" = "EmployeeId")) |> 
+  dplyr::inner_join(chinook_employees, 
+                    by = c("SupportRepId" = "EmployeeId")) |> 
   dplyr::mutate(
     CustomerName = paste(FirstName.x, LastName.x),
     RepName = paste(FirstName.y, LastName.y)
@@ -245,7 +282,8 @@ We can see from looking at this graph that there are a large number of items tha
 # join customers to customers via common items
 cust_cust_itemjoin <- cust_item |> 
   dplyr::inner_join(cust_item, by = "TrackId") |> 
-  dplyr::select(CustName1 = CustName.x, CustName2 = CustName.y, TrackId) |> 
+  dplyr::select(CustName1 = CustName.x, 
+                CustName2 = CustName.y, TrackId) |> 
   dplyr::filter(CustName1 != CustName2)
 
 # view head
@@ -310,7 +348,8 @@ If we wish, we can restrict the definition of connection.  For example, we may d
 edges <- E(custtocust_network)[E(custtocust_network)$Items >= 2]
 
 # create subgraph using these edges
-two_item_graph <- igraph::subgraph.edges(custtocust_network, eids = edges)
+two_item_graph <- igraph::subgraph.edges(custtocust_network, 
+                                         eids = edges)
 
 # visualise
 set.seed(123)
@@ -329,9 +368,15 @@ import pandas as pd
 import numpy as np
 
 # download chinook database tables
-chinook_customers = pd.read_csv("https://ona-book.org/data/chinook_customers.csv")
-chinook_invoices = pd.read_csv("https://ona-book.org/data/chinook_invoices.csv")
-chinook_items = pd.read_csv("https://ona-book.org/data/chinook_items.csv")
+chinook_customers = pd.read_csv(
+  "https://ona-book.org/data/chinook_customers.csv"
+)
+chinook_invoices = pd.read_csv(
+  "https://ona-book.org/data/chinook_invoices.csv"
+)
+chinook_items = pd.read_csv(
+  "https://ona-book.org/data/chinook_items.csv"
+)
 ```
 
 Now we join the three tables together, create the `FullName` variable and ensure that we don't have any duplicate relationships:
@@ -351,7 +396,8 @@ joined_tables['FullName'] = joined_tables['FirstName'] + ' ' + \
 joined_tables['LastName']
 
 # drop duplicates and view head
-cust_item_table = joined_tables[['FullName', 'TrackId']].drop_duplicates()
+cust_item_table = joined_tables[['FullName', 'TrackId']]\
+.drop_duplicates()
 cust_item_table.head()
 ```
 
@@ -583,7 +629,8 @@ library(stringr)
 
 # outside of 'New Scene' tags extract anything before : in every line 
 nodes_char <- ifelse(nodes_newscene != "New Scene", 
-                     stringr::str_extract(nodes_newscene, "^[A-Za-z ]+(?=:)"), 
+                     stringr::str_extract(nodes_newscene, 
+                                          "^[A-Za-z ]+(?=:)"), 
                      nodes_newscene)
 
 # check a sample
@@ -625,7 +672,7 @@ nodes_char_clean2[sample(20)]
 Let’s assume our cleaning is done and we have a nice vector that contains either the names of characters that are speaking lines in the episode or “New Scene” to indicate that we are crossing a scene boundary. We now just need to convert this vector into a simple dataframe with two columns for scene and character.  We already have our character lists, so we really just need to iterate through our nodes vector and, for each entry, count the number of previous occurrences of “New Scene” and add one. 
 
 ```{r}
-# number each scene by counting previous "New Scene" entries and adding 1
+# number scene by counting previous "New Scene" entries and adding 1
 scene_count <- c()
 
 for (i in 1:length(nodes_char_clean2)) {
@@ -774,8 +821,8 @@ The object `friends_ep1` contains all the HTML code of the script web page. Now 
 ```{python}
 originalString = "Scene:"
 replaceString = "<b>New Scene:</b>"
-friends_ep1_replace = BeautifulSoup(str(friends_ep1).replace(originalString, 
-replaceString))
+friends_ep1_replace = BeautifulSoup(str(friends_ep1)\
+.replace(originalString, replaceString))
 ```
 Now we know from viewing the web page or inspecting the HTML code that the characters' names who are speaking in scenes will be inside bold or strong HTML tags, so firstly lets get everything that is in bold or strong tags in the document, and then let's match for any alphabetic string (including spaces) prior to a colon using regular expression syntax.  This should include the `New Scene` tags that we created in the last step.
 
@@ -811,7 +858,7 @@ Now we are ready to organize our characters by scene.  First we do a scene count
 ```{python}
 import pandas as pd
 
-# number each scene by counting previous "New Scene" entries and adding 1
+# number scene by counting previous "New Scene" entries and adding 1
 scene_count = []
 
 for i in range(0,len(friends_ep1_list2)):
@@ -900,9 +947,13 @@ source = "char1", target = "char2", edge_attr=True)
 
 # visualize with edge weight as edge width
 np.random.seed(123)
-weights = list(nx.get_edge_attributes(friends_ep1_network, 'weight').values())
-nx.draw_networkx(friends_ep1_network, node_color = "lightblue", node_size = 60,
-edge_color = "grey", with_labels = True, width = np.array(weights))
+weights = list(
+  nx.get_edge_attributes(friends_ep1_network, 'weight').values()
+)
+nx.draw_networkx(
+  friends_ep1_network, node_color = "lightblue", node_size = 60,
+  edge_color = "grey", with_labels = True, width = np.array(weights)
+)
 plt.show()
 ```
 

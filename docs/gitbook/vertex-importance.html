@@ -174,7 +174,7 @@ div.csl-indent {
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./">Handbook of Regression Modeling in People Analytics</a></li>
+<li><a href="./">Handbook of Graphs and Networks in People Analytics</a></li>
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a>
@@ -534,7 +534,7 @@ If we require that <span class="math inline">\(x\)</span> can only have positive
 <div class="sourceCode" id="cb391"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb391-1"><a href="vertex-importance.html#cb391-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2nd order ego network of Vertex 4</span></span>
 <span id="cb391-2"><a href="vertex-importance.html#cb391-2" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">ego</span>(g14, <span class="at">order =</span> <span class="dv">2</span>, <span class="at">nodes =</span> <span class="st">&quot;4&quot;</span>)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 9/14 vertices, named, from ed4f788:
+## + 9/14 vertices, named, from 044ebce:
 ## [1] 4 8 6 1 7 2 3 5 9</code></pre>
 <div class="sourceCode" id="cb393"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb393-1"><a href="vertex-importance.html#cb393-1" aria-hidden="true" tabindex="-1"></a><span class="co"># size of ego network</span></span>
 <span id="cb393-2"><a href="vertex-importance.html#cb393-2" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">ego_size</span>(g14, <span class="at">order =</span> <span class="dv">2</span>, <span class="at">nodes =</span> <span class="st">&quot;4&quot;</span>)</span></code></pre></div>
@@ -566,14 +566,17 @@ If we require that <span class="math inline">\(x\)</span> can only have positive
 <span id="cb401-2"><a href="vertex-importance.html#cb401-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb401-3"><a href="vertex-importance.html#cb401-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb401-4"><a href="vertex-importance.html#cb401-4" aria-hidden="true" tabindex="-1"></a><span class="co"># download edgelist and remove weights</span></span>
-<span id="cb401-5"><a href="vertex-importance.html#cb401-5" aria-hidden="true" tabindex="-1"></a>g14_edgelist <span class="op">=</span> pd.read_csv(<span class="st">&quot;https://ona-book.org/data/g14_edgelist.csv&quot;</span>)</span>
-<span id="cb401-6"><a href="vertex-importance.html#cb401-6" aria-hidden="true" tabindex="-1"></a>g14_undirected <span class="op">=</span> g14_edgelist.drop(<span class="st">&#39;weight&#39;</span>, axis <span class="op">=</span> <span class="dv">1</span>)</span>
-<span id="cb401-7"><a href="vertex-importance.html#cb401-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb401-8"><a href="vertex-importance.html#cb401-8" aria-hidden="true" tabindex="-1"></a><span class="co"># create undirected g14 graph</span></span>
-<span id="cb401-9"><a href="vertex-importance.html#cb401-9" aria-hidden="true" tabindex="-1"></a>g14 <span class="op">=</span> nx.from_pandas_edgelist(g14_undirected, source <span class="op">=</span> <span class="st">&#39;from&#39;</span>, target <span class="op">=</span> <span class="st">&#39;to&#39;</span>)</span>
-<span id="cb401-10"><a href="vertex-importance.html#cb401-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb401-11"><a href="vertex-importance.html#cb401-11" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate degree centrality of Vertices 4 and 9</span></span>
-<span id="cb401-12"><a href="vertex-importance.html#cb401-12" aria-hidden="true" tabindex="-1"></a>nx.degree(g14, [<span class="dv">4</span>, <span class="dv">9</span>])</span></code></pre></div>
+<span id="cb401-5"><a href="vertex-importance.html#cb401-5" aria-hidden="true" tabindex="-1"></a>g14_edgelist <span class="op">=</span> pd.read_csv(</span>
+<span id="cb401-6"><a href="vertex-importance.html#cb401-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;https://ona-book.org/data/g14_edgelist.csv&quot;</span></span>
+<span id="cb401-7"><a href="vertex-importance.html#cb401-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb401-8"><a href="vertex-importance.html#cb401-8" aria-hidden="true" tabindex="-1"></a>g14_undirected <span class="op">=</span> g14_edgelist.drop(<span class="st">&#39;weight&#39;</span>, axis <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb401-9"><a href="vertex-importance.html#cb401-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb401-10"><a href="vertex-importance.html#cb401-10" aria-hidden="true" tabindex="-1"></a><span class="co"># create undirected g14 graph</span></span>
+<span id="cb401-11"><a href="vertex-importance.html#cb401-11" aria-hidden="true" tabindex="-1"></a>g14 <span class="op">=</span> nx.from_pandas_edgelist(g14_undirected, source <span class="op">=</span> <span class="st">&#39;from&#39;</span>, </span>
+<span id="cb401-12"><a href="vertex-importance.html#cb401-12" aria-hidden="true" tabindex="-1"></a>target <span class="op">=</span> <span class="st">&#39;to&#39;</span>)</span>
+<span id="cb401-13"><a href="vertex-importance.html#cb401-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb401-14"><a href="vertex-importance.html#cb401-14" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate degree centrality of Vertices 4 and 9</span></span>
+<span id="cb401-15"><a href="vertex-importance.html#cb401-15" aria-hidden="true" tabindex="-1"></a>nx.degree(g14, [<span class="dv">4</span>, <span class="dv">9</span>])</span></code></pre></div>
 <pre><code>## DegreeView({4: 7, 9: 4})</code></pre>
 <p>There are also methods called <code>degree()</code> for a <code>Graph()</code> object as well as <code>in_degree()</code> and <code>out_degree()</code> for <code>DiGraph()</code> objects in <code>networkx</code>.</p>
 <div class="sourceCode" id="cb403"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb403-1"><a href="vertex-importance.html#cb403-1" aria-hidden="true" tabindex="-1"></a>g14.degree(<span class="dv">4</span>)</span></code></pre></div>
@@ -726,17 +729,20 @@ Figure 7.5: DMI subgraph with the top three superconnectors identified
 <span id="cb423-2"><a href="vertex-importance.html#cb423-2" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(workfrance)<span class="sc">$</span>betweenness <span class="ot">&lt;-</span> <span class="fu">betweenness</span>(workfrance)</span>
 <span id="cb423-3"><a href="vertex-importance.html#cb423-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb423-4"><a href="vertex-importance.html#cb423-4" aria-hidden="true" tabindex="-1"></a><span class="co"># label only if a top3 superconnector</span></span>
-<span id="cb423-5"><a href="vertex-importance.html#cb423-5" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(workfrance)<span class="sc">$</span>btwn_label <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(workfrance)<span class="sc">$</span>name <span class="sc">%in%</span> top3_workfrance,</span>
-<span id="cb423-6"><a href="vertex-importance.html#cb423-6" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">V</span>(workfrance)<span class="sc">$</span>name, <span class="st">&quot;&quot;</span>)</span>
-<span id="cb423-7"><a href="vertex-importance.html#cb423-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb423-8"><a href="vertex-importance.html#cb423-8" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize</span></span>
-<span id="cb423-9"><a href="vertex-importance.html#cb423-9" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb423-10"><a href="vertex-importance.html#cb423-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(workfrance) <span class="sc">+</span></span>
-<span id="cb423-11"><a href="vertex-importance.html#cb423-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb423-12"><a href="vertex-importance.html#cb423-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> dept, <span class="at">size =</span> betweenness),</span>
-<span id="cb423-13"><a href="vertex-importance.html#cb423-13" aria-hidden="true" tabindex="-1"></a>                  <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb423-14"><a href="vertex-importance.html#cb423-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> btwn_label), <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span> </span>
-<span id="cb423-15"><a href="vertex-importance.html#cb423-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
+<span id="cb423-5"><a href="vertex-importance.html#cb423-5" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(workfrance)<span class="sc">$</span>btwn_label <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(</span>
+<span id="cb423-6"><a href="vertex-importance.html#cb423-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">V</span>(workfrance)<span class="sc">$</span>name <span class="sc">%in%</span> top3_workfrance,</span>
+<span id="cb423-7"><a href="vertex-importance.html#cb423-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">V</span>(workfrance)<span class="sc">$</span>name, </span>
+<span id="cb423-8"><a href="vertex-importance.html#cb423-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;&quot;</span></span>
+<span id="cb423-9"><a href="vertex-importance.html#cb423-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb423-10"><a href="vertex-importance.html#cb423-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb423-11"><a href="vertex-importance.html#cb423-11" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize</span></span>
+<span id="cb423-12"><a href="vertex-importance.html#cb423-12" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb423-13"><a href="vertex-importance.html#cb423-13" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(workfrance) <span class="sc">+</span></span>
+<span id="cb423-14"><a href="vertex-importance.html#cb423-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb423-15"><a href="vertex-importance.html#cb423-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> dept, <span class="at">size =</span> betweenness),</span>
+<span id="cb423-16"><a href="vertex-importance.html#cb423-16" aria-hidden="true" tabindex="-1"></a>                  <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb423-17"><a href="vertex-importance.html#cb423-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> btwn_label), <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span> </span>
+<span id="cb423-18"><a href="vertex-importance.html#cb423-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:workfrance-superconnectors"></span>
 <img src="_main_files/figure-html/workfrance-superconnectors-1.png" alt="French workplace graph with the top three superconnectors identified" width="90%" />
 <p class="caption">

@@ -131,7 +131,9 @@ schoolfriends_reported <- schoolfriends_edgelist |>
   dplyr::filter(type == "reported")
 
 # create directed graph
-schoolfriends_rp <- igraph::graph_from_data_frame(schoolfriends_reported)
+schoolfriends_rp <- igraph::graph_from_data_frame(
+  schoolfriends_reported
+)
 
 # visualize
 set.seed(123)
@@ -195,7 +197,9 @@ karate_edges <- read.csv("https://ona-book.org/data/karate.csv")
 karate <- igraph::graph_from_data_frame(karate_edges, directed = FALSE)
 
 # color John A and Mr Hi differently
-V(karate)$leader <- ifelse(V(karate)$name %in% c("Mr Hi", "John A"), 1, 0)
+V(karate)$leader <- ifelse(
+  V(karate)$name %in% c("Mr Hi", "John A"), 1, 0
+)
 
 # visualize
 set.seed(123)
@@ -244,7 +248,8 @@ We have four detected communities of varying sizes.  As before, we can color cod
 set.seed(123)
 ggraph(karate, layout = "fr") +
   geom_edge_link(color =  "grey") +
-  geom_node_point(aes(size = as.factor(leader), color = as.factor(community)),
+  geom_node_point(aes(size = as.factor(leader), 
+                      color = as.factor(community)),
                   show.legend = FALSE) +
   theme_void()
 ```
@@ -337,7 +342,8 @@ subgraphs[2].nodes
 karate_edges = pd.read_csv("https://ona-book.org/data/karate.csv")
 
 # create undirected network
-karate = nx.from_pandas_edgelist(karate_edges, source = "from", target = "to")
+karate = nx.from_pandas_edgelist(karate_edges, source = "from", 
+target = "to")
 
 # find minimum cut
 nx.minimum_edge_cut(karate)
@@ -351,7 +357,7 @@ len(nx.minimum_edge_cut(karate))
 `r if (knitr::is_latex_output()) '\\index{community detection!calculating in Python}'`
 Various built-in community detection algorithms are available in the `networkx.community` module, such as the `r if (knitr::is_latex_output()) '\\index{algorithm!Girvan-Newman}'`Girvan-Newman edge betweenness algorithm.  This generates communities by progressively removing edges with the highest edge betweenness centrality.  It returns an iterator object where the first element is the result of the first edge removal, and subsequent elements are the result of progressive edge removal.
 
-```{python, wrap = TRUE}
+```{python}
 # get communities based on girvan-newman and sort by no of communities
 communities = sorted(
   nx.community.girvan_newman(karate), 
@@ -359,7 +365,7 @@ communities = sorted(
 )
 
 # view communities from first edge removal
-communities[0]
+pd.DataFrame(communities[0]).transpose()
 ```
 
 We see that the first split leads to two communities, one around John A and the other around Mr Hi.
@@ -383,7 +389,7 @@ louvain_comms = algorithms.louvain(karate)
 `louvain_comms` is a clustering object that has a lot of useful properties and methods.  To see the communities:
 
 ```{python, wrap = TRUE}
-louvain_comms.communities
+pd.DataFrame(louvain_comms.communities).transpose()
 ```
 
 `r if (knitr::is_latex_output()) '\\index{modularity!calculating in Python}'`We see four communities.  The modularity of the resulting community structure can be calculated using the `newman_girvan_modularity()` method.
@@ -405,7 +411,8 @@ from matplotlib.colors import ListedColormap, LinearSegmentedColormap
 
 # create dict with labels only for Mr Hi and John A
 node = list(karate.nodes)
-labels = [i if i == "Mr Hi" or i == "John A" else "" for i in karate.nodes]
+labels = [i if i == "Mr Hi" or i == "John A" else "" \
+for i in karate.nodes]
 nodelabels = dict(zip(node, labels))
 
 # create and order community mappings
@@ -526,7 +533,8 @@ We see six cliques of 14 individuals, all of which have considerable overlap.  W
 
 ```{r}
 # subgraph for clique 6
-clique6 <- igraph::induced_subgraph(schoolfriends_fb, vids = cliques[[6]])
+clique6 <- igraph::induced_subgraph(schoolfriends_fb, 
+                                    vids = cliques[[6]])
 
 (data.frame(
   id = V(clique6)$name,
@@ -575,12 +583,14 @@ modularity(schoolfriends_fb, V(schoolfriends_fb)$community)
 
 ```{r}
 # modularity of class structure
-modularity(schoolfriends_fb, as.integer(as.factor(V(schoolfriends_fb)$class)))
+modularity(schoolfriends_fb, 
+           as.integer(as.factor(V(schoolfriends_fb)$class)))
 ```
 
 ```{r}
 # modularity of gender structure
-modularity(schoolfriends_fb, as.integer(as.factor(V(schoolfriends_fb)$gender)))
+modularity(schoolfriends_fb, 
+           as.integer(as.factor(V(schoolfriends_fb)$gender)))
 ```
 
 This community structure is certainly a better indicator of connected Facebook subgroups than gender or class.  We can visualize the class structure side by side with the Louvain community structure to try to interpret it, as in Figure \@ref(fig:schoolfriends-louvain).
@@ -617,7 +627,7 @@ Visually, we can see that the Louvain community structure is a much better repre
 
 The `r if (knitr::is_latex_output()) '\\index{data sets!ontariopol@\\texttt{ontariopol}}'``ontariopol_edgelist` and `ontariopol_vertices` data sets represent tweeting activity between Ontario province politicians in Canada as captured in September 2021 and spanning several prior years of activity.  Although the Twitter graph is a directed graph, we will set this network up as undirected, with two politicians connected if there has been an interaction between them by means of one mentioning the other in a tweet or one replying to a tweet from the other.  The `weight` property represents the number of interactions and is therefore a measure of the connection strength. 
 
-```{r}
+```{r, eval = FALSE}
 # get edgelist and vertex data
 ontariopol_edges <- read.csv(
   "https://ona-book.org/data/ontariopol_edgelist.csv"
@@ -633,6 +643,27 @@ ontariopol_vertices <- read.csv(
   directed = FALSE
 ))
 ```
+
+`r if (knitr::is_latex_output()) '\\footnotesize'`
+
+```{r, echo = FALSE}
+# get edgelist and vertex data
+ontariopol_edges <- read.csv(
+  "https://ona-book.org/data/ontariopol_edgelist.csv"
+)
+ontariopol_vertices <- read.csv(
+  "https://ona-book.org/data/ontariopol_vertices.csv"
+) 
+
+# create undirected graph
+(ontariopol <- igraph::graph_from_data_frame(
+  d = ontariopol_edges,
+  vertices = ontariopol_vertices, 
+  directed = FALSE
+))
+```
+
+`r if (knitr::is_latex_output()) '\\normalsize'`
 
 We have an undirected, weighted graph, with `screen_name` and `party` vertex properties.  First, we check if our graph is connected:
 

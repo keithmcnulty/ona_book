@@ -174,7 +174,7 @@ div.csl-indent {
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./">Handbook of Regression Modeling in People Analytics</a></li>
+<li><a href="./">Handbook of Graphs and Networks in People Analytics</a></li>
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a>
@@ -458,10 +458,18 @@ div.csl-indent {
 <h2><span class="header-section-number">5.1</span> Transforming data in rectangular tables for use in graphs</h2>
 <p>In this example we are going to use some simplified tables from the <em>Chinook</em> database<a href="#fn41" class="footnote-ref" id="fnref41"><sup>41</sup></a> - an open source database which contains records of the customers, employees and transactions of a music sales company. We will be working with four simplified tables from this database which you can load from the <code>onadata</code> package now or download from the internet as follows:</p>
 <div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb220-1"><a href="restructuring-data.html#cb220-1" aria-hidden="true" tabindex="-1"></a><span class="co"># download chinook database tables</span></span>
-<span id="cb220-2"><a href="restructuring-data.html#cb220-2" aria-hidden="true" tabindex="-1"></a>chinook_employees <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://ona-book.org/data/chinook_employees.csv&quot;</span>)</span>
-<span id="cb220-3"><a href="restructuring-data.html#cb220-3" aria-hidden="true" tabindex="-1"></a>chinook_customers <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://ona-book.org/data/chinook_customers.csv&quot;</span>)</span>
-<span id="cb220-4"><a href="restructuring-data.html#cb220-4" aria-hidden="true" tabindex="-1"></a>chinook_invoices <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://ona-book.org/data/chinook_invoices.csv&quot;</span>)</span>
-<span id="cb220-5"><a href="restructuring-data.html#cb220-5" aria-hidden="true" tabindex="-1"></a>chinook_items <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://ona-book.org/data/chinook_items.csv&quot;</span>)</span></code></pre></div>
+<span id="cb220-2"><a href="restructuring-data.html#cb220-2" aria-hidden="true" tabindex="-1"></a>chinook_employees <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(</span>
+<span id="cb220-3"><a href="restructuring-data.html#cb220-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;https://ona-book.org/data/chinook_employees.csv&quot;</span></span>
+<span id="cb220-4"><a href="restructuring-data.html#cb220-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb220-5"><a href="restructuring-data.html#cb220-5" aria-hidden="true" tabindex="-1"></a>chinook_customers <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(</span>
+<span id="cb220-6"><a href="restructuring-data.html#cb220-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;https://ona-book.org/data/chinook_customers.csv&quot;</span></span>
+<span id="cb220-7"><a href="restructuring-data.html#cb220-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb220-8"><a href="restructuring-data.html#cb220-8" aria-hidden="true" tabindex="-1"></a>chinook_invoices <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(</span>
+<span id="cb220-9"><a href="restructuring-data.html#cb220-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;https://ona-book.org/data/chinook_invoices.csv&quot;</span></span>
+<span id="cb220-10"><a href="restructuring-data.html#cb220-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb220-11"><a href="restructuring-data.html#cb220-11" aria-hidden="true" tabindex="-1"></a>chinook_items <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(</span>
+<span id="cb220-12"><a href="restructuring-data.html#cb220-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;https://ona-book.org/data/chinook_items.csv&quot;</span></span>
+<span id="cb220-13"><a href="restructuring-data.html#cb220-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <div id="creating-a-simple-graph-of-a-management-hierarchy" class="section level3" number="5.1.1">
 <h3><span class="header-section-number">5.1.1</span> Creating a simple graph of a management hierarchy</h3>
 <p>First, let’s take a look at a simple example of a graph that already exists explicitly in one of these data tables. Let’s take a look at a few rows of the <code>chinook_employees</code> data set.</p>
@@ -479,7 +487,8 @@ div.csl-indent {
 <span id="cb223-3"><a href="restructuring-data.html#cb223-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb223-4"><a href="restructuring-data.html#cb223-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create edgelist</span></span>
 <span id="cb223-5"><a href="restructuring-data.html#cb223-5" aria-hidden="true" tabindex="-1"></a>(orgchart_edgelist1 <span class="ot">&lt;-</span> chinook_employees <span class="sc">|</span><span class="er">&gt;</span> </span>
-<span id="cb223-6"><a href="restructuring-data.html#cb223-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">inner_join</span>(chinook_employees, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;EmployeeId&quot;</span> <span class="ot">=</span> <span class="st">&quot;ReportsTo&quot;</span>)))</span></code></pre></div>
+<span id="cb223-6"><a href="restructuring-data.html#cb223-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">inner_join</span>(chinook_employees, </span>
+<span id="cb223-7"><a href="restructuring-data.html#cb223-7" aria-hidden="true" tabindex="-1"></a>                    <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;EmployeeId&quot;</span> <span class="ot">=</span> <span class="st">&quot;ReportsTo&quot;</span>)))</span></code></pre></div>
 <pre><code>##   EmployeeId FirstName.x LastName.x ReportsTo EmployeeId.y FirstName.y LastName.y
 ## 1          1      Andrew      Adams        NA            2       Nancy    Edwards
 ## 2          1      Andrew      Adams        NA            6     Michael   Mitchell
@@ -507,9 +516,9 @@ div.csl-indent {
 <span id="cb227-4"><a href="restructuring-data.html#cb227-4" aria-hidden="true" tabindex="-1"></a>(orgchart <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(</span>
 <span id="cb227-5"><a href="restructuring-data.html#cb227-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">d =</span> orgchart_edgelist2</span>
 <span id="cb227-6"><a href="restructuring-data.html#cb227-6" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
-<pre><code>## IGRAPH 32be549 DN-- 8 7 -- 
+<pre><code>## IGRAPH a4b4570 DN-- 8 7 -- 
 ## + attr: name (v/c)
-## + edges from 32be549 (vertex names):
+## + edges from a4b4570 (vertex names):
 ## [1] Andrew -&gt;Nancy    Andrew -&gt;Michael  Nancy  -&gt;Jane     Nancy  -&gt;Margaret Nancy  -&gt;Steve    Michael-&gt;Robert  
 ## [7] Michael-&gt;Laura</code></pre>
 <p>We now have a directed graph with named vertices, so this should be easy to plot. Let’s use <code>ggplot</code> with a dendrogram (tree) layout, as in Figure <a href="restructuring-data.html#fig:chinook-pretty">5.1</a>.</p>
@@ -542,15 +551,16 @@ Figure 5.1: Management hierarchy of Chinook as a tree (dendrogram)
 <p>We see a <code>SupportRepId</code> field which corresponds to the <code>EmployeeId</code> field in the <code>chinook_employees</code> table. We can join these tables to get an edgelist of customers to support reps. Let’s also create full names for better reference.</p>
 <div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb232-1"><a href="restructuring-data.html#cb232-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create customer to support rep edgelist</span></span>
 <span id="cb232-2"><a href="restructuring-data.html#cb232-2" aria-hidden="true" tabindex="-1"></a>cust_reps <span class="ot">&lt;-</span> chinook_customers <span class="sc">|</span><span class="er">&gt;</span> </span>
-<span id="cb232-3"><a href="restructuring-data.html#cb232-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">inner_join</span>(chinook_employees, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;SupportRepId&quot;</span> <span class="ot">=</span> <span class="st">&quot;EmployeeId&quot;</span>)) <span class="sc">|</span><span class="er">&gt;</span> </span>
-<span id="cb232-4"><a href="restructuring-data.html#cb232-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
-<span id="cb232-5"><a href="restructuring-data.html#cb232-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">CustomerName =</span> <span class="fu">paste</span>(FirstName.x, LastName.x),</span>
-<span id="cb232-6"><a href="restructuring-data.html#cb232-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">RepName =</span> <span class="fu">paste</span>(FirstName.y, LastName.y)</span>
-<span id="cb232-7"><a href="restructuring-data.html#cb232-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|</span><span class="er">&gt;</span> </span>
-<span id="cb232-8"><a href="restructuring-data.html#cb232-8" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(RepName, CustomerName, SupportRepId)</span>
-<span id="cb232-9"><a href="restructuring-data.html#cb232-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb232-10"><a href="restructuring-data.html#cb232-10" aria-hidden="true" tabindex="-1"></a><span class="co"># view head</span></span>
-<span id="cb232-11"><a href="restructuring-data.html#cb232-11" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cust_reps)</span></code></pre></div>
+<span id="cb232-3"><a href="restructuring-data.html#cb232-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">inner_join</span>(chinook_employees, </span>
+<span id="cb232-4"><a href="restructuring-data.html#cb232-4" aria-hidden="true" tabindex="-1"></a>                    <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;SupportRepId&quot;</span> <span class="ot">=</span> <span class="st">&quot;EmployeeId&quot;</span>)) <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb232-5"><a href="restructuring-data.html#cb232-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb232-6"><a href="restructuring-data.html#cb232-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">CustomerName =</span> <span class="fu">paste</span>(FirstName.x, LastName.x),</span>
+<span id="cb232-7"><a href="restructuring-data.html#cb232-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">RepName =</span> <span class="fu">paste</span>(FirstName.y, LastName.y)</span>
+<span id="cb232-8"><a href="restructuring-data.html#cb232-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb232-9"><a href="restructuring-data.html#cb232-9" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(RepName, CustomerName, SupportRepId)</span>
+<span id="cb232-10"><a href="restructuring-data.html#cb232-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb232-11"><a href="restructuring-data.html#cb232-11" aria-hidden="true" tabindex="-1"></a><span class="co"># view head</span></span>
+<span id="cb232-12"><a href="restructuring-data.html#cb232-12" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cust_reps)</span></code></pre></div>
 <pre><code>##         RepName          CustomerName SupportRepId
 ## 1  Jane Peacock        Luís Gonçalves            3
 ## 2 Steve Johnson         Leonie Köhler            5
@@ -700,11 +710,12 @@ Figure 5.4: Network connecting customers via items purchased
 <div class="sourceCode" id="cb248"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb248-1"><a href="restructuring-data.html#cb248-1" aria-hidden="true" tabindex="-1"></a><span class="co"># join customers to customers via common items</span></span>
 <span id="cb248-2"><a href="restructuring-data.html#cb248-2" aria-hidden="true" tabindex="-1"></a>cust_cust_itemjoin <span class="ot">&lt;-</span> cust_item <span class="sc">|</span><span class="er">&gt;</span> </span>
 <span id="cb248-3"><a href="restructuring-data.html#cb248-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">inner_join</span>(cust_item, <span class="at">by =</span> <span class="st">&quot;TrackId&quot;</span>) <span class="sc">|</span><span class="er">&gt;</span> </span>
-<span id="cb248-4"><a href="restructuring-data.html#cb248-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="at">CustName1 =</span> CustName.x, <span class="at">CustName2 =</span> CustName.y, TrackId) <span class="sc">|</span><span class="er">&gt;</span> </span>
-<span id="cb248-5"><a href="restructuring-data.html#cb248-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(CustName1 <span class="sc">!=</span> CustName2)</span>
-<span id="cb248-6"><a href="restructuring-data.html#cb248-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb248-7"><a href="restructuring-data.html#cb248-7" aria-hidden="true" tabindex="-1"></a><span class="co"># view head</span></span>
-<span id="cb248-8"><a href="restructuring-data.html#cb248-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cust_cust_itemjoin)</span></code></pre></div>
+<span id="cb248-4"><a href="restructuring-data.html#cb248-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="at">CustName1 =</span> CustName.x, </span>
+<span id="cb248-5"><a href="restructuring-data.html#cb248-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">CustName2 =</span> CustName.y, TrackId) <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb248-6"><a href="restructuring-data.html#cb248-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(CustName1 <span class="sc">!=</span> CustName2)</span>
+<span id="cb248-7"><a href="restructuring-data.html#cb248-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb248-8"><a href="restructuring-data.html#cb248-8" aria-hidden="true" tabindex="-1"></a><span class="co"># view head</span></span>
+<span id="cb248-9"><a href="restructuring-data.html#cb248-9" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cust_cust_itemjoin)</span></code></pre></div>
 <pre><code>##        CustName1          CustName2 TrackId
 ## 1 Luís Gonçalves     Edward Francis     449
 ## 2 Luís Gonçalves Richard Cunningham    1157
@@ -775,14 +786,15 @@ Figure 5.5: Chinook customer-to-customer network based on common item purchases
 <span id="cb257-2"><a href="restructuring-data.html#cb257-2" aria-hidden="true" tabindex="-1"></a>edges <span class="ot">&lt;-</span> <span class="fu">E</span>(custtocust_network)[<span class="fu">E</span>(custtocust_network)<span class="sc">$</span>Items <span class="sc">&gt;=</span> <span class="dv">2</span>]</span>
 <span id="cb257-3"><a href="restructuring-data.html#cb257-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb257-4"><a href="restructuring-data.html#cb257-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create subgraph using these edges</span></span>
-<span id="cb257-5"><a href="restructuring-data.html#cb257-5" aria-hidden="true" tabindex="-1"></a>two_item_graph <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">subgraph.edges</span>(custtocust_network, <span class="at">eids =</span> edges)</span>
-<span id="cb257-6"><a href="restructuring-data.html#cb257-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb257-7"><a href="restructuring-data.html#cb257-7" aria-hidden="true" tabindex="-1"></a><span class="co"># visualise</span></span>
-<span id="cb257-8"><a href="restructuring-data.html#cb257-8" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb257-9"><a href="restructuring-data.html#cb257-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(two_item_graph, <span class="at">layout =</span> <span class="st">&quot;fr&quot;</span>) <span class="sc">+</span></span>
-<span id="cb257-10"><a href="restructuring-data.html#cb257-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb257-11"><a href="restructuring-data.html#cb257-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="at">color =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="at">size =</span> <span class="dv">6</span>) <span class="sc">+</span></span>
-<span id="cb257-12"><a href="restructuring-data.html#cb257-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
+<span id="cb257-5"><a href="restructuring-data.html#cb257-5" aria-hidden="true" tabindex="-1"></a>two_item_graph <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">subgraph.edges</span>(custtocust_network, </span>
+<span id="cb257-6"><a href="restructuring-data.html#cb257-6" aria-hidden="true" tabindex="-1"></a>                                         <span class="at">eids =</span> edges)</span>
+<span id="cb257-7"><a href="restructuring-data.html#cb257-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb257-8"><a href="restructuring-data.html#cb257-8" aria-hidden="true" tabindex="-1"></a><span class="co"># visualise</span></span>
+<span id="cb257-9"><a href="restructuring-data.html#cb257-9" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb257-10"><a href="restructuring-data.html#cb257-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(two_item_graph, <span class="at">layout =</span> <span class="st">&quot;fr&quot;</span>) <span class="sc">+</span></span>
+<span id="cb257-11"><a href="restructuring-data.html#cb257-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb257-12"><a href="restructuring-data.html#cb257-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="at">color =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="at">size =</span> <span class="dv">6</span>) <span class="sc">+</span></span>
+<span id="cb257-13"><a href="restructuring-data.html#cb257-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:cust-item-two"></span>
 <img src="_main_files/figure-html/cust-item-two-1.png" alt="Chinook customer-to-customer network based at least two common items purchased" width="90%" />
 <p class="caption">
@@ -797,9 +809,15 @@ Figure 5.6: Chinook customer-to-customer network based at least two common items
 <span id="cb258-2"><a href="restructuring-data.html#cb258-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb258-3"><a href="restructuring-data.html#cb258-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb258-4"><a href="restructuring-data.html#cb258-4" aria-hidden="true" tabindex="-1"></a><span class="co"># download chinook database tables</span></span>
-<span id="cb258-5"><a href="restructuring-data.html#cb258-5" aria-hidden="true" tabindex="-1"></a>chinook_customers <span class="op">=</span> pd.read_csv(<span class="st">&quot;https://ona-book.org/data/chinook_customers.csv&quot;</span>)</span>
-<span id="cb258-6"><a href="restructuring-data.html#cb258-6" aria-hidden="true" tabindex="-1"></a>chinook_invoices <span class="op">=</span> pd.read_csv(<span class="st">&quot;https://ona-book.org/data/chinook_invoices.csv&quot;</span>)</span>
-<span id="cb258-7"><a href="restructuring-data.html#cb258-7" aria-hidden="true" tabindex="-1"></a>chinook_items <span class="op">=</span> pd.read_csv(<span class="st">&quot;https://ona-book.org/data/chinook_items.csv&quot;</span>)</span></code></pre></div>
+<span id="cb258-5"><a href="restructuring-data.html#cb258-5" aria-hidden="true" tabindex="-1"></a>chinook_customers <span class="op">=</span> pd.read_csv(</span>
+<span id="cb258-6"><a href="restructuring-data.html#cb258-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;https://ona-book.org/data/chinook_customers.csv&quot;</span></span>
+<span id="cb258-7"><a href="restructuring-data.html#cb258-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb258-8"><a href="restructuring-data.html#cb258-8" aria-hidden="true" tabindex="-1"></a>chinook_invoices <span class="op">=</span> pd.read_csv(</span>
+<span id="cb258-9"><a href="restructuring-data.html#cb258-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;https://ona-book.org/data/chinook_invoices.csv&quot;</span></span>
+<span id="cb258-10"><a href="restructuring-data.html#cb258-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb258-11"><a href="restructuring-data.html#cb258-11" aria-hidden="true" tabindex="-1"></a>chinook_items <span class="op">=</span> pd.read_csv(</span>
+<span id="cb258-12"><a href="restructuring-data.html#cb258-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;https://ona-book.org/data/chinook_items.csv&quot;</span></span>
+<span id="cb258-13"><a href="restructuring-data.html#cb258-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>Now we join the three tables together, create the <code>FullName</code> variable and ensure that we don’t have any duplicate relationships:</p>
 <div class="sourceCode" id="cb259"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb259-1"><a href="restructuring-data.html#cb259-1" aria-hidden="true" tabindex="-1"></a><span class="co"># join customers to invoices</span></span>
 <span id="cb259-2"><a href="restructuring-data.html#cb259-2" aria-hidden="true" tabindex="-1"></a>joined_tables <span class="op">=</span> pd.merge(</span>
@@ -815,8 +833,9 @@ Figure 5.6: Chinook customer-to-customer network based at least two common items
 <span id="cb259-12"><a href="restructuring-data.html#cb259-12" aria-hidden="true" tabindex="-1"></a>joined_tables[<span class="st">&#39;LastName&#39;</span>]</span>
 <span id="cb259-13"><a href="restructuring-data.html#cb259-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb259-14"><a href="restructuring-data.html#cb259-14" aria-hidden="true" tabindex="-1"></a><span class="co"># drop duplicates and view head</span></span>
-<span id="cb259-15"><a href="restructuring-data.html#cb259-15" aria-hidden="true" tabindex="-1"></a>cust_item_table <span class="op">=</span> joined_tables[[<span class="st">&#39;FullName&#39;</span>, <span class="st">&#39;TrackId&#39;</span>]].drop_duplicates()</span>
-<span id="cb259-16"><a href="restructuring-data.html#cb259-16" aria-hidden="true" tabindex="-1"></a>cust_item_table.head()</span></code></pre></div>
+<span id="cb259-15"><a href="restructuring-data.html#cb259-15" aria-hidden="true" tabindex="-1"></a>cust_item_table <span class="op">=</span> joined_tables[[<span class="st">&#39;FullName&#39;</span>, <span class="st">&#39;TrackId&#39;</span>]]<span class="op">\</span></span>
+<span id="cb259-16"><a href="restructuring-data.html#cb259-16" aria-hidden="true" tabindex="-1"></a>.drop_duplicates()</span>
+<span id="cb259-17"><a href="restructuring-data.html#cb259-17" aria-hidden="true" tabindex="-1"></a>cust_item_table.head()</span></code></pre></div>
 <pre><code>##          FullName  TrackId
 ## 0  Luís Gonçalves     3247
 ## 1  Luís Gonçalves     3248
@@ -985,12 +1004,13 @@ Figure 5.10: Viewing the script of Season 1 Episode 1 of Friends with the Elemen
 <span id="cb274-2"><a href="restructuring-data.html#cb274-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb274-3"><a href="restructuring-data.html#cb274-3" aria-hidden="true" tabindex="-1"></a><span class="co"># outside of &#39;New Scene&#39; tags extract anything before : in every line </span></span>
 <span id="cb274-4"><a href="restructuring-data.html#cb274-4" aria-hidden="true" tabindex="-1"></a>nodes_char <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(nodes_newscene <span class="sc">!=</span> <span class="st">&quot;New Scene&quot;</span>, </span>
-<span id="cb274-5"><a href="restructuring-data.html#cb274-5" aria-hidden="true" tabindex="-1"></a>                     stringr<span class="sc">::</span><span class="fu">str_extract</span>(nodes_newscene, <span class="st">&quot;^[A-Za-z ]+(?=:)&quot;</span>), </span>
-<span id="cb274-6"><a href="restructuring-data.html#cb274-6" aria-hidden="true" tabindex="-1"></a>                     nodes_newscene)</span>
-<span id="cb274-7"><a href="restructuring-data.html#cb274-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb274-8"><a href="restructuring-data.html#cb274-8" aria-hidden="true" tabindex="-1"></a><span class="co"># check a sample</span></span>
-<span id="cb274-9"><a href="restructuring-data.html#cb274-9" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb274-10"><a href="restructuring-data.html#cb274-10" aria-hidden="true" tabindex="-1"></a>nodes_char[<span class="fu">sample</span>(<span class="dv">30</span>)]</span></code></pre></div>
+<span id="cb274-5"><a href="restructuring-data.html#cb274-5" aria-hidden="true" tabindex="-1"></a>                     stringr<span class="sc">::</span><span class="fu">str_extract</span>(nodes_newscene, </span>
+<span id="cb274-6"><a href="restructuring-data.html#cb274-6" aria-hidden="true" tabindex="-1"></a>                                          <span class="st">&quot;^[A-Za-z ]+(?=:)&quot;</span>), </span>
+<span id="cb274-7"><a href="restructuring-data.html#cb274-7" aria-hidden="true" tabindex="-1"></a>                     nodes_newscene)</span>
+<span id="cb274-8"><a href="restructuring-data.html#cb274-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb274-9"><a href="restructuring-data.html#cb274-9" aria-hidden="true" tabindex="-1"></a><span class="co"># check a sample</span></span>
+<span id="cb274-10"><a href="restructuring-data.html#cb274-10" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb274-11"><a href="restructuring-data.html#cb274-11" aria-hidden="true" tabindex="-1"></a>nodes_char[<span class="fu">sample</span>(<span class="dv">30</span>)]</span></code></pre></div>
 <pre><code>##  [1] NA           NA           NA           NA           NA           &quot;Monica&quot;     NA           NA           NA          
 ## [10] NA           NA           &quot;Chandler&quot;   NA           NA           NA           NA           NA           NA          
 ## [19] NA           NA           NA           NA           NA           &quot;Joey&quot;       &quot;Phoebe&quot;     NA           &quot;New Scene&quot; 
@@ -1009,7 +1029,7 @@ Figure 5.10: Viewing the script of Season 1 Episode 1 of Friends with the Elemen
 <pre><code>##  [1] &quot;Chandler&quot;  &quot;Monica&quot;    &quot;Chandler&quot;  &quot;Monica&quot;    &quot;Phoebe&quot;    &quot;Joey&quot;      &quot;Phoebe&quot;    &quot;Joey&quot;      &quot;Monica&quot;    &quot;Monica&quot;   
 ## [11] &quot;Chandler&quot;  &quot;Chandler&quot;  &quot;New Scene&quot; &quot;Ross&quot;      &quot;Joey&quot;      &quot;Chandler&quot;  &quot;Joey&quot;      &quot;Chandler&quot;  &quot;Phoebe&quot;    &quot;Chandler&quot;</code></pre>
 <p>Let’s assume our cleaning is done and we have a nice vector that contains either the names of characters that are speaking lines in the episode or “New Scene” to indicate that we are crossing a scene boundary. We now just need to convert this vector into a simple dataframe with two columns for scene and character. We already have our character lists, so we really just need to iterate through our nodes vector and, for each entry, count the number of previous occurrences of “New Scene” and add one.</p>
-<div class="sourceCode" id="cb278"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb278-1"><a href="restructuring-data.html#cb278-1" aria-hidden="true" tabindex="-1"></a><span class="co"># number each scene by counting previous &quot;New Scene&quot; entries and adding 1</span></span>
+<div class="sourceCode" id="cb278"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb278-1"><a href="restructuring-data.html#cb278-1" aria-hidden="true" tabindex="-1"></a><span class="co"># number scene by counting previous &quot;New Scene&quot; entries and adding 1</span></span>
 <span id="cb278-2"><a href="restructuring-data.html#cb278-2" aria-hidden="true" tabindex="-1"></a>scene_count <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
 <span id="cb278-3"><a href="restructuring-data.html#cb278-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb278-4"><a href="restructuring-data.html#cb278-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(nodes_char_clean2)) {</span>
@@ -1167,8 +1187,8 @@ Figure 5.11: Visualization of the network of characters in Episode 1 of Friends,
 <p>The object <code>friends_ep1</code> contains all the HTML code of the script web page. Now we need to look for the string <code>Scene:</code> and replace it with the string <code>&lt;b&gt;New Scene:&lt;/b&gt;</code>. It should be clear soon why we should put the replacement string in bold HTML tags.</p>
 <div class="sourceCode" id="cb292"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb292-1"><a href="restructuring-data.html#cb292-1" aria-hidden="true" tabindex="-1"></a>originalString <span class="op">=</span> <span class="st">&quot;Scene:&quot;</span></span>
 <span id="cb292-2"><a href="restructuring-data.html#cb292-2" aria-hidden="true" tabindex="-1"></a>replaceString <span class="op">=</span> <span class="st">&quot;&lt;b&gt;New Scene:&lt;/b&gt;&quot;</span></span>
-<span id="cb292-3"><a href="restructuring-data.html#cb292-3" aria-hidden="true" tabindex="-1"></a>friends_ep1_replace <span class="op">=</span> BeautifulSoup(<span class="bu">str</span>(friends_ep1).replace(originalString, </span>
-<span id="cb292-4"><a href="restructuring-data.html#cb292-4" aria-hidden="true" tabindex="-1"></a>replaceString))</span></code></pre></div>
+<span id="cb292-3"><a href="restructuring-data.html#cb292-3" aria-hidden="true" tabindex="-1"></a>friends_ep1_replace <span class="op">=</span> BeautifulSoup(<span class="bu">str</span>(friends_ep1)<span class="op">\</span></span>
+<span id="cb292-4"><a href="restructuring-data.html#cb292-4" aria-hidden="true" tabindex="-1"></a>.replace(originalString, replaceString))</span></code></pre></div>
 <p>Now we know from viewing the web page or inspecting the HTML code that the characters’ names who are speaking in scenes will be inside bold or strong HTML tags, so firstly lets get everything that is in bold or strong tags in the document, and then let’s match for any alphabetic string (including spaces) prior to a colon using regular expression syntax. This should include the <code>New Scene</code> tags that we created in the last step.</p>
 <div class="sourceCode" id="cb293"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb293-1"><a href="restructuring-data.html#cb293-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use re (regular expressions) package</span></span>
 <span id="cb293-2"><a href="restructuring-data.html#cb293-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
@@ -1195,7 +1215,7 @@ Figure 5.11: Visualization of the network of characters in Episode 1 of Friends,
 <p>Now we are ready to organize our characters by scene. First we do a scene count, then we create a dataframe and obtain unique character lists by scene.</p>
 <div class="sourceCode" id="cb297"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb297-1"><a href="restructuring-data.html#cb297-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb297-2"><a href="restructuring-data.html#cb297-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb297-3"><a href="restructuring-data.html#cb297-3" aria-hidden="true" tabindex="-1"></a><span class="co"># number each scene by counting previous &quot;New Scene&quot; entries and adding 1</span></span>
+<span id="cb297-3"><a href="restructuring-data.html#cb297-3" aria-hidden="true" tabindex="-1"></a><span class="co"># number scene by counting previous &quot;New Scene&quot; entries and adding 1</span></span>
 <span id="cb297-4"><a href="restructuring-data.html#cb297-4" aria-hidden="true" tabindex="-1"></a>scene_count <span class="op">=</span> []</span>
 <span id="cb297-5"><a href="restructuring-data.html#cb297-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb297-6"><a href="restructuring-data.html#cb297-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,<span class="bu">len</span>(friends_ep1_list2)):</span>
@@ -1290,10 +1310,14 @@ Figure 5.11: Visualization of the network of characters in Episode 1 of Friends,
 <span id="cb304-7"><a href="restructuring-data.html#cb304-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb304-8"><a href="restructuring-data.html#cb304-8" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize with edge weight as edge width</span></span>
 <span id="cb304-9"><a href="restructuring-data.html#cb304-9" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">123</span>)</span>
-<span id="cb304-10"><a href="restructuring-data.html#cb304-10" aria-hidden="true" tabindex="-1"></a>weights <span class="op">=</span> <span class="bu">list</span>(nx.get_edge_attributes(friends_ep1_network, <span class="st">&#39;weight&#39;</span>).values())</span>
-<span id="cb304-11"><a href="restructuring-data.html#cb304-11" aria-hidden="true" tabindex="-1"></a>nx.draw_networkx(friends_ep1_network, node_color <span class="op">=</span> <span class="st">&quot;lightblue&quot;</span>, node_size <span class="op">=</span> <span class="dv">60</span>,</span>
-<span id="cb304-12"><a href="restructuring-data.html#cb304-12" aria-hidden="true" tabindex="-1"></a>edge_color <span class="op">=</span> <span class="st">&quot;grey&quot;</span>, with_labels <span class="op">=</span> <span class="va">True</span>, width <span class="op">=</span> np.array(weights))</span>
-<span id="cb304-13"><a href="restructuring-data.html#cb304-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<span id="cb304-10"><a href="restructuring-data.html#cb304-10" aria-hidden="true" tabindex="-1"></a>weights <span class="op">=</span> <span class="bu">list</span>(</span>
+<span id="cb304-11"><a href="restructuring-data.html#cb304-11" aria-hidden="true" tabindex="-1"></a>  nx.get_edge_attributes(friends_ep1_network, <span class="st">&#39;weight&#39;</span>).values()</span>
+<span id="cb304-12"><a href="restructuring-data.html#cb304-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb304-13"><a href="restructuring-data.html#cb304-13" aria-hidden="true" tabindex="-1"></a>nx.draw_networkx(</span>
+<span id="cb304-14"><a href="restructuring-data.html#cb304-14" aria-hidden="true" tabindex="-1"></a>  friends_ep1_network, node_color <span class="op">=</span> <span class="st">&quot;lightblue&quot;</span>, node_size <span class="op">=</span> <span class="dv">60</span>,</span>
+<span id="cb304-15"><a href="restructuring-data.html#cb304-15" aria-hidden="true" tabindex="-1"></a>  edge_color <span class="op">=</span> <span class="st">&quot;grey&quot;</span>, with_labels <span class="op">=</span> <span class="va">True</span>, width <span class="op">=</span> np.array(weights)</span>
+<span id="cb304-16"><a href="restructuring-data.html#cb304-16" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb304-17"><a href="restructuring-data.html#cb304-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:friends-graph-py"></span>
 <img src="www/restructuring-data/friends-graph-py-1.png" alt="Graph of Friends character network from Episode 1 with edge width indicating the number of shared scenes" width="90%" />
 <p class="caption">

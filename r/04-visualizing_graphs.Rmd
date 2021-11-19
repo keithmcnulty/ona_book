@@ -279,7 +279,8 @@ library(ggraph)
 karate_edgelist <- read.csv("https://ona-book.org/data/karate.csv")
 
 # create graph object
-karate <- igraph::graph_from_data_frame(karate_edgelist, directed = FALSE)
+karate <- igraph::graph_from_data_frame(karate_edgelist, 
+                                        directed = FALSE)
 
 # set seed for reproducibility
 set.seed(123)
@@ -307,7 +308,9 @@ Like in `ggplot2`, if we want to associate a property of the nodes or edges with
 
 ```{r ggraph-leader-karate, fig.align = "center", fig.cap=if (knitr::is_html_output()) {"`karate` graph with `leader` property used as an aesthetic"} else {"\\texttt{karate} graph with \\texttt{leader} property used as an aesthetic"}}
 
-V(karate)$leader <- ifelse(V(karate)$name %in% c("Mr Hi", "John A"), 1, 0)
+V(karate)$leader <- ifelse(
+  V(karate)$name %in% c("Mr Hi", "John A"), 1, 0
+)
 
 set.seed(123)
 ggraph(karate, layout = "fr") +
@@ -410,9 +413,11 @@ lines <- londontube_edgelist |>
   dplyr::distinct(line, linecolor)
 
 # create graph object
-tubegraph <- igraph::graph_from_data_frame(d = londontube_edgelist, 
-                                           vertices = londontube_vertices,
-                                           directed = FALSE)
+tubegraph <- igraph::graph_from_data_frame(
+  d = londontube_edgelist, 
+  vertices = londontube_vertices,
+  directed = FALSE
+)
 
 # visualize tube graph using linecolors for edge color
 set.seed(123)
@@ -429,7 +434,7 @@ While it's great that we can do this so easily, it's a pretty confusing visualiz
 We can change this by expanding our edgelist to include the latitudes and longitudes of the `from` and `to` stations in each edge, and then we can layer a map on this graph.  First, let's create those new longitude and latitude columns in the edgelist, and check it works.
 
 ```{r}
-# we reorganize the edgelist to include longitude and latitude for start and end
+# reorganize to include longitude and latitude for start and end
 new_edgelist <- londontube_edgelist |> 
   dplyr::inner_join(londontube_vertices |> 
                       dplyr::select(id, latitude, longitude), 
@@ -448,9 +453,11 @@ That looks like it worked.  Now we can use the `r if (knitr::is_latex_output()) 
 
 ```{r geo-accurate-tube, fig.align = "center", fig.cap = "Geographically accurate London Tube Network"}
 # recreate graph object to capture additional edge data
-tubegraph <- igraph::graph_from_data_frame(d = new_edgelist, 
-                                           vertices = londontube_vertices,
-                                           directed = FALSE)
+tubegraph <- igraph::graph_from_data_frame(
+  d = new_edgelist, 
+  vertices = londontube_vertices,
+  directed = FALSE
+)
 
 # layer a London map (requires Google Maps API key)
 library(ggmap)
@@ -541,7 +548,8 @@ library(ggraph)
 karate_edgelist <- read.csv("https://ona-book.org/data/karate.csv")
 
 # create graph object
-karate <- igraph::graph_from_data_frame(karate_edgelist, directed = FALSE)
+karate <- igraph::graph_from_data_frame(karate_edgelist, 
+                                        directed = FALSE)
 
 # different colors and shapes for Mr Hi and and John A
 V(karate)$color <- ifelse(V(karate)$name %in% c("Mr Hi", "John A"),
@@ -557,7 +565,8 @@ E(karate)$color = "grey"
 E(karate)$width <- 3
 
 # visualize from igraph
-visNetwork::visIgraph(karate, layout = "layout_with_fr", randomSeed = 123) 
+visNetwork::visIgraph(karate, layout = "layout_with_fr", 
+                      randomSeed = 123) 
 ```
 
 
@@ -601,6 +610,7 @@ visNetwork::visIgraph(karate, layout = "layout_with_fr", randomSeed = 123)
 :::
 
 `r if (knitr::is_latex_output()) '\\index{packages!R!visNetwork@\\texttt{visNetwork}|)}'`
+
 ### Interactive graph visualization using `networkD3`
 
 `r if (knitr::is_latex_output()) '\\index{packages!R!networkD3@\\texttt{networkD3}|(}'`The `networkD3` package creates responsive and interactive network visualizations using the `D3` javascript library, which has some beautiful options for common network layouts like force-directed or chord diagrams.
@@ -642,10 +652,13 @@ The `forceNetwork()` function allows greater levels of customization of the visu
 karate_edgelist <- read.csv("https://ona-book.org/data/karate.csv")
 
 # create igraph object
-karate <- igraph::graph_from_data_frame(karate_edgelist, directed = FALSE)
+karate <- igraph::graph_from_data_frame(karate_edgelist, 
+                                        directed = FALSE)
 
 # give Mr Hi and John A a different group
-V(karate)$group <- ifelse(V(karate)$name %in% c("Mr Hi", "John A"), 1, 2)
+V(karate)$group <- ifelse(
+  V(karate)$name %in% c("Mr Hi", "John A"), 1, 2
+)
 
 # translate to networkD3 - creates a list with links and nodes dfs
 # links have a source and target column and group if requested 
@@ -703,13 +716,16 @@ library(networkD3)
 library(tidyr)
 
 # get data
-eu_referendum <- read.csv("https://ona-book.org/data/eu_referendum.csv")
+eu_referendum <- read.csv(
+  "https://ona-book.org/data/eu_referendum.csv"
+)
 
 # aggregate by region
 results <- eu_referendum |>  
   dplyr::group_by(Region) |> 
   dplyr::summarise(Remain = sum(Remain), Leave = sum(Leave)) |> 
-  tidyr::pivot_longer(-Region, names_to = "result", values_to = "votes")
+  tidyr::pivot_longer(-Region, names_to = "result", 
+                      values_to = "votes")
 
 # create unique regions, "Leave" and "Remain" for nodes dataframe
 regions <- unique(results$Region)
@@ -777,6 +793,7 @@ if (knitr::is_html_output()) {
 
 `r if (knitr::is_latex_output()) '\\index{packages!R!networkD3@\\texttt{networkD3}|)}'`
 `r if (knitr::is_latex_output()) '\\index{visualization!in R|)}'`
+
 ## Visualizing graphs in Python
 
 `r if (knitr::is_latex_output()) '\\index{visualization!in Python|(}'`
@@ -835,7 +852,8 @@ np.random.seed(123)
 
 # create dict with labels only for Mr Hi and John A
 node = list(karate.nodes)
-labels = [i if i == "Mr Hi" or i == "John A" else "" for i in karate.nodes]
+labels = [i if i == "Mr Hi" or i == "John A" else "" 
+for i in karate.nodes]
 nodelabels = dict(zip(node, labels))
 
 # create color list
@@ -986,8 +1004,8 @@ for i in karate.nodes:
   karate.nodes[i]['size'] = 20 if i == "Mr Hi" or i == "John A" \
   else 10
   
-  karate.nodes[i]['color'] = "lightblue" if i == "Mr Hi" or i == "John A" \
-  else "pink" 
+  karate.nodes[i]['color'] = "lightblue" if i == "Mr Hi" \
+  or i == "John A" else "pink" 
 
 # create edge color
 for i in karate.edges:
