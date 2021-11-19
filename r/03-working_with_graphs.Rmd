@@ -269,31 +269,43 @@ Complete graphs are rare and not very useful in practice, since if you already k
 **Thinking ahead:** While entire graphs which are complete are rarely useful in practice, it is often useful to identify sets of vertices inside graphs which together represent a *complete subgraph*.  Such a group of vertices is known as a `r if (knitr::is_latex_output()) '\\index{clique (in a graph)}'`*clique*, and we will look at clique discovery in a later chapter.
 :::
 
-`r if (knitr::is_latex_output()) '\\index{graph!bipartite}'`**Bipartite graphs** are graphs that have two disjoint sets of vertices, such that no vertex from one set is connected to any of the vertices in the other set.  Imagine we were to add three new individuals to our $G_\mathrm{work}$ graph, and these three individuals all work for a completely different organization to the four people already in the graph.  Then the new graph $G_\mathrm{new}$ may look like Figure \@ref(fig:newwork), with the distinct sets of vertices representing individuals in different organizations.`r if (knitr::is_latex_output()) '\\index{bipartite graph|see {graph}}'`
+`r if (knitr::is_latex_output()) '\\index{graph!bipartite}'`**Bipartite graphs** are graphs that have two disjoint sets of vertices, such that no two vertices in the same set are connected.  Imagine we were to add three new individuals from another department to our $G_\mathrm{work}$ vertices, and redefine our relationships so that an edge means that two individuals worked with each other across departments.  Then the new graph $G_\mathrm{new}$ may look like Figure \@ref(fig:newwork), with the distinct sets of vertices representing individuals in different departments.`r if (knitr::is_latex_output()) '\\index{bipartite graph|see {graph}}'`
 
-```{r newwork, echo = FALSE, fig.cap = "A bipartite graph $G_\\mathrm{new}$ showing working relationships involving individuals in separate organizations A and B"}
+```{r newwork, echo = FALSE, fig.cap = "A bipartite graph $G_\\mathrm{new}$ showing individuals in different departments A and B working across departments"}
 library(igraph)
 library(ggraph)
 
+sevenpeople_vertices <- data.frame(
+  name = c("David", "Jane", "Zubin", "Suraya", 
+           "Sandra", "Jake", "Mae-Li"),
+  type = c(rep(TRUE, 4), rep(FALSE, 3)),
+  Dept = c(rep("Dept A", 4), rep("Dept B", 3))
+)
+
 sevenpeople <- data.frame(
-  from = c("David", "David", "David", "Jane", "Jane", "Sandra", "Sandra", "Mae-Li"),
-  to = c("Zubin", "Suraya", "Jane", "Zubin", "Suraya", "Mae-Li", "Jake", "Jake")
-) |> 
-  as.matrix()
+  from = c("David", "David", "Jane", "Jane", "Zubin", "Suraya"),
+  to = c("Sandra", "Jake", "Mae-Li", "Jake", "Sandra", "Mae-Li")
+) 
 
-sevenpeoplegraph <- igraph::graph_from_edgelist(sevenpeople)
-V(sevenpeoplegraph)$Organization <- c(rep("A", 4), rep("B", 3))
+sevenpeoplegraph <- igraph::graph_from_data_frame(
+  sevenpeople,
+  vertices = sevenpeople_vertices
+)
 
-ggraph(sevenpeoplegraph) +
+lo <- igraph::layout_as_bipartite(sevenpeoplegraph)
+lo <- lo[,c(2,1)]
+
+ggraph(sevenpeoplegraph, layout = lo) +
   geom_edge_link(color = "blue") +
-  geom_node_point(size = 14, aes(color = Organization)) +
+  geom_node_point(size = 14, aes(color = as.factor(Dept))) +
   geom_node_text(aes(label = name)) +
+  labs(color = "") +
   theme_void()
 
 
 ```
 
-Extending the idea of bipartite graphs, `r if (knitr::is_latex_output()) '\\index{graph!k-partite}'`**$k$-partite graphs** are graphs which have $k$ disjoined sets of vertices, where any vertex in one set is not connected to any of the vertices in the other $k - 1$ sets. `r if (knitr::is_latex_output()) '\\index{k-partite graph|see {graph}}'`
+Extending the idea of bipartite graphs, `r if (knitr::is_latex_output()) '\\index{graph!k-partite}'`**$k$-partite graphs** are graphs which have $k$ disjoint sets of vertices, such that no two vertices in the same set are connected. `r if (knitr::is_latex_output()) '\\index{k-partite graph|see {graph}}'`
 
 `r if (knitr::is_latex_output()) '\\index{graph!tree}'`**Trees** can be regarded as vertices connected by edges, and so trees are graphs.  For example, our graph $G_\mathrm{manage}$ in Section \@ref(graph-def) is a tree because it displays a hierarchical management structure between individuals.  For a graph to be characterized as a tree, there needs to be *exactly* one path between any pair of vertices when viewed undirected.  `r if (knitr::is_latex_output()) '\\index{tree|see {graph}}'`
 
@@ -668,16 +680,15 @@ Let's create our `r if (knitr::is_latex_output()) '\\index{graph!bipartite}'`bip
 ```{r, eval = FALSE}
 # edge dataframe
 edge_df <- data.frame(
-  from = c("David", "David", "David", "Jane", "Jane", 
-           "Sandra", "Sandra", "Mae-Li"),
-  to = c("Zubin", "Suraya", "Jane", "Zubin", "Suraya", 
-         "Mae-Li", "Jake", "Jake")
-)
+  from = c("David", "David", "Jane", "Jane", "Zubin", "Suraya"),
+  to = c("Sandra", "Jake", "Mae-Li", "Jake", "Sandra", "Mae-Li")
+) 
 
 # vertex dataframe
 vertex_df <- data.frame(
-  name = c("David", "Zubin", "Suraya", "Jane", 
-           "Sandra", "Mae-Li", "Jake")
+  name = c("David", "Jane", "Zubin", "Suraya", 
+           "Sandra", "Jake", "Mae-Li"),
+  Dept = c(rep("A", 4), rep("B", 3))
 )
 
 # create graph
@@ -693,16 +704,15 @@ vertex_df <- data.frame(
 ```{r, echo = FALSE}
 # edge dataframe
 edge_df <- data.frame(
-  from = c("David", "David", "David", "Jane", "Jane", 
-           "Sandra", "Sandra", "Mae-Li"),
-  to = c("Zubin", "Suraya", "Jane", "Zubin", "Suraya", 
-         "Mae-Li", "Jake", "Jake")
-)
+  from = c("David", "David", "Jane", "Jane", "Zubin", "Suraya"),
+  to = c("Sandra", "Jake", "Mae-Li", "Jake", "Sandra", "Mae-Li")
+) 
 
 # vertex dataframe
 vertex_df <- data.frame(
-  name = c("David", "Zubin", "Suraya", "Jane", 
-           "Sandra", "Mae-Li", "Jake")
+  name = c("David", "Jane", "Zubin", "Suraya", 
+           "Sandra", "Jake", "Mae-Li"),
+  Dept = c(rep("A", 4), rep("B", 3))
 )
 
 # create graph
@@ -795,17 +805,17 @@ flightsgraph
 
 We see a weighted graph has been created by adding a `weight` property to the edges of an unweighted graph.
 
-A `r if (knitr::is_latex_output()) '\\index{graph!bipartite}'`bipartite graph can be created by giving the vertices a `type` property according to the two disjoint sets of vertices.  Let's use our $G_\mathrm{new}$ bipartite graph again as an example, which we generated earlier as the `gnew` object.  In our vertex set, the first four vertices are from organization A and the final three are from organization B.
+A `r if (knitr::is_latex_output()) '\\index{graph!bipartite}'`bipartite graph can be created by giving the vertices a `type` property according to the two disjoint sets of vertices.  Let's use our $G_\mathrm{new}$ bipartite graph again as an example, which we generated earlier as the `gnew` object.  In our vertex set, we can define our `type` property to be the same as the department property `Dept`.
 
 ```{r, eval = FALSE}
-V(gnew)$type = c(rep("A", 4), rep("B", 3))
+V(gnew)$type <- V(gnew)$Dept
 
 gnew
 ```
 
 `r if (knitr::is_latex_output()) '\\footnotesize'`
 ```{r, echo = FALSE}
-V(gnew)$type = c(rep("A", 4), rep("B", 3))
+V(gnew)$type <- V(gnew)$Dept
 
 gnew
 ```
@@ -1012,7 +1022,7 @@ For each of the following real-world cases, what kind of graph would be the best
 4.  A graph where each vertex represents a soccer player and an edge exists if both vertices have played on the same team at the same time.
 5.  A graph where the vertices are geographical cities, countries and continents and an edge exists if one vertex is geographically located in another.
 6.  A graph where the vertices are a group of colleagues and where an edge exists between vertex A and B if at least one email message has been sent from colleague A to colleague B.
-7.  A graph where the vertices are train stations in the US, Japan and Russia and where an edge exists if a direct train route exists between two vertices.  
+7.  A graph where the vertices are world cities grouped by continent, and an edge exists between two cities if an intercontinental flight exists between those cities.  
 
 8.  What criteria must a graph satisfy to be called a tree?
 9.  Give two different ways to construct the graph described in Question 3 above.

@@ -172,14 +172,14 @@ Figure 3.6: Updated version of <span class="math inline">\(G_\mathrm{work}\)</sp
 <div class="thinkahead">
 <p><strong>Thinking ahead:</strong> While entire graphs which are complete are rarely useful in practice, it is often useful to identify sets of vertices inside graphs which together represent a <em>complete subgraph</em>. Such a group of vertices is known as a <em>clique</em>, and we will look at clique discovery in a later chapter.</p>
 </div>
-<p><strong>Bipartite graphs</strong> are graphs that have two disjoint sets of vertices, such that no vertex from one set is connected to any of the vertices in the other set. Imagine we were to add three new individuals to our <span class="math inline">\(G_\mathrm{work}\)</span> graph, and these three individuals all work for a completely different organization to the four people already in the graph. Then the new graph <span class="math inline">\(G_\mathrm{new}\)</span> may look like Figure <a href="working.html#fig:newwork">3.7</a>, with the distinct sets of vertices representing individuals in different organizations.</p>
+<p><strong>Bipartite graphs</strong> are graphs that have two disjoint sets of vertices, such that no two vertices in the same set are connected. Imagine we were to add three new individuals from another department to our <span class="math inline">\(G_\mathrm{work}\)</span> vertices, and redefine our relationships so that an edge means that two individuals worked with each other across departments. Then the new graph <span class="math inline">\(G_\mathrm{new}\)</span> may look like Figure <a href="working.html#fig:newwork">3.7</a>, with the distinct sets of vertices representing individuals in different departments.</p>
 <div class="figure">
 <span style="display:block;" id="fig:newwork"></span>
-<img src="_main_files/figure-html/newwork-1.png" alt="A bipartite graph $G_\mathrm{new}$ showing working relationships involving individuals in separate organizations A and B" width="90%"><p class="caption">
-Figure 3.7: A bipartite graph <span class="math inline">\(G_\mathrm{new}\)</span> showing working relationships involving individuals in separate organizations A and B
+<img src="_main_files/figure-html/newwork-1.png" alt="A bipartite graph $G_\mathrm{new}$ showing individuals in different departments A and B working across departments" width="90%"><p class="caption">
+Figure 3.7: A bipartite graph <span class="math inline">\(G_\mathrm{new}\)</span> showing individuals in different departments A and B working across departments
 </p>
 </div>
-<p>Extending the idea of bipartite graphs, <strong><span class="math inline">\(k\)</span>-partite graphs</strong> are graphs which have <span class="math inline">\(k\)</span> disjoined sets of vertices, where any vertex in one set is not connected to any of the vertices in the other <span class="math inline">\(k - 1\)</span> sets.</p>
+<p>Extending the idea of bipartite graphs, <strong><span class="math inline">\(k\)</span>-partite graphs</strong> are graphs which have <span class="math inline">\(k\)</span> disjoint sets of vertices, such that no two vertices in the same set are connected.</p>
 <p><strong>Trees</strong> can be regarded as vertices connected by edges, and so trees are graphs. For example, our graph <span class="math inline">\(G_\mathrm{manage}\)</span> in Section <a href="working.html#graph-def">3.1.1</a> is a tree because it displays a hierarchical management structure between individuals. For a graph to be characterized as a tree, there needs to be <em>exactly</em> one path between any pair of vertices when viewed undirected.</p>
 <p>Usually, trees are graphs where the edges represent some sort of hierarchical or nested relationship. Figure <a href="working.html#fig:boybands">3.8</a> shows a tree graph of the author’s favorite boy bands, where an edge indicates that the vertex below is a member of the vertex above. It seems like five is the magic number for a great boy band.</p>
 <div class="figure">
@@ -376,9 +376,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <p>We now have our <span class="math inline">\(G_\mathrm{work}\)</span> graph in memory. Before we go any further, let’s take a look at it.</p>
 <div class="sourceCode" id="cb122"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">gwork</span></code></pre></div>
-<pre><code>## IGRAPH 459eeda UN-- 4 5 -- 
+<pre><code>## IGRAPH 132f60e UN-- 4 5 -- 
 ## + attr: name (v/c)
-## + edges from 459eeda (vertex names):
+## + edges from 132f60e (vertex names):
 ## [1] David --Zubin  David --Suraya David --Jane   Zubin --Jane   Suraya--Jane</code></pre>
 <p>Let’s start with the string <code>UN--</code> on the first line of the output. This string describes the type of graph this is. The letter <code>U</code> denotes an undirected graph, and <code>N</code> denotes a graph with named vertices. The two other properties, which we will discover later, are currently not present and so are represented by the dashes <code>--</code>. Next we have the number of vertices (4) and edges (5), followed by two further dashes.</p>
 <p>On the next line the attributes of the graph are listed. In this case there is just one attribute <code>name</code>, which is a vertex attribute of character type — denoted by <code>(v/c)</code>. Finally the edges of the graph are given using the vertex names. Note that there is no direction to these edges, so they are denoted with <code>--</code>.</p>
@@ -392,9 +392,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <span class="va">gmanage_edgelist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">gmanage_edgelist</span><span class="op">)</span>
 <span class="op">(</span><span class="va">gmanage</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_edgelist.html">graph_from_edgelist</a></span><span class="op">(</span>el <span class="op">=</span> <span class="va">gmanage_edgelist</span>,
                                        directed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH 686e14f DN-- 4 3 -- 
+<pre><code>## IGRAPH 00f5432 DN-- 4 3 -- 
 ## + attr: name (v/c)
-## + edges from 686e14f (vertex names):
+## + edges from 00f5432 (vertex names):
 ## [1] Suraya-&gt;David David -&gt;Zubin David -&gt;Jane</code></pre>
 <p>We see a similar output to <code>gwork</code>, except we now have a directed graph, donated by <code>D</code> in the first line, and we see that the edges are now denoted with direction using <code><a href="https://rdrr.io/r/base/assignOps.html">-&gt;</a></code>.</p>
 </div>
@@ -414,9 +414,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
   adjmatrix <span class="op">=</span> <span class="va">adj_flights</span>,
   mode <span class="op">=</span> <span class="st">"directed"</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH a738efa DN-- 3 16 -- 
+<pre><code>## IGRAPH 480a406 DN-- 3 16 -- 
 ## + attr: name (v/c)
-## + edges from a738efa (vertex names):
+## + edges from 480a406 (vertex names):
 ##  [1] SFO-&gt;PHL SFO-&gt;PHL SFO-&gt;PHL SFO-&gt;PHL SFO-&gt;TUS SFO-&gt;TUS SFO-&gt;TUS SFO-&gt;TUS PHL-&gt;SFO PHL-&gt;SFO PHL-&gt;SFO PHL-&gt;SFO PHL-&gt;SFO
 ## [14] PHL-&gt;TUS TUS-&gt;SFO TUS-&gt;SFO</code></pre>
 <p>We see the expected directed multigraph with 3 vertices and 16 edges. If we wish to create the weighted graph in Figure <a href="working.html#fig:weightedflights">3.10</a>, we add <code>weighted = TRUE</code> to the arguments.</p>
@@ -427,18 +427,18 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
   mode <span class="op">=</span> <span class="st">"directed"</span>,
   weighted <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH 5025297 DNW- 3 5 -- 
+<pre><code>## IGRAPH ebfbebf DNW- 3 5 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from 5025297 (vertex names):
+## + edges from ebfbebf (vertex names):
 ## [1] SFO-&gt;PHL SFO-&gt;TUS PHL-&gt;SFO PHL-&gt;TUS TUS-&gt;SFO</code></pre>
 <p>We now see a graph with only 5 edges but we see the addition of <code>W</code> in our graph type, indicating a weighted graph. We also see a new edge property of numeric type called <code>weight</code>. In situations where we want to simplify multiple edges to single edges without worrying about weight, the <code><a href="https://rdrr.io/pkg/igraph/man/simplify.html">simplify()</a></code> function in <code>igraph</code> works well. By default, <code><a href="https://rdrr.io/pkg/igraph/man/simplify.html">simplify()</a></code> will collapse multiple edges to a single edge and remove any loop edges from vertices to themselves in order to create a simple graph<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;If you only want to do one of these—such as remove loops but not multiples—you can set this in the function arguments using &lt;code&gt;remove.multiples = FALSE&lt;/code&gt; or &lt;code&gt;remove.loops = FALSE&lt;/code&gt;.&lt;/p&gt;"><sup>18</sup></a>.</p>
 <div class="sourceCode" id="cb130"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">(</span><span class="va">flightgraph_simple</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/simplify.html">simplify</a></span><span class="op">(</span>
   <span class="va">flightgraph</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH 846ef97 DN-- 3 5 -- 
+<pre><code>## IGRAPH e6e4ca4 DN-- 3 5 -- 
 ## + attr: name (v/c)
-## + edges from 846ef97 (vertex names):
+## + edges from e6e4ca4 (vertex names):
 ## [1] SFO-&gt;PHL SFO-&gt;TUS PHL-&gt;SFO PHL-&gt;TUS TUS-&gt;SFO</code></pre>
 </div>
 <div id="creating-a-graph-from-a-dataframe" class="section level3" number="3.2.3">
@@ -450,16 +450,15 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <div class="sourceCode" id="cb132"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># edge dataframe</span>
 <span class="va">edge_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
-  from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"David"</span>, <span class="st">"David"</span>, <span class="st">"David"</span>, <span class="st">"Jane"</span>, <span class="st">"Jane"</span>, 
-           <span class="st">"Sandra"</span>, <span class="st">"Sandra"</span>, <span class="st">"Mae-Li"</span><span class="op">)</span>,
-  to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Zubin"</span>, <span class="st">"Suraya"</span>, <span class="st">"Jane"</span>, <span class="st">"Zubin"</span>, <span class="st">"Suraya"</span>, 
-         <span class="st">"Mae-Li"</span>, <span class="st">"Jake"</span>, <span class="st">"Jake"</span><span class="op">)</span>
-<span class="op">)</span>
+  from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"David"</span>, <span class="st">"David"</span>, <span class="st">"Jane"</span>, <span class="st">"Jane"</span>, <span class="st">"Zubin"</span>, <span class="st">"Suraya"</span><span class="op">)</span>,
+  to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Sandra"</span>, <span class="st">"Jake"</span>, <span class="st">"Mae-Li"</span>, <span class="st">"Jake"</span>, <span class="st">"Sandra"</span>, <span class="st">"Mae-Li"</span><span class="op">)</span>
+<span class="op">)</span> 
 
 <span class="co"># vertex dataframe</span>
 <span class="va">vertex_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
-  name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"David"</span>, <span class="st">"Zubin"</span>, <span class="st">"Suraya"</span>, <span class="st">"Jane"</span>, 
-           <span class="st">"Sandra"</span>, <span class="st">"Mae-Li"</span>, <span class="st">"Jake"</span><span class="op">)</span>
+  name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"David"</span>, <span class="st">"Jane"</span>, <span class="st">"Zubin"</span>, <span class="st">"Suraya"</span>, 
+           <span class="st">"Sandra"</span>, <span class="st">"Jake"</span>, <span class="st">"Mae-Li"</span><span class="op">)</span>,
+  Dept <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="fl">4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"B"</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>
 <span class="op">)</span>
 
 <span class="co"># create graph</span>
@@ -468,10 +467,10 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
   directed <span class="op">=</span> <span class="cn">FALSE</span>,
   vertices <span class="op">=</span> <span class="va">vertex_df</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH 9bce20a UN-- 7 8 -- 
-## + attr: name (v/c)
-## + edges from 9bce20a (vertex names):
-## [1] David --Zubin  David --Suraya David --Jane   Zubin --Jane   Suraya--Jane   Sandra--Mae-Li Sandra--Jake   Mae-Li--Jake</code></pre>
+<pre><code>## IGRAPH 3869653 UN-- 7 6 -- 
+## + attr: name (v/c), Dept (v/c)
+## + edges from 3869653 (vertex names):
+## [1] David --Sandra David --Jake   Jane  --Mae-Li Jane  --Jake   Zubin --Sandra Suraya--Mae-Li</code></pre>
 <div class="thinkahead">
 <p><strong>Playing around:</strong> The functions in this section are not the only functions in the <code>igraph</code> package that build graphs from data, but they are by far the most commonly used ones. By typing <code>?graph_from</code> in your R console and looking at the functions that autocomplete, you can see some of the other functions that build graphs from data. Try playing around with them if you are curious.</p>
 </div>
@@ -502,9 +501,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
   directed <span class="op">=</span> <span class="cn">TRUE</span>,
   vertices <span class="op">=</span> <span class="va">vertex_transfers</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH fb85982 DN-- 3 4 -- 
+<pre><code>## IGRAPH 0af298a DN-- 3 4 -- 
 ## + attr: name (v/c), loc (v/c), cur (e/c), amt (e/n)
-## + edges from fb85982 (vertex names):
+## + edges from 0af298a (vertex names):
 ## [1] A-&gt;A A-&gt;B B-&gt;A B-&gt;C</code></pre>
 <p>We see that the additional edge properties <code>cur</code> and <code>amt</code> and the vertex property <code>loc</code> have been included in the graph. The codes immediately following these properties represent the property type and the data type. We can see that <code>loc</code> is a vertex property of character type (<code>v/c</code>), <code>cur</code> is an edge property of character type (<code>e/c</code>) and <code>amt</code> is an edge property of numeric type (<code>e/n</code>).</p>
 <div class="thinkahead">
@@ -513,11 +512,11 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <p>You can view the vertex and edge sets of a graph using the <code><a href="https://rdrr.io/pkg/igraph/man/V.html">V()</a></code> and <code><a href="https://rdrr.io/pkg/igraph/man/E.html">E()</a></code> functions respectively.</p>
 <div class="sourceCode" id="cb136"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">gtransfers</span><span class="op">)</span></code></pre></div>
-<pre><code>## + 3/3 vertices, named, from fb85982:
+<pre><code>## + 3/3 vertices, named, from 0af298a:
 ## [1] A B C</code></pre>
 <div class="sourceCode" id="cb138"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/E.html">E</a></span><span class="op">(</span><span class="va">gtransfers</span><span class="op">)</span></code></pre></div>
-<pre><code>## + 4/4 edges from fb85982 (vertex names):
+<pre><code>## + 4/4 edges from 0af298a (vertex names):
 ## [1] A-&gt;A A-&gt;B B-&gt;A B-&gt;C</code></pre>
 <p>To see specific properties or attributes within the vertices or edges, the <code><a href="https://rdrr.io/r/base/Extract.html">$</a></code> operator can be used.</p>
 <div class="sourceCode" id="cb140"><pre class="downlit sourceCode r">
@@ -546,20 +545,20 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 
 <span class="co"># view flightsgraph</span>
 <span class="va">flightsgraph</span></code></pre></div>
-<pre><code>## IGRAPH 08e8c45 DNW- 3 5 -- 
+<pre><code>## IGRAPH 1f21110 DNW- 3 5 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from 08e8c45 (vertex names):
+## + edges from 1f21110 (vertex names):
 ## [1] SFO-&gt;PHL SFO-&gt;TUS PHL-&gt;SFO PHL-&gt;TUS TUS-&gt;SFO</code></pre>
 <p>We see a weighted graph has been created by adding a <code>weight</code> property to the edges of an unweighted graph.</p>
-<p>A bipartite graph can be created by giving the vertices a <code>type</code> property according to the two disjoint sets of vertices. Let’s use our <span class="math inline">\(G_\mathrm{new}\)</span> bipartite graph again as an example, which we generated earlier as the <code>gnew</code> object. In our vertex set, the first four vertices are from organization A and the final three are from organization B.</p>
+<p>A bipartite graph can be created by giving the vertices a <code>type</code> property according to the two disjoint sets of vertices. Let’s use our <span class="math inline">\(G_\mathrm{new}\)</span> bipartite graph again as an example, which we generated earlier as the <code>gnew</code> object. In our vertex set, we can define our <code>type</code> property to be the same as the department property <code>Dept</code>.</p>
 <div class="sourceCode" id="cb146"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">gnew</span><span class="op">)</span><span class="op">$</span><span class="va">type</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="fl">4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"B"</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">gnew</span><span class="op">)</span><span class="op">$</span><span class="va">type</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">gnew</span><span class="op">)</span><span class="op">$</span><span class="va">Dept</span>
 
 <span class="va">gnew</span></code></pre></div>
-<pre><code>## IGRAPH 9bce20a UN-B 7 8 -- 
-## + attr: name (v/c), type (v/c)
-## + edges from 9bce20a (vertex names):
-## [1] David --Zubin  David --Suraya David --Jane   Zubin --Jane   Suraya--Jane   Sandra--Mae-Li Sandra--Jake   Mae-Li--Jake</code></pre>
+<pre><code>## IGRAPH 3869653 UN-B 7 6 -- 
+## + attr: name (v/c), Dept (v/c), type (v/c)
+## + edges from 3869653 (vertex names):
+## [1] David --Sandra David --Jake   Jane  --Mae-Li Jane  --Jake   Zubin --Sandra Suraya--Mae-Li</code></pre>
 <p>We can see that our graph <code>gnew</code> now has the final of the four graph types: <code>B</code> meaning bipartite.</p>
 <div class="thinkahead">
 <p><strong>Playing around:</strong> Hopefully you can now see that there are many ways to construct your graph. Try using the <code><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame()</a></code> function to create <code>gnew</code> as a bipartite graph at the point of creation.</p>
@@ -733,7 +732,7 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <li><p>A graph where each vertex represents a soccer player and an edge exists if both vertices have played on the same team at the same time.</p></li>
 <li><p>A graph where the vertices are geographical cities, countries and continents and an edge exists if one vertex is geographically located in another.</p></li>
 <li><p>A graph where the vertices are a group of colleagues and where an edge exists between vertex A and B if at least one email message has been sent from colleague A to colleague B.</p></li>
-<li><p>A graph where the vertices are train stations in the US, Japan and Russia and where an edge exists if a direct train route exists between two vertices.</p></li>
+<li><p>A graph where the vertices are world cities grouped by continent, and an edge exists between two cities if an intercontinental flight exists between those cities.</p></li>
 <li><p>What criteria must a graph satisfy to be called a tree?</p></li>
 <li><p>Give two different ways to construct the graph described in Question 3 above.</p></li>
 <li><p>Can you think of three things in your everyday life that could be represented by graphs? What would the vertices and edges represent? What kinds of graph would be best for each case?</p></li>

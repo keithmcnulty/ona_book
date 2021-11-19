@@ -105,7 +105,7 @@ cust_reps <- chinook_customers |>
 head(cust_reps)
 ```
 
-Now we have an option of creating two types of graphs.  First we could create a graph from the data as is, using the `CustomerName` and `RepName` as the edgelist, and where the relationship is 'is a customer of'.  Let's create that graph, and view it in Figure \@ref(fig:cust-rep).  We see a tripartite graph with a hub-and-spoke shape.
+Now we have an option of creating two types of graphs.  First we could create a graph from the data as is, using the `CustomerName` and `RepName` as the edgelist, and where the relationship is 'is a customer of'.  Let's create that graph, and view it in Figure \@ref(fig:cust-rep).  We see a graph with three distinct connected components, each with a hub-and-spoke shape.
 
 ```{r cust-rep, fig.align = "center", fig.cap="Graph of Chinook customers connected to their sales reps"}
 # create igraph
@@ -156,7 +156,7 @@ customer_network_edgelist <- cust_cust |>
 head(customer_network_edgelist)
 ```
 
-Now we have a network edgelist we can work with, and we have `RepName` available to use as an edge property.  Note that relationships will appear in both directions in this dataset, but we can take care of that by choosing to represent them in an undirected graph.  Let's build and visualize the graph, as in Figure \@ref(fig:cust-cust).  We see a tripartite graph consisting of three `r if (knitr::is_latex_output()) '\\index{graph!complete}'`complete subgraphs with the edges color coded by the support rep.
+Now we have a network edgelist we can work with, and we have `RepName` available to use as an edge property.  Note that relationships will appear in both directions in this dataset, but we can take care of that by choosing to represent them in an undirected graph.  Let's build and visualize the graph, as in Figure \@ref(fig:cust-cust).  We see a graph consisting of three `r if (knitr::is_latex_output()) '\\index{graph!complete}'`complete subgraphs with the edges color coded by the support rep.
 
 ```{r cust-cust, fig.align="center", fig.cap = "Customer-to-customer network for Chinook based on customers sharing the same sales rep"}
 # create igraph object
@@ -303,7 +303,7 @@ ggraph(custtocust_network) +
 
 ```
 
-If we wish, we can restrict the definition of connection.  For example, we may define it as 'purchased at least two items in common', as in Figure \@ref(fig:cust-item-two).  We can use the `subgraph()` function in `igraph` for this, and the result reveals a `r if (knitr::is_latex_output()) '\\index{graph!bipartite}'`bipartite graph, indicating that there are two independent groups of customers who are related according to some commonality in music purchasing.
+If we wish, we can restrict the definition of connection.  For example, we may define it as 'purchased at least two items in common', as in Figure \@ref(fig:cust-item-two).  We can use the `subgraph()` function in `igraph` for this, and the result reveals a graph with two connected components, indicating that there are two independent groups of customers who are related according to some commonality in music purchasing.
 
 ```{r cust-item-two, fig.align = "center", fig.cap = "Chinook customer-to-customer network based at least two common items purchased"}
 # select edges that have Item value of at least 2
@@ -475,7 +475,7 @@ plt.savefig("www/restructuring-data/custcustpy-1.png", bbox_inches = 'tight')
 knitr::include_graphics("www/restructuring-data/custcustpy-1.png")
 ```
 
-And if we wish to restrict connections to two or more common item purchases, we can create a subgraph based on the number of items, as in Figure \@ref(fig:twoitempy).  Some experimentation with the parameter `k` in `networkx`'s spring layout (which determines the optimal distance between vertices) is needed to visualize the bipartite nature of the resulting graph.
+And if we wish to restrict connections to two or more common item purchases, we can create a subgraph based on the number of items, as in Figure \@ref(fig:twoitempy).  Some experimentation with the parameter `k` in `networkx`'s spring layout (which determines the optimal distance between vertices) is needed to appropriately visualize the two distinct connected components in this graph.
 
 ```{python, eval = FALSE}
 # get edges with items >= 2

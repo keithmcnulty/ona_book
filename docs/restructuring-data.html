@@ -148,9 +148,9 @@
 <span class="op">(</span><span class="va">orgchart</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>
   d <span class="op">=</span> <span class="va">orgchart_edgelist2</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH 319e1eb DN-- 8 7 -- 
+<pre><code>## IGRAPH de808ce DN-- 8 7 -- 
 ## + attr: name (v/c)
-## + edges from 319e1eb (vertex names):
+## + edges from de808ce (vertex names):
 ## [1] Andrew -&gt;Nancy    Andrew -&gt;Michael  Nancy  -&gt;Jane     Nancy  -&gt;Margaret Nancy  -&gt;Steve    Michael-&gt;Robert  
 ## [7] Michael-&gt;Laura</code></pre>
 <p>We now have a directed graph with named vertices, so this should be easy to plot. Let’s use <code>ggplot</code> with a dendrogram (tree) layout, as in Figure <a href="restructuring-data.html#fig:chinook-pretty">5.1</a>.</p>
@@ -204,7 +204,7 @@ Figure 5.1: Management hierarchy of Chinook as a tree (dendrogram)
 ## 4 Margaret Park          Bjørn Hansen            4
 ## 5 Margaret Park František Wichterlová            4
 ## 6 Steve Johnson           Helena Holý            5</code></pre>
-<p>Now we have an option of creating two types of graphs. First we could create a graph from the data as is, using the <code>CustomerName</code> and <code>RepName</code> as the edgelist, and where the relationship is ‘is a customer of.’ Let’s create that graph, and view it in Figure <a href="restructuring-data.html#fig:cust-rep">5.2</a>. We see a tripartite graph with a hub-and-spoke shape.</p>
+<p>Now we have an option of creating two types of graphs. First we could create a graph from the data as is, using the <code>CustomerName</code> and <code>RepName</code> as the edgelist, and where the relationship is ‘is a customer of.’ Let’s create that graph, and view it in Figure <a href="restructuring-data.html#fig:cust-rep">5.2</a>. We see a graph with three distinct connected components, each with a hub-and-spoke shape.</p>
 <div class="sourceCode" id="cb234"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># create igraph</span>
 <span class="va">cust_rep_graph</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>
@@ -266,7 +266,7 @@ Figure 5.2: Graph of Chinook customers connected to their sales reps
 ## 4 Luís Gonçalves   Michelle Brooks Jane Peacock
 ## 5 Luís Gonçalves         Tim Goyer Jane Peacock
 ## 6 Luís Gonçalves     Frank Ralston Jane Peacock</code></pre>
-<p>Now we have a network edgelist we can work with, and we have <code>RepName</code> available to use as an edge property. Note that relationships will appear in both directions in this dataset, but we can take care of that by choosing to represent them in an undirected graph. Let’s build and visualize the graph, as in Figure <a href="restructuring-data.html#fig:cust-cust">5.3</a>. We see a tripartite graph consisting of three complete subgraphs with the edges color coded by the support rep.</p>
+<p>Now we have a network edgelist we can work with, and we have <code>RepName</code> available to use as an edge property. Note that relationships will appear in both directions in this dataset, but we can take care of that by choosing to represent them in an undirected graph. Let’s build and visualize the graph, as in Figure <a href="restructuring-data.html#fig:cust-cust">5.3</a>. We see a graph consisting of three complete subgraphs with the edges color coded by the support rep.</p>
 <div class="sourceCode" id="cb239"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># create igraph object</span>
 <span class="va">customer_network</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>
@@ -432,7 +432,7 @@ Figure 5.4: Network connecting customers via items purchased
 Figure 5.5: Chinook customer-to-customer network based on common item purchases
 </p>
 </div>
-<p>If we wish, we can restrict the definition of connection. For example, we may define it as ‘purchased at least two items in common,’ as in Figure <a href="restructuring-data.html#fig:cust-item-two">5.6</a>. We can use the <code><a href="https://rdrr.io/pkg/igraph/man/subgraph.html">subgraph()</a></code> function in <code>igraph</code> for this, and the result reveals a bipartite graph, indicating that there are two independent groups of customers who are related according to some commonality in music purchasing.</p>
+<p>If we wish, we can restrict the definition of connection. For example, we may define it as ‘purchased at least two items in common,’ as in Figure <a href="restructuring-data.html#fig:cust-item-two">5.6</a>. We can use the <code><a href="https://rdrr.io/pkg/igraph/man/subgraph.html">subgraph()</a></code> function in <code>igraph</code> for this, and the result reveals a graph with two connected components, indicating that there are two independent groups of customers who are related according to some commonality in music purchasing.</p>
 <div class="sourceCode" id="cb257"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># select edges that have Item value of at least 2</span>
 <span class="va">edges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/E.html">E</a></span><span class="op">(</span><span class="va">custtocust_network</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/E.html">E</a></span><span class="op">(</span><span class="va">custtocust_network</span><span class="op">)</span><span class="op">$</span><span class="va">Items</span> <span class="op">&gt;=</span> <span class="fl">2</span><span class="op">]</span>
@@ -569,7 +569,7 @@ Figure 5.7: Visualization of the Chinook customer-to-item network with customers
 Figure 5.8: Visualization of the Chinook customer-to-customer network based on any common item purchase
 </p>
 </div>
-<p>And if we wish to restrict connections to two or more common item purchases, we can create a subgraph based on the number of items, as in Figure <a href="restructuring-data.html#fig:twoitempy">5.9</a>. Some experimentation with the parameter <code>k</code> in <code>networkx</code>’s spring layout (which determines the optimal distance between vertices) is needed to visualize the bipartite nature of the resulting graph.</p>
+<p>And if we wish to restrict connections to two or more common item purchases, we can create a subgraph based on the number of items, as in Figure <a href="restructuring-data.html#fig:twoitempy">5.9</a>. Some experimentation with the parameter <code>k</code> in <code>networkx</code>’s spring layout (which determines the optimal distance between vertices) is needed to appropriately visualize the two distinct connected components in this graph.</p>
 <div class="sourceCode" id="cb267"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb267-1"><a href="restructuring-data.html#cb267-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get edges with items &gt;= 2</span></span>
 <span id="cb267-2"><a href="restructuring-data.html#cb267-2" aria-hidden="true" tabindex="-1"></a>twoitem_edges <span class="op">=</span> [i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">list</span>(cust_cust_network.edges) <span class="cf">if</span> </span>
 <span id="cb267-3"><a href="restructuring-data.html#cb267-3" aria-hidden="true" tabindex="-1"></a>cust_cust_network.edges[i][<span class="st">'Items'</span>] <span class="op">&gt;=</span> <span class="dv">2</span>]</span>

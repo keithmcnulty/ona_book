@@ -534,14 +534,14 @@ Figure 3.6: Updated version of <span class="math inline">\(G_\mathrm{work}\)</sp
 <div class="thinkahead">
 <p><strong>Thinking ahead:</strong> While entire graphs which are complete are rarely useful in practice, it is often useful to identify sets of vertices inside graphs which together represent a <em>complete subgraph</em>. Such a group of vertices is known as a <em>clique</em>, and we will look at clique discovery in a later chapter.</p>
 </div>
-<p><strong>Bipartite graphs</strong> are graphs that have two disjoint sets of vertices, such that no vertex from one set is connected to any of the vertices in the other set. Imagine we were to add three new individuals to our <span class="math inline">\(G_\mathrm{work}\)</span> graph, and these three individuals all work for a completely different organization to the four people already in the graph. Then the new graph <span class="math inline">\(G_\mathrm{new}\)</span> may look like Figure <a href="working.html#fig:newwork">3.7</a>, with the distinct sets of vertices representing individuals in different organizations.</p>
+<p><strong>Bipartite graphs</strong> are graphs that have two disjoint sets of vertices, such that no two vertices in the same set are connected. Imagine we were to add three new individuals from another department to our <span class="math inline">\(G_\mathrm{work}\)</span> vertices, and redefine our relationships so that an edge means that two individuals worked with each other across departments. Then the new graph <span class="math inline">\(G_\mathrm{new}\)</span> may look like Figure <a href="working.html#fig:newwork">3.7</a>, with the distinct sets of vertices representing individuals in different departments.</p>
 <div class="figure"><span style="display:block;" id="fig:newwork"></span>
-<img src="_main_files/figure-html/newwork-1.png" alt="A bipartite graph $G_\mathrm{new}$ showing working relationships involving individuals in separate organizations A and B" width="90%" />
+<img src="_main_files/figure-html/newwork-1.png" alt="A bipartite graph $G_\mathrm{new}$ showing individuals in different departments A and B working across departments" width="90%" />
 <p class="caption">
-Figure 3.7: A bipartite graph <span class="math inline">\(G_\mathrm{new}\)</span> showing working relationships involving individuals in separate organizations A and B
+Figure 3.7: A bipartite graph <span class="math inline">\(G_\mathrm{new}\)</span> showing individuals in different departments A and B working across departments
 </p>
 </div>
-<p>Extending the idea of bipartite graphs, <strong><span class="math inline">\(k\)</span>-partite graphs</strong> are graphs which have <span class="math inline">\(k\)</span> disjoined sets of vertices, where any vertex in one set is not connected to any of the vertices in the other <span class="math inline">\(k - 1\)</span> sets.</p>
+<p>Extending the idea of bipartite graphs, <strong><span class="math inline">\(k\)</span>-partite graphs</strong> are graphs which have <span class="math inline">\(k\)</span> disjoint sets of vertices, such that no two vertices in the same set are connected.</p>
 <p><strong>Trees</strong> can be regarded as vertices connected by edges, and so trees are graphs. For example, our graph <span class="math inline">\(G_\mathrm{manage}\)</span> in Section <a href="working.html#graph-def">3.1.1</a> is a tree because it displays a hierarchical management structure between individuals. For a graph to be characterized as a tree, there needs to be <em>exactly</em> one path between any pair of vertices when viewed undirected.</p>
 <p>Usually, trees are graphs where the edges represent some sort of hierarchical or nested relationship. Figure <a href="working.html#fig:boybands">3.8</a> shows a tree graph of the author’s favorite boy bands, where an edge indicates that the vertex below is a member of the vertex above. It seems like five is the magic number for a great boy band.</p>
 <div class="figure"><span style="display:block;" id="fig:boybands"></span>
@@ -729,9 +729,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <span id="cb121-5"><a href="working.html#cb121-5" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">directed =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <p>We now have our <span class="math inline">\(G_\mathrm{work}\)</span> graph in memory. Before we go any further, let’s take a look at it.</p>
 <div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb122-1"><a href="working.html#cb122-1" aria-hidden="true" tabindex="-1"></a>gwork</span></code></pre></div>
-<pre><code>## IGRAPH 517cd40 UN-- 4 5 -- 
+<pre><code>## IGRAPH 86942ff UN-- 4 5 -- 
 ## + attr: name (v/c)
-## + edges from 517cd40 (vertex names):
+## + edges from 86942ff (vertex names):
 ## [1] David --Zubin  David --Suraya David --Jane   Zubin --Jane   Suraya--Jane</code></pre>
 <p>Let’s start with the string <code>UN--</code> on the first line of the output. This string describes the type of graph this is. The letter <code>U</code> denotes an undirected graph, and <code>N</code> denotes a graph with named vertices. The two other properties, which we will discover later, are currently not present and so are represented by the dashes <code>--</code>. Next we have the number of vertices (4) and edges (5), followed by two further dashes.</p>
 <p>On the next line the attributes of the graph are listed. In this case there is just one attribute <code>name</code>, which is a vertex attribute of character type — denoted by <code>(v/c)</code>. Finally the edges of the graph are given using the vertex names. Note that there is no direction to these edges, so they are denoted with <code>--</code>.</p>
@@ -744,9 +744,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <span id="cb124-6"><a href="working.html#cb124-6" aria-hidden="true" tabindex="-1"></a>gmanage_edgelist <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(gmanage_edgelist)</span>
 <span id="cb124-7"><a href="working.html#cb124-7" aria-hidden="true" tabindex="-1"></a>(gmanage <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_edgelist</span>(<span class="at">el =</span> gmanage_edgelist,</span>
 <span id="cb124-8"><a href="working.html#cb124-8" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">directed =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
-<pre><code>## IGRAPH e2ed837 DN-- 4 3 -- 
+<pre><code>## IGRAPH 1c7089b DN-- 4 3 -- 
 ## + attr: name (v/c)
-## + edges from e2ed837 (vertex names):
+## + edges from 1c7089b (vertex names):
 ## [1] Suraya-&gt;David David -&gt;Zubin David -&gt;Jane</code></pre>
 <p>We see a similar output to <code>gwork</code>, except we now have a directed graph, donated by <code>D</code> in the first line, and we see that the edges are now denoted with direction using <code>-&gt;</code>.</p>
 </div>
@@ -763,9 +763,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <span id="cb126-8"><a href="working.html#cb126-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">adjmatrix =</span> adj_flights,</span>
 <span id="cb126-9"><a href="working.html#cb126-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">mode =</span> <span class="st">&quot;directed&quot;</span></span>
 <span id="cb126-10"><a href="working.html#cb126-10" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
-<pre><code>## IGRAPH 7f2b799 DN-- 3 16 -- 
+<pre><code>## IGRAPH 6ef902d DN-- 3 16 -- 
 ## + attr: name (v/c)
-## + edges from 7f2b799 (vertex names):
+## + edges from 6ef902d (vertex names):
 ##  [1] SFO-&gt;PHL SFO-&gt;PHL SFO-&gt;PHL SFO-&gt;PHL SFO-&gt;TUS SFO-&gt;TUS SFO-&gt;TUS SFO-&gt;TUS PHL-&gt;SFO PHL-&gt;SFO PHL-&gt;SFO PHL-&gt;SFO PHL-&gt;SFO
 ## [14] PHL-&gt;TUS TUS-&gt;SFO TUS-&gt;SFO</code></pre>
 <p>We see the expected directed multigraph with 3 vertices and 16 edges. If we wish to create the weighted graph in Figure <a href="working.html#fig:weightedflights">3.10</a>, we add <code>weighted = TRUE</code> to the arguments.</p>
@@ -775,17 +775,17 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <span id="cb128-4"><a href="working.html#cb128-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">mode =</span> <span class="st">&quot;directed&quot;</span>,</span>
 <span id="cb128-5"><a href="working.html#cb128-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">weighted =</span> <span class="cn">TRUE</span></span>
 <span id="cb128-6"><a href="working.html#cb128-6" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
-<pre><code>## IGRAPH cf1b4aa DNW- 3 5 -- 
+<pre><code>## IGRAPH 444123d DNW- 3 5 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from cf1b4aa (vertex names):
+## + edges from 444123d (vertex names):
 ## [1] SFO-&gt;PHL SFO-&gt;TUS PHL-&gt;SFO PHL-&gt;TUS TUS-&gt;SFO</code></pre>
 <p>We now see a graph with only 5 edges but we see the addition of <code>W</code> in our graph type, indicating a weighted graph. We also see a new edge property of numeric type called <code>weight</code>. In situations where we want to simplify multiple edges to single edges without worrying about weight, the <code>simplify()</code> function in <code>igraph</code> works well. By default, <code>simplify()</code> will collapse multiple edges to a single edge and remove any loop edges from vertices to themselves in order to create a simple graph<a href="#fn18" class="footnote-ref" id="fnref18"><sup>18</sup></a>.</p>
 <div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb130-1"><a href="working.html#cb130-1" aria-hidden="true" tabindex="-1"></a>(flightgraph_simple <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">simplify</span>(</span>
 <span id="cb130-2"><a href="working.html#cb130-2" aria-hidden="true" tabindex="-1"></a>  flightgraph</span>
 <span id="cb130-3"><a href="working.html#cb130-3" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
-<pre><code>## IGRAPH ccf84d9 DN-- 3 5 -- 
+<pre><code>## IGRAPH 9eb879e DN-- 3 5 -- 
 ## + attr: name (v/c)
-## + edges from ccf84d9 (vertex names):
+## + edges from 9eb879e (vertex names):
 ## [1] SFO-&gt;PHL SFO-&gt;TUS PHL-&gt;SFO PHL-&gt;TUS TUS-&gt;SFO</code></pre>
 </div>
 <div id="creating-a-graph-from-a-dataframe" class="section level3" number="3.2.3">
@@ -794,28 +794,27 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <p>Let’s create our bipartite graph <span class="math inline">\(G_\mathrm{new}\)</span> from Figure <a href="working.html#fig:newwork">3.7</a> using this function. At a minimum, this function requires a dataframe of edges, and will also accept a dataframe of vertices if needed.</p>
 <div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb132-1"><a href="working.html#cb132-1" aria-hidden="true" tabindex="-1"></a><span class="co"># edge dataframe</span></span>
 <span id="cb132-2"><a href="working.html#cb132-2" aria-hidden="true" tabindex="-1"></a>edge_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb132-3"><a href="working.html#cb132-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">from =</span> <span class="fu">c</span>(<span class="st">&quot;David&quot;</span>, <span class="st">&quot;David&quot;</span>, <span class="st">&quot;David&quot;</span>, <span class="st">&quot;Jane&quot;</span>, <span class="st">&quot;Jane&quot;</span>, </span>
-<span id="cb132-4"><a href="working.html#cb132-4" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;Sandra&quot;</span>, <span class="st">&quot;Sandra&quot;</span>, <span class="st">&quot;Mae-Li&quot;</span>),</span>
-<span id="cb132-5"><a href="working.html#cb132-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">to =</span> <span class="fu">c</span>(<span class="st">&quot;Zubin&quot;</span>, <span class="st">&quot;Suraya&quot;</span>, <span class="st">&quot;Jane&quot;</span>, <span class="st">&quot;Zubin&quot;</span>, <span class="st">&quot;Suraya&quot;</span>, </span>
-<span id="cb132-6"><a href="working.html#cb132-6" aria-hidden="true" tabindex="-1"></a>         <span class="st">&quot;Mae-Li&quot;</span>, <span class="st">&quot;Jake&quot;</span>, <span class="st">&quot;Jake&quot;</span>)</span>
-<span id="cb132-7"><a href="working.html#cb132-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb132-8"><a href="working.html#cb132-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb132-9"><a href="working.html#cb132-9" aria-hidden="true" tabindex="-1"></a><span class="co"># vertex dataframe</span></span>
-<span id="cb132-10"><a href="working.html#cb132-10" aria-hidden="true" tabindex="-1"></a>vertex_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb132-11"><a href="working.html#cb132-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">name =</span> <span class="fu">c</span>(<span class="st">&quot;David&quot;</span>, <span class="st">&quot;Zubin&quot;</span>, <span class="st">&quot;Suraya&quot;</span>, <span class="st">&quot;Jane&quot;</span>, </span>
-<span id="cb132-12"><a href="working.html#cb132-12" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;Sandra&quot;</span>, <span class="st">&quot;Mae-Li&quot;</span>, <span class="st">&quot;Jake&quot;</span>)</span>
-<span id="cb132-13"><a href="working.html#cb132-13" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb132-14"><a href="working.html#cb132-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb132-15"><a href="working.html#cb132-15" aria-hidden="true" tabindex="-1"></a><span class="co"># create graph</span></span>
-<span id="cb132-16"><a href="working.html#cb132-16" aria-hidden="true" tabindex="-1"></a>(gnew <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(</span>
-<span id="cb132-17"><a href="working.html#cb132-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">d =</span> edge_df,</span>
-<span id="cb132-18"><a href="working.html#cb132-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">directed =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb132-19"><a href="working.html#cb132-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">vertices =</span> vertex_df</span>
-<span id="cb132-20"><a href="working.html#cb132-20" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
-<pre><code>## IGRAPH fcdd7f1 UN-- 7 8 -- 
-## + attr: name (v/c)
-## + edges from fcdd7f1 (vertex names):
-## [1] David --Zubin  David --Suraya David --Jane   Zubin --Jane   Suraya--Jane   Sandra--Mae-Li Sandra--Jake   Mae-Li--Jake</code></pre>
+<span id="cb132-3"><a href="working.html#cb132-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">from =</span> <span class="fu">c</span>(<span class="st">&quot;David&quot;</span>, <span class="st">&quot;David&quot;</span>, <span class="st">&quot;Jane&quot;</span>, <span class="st">&quot;Jane&quot;</span>, <span class="st">&quot;Zubin&quot;</span>, <span class="st">&quot;Suraya&quot;</span>),</span>
+<span id="cb132-4"><a href="working.html#cb132-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">to =</span> <span class="fu">c</span>(<span class="st">&quot;Sandra&quot;</span>, <span class="st">&quot;Jake&quot;</span>, <span class="st">&quot;Mae-Li&quot;</span>, <span class="st">&quot;Jake&quot;</span>, <span class="st">&quot;Sandra&quot;</span>, <span class="st">&quot;Mae-Li&quot;</span>)</span>
+<span id="cb132-5"><a href="working.html#cb132-5" aria-hidden="true" tabindex="-1"></a>) </span>
+<span id="cb132-6"><a href="working.html#cb132-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb132-7"><a href="working.html#cb132-7" aria-hidden="true" tabindex="-1"></a><span class="co"># vertex dataframe</span></span>
+<span id="cb132-8"><a href="working.html#cb132-8" aria-hidden="true" tabindex="-1"></a>vertex_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb132-9"><a href="working.html#cb132-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">name =</span> <span class="fu">c</span>(<span class="st">&quot;David&quot;</span>, <span class="st">&quot;Jane&quot;</span>, <span class="st">&quot;Zubin&quot;</span>, <span class="st">&quot;Suraya&quot;</span>, </span>
+<span id="cb132-10"><a href="working.html#cb132-10" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;Sandra&quot;</span>, <span class="st">&quot;Jake&quot;</span>, <span class="st">&quot;Mae-Li&quot;</span>),</span>
+<span id="cb132-11"><a href="working.html#cb132-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">Dept =</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">&quot;A&quot;</span>, <span class="dv">4</span>), <span class="fu">rep</span>(<span class="st">&quot;B&quot;</span>, <span class="dv">3</span>))</span>
+<span id="cb132-12"><a href="working.html#cb132-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb132-13"><a href="working.html#cb132-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb132-14"><a href="working.html#cb132-14" aria-hidden="true" tabindex="-1"></a><span class="co"># create graph</span></span>
+<span id="cb132-15"><a href="working.html#cb132-15" aria-hidden="true" tabindex="-1"></a>(gnew <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(</span>
+<span id="cb132-16"><a href="working.html#cb132-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">d =</span> edge_df,</span>
+<span id="cb132-17"><a href="working.html#cb132-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">directed =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb132-18"><a href="working.html#cb132-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">vertices =</span> vertex_df</span>
+<span id="cb132-19"><a href="working.html#cb132-19" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
+<pre><code>## IGRAPH 8c99616 UN-- 7 6 -- 
+## + attr: name (v/c), Dept (v/c)
+## + edges from 8c99616 (vertex names):
+## [1] David --Sandra David --Jake   Jane  --Mae-Li Jane  --Jake   Zubin --Sandra Suraya--Mae-Li</code></pre>
 <div class="thinkahead">
 <p><strong>Playing around:</strong> The functions in this section are not the only functions in the <code>igraph</code> package that build graphs from data, but they are by far the most commonly used ones. By typing <code>?graph_from</code> in your R console and looking at the functions that autocomplete, you can see some of the other functions that build graphs from data. Try playing around with them if you are curious.</p>
 </div>
@@ -843,9 +842,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <span id="cb134-18"><a href="working.html#cb134-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">directed =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb134-19"><a href="working.html#cb134-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">vertices =</span> vertex_transfers</span>
 <span id="cb134-20"><a href="working.html#cb134-20" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
-<pre><code>## IGRAPH c468ebe DN-- 3 4 -- 
+<pre><code>## IGRAPH 82c4348 DN-- 3 4 -- 
 ## + attr: name (v/c), loc (v/c), cur (e/c), amt (e/n)
-## + edges from c468ebe (vertex names):
+## + edges from 82c4348 (vertex names):
 ## [1] A-&gt;A A-&gt;B B-&gt;A B-&gt;C</code></pre>
 <p>We see that the additional edge properties <code>cur</code> and <code>amt</code> and the vertex property <code>loc</code> have been included in the graph. The codes immediately following these properties represent the property type and the data type. We can see that <code>loc</code> is a vertex property of character type (<code>v/c</code>), <code>cur</code> is an edge property of character type (<code>e/c</code>) and <code>amt</code> is an edge property of numeric type (<code>e/n</code>).</p>
 <div class="thinkahead">
@@ -853,10 +852,10 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 </div>
 <p>You can view the vertex and edge sets of a graph using the <code>V()</code> and <code>E()</code> functions respectively.</p>
 <div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb136-1"><a href="working.html#cb136-1" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(gtransfers)</span></code></pre></div>
-<pre><code>## + 3/3 vertices, named, from c468ebe:
+<pre><code>## + 3/3 vertices, named, from 82c4348:
 ## [1] A B C</code></pre>
 <div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb138-1"><a href="working.html#cb138-1" aria-hidden="true" tabindex="-1"></a><span class="fu">E</span>(gtransfers)</span></code></pre></div>
-<pre><code>## + 4/4 edges from c468ebe (vertex names):
+<pre><code>## + 4/4 edges from 82c4348 (vertex names):
 ## [1] A-&gt;A A-&gt;B B-&gt;A B-&gt;C</code></pre>
 <p>To see specific properties or attributes within the vertices or edges, the <code>$</code> operator can be used.</p>
 <div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb140-1"><a href="working.html#cb140-1" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(gtransfers)<span class="sc">$</span>name</span></code></pre></div>
@@ -882,19 +881,19 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <span id="cb144-16"><a href="working.html#cb144-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb144-17"><a href="working.html#cb144-17" aria-hidden="true" tabindex="-1"></a><span class="co"># view flightsgraph</span></span>
 <span id="cb144-18"><a href="working.html#cb144-18" aria-hidden="true" tabindex="-1"></a>flightsgraph</span></code></pre></div>
-<pre><code>## IGRAPH 8bd3b28 DNW- 3 5 -- 
+<pre><code>## IGRAPH e8e50af DNW- 3 5 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from 8bd3b28 (vertex names):
+## + edges from e8e50af (vertex names):
 ## [1] SFO-&gt;PHL SFO-&gt;TUS PHL-&gt;SFO PHL-&gt;TUS TUS-&gt;SFO</code></pre>
 <p>We see a weighted graph has been created by adding a <code>weight</code> property to the edges of an unweighted graph.</p>
-<p>A bipartite graph can be created by giving the vertices a <code>type</code> property according to the two disjoint sets of vertices. Let’s use our <span class="math inline">\(G_\mathrm{new}\)</span> bipartite graph again as an example, which we generated earlier as the <code>gnew</code> object. In our vertex set, the first four vertices are from organization A and the final three are from organization B.</p>
-<div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb146-1"><a href="working.html#cb146-1" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(gnew)<span class="sc">$</span>type <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">&quot;A&quot;</span>, <span class="dv">4</span>), <span class="fu">rep</span>(<span class="st">&quot;B&quot;</span>, <span class="dv">3</span>))</span>
+<p>A bipartite graph can be created by giving the vertices a <code>type</code> property according to the two disjoint sets of vertices. Let’s use our <span class="math inline">\(G_\mathrm{new}\)</span> bipartite graph again as an example, which we generated earlier as the <code>gnew</code> object. In our vertex set, we can define our <code>type</code> property to be the same as the department property <code>Dept</code>.</p>
+<div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb146-1"><a href="working.html#cb146-1" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(gnew)<span class="sc">$</span>type <span class="ot">&lt;-</span> <span class="fu">V</span>(gnew)<span class="sc">$</span>Dept</span>
 <span id="cb146-2"><a href="working.html#cb146-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb146-3"><a href="working.html#cb146-3" aria-hidden="true" tabindex="-1"></a>gnew</span></code></pre></div>
-<pre><code>## IGRAPH fcdd7f1 UN-B 7 8 -- 
-## + attr: name (v/c), type (v/c)
-## + edges from fcdd7f1 (vertex names):
-## [1] David --Zubin  David --Suraya David --Jane   Zubin --Jane   Suraya--Jane   Sandra--Mae-Li Sandra--Jake   Mae-Li--Jake</code></pre>
+<pre><code>## IGRAPH 8c99616 UN-B 7 6 -- 
+## + attr: name (v/c), Dept (v/c), type (v/c)
+## + edges from 8c99616 (vertex names):
+## [1] David --Sandra David --Jake   Jane  --Mae-Li Jane  --Jake   Zubin --Sandra Suraya--Mae-Li</code></pre>
 <p>We can see that our graph <code>gnew</code> now has the final of the four graph types: <code>B</code> meaning bipartite.</p>
 <div class="thinkahead">
 <p><strong>Playing around:</strong> Hopefully you can now see that there are many ways to construct your graph. Try using the <code>graph_from_data_frame()</code> function to create <code>gnew</code> as a bipartite graph at the point of creation.</p>
@@ -1056,7 +1055,7 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <li><p>A graph where each vertex represents a soccer player and an edge exists if both vertices have played on the same team at the same time.</p></li>
 <li><p>A graph where the vertices are geographical cities, countries and continents and an edge exists if one vertex is geographically located in another.</p></li>
 <li><p>A graph where the vertices are a group of colleagues and where an edge exists between vertex A and B if at least one email message has been sent from colleague A to colleague B.</p></li>
-<li><p>A graph where the vertices are train stations in the US, Japan and Russia and where an edge exists if a direct train route exists between two vertices.</p></li>
+<li><p>A graph where the vertices are world cities grouped by continent, and an edge exists between two cities if an intercontinental flight exists between those cities.</p></li>
 <li><p>What criteria must a graph satisfy to be called a tree?</p></li>
 <li><p>Give two different ways to construct the graph described in Question 3 above.</p></li>
 <li><p>Can you think of three things in your everyday life that could be represented by graphs? What would the vertices and edges represent? What kinds of graph would be best for each case?</p></li>
