@@ -76,7 +76,7 @@
 <h1>
 <span class="header-section-number">5</span> Restructuring Data For Use in Graphs<a class="anchor" aria-label="anchor" href="#restructuring-data"><i class="fas fa-link"></i></a>
 </h1>
-<p>So far we have learned how to define and visualize graphs to allow us to work with them and to gain some basic insights from them. But we have made a really big assumption in doing so. We have assumed that the data we need to create our graph is always available in exactly the form in which we will need it. Usually this is an edgelist or a set of dataframes of edges and vertices. In reality, only certain types of data exist in this form by default. Typically, electronic communication data will often — though not always — have a ‘from’ and ‘to’ structure because that is how communication works and because many of the underlying systems like email, calendar or other communication networks are already built on databases that have a graph-like structure.</p>
+<p>So far we have learned how to define and visualize graphs to allow us to work with them and to gain some basic insights from them. But we have made a really big assumption in doing so. We have assumed that the data we need to create our graph is always available in exactly the form in which we will need it. Usually this is an edgelist or a set of dataframes of edges and vertices. In reality, only certain types of data exist in this form by default. Typically, electronic communication data will often—though not always—have a ‘from’ and ‘to’ structure because that is how communication works and because many of the underlying systems like email, calendar or other communication networks are already built on databases that have a graph-like structure.</p>
 <p>However, there are a lot of problems where we may want to apply graph theory, but where the data does not exist in a way that makes it easy to create a graph. In these situations we will need to <em>transform</em> the data from its existing shape to a graph-friendly shape—a set of vertices and edges.</p>
 <p>There are two important considerations in transforming data into a graph-friendly structure. Both of these considerations depend on the problem you are trying to solve with the graph, as follows:</p>
 <ol style="list-style-type: decimal">
@@ -93,10 +93,18 @@
 <p>In this example we are going to use some simplified tables from the <em>Chinook</em> database<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;You can find and download the full version of the &lt;em&gt;Chinook&lt;/em&gt; open-source SQLite database at &lt;a href="https://www.sqlitetutorial.net/sqlite-sample-database/" class="uri"&gt;https://www.sqlitetutorial.net/sqlite-sample-database/&lt;/a&gt;&lt;/p&gt;'><sup>41</sup></a> - an open source database which contains records of the customers, employees and transactions of a music sales company. We will be working with four simplified tables from this database which you can load from the <code>onadata</code> package now or download from the internet as follows:</p>
 <div class="sourceCode" id="cb220"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># download chinook database tables</span>
-<span class="va">chinook_employees</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"https://ona-book.org/data/chinook_employees.csv"</span><span class="op">)</span>
-<span class="va">chinook_customers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"https://ona-book.org/data/chinook_customers.csv"</span><span class="op">)</span>
-<span class="va">chinook_invoices</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"https://ona-book.org/data/chinook_invoices.csv"</span><span class="op">)</span>
-<span class="va">chinook_items</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"https://ona-book.org/data/chinook_items.csv"</span><span class="op">)</span></code></pre></div>
+<span class="va">chinook_employees</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span>
+  <span class="st">"https://ona-book.org/data/chinook_employees.csv"</span>
+<span class="op">)</span>
+<span class="va">chinook_customers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span>
+  <span class="st">"https://ona-book.org/data/chinook_customers.csv"</span>
+<span class="op">)</span>
+<span class="va">chinook_invoices</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span>
+  <span class="st">"https://ona-book.org/data/chinook_invoices.csv"</span>
+<span class="op">)</span>
+<span class="va">chinook_items</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span>
+  <span class="st">"https://ona-book.org/data/chinook_items.csv"</span>
+<span class="op">)</span></code></pre></div>
 <div id="creating-a-simple-graph-of-a-management-hierarchy" class="section level3" number="5.1.1">
 <h3>
 <span class="header-section-number">5.1.1</span> Creating a simple graph of a management hierarchy<a class="anchor" aria-label="anchor" href="#creating-a-simple-graph-of-a-management-hierarchy"><i class="fas fa-link"></i></a>
@@ -118,7 +126,8 @@
 
 <span class="co"># create edgelist</span>
 <span class="op">(</span><span class="va">orgchart_edgelist1</span> <span class="op">&lt;-</span> <span class="va">chinook_employees</span> |&gt; 
-  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">inner_join</a></span><span class="op">(</span><span class="va">chinook_employees</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"EmployeeId"</span> <span class="op">=</span> <span class="st">"ReportsTo"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">inner_join</a></span><span class="op">(</span><span class="va">chinook_employees</span>, 
+                    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"EmployeeId"</span> <span class="op">=</span> <span class="st">"ReportsTo"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>##   EmployeeId FirstName.x LastName.x ReportsTo EmployeeId.y FirstName.y LastName.y
 ## 1          1      Andrew      Adams        NA            2       Nancy    Edwards
 ## 2          1      Andrew      Adams        NA            6     Michael   Mitchell
@@ -148,9 +157,9 @@
 <span class="op">(</span><span class="va">orgchart</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>
   d <span class="op">=</span> <span class="va">orgchart_edgelist2</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH de808ce DN-- 8 7 -- 
+<pre><code>## IGRAPH 3273391 DN-- 8 7 -- 
 ## + attr: name (v/c)
-## + edges from de808ce (vertex names):
+## + edges from 3273391 (vertex names):
 ## [1] Andrew -&gt;Nancy    Andrew -&gt;Michael  Nancy  -&gt;Jane     Nancy  -&gt;Margaret Nancy  -&gt;Steve    Michael-&gt;Robert  
 ## [7] Michael-&gt;Laura</code></pre>
 <p>We now have a directed graph with named vertices, so this should be easy to plot. Let’s use <code>ggplot</code> with a dendrogram (tree) layout, as in Figure <a href="restructuring-data.html#fig:chinook-pretty">5.1</a>.</p>
@@ -188,7 +197,8 @@ Figure 5.1: Management hierarchy of Chinook as a tree (dendrogram)
 <div class="sourceCode" id="cb232"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># create customer to support rep edgelist</span>
 <span class="va">cust_reps</span> <span class="op">&lt;-</span> <span class="va">chinook_customers</span> |&gt; 
-  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">inner_join</a></span><span class="op">(</span><span class="va">chinook_employees</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"SupportRepId"</span> <span class="op">=</span> <span class="st">"EmployeeId"</span><span class="op">)</span><span class="op">)</span> |&gt; 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">inner_join</a></span><span class="op">(</span><span class="va">chinook_employees</span>, 
+                    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"SupportRepId"</span> <span class="op">=</span> <span class="st">"EmployeeId"</span><span class="op">)</span><span class="op">)</span> |&gt; 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
     CustomerName <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">FirstName.x</span>, <span class="va">LastName.x</span><span class="op">)</span>,
     RepName <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">FirstName.y</span>, <span class="va">LastName.y</span><span class="op">)</span>
@@ -358,7 +368,8 @@ Figure 5.4: Network connecting customers via items purchased
 <code class="sourceCode R"><span class="co"># join customers to customers via common items</span>
 <span class="va">cust_cust_itemjoin</span> <span class="op">&lt;-</span> <span class="va">cust_item</span> |&gt; 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">inner_join</a></span><span class="op">(</span><span class="va">cust_item</span>, by <span class="op">=</span> <span class="st">"TrackId"</span><span class="op">)</span> |&gt; 
-  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span>CustName1 <span class="op">=</span> <span class="va">CustName.x</span>, CustName2 <span class="op">=</span> <span class="va">CustName.y</span>, <span class="va">TrackId</span><span class="op">)</span> |&gt; 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span>CustName1 <span class="op">=</span> <span class="va">CustName.x</span>, 
+                CustName2 <span class="op">=</span> <span class="va">CustName.y</span>, <span class="va">TrackId</span><span class="op">)</span> |&gt; 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">CustName1</span> <span class="op">!=</span> <span class="va">CustName2</span><span class="op">)</span>
 
 <span class="co"># view head</span>
@@ -438,7 +449,8 @@ Figure 5.5: Chinook customer-to-customer network based on common item purchases
 <span class="va">edges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/E.html">E</a></span><span class="op">(</span><span class="va">custtocust_network</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/E.html">E</a></span><span class="op">(</span><span class="va">custtocust_network</span><span class="op">)</span><span class="op">$</span><span class="va">Items</span> <span class="op">&gt;=</span> <span class="fl">2</span><span class="op">]</span>
 
 <span class="co"># create subgraph using these edges</span>
-<span class="va">two_item_graph</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/subgraph.html">subgraph.edges</a></span><span class="op">(</span><span class="va">custtocust_network</span>, eids <span class="op">=</span> <span class="va">edges</span><span class="op">)</span>
+<span class="va">two_item_graph</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/subgraph.html">subgraph.edges</a></span><span class="op">(</span><span class="va">custtocust_network</span>, 
+                                         eids <span class="op">=</span> <span class="va">edges</span><span class="op">)</span>
 
 <span class="co"># visualise</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
@@ -462,9 +474,15 @@ Figure 5.6: Chinook customer-to-customer network based at least two common items
 <span id="cb258-2"><a href="restructuring-data.html#cb258-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb258-3"><a href="restructuring-data.html#cb258-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb258-4"><a href="restructuring-data.html#cb258-4" aria-hidden="true" tabindex="-1"></a><span class="co"># download chinook database tables</span></span>
-<span id="cb258-5"><a href="restructuring-data.html#cb258-5" aria-hidden="true" tabindex="-1"></a>chinook_customers <span class="op">=</span> pd.read_csv(<span class="st">"https://ona-book.org/data/chinook_customers.csv"</span>)</span>
-<span id="cb258-6"><a href="restructuring-data.html#cb258-6" aria-hidden="true" tabindex="-1"></a>chinook_invoices <span class="op">=</span> pd.read_csv(<span class="st">"https://ona-book.org/data/chinook_invoices.csv"</span>)</span>
-<span id="cb258-7"><a href="restructuring-data.html#cb258-7" aria-hidden="true" tabindex="-1"></a>chinook_items <span class="op">=</span> pd.read_csv(<span class="st">"https://ona-book.org/data/chinook_items.csv"</span>)</span></code></pre></div>
+<span id="cb258-5"><a href="restructuring-data.html#cb258-5" aria-hidden="true" tabindex="-1"></a>chinook_customers <span class="op">=</span> pd.read_csv(</span>
+<span id="cb258-6"><a href="restructuring-data.html#cb258-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"https://ona-book.org/data/chinook_customers.csv"</span></span>
+<span id="cb258-7"><a href="restructuring-data.html#cb258-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb258-8"><a href="restructuring-data.html#cb258-8" aria-hidden="true" tabindex="-1"></a>chinook_invoices <span class="op">=</span> pd.read_csv(</span>
+<span id="cb258-9"><a href="restructuring-data.html#cb258-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"https://ona-book.org/data/chinook_invoices.csv"</span></span>
+<span id="cb258-10"><a href="restructuring-data.html#cb258-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb258-11"><a href="restructuring-data.html#cb258-11" aria-hidden="true" tabindex="-1"></a>chinook_items <span class="op">=</span> pd.read_csv(</span>
+<span id="cb258-12"><a href="restructuring-data.html#cb258-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"https://ona-book.org/data/chinook_items.csv"</span></span>
+<span id="cb258-13"><a href="restructuring-data.html#cb258-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>Now we join the three tables together, create the <code>FullName</code> variable and ensure that we don’t have any duplicate relationships:</p>
 <div class="sourceCode" id="cb259"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb259-1"><a href="restructuring-data.html#cb259-1" aria-hidden="true" tabindex="-1"></a><span class="co"># join customers to invoices</span></span>
 <span id="cb259-2"><a href="restructuring-data.html#cb259-2" aria-hidden="true" tabindex="-1"></a>joined_tables <span class="op">=</span> pd.merge(</span>
@@ -480,8 +498,9 @@ Figure 5.6: Chinook customer-to-customer network based at least two common items
 <span id="cb259-12"><a href="restructuring-data.html#cb259-12" aria-hidden="true" tabindex="-1"></a>joined_tables[<span class="st">'LastName'</span>]</span>
 <span id="cb259-13"><a href="restructuring-data.html#cb259-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb259-14"><a href="restructuring-data.html#cb259-14" aria-hidden="true" tabindex="-1"></a><span class="co"># drop duplicates and view head</span></span>
-<span id="cb259-15"><a href="restructuring-data.html#cb259-15" aria-hidden="true" tabindex="-1"></a>cust_item_table <span class="op">=</span> joined_tables[[<span class="st">'FullName'</span>, <span class="st">'TrackId'</span>]].drop_duplicates()</span>
-<span id="cb259-16"><a href="restructuring-data.html#cb259-16" aria-hidden="true" tabindex="-1"></a>cust_item_table.head()</span></code></pre></div>
+<span id="cb259-15"><a href="restructuring-data.html#cb259-15" aria-hidden="true" tabindex="-1"></a>cust_item_table <span class="op">=</span> joined_tables[[<span class="st">'FullName'</span>, <span class="st">'TrackId'</span>]]<span class="op">\</span></span>
+<span id="cb259-16"><a href="restructuring-data.html#cb259-16" aria-hidden="true" tabindex="-1"></a>.drop_duplicates()</span>
+<span id="cb259-17"><a href="restructuring-data.html#cb259-17" aria-hidden="true" tabindex="-1"></a>cust_item_table.head()</span></code></pre></div>
 <pre><code>##          FullName  TrackId
 ## 0  Luís Gonçalves     3247
 ## 1  Luís Gonçalves     3248
@@ -652,13 +671,14 @@ Figure 5.10: Viewing the script of Season 1 Episode 1 of Friends with the Elemen
 <pre><code>## [1] 15</code></pre>
 <p>That worked nicely. Now, you might also have noticed that, for dialogue purposes, character names precede a colon at the beginning of a line. So that might be a nice way to extract the names of characters with speaking parts in a scene (although it might give us a few other things that have preceded colons in the script which we do not want, but we can deal with that later).</p>
 <p>So what we will do is use regular expression syntax (regex) to tell R that we are looking for anything at the beginning of a line preceding a colon. We will use a lookahead regex string as follows: <code>^[A-Za-z ]+(?=:)</code>.</p>
-<p>Let’s look at that string and make sure we know what it means. The <code>^[A-Za-z ]+</code> component means ‘find any sub-string of alphabetic text of any length including spaces at the beginning of a string.’ The part in parentheses <code>(?=:)</code> is known as a lookahead — it means look ahead of that sub-string of text and find situations where a colon is the next character. This is therefore instructing R to find any string of alphabetic text at the start of a line that precedes a colon and return it. If we use the R package <code>stringr</code> and its function <code><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract()</a></code> with this regex syntax, it will go through every entry of the <code>nodes</code> vector and transform it to just the first string of text found before a colon. If no such string is found it will return an <code>NA</code> value. This is great for us because we know that, for the purpose of dialogue, characters names are always at the start of nodes, so we certainly won’t miss any if we just take the first instance in each line. We should also, for safety, not mess with the scene breaks we have put into our vector.</p>
+<p>Let’s look at that string and make sure we know what it means. The <code>^[A-Za-z ]+</code> component means ‘find any sub-string of alphabetic text of any length including spaces at the beginning of a string.’ The part in parentheses <code>(?=:)</code> is known as a lookahead—it means look ahead of that sub-string of text and find situations where a colon is the next character. This is therefore instructing R to find any string of alphabetic text at the start of a line that precedes a colon and return it. If we use the R package <code>stringr</code> and its function <code><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract()</a></code> with this regex syntax, it will go through every entry of the <code>nodes</code> vector and transform it to just the first string of text found before a colon. If no such string is found it will return an <code>NA</code> value. This is great for us because we know that, for the purpose of dialogue, characters names are always at the start of nodes, so we certainly won’t miss any if we just take the first instance in each line. We should also, for safety, not mess with the scene breaks we have put into our vector.</p>
 <div class="sourceCode" id="cb274"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://stringr.tidyverse.org">stringr</a></span><span class="op">)</span>
 
 <span class="co"># outside of 'New Scene' tags extract anything before : in every line </span>
 <span class="va">nodes_char</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">nodes_newscene</span> <span class="op">!=</span> <span class="st">"New Scene"</span>, 
-                     <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">nodes_newscene</span>, <span class="st">"^[A-Za-z ]+(?=:)"</span><span class="op">)</span>, 
+                     <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract</a></span><span class="op">(</span><span class="va">nodes_newscene</span>, 
+                                          <span class="st">"^[A-Za-z ]+(?=:)"</span><span class="op">)</span>, 
                      <span class="va">nodes_newscene</span><span class="op">)</span>
 
 <span class="co"># check a sample</span>
@@ -684,7 +704,7 @@ Figure 5.10: Viewing the script of Season 1 Episode 1 of Friends with the Elemen
 ## [11] "Chandler"  "Chandler"  "New Scene" "Ross"      "Joey"      "Chandler"  "Joey"      "Chandler"  "Phoebe"    "Chandler"</code></pre>
 <p>Let’s assume our cleaning is done and we have a nice vector that contains either the names of characters that are speaking lines in the episode or “New Scene” to indicate that we are crossing a scene boundary. We now just need to convert this vector into a simple dataframe with two columns for scene and character. We already have our character lists, so we really just need to iterate through our nodes vector and, for each entry, count the number of previous occurrences of “New Scene” and add one.</p>
 <div class="sourceCode" id="cb278"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># number each scene by counting previous "New Scene" entries and adding 1</span>
+<code class="sourceCode R"><span class="co"># number scene by counting previous "New Scene" entries and adding 1</span>
 <span class="va">scene_count</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">nodes_char_clean2</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
@@ -857,8 +877,8 @@ Figure 5.11: Visualization of the network of characters in Episode 1 of Friends,
 <p>The object <code>friends_ep1</code> contains all the HTML code of the script web page. Now we need to look for the string <code>Scene:</code> and replace it with the string <code>&lt;b&gt;New Scene:&lt;/b&gt;</code>. It should be clear soon why we should put the replacement string in bold HTML tags.</p>
 <div class="sourceCode" id="cb292"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb292-1"><a href="restructuring-data.html#cb292-1" aria-hidden="true" tabindex="-1"></a>originalString <span class="op">=</span> <span class="st">"Scene:"</span></span>
 <span id="cb292-2"><a href="restructuring-data.html#cb292-2" aria-hidden="true" tabindex="-1"></a>replaceString <span class="op">=</span> <span class="st">"&lt;b&gt;New Scene:&lt;/b&gt;"</span></span>
-<span id="cb292-3"><a href="restructuring-data.html#cb292-3" aria-hidden="true" tabindex="-1"></a>friends_ep1_replace <span class="op">=</span> BeautifulSoup(<span class="bu">str</span>(friends_ep1).replace(originalString, </span>
-<span id="cb292-4"><a href="restructuring-data.html#cb292-4" aria-hidden="true" tabindex="-1"></a>replaceString))</span></code></pre></div>
+<span id="cb292-3"><a href="restructuring-data.html#cb292-3" aria-hidden="true" tabindex="-1"></a>friends_ep1_replace <span class="op">=</span> BeautifulSoup(<span class="bu">str</span>(friends_ep1)<span class="op">\</span></span>
+<span id="cb292-4"><a href="restructuring-data.html#cb292-4" aria-hidden="true" tabindex="-1"></a>.replace(originalString, replaceString))</span></code></pre></div>
 <p>Now we know from viewing the web page or inspecting the HTML code that the characters’ names who are speaking in scenes will be inside bold or strong HTML tags, so firstly lets get everything that is in bold or strong tags in the document, and then let’s match for any alphabetic string (including spaces) prior to a colon using regular expression syntax. This should include the <code>New Scene</code> tags that we created in the last step.</p>
 <div class="sourceCode" id="cb293"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb293-1"><a href="restructuring-data.html#cb293-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use re (regular expressions) package</span></span>
 <span id="cb293-2"><a href="restructuring-data.html#cb293-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
@@ -885,7 +905,7 @@ Figure 5.11: Visualization of the network of characters in Episode 1 of Friends,
 <p>Now we are ready to organize our characters by scene. First we do a scene count, then we create a dataframe and obtain unique character lists by scene.</p>
 <div class="sourceCode" id="cb297"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb297-1"><a href="restructuring-data.html#cb297-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb297-2"><a href="restructuring-data.html#cb297-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb297-3"><a href="restructuring-data.html#cb297-3" aria-hidden="true" tabindex="-1"></a><span class="co"># number each scene by counting previous "New Scene" entries and adding 1</span></span>
+<span id="cb297-3"><a href="restructuring-data.html#cb297-3" aria-hidden="true" tabindex="-1"></a><span class="co"># number scene by counting previous "New Scene" entries and adding 1</span></span>
 <span id="cb297-4"><a href="restructuring-data.html#cb297-4" aria-hidden="true" tabindex="-1"></a>scene_count <span class="op">=</span> []</span>
 <span id="cb297-5"><a href="restructuring-data.html#cb297-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb297-6"><a href="restructuring-data.html#cb297-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,<span class="bu">len</span>(friends_ep1_list2)):</span>
@@ -980,10 +1000,14 @@ Figure 5.11: Visualization of the network of characters in Episode 1 of Friends,
 <span id="cb304-7"><a href="restructuring-data.html#cb304-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb304-8"><a href="restructuring-data.html#cb304-8" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize with edge weight as edge width</span></span>
 <span id="cb304-9"><a href="restructuring-data.html#cb304-9" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">123</span>)</span>
-<span id="cb304-10"><a href="restructuring-data.html#cb304-10" aria-hidden="true" tabindex="-1"></a>weights <span class="op">=</span> <span class="bu">list</span>(nx.get_edge_attributes(friends_ep1_network, <span class="st">'weight'</span>).values())</span>
-<span id="cb304-11"><a href="restructuring-data.html#cb304-11" aria-hidden="true" tabindex="-1"></a>nx.draw_networkx(friends_ep1_network, node_color <span class="op">=</span> <span class="st">"lightblue"</span>, node_size <span class="op">=</span> <span class="dv">60</span>,</span>
-<span id="cb304-12"><a href="restructuring-data.html#cb304-12" aria-hidden="true" tabindex="-1"></a>edge_color <span class="op">=</span> <span class="st">"grey"</span>, with_labels <span class="op">=</span> <span class="va">True</span>, width <span class="op">=</span> np.array(weights))</span>
-<span id="cb304-13"><a href="restructuring-data.html#cb304-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<span id="cb304-10"><a href="restructuring-data.html#cb304-10" aria-hidden="true" tabindex="-1"></a>weights <span class="op">=</span> <span class="bu">list</span>(</span>
+<span id="cb304-11"><a href="restructuring-data.html#cb304-11" aria-hidden="true" tabindex="-1"></a>  nx.get_edge_attributes(friends_ep1_network, <span class="st">'weight'</span>).values()</span>
+<span id="cb304-12"><a href="restructuring-data.html#cb304-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb304-13"><a href="restructuring-data.html#cb304-13" aria-hidden="true" tabindex="-1"></a>nx.draw_networkx(</span>
+<span id="cb304-14"><a href="restructuring-data.html#cb304-14" aria-hidden="true" tabindex="-1"></a>  friends_ep1_network, node_color <span class="op">=</span> <span class="st">"lightblue"</span>, node_size <span class="op">=</span> <span class="dv">60</span>,</span>
+<span id="cb304-15"><a href="restructuring-data.html#cb304-15" aria-hidden="true" tabindex="-1"></a>  edge_color <span class="op">=</span> <span class="st">"grey"</span>, with_labels <span class="op">=</span> <span class="va">True</span>, width <span class="op">=</span> np.array(weights)</span>
+<span id="cb304-16"><a href="restructuring-data.html#cb304-16" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb304-17"><a href="restructuring-data.html#cb304-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
 <div class="figure" style="text-align: center">
 <span style="display:block;" id="fig:friends-graph-py"></span>
 <img src="www/restructuring-data/friends-graph-py-1.png" alt="Graph of Friends character network from Episode 1 with edge width indicating the number of shared scenes" width="90%"><p class="caption">

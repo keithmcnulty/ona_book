@@ -148,7 +148,7 @@ If we require that <span class="math inline">\(x\)</span> can only have positive
 <p>Because this is solving for a system of linear equations with coefficients that relate to the connectedness of neighbouring vertices, its solution is a measure of the relative influence of a vertex as a function of the influences of the vertices it is connected to. Vertices can have high influence through being connected to a lot of other vertices with low influence, or through being connected to a small number of highly influential vertices. Vertex 10 in <span class="math inline">\(G_{14}\)</span> has an eigenvector centrality of 0.12, and Vertex 2 has an eigenvector centrality of 0.23. This makes sense because Vertex 2 is connected to Vertex 4, which we already know has the highest degree centrality in the network. Intuitively, it shouldn’t be too hard to appreciate that Vertex 4 has the highest eigenvector centrality in <span class="math inline">\(G_{14}\)</span>.</p>
 <p>In directed graphs, eigenvector centrality gives rise to interesting measures of different types of influence. For example, imagine a citation network where certain authors are regularly citing a lot of influential articles. These authors are known as <em>hubs</em>, and their <em>outgoing</em> eigenvector centrality will be high. <em>Hub score</em> is the outgoing eigenvector centrality of a vertex. Meanwhile, authors who have high incoming eigenvector centrality will be frequently referenced by hubs, and these authors are known as <em>authorities</em>. <em>Authority score</em> is the <em>incoming</em> eigenvector centrality of a vertex. These types of measures are becoming increasingly adopted in fields such as bibliometrics. Note that in undirected graphs the hub score, authority score and eigenvector centrality of vertices are identical.</p>
 <div class="thinkahead">
-<p><strong>Playing around:</strong> We have not looked at the impact of edge weights on centrality in this chapter. This is because it is unusual to consider edge weights in centrality measures. Nonetheless, most centrality measures do have approaches to consider edge weights, and this is a topic of ongoing research. Usually in these situations, edge weights are transformed to be cost functions — for example by inverting them — so that edges with higher weights are considered ‘preferable’ in graph traversal. To see what I mean, go back and have a look at the <span class="math inline">\(G_{14W}\)</span> weighted graph from the previous chapter. Pick pairs of vertices and see what the shortest path between them would be using the sum of weights of edges, and what it would be using the sum of the inverse weights of edges.</p>
+<p><strong>Playing around:</strong> We have not looked at the impact of edge weights on centrality in this chapter. This is because it is unusual to consider edge weights in centrality measures. Nonetheless, most centrality measures do have approaches to consider edge weights, and this is a topic of ongoing research. Usually in these situations, edge weights are transformed to be cost functions—for example by inverting them—so that edges with higher weights are considered ‘preferable’ in graph traversal. To see what I mean, go back and have a look at the <span class="math inline">\(G_{14W}\)</span> weighted graph from the previous chapter. Pick pairs of vertices and see what the shortest path between them would be using the sum of weights of edges, and what it would be using the sum of the inverse weights of edges.</p>
 </div>
 </div>
 </div>
@@ -182,7 +182,7 @@ If we require that <span class="math inline">\(x\)</span> can only have positive
 <code class="sourceCode R"><span class="co"># 2nd order ego network of Vertex 4</span>
 <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/ego.html">ego</a></span><span class="op">(</span><span class="va">g14</span>, order <span class="op">=</span> <span class="fl">2</span>, nodes <span class="op">=</span> <span class="st">"4"</span><span class="op">)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 9/14 vertices, named, from 24cb015:
+## + 9/14 vertices, named, from 0d0709e:
 ## [1] 4 8 6 1 7 2 3 5 9</code></pre>
 <div class="sourceCode" id="cb393"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># size of ego network</span>
@@ -220,14 +220,17 @@ If we require that <span class="math inline">\(x\)</span> can only have positive
 <span id="cb401-2"><a href="vertex-importance.html#cb401-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb401-3"><a href="vertex-importance.html#cb401-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb401-4"><a href="vertex-importance.html#cb401-4" aria-hidden="true" tabindex="-1"></a><span class="co"># download edgelist and remove weights</span></span>
-<span id="cb401-5"><a href="vertex-importance.html#cb401-5" aria-hidden="true" tabindex="-1"></a>g14_edgelist <span class="op">=</span> pd.read_csv(<span class="st">"https://ona-book.org/data/g14_edgelist.csv"</span>)</span>
-<span id="cb401-6"><a href="vertex-importance.html#cb401-6" aria-hidden="true" tabindex="-1"></a>g14_undirected <span class="op">=</span> g14_edgelist.drop(<span class="st">'weight'</span>, axis <span class="op">=</span> <span class="dv">1</span>)</span>
-<span id="cb401-7"><a href="vertex-importance.html#cb401-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb401-8"><a href="vertex-importance.html#cb401-8" aria-hidden="true" tabindex="-1"></a><span class="co"># create undirected g14 graph</span></span>
-<span id="cb401-9"><a href="vertex-importance.html#cb401-9" aria-hidden="true" tabindex="-1"></a>g14 <span class="op">=</span> nx.from_pandas_edgelist(g14_undirected, source <span class="op">=</span> <span class="st">'from'</span>, target <span class="op">=</span> <span class="st">'to'</span>)</span>
-<span id="cb401-10"><a href="vertex-importance.html#cb401-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb401-11"><a href="vertex-importance.html#cb401-11" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate degree centrality of Vertices 4 and 9</span></span>
-<span id="cb401-12"><a href="vertex-importance.html#cb401-12" aria-hidden="true" tabindex="-1"></a>nx.degree(g14, [<span class="dv">4</span>, <span class="dv">9</span>])</span></code></pre></div>
+<span id="cb401-5"><a href="vertex-importance.html#cb401-5" aria-hidden="true" tabindex="-1"></a>g14_edgelist <span class="op">=</span> pd.read_csv(</span>
+<span id="cb401-6"><a href="vertex-importance.html#cb401-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"https://ona-book.org/data/g14_edgelist.csv"</span></span>
+<span id="cb401-7"><a href="vertex-importance.html#cb401-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb401-8"><a href="vertex-importance.html#cb401-8" aria-hidden="true" tabindex="-1"></a>g14_undirected <span class="op">=</span> g14_edgelist.drop(<span class="st">'weight'</span>, axis <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb401-9"><a href="vertex-importance.html#cb401-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb401-10"><a href="vertex-importance.html#cb401-10" aria-hidden="true" tabindex="-1"></a><span class="co"># create undirected g14 graph</span></span>
+<span id="cb401-11"><a href="vertex-importance.html#cb401-11" aria-hidden="true" tabindex="-1"></a>g14 <span class="op">=</span> nx.from_pandas_edgelist(g14_undirected, source <span class="op">=</span> <span class="st">'from'</span>, </span>
+<span id="cb401-12"><a href="vertex-importance.html#cb401-12" aria-hidden="true" tabindex="-1"></a>target <span class="op">=</span> <span class="st">'to'</span>)</span>
+<span id="cb401-13"><a href="vertex-importance.html#cb401-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb401-14"><a href="vertex-importance.html#cb401-14" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate degree centrality of Vertices 4 and 9</span></span>
+<span id="cb401-15"><a href="vertex-importance.html#cb401-15" aria-hidden="true" tabindex="-1"></a>nx.degree(g14, [<span class="dv">4</span>, <span class="dv">9</span>])</span></code></pre></div>
 <pre><code>## DegreeView({4: 7, 9: 4})</code></pre>
 <p>There are also methods called <code><a href="https://rdrr.io/pkg/igraph/man/degree.html">degree()</a></code> for a <code>Graph()</code> object as well as <code>in_degree()</code> and <code>out_degree()</code> for <code>DiGraph()</code> objects in <code>networkx</code>.</p>
 <div class="sourceCode" id="cb403"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb403-1"><a href="vertex-importance.html#cb403-1" aria-hidden="true" tabindex="-1"></a>g14.degree(<span class="dv">4</span>)</span></code></pre></div>
@@ -395,8 +398,11 @@ Figure 7.5: DMI subgraph with the top three superconnectors identified
 <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">$</span><span class="va">betweenness</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/betweenness.html">betweenness</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span>
 
 <span class="co"># label only if a top3 superconnector</span>
-<span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">$</span><span class="va">btwn_label</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">$</span><span class="va">name</span> <span class="op">%in%</span> <span class="va">top3_workfrance</span>,
-                              <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, <span class="st">""</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">$</span><span class="va">btwn_label</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">$</span><span class="va">name</span> <span class="op">%in%</span> <span class="va">top3_workfrance</span>,
+  <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, 
+  <span class="st">""</span>
+<span class="op">)</span>
 
 <span class="co"># visualize</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
@@ -487,7 +493,7 @@ Figure 7.7: French workplace graph with the top three most influential vertices 
 <li>Define closeness centrality and describe how it can be interpreted. Manually calculate the closeness centrality of Vertex 10 in <span class="math inline">\(G_{14}\)</span> (feel free to express your answer as a fraction).</li>
 <li>Define betweenness centrality and describe how it can be interpreted. Manually calculate the betweenness centrality of Vertex 4 in <span class="math inline">\(G_{14}\)</span>.</li>
 <li>Describe how you would interpret the eigenvector centrality of a vertex in an undirected graph <span class="math inline">\(G\)</span>.</li>
-<li>For each of the four main centrality measures — degree, closeness, betweenness and eigenvector — write down some potential benefits from knowing which individuals rank highest in a people network?</li>
+<li>For each of the four main centrality measures—degree, closeness, betweenness and eigenvector—write down some potential benefits from knowing which individuals rank highest in a people network?</li>
 <li>When visualizing graphs, name some ways to illustrate vertex centrality.</li>
 <li>Why might some centrality functions in R or Python not actually output the raw centrality measure? Give an example of this. Do you think it matters? What would you do to correct it if you need to?</li>
 <li>Describe some additional considerations in the calculation of vertex centrality in the case of directed graphs and in the case of weighted graphs.</li>

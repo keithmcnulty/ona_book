@@ -556,7 +556,7 @@ Figure 9.1: It’s our old friend <span class="math inline">\(G_{14}\)</span> ag
 ## [1,] 1.0000000 0.5714286
 ## [2,] 0.5714286 1.0000000</code></pre>
 <p>Finally, to calculate the inverse log weighted similarity coefficient, we sum the inverse of the logs of the degrees of the common neighbors of vertices 4 and 8, which is <span class="math inline">\(\frac{1}{\ln{7}} + \frac{1}{\ln{4}}\)</span>, which calculates to 1.235.</p>
-<p>The output of this <code>similarity()</code> function variant returns the similarity of the selected vertices with all vertices in the network — try it if you like. In order to extract the specific similarity for vertices 7 and 8, we should ensure to label the rows and columns of the matrix by vertex name before extracting a specific value from it.</p>
+<p>The output of this <code>similarity()</code> function variant returns the similarity of the selected vertices with all vertices in the network—try it if you like. In order to extract the specific similarity for vertices 7 and 8, we should ensure to label the rows and columns of the matrix by vertex name before extracting a specific value from it.</p>
 <div class="sourceCode" id="cb514"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb514-1"><a href="similarity.html#cb514-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get invlogweighted similarity</span></span>
 <span id="cb514-2"><a href="similarity.html#cb514-2" aria-hidden="true" tabindex="-1"></a>invsim <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">similarity</span>(g14, <span class="at">method =</span> <span class="st">&quot;invlogweighted&quot;</span>)</span>
 <span id="cb514-3"><a href="similarity.html#cb514-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -641,7 +641,7 @@ Figure 9.1: It’s our old friend <span class="math inline">\(G_{14}\)</span> ag
 <span id="cb519-38"><a href="similarity.html#cb519-38" aria-hidden="true" tabindex="-1"></a>values <span class="op">=</span> class_attr)</span></code></pre></div>
 <p>The following functions can be used to calculate categorical assortativity and degree assortativity respectively.</p>
 <div class="sourceCode" id="cb520"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb520-1"><a href="similarity.html#cb520-1" aria-hidden="true" tabindex="-1"></a>nx.attribute_assortativity_coefficient(schoolfriends_fb, <span class="st">&quot;class&quot;</span>)</span></code></pre></div>
-<pre><code>## 0.38336668753682634</code></pre>
+<pre><code>## 0.3833666875368265</code></pre>
 <div class="sourceCode" id="cb522"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb522-1"><a href="similarity.html#cb522-1" aria-hidden="true" tabindex="-1"></a>nx.attribute_assortativity_coefficient(schoolfriends_rp, <span class="st">&quot;class&quot;</span>)</span></code></pre></div>
 <pre><code>## 0.7188918572576617</code></pre>
 <div class="sourceCode" id="cb524"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb524-1"><a href="similarity.html#cb524-1" aria-hidden="true" tabindex="-1"></a>nx.degree_assortativity_coefficient(schoolfriends_fb)</span></code></pre></div>
