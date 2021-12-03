@@ -53,6 +53,7 @@
       <nav aria-label="Table of contents"><h2>Table of contents</h2>
         <ul class="book-toc list-unstyled">
 <li><a class="" href="index.html">Welcome</a></li>
+<li><a class="" href="foreword-by-professor-jeff-polzer.html">Foreword by Professor Jeff Polzer</a></li>
 <li><a class="" href="introduction.html">Introduction</a></li>
 <li><a class="" href="everywhere.html"><span class="header-section-number">1</span> Graphs Everywhere!</a></li>
 <li><a class="" href="r-intro.html"><span class="header-section-number">2</span> The Basics of the R Programming Language</a></li>
@@ -376,9 +377,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <p>We now have our <span class="math inline">\(G_\mathrm{work}\)</span> graph in memory. Before we go any further, let’s take a look at it.</p>
 <div class="sourceCode" id="cb122"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">gwork</span></code></pre></div>
-<pre><code>## IGRAPH 155e10e UN-- 4 5 -- 
+<pre><code>## IGRAPH 99ecc3e UN-- 4 5 -- 
 ## + attr: name (v/c)
-## + edges from 155e10e (vertex names):
+## + edges from 99ecc3e (vertex names):
 ## [1] David --Zubin  David --Suraya David --Jane   Zubin --Jane   Suraya--Jane</code></pre>
 <p>Let’s start with the string <code>UN--</code> on the first line of the output. This string describes the type of graph this is. The letter <code>U</code> denotes an undirected graph, and <code>N</code> denotes a graph with named vertices. The two other properties, which we will discover later, are currently not present and so are represented by the dashes <code>--</code>. Next we have the number of vertices (4) and edges (5), followed by two further dashes.</p>
 <p>On the next line the attributes of the graph are listed. In this case there is just one attribute <code>name</code>, which is a vertex attribute of character type—denoted by <code>(v/c)</code>. Finally the edges of the graph are given using the vertex names. Note that there is no direction to these edges, so they are denoted with <code>--</code>.</p>
@@ -392,9 +393,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <span class="va">gmanage_edgelist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">gmanage_edgelist</span><span class="op">)</span>
 <span class="op">(</span><span class="va">gmanage</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_edgelist.html">graph_from_edgelist</a></span><span class="op">(</span>el <span class="op">=</span> <span class="va">gmanage_edgelist</span>,
                                        directed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH d8706a3 DN-- 4 3 -- 
+<pre><code>## IGRAPH b2c2893 DN-- 4 3 -- 
 ## + attr: name (v/c)
-## + edges from d8706a3 (vertex names):
+## + edges from b2c2893 (vertex names):
 ## [1] Suraya-&gt;David David -&gt;Zubin David -&gt;Jane</code></pre>
 <p>We see a similar output to <code>gwork</code>, except we now have a directed graph, donated by <code>D</code> in the first line, and we see that the edges are now denoted with direction using <code><a href="https://rdrr.io/r/base/assignOps.html">-&gt;</a></code>.</p>
 </div>
@@ -414,9 +415,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
   adjmatrix <span class="op">=</span> <span class="va">adj_flights</span>,
   mode <span class="op">=</span> <span class="st">"directed"</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH 58e33ef DN-- 3 16 -- 
+<pre><code>## IGRAPH 0b29dea DN-- 3 16 -- 
 ## + attr: name (v/c)
-## + edges from 58e33ef (vertex names):
+## + edges from 0b29dea (vertex names):
 ##  [1] SFO-&gt;PHL SFO-&gt;PHL SFO-&gt;PHL SFO-&gt;PHL SFO-&gt;TUS SFO-&gt;TUS SFO-&gt;TUS SFO-&gt;TUS PHL-&gt;SFO PHL-&gt;SFO PHL-&gt;SFO PHL-&gt;SFO PHL-&gt;SFO
 ## [14] PHL-&gt;TUS TUS-&gt;SFO TUS-&gt;SFO</code></pre>
 <p>We see the expected directed multigraph with 3 vertices and 16 edges. If we wish to create the weighted graph in Figure <a href="working.html#fig:weightedflights">3.10</a>, we add <code>weighted = TRUE</code> to the arguments.</p>
@@ -427,18 +428,18 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
   mode <span class="op">=</span> <span class="st">"directed"</span>,
   weighted <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH 2dcb81c DNW- 3 5 -- 
+<pre><code>## IGRAPH 317f16c DNW- 3 5 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from 2dcb81c (vertex names):
+## + edges from 317f16c (vertex names):
 ## [1] SFO-&gt;PHL SFO-&gt;TUS PHL-&gt;SFO PHL-&gt;TUS TUS-&gt;SFO</code></pre>
 <p>We now see a graph with only 5 edges but we see the addition of <code>W</code> in our graph type, indicating a weighted graph. We also see a new edge property of numeric type called <code>weight</code>. In situations where we want to simplify multiple edges to single edges without worrying about weight, the <code><a href="https://rdrr.io/pkg/igraph/man/simplify.html">simplify()</a></code> function in <code>igraph</code> works well. By default, <code><a href="https://rdrr.io/pkg/igraph/man/simplify.html">simplify()</a></code> will collapse multiple edges to a single edge and remove any loop edges from vertices to themselves in order to create a simple graph<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;If you only want to do one of these—such as remove loops but not multiples—you can set this in the function arguments using &lt;code&gt;remove.multiples = FALSE&lt;/code&gt; or &lt;code&gt;remove.loops = FALSE&lt;/code&gt;.&lt;/p&gt;"><sup>18</sup></a>.</p>
 <div class="sourceCode" id="cb130"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">(</span><span class="va">flightgraph_simple</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/simplify.html">simplify</a></span><span class="op">(</span>
   <span class="va">flightgraph</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH 4ebdf51 DN-- 3 5 -- 
+<pre><code>## IGRAPH 78151e9 DN-- 3 5 -- 
 ## + attr: name (v/c)
-## + edges from 4ebdf51 (vertex names):
+## + edges from 78151e9 (vertex names):
 ## [1] SFO-&gt;PHL SFO-&gt;TUS PHL-&gt;SFO PHL-&gt;TUS TUS-&gt;SFO</code></pre>
 </div>
 <div id="creating-a-graph-from-a-dataframe" class="section level3" number="3.2.3">
@@ -467,9 +468,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
   directed <span class="op">=</span> <span class="cn">FALSE</span>,
   vertices <span class="op">=</span> <span class="va">vertex_df</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH 84d478d UN-- 7 6 -- 
+<pre><code>## IGRAPH a6ee92d UN-- 7 6 -- 
 ## + attr: name (v/c), Dept (v/c)
-## + edges from 84d478d (vertex names):
+## + edges from a6ee92d (vertex names):
 ## [1] David --Sandra David --Jake   Jane  --Mae-Li Jane  --Jake   Zubin --Sandra Suraya--Mae-Li</code></pre>
 <div class="thinkahead">
 <p><strong>Playing around:</strong> The functions in this section are not the only functions in the <code>igraph</code> package that build graphs from data, but they are by far the most commonly used ones. By typing <code>?graph_from</code> in your R console and looking at the functions that autocomplete, you can see some of the other functions that build graphs from data. Try playing around with them if you are curious.</p>
@@ -501,9 +502,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
   directed <span class="op">=</span> <span class="cn">TRUE</span>,
   vertices <span class="op">=</span> <span class="va">vertex_transfers</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH 6a38519 DN-- 3 4 -- 
+<pre><code>## IGRAPH 7370050 DN-- 3 4 -- 
 ## + attr: name (v/c), loc (v/c), cur (e/c), amt (e/n)
-## + edges from 6a38519 (vertex names):
+## + edges from 7370050 (vertex names):
 ## [1] A-&gt;A A-&gt;B B-&gt;A B-&gt;C</code></pre>
 <p>We see that the additional edge properties <code>cur</code> and <code>amt</code> and the vertex property <code>loc</code> have been included in the graph. The codes immediately following these properties represent the property type and the data type. We can see that <code>loc</code> is a vertex property of character type (<code>v/c</code>), <code>cur</code> is an edge property of character type (<code>e/c</code>) and <code>amt</code> is an edge property of numeric type (<code>e/n</code>).</p>
 <div class="thinkahead">
@@ -512,11 +513,11 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <p>You can view the vertex and edge sets of a graph using the <code><a href="https://rdrr.io/pkg/igraph/man/V.html">V()</a></code> and <code><a href="https://rdrr.io/pkg/igraph/man/E.html">E()</a></code> functions respectively.</p>
 <div class="sourceCode" id="cb136"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">gtransfers</span><span class="op">)</span></code></pre></div>
-<pre><code>## + 3/3 vertices, named, from 6a38519:
+<pre><code>## + 3/3 vertices, named, from 7370050:
 ## [1] A B C</code></pre>
 <div class="sourceCode" id="cb138"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/E.html">E</a></span><span class="op">(</span><span class="va">gtransfers</span><span class="op">)</span></code></pre></div>
-<pre><code>## + 4/4 edges from 6a38519 (vertex names):
+<pre><code>## + 4/4 edges from 7370050 (vertex names):
 ## [1] A-&gt;A A-&gt;B B-&gt;A B-&gt;C</code></pre>
 <p>To see specific properties or attributes within the vertices or edges, the <code><a href="https://rdrr.io/r/base/Extract.html">$</a></code> operator can be used.</p>
 <div class="sourceCode" id="cb140"><pre class="downlit sourceCode r">
@@ -545,9 +546,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 
 <span class="co"># view flightsgraph</span>
 <span class="va">flightsgraph</span></code></pre></div>
-<pre><code>## IGRAPH 6d34d5a DNW- 3 5 -- 
+<pre><code>## IGRAPH 867ceab DNW- 3 5 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from 6d34d5a (vertex names):
+## + edges from 867ceab (vertex names):
 ## [1] SFO-&gt;PHL SFO-&gt;TUS PHL-&gt;SFO PHL-&gt;TUS TUS-&gt;SFO</code></pre>
 <p>We see a weighted graph has been created by adding a <code>weight</code> property to the edges of an unweighted graph.</p>
 <p>A bipartite graph can be created by giving the vertices a <code>type</code> property according to the two disjoint sets of vertices. Let’s use our <span class="math inline">\(G_\mathrm{new}\)</span> bipartite graph again as an example, which we generated earlier as the <code>gnew</code> object. In our vertex set, we can define our <code>type</code> property to be the same as the department property <code>Dept</code>.</p>
@@ -555,9 +556,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">gnew</span><span class="op">)</span><span class="op">$</span><span class="va">type</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">gnew</span><span class="op">)</span><span class="op">$</span><span class="va">Dept</span>
 
 <span class="va">gnew</span></code></pre></div>
-<pre><code>## IGRAPH 84d478d UN-B 7 6 -- 
+<pre><code>## IGRAPH a6ee92d UN-B 7 6 -- 
 ## + attr: name (v/c), Dept (v/c), type (v/c)
-## + edges from 84d478d (vertex names):
+## + edges from a6ee92d (vertex names):
 ## [1] David --Sandra David --Jake   Jane  --Mae-Li Jane  --Jake   Zubin --Sandra Suraya--Mae-Li</code></pre>
 <p>We can see that our graph <code>gnew</code> now has the final of the four graph types: <code>B</code> meaning bipartite.</p>
 <div class="thinkahead">
