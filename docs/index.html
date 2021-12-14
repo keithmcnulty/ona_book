@@ -30,8 +30,83 @@
 
       gtag('config', 'G-400FPN6D44');
     </script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><link rel="stylesheet" href="css/style.css">
+    <link href="css/snow.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body data-spy="scroll" data-target="#toc">
+  <div id="flakes" class="flakes"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="snow-1024px"></i><i class="snow-1024px"></i><i class="snow-1024px"></i><i class="snow-1280px"></i><i class="snow-1280px"></i><i class="snow-1366px"></i><i class="snow-1366px"></i><i class="snow-1440px"></i><i class="snow-1600px"></i><i class="snow-1600px"></i><i class="snow-1800px"></i><i class="snow-1800px"></i><i class="snow-1920px"></i><i class="snow-1920px"></i><div></div></div>
+  
+  <script>
+
+(function () {
+  "use strict";
+
+  // Dynamically add snowflake HTML & CSS to the page upon page-load.
+
+  function letItSnow() {
+    var flakesDiv = document.createElement("div"),
+        link = document.createElement("link"),
+        html = "";
+
+    // Fetch snow CSS:
+    link.href = "snow.css";
+    link.rel = "stylesheet";
+    document.head.appendChild(link);
+
+    // Build HTML:
+    flakesDiv.id = "flakes";
+    flakesDiv.className = "flakes";
+
+    // 1 row at 768px
+    html += '<i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>';
+
+    // Common device widths
+    html += '<i class=snow-1024px></i><i class=snow-1024px></i><i class=snow-1024px></i>';
+    html += '<i class=snow-1280px></i><i class=snow-1280px></i>';
+    html += '<i class=snow-1366px></i><i class=snow-1366px></i>';
+    html += '<i class=snow-1440px></i>';
+    html += '<i class=snow-1600px></i><i class=snow-1600px></i>';
+    html += '<i class=snow-1800px></i><i class=snow-1800px></i>';
+    html += '<i class=snow-1920px></i><i class=snow-1920px></i>';
+    html += '<div></div>';
+
+    // Add HTML
+    flakesDiv.innerHTML = html;
+    document.body.insertBefore(flakesDiv, document.body.childNodes[0]);
+  }
+
+  // classList test to eliminate IE9 specifically
+  if (window.addEventListener && document.documentElement.classList) {
+    window.addEventListener("load", letItSnow, false);
+  }
+
+  // For Testing purposes only: disables the embedded CSS in this demo page
+  var n = document.getElementById("snowflakes");
+  n.parentNode.removeChild(n);
+
+}());
+  </script>
+  
+  <body data-spy="scroll" data-target="#toc">
+<div class="banner">
+  <div class="banner__content">
+    <div class="banner__text">
+      <center>
+      <strong>Happy holidays!</strong> Did you know that a snowflake is a naturally occurring graph?
+      <button class="banner__close" type="button">
+        <span class="material-icons">
+          close
+        </span>
+      </button>
+      </center>
+    </div>
+  </div>
+</div>
+<script>
+      document.querySelector(".banner__close").addEventListener("click", function() {
+        this.closest(".banner").style.display = "none";
+      });
+</script>
 
 <div class="container-fluid">
 <div class="row">
@@ -127,7 +202,7 @@ ona.karate().info()
 </h2>
 <p>This book uses the new native pipe operator <code>|&gt;</code> which was introduced in R version 4.1.0. Users using an older version of R, or who wish to use the alternative pipe operator <code><a href="https://rdrr.io/pkg/igraph/man/pipe.html">%&gt;%</a></code> can simply replace this in all code. However, an appropriate library containing <code><a href="https://rdrr.io/pkg/igraph/man/pipe.html">%&gt;%</a></code> will need to be loaded, such as <code>magrittr</code>, <code>dplyr</code> or <code>tidyverse</code>.</p>
 <p>Many thanks!</p>
-<p><em>Last updated: 13 December 2021</em></p>
+<p><em>Last updated: 14 December 2021</em></p>
 
 </div>
 </div>
