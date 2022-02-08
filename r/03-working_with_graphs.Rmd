@@ -1,4 +1,4 @@
-# Working With Graphs {#working}
+# Working with Graphs {#working}
 
 When we think of a graph, we usually think of a diagram of dots and lines.  Indeed, as we have seen in Chapter \@ref(everywhere) of this book, the very concept of a graph came into existence in the 1700s when a mathematician tried to solve a problem diagramatically.   It makes sense that we think about graphs in this way, because it is intuitive, easy to communicate and in many cases a diagram helps us better address the problem we are solving. However, a diagram is only one way of describing a graph, and it is not particularly scalable.  It is easy to draw a diagram for a graph of a few nodes and edges like in our *Bridges of K&ouml;nigsberg* problem, but what if our problem involved thousands of nodes and millions of edges?  Most interesting graphs which we will want to study will be more complex in nature and will contain many hundreds or thousands of nodes and many more edges, and diagrams of graphs of that size are not always useful in helping us solve problems.  
 
@@ -70,7 +70,7 @@ It doesn't really matter how you choose to notate the vertex and edge sets as lo
 :::
 
 
-The relationship that we are modeling using our edges in the graph $G_{\mathrm{work}}$ is reciprocal in nature.  If David has worked with Zubin, then we automatically conclude that Zubin has worked with David.  Therefore there is no need for `r if (knitr::is_latex_output()) '\\index{edge!direction}'`direction in the edges of $G_{\mathrm{work}}$.  We call such a graph an `r if (knitr::is_latex_output()) '\\index{graph!undirected}'`*undirected* graph. In an undirected graph, the order of the nodes in each pair in the edge set $E$ is not relevant.  For example, $\mathrm{David}\longleftrightarrow\mathrm{Zubin}$ is the same as $\mathrm{Zubin}\longleftrightarrow\mathrm{David}$.
+The relationship that we are modeling using our edges in the graph $G_{\mathrm{work}}$ is reciprocal in nature.  If David has worked with Zubin, then we automatically conclude that Zubin has worked with David.  Therefore, there is no need for `r if (knitr::is_latex_output()) '\\index{edge!direction}'`direction in the edges of $G_{\mathrm{work}}$.  We call such a graph an `r if (knitr::is_latex_output()) '\\index{graph!undirected}'`*undirected* graph. In an undirected graph, the order of the nodes in each pair in the edge set $E$ is not relevant.  For example, $\mathrm{David}\longleftrightarrow\mathrm{Zubin}$ is the same as $\mathrm{Zubin}\longleftrightarrow\mathrm{David}$.
 
 A graph where direction is important is called a `r if (knitr::is_latex_output()) '\\index{graph!directed}'`*directed* graph.  As an example, let's consider a graph $G_{\mathrm{manage}}$ with the same vertex set of four people but where an edge exists between two people if and only if the first person is the manager of the second person, as in Figure \@ref(fig:fourpeoplemanage).
 
@@ -216,9 +216,9 @@ $$
 E = \{\mathrm{David}\longrightarrow\mathrm{Zubin}, \mathrm{David}\longrightarrow\mathrm{David}\}
 $$
 
-An example of where pseudographs frequently occur might be in the analysis of financial transactions.  Let's imagine that we have a graph of three verticies representing different companies A, B and C, where an edge represent a bank transfer from one company to another on a certain day.  If a company holds multiple bank accounts, such a graph might look something like Figure \@ref(fig:banktransfer).  `r if (knitr::is_latex_output()) '\\index{edge!loop}'`An edge which connects a vertex to itself is usually called a *loop*. 
+An example of where pseudographs frequently occur might be in the analysis of financial transactions.  Let's imagine that we have a graph of three vertices representing different companies A, B and C, where an edge represents a bank transfer from one company to another on a certain day.  If a company holds multiple bank accounts, such a graph might look something like Figure \@ref(fig:banktransfer).  `r if (knitr::is_latex_output()) '\\index{edge!loop}'`An edge which connects a vertex to itself is usually called a *loop*. 
 
-```{r banktransfer, echo = FALSE, fig.cap = "Pseudograph representing bank transfers between three companies A, B and C with a loop on Vertex A"}
+```{r banktransfer, echo = FALSE, fig.cap = "Pseudograph representing bank transfers between three companies A, B and C with a loop on vertex A"}
 library(igraph)
 library(ggraph)
 
@@ -311,12 +311,12 @@ Extending the idea of bipartite graphs, `r if (knitr::is_latex_output()) '\\inde
 
 Usually, trees are graphs where the edges represent some sort of hierarchical or nested relationship.  Figure \@ref(fig:boybands) shows a tree graph of the author's favorite boy bands, where an edge indicates that the vertex below is a member of the vertex above.  It seems like five is the magic number for a great boy band.
 
-```{r boybands, echo = FALSE, fig.cap = "Membership of the exclusive class of the author's favourite boy bands can be represented as a tree graph"}
+```{r boybands, echo = FALSE, fig.cap = "Membership of the exclusive class of the author's favorite boy bands can be represented as a tree graph"}
 bands <- data.frame(
   from = c(rep("Best\nBoy Bands", 3), rep("Backstreet\nBoys", 5), 
            rep("Boyzone", 5), rep("Take\nThat", 5)),
   to = c("Backstreet\nBoys", "Boyzone", "Take\nThat", 
-         "Nick\nCarter", "Brian\nLitrell", "AJ\nMcLean", "Kevin\nRichardson", "Howie\nDorough",
+         "Nick\nCarter", "Brian\nLittrell", "AJ\nMcLean", "Kevin\nRichardson", "Howie\nDorough",
          "Ronan\nKeating", "Shane\nLynch", "Keith\nDuffy", "Mikey\nGraham", "Stephen\nGately",
          "Robbie\nWilliams", "Gary\nBarlow", "Mark\nOwen", "Jason\nOrange", "Howard\nDonald"
          )
@@ -342,7 +342,7 @@ As an example, let's return to our directed `r if (knitr::is_latex_output()) '\\
 
 Figure \@ref(fig:enhancedcompanytransfers) shows this enhanced graph with the vertex and edge properties added diagramatically.
 
-```{r enhancedcompanytransfers, echo = FALSE, fig.cap="Graph of bank transfers between companies A, B and C with additional information stored as vertex and edge properties"}
+```{r enhancedcompanytransfers, echo = FALSE, fig.cap="Graph of bank transfers between companies A, B and C with additional information stored as vertex and edge properties", fig.align='center', out.width='90%'}
 
 library(igraph)
 library(ggraph)
@@ -372,6 +372,7 @@ ggraph(companytransfersgraph, layout = 'kk') +
                  angle_calc = "along",
                  label_dodge = unit(7, 'mm')) +
   geom_node_text(aes(label = paste0(name, " \n(loc:", loc, ")")), size = 3) +
+  scale_x_continuous(expand = expansion(mult = 0.1)) +
   theme_void()
 
 
@@ -466,9 +467,11 @@ ggplot() +
 
 ### Representations of graphs {#rep-graphs}
 
-`r if (knitr::is_latex_output()) '\\index{graph!representations}'`So far in this chapter we have seen two common ways of representing a graph.  The first, and most well known way, is a diagram.  The second is an algebraic structure $G = (V, E)$ consisting (at a minimum) of a vertex set $V$ and an edge set $E$.  As we discussed at the beginning of this chapter, diagrams are useful for visualizing und understanding small graphs, but less useful for storing graph data and working with large graphs.  When working with graphs in the field of data science, the two most common sources of graph data will be `r if (knitr::is_latex_output()) '\\index{edgelist}'`edgelists and adjacency matrices.  
+`r if (knitr::is_latex_output()) '\\index{graph!representations}'`So far in this chapter we have seen two common ways of representing a graph.  The first, and most well-known, way is a diagram.  The second is an algebraic structure $G = (V, E)$ consisting (at a minimum) of a vertex set $V$ and an edge set $E$.  As we discussed at the beginning of this chapter, diagrams are useful for visualizing und understanding small graphs, but less useful for storing graph data and working with large graphs.  When working with graphs in the field of data science, the two most common sources of graph data will be `r if (knitr::is_latex_output()) '\\index{edgelist}'`edgelists and adjacency matrices.  
 
-An **edgelist** is the edge set $E$ in our graph $G = (V, E)$.  If we don't care about `r if (knitr::is_latex_output()) '\\index{isolate}'`*isolates*^[Isolates, also known as singletons, are vertices which are not connected to any other vertices.  Many real life graphs contain isolates which will often be removed in order to better focus on connected components.], then our vertex set $V$ can be derived directly from $E$.  This means that the edgelist is all that is needed to build a graph provided you are happy to ignore isolates.  It is common that an analyst is happy to ignore isolates because we are often only interested in the connections or relationships in the data.`r if (knitr::is_latex_output()) '\\index{singleton|see {isolate}}'`   Let's look at an example.
+`r if (knitr::is_latex_output()) '\\newpage'`
+
+An **edgelist** is the edge set $E$ in our graph $G = (V, E)$.  If we don't care about `r if (knitr::is_latex_output()) '\\index{isolate}'`*isolates*^[Isolates, also known as singletons, are vertices which are not connected to any other vertices.  Many real-life graphs contain isolates which will often be removed in order to better focus on connected components.], then our vertex set $V$ can be derived directly from $E$.  This means that the edgelist is all that is needed to build a graph provided you are happy to ignore isolates.  It is common that an analyst is happy to ignore isolates because we are often only interested in the connections or relationships in the data.`r if (knitr::is_latex_output()) '\\index{singleton|see {isolate}}'`   Let's look at an example.
 
 Recall our edge set $E$ in the graph $G_\mathrm{work} = (V, E)$ from Section \@ref(graph-def):
 
@@ -479,7 +482,7 @@ E = \{\mathrm{David}\longleftrightarrow\mathrm{Zubin}, \mathrm{David}\longleftri
 \end{gather*}
 ```
 
-Since by definition each edge in $E$ must be a pair of vertices from $V$, and since we are not concerned about isolates (in fact, we know they don't exist in this case), we can obtain the vertex set $V$ by simply listing the unique vertices from the pairs in $E$).  Therefore we can construct $V$ to be
+Since by definition each edge in $E$ must be a pair of vertices from $V$, and since we are not concerned about isolates (in fact, we know they don't exist in this case), we can obtain the vertex set $V$ by simply listing the unique vertices from the pairs in $E$.  Therefore, we can construct $V$ to be
 
 $$
 V = \{\mathrm{David}, \mathrm{Suraya}, \mathrm{Jane}, \mathrm{Zubin}\}
@@ -487,7 +490,7 @@ $$
 
 and we now have obtained everything we need for our graph from the edgelist.
 
-Edgelists typically take the form of two columns of data, usually labelled 'from' and 'to' or 'source' and 'target'.  Therefore our edgelist for $G_\mathrm{work}$ would look like Table \@ref(tab:workedgelist).
+Edgelists typically take the form of two columns of data, usually labelled 'from' and 'to' or 'source' and 'target'.  Therefore, our edgelist for $G_\mathrm{work}$ would look like Table \@ref(tab:workedgelist).
 
 
 ```{r workedgelist, echo = FALSE, out.width="60%"}
@@ -602,7 +605,7 @@ gwork
 
 Let's start with the string `UN--` on the first line of the output.  This string describes the type of graph this is.  The letter `U` denotes an undirected graph, and `N` denotes a graph with named vertices.  The two other properties, which we will discover later, are currently not present and so are represented by the dashes `--`.  Next we have the number of vertices (4) and edges (5), followed by two further dashes.
 
-On the next line the attributes of the graph are listed.  In this case there is just one attribute `name`, which is a vertex attribute of character type---denoted by `(v/c)`.  Finally the edges of the graph are given using the vertex names.  Note that there is no direction to these edges, so they are denoted with `--`.
+On the next line, the attributes of the graph are listed.  In this case there is just one attribute `name`, which is a vertex attribute of character type---denoted by `(v/c)`.  Finally the edges of the graph are given using the vertex names.  Note that there is no direction to these edges, so they are denoted with `--`.
 
 Let's try the same thing but this time with our directed graph $G_\mathrm{manage}$ from Section \@ref(graph-def).
 
@@ -663,7 +666,7 @@ We see the expected directed `r if (knitr::is_latex_output()) '\\index{graph!mul
   weighted = TRUE
 ))
 ```
-We now see a graph with only 5 edges but we see the addition of `W` in our graph type, indicating a weighted graph. We also see a new edge property of numeric type called `weight`.  In situations where we want to simplify multiple edges to single edges without worrying about weight, the `simplify()` function in `igraph` works well. By default, `simplify()` will collapse multiple edges to a single edge and remove  any loop edges from vertices to themselves in order to create a `r if (knitr::is_latex_output()) '\\index{graph!simple}'`simple graph^[If you only want to do one of these---such as remove loops but not multiples---you can set this in the function arguments using `remove.multiples = FALSE` or `remove.loops = FALSE`.].
+We now see a graph with only 5 edges, but we see the addition of `W` in our graph type, indicating a weighted graph. We also see a new edge property of numeric type called `weight`.  In situations where we want to simplify multiple edges to single edges without worrying about weight, the `simplify()` function in `igraph` works well. By default, `simplify()` will collapse multiple edges to a single edge and remove  any loop edges from vertices to themselves in order to create a `r if (knitr::is_latex_output()) '\\index{graph!simple}'`simple graph^[If you only want to do one of these---such as remove loops but not multiples---you can set this in the function arguments using `remove.multiples = FALSE` or `remove.loops = FALSE`.].
 
 ```{r}
 (flightgraph_simple <- igraph::simplify(
@@ -673,7 +676,7 @@ We now see a graph with only 5 edges but we see the addition of `W` in our graph
 
 ### Creating a graph from a dataframe
 
-As we noted in Section \@ref(rep-graphs), edgelists are usually sufficient to descibe a graph when isolates are not of concern.  The function `graph_from_edgelist()` works fine for this purpose, but is lacking in flexibility when graphs contain isolates or where vertices have properties that you would ideally like to load on creation.  The function `graph_from_data_frame()` allows you to create a more flexible graph directly from dataframes containing the required data.
+As we noted in Section \@ref(rep-graphs), edgelists are usually sufficient to descibe a graph when isolates are not of concern.  The function `graph_from_edgelist()` works fine for this purpose, but it is lacking in flexibility when graphs contain isolates or where vertices have properties that you would ideally like to load on creation.  The function `graph_from_data_frame()` allows you to create a more flexible graph directly from dataframes containing the required data.
 
 Let's create our `r if (knitr::is_latex_output()) '\\index{graph!bipartite}'`bipartite graph $G_\mathrm{new}$ from Figure \@ref(fig:newwork) using this function.  At a minimum, this function requires a dataframe of edges, and will also accept a dataframe of vertices if needed.
 
@@ -765,7 +768,7 @@ We see that the additional edge properties `cur` and `amt` and the vertex proper
 :::
 
 
-You can view the vertex and edge sets of a graph using the `V()` and `E()` functions respectively.
+You can view the vertex and edge sets of a graph using the `V()` and `E()` functions, respectively.
 
 ```{r}
 V(gtransfers)
@@ -865,7 +868,7 @@ list(gwork.nodes)
 list(gwork.edges)[0:3]
 ```
 
-A graph can also be constructed from an edgelist in a Pandas DataFrame.  By default the edgelist needs to have the columns `source` and `target`^[These columns can also be named differently and identified via the `source` and `target` arguments in the `from_pandas_edgelist()` function.].
+A graph can also be constructed from an edgelist in a Pandas DataFrame.  By default, the edgelist needs to have the columns `source` and `target`^[These columns can also be named differently and identified via the `source` and `target` arguments in the `from_pandas_edgelist()` function.].
 
 ```{python}
 gwork_edgelist=dict(
@@ -880,7 +883,7 @@ gwork_edgelist = pd.DataFrame(gwork_edgelist)
 gwork = nx.from_pandas_edgelist(gwork_edgelist)
 ```
 
-By default these functions uses a `Graph()` class to create an undirected graph.  Various methods exist to check the type of graph.  For example:
+By default these functions use a `Graph()` class to create an undirected graph.  Various methods exist to check the type of graph.  For example:
 
 ```{python}
 gwork.is_directed()
@@ -951,7 +954,7 @@ list(multiflights.edges)
 
 ### Adding vertex and edge properties to a graph
 
-`r if (knitr::is_latex_output()) '\\index{vertex!properties} \\index{edge!properties}'`The easiest way to add attributes to the vertices and edges is to use the `set_node_attributes()` and `set_edge_attributes()` functions respectively.  Vertex/node attributes must be passed as a dict with the nodes as keys.  Let's build our financial transactions graph as in Figure \@ref(fig:enhancedcompanytransfers).
+`r if (knitr::is_latex_output()) '\\index{vertex!properties} \\index{edge!properties}'`The easiest way to add attributes to the vertices and edges is to use the `set_node_attributes()` and `set_edge_attributes()` functions, respectively.  Vertex/node attributes must be passed as a dict with the nodes as keys.  Let's build our financial transactions graph as in Figure \@ref(fig:enhancedcompanytransfers).
 
 ```{python}
 # create dict of edgelist
@@ -1014,14 +1017,14 @@ While this may look tedious and manual, as we move into adding common properties
 ### Discussion questions
 
 1.  Describe the two sets that make up a graph.  
-2.  If a graph has no vertices then it has no edges.  Why is this statement true?  Is the converse of this statement true?
+2.  If a graph has no vertices, then it has no edges.  Why is this statement true?  Is the converse of this statement true?
 
 For each of the following real-world cases, what kind of graph would be the best choice: a pseudograph, multigraph, $k$-partite graph or tree?  Also state whether it should be directed or undirected.  
 
 3.  A graph of academic collaboration where vertices represent people and an edge represents a published paper with both vertices as authors. 
 4.  A graph where each vertex represents a soccer player and an edge exists if both vertices have played on the same team at the same time.
 5.  A graph where the vertices are geographical cities, countries and continents and an edge exists if one vertex is geographically located in another.
-6.  A graph where the vertices are a group of colleagues and where an edge exists between vertex A and B if at least one email message has been sent from colleague A to colleague B.
+6.  A graph where the vertices are a group of colleagues and where an edge exists between vertex $A$ and vertex $B$ if at least one email message has been sent from colleague $A$ to colleague $B$.
 7.  A graph where the vertices are world cities grouped by continent, and an edge exists between two cities if an intercontinental flight exists between those cities.  
 
 8.  What criteria must a graph satisfy to be called a tree?
@@ -1037,7 +1040,7 @@ Load the `r if (knitr::is_latex_output()) '\\index{data sets!koenigsberg@\\textt
 3.  Obtain a list of the names of the vertices in this graph.
 4.  Find a function or method in your graph package to create the adjacency matrix or adjacency list for this graph.  Check the output to see if it makes sense.
 
-Load the `r if (knitr::is_latex_output()) '\\index{data sets!koenigsberg@\\texttt{pizza}}'``pizza` data set from the `onadata` package or load it as a dataframe from the internet^[https://ona-book.org/data/pizza.csv].  This dataset represents requests made by Reddit users on a thread called *Random Acts of Pizza* or *ROAP*, and is part of a larger dataset used for research purposes^[@altruistic].  The `requester` column represents users who made requests for pizza and the `responder` column represents users who read the request and responded to the request by giving pizza^[This data set is only a small subset of the full data set, which included many requests which were not fulfilled.   As we all know, a free pizza is a rare thing!].  Other columns represent the request ID and data on the requester at the time the request was made.
+Load the `r if (knitr::is_latex_output()) '\\index{data sets!koenigsberg@\\texttt{pizza}}'``pizza` data set from the `onadata` package or load it as a dataframe from the internet^[https://ona-book.org/data/pizza.csv].  This data set represents requests made by Reddit users on a thread called *Random Acts of Pizza* or *ROAP*, and is part of a larger data set used for research purposes^[@altruistic].  The `requester` column represents users who made requests for pizza, and the `responder` column represents users who read the request and responded to the request by giving pizza^[This data set is only a small subset of the full data set, which included many requests which were not fulfilled.   As we all know, a free pizza is a rare thing!].  Other columns represent the request ID and data on the requester at the time the request was made.
 
 5. Use an appropriate method to create a graph object using the `requester` and `responder` columns in this data set.
 6. Use the information contained in the graph object to determine how many pizza requests were fulfilled.

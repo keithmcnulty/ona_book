@@ -1,10 +1,10 @@
-# The Basics of the R Programming Language {#r-intro}
+# The Basics of the R Programming Language {-} 
 
-Most of the work in this book is implemented in the R statistical programming language which, along with Python, is one of the two languages that I use in my day-to-day statistical analysis.  Sample implementations in Python are also provided at various points in the book.  For those who wish to follow the method and theory without the implementations in this book, there is no need to read this chapter.  However, the style of this book is to use implementation to illustrate theory and practice, and so tolerance of many code blocks will be necessary as you read onward.
+Most of the work in this book is implemented in the R statistical programming language which, along with Python, is one of the two languages that I use in my day-to-day statistical analysis.  Sample implementations in Python are also provided at various points in the book.  For those who wish to follow the method and theory without the implementations in this book, there is no need to read this preliminary section.  However, the style of this book is to use implementation to illustrate theory and practice, and so tolerance of many code blocks will be necessary as you read onward.
 
 For those who wish to simply replicate this work as quickly as possible, `r if (knitr::is_html_output()) {"they will be able to avail of the code block copying feature, which appears whenever you scroll over an input code block"} else {"full code is provided throughout this book by means of interspersed code blocks"}`.  Assuming all the required external packages have been installed, these code blocks should all be transportable and immediately usable.  In some parts of the book I have used graphics to illustrate a concept but I have hidden the underlying code as I did not consider it important to the learning objectives at that point.  Nevertheless there will be some who will want to see it, and if you are one of those the best place to go is the [Github repository](https://github.com/keithmcnulty/ona_book) for this book. 
 
-This chapter is for those who wish to learn the methods in this book but do not know how to use a programming language.  However, it is not intended to be a full tutorial on R.  There are many more qualified individuals and existing resources that would better serve that purpose---in particular I recommend @wickham.  It is recommended that you consult these resources and become comfortable with the basics of R before proceeding into the later chapters of this book.  However, acknowledging that many will want to dive in sooner rather than later, this chapter covers the absolute basics of R that will allow the uninitiated reader to proceed with at least some orientation.
+This preliminary section is for those who wish to learn the methods in this book but do not know how to use a programming language.  However, it is not intended to be a full tutorial on R.  There are many more qualified individuals and existing resources that would better serve that purpose---in particular I recommend @wickham.  It is recommended that you consult these resources and become comfortable with the basics of R before proceeding into the later chapters of this book.  However, acknowledging that many will want to dive in sooner rather than later, this section covers the absolute basics of R that will allow the uninitiated reader to proceed with at least some orientation.
 
 ## What is R?
 
@@ -219,7 +219,7 @@ The dataframe is the most common data structure used by analysts in R, due to it
 
 ### Loading and tidying data in dataframes
 
-`r if (knitr::is_latex_output()) '\\index{R!loading data}'`To work with data in R, you usually need to pull it in from an outside source into a dataframe^[R also has some built-in data sets for testing and playing with.  For example, later in this chapter we will use the built-in `airquality` data set to do some plotting.  You can see this data set simply by typing `airquality` into the terminal.  You can type `data()` to see a full list of built-in data sets.].  R facilitates numerous ways of importing data from simple `.csv` files, from Excel files, from online sources or from databases.  Let's load a data set that we will use later---the `chinook_employees` data set, which contains information on employees of a sales company.  The `read.csv()` function can accept a URL address of the file if it is online.
+`r if (knitr::is_latex_output()) '\\index{R!loading data}'`To work with data in R, you usually need to pull it in from an outside source into a dataframe^[R also has some built-in data sets for testing and playing with.  For example, later in this section we will use the built-in `airquality` data set to do some plotting.  You can see this data set simply by typing `airquality` into the terminal.  You can type `data()` to see a full list of built-in data sets.].  R facilitates numerous ways of importing data from simple `.csv` files, from Excel files, from online sources or from databases.  Let's load a data set that we will use later---the `chinook_employees` data set, which contains information on employees of a sales company.  The `read.csv()` function can accept a URL address of the file if it is online.
 
 ```{r}
 # url of data set 
@@ -452,7 +452,7 @@ The pipe operator is very widely used because it helps to make code more readabl
 
 ## Errors, warnings and messages
 
-As I mentioned earlier in this chapter, getting familiar with R can be frustrating at the beginning if you have never programmed before.  You can expect to regularly see messages, warnings or errors in response to your commands.  I encourage you to regard these as your friend rather than your enemy.  It is very tempting to take the latter approach when you are starting out, but over time I hope you will appreciate some wisdom from my words.
+As I mentioned earlier in this section, getting familiar with R can be frustrating at the beginning if you have never programmed before.  You can expect to regularly see messages, warnings or errors in response to your commands.  I encourage you to regard these as your friend rather than your enemy.  It is very tempting to take the latter approach when you are starting out, but over time I hope you will appreciate some wisdom from my words.
 
 `r if (knitr::is_latex_output()) '\\index{R!errors}'`*Errors* are serious problems which usually result in the halting of your code and a failure to return your requested output.  They usually come with an indication of the source of the error, and these can sometimes be easy to understand and sometimes frustratingly vague and abstract.  For example, an easy-to-understand error is:
 
@@ -628,7 +628,7 @@ Here is a nice picture about this sub-topic.
 ![](path/to/image)
 ```
 
-Code can be written and executed and the results displayed inline using backticks.  For example, recalling our `chinook_employees` dataset from earlier and writing 
+Code can be written and executed and the results displayed inline using backticks.  For example, recalling our `chinook_employees` data set from earlier and writing 
 
 ```{r, echo = FALSE}
 chinook_employees <- read.csv(url)
@@ -638,7 +638,7 @@ chinook_employees <- read.csv(url)
 `r`r ''` nrow(chinook_employees)`
 ````
 
-inline will display `r nrow(chinook_employees)` in the final document^[This assumes the dataset has been loaded afresh without removing any data from it].  Entire code blocks can be included and executed by using triple-backticks.  The following code block:
+inline will display `r nrow(chinook_employees)` in the final document^[This assumes the data set has been loaded afresh without removing any data from it].  Entire code blocks can be included and executed by using triple-backticks.  The following code block:
 
 ````
 ```{r}`r ''`
@@ -690,8 +690,8 @@ If you are not familiar with R Markdown, I strongly encourage you to learn it al
 8.  Install and load the package `dplyr`.  Look up the help for the `filter()` function in this package and try to use it to repeat the task in the previous question.
 9.  Write code to find the last name of the customer with the highest `CustomerId` where the `SupportRepId` is equal to 4.  Count the number of characters in this last name.
 10. Familiarize yourself with the two functions `filter()` and `pull()` from `dplyr`.  Use these functions to try to do the same calculation in the previous question using a single unbroken piped command.  Be sure to namespace where necessary.
-11.  Create a scatter plot using the built-in `mtcars` dataset with data from the column named `mpg` plotted on the $y$ axis and data from the column named `hp` plotted on the $x$ axis.
-12.  Using the same `mtcars` dataset, convert the data in the `cyl` column to a factor with three levels.  Plot a histogram of the count of observations at each of the three `cyl` levels.
+11.  Create a scatter plot using the built-in `mtcars` data set with data from the column named `mpg` plotted on the $y$ axis and data from the column named `hp` plotted on the $x$ axis.
+12.  Using the same `mtcars` data set, convert the data in the `cyl` column to a factor with three levels.  Plot a histogram of the count of observations at each of the three `cyl` levels.
 13.  Create a box plot of `mpg` grouped by `cyl`.
 14.  If you used base plotting functions to answer questions 11-13, try to answer them again using the `ggplot2` package.  Experiment with different themes and colors.
 15.  Knit all of your answers to these exercises into an R Markdown document.  Create one version that displays your code and answers, and another that just displays the answers.
