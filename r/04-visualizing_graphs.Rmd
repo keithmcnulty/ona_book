@@ -44,13 +44,24 @@ In this chapter we will work with a relatively famous graph known as `r if (knit
 `r if (knitr::is_latex_output()) '\\index{visualization!in R|(}'`
 Let's load the `r if (knitr::is_latex_output()) '\\index{data sets!karate@\\texttt{karate}}'``karate` graph edgelist in R from the `onadata` package or from the internet^[https://ona-book.org/data/karate.csv], and check the first few rows.
 
-```{r}
+```{r, eval = FALSE}
 # get karate edgelist data as dataframe
 karate_edgelist <- read.csv("https://ona-book.org/data/karate.csv")
 
 head(karate_edgelist)
 
 ```
+
+`r if (knitr::is_latex_output()) '\\newpage'`
+
+```{r, echo = FALSE}
+# get karate edgelist data as dataframe
+karate_edgelist <- read.csv("https://ona-book.org/data/karate.csv")
+
+head(karate_edgelist)
+
+```
+
 
 Now let's use our edgelist to create an undirected graph object in `igraph`.
 
@@ -232,7 +243,6 @@ fr <- layout_with_fr(karate)
 plot(karate, layout = fr)
 ```
 
-`r if (knitr::is_latex_output()) '\\newpage'`
 
 The `r if (knitr::is_latex_output()) '\\index{algorithm!Kamada-Kawai}'`Kamada-Kawai algorithm and the GEM algorithm are also commonly used force-directed algorithms and they produce similar types of community structures as in Figures \@ref(fig:kk-karate) and \@ref(fig:gem-karate), respectively.
 

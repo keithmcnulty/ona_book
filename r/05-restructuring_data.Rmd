@@ -121,7 +121,13 @@ ggraph(orgchart, layout = 'dendrogram') +
 
 Now let's try to build a graph based an a slightly more complex definition of connection.  We are going to connect Chinook's customers based on whether or not they share the same support rep.  First, let's take a look at the `customers` table.
 
-```{r}
+```{r, eval = FALSE}
+head(chinook_customers)
+```
+
+`r if (knitr::is_latex_output()) '\\newpage'`
+
+```{r, echo = FALSE}
 head(chinook_customers)
 ```
 
@@ -312,7 +318,19 @@ nrow(cust_cust_itemjoin)/nrow(cust_item_network)
 
 This looks good.  So we now can count up how many common items each pair of customers purchased.
 
-```{r}
+```{r, eval = FALSE}
+# count common items
+cust_item_network <- cust_item_network |> 
+  dplyr::count(Cust1, Cust2, name = "Items") 
+
+# view head
+head(cust_item_network)
+
+```
+
+`r if (knitr::is_latex_output()) '\\newpage'`
+
+```{r, echo = FALSE}
 # count common items
 cust_item_network <- cust_item_network |> 
   dplyr::count(Cust1, Cust2, name = "Items") 
@@ -520,8 +538,6 @@ plt.savefig("www/restructuring-data/custcustpy-1.png", bbox_inches = 'tight')
 # create networkx object
 knitr::include_graphics("www/restructuring-data/custcustpy-1.png")
 ```
-
-`r if (knitr::is_latex_output()) '\\newpage'`
 
 And if we wish to restrict connections to two or more common item purchases, we can create a subgraph based on the number of items, as in Figure \@ref(fig:twoitempy).  Some experimentation with the parameter `k` in `networkx`'s spring layout (which determines the optimal distance between vertices) is needed to appropriately visualize the two distinct connected components in this graph.
 

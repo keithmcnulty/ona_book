@@ -185,15 +185,13 @@ ggraph(schoolfriends_rp) +
 **Playing around:** Weakly connected components of a directed graph are easier to spot with the naked eye compared to strongly connected components.  Why?  Remind yourself of the definition of weakly connected components from earlier in this chapter.  Try to repeat this analysis to visualize all strongly connected components in the reported `schoolfriends` graph and see the difference.
 :::
 
-### Partioning and community detection in R
+### Partitioning and community detection in R
 
 `r if (knitr::is_latex_output()) '\\index{data sets!karate@\\texttt{karate}}'`For the next few examples, we will return to *Zachary's Karate Club* network from Chapter \@ref(viz-graphs).  Let's load up and visualize that undirected graph and mark the known leading actors Mr Hi and John A with larger vertices, as in Figure \@ref(fig:karate8).
 
 ```{r karate8, fig.align = "center", fig.cap = "Zachary's Karate Club graph with Mr Hi and John A indicated with larger vertices"}
-# get karate edgelist
+# get karate edgelist and create undirected graph
 karate_edges <- read.csv("https://ona-book.org/data/karate.csv")
-
-# create undirected graph
 karate <- igraph::graph_from_data_frame(karate_edges, directed = FALSE)
 
 # color John A and Mr Hi differently
