@@ -52,6 +52,10 @@
 
 <link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<meta name="citation_title" content="7 Components, Communities and Cliques | Handbook of Graphs and Networks in People Analytics: With Examples in R and Python"/>
+<meta name="citation_author" content="Keith McNulty"/>
+<meta name="citation_publication_date" content="2022"/>
+<meta name="citation_isbn" content="9781032204970"/>
 <script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
 <link href="libs/vis-4.20.1/vis.css" rel="stylesheet" />
 <script src="libs/vis-4.20.1/vis.min.js"></script>
@@ -369,7 +373,7 @@ div.csl-indent {
 <li class="chapter" data-level="7.2" data-path="community.html"><a href="community.html#finding-components-communities-and-cliques-using-r"><i class="fa fa-check"></i><b>7.2</b> Finding components, communities and cliques using R</a>
 <ul>
 <li class="chapter" data-level="7.2.1" data-path="community.html"><a href="community.html#finding-connected-components-of-disconnected-graphs"><i class="fa fa-check"></i><b>7.2.1</b> Finding connected components of disconnected graphs</a></li>
-<li class="chapter" data-level="7.2.2" data-path="community.html"><a href="community.html#partioning-and-community-detection-in-r"><i class="fa fa-check"></i><b>7.2.2</b> Partioning and community detection in R</a></li>
+<li class="chapter" data-level="7.2.2" data-path="community.html"><a href="community.html#partitioning-and-community-detection-in-r"><i class="fa fa-check"></i><b>7.2.2</b> Partitioning and community detection in R</a></li>
 <li class="chapter" data-level="7.2.3" data-path="community.html"><a href="community.html#finding-cliques-in-r"><i class="fa fa-check"></i><b>7.2.3</b> Finding cliques in R</a></li>
 </ul></li>
 <li class="chapter" data-level="7.3" data-path="community.html"><a href="community.html#finding-components-communities-and-cliques-using-python"><i class="fa fa-check"></i><b>7.3</b> Finding components, communities and cliques using Python</a>
@@ -515,31 +519,31 @@ Figure 7.3: Cuts are defined by edges that split the vertices of a graph into di
 <div id="finding-connected-components-of-disconnected-graphs" class="section level3" number="7.2.1">
 <h3><span class="header-section-number">7.2.1</span> Finding connected components of disconnected graphs</h3>
 <p>To illustrate the <code>components()</code> function in <code>igraph</code> we will load up the <code>schoolfriends</code> edgelist data set from an earlier chapter. We will use reported friendships, create a directed graph and visualize it as in Figure <a href="community.html#fig:viz-schoolfriends-rp">7.4</a>.</p>
-<div class="sourceCode" id="cb429"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb429-1"><a href="community.html#cb429-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(igraph)</span>
-<span id="cb429-2"><a href="community.html#cb429-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggraph)</span>
-<span id="cb429-3"><a href="community.html#cb429-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb429-4"><a href="community.html#cb429-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb429-5"><a href="community.html#cb429-5" aria-hidden="true" tabindex="-1"></a><span class="co"># get schoolfriends edgelist</span></span>
-<span id="cb429-6"><a href="community.html#cb429-6" aria-hidden="true" tabindex="-1"></a>schoolfriends_edgelist <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(</span>
-<span id="cb429-7"><a href="community.html#cb429-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;https://ona-book.org/data/schoolfriends_edgelist.csv&quot;</span></span>
-<span id="cb429-8"><a href="community.html#cb429-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb429-9"><a href="community.html#cb429-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb429-10"><a href="community.html#cb429-10" aria-hidden="true" tabindex="-1"></a><span class="co"># just use reported friendships</span></span>
-<span id="cb429-11"><a href="community.html#cb429-11" aria-hidden="true" tabindex="-1"></a>schoolfriends_reported <span class="ot">&lt;-</span> schoolfriends_edgelist <span class="sc">|</span><span class="er">&gt;</span> </span>
-<span id="cb429-12"><a href="community.html#cb429-12" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(type <span class="sc">==</span> <span class="st">&quot;reported&quot;</span>)</span>
-<span id="cb429-13"><a href="community.html#cb429-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb429-14"><a href="community.html#cb429-14" aria-hidden="true" tabindex="-1"></a><span class="co"># create directed graph</span></span>
-<span id="cb429-15"><a href="community.html#cb429-15" aria-hidden="true" tabindex="-1"></a>schoolfriends_rp <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(</span>
-<span id="cb429-16"><a href="community.html#cb429-16" aria-hidden="true" tabindex="-1"></a>  schoolfriends_reported</span>
-<span id="cb429-17"><a href="community.html#cb429-17" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb429-18"><a href="community.html#cb429-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb429-19"><a href="community.html#cb429-19" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize</span></span>
-<span id="cb429-20"><a href="community.html#cb429-20" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb429-21"><a href="community.html#cb429-21" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(schoolfriends_rp) <span class="sc">+</span> </span>
-<span id="cb429-22"><a href="community.html#cb429-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>,</span>
-<span id="cb429-23"><a href="community.html#cb429-23" aria-hidden="true" tabindex="-1"></a>                 <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="fl">0.2</span>, <span class="st">&quot;cm&quot;</span>))) <span class="sc">+</span></span>
-<span id="cb429-24"><a href="community.html#cb429-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
-<span id="cb429-25"><a href="community.html#cb429-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb430"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb430-1"><a href="community.html#cb430-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(igraph)</span>
+<span id="cb430-2"><a href="community.html#cb430-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggraph)</span>
+<span id="cb430-3"><a href="community.html#cb430-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb430-4"><a href="community.html#cb430-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb430-5"><a href="community.html#cb430-5" aria-hidden="true" tabindex="-1"></a><span class="co"># get schoolfriends edgelist</span></span>
+<span id="cb430-6"><a href="community.html#cb430-6" aria-hidden="true" tabindex="-1"></a>schoolfriends_edgelist <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(</span>
+<span id="cb430-7"><a href="community.html#cb430-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;https://ona-book.org/data/schoolfriends_edgelist.csv&quot;</span></span>
+<span id="cb430-8"><a href="community.html#cb430-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb430-9"><a href="community.html#cb430-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb430-10"><a href="community.html#cb430-10" aria-hidden="true" tabindex="-1"></a><span class="co"># just use reported friendships</span></span>
+<span id="cb430-11"><a href="community.html#cb430-11" aria-hidden="true" tabindex="-1"></a>schoolfriends_reported <span class="ot">&lt;-</span> schoolfriends_edgelist <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb430-12"><a href="community.html#cb430-12" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(type <span class="sc">==</span> <span class="st">&quot;reported&quot;</span>)</span>
+<span id="cb430-13"><a href="community.html#cb430-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb430-14"><a href="community.html#cb430-14" aria-hidden="true" tabindex="-1"></a><span class="co"># create directed graph</span></span>
+<span id="cb430-15"><a href="community.html#cb430-15" aria-hidden="true" tabindex="-1"></a>schoolfriends_rp <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(</span>
+<span id="cb430-16"><a href="community.html#cb430-16" aria-hidden="true" tabindex="-1"></a>  schoolfriends_reported</span>
+<span id="cb430-17"><a href="community.html#cb430-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb430-18"><a href="community.html#cb430-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb430-19"><a href="community.html#cb430-19" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize</span></span>
+<span id="cb430-20"><a href="community.html#cb430-20" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb430-21"><a href="community.html#cb430-21" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(schoolfriends_rp) <span class="sc">+</span> </span>
+<span id="cb430-22"><a href="community.html#cb430-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>,</span>
+<span id="cb430-23"><a href="community.html#cb430-23" aria-hidden="true" tabindex="-1"></a>                 <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="fl">0.2</span>, <span class="st">&quot;cm&quot;</span>))) <span class="sc">+</span></span>
+<span id="cb430-24"><a href="community.html#cb430-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb430-25"><a href="community.html#cb430-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:viz-schoolfriends-rp"></span>
 <img src="_main_files/figure-html/viz-schoolfriends-rp-1.png" alt="The directed graph of reported friendships from our French high school" width="90%" />
 <p class="caption">
@@ -553,27 +557,27 @@ Figure 7.4: The directed graph of reported friendships from our French high scho
 <li><code>no</code>, which is the number of connected components</li>
 </ul>
 <p>Let’s verify the latter two:</p>
-<div class="sourceCode" id="cb430"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb430-1"><a href="community.html#cb430-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get weakly connected components (mode ignored if undirected)</span></span>
-<span id="cb430-2"><a href="community.html#cb430-2" aria-hidden="true" tabindex="-1"></a>schoolfriends_components <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">components</span>(schoolfriends_rp, </span>
-<span id="cb430-3"><a href="community.html#cb430-3" aria-hidden="true" tabindex="-1"></a>                                               <span class="at">mode =</span> <span class="st">&quot;weak&quot;</span>)</span>
-<span id="cb430-4"><a href="community.html#cb430-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb430-5"><a href="community.html#cb430-5" aria-hidden="true" tabindex="-1"></a><span class="co"># how many components?</span></span>
-<span id="cb430-6"><a href="community.html#cb430-6" aria-hidden="true" tabindex="-1"></a>schoolfriends_components<span class="sc">$</span>no</span></code></pre></div>
+<div class="sourceCode" id="cb431"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb431-1"><a href="community.html#cb431-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get weakly connected components (mode ignored if undirected)</span></span>
+<span id="cb431-2"><a href="community.html#cb431-2" aria-hidden="true" tabindex="-1"></a>schoolfriends_components <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">components</span>(schoolfriends_rp, </span>
+<span id="cb431-3"><a href="community.html#cb431-3" aria-hidden="true" tabindex="-1"></a>                                               <span class="at">mode =</span> <span class="st">&quot;weak&quot;</span>)</span>
+<span id="cb431-4"><a href="community.html#cb431-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb431-5"><a href="community.html#cb431-5" aria-hidden="true" tabindex="-1"></a><span class="co"># how many components?</span></span>
+<span id="cb431-6"><a href="community.html#cb431-6" aria-hidden="true" tabindex="-1"></a>schoolfriends_components<span class="sc">$</span>no</span></code></pre></div>
 <pre><code>## [1] 3</code></pre>
-<div class="sourceCode" id="cb432"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb432-1"><a href="community.html#cb432-1" aria-hidden="true" tabindex="-1"></a><span class="co"># size of components</span></span>
-<span id="cb432-2"><a href="community.html#cb432-2" aria-hidden="true" tabindex="-1"></a>schoolfriends_components<span class="sc">$</span>csize</span></code></pre></div>
+<div class="sourceCode" id="cb433"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb433-1"><a href="community.html#cb433-1" aria-hidden="true" tabindex="-1"></a><span class="co"># size of components</span></span>
+<span id="cb433-2"><a href="community.html#cb433-2" aria-hidden="true" tabindex="-1"></a>schoolfriends_components<span class="sc">$</span>csize</span></code></pre></div>
 <pre><code>## [1] 128   3   3</code></pre>
 <p>We can use the membership to assign a <code>component</code> property and then visualize with the vertices colored by component, as in Figure <a href="community.html#fig:component-color">7.5</a>.</p>
-<div class="sourceCode" id="cb434"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb434-1"><a href="community.html#cb434-1" aria-hidden="true" tabindex="-1"></a><span class="co"># assign component property</span></span>
-<span id="cb434-2"><a href="community.html#cb434-2" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(schoolfriends_rp)<span class="sc">$</span>component <span class="ot">&lt;-</span> schoolfriends_components<span class="sc">$</span>membership</span>
-<span id="cb434-3"><a href="community.html#cb434-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb434-4"><a href="community.html#cb434-4" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize</span></span>
-<span id="cb434-5"><a href="community.html#cb434-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(schoolfriends_rp) <span class="sc">+</span> </span>
-<span id="cb434-6"><a href="community.html#cb434-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, </span>
-<span id="cb434-7"><a href="community.html#cb434-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="fl">0.2</span>, <span class="st">&quot;cm&quot;</span>))) <span class="sc">+</span></span>
-<span id="cb434-8"><a href="community.html#cb434-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="fu">aes</span>(<span class="at">color =</span> <span class="fu">as.factor</span>(component))) <span class="sc">+</span></span>
-<span id="cb434-9"><a href="community.html#cb434-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="st">&quot;Component&quot;</span>) <span class="sc">+</span></span>
-<span id="cb434-10"><a href="community.html#cb434-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb435"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb435-1"><a href="community.html#cb435-1" aria-hidden="true" tabindex="-1"></a><span class="co"># assign component property</span></span>
+<span id="cb435-2"><a href="community.html#cb435-2" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(schoolfriends_rp)<span class="sc">$</span>component <span class="ot">&lt;-</span> schoolfriends_components<span class="sc">$</span>membership</span>
+<span id="cb435-3"><a href="community.html#cb435-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb435-4"><a href="community.html#cb435-4" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize</span></span>
+<span id="cb435-5"><a href="community.html#cb435-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(schoolfriends_rp) <span class="sc">+</span> </span>
+<span id="cb435-6"><a href="community.html#cb435-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, </span>
+<span id="cb435-7"><a href="community.html#cb435-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="fl">0.2</span>, <span class="st">&quot;cm&quot;</span>))) <span class="sc">+</span></span>
+<span id="cb435-8"><a href="community.html#cb435-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="fu">aes</span>(<span class="at">color =</span> <span class="fu">as.factor</span>(component))) <span class="sc">+</span></span>
+<span id="cb435-9"><a href="community.html#cb435-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="st">&quot;Component&quot;</span>) <span class="sc">+</span></span>
+<span id="cb435-10"><a href="community.html#cb435-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:component-color"></span>
 <img src="_main_files/figure-html/component-color-1.png" alt="The reported `schoolfriends` graph color coded by its (weakly) connected components" width="90%" />
 <p class="caption">
@@ -584,27 +588,25 @@ Figure 7.5: The reported <code>schoolfriends</code> graph color coded by its (we
 <p><strong>Playing around:</strong> Weakly connected components of a directed graph are easier to spot with the naked eye compared to strongly connected components. Why? Remind yourself of the definition of weakly connected components from earlier in this chapter. Try to repeat this analysis to visualize all strongly connected components in the reported <code>schoolfriends</code> graph and see the difference.</p>
 </div>
 </div>
-<div id="partioning-and-community-detection-in-r" class="section level3" number="7.2.2">
-<h3><span class="header-section-number">7.2.2</span> Partioning and community detection in R</h3>
+<div id="partitioning-and-community-detection-in-r" class="section level3" number="7.2.2">
+<h3><span class="header-section-number">7.2.2</span> Partitioning and community detection in R</h3>
 <p>For the next few examples, we will return to <em>Zachary’s Karate Club</em> network from Chapter <a href="viz-graphs.html#viz-graphs">3</a>. Let’s load up and visualize that undirected graph and mark the known leading actors Mr Hi and John A with larger vertices, as in Figure <a href="community.html#fig:karate8">7.6</a>.</p>
-<div class="sourceCode" id="cb435"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb435-1"><a href="community.html#cb435-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get karate edgelist</span></span>
-<span id="cb435-2"><a href="community.html#cb435-2" aria-hidden="true" tabindex="-1"></a>karate_edges <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://ona-book.org/data/karate.csv&quot;</span>)</span>
-<span id="cb435-3"><a href="community.html#cb435-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb435-4"><a href="community.html#cb435-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create undirected graph</span></span>
-<span id="cb435-5"><a href="community.html#cb435-5" aria-hidden="true" tabindex="-1"></a>karate <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(karate_edges, <span class="at">directed =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb435-6"><a href="community.html#cb435-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb435-7"><a href="community.html#cb435-7" aria-hidden="true" tabindex="-1"></a><span class="co"># color John A and Mr Hi differently</span></span>
-<span id="cb435-8"><a href="community.html#cb435-8" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(karate)<span class="sc">$</span>leader <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(</span>
-<span id="cb435-9"><a href="community.html#cb435-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">V</span>(karate)<span class="sc">$</span>name <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Mr Hi&quot;</span>, <span class="st">&quot;John A&quot;</span>), <span class="dv">1</span>, <span class="dv">0</span></span>
-<span id="cb435-10"><a href="community.html#cb435-10" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb435-11"><a href="community.html#cb435-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb435-12"><a href="community.html#cb435-12" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize</span></span>
-<span id="cb435-13"><a href="community.html#cb435-13" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb435-14"><a href="community.html#cb435-14" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(karate, <span class="at">layout =</span> <span class="st">&quot;fr&quot;</span>) <span class="sc">+</span></span>
-<span id="cb435-15"><a href="community.html#cb435-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span>  <span class="st">&quot;grey&quot;</span>) <span class="sc">+</span></span>
-<span id="cb435-16"><a href="community.html#cb435-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">size =</span> <span class="fu">as.factor</span>(leader)), <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>,</span>
-<span id="cb435-17"><a href="community.html#cb435-17" aria-hidden="true" tabindex="-1"></a>                  <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb435-18"><a href="community.html#cb435-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb436"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb436-1"><a href="community.html#cb436-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get karate edgelist and create undirected graph</span></span>
+<span id="cb436-2"><a href="community.html#cb436-2" aria-hidden="true" tabindex="-1"></a>karate_edges <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://ona-book.org/data/karate.csv&quot;</span>)</span>
+<span id="cb436-3"><a href="community.html#cb436-3" aria-hidden="true" tabindex="-1"></a>karate <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(karate_edges, <span class="at">directed =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb436-4"><a href="community.html#cb436-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb436-5"><a href="community.html#cb436-5" aria-hidden="true" tabindex="-1"></a><span class="co"># color John A and Mr Hi differently</span></span>
+<span id="cb436-6"><a href="community.html#cb436-6" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(karate)<span class="sc">$</span>leader <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(</span>
+<span id="cb436-7"><a href="community.html#cb436-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">V</span>(karate)<span class="sc">$</span>name <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Mr Hi&quot;</span>, <span class="st">&quot;John A&quot;</span>), <span class="dv">1</span>, <span class="dv">0</span></span>
+<span id="cb436-8"><a href="community.html#cb436-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb436-9"><a href="community.html#cb436-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb436-10"><a href="community.html#cb436-10" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize</span></span>
+<span id="cb436-11"><a href="community.html#cb436-11" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb436-12"><a href="community.html#cb436-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(karate, <span class="at">layout =</span> <span class="st">&quot;fr&quot;</span>) <span class="sc">+</span></span>
+<span id="cb436-13"><a href="community.html#cb436-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span>  <span class="st">&quot;grey&quot;</span>) <span class="sc">+</span></span>
+<span id="cb436-14"><a href="community.html#cb436-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">size =</span> <span class="fu">as.factor</span>(leader)), <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>,</span>
+<span id="cb436-15"><a href="community.html#cb436-15" aria-hidden="true" tabindex="-1"></a>                  <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb436-16"><a href="community.html#cb436-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:karate8"></span>
 <img src="_main_files/figure-html/karate8-1.png" alt="Zachary's Karate Club graph with Mr Hi and John A indicated with larger vertices" width="90%" />
 <p class="caption">
@@ -612,43 +614,43 @@ Figure 7.6: Zachary’s Karate Club graph with Mr Hi and John A indicated with l
 </p>
 </div>
 <p>Minimum cuts in graphs can be found using the <code>min_cut()</code> function in <code>igraph</code>. This will return the number of edges in the minimum cut, unless you use the <code>value.only = FALSE</code> argument, in which case it will return more information on the cut,</p>
-<div class="sourceCode" id="cb436"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb436-1"><a href="community.html#cb436-1" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">min_cut</span>(karate, <span class="at">value.only =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb437"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb437-1"><a href="community.html#cb437-1" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">min_cut</span>(karate, <span class="at">value.only =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <pre><code>## $value
 ## [1] 1
 ## 
 ## $cut
-## + 1/78 edge from bc39ff9 (vertex names):
+## + 1/78 edge from 5ec1083 (vertex names):
 ## [1] Mr Hi--Actor 12
 ## 
 ## $partition1
-## + 1/34 vertex, named, from bc39ff9:
+## + 1/34 vertex, named, from 5ec1083:
 ## [1] Actor 12
 ## 
 ## $partition2
-## + 33/34 vertices, named, from bc39ff9:
+## + 33/34 vertices, named, from 5ec1083:
 ##  [1] Mr Hi    Actor 2  Actor 3  Actor 4  Actor 5  Actor 6  Actor 7  Actor 9  Actor 10 Actor 14 Actor 15 Actor 16 Actor 19
 ## [14] Actor 20 Actor 21 Actor 23 Actor 24 Actor 25 Actor 26 Actor 27 Actor 28 Actor 29 Actor 30 Actor 31 Actor 32 Actor 33
 ## [27] Actor 8  Actor 11 Actor 13 Actor 18 Actor 22 Actor 17 John A</code></pre>
 <p>We see that a minimum cut exists of size 1 between Mr Hi and Actor 12.</p>
 <p>The Louvain community detection algorithm can be run using the <code>cluster_louvain()</code> function. <code>weights</code> can be added as an argument, or will be used by default if the graph has a <code>weight</code> edge attribute (set <code>weight = NA</code> to avoid this). This will produce a list of community groups. The best way to record the resulting community membership is to assign it as a vertex property using the <code>membership()</code> function.</p>
-<div class="sourceCode" id="cb438"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb438-1"><a href="community.html#cb438-1" aria-hidden="true" tabindex="-1"></a><span class="co"># detect communities using Louvain</span></span>
-<span id="cb438-2"><a href="community.html#cb438-2" aria-hidden="true" tabindex="-1"></a>communities <span class="ot">&lt;-</span> <span class="fu">cluster_louvain</span>(karate)</span>
-<span id="cb438-3"><a href="community.html#cb438-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb438-4"><a href="community.html#cb438-4" aria-hidden="true" tabindex="-1"></a><span class="co"># assign as a vertex property</span></span>
-<span id="cb438-5"><a href="community.html#cb438-5" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(karate)<span class="sc">$</span>community <span class="ot">&lt;-</span> <span class="fu">membership</span>(communities)</span></code></pre></div>
+<div class="sourceCode" id="cb439"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb439-1"><a href="community.html#cb439-1" aria-hidden="true" tabindex="-1"></a><span class="co"># detect communities using Louvain</span></span>
+<span id="cb439-2"><a href="community.html#cb439-2" aria-hidden="true" tabindex="-1"></a>communities <span class="ot">&lt;-</span> <span class="fu">cluster_louvain</span>(karate)</span>
+<span id="cb439-3"><a href="community.html#cb439-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb439-4"><a href="community.html#cb439-4" aria-hidden="true" tabindex="-1"></a><span class="co"># assign as a vertex property</span></span>
+<span id="cb439-5"><a href="community.html#cb439-5" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(karate)<span class="sc">$</span>community <span class="ot">&lt;-</span> <span class="fu">membership</span>(communities)</span></code></pre></div>
 <p>Before visualizing the communities, we can see how many they are and their size<a href="#fn67" class="footnote-ref" id="fnref67"><sup>67</sup></a>:</p>
-<div class="sourceCode" id="cb439"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb439-1"><a href="community.html#cb439-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sizes</span>(communities)</span></code></pre></div>
+<div class="sourceCode" id="cb440"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb440-1"><a href="community.html#cb440-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sizes</span>(communities)</span></code></pre></div>
 <pre><code>## Community sizes
 ##  1  2  3  4 
 ##  6 12 11  5</code></pre>
 <p>We have four detected communities of varying sizes. As before, we can color code to visualize these, as in Figure <a href="community.html#fig:karate-communities">7.7</a>.</p>
-<div class="sourceCode" id="cb441"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb441-1"><a href="community.html#cb441-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb441-2"><a href="community.html#cb441-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(karate, <span class="at">layout =</span> <span class="st">&quot;fr&quot;</span>) <span class="sc">+</span></span>
-<span id="cb441-3"><a href="community.html#cb441-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span>  <span class="st">&quot;grey&quot;</span>) <span class="sc">+</span></span>
-<span id="cb441-4"><a href="community.html#cb441-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">size =</span> <span class="fu">as.factor</span>(leader), </span>
-<span id="cb441-5"><a href="community.html#cb441-5" aria-hidden="true" tabindex="-1"></a>                      <span class="at">color =</span> <span class="fu">as.factor</span>(community)),</span>
-<span id="cb441-6"><a href="community.html#cb441-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb441-7"><a href="community.html#cb441-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb442"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb442-1"><a href="community.html#cb442-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb442-2"><a href="community.html#cb442-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(karate, <span class="at">layout =</span> <span class="st">&quot;fr&quot;</span>) <span class="sc">+</span></span>
+<span id="cb442-3"><a href="community.html#cb442-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span>  <span class="st">&quot;grey&quot;</span>) <span class="sc">+</span></span>
+<span id="cb442-4"><a href="community.html#cb442-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">size =</span> <span class="fu">as.factor</span>(leader), </span>
+<span id="cb442-5"><a href="community.html#cb442-5" aria-hidden="true" tabindex="-1"></a>                      <span class="at">color =</span> <span class="fu">as.factor</span>(community)),</span>
+<span id="cb442-6"><a href="community.html#cb442-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb442-7"><a href="community.html#cb442-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:karate-communities"></span>
 <img src="_main_files/figure-html/karate-communities-1.png" alt="Communities of Zachary's Karate Club as detected by the Louvain algorithm" width="90%" />
 <p class="caption">
@@ -662,25 +664,25 @@ Figure 7.7: Communities of Zachary’s Karate Club as detected by the Louvain al
 <div id="finding-cliques-in-r" class="section level3" number="7.2.3">
 <h3><span class="header-section-number">7.2.3</span> Finding cliques in R</h3>
 <p>The <code>cliques()</code> and <code>max_cliques()</code> function in <code>igraph</code> identifies all cliques or maximal cliques, respectively, with a specified maximum or minimum size if desired. It is advisable to specify a size for cliques of interest because otherwise a long list might be returned, including many single node cliques.</p>
-<div class="sourceCode" id="cb442"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb442-1"><a href="community.html#cb442-1" aria-hidden="true" tabindex="-1"></a><span class="fu">max_cliques</span>(karate, <span class="at">min =</span> <span class="dv">5</span>, <span class="at">max =</span> <span class="dv">5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb443"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb443-1"><a href="community.html#cb443-1" aria-hidden="true" tabindex="-1"></a><span class="fu">max_cliques</span>(karate, <span class="at">min =</span> <span class="dv">5</span>, <span class="at">max =</span> <span class="dv">5</span>)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 5/34 vertices, named, from bc39ff9:
+## + 5/34 vertices, named, from 5ec1083:
 ## [1] Actor 2  Mr Hi    Actor 4  Actor 3  Actor 14
 ## 
 ## [[2]]
-## + 5/34 vertices, named, from bc39ff9:
+## + 5/34 vertices, named, from 5ec1083:
 ## [1] Actor 2 Mr Hi   Actor 4 Actor 3 Actor 8</code></pre>
 <p>The <code>largest_cliques()</code> function finds all largest cliques in a graph.</p>
-<div class="sourceCode" id="cb444"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb444-1"><a href="community.html#cb444-1" aria-hidden="true" tabindex="-1"></a><span class="fu">largest_cliques</span>(karate)</span></code></pre></div>
+<div class="sourceCode" id="cb445"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb445-1"><a href="community.html#cb445-1" aria-hidden="true" tabindex="-1"></a><span class="fu">largest_cliques</span>(karate)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 5/34 vertices, named, from bc39ff9:
+## + 5/34 vertices, named, from 5ec1083:
 ## [1] Actor 8 Mr Hi   Actor 2 Actor 3 Actor 4
 ## 
 ## [[2]]
-## + 5/34 vertices, named, from bc39ff9:
+## + 5/34 vertices, named, from 5ec1083:
 ## [1] Actor 4  Mr Hi    Actor 2  Actor 3  Actor 14</code></pre>
 <p>We see that the maximal cliques of size 5 that we identified are also the largest cliques in the <code>karate graph</code>, and they have 4 out of 5 vertices in common. The function <code>clique_num()</code> returns the size of the largest clique.</p>
-<div class="sourceCode" id="cb446"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb446-1"><a href="community.html#cb446-1" aria-hidden="true" tabindex="-1"></a><span class="fu">clique_num</span>(karate)</span></code></pre></div>
+<div class="sourceCode" id="cb447"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb447-1"><a href="community.html#cb447-1" aria-hidden="true" tabindex="-1"></a><span class="fu">clique_num</span>(karate)</span></code></pre></div>
 <pre><code>## [1] 5</code></pre>
 </div>
 </div>
@@ -690,99 +692,99 @@ Figure 7.7: Communities of Zachary’s Karate Club as detected by the Louvain al
 <h3><span class="header-section-number">7.3.1</span> Finding connected components using Python</h3>
 <p>For <em>undirected graphs</em>, the <code>networkx</code> function <code>number_connected_components()</code> returns the number of connected components in the graph, while the <code>connected_components()</code> function returns the vertices in each connected component.</p>
 <p>For <em>directed graphs</em>, similar functions identify weakly and strongly connected components. Let’s use the reported friendships from the <code>schoolfriends</code> data set as an example.</p>
-<div class="sourceCode" id="cb448"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb448-1"><a href="community.html#cb448-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb448-2"><a href="community.html#cb448-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
-<span id="cb448-3"><a href="community.html#cb448-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb448-4"><a href="community.html#cb448-4" aria-hidden="true" tabindex="-1"></a><span class="co"># get schoolfriends edgelist</span></span>
-<span id="cb448-5"><a href="community.html#cb448-5" aria-hidden="true" tabindex="-1"></a>schoolfriends_edges <span class="op">=</span> pd.read_csv(</span>
-<span id="cb448-6"><a href="community.html#cb448-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;https://ona-book.org/data/schoolfriends_edgelist.csv&quot;</span></span>
-<span id="cb448-7"><a href="community.html#cb448-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb448-8"><a href="community.html#cb448-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb448-9"><a href="community.html#cb448-9" aria-hidden="true" tabindex="-1"></a><span class="co"># use only reported friendships</span></span>
-<span id="cb448-10"><a href="community.html#cb448-10" aria-hidden="true" tabindex="-1"></a>schoolfriends_reported <span class="op">=</span> schoolfriends_edges[</span>
-<span id="cb448-11"><a href="community.html#cb448-11" aria-hidden="true" tabindex="-1"></a>  schoolfriends_edges.<span class="bu">type</span> <span class="op">==</span> <span class="st">&quot;reported&quot;</span></span>
-<span id="cb448-12"><a href="community.html#cb448-12" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb448-13"><a href="community.html#cb448-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb448-14"><a href="community.html#cb448-14" aria-hidden="true" tabindex="-1"></a><span class="co"># create directed graph</span></span>
-<span id="cb448-15"><a href="community.html#cb448-15" aria-hidden="true" tabindex="-1"></a>schoolfriends_rp <span class="op">=</span> nx.from_pandas_edgelist(</span>
-<span id="cb448-16"><a href="community.html#cb448-16" aria-hidden="true" tabindex="-1"></a>  schoolfriends_reported,</span>
-<span id="cb448-17"><a href="community.html#cb448-17" aria-hidden="true" tabindex="-1"></a>  source <span class="op">=</span> <span class="st">&quot;from&quot;</span>,</span>
-<span id="cb448-18"><a href="community.html#cb448-18" aria-hidden="true" tabindex="-1"></a>  target <span class="op">=</span> <span class="st">&quot;to&quot;</span>,</span>
-<span id="cb448-19"><a href="community.html#cb448-19" aria-hidden="true" tabindex="-1"></a>  create_using<span class="op">=</span>nx.DiGraph</span>
-<span id="cb448-20"><a href="community.html#cb448-20" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb448-21"><a href="community.html#cb448-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb448-22"><a href="community.html#cb448-22" aria-hidden="true" tabindex="-1"></a><span class="co"># number of weakly connected components</span></span>
-<span id="cb448-23"><a href="community.html#cb448-23" aria-hidden="true" tabindex="-1"></a>nx.number_weakly_connected_components(schoolfriends_rp)</span></code></pre></div>
+<div class="sourceCode" id="cb449"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb449-1"><a href="community.html#cb449-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb449-2"><a href="community.html#cb449-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
+<span id="cb449-3"><a href="community.html#cb449-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb449-4"><a href="community.html#cb449-4" aria-hidden="true" tabindex="-1"></a><span class="co"># get schoolfriends edgelist</span></span>
+<span id="cb449-5"><a href="community.html#cb449-5" aria-hidden="true" tabindex="-1"></a>schoolfriends_edges <span class="op">=</span> pd.read_csv(</span>
+<span id="cb449-6"><a href="community.html#cb449-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;https://ona-book.org/data/schoolfriends_edgelist.csv&quot;</span></span>
+<span id="cb449-7"><a href="community.html#cb449-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb449-8"><a href="community.html#cb449-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb449-9"><a href="community.html#cb449-9" aria-hidden="true" tabindex="-1"></a><span class="co"># use only reported friendships</span></span>
+<span id="cb449-10"><a href="community.html#cb449-10" aria-hidden="true" tabindex="-1"></a>schoolfriends_reported <span class="op">=</span> schoolfriends_edges[</span>
+<span id="cb449-11"><a href="community.html#cb449-11" aria-hidden="true" tabindex="-1"></a>  schoolfriends_edges.<span class="bu">type</span> <span class="op">==</span> <span class="st">&quot;reported&quot;</span></span>
+<span id="cb449-12"><a href="community.html#cb449-12" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb449-13"><a href="community.html#cb449-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb449-14"><a href="community.html#cb449-14" aria-hidden="true" tabindex="-1"></a><span class="co"># create directed graph</span></span>
+<span id="cb449-15"><a href="community.html#cb449-15" aria-hidden="true" tabindex="-1"></a>schoolfriends_rp <span class="op">=</span> nx.from_pandas_edgelist(</span>
+<span id="cb449-16"><a href="community.html#cb449-16" aria-hidden="true" tabindex="-1"></a>  schoolfriends_reported,</span>
+<span id="cb449-17"><a href="community.html#cb449-17" aria-hidden="true" tabindex="-1"></a>  source <span class="op">=</span> <span class="st">&quot;from&quot;</span>,</span>
+<span id="cb449-18"><a href="community.html#cb449-18" aria-hidden="true" tabindex="-1"></a>  target <span class="op">=</span> <span class="st">&quot;to&quot;</span>,</span>
+<span id="cb449-19"><a href="community.html#cb449-19" aria-hidden="true" tabindex="-1"></a>  create_using<span class="op">=</span>nx.DiGraph</span>
+<span id="cb449-20"><a href="community.html#cb449-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb449-21"><a href="community.html#cb449-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb449-22"><a href="community.html#cb449-22" aria-hidden="true" tabindex="-1"></a><span class="co"># number of weakly connected components</span></span>
+<span id="cb449-23"><a href="community.html#cb449-23" aria-hidden="true" tabindex="-1"></a>nx.number_weakly_connected_components(schoolfriends_rp)</span></code></pre></div>
 <pre><code>## 3</code></pre>
-<div class="sourceCode" id="cb450"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb450-1"><a href="community.html#cb450-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create component subgraphs </span></span>
-<span id="cb450-2"><a href="community.html#cb450-2" aria-hidden="true" tabindex="-1"></a>components <span class="op">=</span> nx.weakly_connected_components(schoolfriends_rp)</span>
-<span id="cb450-3"><a href="community.html#cb450-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb450-4"><a href="community.html#cb450-4" aria-hidden="true" tabindex="-1"></a>subgraphs <span class="op">=</span> [schoolfriends_rp.subgraph(component).copy() </span>
-<span id="cb450-5"><a href="community.html#cb450-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> component <span class="kw">in</span> components]</span>
-<span id="cb450-6"><a href="community.html#cb450-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb450-7"><a href="community.html#cb450-7" aria-hidden="true" tabindex="-1"></a><span class="co"># size of subgraphs</span></span>
-<span id="cb450-8"><a href="community.html#cb450-8" aria-hidden="true" tabindex="-1"></a>[<span class="bu">len</span>(subgraph.nodes) <span class="cf">for</span> subgraph <span class="kw">in</span> subgraphs]</span></code></pre></div>
+<div class="sourceCode" id="cb451"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb451-1"><a href="community.html#cb451-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create component subgraphs </span></span>
+<span id="cb451-2"><a href="community.html#cb451-2" aria-hidden="true" tabindex="-1"></a>components <span class="op">=</span> nx.weakly_connected_components(schoolfriends_rp)</span>
+<span id="cb451-3"><a href="community.html#cb451-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb451-4"><a href="community.html#cb451-4" aria-hidden="true" tabindex="-1"></a>subgraphs <span class="op">=</span> [schoolfriends_rp.subgraph(component).copy() </span>
+<span id="cb451-5"><a href="community.html#cb451-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> component <span class="kw">in</span> components]</span>
+<span id="cb451-6"><a href="community.html#cb451-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb451-7"><a href="community.html#cb451-7" aria-hidden="true" tabindex="-1"></a><span class="co"># size of subgraphs</span></span>
+<span id="cb451-8"><a href="community.html#cb451-8" aria-hidden="true" tabindex="-1"></a>[<span class="bu">len</span>(subgraph.nodes) <span class="cf">for</span> subgraph <span class="kw">in</span> subgraphs]</span></code></pre></div>
 <pre><code>## [128, 3, 3]</code></pre>
-<div class="sourceCode" id="cb452"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb452-1"><a href="community.html#cb452-1" aria-hidden="true" tabindex="-1"></a><span class="co"># view nodes in one of the smaller components</span></span>
-<span id="cb452-2"><a href="community.html#cb452-2" aria-hidden="true" tabindex="-1"></a>subgraphs[<span class="dv">2</span>].nodes</span></code></pre></div>
+<div class="sourceCode" id="cb453"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb453-1"><a href="community.html#cb453-1" aria-hidden="true" tabindex="-1"></a><span class="co"># view nodes in one of the smaller components</span></span>
+<span id="cb453-2"><a href="community.html#cb453-2" aria-hidden="true" tabindex="-1"></a>subgraphs[<span class="dv">2</span>].nodes</span></code></pre></div>
 <pre><code>## NodeView((366, 1485, 974))</code></pre>
 </div>
 <div id="partitioning-and-community-detection-using-python" class="section level3" number="7.3.2">
 <h3><span class="header-section-number">7.3.2</span> Partitioning and community detection using Python</h3>
 <p><code>networkx</code> has numerous algorithmic functions for exploring edge cuts on graphs, including to find the minimum edge cut. You can consult the reference documentation<a href="#fn68" class="footnote-ref" id="fnref68"><sup>68</sup></a> to learn about the various functions available. Let’s use the <code>karate</code> data set to demonstrate how to find a minimum cut.</p>
-<div class="sourceCode" id="cb454"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb454-1"><a href="community.html#cb454-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get karate edgelist</span></span>
-<span id="cb454-2"><a href="community.html#cb454-2" aria-hidden="true" tabindex="-1"></a>karate_edges <span class="op">=</span> pd.read_csv(<span class="st">&quot;https://ona-book.org/data/karate.csv&quot;</span>)</span>
-<span id="cb454-3"><a href="community.html#cb454-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb454-4"><a href="community.html#cb454-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create undirected network</span></span>
-<span id="cb454-5"><a href="community.html#cb454-5" aria-hidden="true" tabindex="-1"></a>karate <span class="op">=</span> nx.from_pandas_edgelist(karate_edges, source <span class="op">=</span> <span class="st">&quot;from&quot;</span>, </span>
-<span id="cb454-6"><a href="community.html#cb454-6" aria-hidden="true" tabindex="-1"></a>target <span class="op">=</span> <span class="st">&quot;to&quot;</span>)</span>
-<span id="cb454-7"><a href="community.html#cb454-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb454-8"><a href="community.html#cb454-8" aria-hidden="true" tabindex="-1"></a><span class="co"># find minimum cut</span></span>
-<span id="cb454-9"><a href="community.html#cb454-9" aria-hidden="true" tabindex="-1"></a>nx.minimum_edge_cut(karate)</span></code></pre></div>
+<div class="sourceCode" id="cb455"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb455-1"><a href="community.html#cb455-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get karate edgelist</span></span>
+<span id="cb455-2"><a href="community.html#cb455-2" aria-hidden="true" tabindex="-1"></a>karate_edges <span class="op">=</span> pd.read_csv(<span class="st">&quot;https://ona-book.org/data/karate.csv&quot;</span>)</span>
+<span id="cb455-3"><a href="community.html#cb455-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb455-4"><a href="community.html#cb455-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create undirected network</span></span>
+<span id="cb455-5"><a href="community.html#cb455-5" aria-hidden="true" tabindex="-1"></a>karate <span class="op">=</span> nx.from_pandas_edgelist(karate_edges, source <span class="op">=</span> <span class="st">&quot;from&quot;</span>, </span>
+<span id="cb455-6"><a href="community.html#cb455-6" aria-hidden="true" tabindex="-1"></a>target <span class="op">=</span> <span class="st">&quot;to&quot;</span>)</span>
+<span id="cb455-7"><a href="community.html#cb455-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb455-8"><a href="community.html#cb455-8" aria-hidden="true" tabindex="-1"></a><span class="co"># find minimum cut</span></span>
+<span id="cb455-9"><a href="community.html#cb455-9" aria-hidden="true" tabindex="-1"></a>nx.minimum_edge_cut(karate)</span></code></pre></div>
 <pre><code>## {(&#39;Actor 12&#39;, &#39;Mr Hi&#39;)}</code></pre>
-<div class="sourceCode" id="cb456"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb456-1"><a href="community.html#cb456-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get minimum edge cut size</span></span>
-<span id="cb456-2"><a href="community.html#cb456-2" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(nx.minimum_edge_cut(karate))</span></code></pre></div>
+<div class="sourceCode" id="cb457"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb457-1"><a href="community.html#cb457-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get minimum edge cut size</span></span>
+<span id="cb457-2"><a href="community.html#cb457-2" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(nx.minimum_edge_cut(karate))</span></code></pre></div>
 <pre><code>## 1</code></pre>
 <p>Various built-in community detection algorithms are available in the <code>networkx.community</code> module, such as the Girvan-Newman edge betweenness algorithm. This generates communities by progressively removing edges with the highest edge betweenness centrality. It returns an iterator object where the first element is the result of the first edge removal, and subsequent elements are the result of progressive edge removal.</p>
-<div class="sourceCode" id="cb458"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb458-1"><a href="community.html#cb458-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get communities based on girvan-newman and sort by no of communities</span></span>
-<span id="cb458-2"><a href="community.html#cb458-2" aria-hidden="true" tabindex="-1"></a>communities <span class="op">=</span> <span class="bu">sorted</span>(</span>
-<span id="cb458-3"><a href="community.html#cb458-3" aria-hidden="true" tabindex="-1"></a>  nx.community.girvan_newman(karate), </span>
-<span id="cb458-4"><a href="community.html#cb458-4" aria-hidden="true" tabindex="-1"></a>  key <span class="op">=</span> <span class="bu">len</span></span>
-<span id="cb458-5"><a href="community.html#cb458-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb458-6"><a href="community.html#cb458-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb458-7"><a href="community.html#cb458-7" aria-hidden="true" tabindex="-1"></a><span class="co"># view communities from first edge removal</span></span>
-<span id="cb458-8"><a href="community.html#cb458-8" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(communities[<span class="dv">0</span>]).transpose()</span></code></pre></div>
+<div class="sourceCode" id="cb459"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb459-1"><a href="community.html#cb459-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get communities based on girvan-newman and sort by no of communities</span></span>
+<span id="cb459-2"><a href="community.html#cb459-2" aria-hidden="true" tabindex="-1"></a>communities <span class="op">=</span> <span class="bu">sorted</span>(</span>
+<span id="cb459-3"><a href="community.html#cb459-3" aria-hidden="true" tabindex="-1"></a>  nx.community.girvan_newman(karate), </span>
+<span id="cb459-4"><a href="community.html#cb459-4" aria-hidden="true" tabindex="-1"></a>  key <span class="op">=</span> <span class="bu">len</span></span>
+<span id="cb459-5"><a href="community.html#cb459-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb459-6"><a href="community.html#cb459-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb459-7"><a href="community.html#cb459-7" aria-hidden="true" tabindex="-1"></a><span class="co"># view communities from first edge removal</span></span>
+<span id="cb459-8"><a href="community.html#cb459-8" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(communities[<span class="dv">0</span>]).transpose()</span></code></pre></div>
 <pre><code>##            0         1
-## 0   Actor 11   Actor 3
-## 1    Actor 7  Actor 32
-## 2    Actor 4  Actor 30
-## 3   Actor 17  Actor 23
-## 4    Actor 8  Actor 16
-## 5   Actor 18  Actor 31
-## 6    Actor 6  Actor 25
-## 7    Actor 5  Actor 10
-## 8   Actor 20  Actor 21
-## 9   Actor 22  Actor 27
-## 10   Actor 2   Actor 9
-## 11  Actor 13  Actor 15
-## 12  Actor 14    John A
-## 13     Mr Hi  Actor 24
-## 14  Actor 12  Actor 26
-## 15      None  Actor 33
-## 16      None  Actor 19
-## 17      None  Actor 28
-## 18      None  Actor 29</code></pre>
+## 0    Actor 8  Actor 26
+## 1      Mr Hi  Actor 21
+## 2    Actor 6    John A
+## 3   Actor 18  Actor 32
+## 4   Actor 22  Actor 25
+## 5   Actor 20  Actor 30
+## 6   Actor 17  Actor 31
+## 7   Actor 12   Actor 9
+## 8   Actor 13  Actor 19
+## 9    Actor 5  Actor 28
+## 10   Actor 2  Actor 16
+## 11   Actor 7  Actor 23
+## 12   Actor 4  Actor 33
+## 13  Actor 14  Actor 15
+## 14  Actor 11  Actor 24
+## 15      None  Actor 27
+## 16      None  Actor 29
+## 17      None   Actor 3
+## 18      None  Actor 10</code></pre>
 <p>We see that the first split leads to two communities, one around John A and the other around Mr Hi.</p>
 <p>The <code>cdlib</code> package in Python contains a very wide range of community detection algorithms that work with the <code>networkx</code> package, including the Louvain and Leiden algorithms as well as many others. In this example, we create a Louvain partition of the <code>karate</code> graph using <code>cdlib</code>.</p>
-<div class="sourceCode" id="cb460"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb460-1"><a href="community.html#cb460-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> cdlib <span class="im">import</span> algorithms</span>
-<span id="cb460-2"><a href="community.html#cb460-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb460-3"><a href="community.html#cb460-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.cm <span class="im">as</span> cm</span>
-<span id="cb460-4"><a href="community.html#cb460-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt </span>
-<span id="cb460-5"><a href="community.html#cb460-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb460-6"><a href="community.html#cb460-6" aria-hidden="true" tabindex="-1"></a><span class="co"># get louvain partition which optimizes modularity</span></span>
-<span id="cb460-7"><a href="community.html#cb460-7" aria-hidden="true" tabindex="-1"></a>louvain_comms <span class="op">=</span> algorithms.louvain(karate)</span></code></pre></div>
+<div class="sourceCode" id="cb461"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb461-1"><a href="community.html#cb461-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> cdlib <span class="im">import</span> algorithms</span>
+<span id="cb461-2"><a href="community.html#cb461-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb461-3"><a href="community.html#cb461-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.cm <span class="im">as</span> cm</span>
+<span id="cb461-4"><a href="community.html#cb461-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt </span>
+<span id="cb461-5"><a href="community.html#cb461-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb461-6"><a href="community.html#cb461-6" aria-hidden="true" tabindex="-1"></a><span class="co"># get louvain partition which optimizes modularity</span></span>
+<span id="cb461-7"><a href="community.html#cb461-7" aria-hidden="true" tabindex="-1"></a>louvain_comms <span class="op">=</span> algorithms.louvain(karate)</span></code></pre></div>
 <p><code>louvain_comms</code> is a clustering object that has a lot of useful properties and methods. To see the communities, use the following:</p>
-<div class="sourceCode" id="cb461"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb461-1"><a href="community.html#cb461-1" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(louvain_comms.communities).transpose()</span></code></pre></div>
+<div class="sourceCode" id="cb462"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb462-1"><a href="community.html#cb462-1" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(louvain_comms.communities).transpose()</span></code></pre></div>
 <pre><code>##            0         1         2         3
 ## 0      Mr Hi   Actor 9  Actor 32   Actor 5
 ## 1    Actor 2  Actor 31  Actor 28   Actor 6
@@ -797,31 +799,31 @@ Figure 7.7: Communities of Zachary’s Karate Club as detected by the Louvain al
 ## 10  Actor 22  Actor 27      None      None
 ## 11  Actor 10      None      None      None</code></pre>
 <p>We see four communities. The modularity of the resulting community structure can be calculated using the <code>newman_girvan_modularity()</code> method.</p>
-<div class="sourceCode" id="cb463"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb463-1"><a href="community.html#cb463-1" aria-hidden="true" tabindex="-1"></a>louvain_comms.newman_girvan_modularity()</span></code></pre></div>
+<div class="sourceCode" id="cb464"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb464-1"><a href="community.html#cb464-1" aria-hidden="true" tabindex="-1"></a>louvain_comms.newman_girvan_modularity()</span></code></pre></div>
 <pre><code>## FitnessResult(min=None, max=None, score=0.4188034188034188, std=None)</code></pre>
 <p>To visualize the network community structure, we can create a color mapping against the communities, as in Figure <a href="community.html#fig:karate-py-conn">7.8</a>.</p>
-<div class="sourceCode" id="cb465"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb465-1"><a href="community.html#cb465-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb465-2"><a href="community.html#cb465-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> cm</span>
-<span id="cb465-3"><a href="community.html#cb465-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.colors <span class="im">import</span> ListedColormap, LinearSegmentedColormap</span>
-<span id="cb465-4"><a href="community.html#cb465-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb465-5"><a href="community.html#cb465-5" aria-hidden="true" tabindex="-1"></a><span class="co"># create dict with labels only for Mr Hi and John A</span></span>
-<span id="cb465-6"><a href="community.html#cb465-6" aria-hidden="true" tabindex="-1"></a>node <span class="op">=</span> <span class="bu">list</span>(karate.nodes)</span>
-<span id="cb465-7"><a href="community.html#cb465-7" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> [i <span class="cf">if</span> i <span class="op">==</span> <span class="st">&quot;Mr Hi&quot;</span> <span class="kw">or</span> i <span class="op">==</span> <span class="st">&quot;John A&quot;</span> <span class="cf">else</span> <span class="st">&quot;&quot;</span> \</span>
-<span id="cb465-8"><a href="community.html#cb465-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> karate.nodes]</span>
-<span id="cb465-9"><a href="community.html#cb465-9" aria-hidden="true" tabindex="-1"></a>nodelabels <span class="op">=</span> <span class="bu">dict</span>(<span class="bu">zip</span>(node, labels))</span>
-<span id="cb465-10"><a href="community.html#cb465-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb465-11"><a href="community.html#cb465-11" aria-hidden="true" tabindex="-1"></a><span class="co"># create and order community mappings</span></span>
-<span id="cb465-12"><a href="community.html#cb465-12" aria-hidden="true" tabindex="-1"></a>communities <span class="op">=</span> louvain_comms.to_node_community_map()</span>
-<span id="cb465-13"><a href="community.html#cb465-13" aria-hidden="true" tabindex="-1"></a>communities <span class="op">=</span> [communities[k].pop() <span class="cf">for</span> k <span class="kw">in</span> node]</span>
-<span id="cb465-14"><a href="community.html#cb465-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb465-15"><a href="community.html#cb465-15" aria-hidden="true" tabindex="-1"></a><span class="co"># create color map</span></span>
-<span id="cb465-16"><a href="community.html#cb465-16" aria-hidden="true" tabindex="-1"></a>pastel2 <span class="op">=</span> cm.get_cmap(<span class="st">&#39;Pastel2&#39;</span>, <span class="bu">max</span>(communities) <span class="op">+</span> <span class="dv">1</span>)</span>
-<span id="cb465-17"><a href="community.html#cb465-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb465-18"><a href="community.html#cb465-18" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize</span></span>
-<span id="cb465-19"><a href="community.html#cb465-19" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">123</span>)</span>
-<span id="cb465-20"><a href="community.html#cb465-20" aria-hidden="true" tabindex="-1"></a>nx.draw_spring(karate, labels <span class="op">=</span> nodelabels, cmap <span class="op">=</span> pastel2,</span>
-<span id="cb465-21"><a href="community.html#cb465-21" aria-hidden="true" tabindex="-1"></a>node_color <span class="op">=</span> communities, edge_color <span class="op">=</span> <span class="st">&quot;grey&quot;</span>)</span>
-<span id="cb465-22"><a href="community.html#cb465-22" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<div class="sourceCode" id="cb466"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb466-1"><a href="community.html#cb466-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb466-2"><a href="community.html#cb466-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> cm</span>
+<span id="cb466-3"><a href="community.html#cb466-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.colors <span class="im">import</span> ListedColormap, LinearSegmentedColormap</span>
+<span id="cb466-4"><a href="community.html#cb466-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb466-5"><a href="community.html#cb466-5" aria-hidden="true" tabindex="-1"></a><span class="co"># create dict with labels only for Mr Hi and John A</span></span>
+<span id="cb466-6"><a href="community.html#cb466-6" aria-hidden="true" tabindex="-1"></a>node <span class="op">=</span> <span class="bu">list</span>(karate.nodes)</span>
+<span id="cb466-7"><a href="community.html#cb466-7" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> [i <span class="cf">if</span> i <span class="op">==</span> <span class="st">&quot;Mr Hi&quot;</span> <span class="kw">or</span> i <span class="op">==</span> <span class="st">&quot;John A&quot;</span> <span class="cf">else</span> <span class="st">&quot;&quot;</span> \</span>
+<span id="cb466-8"><a href="community.html#cb466-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> karate.nodes]</span>
+<span id="cb466-9"><a href="community.html#cb466-9" aria-hidden="true" tabindex="-1"></a>nodelabels <span class="op">=</span> <span class="bu">dict</span>(<span class="bu">zip</span>(node, labels))</span>
+<span id="cb466-10"><a href="community.html#cb466-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb466-11"><a href="community.html#cb466-11" aria-hidden="true" tabindex="-1"></a><span class="co"># create and order community mappings</span></span>
+<span id="cb466-12"><a href="community.html#cb466-12" aria-hidden="true" tabindex="-1"></a>communities <span class="op">=</span> louvain_comms.to_node_community_map()</span>
+<span id="cb466-13"><a href="community.html#cb466-13" aria-hidden="true" tabindex="-1"></a>communities <span class="op">=</span> [communities[k].pop() <span class="cf">for</span> k <span class="kw">in</span> node]</span>
+<span id="cb466-14"><a href="community.html#cb466-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb466-15"><a href="community.html#cb466-15" aria-hidden="true" tabindex="-1"></a><span class="co"># create color map</span></span>
+<span id="cb466-16"><a href="community.html#cb466-16" aria-hidden="true" tabindex="-1"></a>pastel2 <span class="op">=</span> cm.get_cmap(<span class="st">&#39;Pastel2&#39;</span>, <span class="bu">max</span>(communities) <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb466-17"><a href="community.html#cb466-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb466-18"><a href="community.html#cb466-18" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize</span></span>
+<span id="cb466-19"><a href="community.html#cb466-19" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">123</span>)</span>
+<span id="cb466-20"><a href="community.html#cb466-20" aria-hidden="true" tabindex="-1"></a>nx.draw_spring(karate, labels <span class="op">=</span> nodelabels, cmap <span class="op">=</span> pastel2,</span>
+<span id="cb466-21"><a href="community.html#cb466-21" aria-hidden="true" tabindex="-1"></a>node_color <span class="op">=</span> communities, edge_color <span class="op">=</span> <span class="st">&quot;grey&quot;</span>)</span>
+<span id="cb466-22"><a href="community.html#cb466-22" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:karate-py-conn"></span>
 <img src="www/segmentation/karate-py-conn.png" alt="Best Louvain partition of Zachary's Karate Club graph" width="90%" />
 <p class="caption">
@@ -835,19 +837,19 @@ Figure 7.8: Best Louvain partition of Zachary’s Karate Club graph
 <div id="finding-cliques-in-python" class="section level3" number="7.3.3">
 <h3><span class="header-section-number">7.3.3</span> Finding cliques in Python</h3>
 <p>All maximal cliques in a graph can be calculated using the <code>find_cliques()</code> function:</p>
-<div class="sourceCode" id="cb466"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb466-1"><a href="community.html#cb466-1" aria-hidden="true" tabindex="-1"></a>cliques <span class="op">=</span> nx.find_cliques(karate)</span>
-<span id="cb466-2"><a href="community.html#cb466-2" aria-hidden="true" tabindex="-1"></a>maximal_cliques <span class="op">=</span> <span class="bu">sorted</span>(cliques, key <span class="op">=</span> <span class="bu">len</span>)</span>
-<span id="cb466-3"><a href="community.html#cb466-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb466-4"><a href="community.html#cb466-4" aria-hidden="true" tabindex="-1"></a><span class="co"># get number of maximal cliques</span></span>
-<span id="cb466-5"><a href="community.html#cb466-5" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(maximal_cliques)</span></code></pre></div>
+<div class="sourceCode" id="cb467"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb467-1"><a href="community.html#cb467-1" aria-hidden="true" tabindex="-1"></a>cliques <span class="op">=</span> nx.find_cliques(karate)</span>
+<span id="cb467-2"><a href="community.html#cb467-2" aria-hidden="true" tabindex="-1"></a>maximal_cliques <span class="op">=</span> <span class="bu">sorted</span>(cliques, key <span class="op">=</span> <span class="bu">len</span>)</span>
+<span id="cb467-3"><a href="community.html#cb467-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb467-4"><a href="community.html#cb467-4" aria-hidden="true" tabindex="-1"></a><span class="co"># get number of maximal cliques</span></span>
+<span id="cb467-5"><a href="community.html#cb467-5" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(maximal_cliques)</span></code></pre></div>
 <pre><code>## 36</code></pre>
-<div class="sourceCode" id="cb468"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb468-1"><a href="community.html#cb468-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get largest clique</span></span>
-<span id="cb468-2"><a href="community.html#cb468-2" aria-hidden="true" tabindex="-1"></a>maximal_cliques[<span class="bu">len</span>(maximal_cliques) <span class="op">-</span> <span class="dv">1</span>]</span></code></pre></div>
-<pre><code>## [&#39;Actor 3&#39;, &#39;Mr Hi&#39;, &#39;Actor 4&#39;, &#39;Actor 2&#39;, &#39;Actor 14&#39;]</code></pre>
+<div class="sourceCode" id="cb469"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb469-1"><a href="community.html#cb469-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get largest clique</span></span>
+<span id="cb469-2"><a href="community.html#cb469-2" aria-hidden="true" tabindex="-1"></a>maximal_cliques[<span class="bu">len</span>(maximal_cliques) <span class="op">-</span> <span class="dv">1</span>]</span></code></pre></div>
+<pre><code>## [&#39;Mr Hi&#39;, &#39;Actor 2&#39;, &#39;Actor 14&#39;, &#39;Actor 3&#39;, &#39;Actor 4&#39;]</code></pre>
 <p>Alternatively, there are functions that can calculate the number of cliques, the size of the largest clique, and can extract the graph of the largest clique.</p>
-<div class="sourceCode" id="cb470"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb470-1"><a href="community.html#cb470-1" aria-hidden="true" tabindex="-1"></a>nx.graph_number_of_cliques(karate)</span></code></pre></div>
+<div class="sourceCode" id="cb471"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb471-1"><a href="community.html#cb471-1" aria-hidden="true" tabindex="-1"></a>nx.graph_number_of_cliques(karate)</span></code></pre></div>
 <pre><code>## 36</code></pre>
-<div class="sourceCode" id="cb472"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb472-1"><a href="community.html#cb472-1" aria-hidden="true" tabindex="-1"></a>nx.graph_clique_number(karate)</span></code></pre></div>
+<div class="sourceCode" id="cb473"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb473-1"><a href="community.html#cb473-1" aria-hidden="true" tabindex="-1"></a>nx.graph_clique_number(karate)</span></code></pre></div>
 <pre><code>## 5</code></pre>
 </div>
 </div>
@@ -857,63 +859,63 @@ Figure 7.8: Best Louvain partition of Zachary’s Karate Club graph
 <div id="schoolfriend-community" class="section level3" number="7.4.1">
 <h3><span class="header-section-number">7.4.1</span> Detecting communities and cliques among Facebook friends</h3>
 <p>Let’s reload our Facebook schoolfriends graph and remove any isolates so that we can investigate communities and cliques inside it.</p>
-<div class="sourceCode" id="cb474"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb474-1"><a href="community.html#cb474-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get schoolfriends data</span></span>
-<span id="cb474-2"><a href="community.html#cb474-2" aria-hidden="true" tabindex="-1"></a>schoolfriends_edgelist <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(</span>
-<span id="cb474-3"><a href="community.html#cb474-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;https://ona-book.org/data/schoolfriends_edgelist.csv&quot;</span></span>
-<span id="cb474-4"><a href="community.html#cb474-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb474-5"><a href="community.html#cb474-5" aria-hidden="true" tabindex="-1"></a>schoolfriends_vertices <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(</span>
-<span id="cb474-6"><a href="community.html#cb474-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;https://ona-book.org/data/schoolfriends_vertices.csv&quot;</span></span>
-<span id="cb474-7"><a href="community.html#cb474-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb474-8"><a href="community.html#cb474-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb474-9"><a href="community.html#cb474-9" aria-hidden="true" tabindex="-1"></a><span class="co"># facebook friendships only</span></span>
-<span id="cb474-10"><a href="community.html#cb474-10" aria-hidden="true" tabindex="-1"></a>schoolfriends_facebook <span class="ot">&lt;-</span> schoolfriends_edgelist <span class="sc">|</span><span class="er">&gt;</span> </span>
-<span id="cb474-11"><a href="community.html#cb474-11" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(type <span class="sc">==</span> <span class="st">&quot;facebook&quot;</span>)</span>
-<span id="cb474-12"><a href="community.html#cb474-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb474-13"><a href="community.html#cb474-13" aria-hidden="true" tabindex="-1"></a><span class="co"># create undirected graph</span></span>
-<span id="cb474-14"><a href="community.html#cb474-14" aria-hidden="true" tabindex="-1"></a>schoolfriends_fb <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(</span>
-<span id="cb474-15"><a href="community.html#cb474-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">d =</span> schoolfriends_facebook,</span>
-<span id="cb474-16"><a href="community.html#cb474-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">vertices =</span> schoolfriends_vertices,</span>
-<span id="cb474-17"><a href="community.html#cb474-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">directed =</span> <span class="cn">FALSE</span></span>
-<span id="cb474-18"><a href="community.html#cb474-18" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb474-19"><a href="community.html#cb474-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb474-20"><a href="community.html#cb474-20" aria-hidden="true" tabindex="-1"></a><span class="co"># remove isolates</span></span>
-<span id="cb474-21"><a href="community.html#cb474-21" aria-hidden="true" tabindex="-1"></a>isolates <span class="ot">=</span> <span class="fu">which</span>(<span class="fu">degree</span>(schoolfriends_fb) <span class="sc">==</span> <span class="dv">0</span>)</span>
-<span id="cb474-22"><a href="community.html#cb474-22" aria-hidden="true" tabindex="-1"></a>schoolfriends_fb <span class="ot">&lt;-</span> <span class="fu">delete.vertices</span>(schoolfriends_fb, isolates)</span></code></pre></div>
+<div class="sourceCode" id="cb475"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb475-1"><a href="community.html#cb475-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get schoolfriends data</span></span>
+<span id="cb475-2"><a href="community.html#cb475-2" aria-hidden="true" tabindex="-1"></a>schoolfriends_edgelist <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(</span>
+<span id="cb475-3"><a href="community.html#cb475-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;https://ona-book.org/data/schoolfriends_edgelist.csv&quot;</span></span>
+<span id="cb475-4"><a href="community.html#cb475-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb475-5"><a href="community.html#cb475-5" aria-hidden="true" tabindex="-1"></a>schoolfriends_vertices <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(</span>
+<span id="cb475-6"><a href="community.html#cb475-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;https://ona-book.org/data/schoolfriends_vertices.csv&quot;</span></span>
+<span id="cb475-7"><a href="community.html#cb475-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb475-8"><a href="community.html#cb475-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb475-9"><a href="community.html#cb475-9" aria-hidden="true" tabindex="-1"></a><span class="co"># facebook friendships only</span></span>
+<span id="cb475-10"><a href="community.html#cb475-10" aria-hidden="true" tabindex="-1"></a>schoolfriends_facebook <span class="ot">&lt;-</span> schoolfriends_edgelist <span class="sc">|</span><span class="er">&gt;</span> </span>
+<span id="cb475-11"><a href="community.html#cb475-11" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(type <span class="sc">==</span> <span class="st">&quot;facebook&quot;</span>)</span>
+<span id="cb475-12"><a href="community.html#cb475-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb475-13"><a href="community.html#cb475-13" aria-hidden="true" tabindex="-1"></a><span class="co"># create undirected graph</span></span>
+<span id="cb475-14"><a href="community.html#cb475-14" aria-hidden="true" tabindex="-1"></a>schoolfriends_fb <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(</span>
+<span id="cb475-15"><a href="community.html#cb475-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">d =</span> schoolfriends_facebook,</span>
+<span id="cb475-16"><a href="community.html#cb475-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">vertices =</span> schoolfriends_vertices,</span>
+<span id="cb475-17"><a href="community.html#cb475-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">directed =</span> <span class="cn">FALSE</span></span>
+<span id="cb475-18"><a href="community.html#cb475-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb475-19"><a href="community.html#cb475-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb475-20"><a href="community.html#cb475-20" aria-hidden="true" tabindex="-1"></a><span class="co"># remove isolates</span></span>
+<span id="cb475-21"><a href="community.html#cb475-21" aria-hidden="true" tabindex="-1"></a>isolates <span class="ot">=</span> <span class="fu">which</span>(<span class="fu">degree</span>(schoolfriends_fb) <span class="sc">==</span> <span class="dv">0</span>)</span>
+<span id="cb475-22"><a href="community.html#cb475-22" aria-hidden="true" tabindex="-1"></a>schoolfriends_fb <span class="ot">&lt;-</span> <span class="fu">delete.vertices</span>(schoolfriends_fb, isolates)</span></code></pre></div>
 <p>We now have a connected, undirected graph of 156 vertices, with class and gender as vertex properties. First, let’s detemine the largest clique in the graph.</p>
-<div class="sourceCode" id="cb475"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb475-1"><a href="community.html#cb475-1" aria-hidden="true" tabindex="-1"></a>(cliques <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">largest_cliques</span>(schoolfriends_fb))</span></code></pre></div>
+<div class="sourceCode" id="cb476"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb476-1"><a href="community.html#cb476-1" aria-hidden="true" tabindex="-1"></a>(cliques <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">largest_cliques</span>(schoolfriends_fb))</span></code></pre></div>
 <pre><code>## [[1]]
-## + 14/156 vertices, named, from 4a5d5f1:
+## + 14/156 vertices, named, from 19201ae:
 ##  [1] 525  797  466  376  638  841  1423 1218 769  440  125  325  694  245 
 ## 
 ## [[2]]
-## + 14/156 vertices, named, from 4a5d5f1:
+## + 14/156 vertices, named, from 19201ae:
 ##  [1] 245  564  1218 440  466  376  841  1237 1423 769  624  125  325  694 
 ## 
 ## [[3]]
-## + 14/156 vertices, named, from 4a5d5f1:
+## + 14/156 vertices, named, from 19201ae:
 ##  [1] 245  797  466  376  841  1423 1218 624  440  125  638  325  694  769 
 ## 
 ## [[4]]
-## + 14/156 vertices, named, from 4a5d5f1:
+## + 14/156 vertices, named, from 19201ae:
 ##  [1] 245  797  466  376  841  1423 1218 624  440  125  638  325  694  1067
 ## 
 ## [[5]]
-## + 14/156 vertices, named, from 4a5d5f1:
+## + 14/156 vertices, named, from 19201ae:
 ##  [1] 245  1067 466  376  841  1237 1423 1218 624  440  125  638  325  694 
 ## 
 ## [[6]]
-## + 14/156 vertices, named, from 4a5d5f1:
+## + 14/156 vertices, named, from 19201ae:
 ##  [1] 245  638  466  376  841  1237 1423 1218 769  624  440  125  325  694</code></pre>
 <p>We see 6 cliques of 14 individuals, all of which have considerable overlap. We can take a look at the class and gender of one of these cliques.</p>
-<div class="sourceCode" id="cb477"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb477-1"><a href="community.html#cb477-1" aria-hidden="true" tabindex="-1"></a><span class="co"># subgraph for clique 6</span></span>
-<span id="cb477-2"><a href="community.html#cb477-2" aria-hidden="true" tabindex="-1"></a>clique6 <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">induced_subgraph</span>(schoolfriends_fb, </span>
-<span id="cb477-3"><a href="community.html#cb477-3" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">vids =</span> cliques[[<span class="dv">6</span>]])</span>
-<span id="cb477-4"><a href="community.html#cb477-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb477-5"><a href="community.html#cb477-5" aria-hidden="true" tabindex="-1"></a>(<span class="fu">data.frame</span>(</span>
-<span id="cb477-6"><a href="community.html#cb477-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">id =</span> <span class="fu">V</span>(clique6)<span class="sc">$</span>name,</span>
-<span id="cb477-7"><a href="community.html#cb477-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">class =</span> <span class="fu">V</span>(clique6)<span class="sc">$</span>class,</span>
-<span id="cb477-8"><a href="community.html#cb477-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">gender =</span> <span class="fu">V</span>(clique6)<span class="sc">$</span>gender</span>
-<span id="cb477-9"><a href="community.html#cb477-9" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
+<div class="sourceCode" id="cb478"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb478-1"><a href="community.html#cb478-1" aria-hidden="true" tabindex="-1"></a><span class="co"># subgraph for clique 6</span></span>
+<span id="cb478-2"><a href="community.html#cb478-2" aria-hidden="true" tabindex="-1"></a>clique6 <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">induced_subgraph</span>(schoolfriends_fb, </span>
+<span id="cb478-3"><a href="community.html#cb478-3" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">vids =</span> cliques[[<span class="dv">6</span>]])</span>
+<span id="cb478-4"><a href="community.html#cb478-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb478-5"><a href="community.html#cb478-5" aria-hidden="true" tabindex="-1"></a>(<span class="fu">data.frame</span>(</span>
+<span id="cb478-6"><a href="community.html#cb478-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">id =</span> <span class="fu">V</span>(clique6)<span class="sc">$</span>name,</span>
+<span id="cb478-7"><a href="community.html#cb478-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">class =</span> <span class="fu">V</span>(clique6)<span class="sc">$</span>class,</span>
+<span id="cb478-8"><a href="community.html#cb478-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">gender =</span> <span class="fu">V</span>(clique6)<span class="sc">$</span>gender</span>
+<span id="cb478-9"><a href="community.html#cb478-9" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
 <pre><code>##      id class gender
 ## 1   466  MP*1      M
 ## 2   376  MP*1      M
@@ -930,18 +932,18 @@ Figure 7.8: Best Louvain partition of Zachary’s Karate Club graph
 ## 13  694    MP      F
 ## 14  245    MP      F</code></pre>
 <p>We see that this clique is distributed over four classes and is mostly male. Let’s visualize where this clique sits in the full network, as in Figure <a href="community.html#fig:schoolfriends-clique">7.9</a>.</p>
-<div class="sourceCode" id="cb479"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb479-1"><a href="community.html#cb479-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create clique property</span></span>
-<span id="cb479-2"><a href="community.html#cb479-2" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(schoolfriends_fb)<span class="sc">$</span>clique6 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(</span>
-<span id="cb479-3"><a href="community.html#cb479-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">V</span>(schoolfriends_fb) <span class="sc">%in%</span> cliques[[<span class="dv">6</span>]], <span class="dv">1</span>, <span class="dv">0</span></span>
-<span id="cb479-4"><a href="community.html#cb479-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb479-5"><a href="community.html#cb479-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb479-6"><a href="community.html#cb479-6" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize</span></span>
-<span id="cb479-7"><a href="community.html#cb479-7" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb479-8"><a href="community.html#cb479-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(schoolfriends_fb, <span class="at">layout =</span> <span class="st">&quot;fr&quot;</span>) <span class="sc">+</span></span>
-<span id="cb479-9"><a href="community.html#cb479-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb479-10"><a href="community.html#cb479-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="fu">aes</span>(<span class="at">color =</span> <span class="fu">as.factor</span>(clique6)),</span>
-<span id="cb479-11"><a href="community.html#cb479-11" aria-hidden="true" tabindex="-1"></a>                  <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb479-12"><a href="community.html#cb479-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb480"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb480-1"><a href="community.html#cb480-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create clique property</span></span>
+<span id="cb480-2"><a href="community.html#cb480-2" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(schoolfriends_fb)<span class="sc">$</span>clique6 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(</span>
+<span id="cb480-3"><a href="community.html#cb480-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">V</span>(schoolfriends_fb) <span class="sc">%in%</span> cliques[[<span class="dv">6</span>]], <span class="dv">1</span>, <span class="dv">0</span></span>
+<span id="cb480-4"><a href="community.html#cb480-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb480-5"><a href="community.html#cb480-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb480-6"><a href="community.html#cb480-6" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize</span></span>
+<span id="cb480-7"><a href="community.html#cb480-7" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb480-8"><a href="community.html#cb480-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(schoolfriends_fb, <span class="at">layout =</span> <span class="st">&quot;fr&quot;</span>) <span class="sc">+</span></span>
+<span id="cb480-9"><a href="community.html#cb480-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb480-10"><a href="community.html#cb480-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="fu">aes</span>(<span class="at">color =</span> <span class="fu">as.factor</span>(clique6)),</span>
+<span id="cb480-11"><a href="community.html#cb480-11" aria-hidden="true" tabindex="-1"></a>                  <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb480-12"><a href="community.html#cb480-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:schoolfriends-clique"></span>
 <img src="_main_files/figure-html/schoolfriends-clique-1.png" alt="Facebook schoolfriends network with one of the largest cliques indicated" width="90%" />
 <p class="caption">
@@ -949,49 +951,49 @@ Figure 7.9: Facebook schoolfriends network with one of the largest cliques indic
 </p>
 </div>
 <p>Now let’s use the Louvain algorithm to detect communities in our graph.</p>
-<div class="sourceCode" id="cb480"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb480-1"><a href="community.html#cb480-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get optimal louvain communities</span></span>
-<span id="cb480-2"><a href="community.html#cb480-2" aria-hidden="true" tabindex="-1"></a>communities <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">cluster_louvain</span>(schoolfriends_fb)</span>
-<span id="cb480-3"><a href="community.html#cb480-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb480-4"><a href="community.html#cb480-4" aria-hidden="true" tabindex="-1"></a><span class="co"># assign community as a vertex property</span></span>
-<span id="cb480-5"><a href="community.html#cb480-5" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(schoolfriends_fb)<span class="sc">$</span>community <span class="ot">&lt;-</span> <span class="fu">membership</span>(communities)</span>
-<span id="cb480-6"><a href="community.html#cb480-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb480-7"><a href="community.html#cb480-7" aria-hidden="true" tabindex="-1"></a><span class="co"># how many communities?</span></span>
-<span id="cb480-8"><a href="community.html#cb480-8" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(<span class="fu">V</span>(schoolfriends_fb)<span class="sc">$</span>community))</span></code></pre></div>
+<div class="sourceCode" id="cb481"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb481-1"><a href="community.html#cb481-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get optimal louvain communities</span></span>
+<span id="cb481-2"><a href="community.html#cb481-2" aria-hidden="true" tabindex="-1"></a>communities <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">cluster_louvain</span>(schoolfriends_fb)</span>
+<span id="cb481-3"><a href="community.html#cb481-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb481-4"><a href="community.html#cb481-4" aria-hidden="true" tabindex="-1"></a><span class="co"># assign community as a vertex property</span></span>
+<span id="cb481-5"><a href="community.html#cb481-5" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(schoolfriends_fb)<span class="sc">$</span>community <span class="ot">&lt;-</span> <span class="fu">membership</span>(communities)</span>
+<span id="cb481-6"><a href="community.html#cb481-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb481-7"><a href="community.html#cb481-7" aria-hidden="true" tabindex="-1"></a><span class="co"># how many communities?</span></span>
+<span id="cb481-8"><a href="community.html#cb481-8" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(<span class="fu">V</span>(schoolfriends_fb)<span class="sc">$</span>community))</span></code></pre></div>
 <pre><code>## [1] 6</code></pre>
 <p>Six communities have been identified. Let’s compare the modularity of this community structure to the known ground truth communities of class and gender.</p>
-<div class="sourceCode" id="cb482"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb482-1"><a href="community.html#cb482-1" aria-hidden="true" tabindex="-1"></a><span class="co"># modularity of louvain</span></span>
-<span id="cb482-2"><a href="community.html#cb482-2" aria-hidden="true" tabindex="-1"></a><span class="fu">modularity</span>(schoolfriends_fb, <span class="fu">V</span>(schoolfriends_fb)<span class="sc">$</span>community)</span></code></pre></div>
+<div class="sourceCode" id="cb483"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb483-1"><a href="community.html#cb483-1" aria-hidden="true" tabindex="-1"></a><span class="co"># modularity of louvain</span></span>
+<span id="cb483-2"><a href="community.html#cb483-2" aria-hidden="true" tabindex="-1"></a><span class="fu">modularity</span>(schoolfriends_fb, <span class="fu">V</span>(schoolfriends_fb)<span class="sc">$</span>community)</span></code></pre></div>
 <pre><code>## [1] 0.5284791</code></pre>
-<div class="sourceCode" id="cb484"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb484-1"><a href="community.html#cb484-1" aria-hidden="true" tabindex="-1"></a><span class="co"># modularity of class structure</span></span>
-<span id="cb484-2"><a href="community.html#cb484-2" aria-hidden="true" tabindex="-1"></a><span class="fu">modularity</span>(schoolfriends_fb, </span>
-<span id="cb484-3"><a href="community.html#cb484-3" aria-hidden="true" tabindex="-1"></a>           <span class="fu">as.integer</span>(<span class="fu">as.factor</span>(<span class="fu">V</span>(schoolfriends_fb)<span class="sc">$</span>class)))</span></code></pre></div>
+<div class="sourceCode" id="cb485"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb485-1"><a href="community.html#cb485-1" aria-hidden="true" tabindex="-1"></a><span class="co"># modularity of class structure</span></span>
+<span id="cb485-2"><a href="community.html#cb485-2" aria-hidden="true" tabindex="-1"></a><span class="fu">modularity</span>(schoolfriends_fb, </span>
+<span id="cb485-3"><a href="community.html#cb485-3" aria-hidden="true" tabindex="-1"></a>           <span class="fu">as.integer</span>(<span class="fu">as.factor</span>(<span class="fu">V</span>(schoolfriends_fb)<span class="sc">$</span>class)))</span></code></pre></div>
 <pre><code>## [1] 0.317128</code></pre>
-<div class="sourceCode" id="cb486"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb486-1"><a href="community.html#cb486-1" aria-hidden="true" tabindex="-1"></a><span class="co"># modularity of gender structure</span></span>
-<span id="cb486-2"><a href="community.html#cb486-2" aria-hidden="true" tabindex="-1"></a><span class="fu">modularity</span>(schoolfriends_fb, </span>
-<span id="cb486-3"><a href="community.html#cb486-3" aria-hidden="true" tabindex="-1"></a>           <span class="fu">as.integer</span>(<span class="fu">as.factor</span>(<span class="fu">V</span>(schoolfriends_fb)<span class="sc">$</span>gender)))</span></code></pre></div>
+<div class="sourceCode" id="cb487"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb487-1"><a href="community.html#cb487-1" aria-hidden="true" tabindex="-1"></a><span class="co"># modularity of gender structure</span></span>
+<span id="cb487-2"><a href="community.html#cb487-2" aria-hidden="true" tabindex="-1"></a><span class="fu">modularity</span>(schoolfriends_fb, </span>
+<span id="cb487-3"><a href="community.html#cb487-3" aria-hidden="true" tabindex="-1"></a>           <span class="fu">as.integer</span>(<span class="fu">as.factor</span>(<span class="fu">V</span>(schoolfriends_fb)<span class="sc">$</span>gender)))</span></code></pre></div>
 <pre><code>## [1] 0.06504432</code></pre>
 <p>This community structure is certainly a better indicator of connected Facebook subgroups than gender or class. We can visualize the class structure side-by-side with the Louvain community structure to try to interpret it, as in Figure <a href="community.html#fig:schoolfriends-louvain">7.10</a>.</p>
-<div class="sourceCode" id="cb488"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb488-1"><a href="community.html#cb488-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use patchwork package for combining plots easily</span></span>
-<span id="cb488-2"><a href="community.html#cb488-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
-<span id="cb488-3"><a href="community.html#cb488-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb488-4"><a href="community.html#cb488-4" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize louvain communities</span></span>
-<span id="cb488-5"><a href="community.html#cb488-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb488-6"><a href="community.html#cb488-6" aria-hidden="true" tabindex="-1"></a>g1 <span class="ot">&lt;-</span> <span class="fu">ggraph</span>(schoolfriends_fb, <span class="at">layout =</span> <span class="st">&quot;fr&quot;</span>) <span class="sc">+</span></span>
-<span id="cb488-7"><a href="community.html#cb488-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb488-8"><a href="community.html#cb488-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="fu">aes</span>(<span class="at">color =</span> <span class="fu">as.factor</span>(community)),</span>
-<span id="cb488-9"><a href="community.html#cb488-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb488-10"><a href="community.html#cb488-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span>
-<span id="cb488-11"><a href="community.html#cb488-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb488-12"><a href="community.html#cb488-12" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize ground truth class communities</span></span>
-<span id="cb488-13"><a href="community.html#cb488-13" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb488-14"><a href="community.html#cb488-14" aria-hidden="true" tabindex="-1"></a>g2 <span class="ot">&lt;-</span> <span class="fu">ggraph</span>(schoolfriends_fb, <span class="at">layout =</span> <span class="st">&quot;fr&quot;</span>) <span class="sc">+</span></span>
-<span id="cb488-15"><a href="community.html#cb488-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb488-16"><a href="community.html#cb488-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="fu">aes</span>(<span class="at">color =</span> class),</span>
-<span id="cb488-17"><a href="community.html#cb488-17" aria-hidden="true" tabindex="-1"></a>                  <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb488-18"><a href="community.html#cb488-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span>
-<span id="cb488-19"><a href="community.html#cb488-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb488-20"><a href="community.html#cb488-20" aria-hidden="true" tabindex="-1"></a><span class="co"># display side by side</span></span>
-<span id="cb488-21"><a href="community.html#cb488-21" aria-hidden="true" tabindex="-1"></a>g1 <span class="sc">+</span> g2</span></code></pre></div>
+<div class="sourceCode" id="cb489"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb489-1"><a href="community.html#cb489-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use patchwork package for combining plots easily</span></span>
+<span id="cb489-2"><a href="community.html#cb489-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb489-3"><a href="community.html#cb489-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb489-4"><a href="community.html#cb489-4" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize louvain communities</span></span>
+<span id="cb489-5"><a href="community.html#cb489-5" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb489-6"><a href="community.html#cb489-6" aria-hidden="true" tabindex="-1"></a>g1 <span class="ot">&lt;-</span> <span class="fu">ggraph</span>(schoolfriends_fb, <span class="at">layout =</span> <span class="st">&quot;fr&quot;</span>) <span class="sc">+</span></span>
+<span id="cb489-7"><a href="community.html#cb489-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb489-8"><a href="community.html#cb489-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="fu">aes</span>(<span class="at">color =</span> <span class="fu">as.factor</span>(community)),</span>
+<span id="cb489-9"><a href="community.html#cb489-9" aria-hidden="true" tabindex="-1"></a>                  <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb489-10"><a href="community.html#cb489-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span>
+<span id="cb489-11"><a href="community.html#cb489-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb489-12"><a href="community.html#cb489-12" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize ground truth class communities</span></span>
+<span id="cb489-13"><a href="community.html#cb489-13" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb489-14"><a href="community.html#cb489-14" aria-hidden="true" tabindex="-1"></a>g2 <span class="ot">&lt;-</span> <span class="fu">ggraph</span>(schoolfriends_fb, <span class="at">layout =</span> <span class="st">&quot;fr&quot;</span>) <span class="sc">+</span></span>
+<span id="cb489-15"><a href="community.html#cb489-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb489-16"><a href="community.html#cb489-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="fu">aes</span>(<span class="at">color =</span> class),</span>
+<span id="cb489-17"><a href="community.html#cb489-17" aria-hidden="true" tabindex="-1"></a>                  <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb489-18"><a href="community.html#cb489-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span>
+<span id="cb489-19"><a href="community.html#cb489-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb489-20"><a href="community.html#cb489-20" aria-hidden="true" tabindex="-1"></a><span class="co"># display side by side</span></span>
+<span id="cb489-21"><a href="community.html#cb489-21" aria-hidden="true" tabindex="-1"></a>g1 <span class="sc">+</span> g2</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:schoolfriends-louvain"></span>
 <img src="_main_files/figure-html/schoolfriends-louvain-1.png" alt="Optimal Louvain communities in the Facebook schoolfriends graph (left) versus ground truth class communities (right)" width="90%" />
 <p class="caption">
@@ -1003,23 +1005,23 @@ Figure 7.10: Optimal Louvain communities in the Facebook schoolfriends graph (le
 <div id="detecting-politically-aligned-communities-on-twitter" class="section level3" number="7.4.2">
 <h3><span class="header-section-number">7.4.2</span> Detecting politically aligned communities on Twitter</h3>
 <p>The <code>ontariopol_edgelist</code> and <code>ontariopol_vertices</code> data sets represent tweeting activity between Ontario province politicians in Canada as captured in September 2021 and spanning several prior years of activity. Although the Twitter graph is a directed graph, we will set this network up as undirected, with two politicians connected if there has been an interaction between them by means of one mentioning the other in a tweet or one replying to a tweet from the other. The <code>weight</code> property represents the number of interactions and is therefore a measure of the connection strength.</p>
-<div class="sourceCode" id="cb489"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb489-1"><a href="community.html#cb489-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get edgelist and vertex data</span></span>
-<span id="cb489-2"><a href="community.html#cb489-2" aria-hidden="true" tabindex="-1"></a>ontariopol_edges <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(</span>
-<span id="cb489-3"><a href="community.html#cb489-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;https://ona-book.org/data/ontariopol_edgelist.csv&quot;</span></span>
-<span id="cb489-4"><a href="community.html#cb489-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb489-5"><a href="community.html#cb489-5" aria-hidden="true" tabindex="-1"></a>ontariopol_vertices <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(</span>
-<span id="cb489-6"><a href="community.html#cb489-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;https://ona-book.org/data/ontariopol_vertices.csv&quot;</span></span>
-<span id="cb489-7"><a href="community.html#cb489-7" aria-hidden="true" tabindex="-1"></a>) </span>
-<span id="cb489-8"><a href="community.html#cb489-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb489-9"><a href="community.html#cb489-9" aria-hidden="true" tabindex="-1"></a><span class="co"># create undirected graph</span></span>
-<span id="cb489-10"><a href="community.html#cb489-10" aria-hidden="true" tabindex="-1"></a>(ontariopol <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(</span>
-<span id="cb489-11"><a href="community.html#cb489-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">d =</span> ontariopol_edges,</span>
-<span id="cb489-12"><a href="community.html#cb489-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">vertices =</span> ontariopol_vertices, </span>
-<span id="cb489-13"><a href="community.html#cb489-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">directed =</span> <span class="cn">FALSE</span></span>
-<span id="cb489-14"><a href="community.html#cb489-14" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
-<pre><code>## IGRAPH 894db2f UNW- 108 6095 -- 
+<div class="sourceCode" id="cb490"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb490-1"><a href="community.html#cb490-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get edgelist and vertex data</span></span>
+<span id="cb490-2"><a href="community.html#cb490-2" aria-hidden="true" tabindex="-1"></a>ontariopol_edges <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(</span>
+<span id="cb490-3"><a href="community.html#cb490-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;https://ona-book.org/data/ontariopol_edgelist.csv&quot;</span></span>
+<span id="cb490-4"><a href="community.html#cb490-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb490-5"><a href="community.html#cb490-5" aria-hidden="true" tabindex="-1"></a>ontariopol_vertices <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(</span>
+<span id="cb490-6"><a href="community.html#cb490-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;https://ona-book.org/data/ontariopol_vertices.csv&quot;</span></span>
+<span id="cb490-7"><a href="community.html#cb490-7" aria-hidden="true" tabindex="-1"></a>) </span>
+<span id="cb490-8"><a href="community.html#cb490-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb490-9"><a href="community.html#cb490-9" aria-hidden="true" tabindex="-1"></a><span class="co"># create undirected graph</span></span>
+<span id="cb490-10"><a href="community.html#cb490-10" aria-hidden="true" tabindex="-1"></a>(ontariopol <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(</span>
+<span id="cb490-11"><a href="community.html#cb490-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">d =</span> ontariopol_edges,</span>
+<span id="cb490-12"><a href="community.html#cb490-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">vertices =</span> ontariopol_vertices, </span>
+<span id="cb490-13"><a href="community.html#cb490-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">directed =</span> <span class="cn">FALSE</span></span>
+<span id="cb490-14"><a href="community.html#cb490-14" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div>
+<pre><code>## IGRAPH b286204 UNW- 108 6095 -- 
 ## + attr: name (v/c), screen_name (v/c), party (v/c), weight (e/n)
-## + edges from 894db2f (vertex names):
+## + edges from b286204 (vertex names):
 ##  [1] Deepak Anand--Doug Ford               Deepak Anand--Victor Fedeli           Deepak Anand--Deepak Anand           
 ##  [4] Deepak Anand--Monte McNaughton        Deepak Anand--Christine Elliott       Deepak Anand--Stephen Lecce          
 ##  [7] Deepak Anand--Rod Phillips            Deepak Anand--Lisa MacLeod            Deepak Anand--Michael Tibollo        
@@ -1030,48 +1032,48 @@ Figure 7.10: Optimal Louvain communities in the Facebook schoolfriends graph (le
 ## [22] Deepak Anand--Ernie Hardeman          Deepak Anand--Natalia Kusendova       Deepak Anand--Prabmeet Singh Sarkaria
 ## + ... omitted several edges</code></pre>
 <p>We have an undirected, weighted graph, with <code>screen_name</code> and <code>party</code> vertex properties. First, we check if our graph is connected:</p>
-<div class="sourceCode" id="cb491"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb491-1"><a href="community.html#cb491-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.connected</span>(ontariopol)</span></code></pre></div>
+<div class="sourceCode" id="cb492"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb492-1"><a href="community.html#cb492-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.connected</span>(ontariopol)</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>Now we use the Louvain algorithm to detect an optimal community structure in our graph. Since the graph has a <code>weight</code> property, our modularity calculations will include edge weight.</p>
-<div class="sourceCode" id="cb493"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb493-1"><a href="community.html#cb493-1" aria-hidden="true" tabindex="-1"></a><span class="co"># find optimal communities</span></span>
-<span id="cb493-2"><a href="community.html#cb493-2" aria-hidden="true" tabindex="-1"></a>communities <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">cluster_louvain</span>(ontariopol)</span>
-<span id="cb493-3"><a href="community.html#cb493-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb493-4"><a href="community.html#cb493-4" aria-hidden="true" tabindex="-1"></a><span class="co"># assign as vertex properties</span></span>
-<span id="cb493-5"><a href="community.html#cb493-5" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(ontariopol)<span class="sc">$</span>community <span class="ot">&lt;-</span> <span class="fu">membership</span>(communities)</span>
-<span id="cb493-6"><a href="community.html#cb493-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb493-7"><a href="community.html#cb493-7" aria-hidden="true" tabindex="-1"></a><span class="co"># how many communities</span></span>
-<span id="cb493-8"><a href="community.html#cb493-8" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(<span class="fu">V</span>(ontariopol)<span class="sc">$</span>community))</span></code></pre></div>
+<div class="sourceCode" id="cb494"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb494-1"><a href="community.html#cb494-1" aria-hidden="true" tabindex="-1"></a><span class="co"># find optimal communities</span></span>
+<span id="cb494-2"><a href="community.html#cb494-2" aria-hidden="true" tabindex="-1"></a>communities <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">cluster_louvain</span>(ontariopol)</span>
+<span id="cb494-3"><a href="community.html#cb494-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb494-4"><a href="community.html#cb494-4" aria-hidden="true" tabindex="-1"></a><span class="co"># assign as vertex properties</span></span>
+<span id="cb494-5"><a href="community.html#cb494-5" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(ontariopol)<span class="sc">$</span>community <span class="ot">&lt;-</span> <span class="fu">membership</span>(communities)</span>
+<span id="cb494-6"><a href="community.html#cb494-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb494-7"><a href="community.html#cb494-7" aria-hidden="true" tabindex="-1"></a><span class="co"># how many communities</span></span>
+<span id="cb494-8"><a href="community.html#cb494-8" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">unique</span>(<span class="fu">V</span>(ontariopol)<span class="sc">$</span>community))</span></code></pre></div>
 <pre><code>## [1] 6</code></pre>
 <p>We see six commmunities. Let’s compare the modularity of this community structure to the ground truth political party structure.</p>
-<div class="sourceCode" id="cb495"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb495-1"><a href="community.html#cb495-1" aria-hidden="true" tabindex="-1"></a><span class="co"># louvain modularity</span></span>
-<span id="cb495-2"><a href="community.html#cb495-2" aria-hidden="true" tabindex="-1"></a><span class="fu">modularity</span>(ontariopol, </span>
-<span id="cb495-3"><a href="community.html#cb495-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">membership =</span> <span class="fu">V</span>(ontariopol)<span class="sc">$</span>community, </span>
-<span id="cb495-4"><a href="community.html#cb495-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">weights =</span> <span class="fu">E</span>(ontariopol)<span class="sc">$</span>weight)</span></code></pre></div>
+<div class="sourceCode" id="cb496"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb496-1"><a href="community.html#cb496-1" aria-hidden="true" tabindex="-1"></a><span class="co"># louvain modularity</span></span>
+<span id="cb496-2"><a href="community.html#cb496-2" aria-hidden="true" tabindex="-1"></a><span class="fu">modularity</span>(ontariopol, </span>
+<span id="cb496-3"><a href="community.html#cb496-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">membership =</span> <span class="fu">V</span>(ontariopol)<span class="sc">$</span>community, </span>
+<span id="cb496-4"><a href="community.html#cb496-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">weights =</span> <span class="fu">E</span>(ontariopol)<span class="sc">$</span>weight)</span></code></pre></div>
 <pre><code>## [1] 0.3904751</code></pre>
-<div class="sourceCode" id="cb497"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb497-1"><a href="community.html#cb497-1" aria-hidden="true" tabindex="-1"></a><span class="co"># political party modularity</span></span>
-<span id="cb497-2"><a href="community.html#cb497-2" aria-hidden="true" tabindex="-1"></a><span class="fu">modularity</span>(ontariopol, </span>
-<span id="cb497-3"><a href="community.html#cb497-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">membership =</span> <span class="fu">as.integer</span>(<span class="fu">as.factor</span>(<span class="fu">V</span>(ontariopol)<span class="sc">$</span>party)), </span>
-<span id="cb497-4"><a href="community.html#cb497-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">weights =</span> <span class="fu">E</span>(ontariopol)<span class="sc">$</span>weight)</span></code></pre></div>
+<div class="sourceCode" id="cb498"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb498-1"><a href="community.html#cb498-1" aria-hidden="true" tabindex="-1"></a><span class="co"># political party modularity</span></span>
+<span id="cb498-2"><a href="community.html#cb498-2" aria-hidden="true" tabindex="-1"></a><span class="fu">modularity</span>(ontariopol, </span>
+<span id="cb498-3"><a href="community.html#cb498-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">membership =</span> <span class="fu">as.integer</span>(<span class="fu">as.factor</span>(<span class="fu">V</span>(ontariopol)<span class="sc">$</span>party)), </span>
+<span id="cb498-4"><a href="community.html#cb498-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">weights =</span> <span class="fu">E</span>(ontariopol)<span class="sc">$</span>weight)</span></code></pre></div>
 <pre><code>## [1] 0.382394</code></pre>
 <p>We see very similar modularity. Let’s visualize the Louvain community and party structure side-by-side, as in Figure <a href="community.html#fig:ontariopol-communities">7.11</a>.</p>
-<div class="sourceCode" id="cb499"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb499-1"><a href="community.html#cb499-1" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize louvain communities</span></span>
-<span id="cb499-2"><a href="community.html#cb499-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb499-3"><a href="community.html#cb499-3" aria-hidden="true" tabindex="-1"></a>g1 <span class="ot">&lt;-</span> <span class="fu">ggraph</span>(ontariopol, <span class="at">layout =</span> <span class="st">&quot;fr&quot;</span>) <span class="sc">+</span></span>
-<span id="cb499-4"><a href="community.html#cb499-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb499-5"><a href="community.html#cb499-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="fu">aes</span>(<span class="at">color =</span> <span class="fu">as.factor</span>(community)),</span>
-<span id="cb499-6"><a href="community.html#cb499-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb499-7"><a href="community.html#cb499-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span>
-<span id="cb499-8"><a href="community.html#cb499-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb499-9"><a href="community.html#cb499-9" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize ground truth political party communities</span></span>
-<span id="cb499-10"><a href="community.html#cb499-10" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb499-11"><a href="community.html#cb499-11" aria-hidden="true" tabindex="-1"></a>g2 <span class="ot">&lt;-</span> <span class="fu">ggraph</span>(ontariopol, <span class="at">layout =</span> <span class="st">&quot;fr&quot;</span>) <span class="sc">+</span></span>
-<span id="cb499-12"><a href="community.html#cb499-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb499-13"><a href="community.html#cb499-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="fu">aes</span>(<span class="at">color =</span> party),</span>
-<span id="cb499-14"><a href="community.html#cb499-14" aria-hidden="true" tabindex="-1"></a>                  <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb499-15"><a href="community.html#cb499-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span>
-<span id="cb499-16"><a href="community.html#cb499-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb499-17"><a href="community.html#cb499-17" aria-hidden="true" tabindex="-1"></a><span class="co"># display side by side</span></span>
-<span id="cb499-18"><a href="community.html#cb499-18" aria-hidden="true" tabindex="-1"></a>g1 <span class="sc">+</span> g2</span></code></pre></div>
+<div class="sourceCode" id="cb500"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb500-1"><a href="community.html#cb500-1" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize louvain communities</span></span>
+<span id="cb500-2"><a href="community.html#cb500-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb500-3"><a href="community.html#cb500-3" aria-hidden="true" tabindex="-1"></a>g1 <span class="ot">&lt;-</span> <span class="fu">ggraph</span>(ontariopol, <span class="at">layout =</span> <span class="st">&quot;fr&quot;</span>) <span class="sc">+</span></span>
+<span id="cb500-4"><a href="community.html#cb500-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb500-5"><a href="community.html#cb500-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="fu">aes</span>(<span class="at">color =</span> <span class="fu">as.factor</span>(community)),</span>
+<span id="cb500-6"><a href="community.html#cb500-6" aria-hidden="true" tabindex="-1"></a>                  <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb500-7"><a href="community.html#cb500-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span>
+<span id="cb500-8"><a href="community.html#cb500-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb500-9"><a href="community.html#cb500-9" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize ground truth political party communities</span></span>
+<span id="cb500-10"><a href="community.html#cb500-10" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb500-11"><a href="community.html#cb500-11" aria-hidden="true" tabindex="-1"></a>g2 <span class="ot">&lt;-</span> <span class="fu">ggraph</span>(ontariopol, <span class="at">layout =</span> <span class="st">&quot;fr&quot;</span>) <span class="sc">+</span></span>
+<span id="cb500-12"><a href="community.html#cb500-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb500-13"><a href="community.html#cb500-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="fu">aes</span>(<span class="at">color =</span> party),</span>
+<span id="cb500-14"><a href="community.html#cb500-14" aria-hidden="true" tabindex="-1"></a>                  <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb500-15"><a href="community.html#cb500-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span>
+<span id="cb500-16"><a href="community.html#cb500-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb500-17"><a href="community.html#cb500-17" aria-hidden="true" tabindex="-1"></a><span class="co"># display side by side</span></span>
+<span id="cb500-18"><a href="community.html#cb500-18" aria-hidden="true" tabindex="-1"></a>g1 <span class="sc">+</span> g2</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:ontariopol-communities"></span>
 <img src="_main_files/figure-html/ontariopol-communities-1.png" alt="Twitter interaction of Ontario politicians segmented by their Louvain communities (left) and their ground truth political parties (right).  Louvain does a good job of identifying political alignment." width="90%" />
 <p class="caption">
@@ -1079,32 +1081,32 @@ Figure 7.11: Twitter interaction of Ontario politicians segmented by their Louva
 </p>
 </div>
 <p>We see very similar community structures, indicating that the Louvain algorithm has done a good job of identifying political party alignment from the tweet activity of the politicians. Using similar methods to our Facebook schoolfriends example in Section <a href="community.html#schoolfriend-community">7.4.1</a>, we can also identify large cliques within the political parties, as in Figure <a href="community.html#fig:ontariopol-clique">7.12</a>.</p>
-<div class="sourceCode" id="cb500"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb500-1"><a href="community.html#cb500-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get largest cliques </span></span>
-<span id="cb500-2"><a href="community.html#cb500-2" aria-hidden="true" tabindex="-1"></a>cliques <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">largest_cliques</span>(ontariopol)</span>
-<span id="cb500-3"><a href="community.html#cb500-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb500-4"><a href="community.html#cb500-4" aria-hidden="true" tabindex="-1"></a><span class="co"># there are 24 cliques of size 48 - choose one and visualize</span></span>
-<span id="cb500-5"><a href="community.html#cb500-5" aria-hidden="true" tabindex="-1"></a><span class="co"># create clique property</span></span>
-<span id="cb500-6"><a href="community.html#cb500-6" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(ontariopol)<span class="sc">$</span>clique24 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(</span>
-<span id="cb500-7"><a href="community.html#cb500-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">V</span>(ontariopol) <span class="sc">%in%</span> cliques[[<span class="dv">24</span>]], <span class="dv">1</span>, <span class="dv">0</span></span>
-<span id="cb500-8"><a href="community.html#cb500-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb500-9"><a href="community.html#cb500-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb500-10"><a href="community.html#cb500-10" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize clique</span></span>
-<span id="cb500-11"><a href="community.html#cb500-11" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb500-12"><a href="community.html#cb500-12" aria-hidden="true" tabindex="-1"></a>g1 <span class="ot">&lt;-</span> <span class="fu">ggraph</span>(ontariopol, <span class="at">layout =</span> <span class="st">&quot;fr&quot;</span>) <span class="sc">+</span></span>
-<span id="cb500-13"><a href="community.html#cb500-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb500-14"><a href="community.html#cb500-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="fu">aes</span>(<span class="at">color =</span> <span class="fu">as.factor</span>(clique24)),</span>
-<span id="cb500-15"><a href="community.html#cb500-15" aria-hidden="true" tabindex="-1"></a>                  <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb500-16"><a href="community.html#cb500-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span>
-<span id="cb500-17"><a href="community.html#cb500-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb500-18"><a href="community.html#cb500-18" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize ground truth political parties</span></span>
-<span id="cb500-19"><a href="community.html#cb500-19" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb500-20"><a href="community.html#cb500-20" aria-hidden="true" tabindex="-1"></a>g2 <span class="ot">&lt;-</span> <span class="fu">ggraph</span>(ontariopol, <span class="at">layout =</span> <span class="st">&quot;fr&quot;</span>) <span class="sc">+</span></span>
-<span id="cb500-21"><a href="community.html#cb500-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
-<span id="cb500-22"><a href="community.html#cb500-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="fu">aes</span>(<span class="at">color =</span> party)) <span class="sc">+</span></span>
-<span id="cb500-23"><a href="community.html#cb500-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="st">&quot;Party (Right hand graph)&quot;</span>) <span class="sc">+</span></span>
-<span id="cb500-24"><a href="community.html#cb500-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span>
-<span id="cb500-25"><a href="community.html#cb500-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb500-26"><a href="community.html#cb500-26" aria-hidden="true" tabindex="-1"></a>g1 <span class="sc">+</span> g2</span></code></pre></div>
+<div class="sourceCode" id="cb501"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb501-1"><a href="community.html#cb501-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get largest cliques </span></span>
+<span id="cb501-2"><a href="community.html#cb501-2" aria-hidden="true" tabindex="-1"></a>cliques <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">largest_cliques</span>(ontariopol)</span>
+<span id="cb501-3"><a href="community.html#cb501-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb501-4"><a href="community.html#cb501-4" aria-hidden="true" tabindex="-1"></a><span class="co"># there are 24 cliques of size 48 - choose one and visualize</span></span>
+<span id="cb501-5"><a href="community.html#cb501-5" aria-hidden="true" tabindex="-1"></a><span class="co"># create clique property</span></span>
+<span id="cb501-6"><a href="community.html#cb501-6" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(ontariopol)<span class="sc">$</span>clique24 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(</span>
+<span id="cb501-7"><a href="community.html#cb501-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">V</span>(ontariopol) <span class="sc">%in%</span> cliques[[<span class="dv">24</span>]], <span class="dv">1</span>, <span class="dv">0</span></span>
+<span id="cb501-8"><a href="community.html#cb501-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb501-9"><a href="community.html#cb501-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb501-10"><a href="community.html#cb501-10" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize clique</span></span>
+<span id="cb501-11"><a href="community.html#cb501-11" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb501-12"><a href="community.html#cb501-12" aria-hidden="true" tabindex="-1"></a>g1 <span class="ot">&lt;-</span> <span class="fu">ggraph</span>(ontariopol, <span class="at">layout =</span> <span class="st">&quot;fr&quot;</span>) <span class="sc">+</span></span>
+<span id="cb501-13"><a href="community.html#cb501-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb501-14"><a href="community.html#cb501-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="fu">aes</span>(<span class="at">color =</span> <span class="fu">as.factor</span>(clique24)),</span>
+<span id="cb501-15"><a href="community.html#cb501-15" aria-hidden="true" tabindex="-1"></a>                  <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb501-16"><a href="community.html#cb501-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span>
+<span id="cb501-17"><a href="community.html#cb501-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb501-18"><a href="community.html#cb501-18" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize ground truth political parties</span></span>
+<span id="cb501-19"><a href="community.html#cb501-19" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb501-20"><a href="community.html#cb501-20" aria-hidden="true" tabindex="-1"></a>g2 <span class="ot">&lt;-</span> <span class="fu">ggraph</span>(ontariopol, <span class="at">layout =</span> <span class="st">&quot;fr&quot;</span>) <span class="sc">+</span></span>
+<span id="cb501-21"><a href="community.html#cb501-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb501-22"><a href="community.html#cb501-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">2</span>, <span class="fu">aes</span>(<span class="at">color =</span> party)) <span class="sc">+</span></span>
+<span id="cb501-23"><a href="community.html#cb501-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="st">&quot;Party (Right hand graph)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb501-24"><a href="community.html#cb501-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span>
+<span id="cb501-25"><a href="community.html#cb501-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb501-26"><a href="community.html#cb501-26" aria-hidden="true" tabindex="-1"></a>g1 <span class="sc">+</span> g2</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:ontariopol-clique"></span>
 <img src="_main_files/figure-html/ontariopol-clique-1.png" alt="Large Twitter clique of 48 politicians (left).  Comparison with party membership (right) reveals this to be a PCP clique." width="90%" />
 <p class="caption">

@@ -21,7 +21,11 @@
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.9.5/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.5.1/tabs.js"></script><script src="libs/bs3compat-0.2.5.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
-<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script><link href="libs/vis-4.20.1/vis.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><meta name="citation_title" content="Welcome | Handbook of Graphs and Networks in People Analytics: With Examples in R and Python">
+<meta name="citation_author" content="Keith McNulty">
+<meta name="citation_publication_date" content="2022">
+<meta name="citation_isbn" content="9781032204970">
+<script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script><link href="libs/vis-4.20.1/vis.css" rel="stylesheet">
 <script src="libs/vis-4.20.1/vis.min.js"></script><script src="libs/visNetwork-binding-2.0.9/visNetwork.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 <script src="libs/d3-4.5.0/d3.min.js"></script><script src="libs/forceNetwork-binding-0.4/forceNetwork.js"></script><script src="libs/sankey-1/sankey.js"></script><script src="libs/sankeyNetwork-binding-0.4/sankeyNetwork.js"></script><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-400FPN6D44"></script><script>
       window.dataLayer = window.dataLayer || [];
@@ -77,14 +81,29 @@
 <h1>Welcome<a class="anchor" aria-label="anchor" href="#welcome"><i class="fas fa-link"></i></a>
 </h1>
 <p>Welcome to the website of the book <em>Handbook of Graphs and Networks in People Analytics</em> by <a href="https://www.linkedin.com/in/keith-mcnulty/">Keith McNulty</a>. This is the second volume in a series of technical textbooks for professionals working in analytics. To view or order a print copy of the first volume, please go to its website: <a href="https://peopleanalytics-regression-book.org">Handbook of Regression Modeling in People Analytics</a>.</p>
+<p style="text-align: center;">
+<a href="https://www.routledge.com/Handbook-of-Graphs-and-Networks-in-People-Analytics-With-Examples-in-R/McNulty/p/book/9781032204970"><img src="www/cover/bookcover.jpg" alt="Handbook of Regression Modeling Cover" width="300"></a>
+</p>
 <div class="infobox caution">
-<p><strong>Note</strong>: This book is to be published by Chapman &amp; Hall/CRC Press in June 2022. You can pre-order a print copy <a href="https://www.routledge.com/Handbook-of-Graphs-and-Networks-in-People-Analytics-With-Examples-in-R/McNulty/p/book/9781032204970">here</a>. The online version of this book is free to read here (thanks to Chapman &amp; Hall/CRC), and licensed under the <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>. If you have any feedback, please feel free to <a href="https://github.com/keithmcnulty/ona_book/issues">file an issue on GitHub</a>. Thank you!</p>
+<p><strong>Note</strong>: This book is published by Chapman &amp; Hall/CRC and can be purchased <a href="https://www.routledge.com/Handbook-of-Graphs-and-Networks-in-People-Analytics-With-Examples-in-R/McNulty/p/book/9781032204970">directly from their website</a>, as well as from Amazon and other book retailers. <em>Please consider buying this book if you find it useful</em> - all the author’s royalties are donated to organizations which promotes diversity in data science. The online version of this book is free to read here (thanks to Chapman &amp; Hall/CRC), and licensed under the <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>. If you have any feedback, please feel free to <a href="https://github.com/keithmcnulty/ona_book/issues">file an issue on GitHub</a>. Thank you!</p>
 </div>
 <p>The book is available in <a href="https://ona-book.org">bootstrap format</a> or in a more plain <a href="https://ona-book.org/gitbook">gitbook format</a>.</p>
 <div id="notes-on-data-used-in-this-book" class="section level2 unnumbered">
 <h2>Notes on data used in this book<a class="anchor" aria-label="anchor" href="#notes-on-data-used-in-this-book"><i class="fas fa-link"></i></a>
 </h2>
-<p>It is my intention to make all the data sets in the book available in convenient and self-contained packages in R and Python to coincide with the print release of this book in 2022. In the meantime, the data sets are all accessible via the URLs provided and you can always access them by following the code examples.</p>
+<p>For R users, each of the data sets used in this book can be downloaded individually by following the code in each chapter. Alternatively, if you intend to work through all the chapters, all data sets can be downloaded in advance by installing the <code>onadata</code> package.</p>
+<p>This can be installed as follows:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># install onadata package</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"onadata"</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">onadata</span><span class="op">)</span>
+
+<span class="co"># see a list of data sets</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"onadata"</span><span class="op">)</span>
+
+<span class="co"># find out more about a specific data set ('karate' example)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/help.html">help</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span></code></pre></div>
+<p>An equivalent Python package is in development. Please check back for updates.</p>
 <!--
 For R and Python users, each of the data sets used in this book can be downloaded individually by following the code in each chapter.  Alternatively, if you intend to work through all the chapters, all data sets can be downloaded in advance by installing the `onadata` package.
 
@@ -125,9 +144,9 @@ ona.karate().info()
 <div id="technical-note-for-r-users" class="section level2 unnumbered">
 <h2>Technical note for R users<a class="anchor" aria-label="anchor" href="#technical-note-for-r-users"><i class="fas fa-link"></i></a>
 </h2>
-<p>This book uses the new native pipe operator <code>|&gt;</code> which was introduced in R version 4.1.0. Users using an older version of R, or who wish to use the alternative pipe operator <code>%&gt;%</code> can simply replace this in all code. However, an appropriate library containing <code>%&gt;%</code> will need to be loaded, such as <code>magrittr</code>, <code>dplyr</code> or <code>tidyverse</code>.</p>
+<p>This book uses the new native pipe operator <code>|&gt;</code> which was introduced in R version 4.1.0. Users using an older version of R, or who wish to use the alternative pipe operator <code><a href="https://rdrr.io/pkg/igraph/man/pipe.html">%&gt;%</a></code> can simply replace this in all code. However, an appropriate library containing <code><a href="https://rdrr.io/pkg/igraph/man/pipe.html">%&gt;%</a></code> will need to be loaded, such as <code>magrittr</code>, <code>dplyr</code> or <code>tidyverse</code>.</p>
 <p>Many thanks!</p>
-<p><em>Last updated: 08 February 2022</em></p>
+<p><em>Last updated: 12 February 2022</em></p>
 
 </div>
 </div>

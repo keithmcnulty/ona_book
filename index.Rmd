@@ -45,14 +45,33 @@ knitr::opts_chunk$set(out.width = "90%")
 # bookdown::render_book("index.Rmd", output_format = "bookdown::gitbook", config_file = "_bookdown_gitbook.yml")
 ```
 
+```{r, echo = FALSE}
+# google scholar metadata
+library(metathis)
+if (knitr::is_html_output()) {
+  meta() |> 
+    meta_google_scholar(
+      title = "Handbook of Graphs and Networks in People Analytics: With Examples in R and Python",
+      author = "Keith McNulty",
+      publication_date = "2022",
+      isbn = "9781032204970"
+    ) 
+}
+```
+
+
 `r if (knitr::is_latex_output()) '<!--'`
 # Welcome {-}
 
 Welcome to the website of the book *Handbook of Graphs and Networks in People Analytics* by [Keith McNulty](https://www.linkedin.com/in/keith-mcnulty/).  This is the second volume in a series of technical textbooks for professionals working in analytics.  To view or order a print copy of the first volume, please go to its website: [Handbook of Regression Modeling in People Analytics](https://peopleanalytics-regression-book.org).
 
+```{asis}
+<p style="text-align: center;"><a href="https://www.routledge.com/Handbook-of-Graphs-and-Networks-in-People-Analytics-With-Examples-in-R/McNulty/p/book/9781032204970"><img src="www/cover/bookcover.jpg" alt="Handbook of Regression Modeling Cover" width="300"/></a></p>
+  
 ::: {.infobox .caution}
-**Note**: This book is to be published by Chapman & Hall/CRC Press in June 2022. You can pre-order a print copy [here](https://www.routledge.com/Handbook-of-Graphs-and-Networks-in-People-Analytics-With-Examples-in-R/McNulty/p/book/9781032204970). The online version of this book is free to read here (thanks to Chapman & Hall/CRC), and licensed under the [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-nc-sa/4.0/). If you have any feedback, please feel free to [file an issue on GitHub](https://github.com/keithmcnulty/ona_book/issues). Thank you!
+**Note**: This book is published by Chapman & Hall/CRC and can be purchased [directly from their website](https://www.routledge.com/Handbook-of-Graphs-and-Networks-in-People-Analytics-With-Examples-in-R/McNulty/p/book/9781032204970), as well as from Amazon and other book retailers.  *Please consider buying this book if you find it useful* - all the author's royalties are donated to organizations which promotes diversity in data science.   The online version of this book is free to read here (thanks to Chapman & Hall/CRC), and licensed under the [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-nc-sa/4.0/). If you have any feedback, please feel free to [file an issue on GitHub](https://github.com/keithmcnulty/ona_book/issues). Thank you!
 :::
+```
 
 The book is available in [bootstrap format](https://ona-book.org) or in a more plain [gitbook format](https://ona-book.org/gitbook).
 `r if (knitr::is_latex_output()) '--> \\newpage\\thispagestyle{empty}\\null'`
@@ -60,7 +79,23 @@ The book is available in [bootstrap format](https://ona-book.org) or in a more p
 ## Notes on data used in this book  {-}
 
 `r if (knitr::is_latex_output()) '<!--'`
-It is my intention to make all the data sets in the book available in convenient and self-contained packages in R and Python to coincide with the print release of this book in 2022.  In the meantime, the data sets are all accessible via the URLs provided and you can always access them by following the code examples.
+For R users, each of the data sets used in this book can be downloaded individually by following the code in each chapter.  Alternatively, if you intend to work through all the chapters, all data sets can be downloaded in advance by installing the `onadata` package.
+
+This can be installed as follows:
+
+```{r, eval = FALSE}
+# install onadata package
+install.packages("onadata")
+library(onadata)
+
+# see a list of data sets
+data(package = "onadata")
+
+# find out more about a specific data set ('karate' example)
+help(karate)
+```
+
+An equivalent Python package is in development.  Please check back for updates.
 `r if (knitr::is_latex_output()) '-->'`
 
 `r if (knitr::is_html_output()) '<!--'`

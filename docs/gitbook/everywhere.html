@@ -52,6 +52,10 @@
 
 <link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<meta name="citation_title" content="1 Graphs Everywhere! | Handbook of Graphs and Networks in People Analytics: With Examples in R and Python"/>
+<meta name="citation_author" content="Keith McNulty"/>
+<meta name="citation_publication_date" content="2022"/>
+<meta name="citation_isbn" content="9781032204970"/>
 <script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
 <link href="libs/vis-4.20.1/vis.css" rel="stylesheet" />
 <script src="libs/vis-4.20.1/vis.min.js"></script>
@@ -369,7 +373,7 @@ div.csl-indent {
 <li class="chapter" data-level="7.2" data-path="community.html"><a href="community.html#finding-components-communities-and-cliques-using-r"><i class="fa fa-check"></i><b>7.2</b> Finding components, communities and cliques using R</a>
 <ul>
 <li class="chapter" data-level="7.2.1" data-path="community.html"><a href="community.html#finding-connected-components-of-disconnected-graphs"><i class="fa fa-check"></i><b>7.2.1</b> Finding connected components of disconnected graphs</a></li>
-<li class="chapter" data-level="7.2.2" data-path="community.html"><a href="community.html#partioning-and-community-detection-in-r"><i class="fa fa-check"></i><b>7.2.2</b> Partioning and community detection in R</a></li>
+<li class="chapter" data-level="7.2.2" data-path="community.html"><a href="community.html#partitioning-and-community-detection-in-r"><i class="fa fa-check"></i><b>7.2.2</b> Partitioning and community detection in R</a></li>
 <li class="chapter" data-level="7.2.3" data-path="community.html"><a href="community.html#finding-cliques-in-r"><i class="fa fa-check"></i><b>7.2.3</b> Finding cliques in R</a></li>
 </ul></li>
 <li class="chapter" data-level="7.3" data-path="community.html"><a href="community.html#finding-components-communities-and-cliques-using-python"><i class="fa fa-check"></i><b>7.3</b> Finding components, communities and cliques using Python</a>
@@ -460,8 +464,8 @@ Figure 1.1: The Prussian city of Königsberg circa 1600 from <em>Civitates Orbis
 <p>Enter Leonhard Euler, an 18th century Swiss mathematician who spent the majority of his life in St. Petersburg and Berlin. A prolific original thinker, Euler is considered by many as the greatest mathematician of all time. It is impossible to study mathematics even at high school without being constantly exposed to Euler’s work. He popularized the greek letter <span class="math inline">\(\pi\)</span> to denote Archimedes’ constant ratio between the circumference and diameter of a circle. He formalized the letter <span class="math inline">\(i\)</span> to denote the imaginary number <span class="math inline">\(\sqrt{-1}\)</span> and he defined the exponential constant <span class="math inline">\(e\)</span> which is known as <em>Euler’s number</em>. Living between two cities on either side of Königsberg at the time of the problem of the seven bridges, he set about finding a solution. The one he discovered is both a testament to the beauty of mathematical proof and the first use of the concept of a graph to solve a mathematical problem.</p>
 <p>The first thing Euler did—as any good mathematician will always do—is strip the problem of all its extraneous information and reduce it to its most minimal form. The problem merely requires one to set foot on a land mass. It is not concerned with what route one takes while on that land mass. Therefore, we can represent each of the four land masses as dots. We can then draw lines between the dots to represent the bridges. This, he reasoned, leads to a diagram like that in Interactive Figure <a href="everywhere.html#fig:euler-graph">1.2</a>. The picture can be drawn in infinitely many ways, but it will always be four dots connected by seven lines in the same configuration. If you like, move the nodes around to see what I mean.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:euler-graph"></span>
-<div id="htmlwidget-3e8cd160f85a982514ce" style="width:80%;height:480px;" class="visNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-3e8cd160f85a982514ce">{"x":{"nodes":{"id":["Altstadt-Loebenicht","Kneiphof","Vorstadt-Haberberg","Lomse"],"label":["Altstadt-Loebenicht","Kneiphof","Vorstadt-Haberberg","Lomse"]},"edges":{"from":["Altstadt-Loebenicht","Altstadt-Loebenicht","Altstadt-Loebenicht","Kneiphof","Kneiphof","Kneiphof","Vorstadt-Haberberg"],"to":["Kneiphof","Kneiphof","Lomse","Lomse","Vorstadt-Haberberg","Vorstadt-Haberberg","Lomse"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot"},"manipulation":{"enabled":false},"layout":{"randomSeed":1}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false},"byselection":{"enabled":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-4296f5794e54a4873249" style="width:80%;height:480px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-4296f5794e54a4873249">{"x":{"nodes":{"id":["Altstadt-Loebenicht","Kneiphof","Vorstadt-Haberberg","Lomse"],"label":["Altstadt-Loebenicht","Kneiphof","Vorstadt-Haberberg","Lomse"]},"edges":{"from":["Altstadt-Loebenicht","Altstadt-Loebenicht","Altstadt-Loebenicht","Kneiphof","Kneiphof","Kneiphof","Vorstadt-Haberberg"],"to":["Kneiphof","Kneiphof","Lomse","Lomse","Vorstadt-Haberberg","Vorstadt-Haberberg","Lomse"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot"},"manipulation":{"enabled":false},"layout":{"randomSeed":1}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false},"byselection":{"enabled":false},"main":null,"submain":null,"footer":null,"background":"rgba(0, 0, 0, 0)"},"evals":[],"jsHooks":[]}</script>
 <p class="caption">
 Figure 1.2: A minimal representation of the <em>Seven Bridges of Königsberg</em> problem
 </p>
@@ -576,7 +580,7 @@ Holt-Lunstad, J., Smith, T. B., Baker, M., Harris, T., &amp; Stephenson, D. (201
 Lu, Z., Wahlström, J., &amp; Nehorai, A. (2018). Community detection in complex networks via clique conductance. In <em>Scientific Reports</em>. <a href="https://www.nature.com/articles/s41598-018-23932-z">https://www.nature.com/articles/s41598-018-23932-z</a>
 </div>
 <div id="ref-mcnulty" class="csl-entry">
-McNulty, K. (2021). <em>Handbook of regression modeling in people analytics</em>. <a href="https://peopleanalytics-regression-book.org/">https://peopleanalytics-regression-book.org/</a>
+McNulty, K. (2021). <em>Handbook of regression modeling in people analytics</em>. CRC Press. <a href="https://peopleanalytics-regression-book.org/">https://peopleanalytics-regression-book.org/</a>
 </div>
 <div id="ref-olguin" class="csl-entry">
 Olguin, D., Waber, B. N., Kim, T., Mohan, A., Ara, K., &amp; Pentland, A. (2009). Sensible organizations: Technology and methodology for automatically measuring organizational behavior. In <em>IEEE transactions on systems, man, and cybernetics. Part B, Cybernetics</em> (Vol. 39, pp. 43–55).

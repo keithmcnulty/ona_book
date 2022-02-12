@@ -21,7 +21,11 @@
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.9.5/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.5.1/tabs.js"></script><script src="libs/bs3compat-0.2.5.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
-<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script><link href="libs/vis-4.20.1/vis.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><meta name="citation_title" content="4 Restructuring Data for Use in Graphs | Handbook of Graphs and Networks in People Analytics: With Examples in R and Python">
+<meta name="citation_author" content="Keith McNulty">
+<meta name="citation_publication_date" content="2022">
+<meta name="citation_isbn" content="9781032204970">
+<script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script><link href="libs/vis-4.20.1/vis.css" rel="stylesheet">
 <script src="libs/vis-4.20.1/vis.min.js"></script><script src="libs/visNetwork-binding-2.0.9/visNetwork.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 <script src="libs/d3-4.5.0/d3.min.js"></script><script src="libs/forceNetwork-binding-0.4/forceNetwork.js"></script><script src="libs/sankey-1/sankey.js"></script><script src="libs/sankeyNetwork-binding-0.4/sankeyNetwork.js"></script><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-400FPN6D44"></script><script>
       window.dataLayer = window.dataLayer || [];
@@ -92,7 +96,7 @@
 <span class="header-section-number">4.1</span> Transforming data in rectangular tables for use in graphs<a class="anchor" aria-label="anchor" href="#transforming-data-in-rectangular-tables-for-use-in-graphs"><i class="fas fa-link"></i></a>
 </h2>
 <p>In this example we are going to use some simplified tables from the <em>Chinook</em> database<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;You can find and download the full version of the &lt;em&gt;Chinook&lt;/em&gt; open-source SQLite database at &lt;a href="https://www.sqlitetutorial.net/sqlite-sample-database/" class="uri"&gt;https://www.sqlitetutorial.net/sqlite-sample-database/&lt;/a&gt;&lt;/p&gt;'><sup>41</sup></a>, an open-source database which contains records of the customers, employees and transactions of a music sales company. We will be working with four simplified tables from this database which you can load from the <code>onadata</code> package now or download from the internet as follows:</p>
-<div class="sourceCode" id="cb220"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb221"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># download chinook database tables</span>
 <span class="va">chinook_employees</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span>
   <span class="st">"https://ona-book.org/data/chinook_employees.csv"</span>
@@ -111,7 +115,7 @@
 <span class="header-section-number">4.1.1</span> Creating a simple graph of a management hierarchy<a class="anchor" aria-label="anchor" href="#creating-a-simple-graph-of-a-management-hierarchy"><i class="fas fa-link"></i></a>
 </h3>
 <p>First, let’s take a look at a simple example of a graph that already exists explicitly in one of these data tables. Let’s take a look at a few rows of the <code>chinook_employees</code> data set.</p>
-<div class="sourceCode" id="cb221"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb222"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">chinook_employees</span><span class="op">)</span></code></pre></div>
 <pre><code>##   EmployeeId FirstName LastName ReportsTo
 ## 1          1    Andrew    Adams        NA
@@ -121,7 +125,7 @@
 ## 5          5     Steve  Johnson         2
 ## 6          6   Michael Mitchell         1</code></pre>
 <p>We can easily create a graph of the management relationships using this table. In such a graph, we would have a single entity type (the employee) as the vertices and the management relationship (‘is a manager of’) as the edges. For simplicity, let’s use first names as vertex names. By joining our data on itself, using <code>EmployeeId = ReportsTo</code>, we can create two columns with the first names of those in each management relationship.</p>
-<div class="sourceCode" id="cb223"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb224"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># load dplyr for tidy manipulation in this chapter</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 
@@ -138,7 +142,7 @@
 ## 6          6     Michael   Mitchell         1            7      Robert       King
 ## 7          6     Michael   Mitchell         1            8       Laura   Callahan</code></pre>
 <p>We can see that the <code>FirstName.x</code> column is the manager and so should be the <code>from</code> column and the <code>Firstname.y</code> column should be the <code>to</code> column in our edgelist. We should also remove rows where there is no edge.</p>
-<div class="sourceCode" id="cb225"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb226"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">(</span><span class="va">orgchart_edgelist2</span> <span class="op">&lt;-</span> <span class="va">orgchart_edgelist1</span> |&gt; 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span>from <span class="op">=</span> <span class="va">FirstName.x</span>, to <span class="op">=</span> <span class="va">FirstName.y</span><span class="op">)</span><span class="op">)</span> |&gt; 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">from</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">to</span><span class="op">)</span><span class="op">)</span></code></pre></div>
@@ -151,20 +155,20 @@
 ## 6 Michael   Robert
 ## 7 Michael    Laura</code></pre>
 <p>Now we can create a directed <code>igraph</code> object using the ‘is a manager of’ relationship.</p>
-<div class="sourceCode" id="cb227"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb228"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://igraph.org">igraph</a></span><span class="op">)</span>
 
 <span class="co"># create orgchart graph</span>
 <span class="op">(</span><span class="va">orgchart</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>
   d <span class="op">=</span> <span class="va">orgchart_edgelist2</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH 781152e DN-- 8 7 -- 
+<pre><code>## IGRAPH a516bb1 DN-- 8 7 -- 
 ## + attr: name (v/c)
-## + edges from 781152e (vertex names):
+## + edges from a516bb1 (vertex names):
 ## [1] Andrew -&gt;Nancy    Andrew -&gt;Michael  Nancy  -&gt;Jane     Nancy  -&gt;Margaret Nancy  -&gt;Steve    Michael-&gt;Robert  
 ## [7] Michael-&gt;Laura</code></pre>
 <p>We now have a directed graph with named vertices, so this should be easy to plot. Let’s use <code>ggplot</code> with a dendrogram (tree) layout, as in Figure <a href="restructuring-data.html#fig:chinook-pretty">4.1</a>.</p>
-<div class="sourceCode" id="cb229"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb230"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggraph.data-imaginist.com">ggraph</a></span><span class="op">)</span>
 
 <span class="co"># create management structure as dendrogram (tree)</span>
@@ -185,7 +189,7 @@ Figure 4.1: Management hierarchy of Chinook as a tree (dendrogram)
 <span class="header-section-number">4.1.2</span> Connecting customers through sales reps<a class="anchor" aria-label="anchor" href="#connecting-customers-through-sales-reps"><i class="fas fa-link"></i></a>
 </h3>
 <p>Now let’s try to build a graph based an a slightly more complex definition of connection. We are going to connect Chinook’s customers based on whether or not they share the same support rep. First, let’s take a look at the <code>customers</code> table.</p>
-<div class="sourceCode" id="cb230"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb231"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">chinook_customers</span><span class="op">)</span></code></pre></div>
 <pre><code>##   CustomerId FirstName    LastName SupportRepId
 ## 1          1      Luís   Gonçalves            3
@@ -195,7 +199,7 @@ Figure 4.1: Management hierarchy of Chinook as a tree (dendrogram)
 ## 5          5 František Wichterlová            4
 ## 6          6    Helena        Holý            5</code></pre>
 <p>We see a <code>SupportRepId</code> field which corresponds to the <code>EmployeeId</code> field in the <code>chinook_employees</code> table. We can join these tables to get an edgelist of customers to support reps. Let’s also create full names for better reference.</p>
-<div class="sourceCode" id="cb232"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb233"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># create customer to support rep edgelist</span>
 <span class="va">cust_reps</span> <span class="op">&lt;-</span> <span class="va">chinook_customers</span> |&gt; 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">inner_join</a></span><span class="op">(</span><span class="va">chinook_employees</span>, 
@@ -216,7 +220,7 @@ Figure 4.1: Management hierarchy of Chinook as a tree (dendrogram)
 ## 5 Margaret Park František Wichterlová            4
 ## 6 Steve Johnson           Helena Holý            5</code></pre>
 <p>Now we have an option of creating two types of graphs. First we could create a graph from the data as is, using the <code>CustomerName</code> and <code>RepName</code> as the edgelist, and where the relationship is ‘is a customer of.’ Let’s create that graph, and view it in Figure <a href="restructuring-data.html#fig:cust-rep">4.2</a>. We see a graph with three distinct connected components, each with a hub-and-spoke shape.</p>
-<div class="sourceCode" id="cb234"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb235"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># create igraph</span>
 <span class="va">cust_rep_graph</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>
   d <span class="op">=</span> <span class="va">cust_reps</span>
@@ -243,7 +247,7 @@ Figure 4.2: Graph of Chinook customers connected to their sales reps
 </div>
 <p>Recall our original objective is to connect customers if they have the same support rep. It is possible to use this graph to do this indirectly, applying the logic that customers are connected if there is a path between them in this graph. However, we may wish to ignore the support reps completely in our graph and make direct connections between customers if they share the same support rep. To do this, we need to do some further joining to our previous <code>cust_reps</code> dataframe.</p>
 <p>If we join this dataframe back to our <code>chinook_customers</code> dataframe, we can get customer-to-customer connections via a common support rep as follows:</p>
-<div class="sourceCode" id="cb235"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb236"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># connect customers via common support rep</span>
 <span class="va">cust_cust</span> <span class="op">&lt;-</span> <span class="va">cust_reps</span> |&gt; 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">inner_join</a></span><span class="op">(</span><span class="va">chinook_customers</span>, by <span class="op">=</span> <span class="st">"SupportRepId"</span><span class="op">)</span> |&gt; 
@@ -261,7 +265,7 @@ Figure 4.2: Graph of Chinook customers connected to their sales reps
 ## 5 Luís Gonçalves   Michelle Brooks Jane Peacock
 ## 6 Luís Gonçalves         Tim Goyer Jane Peacock</code></pre>
 <p>Now we are not interested in creating a pseudograph where customers are connected to themselves, so we should remove any rows where <code>Customer1</code> and <code>Customer2</code> are the same.</p>
-<div class="sourceCode" id="cb237"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb238"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># remove loop edges</span>
 <span class="va">customer_network_edgelist</span> <span class="op">&lt;-</span> <span class="va">cust_cust</span> |&gt; 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span>
@@ -278,7 +282,7 @@ Figure 4.2: Graph of Chinook customers connected to their sales reps
 ## 5 Luís Gonçalves         Tim Goyer Jane Peacock
 ## 6 Luís Gonçalves     Frank Ralston Jane Peacock</code></pre>
 <p>Now we have a network edgelist we can work with, and we have <code>RepName</code> available to use as an edge property. Note that relationships will appear in both directions in this data set, but we can take care of that by choosing to represent them in an undirected graph. Let’s build and visualize the graph, as in Figure <a href="restructuring-data.html#fig:cust-cust">4.3</a>. We see a graph consisting of three complete subgraphs with the edges color coded by the support rep.</p>
-<div class="sourceCode" id="cb239"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb240"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># create igraph object</span>
 <span class="va">customer_network</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>
   d <span class="op">=</span> <span class="va">customer_network_edgelist</span>,
@@ -307,14 +311,14 @@ Figure 4.3: Customer-to-customer network for Chinook based on customers sharing 
 </h3>
 <p>To illustrate a further layer of complexity in reshaping data for use in graphs, let’s imagine that we want to connect customers on the basis of their purchases of common products. We may wish to set some parameters to this relationship; for example, a connection might be based on a minimum number of common products purchased, to give us flexibility around the definition of connection.</p>
 <p>To do this we will need to use three tables: <code>chinook_customers</code>, <code>chinook_invoices</code> and <code>chinook_items</code>. To associate a given customer with a purchased item, we will need to join all three of these tables together. Let’s take a quick look at the latter two.</p>
-<div class="sourceCode" id="cb240"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb241"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># view some invoices</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">chinook_invoices</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <pre><code>##   InvoiceId CustomerId
 ## 1         1          2
 ## 2         2          4
 ## 3         3          8</code></pre>
-<div class="sourceCode" id="cb242"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb243"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># view some items</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">chinook_items</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <pre><code>##   InvoiceId TrackId
@@ -322,7 +326,7 @@ Figure 4.3: Customer-to-customer network for Chinook based on customers sharing 
 ## 2         1       4
 ## 3         2       6</code></pre>
 <p>We can regard the <code>TrackId</code> as an item, and using a couple of joins we can quickly match customers with items. It is possible that customers may have purchased the same item numerous times, but we are not interested in that for this work and so we just need the distinct customer and track pairings.</p>
-<div class="sourceCode" id="cb244"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb245"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># generate distinct customer-item pairs</span>
 <span class="va">cust_item</span> <span class="op">&lt;-</span> <span class="va">chinook_customers</span> |&gt; 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">inner_join</a></span><span class="op">(</span><span class="va">chinook_invoices</span><span class="op">)</span> |&gt; 
@@ -338,7 +342,7 @@ Figure 4.3: Customer-to-customer network for Chinook based on customers sharing 
 ## 2 Luís Gonçalves    3248
 ## 3 Luís Gonçalves     447</code></pre>
 <p>Similar to our previous example, we can now use this to create an undirected network with two vertex entities: customer and item.</p>
-<div class="sourceCode" id="cb246"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb247"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># initiate graph object</span>
 <span class="va">customer_item_network</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>
   d <span class="op">=</span> <span class="va">cust_item</span>,
@@ -352,7 +356,7 @@ Figure 4.3: Customer-to-customer network for Chinook based on customers sharing 
   <span class="st">"Customer"</span>
 <span class="op">)</span></code></pre></div>
 <p>This is a big network. Let’s visualize it simply, as in Figure <a href="restructuring-data.html#fig:cust-item-viz">4.4</a>.</p>
-<div class="sourceCode" id="cb247"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb248"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
 <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/ggraph.html">ggraph</a></span><span class="op">(</span><span class="va">customer_item_network</span>, layout <span class="op">=</span> <span class="st">"fr"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_edge_link.html">geom_edge_link</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"grey"</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span>
@@ -365,7 +369,7 @@ Figure 4.4: Network connecting customers via items purchased
 </p>
 </div>
 <p>We can see from looking at this graph that there are a large number of items that only one customer has purchased. Therefore, the items themselves seem to be extraneous information for this particular use case. If we are not interested in the items themselves, we can instead create the connections between customers directly. In a similar way to the previous problem, we can join the <code>cust_item</code> table on itself to connect customers based on common item purchases, and we should remove links between the same customer.</p>
-<div class="sourceCode" id="cb248"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb249"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># join customers to customers via common items</span>
 <span class="va">cust_cust_itemjoin</span> <span class="op">&lt;-</span> <span class="va">cust_item</span> |&gt; 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">inner_join</a></span><span class="op">(</span><span class="va">cust_item</span>, by <span class="op">=</span> <span class="st">"TrackId"</span><span class="op">)</span> |&gt; 
@@ -383,7 +387,7 @@ Figure 4.4: Network connecting customers via items purchased
 ## 5 Luís Gonçalves         Emma Jones     280
 ## 6 Luís Gonçalves         Emma Jones     298</code></pre>
 <p>The issue with this data set is that it will count every instance of a common item purchase twice, with the customers in opposite orders, and this is double counting. So, we need to group the pairs of customers irrelevant of their order and ensure we don’t double up on items.</p>
-<div class="sourceCode" id="cb250"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb251"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># avoid double counting</span>
 <span class="va">cust_item_network</span> <span class="op">&lt;-</span> <span class="va">cust_cust_itemjoin</span> |&gt; 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span>Cust1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">pmin</a></span><span class="op">(</span><span class="va">CustName1</span>, <span class="va">CustName2</span><span class="op">)</span>, 
@@ -402,12 +406,12 @@ Figure 4.4: Network connecting customers via items purchased
 ## 5 Aaron Mitchell Niklas Schröder     857
 ## 6 Aaron Mitchell Phil Hughes        1822</code></pre>
 <p>If that worked, we should see that the table <code>cust_cust_itemjoin</code> has twice as many rows as <code>cust_item_network</code>.</p>
-<div class="sourceCode" id="cb252"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb253"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># check double size</span>
 <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">cust_cust_itemjoin</span><span class="op">)</span><span class="op">/</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">cust_item_network</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 2</code></pre>
 <p>This looks good. So we now can count up how many common items each pair of customers purchased.</p>
-<div class="sourceCode" id="cb254"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb255"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># count common items</span>
 <span class="va">cust_item_network</span> <span class="op">&lt;-</span> <span class="va">cust_item_network</span> |&gt; 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">Cust1</span>, <span class="va">Cust2</span>, name <span class="op">=</span> <span class="st">"Items"</span><span class="op">)</span> 
@@ -424,7 +428,7 @@ Figure 4.4: Network connecting customers via items purchased
 ## 5 Aaron Mitchell Niklas Schröder     1
 ## 6 Aaron Mitchell Phil Hughes         1</code></pre>
 <p>We are now ready to construct our customer-to-customer graph, with <code>Items</code> as an edge property. We can visualize it with an edge color code indicating how many common items were purchased, as in Figure <a href="restructuring-data.html#fig:cust-items-coded">4.5</a>.</p>
-<div class="sourceCode" id="cb256"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb257"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># create undirected graph</span>
 <span class="va">custtocust_network</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>
   d <span class="op">=</span> <span class="va">cust_item_network</span>,
@@ -445,7 +449,7 @@ Figure 4.5: Chinook customer-to-customer network based on common item purchases
 </p>
 </div>
 <p>If we wish, we can restrict the definition of connection. For example, we may define it as ‘purchased at least two items in common,’ as in Figure <a href="restructuring-data.html#fig:cust-item-two">4.6</a>. We can use the <code><a href="https://rdrr.io/pkg/igraph/man/subgraph.html">subgraph()</a></code> function in <code>igraph</code> for this, and the result reveals a graph with two connected components, indicating that there are two independent groups of customers who are related according to some commonality in music purchasing.</p>
-<div class="sourceCode" id="cb257"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb258"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># select edges that have Item value of at least 2</span>
 <span class="va">edges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/E.html">E</a></span><span class="op">(</span><span class="va">custtocust_network</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/E.html">E</a></span><span class="op">(</span><span class="va">custtocust_network</span><span class="op">)</span><span class="op">$</span><span class="va">Items</span> <span class="op">&gt;=</span> <span class="fl">2</span><span class="op">]</span>
 
@@ -471,37 +475,37 @@ Figure 4.6: Chinook customer-to-customer network based on at least two common it
 <span class="header-section-number">4.1.4</span> Approaches using Python<a class="anchor" aria-label="anchor" href="#approaches-using-python"><i class="fas fa-link"></i></a>
 </h3>
 <p>To illustrate similar approaches in Python, we will redo the work in Section <a href="restructuring-data.html#common-purchases">4.1.3</a>. First, we will download the various data sets.</p>
-<div class="sourceCode" id="cb258"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb258-1"><a href="restructuring-data.html#cb258-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb258-2"><a href="restructuring-data.html#cb258-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb258-3"><a href="restructuring-data.html#cb258-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb258-4"><a href="restructuring-data.html#cb258-4" aria-hidden="true" tabindex="-1"></a><span class="co"># download chinook database tables</span></span>
-<span id="cb258-5"><a href="restructuring-data.html#cb258-5" aria-hidden="true" tabindex="-1"></a>chinook_customers <span class="op">=</span> pd.read_csv(</span>
-<span id="cb258-6"><a href="restructuring-data.html#cb258-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"https://ona-book.org/data/chinook_customers.csv"</span></span>
-<span id="cb258-7"><a href="restructuring-data.html#cb258-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb258-8"><a href="restructuring-data.html#cb258-8" aria-hidden="true" tabindex="-1"></a>chinook_invoices <span class="op">=</span> pd.read_csv(</span>
-<span id="cb258-9"><a href="restructuring-data.html#cb258-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"https://ona-book.org/data/chinook_invoices.csv"</span></span>
-<span id="cb258-10"><a href="restructuring-data.html#cb258-10" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb258-11"><a href="restructuring-data.html#cb258-11" aria-hidden="true" tabindex="-1"></a>chinook_items <span class="op">=</span> pd.read_csv(</span>
-<span id="cb258-12"><a href="restructuring-data.html#cb258-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"https://ona-book.org/data/chinook_items.csv"</span></span>
-<span id="cb258-13"><a href="restructuring-data.html#cb258-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb259"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb259-1"><a href="restructuring-data.html#cb259-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb259-2"><a href="restructuring-data.html#cb259-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb259-3"><a href="restructuring-data.html#cb259-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb259-4"><a href="restructuring-data.html#cb259-4" aria-hidden="true" tabindex="-1"></a><span class="co"># download chinook database tables</span></span>
+<span id="cb259-5"><a href="restructuring-data.html#cb259-5" aria-hidden="true" tabindex="-1"></a>chinook_customers <span class="op">=</span> pd.read_csv(</span>
+<span id="cb259-6"><a href="restructuring-data.html#cb259-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"https://ona-book.org/data/chinook_customers.csv"</span></span>
+<span id="cb259-7"><a href="restructuring-data.html#cb259-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb259-8"><a href="restructuring-data.html#cb259-8" aria-hidden="true" tabindex="-1"></a>chinook_invoices <span class="op">=</span> pd.read_csv(</span>
+<span id="cb259-9"><a href="restructuring-data.html#cb259-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"https://ona-book.org/data/chinook_invoices.csv"</span></span>
+<span id="cb259-10"><a href="restructuring-data.html#cb259-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb259-11"><a href="restructuring-data.html#cb259-11" aria-hidden="true" tabindex="-1"></a>chinook_items <span class="op">=</span> pd.read_csv(</span>
+<span id="cb259-12"><a href="restructuring-data.html#cb259-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"https://ona-book.org/data/chinook_items.csv"</span></span>
+<span id="cb259-13"><a href="restructuring-data.html#cb259-13" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>Now we join the three tables together, create the <code>FullName</code> variable and ensure that we don’t have any duplicate relationships:</p>
-<div class="sourceCode" id="cb259"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb259-1"><a href="restructuring-data.html#cb259-1" aria-hidden="true" tabindex="-1"></a><span class="co"># join customers to invoices</span></span>
-<span id="cb259-2"><a href="restructuring-data.html#cb259-2" aria-hidden="true" tabindex="-1"></a>joined_tables <span class="op">=</span> pd.merge(</span>
-<span id="cb259-3"><a href="restructuring-data.html#cb259-3" aria-hidden="true" tabindex="-1"></a>  chinook_customers,</span>
-<span id="cb259-4"><a href="restructuring-data.html#cb259-4" aria-hidden="true" tabindex="-1"></a>  chinook_invoices</span>
-<span id="cb259-5"><a href="restructuring-data.html#cb259-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb259-6"><a href="restructuring-data.html#cb259-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb259-7"><a href="restructuring-data.html#cb259-7" aria-hidden="true" tabindex="-1"></a><span class="co"># join result to items</span></span>
-<span id="cb259-8"><a href="restructuring-data.html#cb259-8" aria-hidden="true" tabindex="-1"></a>joined_tables <span class="op">=</span> pd.merge(joined_tables, chinook_items)</span>
-<span id="cb259-9"><a href="restructuring-data.html#cb259-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb259-10"><a href="restructuring-data.html#cb259-10" aria-hidden="true" tabindex="-1"></a><span class="co"># create FullName</span></span>
-<span id="cb259-11"><a href="restructuring-data.html#cb259-11" aria-hidden="true" tabindex="-1"></a>joined_tables[<span class="st">'FullName'</span>] <span class="op">=</span> joined_tables[<span class="st">'FirstName'</span>] <span class="op">+</span> <span class="st">' '</span> <span class="op">+</span> <span class="op">\</span></span>
-<span id="cb259-12"><a href="restructuring-data.html#cb259-12" aria-hidden="true" tabindex="-1"></a>joined_tables[<span class="st">'LastName'</span>]</span>
-<span id="cb259-13"><a href="restructuring-data.html#cb259-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb259-14"><a href="restructuring-data.html#cb259-14" aria-hidden="true" tabindex="-1"></a><span class="co"># drop duplicates and view head</span></span>
-<span id="cb259-15"><a href="restructuring-data.html#cb259-15" aria-hidden="true" tabindex="-1"></a>cust_item_table <span class="op">=</span> joined_tables[[<span class="st">'FullName'</span>, <span class="st">'TrackId'</span>]]<span class="op">\</span></span>
-<span id="cb259-16"><a href="restructuring-data.html#cb259-16" aria-hidden="true" tabindex="-1"></a>.drop_duplicates()</span>
-<span id="cb259-17"><a href="restructuring-data.html#cb259-17" aria-hidden="true" tabindex="-1"></a>cust_item_table.head()</span></code></pre></div>
+<div class="sourceCode" id="cb260"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb260-1"><a href="restructuring-data.html#cb260-1" aria-hidden="true" tabindex="-1"></a><span class="co"># join customers to invoices</span></span>
+<span id="cb260-2"><a href="restructuring-data.html#cb260-2" aria-hidden="true" tabindex="-1"></a>joined_tables <span class="op">=</span> pd.merge(</span>
+<span id="cb260-3"><a href="restructuring-data.html#cb260-3" aria-hidden="true" tabindex="-1"></a>  chinook_customers,</span>
+<span id="cb260-4"><a href="restructuring-data.html#cb260-4" aria-hidden="true" tabindex="-1"></a>  chinook_invoices</span>
+<span id="cb260-5"><a href="restructuring-data.html#cb260-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb260-6"><a href="restructuring-data.html#cb260-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb260-7"><a href="restructuring-data.html#cb260-7" aria-hidden="true" tabindex="-1"></a><span class="co"># join result to items</span></span>
+<span id="cb260-8"><a href="restructuring-data.html#cb260-8" aria-hidden="true" tabindex="-1"></a>joined_tables <span class="op">=</span> pd.merge(joined_tables, chinook_items)</span>
+<span id="cb260-9"><a href="restructuring-data.html#cb260-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb260-10"><a href="restructuring-data.html#cb260-10" aria-hidden="true" tabindex="-1"></a><span class="co"># create FullName</span></span>
+<span id="cb260-11"><a href="restructuring-data.html#cb260-11" aria-hidden="true" tabindex="-1"></a>joined_tables[<span class="st">'FullName'</span>] <span class="op">=</span> joined_tables[<span class="st">'FirstName'</span>] <span class="op">+</span> <span class="st">' '</span> <span class="op">+</span> <span class="op">\</span></span>
+<span id="cb260-12"><a href="restructuring-data.html#cb260-12" aria-hidden="true" tabindex="-1"></a>joined_tables[<span class="st">'LastName'</span>]</span>
+<span id="cb260-13"><a href="restructuring-data.html#cb260-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb260-14"><a href="restructuring-data.html#cb260-14" aria-hidden="true" tabindex="-1"></a><span class="co"># drop duplicates and view head</span></span>
+<span id="cb260-15"><a href="restructuring-data.html#cb260-15" aria-hidden="true" tabindex="-1"></a>cust_item_table <span class="op">=</span> joined_tables[[<span class="st">'FullName'</span>, <span class="st">'TrackId'</span>]]<span class="op">\</span></span>
+<span id="cb260-16"><a href="restructuring-data.html#cb260-16" aria-hidden="true" tabindex="-1"></a>.drop_duplicates()</span>
+<span id="cb260-17"><a href="restructuring-data.html#cb260-17" aria-hidden="true" tabindex="-1"></a>cust_item_table.head()</span></code></pre></div>
 <pre><code>##          FullName  TrackId
 ## 0  Luís Gonçalves     3247
 ## 1  Luís Gonçalves     3248
@@ -509,22 +513,22 @@ Figure 4.6: Chinook customer-to-customer network based on at least two common it
 ## 3  Luís Gonçalves      449
 ## 4  Luís Gonçalves      451</code></pre>
 <p>Now we can create a graph of connections between customers and items and visualize it as in Figure <a href="restructuring-data.html#fig:custitempy">4.7</a>.</p>
-<div class="sourceCode" id="cb261"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb261-1"><a href="restructuring-data.html#cb261-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
-<span id="cb261-2"><a href="restructuring-data.html#cb261-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
-<span id="cb261-3"><a href="restructuring-data.html#cb261-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb261-4"><a href="restructuring-data.html#cb261-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create networkx object</span></span>
-<span id="cb261-5"><a href="restructuring-data.html#cb261-5" aria-hidden="true" tabindex="-1"></a>cust_item_network <span class="op">=</span> nx.from_pandas_edgelist(cust_item_table,</span>
-<span id="cb261-6"><a href="restructuring-data.html#cb261-6" aria-hidden="true" tabindex="-1"></a>source <span class="op">=</span> <span class="st">"FullName"</span>, target <span class="op">=</span> <span class="st">"TrackId"</span>)</span>
-<span id="cb261-7"><a href="restructuring-data.html#cb261-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb261-8"><a href="restructuring-data.html#cb261-8" aria-hidden="true" tabindex="-1"></a><span class="co"># color items differently to customers</span></span>
-<span id="cb261-9"><a href="restructuring-data.html#cb261-9" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> [<span class="st">"red"</span> <span class="cf">if</span> i <span class="kw">in</span> cust_item_table[<span class="st">'FullName'</span>].values <span class="cf">else</span> <span class="st">"green"</span></span>
-<span id="cb261-10"><a href="restructuring-data.html#cb261-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> cust_item_network.nodes]</span>
-<span id="cb261-11"><a href="restructuring-data.html#cb261-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb261-12"><a href="restructuring-data.html#cb261-12" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize</span></span>
-<span id="cb261-13"><a href="restructuring-data.html#cb261-13" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">123</span>)</span>
-<span id="cb261-14"><a href="restructuring-data.html#cb261-14" aria-hidden="true" tabindex="-1"></a>nx.draw_networkx(cust_item_network, node_color <span class="op">=</span> colors, node_size <span class="op">=</span> <span class="dv">2</span>,</span>
-<span id="cb261-15"><a href="restructuring-data.html#cb261-15" aria-hidden="true" tabindex="-1"></a>edge_color <span class="op">=</span> <span class="st">"grey"</span>, with_labels <span class="op">=</span> <span class="va">False</span>)</span>
-<span id="cb261-16"><a href="restructuring-data.html#cb261-16" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<div class="sourceCode" id="cb262"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb262-1"><a href="restructuring-data.html#cb262-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
+<span id="cb262-2"><a href="restructuring-data.html#cb262-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
+<span id="cb262-3"><a href="restructuring-data.html#cb262-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb262-4"><a href="restructuring-data.html#cb262-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create networkx object</span></span>
+<span id="cb262-5"><a href="restructuring-data.html#cb262-5" aria-hidden="true" tabindex="-1"></a>cust_item_network <span class="op">=</span> nx.from_pandas_edgelist(cust_item_table,</span>
+<span id="cb262-6"><a href="restructuring-data.html#cb262-6" aria-hidden="true" tabindex="-1"></a>source <span class="op">=</span> <span class="st">"FullName"</span>, target <span class="op">=</span> <span class="st">"TrackId"</span>)</span>
+<span id="cb262-7"><a href="restructuring-data.html#cb262-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb262-8"><a href="restructuring-data.html#cb262-8" aria-hidden="true" tabindex="-1"></a><span class="co"># color items differently to customers</span></span>
+<span id="cb262-9"><a href="restructuring-data.html#cb262-9" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> [<span class="st">"red"</span> <span class="cf">if</span> i <span class="kw">in</span> cust_item_table[<span class="st">'FullName'</span>].values <span class="cf">else</span> <span class="st">"green"</span></span>
+<span id="cb262-10"><a href="restructuring-data.html#cb262-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> cust_item_network.nodes]</span>
+<span id="cb262-11"><a href="restructuring-data.html#cb262-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb262-12"><a href="restructuring-data.html#cb262-12" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize</span></span>
+<span id="cb262-13"><a href="restructuring-data.html#cb262-13" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">123</span>)</span>
+<span id="cb262-14"><a href="restructuring-data.html#cb262-14" aria-hidden="true" tabindex="-1"></a>nx.draw_networkx(cust_item_network, node_color <span class="op">=</span> colors, node_size <span class="op">=</span> <span class="dv">2</span>,</span>
+<span id="cb262-15"><a href="restructuring-data.html#cb262-15" aria-hidden="true" tabindex="-1"></a>edge_color <span class="op">=</span> <span class="st">"grey"</span>, with_labels <span class="op">=</span> <span class="va">False</span>)</span>
+<span id="cb262-16"><a href="restructuring-data.html#cb262-16" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
 <div class="figure" style="text-align: center">
 <span style="display:block;" id="fig:custitempy"></span>
 <img src="www/restructuring-data/custitempy-1.png" alt="Visualization of the Chinook customer-to-item network with customers as red vertices and items as green vertices" width="90%"><p class="caption">
@@ -532,23 +536,23 @@ Figure 4.7: Visualization of the Chinook customer-to-item network with customers
 </p>
 </div>
 <p>Now to create the customer-to-customer network based on common item purchases, we do further joins on the data sets and remove connections between the same customers.</p>
-<div class="sourceCode" id="cb262"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb262-1"><a href="restructuring-data.html#cb262-1" aria-hidden="true" tabindex="-1"></a><span class="co"># merge customers on common track IDs</span></span>
-<span id="cb262-2"><a href="restructuring-data.html#cb262-2" aria-hidden="true" tabindex="-1"></a>cust_cust_table <span class="op">=</span> pd.merge(cust_item_table, cust_item_table,</span>
-<span id="cb262-3"><a href="restructuring-data.html#cb262-3" aria-hidden="true" tabindex="-1"></a>on <span class="op">=</span> <span class="st">"TrackId"</span>)</span>
-<span id="cb262-4"><a href="restructuring-data.html#cb262-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb262-5"><a href="restructuring-data.html#cb262-5" aria-hidden="true" tabindex="-1"></a><span class="co"># rename columns</span></span>
-<span id="cb262-6"><a href="restructuring-data.html#cb262-6" aria-hidden="true" tabindex="-1"></a>cust_cust_table.rename(</span>
-<span id="cb262-7"><a href="restructuring-data.html#cb262-7" aria-hidden="true" tabindex="-1"></a>  columns<span class="op">=</span>{<span class="st">'FullName_x'</span> :<span class="st">'CustName1'</span>, <span class="st">'FullName_y'</span> :<span class="st">'CustName2'</span>},</span>
-<span id="cb262-8"><a href="restructuring-data.html#cb262-8" aria-hidden="true" tabindex="-1"></a>  inplace<span class="op">=</span><span class="va">True</span></span>
-<span id="cb262-9"><a href="restructuring-data.html#cb262-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb262-10"><a href="restructuring-data.html#cb262-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb262-11"><a href="restructuring-data.html#cb262-11" aria-hidden="true" tabindex="-1"></a><span class="co"># remove loop edges</span></span>
-<span id="cb262-12"><a href="restructuring-data.html#cb262-12" aria-hidden="true" tabindex="-1"></a>cust_cust_table <span class="op">=</span> cust_cust_table[</span>
-<span id="cb262-13"><a href="restructuring-data.html#cb262-13" aria-hidden="true" tabindex="-1"></a>  <span class="op">~</span>(cust_cust_table[<span class="st">'CustName1'</span>] <span class="op">==</span> cust_cust_table[<span class="st">'CustName2'</span>])</span>
-<span id="cb262-14"><a href="restructuring-data.html#cb262-14" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb262-15"><a href="restructuring-data.html#cb262-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb262-16"><a href="restructuring-data.html#cb262-16" aria-hidden="true" tabindex="-1"></a><span class="co"># view head</span></span>
-<span id="cb262-17"><a href="restructuring-data.html#cb262-17" aria-hidden="true" tabindex="-1"></a>cust_cust_table.head()</span></code></pre></div>
+<div class="sourceCode" id="cb263"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb263-1"><a href="restructuring-data.html#cb263-1" aria-hidden="true" tabindex="-1"></a><span class="co"># merge customers on common track IDs</span></span>
+<span id="cb263-2"><a href="restructuring-data.html#cb263-2" aria-hidden="true" tabindex="-1"></a>cust_cust_table <span class="op">=</span> pd.merge(cust_item_table, cust_item_table,</span>
+<span id="cb263-3"><a href="restructuring-data.html#cb263-3" aria-hidden="true" tabindex="-1"></a>on <span class="op">=</span> <span class="st">"TrackId"</span>)</span>
+<span id="cb263-4"><a href="restructuring-data.html#cb263-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb263-5"><a href="restructuring-data.html#cb263-5" aria-hidden="true" tabindex="-1"></a><span class="co"># rename columns</span></span>
+<span id="cb263-6"><a href="restructuring-data.html#cb263-6" aria-hidden="true" tabindex="-1"></a>cust_cust_table.rename(</span>
+<span id="cb263-7"><a href="restructuring-data.html#cb263-7" aria-hidden="true" tabindex="-1"></a>  columns<span class="op">=</span>{<span class="st">'FullName_x'</span> :<span class="st">'CustName1'</span>, <span class="st">'FullName_y'</span> :<span class="st">'CustName2'</span>},</span>
+<span id="cb263-8"><a href="restructuring-data.html#cb263-8" aria-hidden="true" tabindex="-1"></a>  inplace<span class="op">=</span><span class="va">True</span></span>
+<span id="cb263-9"><a href="restructuring-data.html#cb263-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb263-10"><a href="restructuring-data.html#cb263-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb263-11"><a href="restructuring-data.html#cb263-11" aria-hidden="true" tabindex="-1"></a><span class="co"># remove loop edges</span></span>
+<span id="cb263-12"><a href="restructuring-data.html#cb263-12" aria-hidden="true" tabindex="-1"></a>cust_cust_table <span class="op">=</span> cust_cust_table[</span>
+<span id="cb263-13"><a href="restructuring-data.html#cb263-13" aria-hidden="true" tabindex="-1"></a>  <span class="op">~</span>(cust_cust_table[<span class="st">'CustName1'</span>] <span class="op">==</span> cust_cust_table[<span class="st">'CustName2'</span>])</span>
+<span id="cb263-14"><a href="restructuring-data.html#cb263-14" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb263-15"><a href="restructuring-data.html#cb263-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb263-16"><a href="restructuring-data.html#cb263-16" aria-hidden="true" tabindex="-1"></a><span class="co"># view head</span></span>
+<span id="cb263-17"><a href="restructuring-data.html#cb263-17" aria-hidden="true" tabindex="-1"></a>cust_cust_table.head()</span></code></pre></div>
 <pre><code>##              CustName1  TrackId           CustName2
 ## 4       Luís Gonçalves      449      Edward Francis
 ## 5       Edward Francis      449      Luís Gonçalves
@@ -556,16 +560,16 @@ Figure 4.7: Visualization of the Chinook customer-to-item network with customers
 ## 12  Richard Cunningham     1157      Luís Gonçalves
 ## 17      Luís Gonçalves     1169  Richard Cunningham</code></pre>
 <p>Now we can drop duplicates based on the <code>TrackId</code>, count the items by pair of customers, and we will have our final edgelist:</p>
-<div class="sourceCode" id="cb264"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb264-1"><a href="restructuring-data.html#cb264-1" aria-hidden="true" tabindex="-1"></a><span class="co"># drop duplicates</span></span>
-<span id="cb264-2"><a href="restructuring-data.html#cb264-2" aria-hidden="true" tabindex="-1"></a>cust_cust_table <span class="op">=</span> cust_cust_table.drop_duplicates(<span class="st">'TrackId'</span>)</span>
-<span id="cb264-3"><a href="restructuring-data.html#cb264-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb264-4"><a href="restructuring-data.html#cb264-4" aria-hidden="true" tabindex="-1"></a><span class="co"># count common items</span></span>
-<span id="cb264-5"><a href="restructuring-data.html#cb264-5" aria-hidden="true" tabindex="-1"></a>cust_cust_table <span class="op">=</span> cust_cust_table.groupby([<span class="st">'CustName1'</span>, <span class="st">'CustName2'</span>], </span>
-<span id="cb264-6"><a href="restructuring-data.html#cb264-6" aria-hidden="true" tabindex="-1"></a>as_index <span class="op">=</span> <span class="va">False</span>).TrackId.nunique()</span>
-<span id="cb264-7"><a href="restructuring-data.html#cb264-7" aria-hidden="true" tabindex="-1"></a>cust_cust_table.rename(columns <span class="op">=</span> {<span class="st">'TrackId'</span>: <span class="st">'Items'</span>}, inplace <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb264-8"><a href="restructuring-data.html#cb264-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb264-9"><a href="restructuring-data.html#cb264-9" aria-hidden="true" tabindex="-1"></a><span class="co"># view head</span></span>
-<span id="cb264-10"><a href="restructuring-data.html#cb264-10" aria-hidden="true" tabindex="-1"></a>cust_cust_table.head()</span></code></pre></div>
+<div class="sourceCode" id="cb265"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb265-1"><a href="restructuring-data.html#cb265-1" aria-hidden="true" tabindex="-1"></a><span class="co"># drop duplicates</span></span>
+<span id="cb265-2"><a href="restructuring-data.html#cb265-2" aria-hidden="true" tabindex="-1"></a>cust_cust_table <span class="op">=</span> cust_cust_table.drop_duplicates(<span class="st">'TrackId'</span>)</span>
+<span id="cb265-3"><a href="restructuring-data.html#cb265-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb265-4"><a href="restructuring-data.html#cb265-4" aria-hidden="true" tabindex="-1"></a><span class="co"># count common items</span></span>
+<span id="cb265-5"><a href="restructuring-data.html#cb265-5" aria-hidden="true" tabindex="-1"></a>cust_cust_table <span class="op">=</span> cust_cust_table.groupby([<span class="st">'CustName1'</span>, <span class="st">'CustName2'</span>], </span>
+<span id="cb265-6"><a href="restructuring-data.html#cb265-6" aria-hidden="true" tabindex="-1"></a>as_index <span class="op">=</span> <span class="va">False</span>).TrackId.nunique()</span>
+<span id="cb265-7"><a href="restructuring-data.html#cb265-7" aria-hidden="true" tabindex="-1"></a>cust_cust_table.rename(columns <span class="op">=</span> {<span class="st">'TrackId'</span>: <span class="st">'Items'</span>}, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb265-8"><a href="restructuring-data.html#cb265-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb265-9"><a href="restructuring-data.html#cb265-9" aria-hidden="true" tabindex="-1"></a><span class="co"># view head</span></span>
+<span id="cb265-10"><a href="restructuring-data.html#cb265-10" aria-hidden="true" tabindex="-1"></a>cust_cust_table.head()</span></code></pre></div>
 <pre><code>##          CustName1        CustName2  Items
 ## 0   Aaron Mitchell    Enrique Muñoz      1
 ## 1   Aaron Mitchell    Hugh O'Reilly      1
@@ -573,16 +577,16 @@ Figure 4.7: Visualization of the Chinook customer-to-item network with customers
 ## 3   Aaron Mitchell      Phil Hughes      1
 ## 4  Alexandre Rocha   Aaron Mitchell      1</code></pre>
 <p>Now we are ready to create and visualize our customer-to-customer network, as in Figure <a href="restructuring-data.html#fig:custcustpy">4.8</a>.</p>
-<div class="sourceCode" id="cb266"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb266-1"><a href="restructuring-data.html#cb266-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create networkx object</span></span>
-<span id="cb266-2"><a href="restructuring-data.html#cb266-2" aria-hidden="true" tabindex="-1"></a>cust_cust_network <span class="op">=</span> nx.from_pandas_edgelist(cust_cust_table,</span>
-<span id="cb266-3"><a href="restructuring-data.html#cb266-3" aria-hidden="true" tabindex="-1"></a>source <span class="op">=</span> <span class="st">"CustName1"</span>, target <span class="op">=</span> <span class="st">"CustName2"</span>, edge_attr <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb266-4"><a href="restructuring-data.html#cb266-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb266-5"><a href="restructuring-data.html#cb266-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb266-6"><a href="restructuring-data.html#cb266-6" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize</span></span>
-<span id="cb266-7"><a href="restructuring-data.html#cb266-7" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">123</span>)</span>
-<span id="cb266-8"><a href="restructuring-data.html#cb266-8" aria-hidden="true" tabindex="-1"></a>nx.draw_networkx(cust_cust_network, node_color <span class="op">=</span> <span class="st">"lightblue"</span>,</span>
-<span id="cb266-9"><a href="restructuring-data.html#cb266-9" aria-hidden="true" tabindex="-1"></a>edge_color <span class="op">=</span> <span class="st">"grey"</span>, with_labels <span class="op">=</span> <span class="va">False</span>)</span>
-<span id="cb266-10"><a href="restructuring-data.html#cb266-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<div class="sourceCode" id="cb267"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb267-1"><a href="restructuring-data.html#cb267-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create networkx object</span></span>
+<span id="cb267-2"><a href="restructuring-data.html#cb267-2" aria-hidden="true" tabindex="-1"></a>cust_cust_network <span class="op">=</span> nx.from_pandas_edgelist(cust_cust_table,</span>
+<span id="cb267-3"><a href="restructuring-data.html#cb267-3" aria-hidden="true" tabindex="-1"></a>source <span class="op">=</span> <span class="st">"CustName1"</span>, target <span class="op">=</span> <span class="st">"CustName2"</span>, edge_attr <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb267-4"><a href="restructuring-data.html#cb267-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb267-5"><a href="restructuring-data.html#cb267-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb267-6"><a href="restructuring-data.html#cb267-6" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize</span></span>
+<span id="cb267-7"><a href="restructuring-data.html#cb267-7" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">123</span>)</span>
+<span id="cb267-8"><a href="restructuring-data.html#cb267-8" aria-hidden="true" tabindex="-1"></a>nx.draw_networkx(cust_cust_network, node_color <span class="op">=</span> <span class="st">"lightblue"</span>,</span>
+<span id="cb267-9"><a href="restructuring-data.html#cb267-9" aria-hidden="true" tabindex="-1"></a>edge_color <span class="op">=</span> <span class="st">"grey"</span>, with_labels <span class="op">=</span> <span class="va">False</span>)</span>
+<span id="cb267-10"><a href="restructuring-data.html#cb267-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
 <div class="figure" style="text-align: center">
 <span style="display:block;" id="fig:custcustpy"></span>
 <img src="www/restructuring-data/custcustpy-1.png" alt="Visualization of the Chinook customer-to-customer network based on any common item purchase" width="90%"><p class="caption">
@@ -590,19 +594,19 @@ Figure 4.8: Visualization of the Chinook customer-to-customer network based on a
 </p>
 </div>
 <p>And if we wish to restrict connections to two or more common item purchases, we can create a subgraph based on the number of items, as in Figure <a href="restructuring-data.html#fig:twoitempy">4.9</a>. Some experimentation with the parameter <code>k</code> in <code>networkx</code>’s spring layout (which determines the optimal distance between vertices) is needed to appropriately visualize the two distinct connected components in this graph.</p>
-<div class="sourceCode" id="cb267"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb267-1"><a href="restructuring-data.html#cb267-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get edges with items &gt;= 2</span></span>
-<span id="cb267-2"><a href="restructuring-data.html#cb267-2" aria-hidden="true" tabindex="-1"></a>twoitem_edges <span class="op">=</span> [i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">list</span>(cust_cust_network.edges) <span class="cf">if</span> </span>
-<span id="cb267-3"><a href="restructuring-data.html#cb267-3" aria-hidden="true" tabindex="-1"></a>cust_cust_network.edges[i][<span class="st">'Items'</span>] <span class="op">&gt;=</span> <span class="dv">2</span>]</span>
-<span id="cb267-4"><a href="restructuring-data.html#cb267-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb267-5"><a href="restructuring-data.html#cb267-5" aria-hidden="true" tabindex="-1"></a><span class="co"># create subgraph</span></span>
-<span id="cb267-6"><a href="restructuring-data.html#cb267-6" aria-hidden="true" tabindex="-1"></a>twoitem_network <span class="op">=</span> cust_cust_network.edge_subgraph(twoitem_edges) </span>
-<span id="cb267-7"><a href="restructuring-data.html#cb267-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb267-8"><a href="restructuring-data.html#cb267-8" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize in FR (spring) layout</span></span>
-<span id="cb267-9"><a href="restructuring-data.html#cb267-9" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">123</span>)</span>
-<span id="cb267-10"><a href="restructuring-data.html#cb267-10" aria-hidden="true" tabindex="-1"></a>layout <span class="op">=</span> nx.spring_layout(twoitem_network, k <span class="op">=</span> <span class="fl">0.05</span>)</span>
-<span id="cb267-11"><a href="restructuring-data.html#cb267-11" aria-hidden="true" tabindex="-1"></a>nx.draw_networkx(twoitem_network, node_color <span class="op">=</span> <span class="st">"lightblue"</span>,</span>
-<span id="cb267-12"><a href="restructuring-data.html#cb267-12" aria-hidden="true" tabindex="-1"></a>edge_color <span class="op">=</span> <span class="st">"grey"</span>, with_labels <span class="op">=</span> <span class="va">False</span>, pos <span class="op">=</span> layout)</span>
-<span id="cb267-13"><a href="restructuring-data.html#cb267-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<div class="sourceCode" id="cb268"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb268-1"><a href="restructuring-data.html#cb268-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get edges with items &gt;= 2</span></span>
+<span id="cb268-2"><a href="restructuring-data.html#cb268-2" aria-hidden="true" tabindex="-1"></a>twoitem_edges <span class="op">=</span> [i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">list</span>(cust_cust_network.edges) <span class="cf">if</span> </span>
+<span id="cb268-3"><a href="restructuring-data.html#cb268-3" aria-hidden="true" tabindex="-1"></a>cust_cust_network.edges[i][<span class="st">'Items'</span>] <span class="op">&gt;=</span> <span class="dv">2</span>]</span>
+<span id="cb268-4"><a href="restructuring-data.html#cb268-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb268-5"><a href="restructuring-data.html#cb268-5" aria-hidden="true" tabindex="-1"></a><span class="co"># create subgraph</span></span>
+<span id="cb268-6"><a href="restructuring-data.html#cb268-6" aria-hidden="true" tabindex="-1"></a>twoitem_network <span class="op">=</span> cust_cust_network.edge_subgraph(twoitem_edges) </span>
+<span id="cb268-7"><a href="restructuring-data.html#cb268-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb268-8"><a href="restructuring-data.html#cb268-8" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize in FR (spring) layout</span></span>
+<span id="cb268-9"><a href="restructuring-data.html#cb268-9" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">123</span>)</span>
+<span id="cb268-10"><a href="restructuring-data.html#cb268-10" aria-hidden="true" tabindex="-1"></a>layout <span class="op">=</span> nx.spring_layout(twoitem_network, k <span class="op">=</span> <span class="fl">0.05</span>)</span>
+<span id="cb268-11"><a href="restructuring-data.html#cb268-11" aria-hidden="true" tabindex="-1"></a>nx.draw_networkx(twoitem_network, node_color <span class="op">=</span> <span class="st">"lightblue"</span>,</span>
+<span id="cb268-12"><a href="restructuring-data.html#cb268-12" aria-hidden="true" tabindex="-1"></a>edge_color <span class="op">=</span> <span class="st">"grey"</span>, with_labels <span class="op">=</span> <span class="va">False</span>, pos <span class="op">=</span> layout)</span>
+<span id="cb268-13"><a href="restructuring-data.html#cb268-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
 <div class="figure" style="text-align: center">
 <span style="display:block;" id="fig:twoitempy"></span>
 <img src="www/restructuring-data/twoitempy-1.png" alt="Visualization of the Chinook customer-to-customer network based on at least two common item purchases" width="90%"><p class="caption">
@@ -631,7 +635,7 @@ Figure 4.10: Viewing the script of Season 1, Episode 1 of <i>Friends</i> with th
 </div>
 <p>One of the things we can see immediately is that most of the words that precede a colon are of interest to us. In fact, most of them are character names that say something in a scene. We also see that lines that contain the string “Scene:” are pretty reliable indicators of scene boundaries.</p>
 <p>The first thing we should do is get this HTML code in a list or vector of HTML nodes which represent the different pieces of formatting and text in the document. Since this will contain the separated lines spoken by each character, this will be really helpful for us to work from. So let’s download the HTML code and break it into HTML nodes so that we have a nice, tidy vector of script content.</p>
-<div class="sourceCode" id="cb268"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb269"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># loading rvest also loads the xml2 package</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rvest.tidyverse.org/">rvest</a></span><span class="op">)</span>
 
@@ -657,13 +661,13 @@ Figure 4.10: Viewing the script of Season 1, Episode 1 of <i>Friends</i> with th
 ##                                                         html.body.font.p 
 ##                               "Written by: Marta Kauffman &amp; David Crane"</code></pre>
 <p>This has generated a named character vector that contains a lot of different splitout parts of the script, but most importantly it contains the lines from the script, for example:</p>
-<div class="sourceCode" id="cb270"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb271"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">nodes</span><span class="op">[</span><span class="fl">16</span><span class="op">]</span></code></pre></div>
 <pre><code>##                                                       html.body.font.p 
 ## "[Scene: Central Perk, Chandler, Joey, Phoebe, and Monica are there.]"</code></pre>
 <p>Now, to generate something useful for our task, we need to create a vector that contains the word ‘New Scene’ if the line represents the beginning of a scene, and the name of the character if the line represents something spoken by a character. This will be the best format for what we want to do.</p>
 <p>The first thing we will need to do is swap any text string containing “Scene:” to the string “New Scene.” We can do this quite simply using an <code><a href="https://rdrr.io/r/base/ifelse.html">ifelse()</a></code> on the nodes vector, where we use <code><a href="https://rdrr.io/r/base/grep.html">grepl()</a></code> to identify which entries are in nodes that contain the string “Scene:”</p>
-<div class="sourceCode" id="cb272"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb273"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># swap lines containing the string 'Scene:' with 'New Scene' </span>
 <span class="va">nodes_newscene</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span><span class="op">(</span><span class="st">"Scene:"</span>, <span class="va">nodes</span><span class="op">)</span>, <span class="st">"New Scene"</span>, <span class="va">nodes</span><span class="op">)</span>
 
@@ -673,7 +677,7 @@ Figure 4.10: Viewing the script of Season 1, Episode 1 of <i>Friends</i> with th
 <p>That worked nicely. Now, you might also have noticed that, for dialogue purposes, character names precede a colon at the beginning of a line. So that might be a nice way to extract the names of characters with speaking parts in a scene (although it might give us a few other things that have preceded colons in the script which we do not want, but we can deal with that later).</p>
 <p>So what we will do is use regular expression syntax (regex) to tell R that we are looking for anything at the beginning of a line preceding a colon. We will use a lookahead regex string as follows: <code>^[A-Za-z ]+(?=:)</code>.</p>
 <p>Let’s look at that string and make sure we know what it means. The <code>^[A-Za-z ]+</code> component means ‘find any substring of alphabetic text of any length including spaces at the beginning of a string.’ The part in parentheses <code>(?=:)</code> is known as a lookahead—it means look ahead of that substring of text and find situations where a colon is the next character. This is therefore instructing R to find any string of alphabetic text at the start of a line that precedes a colon and return it. If we use the R package <code>stringr</code> and its function <code><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract()</a></code> with this regex syntax, it will go through every entry of the <code>nodes</code> vector and transform it to just the first string of text found before a colon. If no such string is found, it will return an <code>NA</code> value. This is great for us because we know that, for the purpose of dialogue, characters’ names are always at the start of nodes, so we certainly won’t miss any if we just take the first instance in each line. We should also, for safety, not mess with the scene breaks we have put into our vector.</p>
-<div class="sourceCode" id="cb274"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb275"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://stringr.tidyverse.org">stringr</a></span><span class="op">)</span>
 
 <span class="co"># outside of 'New Scene' tags extract anything before : in every line </span>
@@ -690,7 +694,7 @@ Figure 4.10: Viewing the script of Season 1, Episode 1 of <i>Friends</i> with th
 ## [19] NA           NA           NA           NA           NA           "Joey"       "Phoebe"     NA           "New Scene" 
 ## [28] NA           NA           "Written by"</code></pre>
 <p>So this is working, but we have more cleaning to do. For example, we will want to get rid of the <code>NA</code> values. We will also see if we take a look that there is a character called ‘All’ which probably should not be in our network. We can also see phrases like ‘Written by’ which are not dialogue characters, and strings containing ‘and’ which involve combinations of characters. So we can create special commands to remove any instances of these phrases<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;The limited cleaning commands here work for this specific episode, but they would need to be expanded to be used on more episodes to take into account any unpredictable formatting in the scripts. The reality of most scraping exercises is that some code has to be written to deal with exceptions.&lt;/p&gt;"><sup>42</sup></a>.</p>
-<div class="sourceCode" id="cb276"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb277"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># remove NAs</span>
 <span class="va">nodes_char_clean1</span> <span class="op">&lt;-</span> <span class="va">nodes_char</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">nodes_char</span><span class="op">)</span><span class="op">]</span> 
 
@@ -704,7 +708,7 @@ Figure 4.10: Viewing the script of Season 1, Episode 1 of <i>Friends</i> with th
 <pre><code>##  [1] "Chandler"  "Monica"    "Chandler"  "Monica"    "Phoebe"    "Joey"      "Phoebe"    "Joey"      "Monica"    "Monica"   
 ## [11] "Chandler"  "Chandler"  "New Scene" "Ross"      "Joey"      "Chandler"  "Joey"      "Chandler"  "Phoebe"    "Chandler"</code></pre>
 <p>Let’s assume our cleaning is done, and we have a nice vector that contains either the names of characters that are speaking lines in the episode or “New Scene” to indicate that we are crossing a scene boundary. We now just need to convert this vector into a simple dataframe with two columns for scene and character. We already have our character lists, so we really just need to iterate through our nodes vector and, for each entry, count the number of previous occurrences of “New Scene” and add one.</p>
-<div class="sourceCode" id="cb278"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb279"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># number scene by counting previous "New Scene" entries and adding 1</span>
 <span class="va">scene_count</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">)</span>
 
@@ -712,7 +716,7 @@ Figure 4.10: Viewing the script of Season 1, Episode 1 of <i>Friends</i> with th
   <span class="va">scene_count</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span><span class="op">(</span><span class="st">"New Scene"</span>, <span class="va">nodes_char_clean2</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span>
 <span class="op">}</span></code></pre></div>
 <p>Then we can finalize our dataframe by putting our two vectors together and removing any repeated characters in the same scene. We can also correct for situations where the script starts with a New Scene and we can consistently format our character names to title case, to account for different case typing.</p>
-<div class="sourceCode" id="cb279"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb280"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 
 <span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>scene <span class="op">=</span> <span class="va">scene_count</span>, 
@@ -746,7 +750,7 @@ Figure 4.10: Viewing the script of Season 1, Episode 1 of <i>Friends</i> with th
 </h3>
 <p>Now that we have scraped the data of characters who have spoken in each numbered scene, we can try to build an edgelist between characters based on whether they have both spoken in the same scene. We can also consider adding a weight to each edge based on the number of scenes in which both characters have spoken.</p>
 <p>To do this, we will need to generate a set of unique pairs from the list of characters in each scene. To illustrate, let’s look at the characters in Scene 11:</p>
-<div class="sourceCode" id="cb281"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb282"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">(</span><span class="va">scene11_chars</span> <span class="op">&lt;-</span> <span class="va">results</span> |&gt; 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">scene</span> <span class="op">==</span> <span class="fl">11</span><span class="op">)</span> |&gt; 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op">(</span><span class="va">character</span><span class="op">)</span><span class="op">)</span></code></pre></div>
@@ -763,7 +767,7 @@ Figure 4.10: Viewing the script of Season 1, Episode 1 of <i>Friends</i> with th
 <strong>Monica pairs</strong>: Monica-Paul</li>
 </ul>
 <p>So we should write a function called <code>unique_pairs()</code> which accepts a character vector of arbitrary length and forms pairs progressively in this way. Then we can apply this function to every scene.</p>
-<div class="sourceCode" id="cb283"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb284"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">unique_pairs</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">char_vector</span> <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">{</span>
   <span class="co"># ensure unique entries</span>
   <span class="va">vector</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">char_vector</span><span class="op">)</span><span class="op">)</span>
@@ -789,7 +793,7 @@ Figure 4.10: Viewing the script of Season 1, Episode 1 of <i>Friends</i> with th
   <span class="va">df</span>
 <span class="op">}</span></code></pre></div>
 <p>Now let’s test our new function on the Scene 11 characters:</p>
-<div class="sourceCode" id="cb284"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb285"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">unique_pairs</span><span class="op">(</span><span class="va">scene11_chars</span><span class="op">)</span></code></pre></div>
 <pre><code>##       char1    char2
 ## 1    Rachel Chandler
@@ -803,7 +807,7 @@ Figure 4.10: Viewing the script of Season 1, Episode 1 of <i>Friends</i> with th
 ## 9      Joey     Paul
 ## 10   Monica     Paul</code></pre>
 <p>That looks right. Now we can easily generate our edgelist from this episode by applying our new function to each scene.</p>
-<div class="sourceCode" id="cb286"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb287"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># run unique_pairs by scene</span>
 <span class="va">friends_ep101</span> <span class="op">&lt;-</span> <span class="va">results</span> |&gt; 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">scene</span><span class="op">)</span> |&gt; 
@@ -822,7 +826,7 @@ Figure 4.10: Viewing the script of Season 1, Episode 1 of <i>Friends</i> with th
 ## 5     1 Monica Rachel  
 ## 6     1 Monica Waitress</code></pre>
 <p>This looks like it worked. Now we can just count the number of times each distinct pair occurs in order to get our edge weights (making sure to ignore the order of the characters).</p>
-<div class="sourceCode" id="cb288"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb289"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># create weight as count of scenes </span>
 <span class="va">friends_ep101_edgelist</span> <span class="op">&lt;-</span> <span class="va">friends_ep101</span> |&gt; 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">scene</span><span class="op">)</span> |&gt; 
@@ -841,7 +845,7 @@ Figure 4.10: Viewing the script of Season 1, Episode 1 of <i>Friends</i> with th
 ## 5 Chandler Phoebe        5
 ## 6 Chandler Rachel        6</code></pre>
 <p>We can now use this edgelist to create an undirected network graph for the first episode of <em>Friends</em>. First, we will create an <code>igraph</code> object and then we will visualize it using edge thickness based on weights, as in Figure <a href="restructuring-data.html#fig:friends-ep1-network">4.11</a>.</p>
-<div class="sourceCode" id="cb290"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb291"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># create igraph object</span>
 <span class="va">friends_ep1_network</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>
   d <span class="op">=</span> <span class="va">friends_ep101_edgelist</span>,
@@ -868,63 +872,63 @@ Figure 4.11: Visualization of the network of characters in Episode 1 of <i>Frien
 <span class="header-section-number">4.2.3</span> Approaches in Python<a class="anchor" aria-label="anchor" href="#approaches-in-python"><i class="fas fa-link"></i></a>
 </h3>
 <p>To repeat the work in the previous sections in Python, we will use the <code>BeautifulSoup</code> package to scrape our web script of the first episode of <em>Friends</em>.</p>
-<div class="sourceCode" id="cb291"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb291-1"><a href="restructuring-data.html#cb291-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
-<span id="cb291-2"><a href="restructuring-data.html#cb291-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> bs4 <span class="im">import</span> BeautifulSoup</span>
-<span id="cb291-3"><a href="restructuring-data.html#cb291-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb291-4"><a href="restructuring-data.html#cb291-4" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://fangj.github.io/friends/season/0101.html"</span></span>
-<span id="cb291-5"><a href="restructuring-data.html#cb291-5" aria-hidden="true" tabindex="-1"></a>script <span class="op">=</span> requests.get(url)</span>
-<span id="cb291-6"><a href="restructuring-data.html#cb291-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb291-7"><a href="restructuring-data.html#cb291-7" aria-hidden="true" tabindex="-1"></a><span class="co"># parse the html of the page</span></span>
-<span id="cb291-8"><a href="restructuring-data.html#cb291-8" aria-hidden="true" tabindex="-1"></a>friends_ep1 <span class="op">=</span> BeautifulSoup(script.text, <span class="st">"html.parser"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb292"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb292-1"><a href="restructuring-data.html#cb292-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
+<span id="cb292-2"><a href="restructuring-data.html#cb292-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> bs4 <span class="im">import</span> BeautifulSoup</span>
+<span id="cb292-3"><a href="restructuring-data.html#cb292-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb292-4"><a href="restructuring-data.html#cb292-4" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://fangj.github.io/friends/season/0101.html"</span></span>
+<span id="cb292-5"><a href="restructuring-data.html#cb292-5" aria-hidden="true" tabindex="-1"></a>script <span class="op">=</span> requests.get(url)</span>
+<span id="cb292-6"><a href="restructuring-data.html#cb292-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb292-7"><a href="restructuring-data.html#cb292-7" aria-hidden="true" tabindex="-1"></a><span class="co"># parse the html of the page</span></span>
+<span id="cb292-8"><a href="restructuring-data.html#cb292-8" aria-hidden="true" tabindex="-1"></a>friends_ep1 <span class="op">=</span> BeautifulSoup(script.text, <span class="st">"html.parser"</span>)</span></code></pre></div>
 <p>The object <code>friends_ep1</code> contains all the HTML code of the script webpage. Now we need to look for the string <code>Scene:</code> and replace it with the string <code>&lt;b&gt;New Scene:&lt;/b&gt;</code>. It should be clear soon why we should put the replacement string in bold HTML tags.</p>
-<div class="sourceCode" id="cb292"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb292-1"><a href="restructuring-data.html#cb292-1" aria-hidden="true" tabindex="-1"></a>originalString <span class="op">=</span> <span class="st">"Scene:"</span></span>
-<span id="cb292-2"><a href="restructuring-data.html#cb292-2" aria-hidden="true" tabindex="-1"></a>replaceString <span class="op">=</span> <span class="st">"&lt;b&gt;New Scene:&lt;/b&gt;"</span></span>
-<span id="cb292-3"><a href="restructuring-data.html#cb292-3" aria-hidden="true" tabindex="-1"></a>friends_ep1_replace <span class="op">=</span> BeautifulSoup(<span class="bu">str</span>(friends_ep1)<span class="op">\</span></span>
-<span id="cb292-4"><a href="restructuring-data.html#cb292-4" aria-hidden="true" tabindex="-1"></a>.replace(originalString, replaceString))</span></code></pre></div>
+<div class="sourceCode" id="cb293"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb293-1"><a href="restructuring-data.html#cb293-1" aria-hidden="true" tabindex="-1"></a>originalString <span class="op">=</span> <span class="st">"Scene:"</span></span>
+<span id="cb293-2"><a href="restructuring-data.html#cb293-2" aria-hidden="true" tabindex="-1"></a>replaceString <span class="op">=</span> <span class="st">"&lt;b&gt;New Scene:&lt;/b&gt;"</span></span>
+<span id="cb293-3"><a href="restructuring-data.html#cb293-3" aria-hidden="true" tabindex="-1"></a>friends_ep1_replace <span class="op">=</span> BeautifulSoup(<span class="bu">str</span>(friends_ep1)<span class="op">\</span></span>
+<span id="cb293-4"><a href="restructuring-data.html#cb293-4" aria-hidden="true" tabindex="-1"></a>.replace(originalString, replaceString))</span></code></pre></div>
 <p>Now we know from viewing the webpage or inspecting the HTML code that the characters’ names who are speaking in scenes will be inside bold or strong HTML tags. So, first let’s get everything that is in bold or strong tags in the document, and then let’s match for any alphabetic string (including spaces) prior to a colon using regular expression syntax. This should include the <code>New Scene</code> tags that we created in the last step.</p>
-<div class="sourceCode" id="cb293"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb293-1"><a href="restructuring-data.html#cb293-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use re (regular expressions) package</span></span>
-<span id="cb293-2"><a href="restructuring-data.html#cb293-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
-<span id="cb293-3"><a href="restructuring-data.html#cb293-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb293-4"><a href="restructuring-data.html#cb293-4" aria-hidden="true" tabindex="-1"></a><span class="co"># find everything in bold tags with alpha preceding a colon</span></span>
-<span id="cb293-5"><a href="restructuring-data.html#cb293-5" aria-hidden="true" tabindex="-1"></a>searchstring <span class="op">=</span> re.<span class="bu">compile</span>(<span class="st">"^[A-Za-z ]+(?=:)"</span>)</span>
-<span id="cb293-6"><a href="restructuring-data.html#cb293-6" aria-hidden="true" tabindex="-1"></a>friends_ep1_bold <span class="op">=</span> friends_ep1_replace.find_all([<span class="st">'b'</span>, <span class="st">'strong'</span>], </span>
-<span id="cb293-7"><a href="restructuring-data.html#cb293-7" aria-hidden="true" tabindex="-1"></a>text <span class="op">=</span> searchstring)</span>
-<span id="cb293-8"><a href="restructuring-data.html#cb293-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb293-9"><a href="restructuring-data.html#cb293-9" aria-hidden="true" tabindex="-1"></a><span class="co"># extract the text and remove colons</span></span>
-<span id="cb293-10"><a href="restructuring-data.html#cb293-10" aria-hidden="true" tabindex="-1"></a>friends_ep1_list <span class="op">=</span> [friends_ep1_bold[i].text.replace(<span class="st">':'</span>, <span class="st">''</span>) </span>
-<span id="cb293-11"><a href="restructuring-data.html#cb293-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(friends_ep1_bold) <span class="op">-</span> <span class="dv">1</span>)]</span>
-<span id="cb293-12"><a href="restructuring-data.html#cb293-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb293-13"><a href="restructuring-data.html#cb293-13" aria-hidden="true" tabindex="-1"></a><span class="co"># check first few unique values returned</span></span>
-<span id="cb293-14"><a href="restructuring-data.html#cb293-14" aria-hidden="true" tabindex="-1"></a><span class="bu">sorted</span>(<span class="bu">set</span>(friends_ep1_list))[<span class="dv">0</span>:<span class="dv">7</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb294"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb294-1"><a href="restructuring-data.html#cb294-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use re (regular expressions) package</span></span>
+<span id="cb294-2"><a href="restructuring-data.html#cb294-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb294-3"><a href="restructuring-data.html#cb294-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb294-4"><a href="restructuring-data.html#cb294-4" aria-hidden="true" tabindex="-1"></a><span class="co"># find everything in bold tags with alpha preceding a colon</span></span>
+<span id="cb294-5"><a href="restructuring-data.html#cb294-5" aria-hidden="true" tabindex="-1"></a>searchstring <span class="op">=</span> re.<span class="bu">compile</span>(<span class="st">"^[A-Za-z ]+(?=:)"</span>)</span>
+<span id="cb294-6"><a href="restructuring-data.html#cb294-6" aria-hidden="true" tabindex="-1"></a>friends_ep1_bold <span class="op">=</span> friends_ep1_replace.find_all([<span class="st">'b'</span>, <span class="st">'strong'</span>], </span>
+<span id="cb294-7"><a href="restructuring-data.html#cb294-7" aria-hidden="true" tabindex="-1"></a>text <span class="op">=</span> searchstring)</span>
+<span id="cb294-8"><a href="restructuring-data.html#cb294-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb294-9"><a href="restructuring-data.html#cb294-9" aria-hidden="true" tabindex="-1"></a><span class="co"># extract the text and remove colons</span></span>
+<span id="cb294-10"><a href="restructuring-data.html#cb294-10" aria-hidden="true" tabindex="-1"></a>friends_ep1_list <span class="op">=</span> [friends_ep1_bold[i].text.replace(<span class="st">':'</span>, <span class="st">''</span>) </span>
+<span id="cb294-11"><a href="restructuring-data.html#cb294-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(friends_ep1_bold) <span class="op">-</span> <span class="dv">1</span>)]</span>
+<span id="cb294-12"><a href="restructuring-data.html#cb294-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb294-13"><a href="restructuring-data.html#cb294-13" aria-hidden="true" tabindex="-1"></a><span class="co"># check first few unique values returned</span></span>
+<span id="cb294-14"><a href="restructuring-data.html#cb294-14" aria-hidden="true" tabindex="-1"></a><span class="bu">sorted</span>(<span class="bu">set</span>(friends_ep1_list))[<span class="dv">0</span>:<span class="dv">7</span>]</span></code></pre></div>
 <pre><code>## ['All', 'Chandler', 'Chandler ', 'Customer', 'Frannie', 'Joey', 'Monica']</code></pre>
 <p>This looks promising; now we need to get rid of the ‘All’ entries and any entries containing ‘and.’</p>
-<div class="sourceCode" id="cb295"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb295-1"><a href="restructuring-data.html#cb295-1" aria-hidden="true" tabindex="-1"></a>friends_ep1_list2<span class="op">=</span>[entry.strip() <span class="cf">for</span> entry <span class="kw">in</span> friends_ep1_list </span>
-<span id="cb295-2"><a href="restructuring-data.html#cb295-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"All"</span> <span class="kw">not</span> <span class="kw">in</span> entry <span class="kw">and</span> <span class="st">" and "</span> <span class="kw">not</span> <span class="kw">in</span> entry]</span>
-<span id="cb295-3"><a href="restructuring-data.html#cb295-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb295-4"><a href="restructuring-data.html#cb295-4" aria-hidden="true" tabindex="-1"></a><span class="co"># check first few entries</span></span>
-<span id="cb295-5"><a href="restructuring-data.html#cb295-5" aria-hidden="true" tabindex="-1"></a><span class="bu">sorted</span>(<span class="bu">set</span>(friends_ep1_list2))[<span class="dv">0</span>:<span class="dv">7</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb296"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb296-1"><a href="restructuring-data.html#cb296-1" aria-hidden="true" tabindex="-1"></a>friends_ep1_list2<span class="op">=</span>[entry.strip() <span class="cf">for</span> entry <span class="kw">in</span> friends_ep1_list </span>
+<span id="cb296-2"><a href="restructuring-data.html#cb296-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"All"</span> <span class="kw">not</span> <span class="kw">in</span> entry <span class="kw">and</span> <span class="st">" and "</span> <span class="kw">not</span> <span class="kw">in</span> entry]</span>
+<span id="cb296-3"><a href="restructuring-data.html#cb296-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb296-4"><a href="restructuring-data.html#cb296-4" aria-hidden="true" tabindex="-1"></a><span class="co"># check first few entries</span></span>
+<span id="cb296-5"><a href="restructuring-data.html#cb296-5" aria-hidden="true" tabindex="-1"></a><span class="bu">sorted</span>(<span class="bu">set</span>(friends_ep1_list2))[<span class="dv">0</span>:<span class="dv">7</span>]</span></code></pre></div>
 <pre><code>## ['Chandler', 'Customer', 'Frannie', 'Joey', 'Monica', 'New Scene', 'Paul']</code></pre>
 <p>Now we are ready to organize our characters by scene. First, we do a scene count, then we create a dataframe and obtain unique character lists by scene.</p>
-<div class="sourceCode" id="cb297"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb297-1"><a href="restructuring-data.html#cb297-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb297-2"><a href="restructuring-data.html#cb297-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb297-3"><a href="restructuring-data.html#cb297-3" aria-hidden="true" tabindex="-1"></a><span class="co"># number scene by counting previous "New Scene" entries and adding 1</span></span>
-<span id="cb297-4"><a href="restructuring-data.html#cb297-4" aria-hidden="true" tabindex="-1"></a>scene_count <span class="op">=</span> []</span>
-<span id="cb297-5"><a href="restructuring-data.html#cb297-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb297-6"><a href="restructuring-data.html#cb297-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,<span class="bu">len</span>(friends_ep1_list2)):</span>
-<span id="cb297-7"><a href="restructuring-data.html#cb297-7" aria-hidden="true" tabindex="-1"></a>  scene_count.append(friends_ep1_list2[<span class="dv">0</span>:i<span class="op">+</span><span class="dv">1</span>].count(<span class="st">"New Scene"</span>))</span>
-<span id="cb297-8"><a href="restructuring-data.html#cb297-8" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb297-9"><a href="restructuring-data.html#cb297-9" aria-hidden="true" tabindex="-1"></a><span class="co"># create a pandas dataframe</span></span>
-<span id="cb297-10"><a href="restructuring-data.html#cb297-10" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> {<span class="st">'scene'</span>: scene_count, <span class="st">'character'</span>: friends_ep1_list2}</span>
-<span id="cb297-11"><a href="restructuring-data.html#cb297-11" aria-hidden="true" tabindex="-1"></a>scenes_df <span class="op">=</span> pd.DataFrame(df)</span>
-<span id="cb297-12"><a href="restructuring-data.html#cb297-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb297-13"><a href="restructuring-data.html#cb297-13" aria-hidden="true" tabindex="-1"></a><span class="co"># remove New Scene rows</span></span>
-<span id="cb297-14"><a href="restructuring-data.html#cb297-14" aria-hidden="true" tabindex="-1"></a>scenes_df <span class="op">=</span> scenes_df[scenes_df.character <span class="op">!=</span> <span class="st">"New Scene"</span>]</span>
-<span id="cb297-15"><a href="restructuring-data.html#cb297-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb297-16"><a href="restructuring-data.html#cb297-16" aria-hidden="true" tabindex="-1"></a><span class="co"># get unique characters by scene</span></span>
-<span id="cb297-17"><a href="restructuring-data.html#cb297-17" aria-hidden="true" tabindex="-1"></a>scenes <span class="op">=</span> scenes_df.groupby(<span class="st">'scene'</span>)[<span class="st">'character'</span>].unique()</span>
-<span id="cb297-18"><a href="restructuring-data.html#cb297-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb297-19"><a href="restructuring-data.html#cb297-19" aria-hidden="true" tabindex="-1"></a><span class="co"># check</span></span>
-<span id="cb297-20"><a href="restructuring-data.html#cb297-20" aria-hidden="true" tabindex="-1"></a>scenes.head()</span></code></pre></div>
+<div class="sourceCode" id="cb298"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb298-1"><a href="restructuring-data.html#cb298-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb298-2"><a href="restructuring-data.html#cb298-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb298-3"><a href="restructuring-data.html#cb298-3" aria-hidden="true" tabindex="-1"></a><span class="co"># number scene by counting previous "New Scene" entries and adding 1</span></span>
+<span id="cb298-4"><a href="restructuring-data.html#cb298-4" aria-hidden="true" tabindex="-1"></a>scene_count <span class="op">=</span> []</span>
+<span id="cb298-5"><a href="restructuring-data.html#cb298-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb298-6"><a href="restructuring-data.html#cb298-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,<span class="bu">len</span>(friends_ep1_list2)):</span>
+<span id="cb298-7"><a href="restructuring-data.html#cb298-7" aria-hidden="true" tabindex="-1"></a>  scene_count.append(friends_ep1_list2[<span class="dv">0</span>:i<span class="op">+</span><span class="dv">1</span>].count(<span class="st">"New Scene"</span>))</span>
+<span id="cb298-8"><a href="restructuring-data.html#cb298-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb298-9"><a href="restructuring-data.html#cb298-9" aria-hidden="true" tabindex="-1"></a><span class="co"># create a pandas dataframe</span></span>
+<span id="cb298-10"><a href="restructuring-data.html#cb298-10" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> {<span class="st">'scene'</span>: scene_count, <span class="st">'character'</span>: friends_ep1_list2}</span>
+<span id="cb298-11"><a href="restructuring-data.html#cb298-11" aria-hidden="true" tabindex="-1"></a>scenes_df <span class="op">=</span> pd.DataFrame(df)</span>
+<span id="cb298-12"><a href="restructuring-data.html#cb298-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb298-13"><a href="restructuring-data.html#cb298-13" aria-hidden="true" tabindex="-1"></a><span class="co"># remove New Scene rows</span></span>
+<span id="cb298-14"><a href="restructuring-data.html#cb298-14" aria-hidden="true" tabindex="-1"></a>scenes_df <span class="op">=</span> scenes_df[scenes_df.character <span class="op">!=</span> <span class="st">"New Scene"</span>]</span>
+<span id="cb298-15"><a href="restructuring-data.html#cb298-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb298-16"><a href="restructuring-data.html#cb298-16" aria-hidden="true" tabindex="-1"></a><span class="co"># get unique characters by scene</span></span>
+<span id="cb298-17"><a href="restructuring-data.html#cb298-17" aria-hidden="true" tabindex="-1"></a>scenes <span class="op">=</span> scenes_df.groupby(<span class="st">'scene'</span>)[<span class="st">'character'</span>].unique()</span>
+<span id="cb298-18"><a href="restructuring-data.html#cb298-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb298-19"><a href="restructuring-data.html#cb298-19" aria-hidden="true" tabindex="-1"></a><span class="co"># check</span></span>
+<span id="cb298-20"><a href="restructuring-data.html#cb298-20" aria-hidden="true" tabindex="-1"></a>scenes.head()</span></code></pre></div>
 <pre><code>## scene
 ## 1    [Monica, Joey, Chandler, Phoebe, Ross, Rachel,...
 ## 2    [Monica, Chandler, Ross, Rachel, Phoebe, Joey,...
@@ -933,28 +937,28 @@ Figure 4.11: Visualization of the network of characters in Episode 1 of <i>Frien
 ## 5                                       [Monica, Paul]
 ## Name: character, dtype: object</code></pre>
 <p>Now we need to create a function to find all unique pairs inside a scene character list. Here’s one way to do it:</p>
-<div class="sourceCode" id="cb299"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb299-1"><a href="restructuring-data.html#cb299-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np </span>
-<span id="cb299-2"><a href="restructuring-data.html#cb299-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb299-3"><a href="restructuring-data.html#cb299-3" aria-hidden="true" tabindex="-1"></a><span class="co"># define function</span></span>
-<span id="cb299-4"><a href="restructuring-data.html#cb299-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> unique_pairs(chars: <span class="bu">object</span>) <span class="op">-&gt;</span> pd.DataFrame:</span>
-<span id="cb299-5"><a href="restructuring-data.html#cb299-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># start with uniques</span></span>
-<span id="cb299-6"><a href="restructuring-data.html#cb299-6" aria-hidden="true" tabindex="-1"></a>  characters <span class="op">=</span> np.unique(chars)</span>
-<span id="cb299-7"><a href="restructuring-data.html#cb299-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create from-to list dataframe</span></span>
-<span id="cb299-8"><a href="restructuring-data.html#cb299-8" aria-hidden="true" tabindex="-1"></a>  char1 <span class="op">=</span> []</span>
-<span id="cb299-9"><a href="restructuring-data.html#cb299-9" aria-hidden="true" tabindex="-1"></a>  char2 <span class="op">=</span> []</span>
-<span id="cb299-10"><a href="restructuring-data.html#cb299-10" aria-hidden="true" tabindex="-1"></a>  df <span class="op">=</span> pd.DataFrame({<span class="st">'char1'</span>: char1, <span class="st">'char2'</span>: char2})</span>
-<span id="cb299-11"><a href="restructuring-data.html#cb299-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># iterate over each entry to form pairs</span></span>
-<span id="cb299-12"><a href="restructuring-data.html#cb299-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="bu">len</span>(characters) <span class="op">&gt;</span> <span class="dv">1</span>:</span>
-<span id="cb299-13"><a href="restructuring-data.html#cb299-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(characters) <span class="op">-</span> <span class="dv">1</span>):</span>
-<span id="cb299-14"><a href="restructuring-data.html#cb299-14" aria-hidden="true" tabindex="-1"></a>      char1 <span class="op">=</span> [characters[i]] <span class="op">*</span> (<span class="bu">len</span>(characters) <span class="op">-</span> i <span class="op">-</span> <span class="dv">1</span>)</span>
-<span id="cb299-15"><a href="restructuring-data.html#cb299-15" aria-hidden="true" tabindex="-1"></a>      char2 <span class="op">=</span> [characters[i] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(i <span class="op">+</span> <span class="dv">1</span>, <span class="bu">len</span>(characters))]</span>
-<span id="cb299-16"><a href="restructuring-data.html#cb299-16" aria-hidden="true" tabindex="-1"></a>      <span class="co"># append to dataframe</span></span>
-<span id="cb299-17"><a href="restructuring-data.html#cb299-17" aria-hidden="true" tabindex="-1"></a>      df2 <span class="op">=</span> pd.DataFrame({<span class="st">'char1'</span>: char1, <span class="st">'char2'</span>: char2})</span>
-<span id="cb299-18"><a href="restructuring-data.html#cb299-18" aria-hidden="true" tabindex="-1"></a>      df <span class="op">=</span> df.append(df2, ignore_index <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb299-19"><a href="restructuring-data.html#cb299-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> df</span>
-<span id="cb299-20"><a href="restructuring-data.html#cb299-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb299-21"><a href="restructuring-data.html#cb299-21" aria-hidden="true" tabindex="-1"></a><span class="co"># test on scene 11</span></span>
-<span id="cb299-22"><a href="restructuring-data.html#cb299-22" aria-hidden="true" tabindex="-1"></a>unique_pairs(scenes[<span class="dv">11</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb300"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb300-1"><a href="restructuring-data.html#cb300-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np </span>
+<span id="cb300-2"><a href="restructuring-data.html#cb300-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb300-3"><a href="restructuring-data.html#cb300-3" aria-hidden="true" tabindex="-1"></a><span class="co"># define function</span></span>
+<span id="cb300-4"><a href="restructuring-data.html#cb300-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> unique_pairs(chars: <span class="bu">object</span>) <span class="op">-&gt;</span> pd.DataFrame:</span>
+<span id="cb300-5"><a href="restructuring-data.html#cb300-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># start with uniques</span></span>
+<span id="cb300-6"><a href="restructuring-data.html#cb300-6" aria-hidden="true" tabindex="-1"></a>  characters <span class="op">=</span> np.unique(chars)</span>
+<span id="cb300-7"><a href="restructuring-data.html#cb300-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create from-to list dataframe</span></span>
+<span id="cb300-8"><a href="restructuring-data.html#cb300-8" aria-hidden="true" tabindex="-1"></a>  char1 <span class="op">=</span> []</span>
+<span id="cb300-9"><a href="restructuring-data.html#cb300-9" aria-hidden="true" tabindex="-1"></a>  char2 <span class="op">=</span> []</span>
+<span id="cb300-10"><a href="restructuring-data.html#cb300-10" aria-hidden="true" tabindex="-1"></a>  df <span class="op">=</span> pd.DataFrame({<span class="st">'char1'</span>: char1, <span class="st">'char2'</span>: char2})</span>
+<span id="cb300-11"><a href="restructuring-data.html#cb300-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># iterate over each entry to form pairs</span></span>
+<span id="cb300-12"><a href="restructuring-data.html#cb300-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="bu">len</span>(characters) <span class="op">&gt;</span> <span class="dv">1</span>:</span>
+<span id="cb300-13"><a href="restructuring-data.html#cb300-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(characters) <span class="op">-</span> <span class="dv">1</span>):</span>
+<span id="cb300-14"><a href="restructuring-data.html#cb300-14" aria-hidden="true" tabindex="-1"></a>      char1 <span class="op">=</span> [characters[i]] <span class="op">*</span> (<span class="bu">len</span>(characters) <span class="op">-</span> i <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb300-15"><a href="restructuring-data.html#cb300-15" aria-hidden="true" tabindex="-1"></a>      char2 <span class="op">=</span> [characters[i] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(i <span class="op">+</span> <span class="dv">1</span>, <span class="bu">len</span>(characters))]</span>
+<span id="cb300-16"><a href="restructuring-data.html#cb300-16" aria-hidden="true" tabindex="-1"></a>      <span class="co"># append to dataframe</span></span>
+<span id="cb300-17"><a href="restructuring-data.html#cb300-17" aria-hidden="true" tabindex="-1"></a>      df2 <span class="op">=</span> pd.DataFrame({<span class="st">'char1'</span>: char1, <span class="st">'char2'</span>: char2})</span>
+<span id="cb300-18"><a href="restructuring-data.html#cb300-18" aria-hidden="true" tabindex="-1"></a>      df <span class="op">=</span> df.append(df2, ignore_index <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb300-19"><a href="restructuring-data.html#cb300-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> df</span>
+<span id="cb300-20"><a href="restructuring-data.html#cb300-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb300-21"><a href="restructuring-data.html#cb300-21" aria-hidden="true" tabindex="-1"></a><span class="co"># test on scene 11</span></span>
+<span id="cb300-22"><a href="restructuring-data.html#cb300-22" aria-hidden="true" tabindex="-1"></a>unique_pairs(scenes[<span class="dv">11</span>])</span></code></pre></div>
 <pre><code>##       char1   char2
 ## 0  Chandler    Joey
 ## 1  Chandler  Monica
@@ -967,25 +971,25 @@ Figure 4.11: Visualization of the network of characters in Episode 1 of <i>Frien
 ## 8    Monica  Rachel
 ## 9      Paul  Rachel</code></pre>
 <p>This looks right. Now we need to apply this to every scene and gather the results into one DataFrame.</p>
-<div class="sourceCode" id="cb301"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb301-1"><a href="restructuring-data.html#cb301-1" aria-hidden="true" tabindex="-1"></a><span class="co"># start DataFrame</span></span>
-<span id="cb301-2"><a href="restructuring-data.html#cb301-2" aria-hidden="true" tabindex="-1"></a>char1 <span class="op">=</span> []</span>
-<span id="cb301-3"><a href="restructuring-data.html#cb301-3" aria-hidden="true" tabindex="-1"></a>char2 <span class="op">=</span> []</span>
-<span id="cb301-4"><a href="restructuring-data.html#cb301-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb301-5"><a href="restructuring-data.html#cb301-5" aria-hidden="true" tabindex="-1"></a>edgelist_df <span class="op">=</span> pd.DataFrame({<span class="st">'char1'</span>: char1, <span class="st">'char2'</span>: char2})</span>
-<span id="cb301-6"><a href="restructuring-data.html#cb301-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb301-7"><a href="restructuring-data.html#cb301-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> scene <span class="kw">in</span> scenes:</span>
-<span id="cb301-8"><a href="restructuring-data.html#cb301-8" aria-hidden="true" tabindex="-1"></a>  df <span class="op">=</span> unique_pairs(scene)</span>
-<span id="cb301-9"><a href="restructuring-data.html#cb301-9" aria-hidden="true" tabindex="-1"></a>  edgelist_df <span class="op">=</span> edgelist_df.append(df, ignore_index <span class="op">=</span> <span class="va">True</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb302"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb302-1"><a href="restructuring-data.html#cb302-1" aria-hidden="true" tabindex="-1"></a><span class="co"># start DataFrame</span></span>
+<span id="cb302-2"><a href="restructuring-data.html#cb302-2" aria-hidden="true" tabindex="-1"></a>char1 <span class="op">=</span> []</span>
+<span id="cb302-3"><a href="restructuring-data.html#cb302-3" aria-hidden="true" tabindex="-1"></a>char2 <span class="op">=</span> []</span>
+<span id="cb302-4"><a href="restructuring-data.html#cb302-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb302-5"><a href="restructuring-data.html#cb302-5" aria-hidden="true" tabindex="-1"></a>edgelist_df <span class="op">=</span> pd.DataFrame({<span class="st">'char1'</span>: char1, <span class="st">'char2'</span>: char2})</span>
+<span id="cb302-6"><a href="restructuring-data.html#cb302-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb302-7"><a href="restructuring-data.html#cb302-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> scene <span class="kw">in</span> scenes:</span>
+<span id="cb302-8"><a href="restructuring-data.html#cb302-8" aria-hidden="true" tabindex="-1"></a>  df <span class="op">=</span> unique_pairs(scene)</span>
+<span id="cb302-9"><a href="restructuring-data.html#cb302-9" aria-hidden="true" tabindex="-1"></a>  edgelist_df <span class="op">=</span> edgelist_df.append(df, ignore_index <span class="op">=</span> <span class="va">True</span>)</span></code></pre></div>
 <p>Now we can order across the rows alphabetically and count the occurrences of each unique character pair to get our edge weights.</p>
-<div class="sourceCode" id="cb302"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb302-1"><a href="restructuring-data.html#cb302-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sort each row alphabetically</span></span>
-<span id="cb302-2"><a href="restructuring-data.html#cb302-2" aria-hidden="true" tabindex="-1"></a>edgelist_df <span class="op">=</span> edgelist_df.sort_values(by <span class="op">=</span> [<span class="st">'char1'</span>, <span class="st">'char2'</span>])</span>
-<span id="cb302-3"><a href="restructuring-data.html#cb302-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb302-4"><a href="restructuring-data.html#cb302-4" aria-hidden="true" tabindex="-1"></a><span class="co"># count by unique pair</span></span>
-<span id="cb302-5"><a href="restructuring-data.html#cb302-5" aria-hidden="true" tabindex="-1"></a>edgelist <span class="op">=</span> edgelist_df.groupby([<span class="st">'char1'</span>, <span class="st">'char2'</span>]).<span class="op">\</span></span>
-<span id="cb302-6"><a href="restructuring-data.html#cb302-6" aria-hidden="true" tabindex="-1"></a><span class="bu">apply</span>(<span class="bu">len</span>).to_frame(<span class="st">"weight"</span>).reset_index()</span>
-<span id="cb302-7"><a href="restructuring-data.html#cb302-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb302-8"><a href="restructuring-data.html#cb302-8" aria-hidden="true" tabindex="-1"></a><span class="co"># check</span></span>
-<span id="cb302-9"><a href="restructuring-data.html#cb302-9" aria-hidden="true" tabindex="-1"></a>edgelist.head()</span></code></pre></div>
+<div class="sourceCode" id="cb303"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb303-1"><a href="restructuring-data.html#cb303-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sort each row alphabetically</span></span>
+<span id="cb303-2"><a href="restructuring-data.html#cb303-2" aria-hidden="true" tabindex="-1"></a>edgelist_df <span class="op">=</span> edgelist_df.sort_values(by <span class="op">=</span> [<span class="st">'char1'</span>, <span class="st">'char2'</span>])</span>
+<span id="cb303-3"><a href="restructuring-data.html#cb303-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb303-4"><a href="restructuring-data.html#cb303-4" aria-hidden="true" tabindex="-1"></a><span class="co"># count by unique pair</span></span>
+<span id="cb303-5"><a href="restructuring-data.html#cb303-5" aria-hidden="true" tabindex="-1"></a>edgelist <span class="op">=</span> edgelist_df.groupby([<span class="st">'char1'</span>, <span class="st">'char2'</span>]).<span class="op">\</span></span>
+<span id="cb303-6"><a href="restructuring-data.html#cb303-6" aria-hidden="true" tabindex="-1"></a><span class="bu">apply</span>(<span class="bu">len</span>).to_frame(<span class="st">"weight"</span>).reset_index()</span>
+<span id="cb303-7"><a href="restructuring-data.html#cb303-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb303-8"><a href="restructuring-data.html#cb303-8" aria-hidden="true" tabindex="-1"></a><span class="co"># check</span></span>
+<span id="cb303-9"><a href="restructuring-data.html#cb303-9" aria-hidden="true" tabindex="-1"></a>edgelist.head()</span></code></pre></div>
 <pre><code>##       char1     char2  weight
 ## 0  Chandler  Customer       1
 ## 1  Chandler      Joey       8
@@ -993,23 +997,23 @@ Figure 4.11: Visualization of the network of characters in Episode 1 of <i>Frien
 ## 3  Chandler      Paul       2
 ## 4  Chandler    Phoebe       5</code></pre>
 <p>This is what we need to create and visualize our graph of Episode 1 of <em>Friends</em>, which can be seen in Figure <a href="restructuring-data.html#fig:friends-graph-py">4.12</a> with the edge thickness determined by edge weight.</p>
-<div class="sourceCode" id="cb304"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb304-1"><a href="restructuring-data.html#cb304-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
-<span id="cb304-2"><a href="restructuring-data.html#cb304-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
-<span id="cb304-3"><a href="restructuring-data.html#cb304-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb304-4"><a href="restructuring-data.html#cb304-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create networkx object</span></span>
-<span id="cb304-5"><a href="restructuring-data.html#cb304-5" aria-hidden="true" tabindex="-1"></a>friends_ep1_network <span class="op">=</span> nx.from_pandas_edgelist(edgelist,</span>
-<span id="cb304-6"><a href="restructuring-data.html#cb304-6" aria-hidden="true" tabindex="-1"></a>source <span class="op">=</span> <span class="st">"char1"</span>, target <span class="op">=</span> <span class="st">"char2"</span>, edge_attr<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb304-7"><a href="restructuring-data.html#cb304-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb304-8"><a href="restructuring-data.html#cb304-8" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize with edge weight as edge width</span></span>
-<span id="cb304-9"><a href="restructuring-data.html#cb304-9" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">123</span>)</span>
-<span id="cb304-10"><a href="restructuring-data.html#cb304-10" aria-hidden="true" tabindex="-1"></a>weights <span class="op">=</span> <span class="bu">list</span>(</span>
-<span id="cb304-11"><a href="restructuring-data.html#cb304-11" aria-hidden="true" tabindex="-1"></a>  nx.get_edge_attributes(friends_ep1_network, <span class="st">'weight'</span>).values()</span>
-<span id="cb304-12"><a href="restructuring-data.html#cb304-12" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb304-13"><a href="restructuring-data.html#cb304-13" aria-hidden="true" tabindex="-1"></a>nx.draw_networkx(</span>
-<span id="cb304-14"><a href="restructuring-data.html#cb304-14" aria-hidden="true" tabindex="-1"></a>  friends_ep1_network, node_color <span class="op">=</span> <span class="st">"lightblue"</span>, node_size <span class="op">=</span> <span class="dv">60</span>,</span>
-<span id="cb304-15"><a href="restructuring-data.html#cb304-15" aria-hidden="true" tabindex="-1"></a>  edge_color <span class="op">=</span> <span class="st">"grey"</span>, with_labels <span class="op">=</span> <span class="va">True</span>, width <span class="op">=</span> np.array(weights)</span>
-<span id="cb304-16"><a href="restructuring-data.html#cb304-16" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb304-17"><a href="restructuring-data.html#cb304-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
+<div class="sourceCode" id="cb305"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb305-1"><a href="restructuring-data.html#cb305-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
+<span id="cb305-2"><a href="restructuring-data.html#cb305-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span>
+<span id="cb305-3"><a href="restructuring-data.html#cb305-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb305-4"><a href="restructuring-data.html#cb305-4" aria-hidden="true" tabindex="-1"></a><span class="co"># create networkx object</span></span>
+<span id="cb305-5"><a href="restructuring-data.html#cb305-5" aria-hidden="true" tabindex="-1"></a>friends_ep1_network <span class="op">=</span> nx.from_pandas_edgelist(edgelist,</span>
+<span id="cb305-6"><a href="restructuring-data.html#cb305-6" aria-hidden="true" tabindex="-1"></a>source <span class="op">=</span> <span class="st">"char1"</span>, target <span class="op">=</span> <span class="st">"char2"</span>, edge_attr<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb305-7"><a href="restructuring-data.html#cb305-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb305-8"><a href="restructuring-data.html#cb305-8" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize with edge weight as edge width</span></span>
+<span id="cb305-9"><a href="restructuring-data.html#cb305-9" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">123</span>)</span>
+<span id="cb305-10"><a href="restructuring-data.html#cb305-10" aria-hidden="true" tabindex="-1"></a>weights <span class="op">=</span> <span class="bu">list</span>(</span>
+<span id="cb305-11"><a href="restructuring-data.html#cb305-11" aria-hidden="true" tabindex="-1"></a>  nx.get_edge_attributes(friends_ep1_network, <span class="st">'weight'</span>).values()</span>
+<span id="cb305-12"><a href="restructuring-data.html#cb305-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb305-13"><a href="restructuring-data.html#cb305-13" aria-hidden="true" tabindex="-1"></a>nx.draw_networkx(</span>
+<span id="cb305-14"><a href="restructuring-data.html#cb305-14" aria-hidden="true" tabindex="-1"></a>  friends_ep1_network, node_color <span class="op">=</span> <span class="st">"lightblue"</span>, node_size <span class="op">=</span> <span class="dv">60</span>,</span>
+<span id="cb305-15"><a href="restructuring-data.html#cb305-15" aria-hidden="true" tabindex="-1"></a>  edge_color <span class="op">=</span> <span class="st">"grey"</span>, with_labels <span class="op">=</span> <span class="va">True</span>, width <span class="op">=</span> np.array(weights)</span>
+<span id="cb305-16"><a href="restructuring-data.html#cb305-16" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb305-17"><a href="restructuring-data.html#cb305-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div>
 <div class="figure" style="text-align: center">
 <span style="display:block;" id="fig:friends-graph-py"></span>
 <img src="www/restructuring-data/friends-graph-py-1.png" alt="Graph of &lt;i&gt;Friends&lt;/i&gt; character network from Episode 1 with edge width indicating the number of shared scenes" width="90%"><p class="caption">
