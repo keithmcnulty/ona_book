@@ -7,7 +7,7 @@
 <title>4 Restructuring Data for Use in Graphs | Handbook of Graphs and Networks in People Analytics</title>
 <meta name="author" content="Keith McNulty">
 <meta name="description" content="So far we have learned how to define and visualize graphs to allow us to work with them and to gain some basic insights from them. But we have made a really big assumption in doing so. We have...">
-<meta name="generator" content="bookdown 0.22.15 with bs4_book()">
+<meta name="generator" content="bookdown 0.26 with bs4_book()">
 <meta property="og:title" content="4 Restructuring Data for Use in Graphs | Handbook of Graphs and Networks in People Analytics">
 <meta property="og:type" content="book">
 <meta property="og:url" content="https://ona-book.org/restructuring-data.html">
@@ -18,22 +18,48 @@
 <meta name="twitter:site" content="@dr_keithmcnulty">
 <meta name="twitter:description" content="So far we have learned how to define and visualize graphs to allow us to work with them and to gain some basic insights from them. But we have made a really big assumption in doing so. We have...">
 <meta name="twitter:image" content="https://ona-book.org/www/cover/cover-ona.png">
-<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.12/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
-<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.5.1/tabs.js"></script><script src="libs/bs3compat-0.2.5.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
 <script src="libs/bs4_book-1.0.0/bs4_book.js"></script><meta name="citation_title" content="4 Restructuring Data for Use in Graphs | Handbook of Graphs and Networks in People Analytics: With Examples in R and Python">
 <meta name="citation_author" content="Keith McNulty">
 <meta name="citation_publication_date" content="2022">
 <meta name="citation_isbn" content="9781032204970">
-<script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script><link href="libs/vis-4.20.1/vis.css" rel="stylesheet">
-<script src="libs/vis-4.20.1/vis.min.js"></script><script src="libs/visNetwork-binding-2.0.9/visNetwork.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script><link href="libs/vis-9.1.0/vis-network.min.css" rel="stylesheet">
+<script src="libs/vis-9.1.0/vis-network.min.js"></script><script src="libs/visNetwork-binding-2.1.0/visNetwork.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 <script src="libs/d3-4.5.0/d3.min.js"></script><script src="libs/forceNetwork-binding-0.4/forceNetwork.js"></script><script src="libs/sankey-1/sankey.js"></script><script src="libs/sankeyNetwork-binding-0.4/sankeyNetwork.js"></script><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-400FPN6D44"></script><script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
       gtag('config', 'G-400FPN6D44');
-    </script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><link rel="stylesheet" href="css/style.css">
+    </script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<style type="text/css">
+    /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+        }
+    .hanging div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }
+  </style>
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body data-spy="scroll" data-target="#toc">
 
@@ -69,6 +95,7 @@
 <li><a class="" href="community.html"><span class="header-section-number">7</span> Components, Communities and Cliques</a></li>
 <li><a class="" href="similarity.html"><span class="header-section-number">8</span> Assortativity and Similarity</a></li>
 <li><a class="" href="databases.html"><span class="header-section-number">9</span> Graphs as Databases</a></li>
+<li><a class="" href="using-twitter.html"><span class="header-section-number">10</span> Bonus Chapter: Using Twitter for Network Analysis</a></li>
 <li><a class="" href="references.html">References</a></li>
 </ul>
 
@@ -86,9 +113,9 @@
 <p>There are two important considerations in transforming data into a graph-friendly structure. Both of these considerations depend on the problem you are trying to solve with the graph, as follows:</p>
 <ol style="list-style-type: decimal">
 <li><p>What entities am I interested in connecting? These will be the vertices of your graph. This could be a single entity type like a set of people, or it could be multiple entity types, such as connecting people to organizational units. Complex graphs will usually involve multiple entity types.</p></li>
-<li><p>How do I define the relationship between the vertices? These will be the edges of your graph. Again, there can be multiple relationship types, such as ‘reports to’ or ‘works with,’ depending on how complex your graph needs to be.</p></li>
+<li><p>How do I define the relationship between the vertices? These will be the edges of your graph. Again, there can be multiple relationship types, such as ‘reports to’ or ‘works with’, depending on how complex your graph needs to be.</p></li>
 </ol>
-<p>In addition to these fundamental considerations, there are also questions of design in how you construct your graph. This is because there is often more than one option for how you can model the entities and relationships you are interested in. For example, imagine that you have two types of relationships where ‘works with’ means that two people have worked together on the same project and ‘located with’ means that two people are based in the same location. One option for modeling these in a single graph is to have a single entity type (person) connected with edges that have a ‘relationship type’ property (‘works with’ or ‘located with’). Another option is to have several entity types—person, project and location—as vertices, and to connect people to projects and locations using a single edge type that means ‘is a member of.’ In the first option, the relationships are modeled directly, but in the second they are modeled indirectly. Both may work equally well for the problem that is being solved by the graph, but one choice may be more useful or efficient than another.</p>
+<p>In addition to these fundamental considerations, there are also questions of design in how you construct your graph. This is because there is often more than one option for how you can model the entities and relationships you are interested in. For example, imagine that you have two types of relationships where ‘works with’ means that two people have worked together on the same project and ‘located with’ means that two people are based in the same location. One option for modeling these in a single graph is to have a single entity type (person) connected with edges that have a ‘relationship type’ property (‘works with’ or ‘located with’). Another option is to have several entity types—person, project and location—as vertices, and to connect people to projects and locations using a single edge type that means ‘is a member of’. In the first option, the relationships are modeled directly, but in the second they are modeled indirectly. Both may work equally well for the problem that is being solved by the graph, but one choice may be more useful or efficient than another.</p>
 <p>To be able to go about these sorts of transformations requires technical and data design skills and judgment. There is no ‘one size fits all’ solution. The transformations required and how you go about them depends a great deal on the context and the purpose of the work. Nevertheless, in this chapter we will demonstrate two examples which reflect common situations where data needs to be transformed from a graph-unfriendly to a graph-friendly structure. Working through these examples should illustrate a simple design process to follow and help demonstrate typical data transformation methods that could be applied in other common situations.</p>
 <p>In the first example, we will study a situation where data exists in traditional rectangular tables, but where we need to transform it in order to understand connections that we cannot understand directly from the tables themselves. This is extremely common in practice and many organizations perform these sorts of transformations in order to populate graph databases from more traditional data sources. In the second example, we will study how to extract information from documents in a way that helps us understand connections between entities in those documents. This is another common situation that has strong applications in general, but has particular potential in the fields of law and crime investigation. Both these examples will be demonstrated in detail using R, and the last section of the chapter will provide examples of how to perform similar transformations using Python.</p>
 <div id="transforming-data-in-rectangular-tables-for-use-in-graphs" class="section level2" number="4.1">
@@ -162,9 +189,9 @@
 <span class="op">(</span><span class="va">orgchart</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>
   d <span class="op">=</span> <span class="va">orgchart_edgelist2</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH bfeec8c DN-- 8 7 -- 
+<pre><code>## IGRAPH 46f8234 DN-- 8 7 -- 
 ## + attr: name (v/c)
-## + edges from bfeec8c (vertex names):
+## + edges from 46f8234 (vertex names):
 ## [1] Andrew -&gt;Nancy    Andrew -&gt;Michael  Nancy  -&gt;Jane     Nancy  -&gt;Margaret Nancy  -&gt;Steve    Michael-&gt;Robert  
 ## [7] Michael-&gt;Laura</code></pre>
 <p>We now have a directed graph with named vertices, so this should be easy to plot. Let’s use <code>ggplot</code> with a dendrogram (tree) layout, as in Figure <a href="restructuring-data.html#fig:chinook-pretty">4.1</a>.</p>
@@ -219,7 +246,7 @@ Figure 4.1: Management hierarchy of Chinook as a tree (dendrogram)
 ## 4 Margaret Park          Bjørn Hansen            4
 ## 5 Margaret Park František Wichterlová            4
 ## 6 Steve Johnson           Helena Holý            5</code></pre>
-<p>Now we have an option of creating two types of graphs. First we could create a graph from the data as is, using the <code>CustomerName</code> and <code>RepName</code> as the edgelist, and where the relationship is ‘is a customer of.’ Let’s create that graph, and view it in Figure <a href="restructuring-data.html#fig:cust-rep">4.2</a>. We see a graph with three distinct connected components, each with a hub-and-spoke shape.</p>
+<p>Now we have an option of creating two types of graphs. First we could create a graph from the data as is, using the <code>CustomerName</code> and <code>RepName</code> as the edgelist, and where the relationship is ‘is a customer of’. Let’s create that graph, and view it in Figure <a href="restructuring-data.html#fig:cust-rep">4.2</a>. We see a graph with three distinct connected components, each with a hub-and-spoke shape.</p>
 <div class="sourceCode" id="cb236"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># create igraph</span>
 <span class="va">cust_rep_graph</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>
@@ -228,7 +255,7 @@ Figure 4.1: Management hierarchy of Chinook as a tree (dendrogram)
 
 <span class="co"># create customer and rep property for vertices</span>
 <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">cust_rep_graph</span><span class="op">)</span><span class="op">$</span><span class="va">Type</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">cust_rep_graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span> <span class="op">%in%</span> <span class="va">cust_reps</span><span class="op">$</span><span class="va">RepName</span>,
+  <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">cust_rep_graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">cust_reps</span><span class="op">$</span><span class="va">RepName</span>,
   <span class="st">"Rep"</span>,
   <span class="st">"Customer"</span>
 <span class="op">)</span>
@@ -351,7 +378,7 @@ Figure 4.3: Customer-to-customer network for Chinook based on customers sharing 
 
 <span class="co"># create vertex type</span>
 <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">customer_item_network</span><span class="op">)</span><span class="op">$</span><span class="va">Type</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">customer_item_network</span><span class="op">)</span><span class="op">$</span><span class="va">name</span> <span class="op">%in%</span> <span class="va">cust_item</span><span class="op">$</span><span class="va">TrackId</span>,
+  <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">customer_item_network</span><span class="op">)</span><span class="op">$</span><span class="va">name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">cust_item</span><span class="op">$</span><span class="va">TrackId</span>,
   <span class="st">"Item"</span>,
   <span class="st">"Customer"</span>
 <span class="op">)</span></code></pre></div>
@@ -448,7 +475,7 @@ Figure 4.4: Network connecting customers via items purchased
 Figure 4.5: Chinook customer-to-customer network based on common item purchases
 </p>
 </div>
-<p>If we wish, we can restrict the definition of connection. For example, we may define it as ‘purchased at least two items in common,’ as in Figure <a href="restructuring-data.html#fig:cust-item-two">4.6</a>. We can use the <code><a href="https://rdrr.io/pkg/igraph/man/subgraph.html">subgraph()</a></code> function in <code>igraph</code> for this, and the result reveals a graph with two connected components, indicating that there are two independent groups of customers who are related according to some commonality in music purchasing.</p>
+<p>If we wish, we can restrict the definition of connection. For example, we may define it as ‘purchased at least two items in common’, as in Figure <a href="restructuring-data.html#fig:cust-item-two">4.6</a>. We can use the <code><a href="https://rdrr.io/pkg/igraph/man/subgraph.html">subgraph()</a></code> function in <code>igraph</code> for this, and the result reveals a graph with two connected components, indicating that there are two independent groups of customers who are related according to some commonality in music purchasing.</p>
 <div class="sourceCode" id="cb259"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># select edges that have Item value of at least 2</span>
 <span class="va">edges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/E.html">E</a></span><span class="op">(</span><span class="va">custtocust_network</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/E.html">E</a></span><span class="op">(</span><span class="va">custtocust_network</span><span class="op">)</span><span class="op">$</span><span class="va">Items</span> <span class="op">&gt;=</span> <span class="fl">2</span><span class="op">]</span>
@@ -642,8 +669,8 @@ Figure 4.10: Viewing the script of Season 1, Episode 1 of <i>Friends</i> with th
 <span class="va">url_string</span> <span class="op">&lt;-</span> <span class="st">"https://fangj.github.io/friends/season/0101.html"</span>
 
 <span class="co"># get script as vector of HTML nodes</span>
-<span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu">xml2</span><span class="fu">::</span><span class="fu"><a href="http://xml2.r-lib.org/reference/read_xml.html">read_html</a></span><span class="op">(</span><span class="va">url_string</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-      <span class="fu">xml2</span><span class="fu">::</span><span class="fu"><a href="http://xml2.r-lib.org/reference/as_list.html">as_list</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<span class="va">nodes</span> <span class="op">&lt;-</span> <span class="fu">xml2</span><span class="fu">::</span><span class="fu"><a href="http://xml2.r-lib.org/reference/read_xml.html">read_html</a></span><span class="op">(</span><span class="va">url_string</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
+      <span class="fu">xml2</span><span class="fu">::</span><span class="fu"><a href="http://xml2.r-lib.org/reference/as_list.html">as_list</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
       <span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="co"># view head</span>
@@ -666,7 +693,7 @@ Figure 4.10: Viewing the script of Season 1, Episode 1 of <i>Friends</i> with th
 <pre><code>##                                                       html.body.font.p 
 ## "[Scene: Central Perk, Chandler, Joey, Phoebe, and Monica are there.]"</code></pre>
 <p>Now, to generate something useful for our task, we need to create a vector that contains the word ‘New Scene’ if the line represents the beginning of a scene, and the name of the character if the line represents something spoken by a character. This will be the best format for what we want to do.</p>
-<p>The first thing we will need to do is swap any text string containing “Scene:” to the string “New Scene.” We can do this quite simply using an <code><a href="https://rdrr.io/r/base/ifelse.html">ifelse()</a></code> on the nodes vector, where we use <code><a href="https://rdrr.io/r/base/grep.html">grepl()</a></code> to identify which entries are in nodes that contain the string “Scene:”</p>
+<p>The first thing we will need to do is swap any text string containing “Scene:” to the string “New Scene”. We can do this quite simply using an <code><a href="https://rdrr.io/r/base/ifelse.html">ifelse()</a></code> on the nodes vector, where we use <code><a href="https://rdrr.io/r/base/grep.html">grepl()</a></code> to identify which entries are in nodes that contain the string “Scene:”.</p>
 <div class="sourceCode" id="cb274"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># swap lines containing the string 'Scene:' with 'New Scene' </span>
 <span class="va">nodes_newscene</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span><span class="op">(</span><span class="st">"Scene:"</span>, <span class="va">nodes</span><span class="op">)</span>, <span class="st">"New Scene"</span>, <span class="va">nodes</span><span class="op">)</span>
@@ -676,7 +703,7 @@ Figure 4.10: Viewing the script of Season 1, Episode 1 of <i>Friends</i> with th
 <pre><code>## [1] 15</code></pre>
 <p>That worked nicely. Now, you might also have noticed that, for dialogue purposes, character names precede a colon at the beginning of a line. So that might be a nice way to extract the names of characters with speaking parts in a scene (although it might give us a few other things that have preceded colons in the script which we do not want, but we can deal with that later).</p>
 <p>So what we will do is use regular expression syntax (regex) to tell R that we are looking for anything at the beginning of a line preceding a colon. We will use a lookahead regex string as follows: <code>^[A-Za-z ]+(?=:)</code>.</p>
-<p>Let’s look at that string and make sure we know what it means. The <code>^[A-Za-z ]+</code> component means ‘find any substring of alphabetic text of any length including spaces at the beginning of a string.’ The part in parentheses <code>(?=:)</code> is known as a lookahead—it means look ahead of that substring of text and find situations where a colon is the next character. This is therefore instructing R to find any string of alphabetic text at the start of a line that precedes a colon and return it. If we use the R package <code>stringr</code> and its function <code><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract()</a></code> with this regex syntax, it will go through every entry of the <code>nodes</code> vector and transform it to just the first string of text found before a colon. If no such string is found, it will return an <code>NA</code> value. This is great for us because we know that, for the purpose of dialogue, characters’ names are always at the start of nodes, so we certainly won’t miss any if we just take the first instance in each line. We should also, for safety, not mess with the scene breaks we have put into our vector.</p>
+<p>Let’s look at that string and make sure we know what it means. The <code>^[A-Za-z ]+</code> component means ‘find any substring of alphabetic text of any length including spaces at the beginning of a string’. The part in parentheses <code>(?=:)</code> is known as a lookahead—it means look ahead of that substring of text and find situations where a colon is the next character. This is therefore instructing R to find any string of alphabetic text at the start of a line that precedes a colon and return it. If we use the R package <code>stringr</code> and its function <code><a href="https://stringr.tidyverse.org/reference/str_extract.html">str_extract()</a></code> with this regex syntax, it will go through every entry of the <code>nodes</code> vector and transform it to just the first string of text found before a colon. If no such string is found, it will return an <code>NA</code> value. This is great for us because we know that, for the purpose of dialogue, characters’ names are always at the start of nodes, so we certainly won’t miss any if we just take the first instance in each line. We should also, for safety, not mess with the scene breaks we have put into our vector.</p>
 <div class="sourceCode" id="cb276"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://stringr.tidyverse.org">stringr</a></span><span class="op">)</span>
 
@@ -689,10 +716,10 @@ Figure 4.10: Viewing the script of Season 1, Episode 1 of <i>Friends</i> with th
 <span class="co"># check a sample</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
 <span class="va">nodes_char</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">30</span><span class="op">)</span><span class="op">]</span></code></pre></div>
-<pre><code>##  [1] NA           NA           NA           NA           NA           "Monica"     NA           NA           NA          
-## [10] NA           NA           "Chandler"   NA           NA           NA           NA           NA           NA          
-## [19] NA           NA           NA           NA           NA           "Joey"       "Phoebe"     NA           "New Scene" 
-## [28] NA           NA           "Written by"</code></pre>
+<pre><code>##  [1] NA           NA           NA           NA           NA           "Monica"     NA           NA          
+##  [9] NA           NA           NA           "Chandler"   NA           NA           NA           NA          
+## [17] NA           NA           NA           NA           NA           NA           NA           "Joey"      
+## [25] "Phoebe"     NA           "New Scene"  NA           NA           "Written by"</code></pre>
 <p>So this is working, but we have more cleaning to do. For example, we will want to get rid of the <code>NA</code> values. We will also see if we take a look that there is a character called ‘All’ which probably should not be in our network. We can also see phrases like ‘Written by’ which are not dialogue characters, and strings containing ‘and’ which involve combinations of characters. So we can create special commands to remove any instances of these phrases<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;The limited cleaning commands here work for this specific episode, but they would need to be expanded to be used on more episodes to take into account any unpredictable formatting in the scripts. The reality of most scraping exercises is that some code has to be written to deal with exceptions.&lt;/p&gt;"><sup>42</sup></a>.</p>
 <div class="sourceCode" id="cb278"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># remove NAs</span>
@@ -705,8 +732,9 @@ Figure 4.10: Viewing the script of Season 1, Episode 1 of <i>Friends</i> with th
 
 <span class="co"># check </span>
 <span class="va">nodes_char_clean2</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span><span class="op">]</span></code></pre></div>
-<pre><code>##  [1] "Chandler"  "Monica"    "Chandler"  "Monica"    "Phoebe"    "Joey"      "Phoebe"    "Joey"      "Monica"    "Monica"   
-## [11] "Chandler"  "Chandler"  "New Scene" "Ross"      "Joey"      "Chandler"  "Joey"      "Chandler"  "Phoebe"    "Chandler"</code></pre>
+<pre><code>##  [1] "Chandler"  "Monica"    "Chandler"  "Monica"    "Phoebe"    "Joey"      "Phoebe"    "Joey"      "Monica"   
+## [10] "Monica"    "Chandler"  "Chandler"  "New Scene" "Ross"      "Joey"      "Chandler"  "Joey"      "Chandler" 
+## [19] "Phoebe"    "Chandler"</code></pre>
 <p>Let’s assume our cleaning is done, and we have a nice vector that contains either the names of characters that are speaking lines in the episode or “New Scene” to indicate that we are crossing a scene boundary. We now just need to convert this vector into a simple dataframe with two columns for scene and character. We already have our character lists, so we really just need to iterate through our nodes vector and, for each entry, count the number of previous occurrences of “New Scene” and add one.</p>
 <div class="sourceCode" id="cb280"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># number scene by counting previous "New Scene" entries and adding 1</span>
@@ -781,7 +809,7 @@ Figure 4.10: Viewing the script of Season 1, Episode 1 of <i>Friends</i> with th
       <span class="va">char1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="va">vector</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">vector</span><span class="op">)</span> <span class="op">-</span> <span class="va">i</span><span class="op">)</span> 
       <span class="va">char2</span> <span class="op">&lt;-</span> <span class="va">vector</span><span class="op">[</span><span class="op">(</span><span class="va">i</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span><span class="op">:</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">vector</span><span class="op">)</span><span class="op">]</span> 
       
-      <span class="va">df</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op">%&gt;%</span> 
+      <span class="va">df</span> <span class="op">&lt;-</span> <span class="va">df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
         <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html">bind_rows</a></span><span class="op">(</span>
           <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>char1 <span class="op">=</span> <span class="va">char1</span>, 
                      char2 <span class="op">=</span> <span class="va">char2</span>, 
@@ -901,7 +929,7 @@ Figure 4.11: Visualization of the network of characters in Episode 1 of <i>Frien
 <span id="cb295-13"><a href="restructuring-data.html#cb295-13" aria-hidden="true" tabindex="-1"></a><span class="co"># check first few unique values returned</span></span>
 <span id="cb295-14"><a href="restructuring-data.html#cb295-14" aria-hidden="true" tabindex="-1"></a><span class="bu">sorted</span>(<span class="bu">set</span>(friends_ep1_list))[<span class="dv">0</span>:<span class="dv">7</span>]</span></code></pre></div>
 <pre><code>## ['All', 'Chandler', 'Chandler ', 'Customer', 'Frannie', 'Joey', 'Monica']</code></pre>
-<p>This looks promising; now we need to get rid of the ‘All’ entries and any entries containing ‘and.’</p>
+<p>This looks promising; now we need to get rid of the ‘All’ entries and any entries containing ‘and’.</p>
 <div class="sourceCode" id="cb297"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb297-1"><a href="restructuring-data.html#cb297-1" aria-hidden="true" tabindex="-1"></a>friends_ep1_list2<span class="op">=</span>[entry.strip() <span class="cf">for</span> entry <span class="kw">in</span> friends_ep1_list </span>
 <span id="cb297-2"><a href="restructuring-data.html#cb297-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="st">"All"</span> <span class="kw">not</span> <span class="kw">in</span> entry <span class="kw">and</span> <span class="st">" and "</span> <span class="kw">not</span> <span class="kw">in</span> entry]</span>
 <span id="cb297-3"><a href="restructuring-data.html#cb297-3" aria-hidden="true" tabindex="-1"></a></span>

@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>10 Bonus Chapter: Using Twitter for Network Analysis | Handbook of Graphs and Networks in People Analytics</title>
+<meta name="author" content="Keith McNulty">
+<meta name="description" content="Social media engines are by their very nature rich sources of data for modeling networks of friends, acquaintences, colleagues and other relationships. In Chapter 7 for example, we used data...">
+<meta name="generator" content="bookdown 0.26 with bs4_book()">
+<meta property="og:title" content="10 Bonus Chapter: Using Twitter for Network Analysis | Handbook of Graphs and Networks in People Analytics">
+<meta property="og:type" content="book">
+<meta property="og:url" content="https://ona-book.org/using-twitter.html">
+<meta property="og:image" content="https://ona-book.org/www/cover/cover-ona.png">
+<meta property="og:description" content="Social media engines are by their very nature rich sources of data for modeling networks of friends, acquaintences, colleagues and other relationships. In Chapter 7 for example, we used data...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="10 Bonus Chapter: Using Twitter for Network Analysis | Handbook of Graphs and Networks in People Analytics">
+<meta name="twitter:site" content="@dr_keithmcnulty">
+<meta name="twitter:description" content="Social media engines are by their very nature rich sources of data for modeling networks of friends, acquaintences, colleagues and other relationships. In Chapter 7 for example, we used data...">
+<meta name="twitter:image" content="https://ona-book.org/www/cover/cover-ona.png">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><meta name="citation_title" content="10 Bonus Chapter: Using Twitter for Network Analysis | Handbook of Graphs and Networks in People Analytics: With Examples in R and Python">
+<meta name="citation_author" content="Keith McNulty">
+<meta name="citation_publication_date" content="2022">
+<meta name="citation_isbn" content="9781032204970">
+<script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script><link href="libs/vis-9.1.0/vis-network.min.css" rel="stylesheet">
+<script src="libs/vis-9.1.0/vis-network.min.js"></script><script src="libs/visNetwork-binding-2.1.0/visNetwork.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<script src="libs/d3-4.5.0/d3.min.js"></script><script src="libs/forceNetwork-binding-0.4/forceNetwork.js"></script><script src="libs/sankey-1/sankey.js"></script><script src="libs/sankeyNetwork-binding-0.4/sankeyNetwork.js"></script><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-400FPN6D44"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-400FPN6D44');
+    </script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<style type="text/css">
+    /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+        }
+    .hanging div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }
+  </style>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="With Examples in R and Python">Handbook of Graphs and Networks in People Analytics</a>:
+        <small class="text-muted">With Examples in R and Python</small>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Welcome</a></li>
+<li><a class="" href="foreword-by-professor-jeff-polzer.html">Foreword by Professor Jeff Polzer</a></li>
+<li><a class="" href="introduction.html">Introduction</a></li>
+<li><a class="" href="the-basics-of-the-r-programming-language.html">The Basics of the R Programming Language</a></li>
+<li><a class="" href="everywhere.html"><span class="header-section-number">1</span> Graphs Everywhere!</a></li>
+<li><a class="" href="working.html"><span class="header-section-number">2</span> Working with Graphs</a></li>
+<li><a class="" href="viz-graphs.html"><span class="header-section-number">3</span> Visualizing Graphs</a></li>
+<li><a class="" href="restructuring-data.html"><span class="header-section-number">4</span> Restructuring Data for Use in Graphs</a></li>
+<li><a class="" href="paths-distance.html"><span class="header-section-number">5</span> Paths and Distance</a></li>
+<li><a class="" href="vertex-importance.html"><span class="header-section-number">6</span> Vertex Importance and Centrality</a></li>
+<li><a class="" href="community.html"><span class="header-section-number">7</span> Components, Communities and Cliques</a></li>
+<li><a class="" href="similarity.html"><span class="header-section-number">8</span> Assortativity and Similarity</a></li>
+<li><a class="" href="databases.html"><span class="header-section-number">9</span> Graphs as Databases</a></li>
+<li><a class="active" href="using-twitter.html"><span class="header-section-number">10</span> Bonus Chapter: Using Twitter for Network Analysis</a></li>
+<li><a class="" href="references.html">References</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/keithmcnulty/ona_book">View book source <i class="fab fa-github"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="using-twitter" class="section level1" number="10">
+<h1>
+<span class="header-section-number">10</span> Bonus Chapter: Using Twitter for Network Analysis<a class="anchor" aria-label="anchor" href="#using-twitter"><i class="fas fa-link"></i></a>
+</h1>
+<p>Social media engines are by their very nature rich sources of data for modeling networks of friends, acquaintences, colleagues and other relationships. In Chapter <a href="community.html#community">7</a> for example, we used data extracted from Twitter to study a network of Canadian politicians. Such data is not always easy to extract, as different social media companies have different philosophies about data access, and some make it very difficult for user data to be extracted.</p>
+<p>However, Twitter is one of the more open platforms, and anyone who wants to can extract a certain amount of data from Twitter provided the user accounts they are interested in are public accounts. In this chapter we will go through how to extract data from Twitter and how to turn that data into a graph object for further study. As an example, we will extract data on the recent tweets of British politicians sitting in the House of Commons as at mid-2022 and we will use it to detect influential politicians, political party groupings and factions.</p>
+<div id="accessing-the-twitter-api" class="section level2" number="10.1">
+<h2>
+<span class="header-section-number">10.1</span> Accessing the Twitter API<a class="anchor" aria-label="anchor" href="#accessing-the-twitter-api"><i class="fas fa-link"></i></a>
+</h2>
+<p>The Twitter Application Programming Interface (API) allows an individual to access the database underlying Twitter and extract certain data from it. As of the time of writing, there are two versions of the API in operation - version 1.1 and the newer version 2. Here we will use version 1.1 of the API, as this is more established and will allow us to use helpful packages which have been written to make access easier.</p>
+<p>In order to access the Twitter API, you need to have your own Twitter account and you need to use this account to sign up for a Twitter developer account at the <a href="https://developer.twitter.com/en">Twitter Developer Platform</a>. When you sign up for a developer account, you can set up a project and an application. Once you have done this, you can generate a series of access codes. For v1.1 of the API, you will need the <em>API Key and Secret</em> and the <em>Access Token and Secret</em>. Note that you will only be able to see and copy these once, so make sure you do so after they are generated and store them in a safe and secure place.</p>
+<div id="accessing-using-r" class="section level3" number="10.1.1">
+<h3>
+<span class="header-section-number">10.1.1</span> Accessing using R<a class="anchor" aria-label="anchor" href="#accessing-using-r"><i class="fas fa-link"></i></a>
+</h3>
+<p>The Twitter v1.1 API can be accessed easily using the <code>rtweet</code> package. When you first use this package, you will need to authenticate by creating a token using the access codes that you generated for your app on the Twitter Developer Platform. You can do this as follows, replacing the placeholders appropriately:</p>
+<div class="sourceCode" id="cb558"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://CRAN.R-project.org/package=rtweet">rtweet</a></span><span class="op">)</span>
+
+<span class="va">token</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rtweet/man/create_token.html">create_token</a></span><span class="op">(</span>
+  app <span class="op">=</span> <span class="st">"YOUR_APP_NAME"</span>,
+  consumer_key <span class="op">=</span> <span class="st">"YOUR_API_KEY"</span>,
+  consumer_secret <span class="op">=</span> <span class="st">"YOUR_API_KEY_SECRET"</span>,
+  access_token <span class="op">=</span> <span class="st">"YOUR_ACCESS_TOKEN"</span>,
+  access_secret <span class="op">=</span> <span class="st">"YOUR_ACCESS_TOKEN_SECRET"</span>
+<span class="op">)</span></code></pre></div>
+<p>This is a one-off authentication, and once you have completed it, your access credentials will be stored in a hidden file in your R session and will be permanently available for future use.</p>
+<p>You can now test some simple functions in the <code>rtweet</code> package to see if you are accessing the API successfully. For example, you can use the <code><a href="https://rdrr.io/pkg/rtweet/man/get_followers.html">get_followers()</a></code> function to get the Twitter IDs of 10 of my followers:</p>
+<div class="sourceCode" id="cb559"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="op">(</span><span class="va">keith_followers</span> <span class="op">&lt;-</span> <span class="fu">rtweet</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rtweet/man/get_followers.html">get_followers</a></span><span class="op">(</span><span class="st">"dr_keithmcnulty"</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 10 × 1
+##    user_id            
+##    &lt;chr&gt;              
+##  1 1518892476966313985
+##  2 1503538180783435776
+##  3 80138065           
+##  4 4531587435         
+##  5 2589097676         
+##  6 1227199012899438592
+##  7 1345708681749401601
+##  8 34060868           
+##  9 38427292           
+## 10 1282840960058171392</code></pre>
+<p>This has returned a data frame with a set of Twitter user IDs in the <code>user_id</code> column. You can use the <code><a href="https://rdrr.io/pkg/rtweet/man/lookup_users.html">lookup_users()</a></code> function to find out more about each of these IDs. This will return quite a lot of information on each user as long as their account is public. You can explore the full set of information, but below we simply show the screen name of each user.</p>
+<div class="sourceCode" id="cb561"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">user_data</span> <span class="op">&lt;-</span> <span class="fu">rtweet</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rtweet/man/lookup_users.html">lookup_users</a></span><span class="op">(</span><span class="va">keith_followers</span><span class="op">$</span><span class="va">user_id</span><span class="op">)</span>
+<span class="va">user_data</span><span class="op">$</span><span class="va">screen_name</span></code></pre></div>
+<pre><code>##  [1] "amina_jarso"    "AlertMitchell"  "matt_chennells" "arthuttifrutti" "ashutosh21293"  "sounix000"     
+##  [7] "foammail"       "jgcopple"       "nsmith_piano"   "brianmahayie"</code></pre>
+</div>
+<div id="accessing-using-python" class="section level3" number="10.1.2">
+<h3>
+<span class="header-section-number">10.1.2</span> Accessing using Python<a class="anchor" aria-label="anchor" href="#accessing-using-python"><i class="fas fa-link"></i></a>
+</h3>
+<p>To access the Twitter API in Python, use the <code>tweepy</code> package. You can authenticate using your keys and secrets that you saved when you set up your application on the Twitter Developer Platform.</p>
+<div class="sourceCode" id="cb563"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb563-1"><a href="using-twitter.html#cb563-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tweepy</span>
+<span id="cb563-2"><a href="using-twitter.html#cb563-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb563-3"><a href="using-twitter.html#cb563-3" aria-hidden="true" tabindex="-1"></a>auth <span class="op">=</span> tweepy.OAuth1UserHandler(</span>
+<span id="cb563-4"><a href="using-twitter.html#cb563-4" aria-hidden="true" tabindex="-1"></a>   <span class="st">"YOUR_API_KEY"</span>, </span>
+<span id="cb563-5"><a href="using-twitter.html#cb563-5" aria-hidden="true" tabindex="-1"></a>   <span class="st">"YOUR_API_KEY_SECRET"</span>, </span>
+<span id="cb563-6"><a href="using-twitter.html#cb563-6" aria-hidden="true" tabindex="-1"></a>   <span class="st">"YOUR_ACCESS_TOKEN"</span>, </span>
+<span id="cb563-7"><a href="using-twitter.html#cb563-7" aria-hidden="true" tabindex="-1"></a>   <span class="st">"YOUR_ACCESS_TOKEN_SECRET"</span></span>
+<span id="cb563-8"><a href="using-twitter.html#cb563-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb563-9"><a href="using-twitter.html#cb563-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb563-10"><a href="using-twitter.html#cb563-10" aria-hidden="true" tabindex="-1"></a>api <span class="op">=</span> tweepy.API(auth)</span></code></pre></div>
+<p>You can now test some simple functions to check whether your are successfully accessing the Twitter API. To get the Twitter IDs of ten of my followers, use the <code>get_follower_ids()</code> function:</p>
+<div class="sourceCode" id="cb564"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb564-1"><a href="using-twitter.html#cb564-1" aria-hidden="true" tabindex="-1"></a>keith_followers <span class="op">=</span> api.get_follower_ids(screen_name <span class="op">=</span> <span class="st">"dr_keithmcnulty"</span>)</span>
+<span id="cb564-2"><a href="using-twitter.html#cb564-2" aria-hidden="true" tabindex="-1"></a>ten_followers <span class="op">=</span> keith_followers[<span class="dv">0</span>:<span class="dv">9</span>]</span>
+<span id="cb564-3"><a href="using-twitter.html#cb564-3" aria-hidden="true" tabindex="-1"></a>ten_followers</span></code></pre></div>
+<pre><code>## [1518892476966313985, 1503538180783435776, 80138065, 4531587435, 2589097676, 1227199012899438592, 1345708681749401601, 34060868, 38427292]</code></pre>
+<p>To find further details of these followers, including their screen names:</p>
+<div class="sourceCode" id="cb566"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb566-1"><a href="using-twitter.html#cb566-1" aria-hidden="true" tabindex="-1"></a>ten_follower_details <span class="op">=</span> api.lookup_users(user_id <span class="op">=</span> ten_followers)</span>
+<span id="cb566-2"><a href="using-twitter.html#cb566-2" aria-hidden="true" tabindex="-1"></a>[follower.screen_name <span class="cf">for</span> follower <span class="kw">in</span> ten_follower_details]</span></code></pre></div>
+<pre><code>## ['amina_jarso', 'AlertMitchell', 'matt_chennells', 'arthuttifrutti', 'ashutosh21293', 'sounix000', 'foammail', 'jgcopple', 'nsmith_piano']</code></pre>
+</div>
+<div id="twitter-rate-limits" class="section level3" number="10.1.3">
+<h3>
+<span class="header-section-number">10.1.3</span> Twitter rate limits<a class="anchor" aria-label="anchor" href="#twitter-rate-limits"><i class="fas fa-link"></i></a>
+</h3>
+<p>With potentially millions of developers querying the Twitter API on a regular basis, Twitter imposes rate limits to ensure that no one developer can overload the API. Rate limits usually operate over a 15 minute period, which practically means that when you hit a rate limit, you’ll need to wait at least 15 minutes before you retry. The size of the limit depends on the specific elements of the API that you are querying. For example, if you are downloading the Twitter timelines of users, you can query a total of 180 users before you hit a rate limit. You can see full details on rate limits <a href="https://developer.twitter.com/en/docs/twitter-api/rate-limits">here</a>. There are also limits to the total number of queries you can make in a day or in a month before you need to purchase enterprise API access. If you are an academic, you can apply for greater free access for research purposes.</p>
+<p>You can obtain information on your current rate limit status by using the <code><a href="https://rdrr.io/pkg/rtweet/man/rate_limit.html">rate_limit()</a></code> function in <code>rtweet</code>:</p>
+<div class="sourceCode" id="cb568"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">rtweet</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rtweet/man/rate_limit.html">rate_limit</a></span><span class="op">(</span>query <span class="op">=</span> <span class="st">"get_followers"</span><span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 1 × 7
+##   query         limit remaining reset        reset_at            timestamp           app          
+##   &lt;chr&gt;         &lt;int&gt;     &lt;int&gt; &lt;drtn&gt;       &lt;dttm&gt;              &lt;dttm&gt;              &lt;chr&gt;        
+## 1 followers/ids    15        13 0.34005 mins 2022-06-03 19:15:35 2022-06-03 19:15:15 Keith McNulty</code></pre>
+<p>In <code>tweepy</code> you can use the <code>rate_limit_status()</code> function. Here is how you can determine your rate limit status on querying follower IDs:</p>
+<div class="sourceCode" id="cb570"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb570-1"><a href="using-twitter.html#cb570-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb570-2"><a href="using-twitter.html#cb570-2" aria-hidden="true" tabindex="-1"></a>limits <span class="op">=</span> api.rate_limit_status(resources <span class="op">=</span> <span class="st">"followers"</span>)</span>
+<span id="cb570-3"><a href="using-twitter.html#cb570-3" aria-hidden="true" tabindex="-1"></a>limits.get(<span class="st">'resources'</span>).get(<span class="st">'followers'</span>).get(<span class="st">'/followers/ids'</span>)</span></code></pre></div>
+<pre><code>## {'limit': 15, 'remaining': 13, 'reset': 1654283739}</code></pre>
+<p>Practically, when you hit a rate limit you will receive a message back indicating so. You can then try again from where you left off after 15 minutes. Packages like <code>rtweet</code> and <code>tweepy</code> also have options to retry automatically after 15 minutes. For example, in many <code>rtweet</code> functions you can use the argument <code>retryonratelimit = TRUE</code>, while in <code>tweepy</code>, you can specify this behavior on initial authentication using:</p>
+<div class="sourceCode" id="cb572"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb572-1"><a href="using-twitter.html#cb572-1" aria-hidden="true" tabindex="-1"></a>api <span class="op">=</span> tweepy.API(auth, wait_on_rate_limit <span class="op">=</span> <span class="va">True</span>)</span></code></pre></div>
+</div>
+</div>
+<div id="example-british-members-of-parliament-mp-twitter-network" class="section level2" number="10.2">
+<h2>
+<span class="header-section-number">10.2</span> Example: British Members of Parliament (MP) Twitter network<a class="anchor" aria-label="anchor" href="#example-british-members-of-parliament-mp-twitter-network"><i class="fas fa-link"></i></a>
+</h2>
+<p>The House of Commons is the lower house of the British Parliament, and consists of 650 elected members (MPs) across numerous political parties. Most of these MPs have public Twitter accounts, and the details can be downloaded from the <em>Politics Social</em> website.</p>
+<div class="sourceCode" id="cb573"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># download MP list from Politics Social</span>
+<span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://www.politics-social.com/api/list/csv/party"</span>
+<span class="va">mp_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">mp_list</span><span class="op">)</span></code></pre></div>
+<pre><code>##              Name      Screen.name                              Party     Constituency Followers
+## 1   Lindsay Hoyle @LindsayHoyle_MP                            Speaker          Chorley     41553
+## 2    Claire Hanna     @ClaireHanna Social Democratic and Labour Party    Belfast South     41827
+## 3  Colum Eastwood   @columeastwood Social Democratic and Labour Party            Foyle     47452
+## 4   Mickey Brady    @MickeyBradySF                          Sinn Féin Newry and Armagh      5364
+## 5    Paul Maskey     @PaulMaskeyMP                          Sinn Féin     Belfast West     20287
+## 6 Francie Molloy    @FrancieMolloy                          Sinn Féin       Mid Ulster      9097
+##   New.followers.in.last.24.hours
+## 1                             -8
+## 2                             31
+## 3                             59
+## 4                             -2
+## 5                              5
+## 6                             65</code></pre>
+<p>There appear to be 590 active MPs on Twitter, although this may have changed since this list was compiled, so some of these users may return no data if their accounts have been disabled or deleted. In this example, we will study the interactions of these MPs. An interaction can be considered as a reply to, a mention of, a retweet of, or a quote tweet of another MP. We will use the number of interactions as an indication of the strength of the connection between two MPs. We will construct a graph from this data and then use the methods learned earlier in this book to perform interesting analyses, such as searching for influential members, or identifying Twitter communities or Twitter cliques of MPs.</p>
+<div id="creating-the-graph-from-twitter-data" class="section level3" number="10.2.1">
+<h3>
+<span class="header-section-number">10.2.1</span> Creating the graph from Twitter data<a class="anchor" aria-label="anchor" href="#creating-the-graph-from-twitter-data"><i class="fas fa-link"></i></a>
+</h3>
+<p>We can use <code>rtweet</code>’s <code><a href="https://rdrr.io/pkg/rtweet/man/get_timeline.html">get_timeline()</a></code> function to download a large amount of information about the most recent tweets of a given user. Twitter’s API allows a maximum of 3,200 most recent tweets to be downloaded, but downloading a large amount of tweets for a large number of users would take several hours at least, so in our case we will aim to download the 500 most recent tweets per user in order to keep the download manageable (though it will still take the better part of an hour at least to get this information for all MPs). As an example, and so as not to run up against rate limits, let’s download the Twitter timelines of the first 180 of the MPs in our list.</p>
+<div class="sourceCode" id="cb575"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># get the 500 most recent tweets of the first 180 MPs to avoid rate limit</span>
+<span class="co"># this may take a while</span>
+<span class="va">results1</span> <span class="op">&lt;-</span> <span class="fu">rtweet</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rtweet/man/get_timeline.html">get_timeline</a></span><span class="op">(</span>
+  user <span class="op">=</span> <span class="va">mp_list</span><span class="op">$</span><span class="va">Screen.name</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">180</span><span class="op">]</span>,
+  n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">500</span>, <span class="fl">180</span><span class="op">)</span>
+<span class="op">)</span></code></pre></div>
+<p>Let’s take a look at the dimensions of this data:</p>
+<div class="sourceCode" id="cb576"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">results1</span><span class="op">)</span></code></pre></div>
+<pre><code>## [1] 107456     90</code></pre>
+<p>This is a large data set with 107456 rows and 90 columns. It will help to see what the column names are:</p>
+<div class="sourceCode" id="cb578"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">results1</span><span class="op">)</span></code></pre></div>
+<pre><code>##  [1] "user_id"                 "status_id"               "created_at"              "screen_name"            
+##  [5] "text"                    "source"                  "display_text_width"      "reply_to_status_id"     
+##  [9] "reply_to_user_id"        "reply_to_screen_name"    "is_quote"                "is_retweet"             
+## [13] "favorite_count"          "retweet_count"           "quote_count"             "reply_count"            
+## [17] "hashtags"                "symbols"                 "urls_url"                "urls_t.co"              
+## [21] "urls_expanded_url"       "media_url"               "media_t.co"              "media_expanded_url"     
+## [25] "media_type"              "ext_media_url"           "ext_media_t.co"          "ext_media_expanded_url" 
+## [29] "ext_media_type"          "mentions_user_id"        "mentions_screen_name"    "lang"                   
+## [33] "quoted_status_id"        "quoted_text"             "quoted_created_at"       "quoted_source"          
+## [37] "quoted_favorite_count"   "quoted_retweet_count"    "quoted_user_id"          "quoted_screen_name"     
+## [41] "quoted_name"             "quoted_followers_count"  "quoted_friends_count"    "quoted_statuses_count"  
+## [45] "quoted_location"         "quoted_description"      "quoted_verified"         "retweet_status_id"      
+## [49] "retweet_text"            "retweet_created_at"      "retweet_source"          "retweet_favorite_count" 
+## [53] "retweet_retweet_count"   "retweet_user_id"         "retweet_screen_name"     "retweet_name"           
+## [57] "retweet_followers_count" "retweet_friends_count"   "retweet_statuses_count"  "retweet_location"       
+## [61] "retweet_description"     "retweet_verified"        "place_url"               "place_name"             
+## [65] "place_full_name"         "place_type"              "country"                 "country_code"           
+## [69] "geo_coords"              "coords_coords"           "bbox_coords"             "status_url"             
+## [73] "name"                    "location"                "description"             "url"                    
+## [77] "protected"               "followers_count"         "friends_count"           "listed_count"           
+## [81] "statuses_count"          "favourites_count"        "account_created_at"      "verified"               
+## [85] "profile_url"             "profile_expanded_url"    "account_lang"            "profile_banner_url"     
+## [89] "profile_background_url"  "profile_image_url"</code></pre>
+<p>We can see some fields that are of interest for our analysis, particularly fields that end in <code>screen_name</code> as these will give information on users that were interacted with in the tweet. Let’s take a look at these:</p>
+<div class="sourceCode" id="cb580"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span>
+
+<span class="va">results1</span> |&gt; 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">ends_with</a></span><span class="op">(</span><span class="st">"screen_name"</span><span class="op">)</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 5
+##   screen_name     reply_to_screen_name mentions_screen_name quoted_screen_name retweet_screen_name
+##   &lt;chr&gt;           &lt;chr&gt;                &lt;list&gt;               &lt;chr&gt;              &lt;chr&gt;              
+## 1 LindsayHoyle_MP &lt;NA&gt;                 &lt;chr [1]&gt;            &lt;NA&gt;               ChorleyCouncil     
+## 2 LindsayHoyle_MP &lt;NA&gt;                 &lt;chr [1]&gt;            &lt;NA&gt;               janeyellene        
+## 3 LindsayHoyle_MP &lt;NA&gt;                 &lt;chr [1]&gt;            IPhillips79        &lt;NA&gt;               
+## 4 LindsayHoyle_MP &lt;NA&gt;                 &lt;chr [1]&gt;            &lt;NA&gt;               FirstFalklands     
+## 5 LindsayHoyle_MP &lt;NA&gt;                 &lt;chr [1]&gt;            &lt;NA&gt;               stae_elephants     
+## 6 LindsayHoyle_MP &lt;NA&gt;                 &lt;chr [1]&gt;            &lt;NA&gt;               janeyellene</code></pre>
+<p>It looks like <code>screen_name</code> is the user’s Twitter handle, <code>reply_to_screen_name</code> likely gives the Twitter handle the user was replying to if it was a reply, <code>mentions_screen_name</code> is a vector containing the handles of anyone mentioned in the tweet, <code>quoted_screen_name</code> gives the handle of who is being quote tweeted and <code>retweet_screen_name</code> gives the handle of who is being retweeted. Later on, we may also wish to grab a couple of these fields for further information or for visualization purposes, such as the URL of the MPs Twitter image (<code>profile_image_url</code>) or their follower count (<code>followers_count</code>).</p>
+<p>Before we start extracting all these, we will need to download the remainder of the MPs timelines. This will need to be done in four attempts so as to avoid rate limits. Each attempt will need to be spaced by at least 15 minutes.</p>
+<div class="sourceCode" id="cb582"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># second batch (at least 15 mins since first batch)</span>
+<span class="va">results2</span> <span class="op">&lt;-</span> <span class="fu">rtweet</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rtweet/man/get_timeline.html">get_timeline</a></span><span class="op">(</span>
+  user <span class="op">=</span> <span class="va">mp_list</span><span class="op">$</span><span class="va">Screen.name</span><span class="op">[</span><span class="fl">181</span><span class="op">:</span><span class="fl">360</span><span class="op">]</span>,
+  n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">500</span>, <span class="fl">180</span><span class="op">)</span>
+<span class="op">)</span>
+
+<span class="co"># third batch (at least 15 mins since second batch)</span>
+<span class="va">results3</span> <span class="op">&lt;-</span> <span class="fu">rtweet</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rtweet/man/get_timeline.html">get_timeline</a></span><span class="op">(</span>
+  user <span class="op">=</span> <span class="va">mp_list</span><span class="op">$</span><span class="va">Screen.name</span><span class="op">[</span><span class="fl">361</span><span class="op">:</span><span class="fl">540</span><span class="op">]</span>,
+  n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">500</span>, <span class="fl">180</span><span class="op">)</span>
+<span class="op">)</span>
+
+<span class="co"># fourth batch (at least 15 mins since third batch)</span>
+<span class="va">results4</span> <span class="op">&lt;-</span> <span class="fu">rtweet</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rtweet/man/get_timeline.html">get_timeline</a></span><span class="op">(</span>
+  user <span class="op">=</span> <span class="va">mp_list</span><span class="op">$</span><span class="va">Screen.name</span><span class="op">[</span><span class="fl">541</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">mp_list</span><span class="op">$</span><span class="va">Screen.name</span><span class="op">)</span><span class="op">]</span>,
+  n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">500</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">mp_list</span><span class="op">$</span><span class="va">Screen.name</span><span class="op">)</span> <span class="op">-</span> <span class="fl">540</span><span class="op">)</span>
+<span class="op">)</span>
+
+<span class="co"># combine all results</span>
+<span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">results1</span>, <span class="va">results2</span>, <span class="va">results3</span>, <span class="va">results4</span><span class="op">)</span></code></pre></div>
+<p>Now we can write some functions to count the interactions that each MP has with other MPs:</p>
+<div class="sourceCode" id="cb583"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># function to create edgelist for single MP</span>
+<span class="va">count_and_group</span> <span class="op">&lt;-</span> <span class="kw">function</span> <span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">df</span> |&gt; 
+    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">ends_with</a></span><span class="op">(</span><span class="st">"screen_name"</span><span class="op">)</span><span class="op">)</span> |&gt; 
+    <span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="op">)</span> |&gt; 
+    <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>interacted_with <span class="op">=</span> _<span class="op">)</span> |&gt; 
+    <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/drop_na.html">drop_na</a></span><span class="op">(</span><span class="op">)</span> |&gt; 
+    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">interacted_with</span><span class="op">)</span> |&gt; 
+    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>weight <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> |&gt; 
+    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span>
+      <span class="co"># ensures that only MP interactions are returned</span>
+      <span class="va">interacted_with</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/substr.html">substr</a></span><span class="op">(</span><span class="va">mp_list</span><span class="op">$</span><span class="va">Screen.name</span>, <span class="fl">2</span>, <span class="fu"><a href="https://rdrr.io/r/base/nchar.html">nchar</a></span><span class="op">(</span><span class="va">mp_list</span><span class="op">$</span><span class="va">Screen.name</span><span class="op">)</span><span class="op">)</span>
+    <span class="op">)</span>
+<span class="op">}</span>
+
+<span class="co"># function to generate edgelist across all MPs</span>
+<span class="va">create_edgelist</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">tweet_df</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">tweet_df</span> |&gt; 
+    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/nest_by.html">nest_by</a></span><span class="op">(</span><span class="va">screen_name</span><span class="op">)</span> |&gt; 
+    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span><span class="fu">count_and_group</span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span> |&gt; 
+    <span class="co"># ignore interactions with self</span>
+    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">screen_name</span> <span class="op">!=</span> <span class="va">interacted_with</span><span class="op">)</span> |&gt; 
+    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>from <span class="op">=</span> <span class="va">screen_name</span>, to <span class="op">=</span> <span class="va">interacted_with</span><span class="op">)</span>
+<span class="op">}</span>
+
+<span class="co"># create final edgelist</span>
+<span class="va">mp_edgelist</span> <span class="op">&lt;-</span> <span class="fu">create_edgelist</span><span class="op">(</span><span class="va">results</span><span class="op">)</span></code></pre></div>
+<p>Let’s take a quick look to check that worked:</p>
+<div class="sourceCode" id="cb584"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">mp_edgelist</span><span class="op">)</span></code></pre></div>
+<pre><code>##           from              to weight
+## 1 _OliviaBlake    Afzal4Gorton      2
+## 2 _OliviaBlake alanwhiteheadmp      4
+## 3 _OliviaBlake   Alex_Stafford      4
+## 4 _OliviaBlake       alexsobel      4
+## 5 _OliviaBlake  AlokSharma_RDG      1
+## 6 _OliviaBlake  AndyMcDonaldMP      2</code></pre>
+<p>Looks good. Now let’s generate a vertex dataframe with some information on each MP. We can include their name, Twitter handle, profile image URL, follower count, political party and the constituency they represent.</p>
+<div class="sourceCode" id="cb586"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">mp_vertices</span> <span class="op">&lt;-</span> <span class="va">results</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">screen_name</span>, <span class="va">profile_image_url</span>, <span class="va">followers_count</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span><span class="op">(</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span>
+    <span class="va">mp_list</span> |&gt; 
+      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
+        screen_name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/substr.html">substr</a></span><span class="op">(</span><span class="va">Screen.name</span>, <span class="fl">2</span>, <span class="fu"><a href="https://rdrr.io/r/base/nchar.html">nchar</a></span><span class="op">(</span><span class="va">Screen.name</span><span class="op">)</span><span class="op">)</span>
+      <span class="op">)</span> |&gt; 
+      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span>
+        <span class="va">screen_name</span>,
+        constituency <span class="op">=</span> <span class="va">Constituency</span>,
+        party <span class="op">=</span> <span class="va">Party</span>,
+        name <span class="op">=</span> <span class="va">Name</span>
+      <span class="op">)</span>
+  <span class="op">)</span></code></pre></div>
+<p>Let’s also attach some official party colors for later use in visualization.</p>
+<div class="sourceCode" id="cb587"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># add party colours from politics social</span>
+<span class="va">parties</span> <span class="op">&lt;-</span> <span class="va">mp_vertices</span><span class="op">$</span><span class="va">party</span> |&gt; <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">party_colours</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"#000000"</span>, <span class="st">"#216a4d"</span>, <span class="st">"#008a49"</span>,
+                   <span class="st">"#d3c200"</span>, <span class="st">"#3d8028"</span>, <span class="st">"#f5b52e"</span>,
+                   <span class="st">"#dd0339"</span>, <span class="st">"#cccccc"</span>, <span class="st">"#66ab21"</span>,
+                   <span class="st">"#c2282a"</span>, <span class="st">"#018fda"</span>, <span class="st">"#eec52e"</span><span class="op">)</span>
+
+<span class="va">color_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
+  party <span class="op">=</span> <span class="va">parties</span>,
+  colour <span class="op">=</span> <span class="va">party_colours</span>
+<span class="op">)</span>
+
+<span class="va">mp_vertices</span> <span class="op">&lt;-</span> <span class="va">mp_vertices</span> |&gt; 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">color_df</span><span class="op">)</span></code></pre></div>
+<p>Let’s take a quick look to see if our vertex dataframe looks good:</p>
+<div class="sourceCode" id="cb588"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">mp_vertices</span><span class="op">)</span></code></pre></div>
+<pre><code>##       screen_name                                                                           profile_image_url
+## 1 LindsayHoyle_MP                 http://pbs.twimg.com/profile_images/1219208145471516672/d5uiK99E_normal.jpg
+## 2     ClaireHanna                 http://pbs.twimg.com/profile_images/1229882927082803200/cd9N4yaE_normal.jpg
+## 3   columeastwood                 http://pbs.twimg.com/profile_images/1503856507229777921/vtRXBZyB_normal.jpg
+## 4   MickeyBradySF                 http://pbs.twimg.com/profile_images/1240647475171676163/HO8w04kr_normal.jpg
+## 5    PaulMaskeyMP                 http://pbs.twimg.com/profile_images/1394647673203040256/3pHc3qER_normal.jpg
+## 6   FrancieMolloy http://pbs.twimg.com/profile_images/2966488222/0e09c703ed91b0f3f7b48ebddf6bb2eb_normal.jpeg
+##   followers_count     constituency                              party            name  colour
+## 1           41560          Chorley                            Speaker   Lindsay Hoyle #000000
+## 2           41802    Belfast South Social Democratic and Labour Party    Claire Hanna #216a4d
+## 3           47402            Foyle Social Democratic and Labour Party  Colum Eastwood #216a4d
+## 4            5366 Newry and Armagh                          Sinn Féin   Mickey Brady  #008a49
+## 5           20281     Belfast West                          Sinn Féin    Paul Maskey  #008a49
+## 6            9035       Mid Ulster                          Sinn Féin Francie Molloy  #008a49</code></pre>
+<p>Looks good. As a final step, let’s just make sure that any past interactions that occurred with Twitter accounts which are no longer active are removed from the edgelist, as this could cause problems.</p>
+<div class="sourceCode" id="cb590"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">mp_edgelist</span> <span class="op">&lt;-</span> <span class="va">mp_edgelist</span> |&gt; 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">to</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">mp_vertices</span><span class="op">$</span><span class="va">screen_name</span><span class="op">)</span></code></pre></div>
+<p>So it looks like we now have a rich edgelist and a vertex dataframe and we are ready to proceed to our visualization and analysis of the MP Twitter network.</p>
+</div>
+<div id="analyzing-the-mp-twitter-network" class="section level3" number="10.2.2">
+<h3>
+<span class="header-section-number">10.2.2</span> Analyzing the MP Twitter network<a class="anchor" aria-label="anchor" href="#analyzing-the-mp-twitter-network"><i class="fas fa-link"></i></a>
+</h3>
+<p>If you don’t have the time or computational capacity to follow the steps in the previous section, the final dataframes I created can be downloaded at <a href="https://ona-book.org/data/mp_edgelist.csv" class="uri">https://ona-book.org/data/mp_edgelist.csv</a> and <a href="https://ona-book.org/data/mp_vertices.csv" class="uri">https://ona-book.org/data/mp_vertices.csv</a>. These dataframes are correct as at the end of May 2022. It is recommended that you work from these downloaded dataframes if you wish to precisely replicate the remainder of this chapter. The results from the following sections will be different if you use more recently generated data.</p>
+<div class="sourceCode" id="cb591"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># if needed, download the results of the previous section as at May 2022 </span>
+<span class="va">mp_edgelist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"https://ona-book.org/data/mp_edgelist.csv"</span><span class="op">)</span>
+<span class="va">mp_vertices</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"https://ona-book.org/data/mp_vertices.csv"</span><span class="op">)</span></code></pre></div>
+<p>Let’s create two weighted graphs - one directed and one undirected - for the rest of our analysis.</p>
+<div class="sourceCode" id="cb592"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://igraph.org">igraph</a></span><span class="op">)</span>
+
+<span class="va">mp_graph_directed</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>
+  <span class="va">mp_edgelist</span>, 
+  vertices <span class="op">=</span> <span class="va">mp_vertices</span>
+<span class="op">)</span>
+
+<span class="va">mp_graph_undirected</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>
+  <span class="va">mp_edgelist</span>, 
+  vertices <span class="op">=</span> <span class="va">mp_vertices</span>,
+  directed <span class="op">=</span> <span class="cn">FALSE</span>
+<span class="op">)</span></code></pre></div>
+<p>Let’s start by looking for some communities based on Twitter interactions. We will use the Leiden community detection algorithm to find maximum modularity communities on the weighted graph. Recall that community detection must be performed on undirected graphs.</p>
+<div class="sourceCode" id="cb593"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># run clustering algorithm</span>
+<span class="va">leiden_clusters</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/cluster_leiden.html">cluster_leiden</a></span><span class="op">(</span>
+  <span class="va">mp_graph_undirected</span>,
+  objective_function <span class="op">=</span> <span class="st">"modularity"</span>,
+  weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/E.html">E</a></span><span class="op">(</span><span class="va">mp_graph_undirected</span><span class="op">)</span><span class="op">$</span><span class="va">weight</span>
+<span class="op">)</span>
+
+<span class="co"># assign each vertex to a cluster</span>
+<span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">mp_graph_undirected</span><span class="op">)</span><span class="op">$</span><span class="va">cluster</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/communities.html">membership</a></span><span class="op">(</span><span class="va">leiden_clusters</span><span class="op">)</span></code></pre></div>
+<p>Let’s determine the modularity of our clustering and the number of clusters determined.</p>
+<div class="sourceCode" id="cb594"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/modularity.igraph.html">modularity</a></span><span class="op">(</span>
+  <span class="va">mp_graph_undirected</span>,
+  membership <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">mp_graph_undirected</span><span class="op">)</span><span class="op">$</span><span class="va">cluster</span>,
+  weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/E.html">E</a></span><span class="op">(</span><span class="va">mp_graph_undirected</span><span class="op">)</span><span class="op">$</span><span class="va">weight</span>
+<span class="op">)</span></code></pre></div>
+<pre><code>## [1] 0.4699543</code></pre>
+<div class="sourceCode" id="cb596"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">mp_graph_undirected</span><span class="op">)</span><span class="op">$</span><span class="va">cluster</span><span class="op">)</span></code></pre></div>
+<pre><code>## [1] 6</code></pre>
+<p>Now let’s visualize our six communities graph in Figure <a href="using-twitter.html#fig:leiden-comms">10.1</a>:</p>
+<div class="sourceCode" id="cb598"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggraph.data-imaginist.com">ggraph</a></span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<span class="op">(</span><span class="va">g1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/ggraph.html">ggraph</a></span><span class="op">(</span><span class="va">mp_graph_undirected</span>, layout <span class="op">=</span> <span class="st">"fr"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_edge_link.html">geom_edge_link</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"grey"</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_point.html">geom_node_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">cluster</span><span class="op">)</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"Leiden community"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:leiden-comms"></span>
+<img src="www/using_twitter/leiden-comms.png" alt="Twitter communities of British MPs as detected by the Leiden algorithm" width="90%"><p class="caption">
+Figure 10.1: Twitter communities of British MPs as detected by the Leiden algorithm
+</p>
+</div>
+<p>To help characterize each community, we can identify the most important individual in each in terms of degree centrality.</p>
+<div class="sourceCode" id="cb599"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="op">(</span><span class="va">highest_degree</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>community <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">mp_graph_undirected</span><span class="op">)</span><span class="op">$</span><span class="va">cluster</span><span class="op">)</span><span class="op">)</span> |&gt; 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/rowwise.html">rowwise</a></span><span class="op">(</span><span class="op">)</span> |&gt; 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>
+    highest_degree <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/subgraph.html">induced_subgraph</a></span><span class="op">(</span>
+      <span class="va">mp_graph_undirected</span>,
+      vids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">mp_graph_undirected</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">mp_graph_undirected</span><span class="op">)</span><span class="op">$</span><span class="va">cluster</span> <span class="op">==</span> <span class="va">community</span><span class="op">]</span><span class="op">)</span> |&gt; 
+      <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/degree.html">degree</a></span><span class="op">(</span><span class="op">)</span> |&gt; 
+      <span class="fu"><a href="https://rdrr.io/r/base/which.min.html">which.max</a></span><span class="op">(</span><span class="op">)</span> |&gt; 
+      <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="op">)</span>,
+    community_size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">mp_graph_undirected</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">mp_graph_undirected</span><span class="op">)</span><span class="op">$</span><span class="va">cluster</span> <span class="op">==</span> <span class="va">community</span><span class="op">]</span> |&gt; 
+      <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="op">)</span>
+  <span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 3
+## # Rowwise: 
+##   community highest_degree    community_size
+##       &lt;int&gt; &lt;chr&gt;                      &lt;int&gt;
+## 1         1 "Keir Starmer "              163
+## 2         2 "Layla Moran"                 29
+## 3         3 "Philip Davies "               2
+## 4         4 "Ian Blackford "              55
+## 5         5 "John McDonnell "             35
+## 6         6 "Boris Johnson "             301</code></pre>
+<p>Those with a knowledge of current British politics will be able to identify that the four largest political parties are represented here:</p>
+<ul>
+<li>Boris Johnson at the time of writing is the current Prime Minister and leader of the largest party - The Conservative and Unionist Party</li>
+<li>Sir Keir Starmer is the current leader of the Labour Party</li>
+<li>Ian Blackford is the current parliamentary leader of the Scottish National Party</li>
+<li>Layla Moran is a prominent MP in the Liberal Democratic Party</li>
+</ul>
+<p>The other two figures appear to represent clusters which are not well aligned with current party groupings:</p>
+<ul>
+<li>John McDonnell is the former Shadow Chancellor and a member of a leftist faction within the Labour Party. Examination of community 4 will reveal several other members of this leftist faction, such as Jeremy Corbyn and Diane Abbott.</li>
+<li>Philip Davies is a member of the Conservative and Unionist Party, but is currently known as one of the most rebellious MPs in parliament, having voted against his party over 250 times in his career. The other member of this small community of two is his wife Esther McVey, also an MP.</li>
+</ul>
+<p>Given that this suggests some alignment of our communities with political party groupings, let’s examine the modularity of the political party communities:</p>
+<div class="sourceCode" id="cb601"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/modularity.igraph.html">modularity</a></span><span class="op">(</span>
+  <span class="va">mp_graph_undirected</span>,
+  membership <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">mp_graph_undirected</span><span class="op">)</span><span class="op">$</span><span class="va">party</span><span class="op">)</span>
+<span class="op">)</span></code></pre></div>
+<pre><code>## [1] 0.3560839</code></pre>
+<p>We can see that the modularity of the political party communities is inferior to our Leiden communities, but the modularities are not dissimilar, suggesting significant overlap. The best way to compare is to visualize the two sets of communities side-by-side, as in Figure <a href="using-twitter.html#fig:leiden-comms-v-party">10.2</a> with the Leiden communities on the left and the ground truth political party communities on the right:</p>
+<div class="sourceCode" id="cb603"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span>
+
+<span class="co"># visualize Leiden communities</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<span class="va">g1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/ggraph.html">ggraph</a></span><span class="op">(</span><span class="va">mp_graph_undirected</span>, layout <span class="op">=</span> <span class="st">"fr"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_edge_link.html">geom_edge_link</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"grey"</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_point.html">geom_node_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">cluster</span><span class="op">)</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">1</span>, show.legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span>
+
+<span class="co"># visualize ground truth political party communities</span>
+
+<span class="va">party_colours</span> <span class="op">&lt;-</span> <span class="va">mp_vertices</span> |&gt; 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">party</span>, <span class="va">colour</span><span class="op">)</span> |&gt; 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span><span class="op">(</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<span class="va">g2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/ggraph.html">ggraph</a></span><span class="op">(</span><span class="va">mp_graph_undirected</span>, layout <span class="op">=</span> <span class="st">"fr"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_edge_link.html">geom_edge_link</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"grey"</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_point.html">geom_node_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">party</span><span class="op">)</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_colour_manual</a></span><span class="op">(</span>limits <span class="op">=</span> <span class="va">party_colours</span><span class="op">$</span><span class="va">party</span>, 
+                      values <span class="op">=</span> <span class="va">party_colours</span><span class="op">$</span><span class="va">colour</span>, name <span class="op">=</span> <span class="st">"Party (Right Hand Graph)"</span><span class="op">)</span> 
+
+<span class="co"># visualize side by side</span>
+<span class="va">g1</span> <span class="op">+</span> <span class="va">g2</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:leiden-comms-v-party"></span>
+<img src="www/using_twitter/leiden-comms-v-party.png" alt="Comparison of Leiden communities with ground truth political party communities" width="90%"><p class="caption">
+Figure 10.2: Comparison of Leiden communities with ground truth political party communities
+</p>
+</div>
+<p>It may also be interesting to identify some large cliques in the graph:</p>
+<div class="sourceCode" id="cb604"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="op">(</span><span class="va">largest_cliques</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/cliques.html">largest_cliques</a></span><span class="op">(</span><span class="va">mp_graph_undirected</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code>## [[1]]
+## + 21/585 vertices, named, from 96a9b8a:
+##  [1] Emily Thornberry     Keir Starmer         Angela Rayner        Boris Johnson        Anneliese Dodds     
+##  [6] Yvette Cooper        Louise Haigh         Lisa Nandy           David Lammy          Jonathan Ashworth   
+## [11] Bridget Phillipson   Kate Green           Sharon Hodgson       Nick Thomas-Symonds  Edward Miliband     
+## [16] Jonathan Reynolds    Peter Kyle           Lucy Powell          Vicky Foxcroft       Jo Stevens          
+## [21] Mary Glindon        
+## 
+## [[2]]
+## + 21/585 vertices, named, from 96a9b8a:
+##  [1] Emily Thornberry     Keir Starmer         Angela Rayner        Rachel Reeves        Anneliese Dodds     
+##  [6] Yvette Cooper        David Lammy          Louise Haigh         Lisa Nandy           Jonathan Ashworth   
+## [11] Bridget Phillipson   Sharon Hodgson       Lucy Powell          Mary Glindon         Kate Green          
+## [16] Jonathan Reynolds    Jo Stevens           Peter Kyle           Nick Thomas-Symonds  Edward Miliband     
+## [21] Vicky Foxcroft      
+## 
+## [[3]]
+## + 21/585 vertices, named, from 96a9b8a:
+##  [1] Emily Thornberry     Keir Starmer         Angela Rayner        Rachel Reeves        Anneliese Dodds     
+##  [6] Yvette Cooper        David Lammy          Louise Haigh         Lisa Nandy           Jonathan Ashworth   
+## [11] Bridget Phillipson   Sharon Hodgson       Lucy Powell          Tulip Siddiq         Peter Kyle          
+## [16] Kate Green           Jo Stevens           Jonathan Reynolds    Nick Thomas-Symonds  Vicky Foxcroft      
+## [21] Edward Miliband     
+## 
+## [[4]]
+## + 21/585 vertices, named, from 96a9b8a:
+##  [1] Emily Thornberry     Keir Starmer         Angela Rayner        Rachel Reeves        Anneliese Dodds     
+##  [6] Yvette Cooper        David Lammy          Louise Haigh         Lisa Nandy           Jonathan Ashworth   
+## [11] Bridget Phillipson   Sharon Hodgson       Lucy Powell          Tulip Siddiq         Peter Kyle          
+## [16] Kate Green           Gill Furniss         Nick Thomas-Symonds  Jonathan Reynolds    Vicky Foxcroft      
+## [21] Edward Miliband</code></pre>
+<p>These cliques are mostly comprised of members of Labour’s current shadow cabinet. We can also search for the largest Conservative Party clique:</p>
+<div class="sourceCode" id="cb606"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">conservative_graph</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/subgraph.html">induced_subgraph</a></span><span class="op">(</span>
+  <span class="va">mp_graph_undirected</span>,
+  vids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">mp_graph_undirected</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">mp_graph_undirected</span><span class="op">)</span><span class="op">$</span><span class="va">party</span> <span class="op">==</span> <span class="st">"Conservative"</span><span class="op">]</span>
+<span class="op">)</span>
+
+<span class="op">(</span><span class="va">largest_conservative_cliques</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/cliques.html">largest_cliques</a></span><span class="op">(</span><span class="va">conservative_graph</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code>## [[1]]
+## + 19/308 vertices, named, from fa469d9:
+##  [1] Stephen Barclay       Rishi Sunak           Boris Johnson         Nadhim Zahawi         Elizabeth Truss      
+##  [6] Sajid Javid           Priti Patel           Kwasi Kwarteng        Oliver Dowden         Nadine Dorries       
+## [11] Anne-Marie Trevelyan  Michael Gove          Richard Holden        Simon Clarke          Michelle Donelan     
+## [16] Suzanne Webb          Brendan Clarke-Smith  Eddie Hughes          Rachel Maclean</code></pre>
+<p>This clique also appears to be mostly consisting of cabinet members. Finally, we can visualize the Labour and Conservative cliques inside the larger graph, as in Figure <a href="using-twitter.html#fig:mp-cliques">10.3</a>, with their central positioning suggesting that these cliques are indeed highly influential, as would be expected given their mostly cabinet membership.</p>
+<div class="sourceCode" id="cb608"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># assign vertices to cliques</span>
+<span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">mp_graph_undirected</span><span class="op">)</span><span class="op">$</span><span class="va">clique</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">mp_graph_undirected</span><span class="op">)</span><span class="op">$</span><span class="va">name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">largest_cliques</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">name</span>,
+  <span class="st">"Largest Labour clique"</span>,
+  <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">mp_graph_undirected</span><span class="op">)</span><span class="op">$</span><span class="va">name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">largest_conservative_cliques</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">name</span>,
+    <span class="st">"Largest Conservative clique"</span>,
+    <span class="st">"Other"</span>
+  <span class="op">)</span>
+<span class="op">)</span>
+
+<span class="co"># visualize</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
+<span class="fu"><a href="https://ggraph.data-imaginist.com/reference/ggraph.html">ggraph</a></span><span class="op">(</span><span class="va">mp_graph_undirected</span>, layout <span class="op">=</span> <span class="st">"fr"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_edge_link.html">geom_edge_link</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"grey"</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_point.html">geom_node_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">clique</span><span class="op">)</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"Largest cliques"</span><span class="op">)</span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:mp-cliques"></span>
+<img src="www/using_twitter/mp-cliques.png" alt="Largest Conservative and Labour cliques" width="90%"><p class="caption">
+Figure 10.3: Largest Conservative and Labour cliques
+</p>
+</div>
+
+</div>
+</div>
+</div>
+  <div class="chapter-nav">
+<div class="prev"><a href="databases.html"><span class="header-section-number">9</span> Graphs as Databases</a></div>
+<div class="next"><a href="references.html">References</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#using-twitter"><span class="header-section-number">10</span> Bonus Chapter: Using Twitter for Network Analysis</a></li>
+<li>
+<a class="nav-link" href="#accessing-the-twitter-api"><span class="header-section-number">10.1</span> Accessing the Twitter API</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#accessing-using-r"><span class="header-section-number">10.1.1</span> Accessing using R</a></li>
+<li><a class="nav-link" href="#accessing-using-python"><span class="header-section-number">10.1.2</span> Accessing using Python</a></li>
+<li><a class="nav-link" href="#twitter-rate-limits"><span class="header-section-number">10.1.3</span> Twitter rate limits</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#example-british-members-of-parliament-mp-twitter-network"><span class="header-section-number">10.2</span> Example: British Members of Parliament (MP) Twitter network</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#creating-the-graph-from-twitter-data"><span class="header-section-number">10.2.1</span> Creating the graph from Twitter data</a></li>
+<li><a class="nav-link" href="#analyzing-the-mp-twitter-network"><span class="header-section-number">10.2.2</span> Analyzing the MP Twitter network</a></li>
+</ul>
+</li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/keithmcnulty/ona_book/blob/master/r/11-using_twitter.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/keithmcnulty/ona_book/edit/master/r/11-using_twitter.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Handbook of Graphs and Networks in People Analytics</strong>: With Examples in R and Python" was written by Keith McNulty. </p>
+  </div>
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
+</script>
+</body>
+</html>

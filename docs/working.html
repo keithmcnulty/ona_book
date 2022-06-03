@@ -7,7 +7,7 @@
 <title>2 Working with Graphs | Handbook of Graphs and Networks in People Analytics</title>
 <meta name="author" content="Keith McNulty">
 <meta name="description" content="When we think of a graph, we usually think of a diagram of dots and lines. Indeed, as we have seen in Chapter 1 of this book, the very concept of a graph came into existence in the 1700s when a...">
-<meta name="generator" content="bookdown 0.22.15 with bs4_book()">
+<meta name="generator" content="bookdown 0.26 with bs4_book()">
 <meta property="og:title" content="2 Working with Graphs | Handbook of Graphs and Networks in People Analytics">
 <meta property="og:type" content="book">
 <meta property="og:url" content="https://ona-book.org/working.html">
@@ -18,22 +18,48 @@
 <meta name="twitter:site" content="@dr_keithmcnulty">
 <meta name="twitter:description" content="When we think of a graph, we usually think of a diagram of dots and lines. Indeed, as we have seen in Chapter 1 of this book, the very concept of a graph came into existence in the 1700s when a...">
 <meta name="twitter:image" content="https://ona-book.org/www/cover/cover-ona.png">
-<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.12/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
-<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.5.1/tabs.js"></script><script src="libs/bs3compat-0.2.5.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
 <script src="libs/bs4_book-1.0.0/bs4_book.js"></script><meta name="citation_title" content="2 Working with Graphs | Handbook of Graphs and Networks in People Analytics: With Examples in R and Python">
 <meta name="citation_author" content="Keith McNulty">
 <meta name="citation_publication_date" content="2022">
 <meta name="citation_isbn" content="9781032204970">
-<script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script><link href="libs/vis-4.20.1/vis.css" rel="stylesheet">
-<script src="libs/vis-4.20.1/vis.min.js"></script><script src="libs/visNetwork-binding-2.0.9/visNetwork.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script><link href="libs/vis-9.1.0/vis-network.min.css" rel="stylesheet">
+<script src="libs/vis-9.1.0/vis-network.min.js"></script><script src="libs/visNetwork-binding-2.1.0/visNetwork.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 <script src="libs/d3-4.5.0/d3.min.js"></script><script src="libs/forceNetwork-binding-0.4/forceNetwork.js"></script><script src="libs/sankey-1/sankey.js"></script><script src="libs/sankeyNetwork-binding-0.4/sankeyNetwork.js"></script><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-400FPN6D44"></script><script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
       gtag('config', 'G-400FPN6D44');
-    </script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><link rel="stylesheet" href="css/style.css">
+    </script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<style type="text/css">
+    /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+        }
+    .hanging div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }
+  </style>
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body data-spy="scroll" data-target="#toc">
 
@@ -69,6 +95,7 @@
 <li><a class="" href="community.html"><span class="header-section-number">7</span> Components, Communities and Cliques</a></li>
 <li><a class="" href="similarity.html"><span class="header-section-number">8</span> Assortativity and Similarity</a></li>
 <li><a class="" href="databases.html"><span class="header-section-number">9</span> Graphs as Databases</a></li>
+<li><a class="" href="using-twitter.html"><span class="header-section-number">10</span> Bonus Chapter: Using Twitter for Network Analysis</a></li>
 <li><a class="" href="references.html">References</a></li>
 </ul>
 
@@ -154,7 +181,7 @@ Figure 2.3: Carrier routes operating between three US airports in December 2010
 Figure 2.4: Graph depicting different types of relationships between individuals
 </p>
 </div>
-<p>Many large graphs used in practice are multigraphs, as they are built to capture many different types of relationships between many different types of entities. For example, a graph of an organizational network might contain vertices which represent individuals, organizational units and knowledge areas. Multiple different types of relationships could exist between individuals (such as ‘worked with,’ ‘manages,’ ‘published with’), between individuals and organizational units (such as ‘member of’ or ‘leader of’), between individuals and knowledge areas (such as ‘affiliated with’ or ‘expert in’) and all sorts of other possibilities.</p>
+<p>Many large graphs used in practice are multigraphs, as they are built to capture many different types of relationships between many different types of entities. For example, a graph of an organizational network might contain vertices which represent individuals, organizational units and knowledge areas. Multiple different types of relationships could exist between individuals (such as ‘worked with’, ‘manages’, ‘published with’), between individuals and organizational units (such as ‘member of’ or ‘leader of’), between individuals and knowledge areas (such as ‘affiliated with’ or ‘expert in’) and all sorts of other possibilities.</p>
 <p><strong>Pseudographs</strong> are graphs which allow vertices to connect to themselves. Pseudographs occur when certain edges depict relationships that can occur between the same vertex. Imagine, for example, a graph <span class="math inline">\(G_{\mathrm{coffee}}\)</span> which takes our four characters from <span class="math inline">\(G_{\mathrm{work}}\)</span> in Section <a href="working.html#graph-def">2.1.1</a> and depicts who buys coffee for whom. If David goes to buy Zubin a coffee, there’s a good chance he will also buy himself one in the process. Thus, you can expect the following edge set:</p>
 <p><span class="math display">\[
 E = \{\mathrm{David}\longrightarrow\mathrm{Zubin}, \mathrm{David}\longrightarrow\mathrm{David}\}
@@ -247,7 +274,7 @@ E = \{\mathrm{David}\longleftrightarrow\mathrm{Zubin}, \mathrm{David}\longleftri
 V = \{\mathrm{David}, \mathrm{Suraya}, \mathrm{Jane}, \mathrm{Zubin}\}
 \]</span></p>
 <p>and we now have obtained everything we need for our graph from the edgelist.</p>
-<p>Edgelists typically take the form of two columns of data, usually labelled ‘from’ and ‘to’ or ‘source’ and ‘target.’ Therefore, our edgelist for <span class="math inline">\(G_\mathrm{work}\)</span> would look like Table <a href="working.html#tab:workedgelist">2.1</a>.</p>
+<p>Edgelists typically take the form of two columns of data, usually labelled ‘from’ and ‘to’ or ‘source’ and ‘target’. Therefore, our edgelist for <span class="math inline">\(G_\mathrm{work}\)</span> would look like Table <a href="working.html#tab:workedgelist">2.1</a>.</p>
 <div class="inline-table"><table class="table" style="margin-left: auto; margin-right: auto;">
 <caption>
 <span id="tab:workedgelist">Table 2.1: </span>Edgelist for <span class="math inline">\(G_\mathrm{work}\)</span>
@@ -313,7 +340,7 @@ Suraya
       \mathrm{David} &amp; 0 &amp; 1 &amp; 1 &amp; 1\\
       \mathrm{Jane} &amp; 1 &amp; 0 &amp; 1 &amp; 1 \\
       \mathrm{Zubin} &amp; 1 &amp; 1 &amp; 0 &amp; 0 \\
-      \mathrm{Suraya} &amp; 1 &amp; 1 &amp; 0 &amp; 0 
+      \mathrm{Suraya} &amp; 1 &amp; 1 &amp; 0 &amp; 0
 \end{array}
 \]</span>
 Adjacency matrices are also commonly written in <em>sparse form</em>, without the use of zeros. For example:</p>
@@ -323,7 +350,7 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
       \mathrm{David} &amp; . &amp; 1 &amp; 1 &amp; 1\\
       \mathrm{Jane} &amp; 1 &amp; . &amp; 1 &amp; 1 \\
       \mathrm{Zubin} &amp; 1 &amp; 1 &amp; . &amp; . \\
-      \mathrm{Suraya} &amp; 1 &amp; 1 &amp; . &amp; . 
+      \mathrm{Suraya} &amp; 1 &amp; 1 &amp; . &amp; .
 \end{array}
 \]</span></p>
 <p>An adjacency matrix for an undirected graph like <span class="math inline">\(G_\mathrm{work}\)</span> is symmetrical on its diagonal, since the existence of an <span class="math inline">\((i,j)\)</span> edge automatically implies the existence of a <span class="math inline">\((j, i)\)</span> edge. However, a directed graph may not have a symmetrical adjacency matrix. Here is the adjacency matrix for our <span class="math inline">\(G_\mathrm{manage}\)</span> graph from Section <a href="working.html#graph-def">2.1.1</a>.</p>
@@ -333,7 +360,7 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
       \mathrm{David} &amp; . &amp; 1 &amp; 1 &amp; .\\
       \mathrm{Jane} &amp; . &amp; . &amp; . &amp; . \\
       \mathrm{Zubin} &amp; . &amp; . &amp; . &amp; . \\
-      \mathrm{Suraya} &amp; 1 &amp; . &amp; . &amp; . 
+      \mathrm{Suraya} &amp; 1 &amp; . &amp; . &amp; .
 \end{array}
 \]</span></p>
 <p>If a graph is a pseudograph, then the diagonal entries may be greater than zero, and multigraphs can have entries that are any non-negative integer. Here is the adjacency matrix for our flight network graph in Figure <a href="working.html#fig:multiflights">2.3</a>:</p>
@@ -342,7 +369,7 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
       &amp; \mathrm{SFO} &amp; \mathrm{PHL} &amp; \mathrm{TUS} \\
       \mathrm{SFO} &amp; . &amp; 4 &amp; 4 \\
       \mathrm{PHL} &amp; 5 &amp; . &amp; 1  \\
-      \mathrm{TUS} &amp; 2 &amp; . &amp; . 
+      \mathrm{TUS} &amp; 2 &amp; . &amp; .
 \end{array}
 \]</span></p>
 <div class="thinkahead">
@@ -381,9 +408,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <p>We now have our <span class="math inline">\(G_\mathrm{work}\)</span> graph in memory. Before we go any further, let’s take a look at it.</p>
 <div class="sourceCode" id="cb124"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">gwork</span></code></pre></div>
-<pre><code>## IGRAPH 2f382b1 UN-- 4 5 -- 
+<pre><code>## IGRAPH 4723241 UN-- 4 5 -- 
 ## + attr: name (v/c)
-## + edges from 2f382b1 (vertex names):
+## + edges from 4723241 (vertex names):
 ## [1] David --Zubin  David --Suraya David --Jane   Zubin --Jane   Suraya--Jane</code></pre>
 <p>Let’s start with the string <code>UN--</code> on the first line of the output. This string describes the type of graph this is. The letter <code>U</code> denotes an undirected graph, and <code>N</code> denotes a graph with named vertices. The two other properties, which we will discover later, are currently not present and so are represented by the dashes <code>--</code>. Next we have the number of vertices (4) and edges (5), followed by two further dashes.</p>
 <p>On the next line, the attributes of the graph are listed. In this case there is just one attribute <code>name</code>, which is a vertex attribute of character type—denoted by <code>(v/c)</code>. Finally the edges of the graph are given using the vertex names. Note that there is no direction to these edges, so they are denoted with <code>--</code>.</p>
@@ -397,11 +424,11 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <span class="va">gmanage_edgelist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">gmanage_edgelist</span><span class="op">)</span>
 <span class="op">(</span><span class="va">gmanage</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_edgelist.html">graph_from_edgelist</a></span><span class="op">(</span>el <span class="op">=</span> <span class="va">gmanage_edgelist</span>,
                                        directed <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH 3d9defb DN-- 4 3 -- 
+<pre><code>## IGRAPH f282a97 DN-- 4 3 -- 
 ## + attr: name (v/c)
-## + edges from 3d9defb (vertex names):
+## + edges from f282a97 (vertex names):
 ## [1] Suraya-&gt;David David -&gt;Zubin David -&gt;Jane</code></pre>
-<p>We see a similar output to <code>gwork</code>, except we now have a directed graph, donated by <code>D</code> in the first line, and we see that the edges are now denoted with direction using <code><a href="https://rdrr.io/r/base/assignOps.html">-&gt;</a></code>.</p>
+<p>We see a similar output to <code>gwork</code>, except we now have a directed graph, donated by <code>D</code> in the first line, and we see that the edges are now denoted with direction using <code>-&gt;</code>.</p>
 </div>
 <div id="creating-a-graph-from-an-adjacency-matrix" class="section level3" number="2.2.2">
 <h3>
@@ -411,19 +438,19 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <div class="sourceCode" id="cb128"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># create 3x3 adjacency matrix</span>
 <span class="va">adj_flights</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">5</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">4</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">3</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">adj_flights</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"SFO"</span>, <span class="st">"PHL"</span>, <span class="st">"TUS"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">adj_flights</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">adj_flights</span><span class="op">)</span>
+<span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html">rownames</a></span><span class="op">(</span><span class="va">adj_flights</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"SFO"</span>, <span class="st">"PHL"</span>, <span class="st">"TUS"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">adj_flights</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html">rownames</a></span><span class="op">(</span><span class="va">adj_flights</span><span class="op">)</span>
 
 <span class="co"># create multigraph from adjacency matrix</span>
 <span class="op">(</span><span class="va">flightgraph</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_adjacency_matrix.html">graph_from_adjacency_matrix</a></span><span class="op">(</span>
   adjmatrix <span class="op">=</span> <span class="va">adj_flights</span>,
   mode <span class="op">=</span> <span class="st">"directed"</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH fd76e70 DN-- 3 16 -- 
+<pre><code>## IGRAPH 4fbc401 DN-- 3 16 -- 
 ## + attr: name (v/c)
-## + edges from fd76e70 (vertex names):
-##  [1] SFO-&gt;PHL SFO-&gt;PHL SFO-&gt;PHL SFO-&gt;PHL SFO-&gt;TUS SFO-&gt;TUS SFO-&gt;TUS SFO-&gt;TUS PHL-&gt;SFO PHL-&gt;SFO PHL-&gt;SFO PHL-&gt;SFO PHL-&gt;SFO
-## [14] PHL-&gt;TUS TUS-&gt;SFO TUS-&gt;SFO</code></pre>
+## + edges from 4fbc401 (vertex names):
+##  [1] SFO-&gt;PHL SFO-&gt;PHL SFO-&gt;PHL SFO-&gt;PHL SFO-&gt;TUS SFO-&gt;TUS SFO-&gt;TUS SFO-&gt;TUS PHL-&gt;SFO PHL-&gt;SFO PHL-&gt;SFO PHL-&gt;SFO
+## [13] PHL-&gt;SFO PHL-&gt;TUS TUS-&gt;SFO TUS-&gt;SFO</code></pre>
 <p>We see the expected directed multigraph with 3 vertices and 16 edges. If we wish to create the weighted graph in Figure <a href="working.html#fig:weightedflights">2.10</a>, we add <code>weighted = TRUE</code> to the arguments.</p>
 <div class="sourceCode" id="cb130"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># create weighted graph </span>
@@ -432,18 +459,18 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
   mode <span class="op">=</span> <span class="st">"directed"</span>,
   weighted <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH 0bcffe3 DNW- 3 5 -- 
+<pre><code>## IGRAPH b7b1c9c DNW- 3 5 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from 0bcffe3 (vertex names):
+## + edges from b7b1c9c (vertex names):
 ## [1] SFO-&gt;PHL SFO-&gt;TUS PHL-&gt;SFO PHL-&gt;TUS TUS-&gt;SFO</code></pre>
 <p>We now see a graph with only 5 edges, but we see the addition of <code>W</code> in our graph type, indicating a weighted graph. We also see a new edge property of numeric type called <code>weight</code>. In situations where we want to simplify multiple edges to single edges without worrying about weight, the <code><a href="https://rdrr.io/pkg/igraph/man/simplify.html">simplify()</a></code> function in <code>igraph</code> works well. By default, <code><a href="https://rdrr.io/pkg/igraph/man/simplify.html">simplify()</a></code> will collapse multiple edges to a single edge and remove any loop edges from vertices to themselves in order to create a simple graph<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;If you only want to do one of these—such as remove loops but not multiples—you can set this in the function arguments using &lt;code&gt;remove.multiples = FALSE&lt;/code&gt; or &lt;code&gt;remove.loops = FALSE&lt;/code&gt;.&lt;/p&gt;"><sup>18</sup></a>.</p>
 <div class="sourceCode" id="cb132"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">(</span><span class="va">flightgraph_simple</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/simplify.html">simplify</a></span><span class="op">(</span>
   <span class="va">flightgraph</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH 961a691 DN-- 3 5 -- 
+<pre><code>## IGRAPH d3e38fc DN-- 3 5 -- 
 ## + attr: name (v/c)
-## + edges from 961a691 (vertex names):
+## + edges from d3e38fc (vertex names):
 ## [1] SFO-&gt;PHL SFO-&gt;TUS PHL-&gt;SFO PHL-&gt;TUS TUS-&gt;SFO</code></pre>
 </div>
 <div id="creating-a-graph-from-a-dataframe" class="section level3" number="2.2.3">
@@ -472,9 +499,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
   directed <span class="op">=</span> <span class="cn">FALSE</span>,
   vertices <span class="op">=</span> <span class="va">vertex_df</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH cf0e709 UN-- 7 6 -- 
+<pre><code>## IGRAPH 8ad48bc UN-- 7 6 -- 
 ## + attr: name (v/c), Dept (v/c)
-## + edges from cf0e709 (vertex names):
+## + edges from 8ad48bc (vertex names):
 ## [1] David --Sandra David --Jake   Jane  --Mae-Li Jane  --Jake   Zubin --Sandra Suraya--Mae-Li</code></pre>
 <div class="thinkahead">
 <p><strong>Playing around:</strong> The functions in this section are not the only functions in the <code>igraph</code> package that build graphs from data, but they are by far the most commonly used ones. By typing <code>?graph_from</code> in your R console and looking at the functions that autocomplete, you can see some of the other functions that build graphs from data. Try playing around with them if you are curious.</p>
@@ -506,9 +533,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
   directed <span class="op">=</span> <span class="cn">TRUE</span>,
   vertices <span class="op">=</span> <span class="va">vertex_transfers</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH b3c8e35 DN-- 3 4 -- 
+<pre><code>## IGRAPH 3aa324a DN-- 3 4 -- 
 ## + attr: name (v/c), loc (v/c), cur (e/c), amt (e/n)
-## + edges from b3c8e35 (vertex names):
+## + edges from 3aa324a (vertex names):
 ## [1] A-&gt;A A-&gt;B B-&gt;A B-&gt;C</code></pre>
 <p>We see that the additional edge properties <code>cur</code> and <code>amt</code> and the vertex property <code>loc</code> have been included in the graph. The codes immediately following these properties represent the property type and the data type. We can see that <code>loc</code> is a vertex property of character type (<code>v/c</code>), <code>cur</code> is an edge property of character type (<code>e/c</code>) and <code>amt</code> is an edge property of numeric type (<code>e/n</code>).</p>
 <div class="thinkahead">
@@ -517,13 +544,13 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <p>You can view the vertex and edge sets of a graph using the <code><a href="https://rdrr.io/pkg/igraph/man/V.html">V()</a></code> and <code><a href="https://rdrr.io/pkg/igraph/man/E.html">E()</a></code> functions, respectively.</p>
 <div class="sourceCode" id="cb138"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">gtransfers</span><span class="op">)</span></code></pre></div>
-<pre><code>## + 3/3 vertices, named, from b3c8e35:
+<pre><code>## + 3/3 vertices, named, from 3aa324a:
 ## [1] A B C</code></pre>
 <div class="sourceCode" id="cb140"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/E.html">E</a></span><span class="op">(</span><span class="va">gtransfers</span><span class="op">)</span></code></pre></div>
-<pre><code>## + 4/4 edges from b3c8e35 (vertex names):
+<pre><code>## + 4/4 edges from 3aa324a (vertex names):
 ## [1] A-&gt;A A-&gt;B B-&gt;A B-&gt;C</code></pre>
-<p>To see specific properties or attributes within the vertices or edges, the <code><a href="https://rdrr.io/r/base/Extract.html">$</a></code> operator can be used.</p>
+<p>To see specific properties or attributes within the vertices or edges, the <code>$</code> operator can be used.</p>
 <div class="sourceCode" id="cb142"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">gtransfers</span><span class="op">)</span><span class="op">$</span><span class="va">name</span></code></pre></div>
 <pre><code>## [1] "A" "B" "C"</code></pre>
@@ -550,9 +577,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 
 <span class="co"># view flightsgraph</span>
 <span class="va">flightsgraph</span></code></pre></div>
-<pre><code>## IGRAPH 5a399b3 DNW- 3 5 -- 
+<pre><code>## IGRAPH efc893d DNW- 3 5 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from 5a399b3 (vertex names):
+## + edges from efc893d (vertex names):
 ## [1] SFO-&gt;PHL SFO-&gt;TUS PHL-&gt;SFO PHL-&gt;TUS TUS-&gt;SFO</code></pre>
 <p>We see a weighted graph has been created by adding a <code>weight</code> property to the edges of an unweighted graph.</p>
 <p>A bipartite graph can be created by giving the vertices a <code>type</code> property according to the two disjoint sets of vertices. Let’s use our <span class="math inline">\(G_\mathrm{new}\)</span> bipartite graph again as an example, which we generated earlier as the <code>gnew</code> object. In our vertex set, we can define our <code>type</code> property to be the same as the department property <code>Dept</code>.</p>
@@ -560,9 +587,9 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">gnew</span><span class="op">)</span><span class="op">$</span><span class="va">type</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">gnew</span><span class="op">)</span><span class="op">$</span><span class="va">Dept</span>
 
 <span class="va">gnew</span></code></pre></div>
-<pre><code>## IGRAPH cf0e709 UN-B 7 6 -- 
+<pre><code>## IGRAPH 8ad48bc UN-B 7 6 -- 
 ## + attr: name (v/c), Dept (v/c), type (v/c)
-## + edges from cf0e709 (vertex names):
+## + edges from 8ad48bc (vertex names):
 ## [1] David --Sandra David --Jake   Jane  --Mae-Li Jane  --Jake   Zubin --Sandra Suraya--Mae-Li</code></pre>
 <p>We can see that our graph <code>gnew</code> now has the final of the four graph types: <code>B</code> meaning bipartite.</p>
 <div class="thinkahead">
@@ -754,7 +781,7 @@ Adjacency matrices are also commonly written in <em>sparse form</em>, without th
 <li>Obtain a list of the names of the vertices in this graph.</li>
 <li>Find a function or method in your graph package to create the adjacency matrix or adjacency list for this graph. Check the output to see if it makes sense.</li>
 </ol>
-<p>Load the <code>pizza</code> data set from the <code>onadata</code> package or load it as a dataframe from the internet<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://ona-book.org/data/pizza.csv" class="uri"&gt;https://ona-book.org/data/pizza.csv&lt;/a&gt;&lt;/p&gt;'><sup>21</sup></a>. This data set represents requests made by Reddit users on a thread called <em>Random Acts of Pizza</em> or <em>ROAP</em>, and is part of a larger data set used for research purposes<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;span class="citation"&gt;&lt;a href="references.html#ref-altruistic" role="doc-biblioref"&gt;Althoff et al.&lt;/a&gt; (&lt;a href="references.html#ref-altruistic" role="doc-biblioref"&gt;2014&lt;/a&gt;)&lt;/span&gt;&lt;/p&gt;'><sup>22</sup></a>. The <code>requester</code> column represents users who made requests for pizza, and the <code>responder</code> column represents users who read the request and responded to the request by giving pizza<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;This data set is only a small subset of the full data set, which included many requests which were not fulfilled. As we all know, a free pizza is a rare thing!&lt;/p&gt;"><sup>23</sup></a>. Other columns represent the request ID and data on the requester at the time the request was made.</p>
+<p>Load the <code>pizza</code> data set from the <code>onadata</code> package or load it as a dataframe from the internet<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://ona-book.org/data/pizza.csv" class="uri"&gt;https://ona-book.org/data/pizza.csv&lt;/a&gt;&lt;/p&gt;'><sup>21</sup></a>. This data set represents requests made by Reddit users on a thread called <em>Random Acts of Pizza</em> or <em>ROAP</em>, and is part of a larger data set used for research purposes<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;span class="citation"&gt;Althoff et al. (&lt;a href="references.html#ref-altruistic" role="doc-biblioref"&gt;2014&lt;/a&gt;)&lt;/span&gt;&lt;/p&gt;'><sup>22</sup></a>. The <code>requester</code> column represents users who made requests for pizza, and the <code>responder</code> column represents users who read the request and responded to the request by giving pizza<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;This data set is only a small subset of the full data set, which included many requests which were not fulfilled. As we all know, a free pizza is a rare thing!&lt;/p&gt;"><sup>23</sup></a>. Other columns represent the request ID and data on the requester at the time the request was made.</p>
 <ol start="5" style="list-style-type: decimal">
 <li>Use an appropriate method to create a graph object using the <code>requester</code> and <code>responder</code> columns in this data set.</li>
 <li>Use the information contained in the graph object to determine how many pizza requests were fulfilled.</li>

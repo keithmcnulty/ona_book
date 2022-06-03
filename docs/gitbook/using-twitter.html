@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>10 Bonus Chapter: Using Twitter for Network Analysis | Handbook of Graphs and Networks in People Analytics</title>
+  <meta name="description" content="A technical manual of graphs, networks and their applications in the people and social sciences" />
+  <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="10 Bonus Chapter: Using Twitter for Network Analysis | Handbook of Graphs and Networks in People Analytics" />
+  <meta property="og:type" content="book" />
+  <meta property="og:image" content="https://ona-book.org/www/cover/cover-ona.png" />
+  <meta property="og:description" content="A technical manual of graphs, networks and their applications in the people and social sciences" />
+  <meta name="github-repo" content="keithmcnulty/ona_book" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="10 Bonus Chapter: Using Twitter for Network Analysis | Handbook of Graphs and Networks in People Analytics" />
+  <meta name="twitter:site" content="@dr_keithmcnulty" />
+  <meta name="twitter:description" content="A technical manual of graphs, networks and their applications in the people and social sciences" />
+  <meta name="twitter:image" content="https://ona-book.org/www/cover/cover-ona.png" />
+
+<meta name="author" content="Keith McNulty" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="databases.html"/>
+<link rel="next" href="references.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<meta name="citation_title" content="10 Bonus Chapter: Using Twitter for Network Analysis | Handbook of Graphs and Networks in People Analytics: With Examples in R and Python"/>
+<meta name="citation_author" content="Keith McNulty"/>
+<meta name="citation_publication_date" content="2022"/>
+<meta name="citation_isbn" content="9781032204970"/>
+<script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<link href="libs/vis-9.1.0/vis-network.min.css" rel="stylesheet" />
+<script src="libs/vis-9.1.0/vis-network.min.js"></script>
+<script src="libs/visNetwork-binding-2.1.0/visNetwork.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<script src="libs/d3-4.5.0/d3.min.js"></script>
+<script src="libs/forceNetwork-binding-0.4/forceNetwork.js"></script>
+<script src="libs/sankey-1/sankey.js"></script>
+<script src="libs/sankeyNetwork-binding-0.4/sankeyNetwork.js"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-400FPN6D44"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-400FPN6D44');
+</script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Handbook of Graphs and Networks in People Analytics</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#notes-on-data-used-in-this-book"><i class="fa fa-check"></i>Notes on data used in this book</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#technical-note-for-r-users"><i class="fa fa-check"></i>Technical note for R users</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="foreword-by-professor-jeff-polzer.html"><a href="foreword-by-professor-jeff-polzer.html"><i class="fa fa-check"></i>Foreword by Professor Jeff Polzer</a></li>
+<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i>Introduction</a></li>
+<li class="chapter" data-level="" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html"><i class="fa fa-check"></i>The Basics of the R Programming Language</a>
+<ul>
+<li class="chapter" data-level="0.1" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#what-is-r"><i class="fa fa-check"></i><b>0.1</b> What is R?</a></li>
+<li class="chapter" data-level="0.2" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#how-to-start-using-r"><i class="fa fa-check"></i><b>0.2</b> How to start using R</a></li>
+<li class="chapter" data-level="0.3" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#data-in-r"><i class="fa fa-check"></i><b>0.3</b> Data in R</a>
+<ul>
+<li class="chapter" data-level="0.3.1" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#data-types"><i class="fa fa-check"></i><b>0.3.1</b> Data types</a></li>
+<li class="chapter" data-level="0.3.2" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#homogeneous-data-structures"><i class="fa fa-check"></i><b>0.3.2</b> Homogeneous data structures</a></li>
+<li class="chapter" data-level="0.3.3" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#heterogeneous-data-structures"><i class="fa fa-check"></i><b>0.3.3</b> Heterogeneous data structures</a></li>
+</ul></li>
+<li class="chapter" data-level="0.4" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#working-with-dataframes"><i class="fa fa-check"></i><b>0.4</b> Working with dataframes</a>
+<ul>
+<li class="chapter" data-level="0.4.1" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#loading-and-tidying-data-in-dataframes"><i class="fa fa-check"></i><b>0.4.1</b> Loading and tidying data in dataframes</a></li>
+<li class="chapter" data-level="0.4.2" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#manipulating-dataframes"><i class="fa fa-check"></i><b>0.4.2</b> Manipulating dataframes</a></li>
+</ul></li>
+<li class="chapter" data-level="0.5" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#functions-packages-and-libraries"><i class="fa fa-check"></i><b>0.5</b> Functions, packages and libraries</a>
+<ul>
+<li class="chapter" data-level="0.5.1" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#using-functions"><i class="fa fa-check"></i><b>0.5.1</b> Using functions</a></li>
+<li class="chapter" data-level="0.5.2" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#help-with-functions"><i class="fa fa-check"></i><b>0.5.2</b> Help with functions</a></li>
+<li class="chapter" data-level="0.5.3" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#writing-your-own-functions"><i class="fa fa-check"></i><b>0.5.3</b> Writing your own functions</a></li>
+<li class="chapter" data-level="0.5.4" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#installing-packages"><i class="fa fa-check"></i><b>0.5.4</b> Installing packages</a></li>
+<li class="chapter" data-level="0.5.5" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#using-packages"><i class="fa fa-check"></i><b>0.5.5</b> Using packages</a></li>
+<li class="chapter" data-level="0.5.6" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#the-pipe-operator"><i class="fa fa-check"></i><b>0.5.6</b> The pipe operator</a></li>
+</ul></li>
+<li class="chapter" data-level="0.6" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#errors-warnings-and-messages"><i class="fa fa-check"></i><b>0.6</b> Errors, warnings and messages</a></li>
+<li class="chapter" data-level="0.7" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#plotting-and-graphing"><i class="fa fa-check"></i><b>0.7</b> Plotting and graphing</a>
+<ul>
+<li class="chapter" data-level="0.7.1" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#plotting-in-base-r"><i class="fa fa-check"></i><b>0.7.1</b> Plotting in base R</a></li>
+<li class="chapter" data-level="0.7.2" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#specialist-plotting-and-graphing-packages"><i class="fa fa-check"></i><b>0.7.2</b> Specialist plotting and graphing packages</a></li>
+</ul></li>
+<li class="chapter" data-level="0.8" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#randomization-in-r"><i class="fa fa-check"></i><b>0.8</b> Randomization in R</a></li>
+<li class="chapter" data-level="0.9" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#documenting-your-work-using-r-markdown"><i class="fa fa-check"></i><b>0.9</b> Documenting your work using R Markdown</a></li>
+<li class="chapter" data-level="0.10" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#learning-exercises"><i class="fa fa-check"></i><b>0.10</b> Learning exercises</a>
+<ul>
+<li class="chapter" data-level="0.10.1" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#discussion-questions"><i class="fa fa-check"></i><b>0.10.1</b> Discussion questions</a></li>
+<li class="chapter" data-level="0.10.2" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#data-exercises"><i class="fa fa-check"></i><b>0.10.2</b> Data exercises</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="everywhere.html"><a href="everywhere.html"><i class="fa fa-check"></i><b>1</b> Graphs Everywhere!</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="everywhere.html"><a href="everywhere.html#the-seven-bridges-of-königsberg"><i class="fa fa-check"></i><b>1.1</b> The Seven Bridges of Königsberg</a></li>
+<li class="chapter" data-level="1.2" data-path="everywhere.html"><a href="everywhere.html#graphs-as-mathematical-models"><i class="fa fa-check"></i><b>1.2</b> Graphs as mathematical models</a></li>
+<li class="chapter" data-level="1.3" data-path="everywhere.html"><a href="everywhere.html#graph-theory-in-the-analysis-of-people-and-groups"><i class="fa fa-check"></i><b>1.3</b> Graph theory in the analysis of people and groups</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="everywhere.html"><a href="everywhere.html#the-study-of-connection"><i class="fa fa-check"></i><b>1.3.1</b> The study of connection</a></li>
+<li class="chapter" data-level="1.3.2" data-path="everywhere.html"><a href="everywhere.html#the-study-of-information-flow"><i class="fa fa-check"></i><b>1.3.2</b> The study of information flow</a></li>
+<li class="chapter" data-level="1.3.3" data-path="everywhere.html"><a href="everywhere.html#the-study-of-community-diversity-and-familiarity"><i class="fa fa-check"></i><b>1.3.3</b> The study of community, diversity and familiarity</a></li>
+<li class="chapter" data-level="1.3.4" data-path="everywhere.html"><a href="everywhere.html#study-importance"><i class="fa fa-check"></i><b>1.3.4</b> The study of importance, influence and attachment</a></li>
+<li class="chapter" data-level="1.3.5" data-path="everywhere.html"><a href="everywhere.html#graphs-as-data-sources"><i class="fa fa-check"></i><b>1.3.5</b> Graphs as data sources</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="everywhere.html"><a href="everywhere.html#purpose-structure-and-organization-of-this-book"><i class="fa fa-check"></i><b>1.4</b> Purpose, structure and organization of this book</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="working.html"><a href="working.html"><i class="fa fa-check"></i><b>2</b> Working with Graphs</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="working.html"><a href="working.html#elementary-graph-theory"><i class="fa fa-check"></i><b>2.1</b> Elementary graph theory</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="working.html"><a href="working.html#graph-def"><i class="fa fa-check"></i><b>2.1.1</b> General definition of a graph</a></li>
+<li class="chapter" data-level="2.1.2" data-path="working.html"><a href="working.html#graph-types"><i class="fa fa-check"></i><b>2.1.2</b> Types of graphs</a></li>
+<li class="chapter" data-level="2.1.3" data-path="working.html"><a href="working.html#vertex-edge-prop"><i class="fa fa-check"></i><b>2.1.3</b> Vertex and edge properties</a></li>
+<li class="chapter" data-level="2.1.4" data-path="working.html"><a href="working.html#rep-graphs"><i class="fa fa-check"></i><b>2.1.4</b> Representations of graphs</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="working.html"><a href="working.html#creating-graphs-in-r"><i class="fa fa-check"></i><b>2.2</b> Creating graphs in R</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="working.html"><a href="working.html#creating-a-graph-from-an-edgelist"><i class="fa fa-check"></i><b>2.2.1</b> Creating a graph from an edgelist</a></li>
+<li class="chapter" data-level="2.2.2" data-path="working.html"><a href="working.html#creating-a-graph-from-an-adjacency-matrix"><i class="fa fa-check"></i><b>2.2.2</b> Creating a graph from an adjacency matrix</a></li>
+<li class="chapter" data-level="2.2.3" data-path="working.html"><a href="working.html#creating-a-graph-from-a-dataframe"><i class="fa fa-check"></i><b>2.2.3</b> Creating a graph from a dataframe</a></li>
+<li class="chapter" data-level="2.2.4" data-path="working.html"><a href="working.html#adding-properties-to-the-vertices-and-edges"><i class="fa fa-check"></i><b>2.2.4</b> Adding properties to the vertices and edges</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="working.html"><a href="working.html#creating-graphs-in-python"><i class="fa fa-check"></i><b>2.3</b> Creating graphs in Python</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="working.html"><a href="working.html#creating-a-graph-from-an-edgelist-1"><i class="fa fa-check"></i><b>2.3.1</b> Creating a graph from an edgelist</a></li>
+<li class="chapter" data-level="2.3.2" data-path="working.html"><a href="working.html#python-graph-from-adjacency"><i class="fa fa-check"></i><b>2.3.2</b> Creating a graph from an adjacency matrix</a></li>
+<li class="chapter" data-level="2.3.3" data-path="working.html"><a href="working.html#adding-vertex-and-edge-properties-to-a-graph"><i class="fa fa-check"></i><b>2.3.3</b> Adding vertex and edge properties to a graph</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="working.html"><a href="working.html#learning-exercises-1"><i class="fa fa-check"></i><b>2.4</b> Learning exercises</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="working.html"><a href="working.html#discussion-questions-1"><i class="fa fa-check"></i><b>2.4.1</b> Discussion questions</a></li>
+<li class="chapter" data-level="2.4.2" data-path="working.html"><a href="working.html#data-exercises-1"><i class="fa fa-check"></i><b>2.4.2</b> Data exercises</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="viz-graphs.html"><a href="viz-graphs.html"><i class="fa fa-check"></i><b>3</b> Visualizing Graphs</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="viz-graphs.html"><a href="viz-graphs.html#visualizing-graphs-in-r"><i class="fa fa-check"></i><b>3.1</b> Visualizing graphs in R</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="viz-graphs.html"><a href="viz-graphs.html#native-plotting-igraph"><i class="fa fa-check"></i><b>3.1.1</b> Native plotting in <code>igraph</code></a></li>
+<li class="chapter" data-level="3.1.2" data-path="viz-graphs.html"><a href="viz-graphs.html#layouts"><i class="fa fa-check"></i><b>3.1.2</b> Graph layouts</a></li>
+<li class="chapter" data-level="3.1.3" data-path="viz-graphs.html"><a href="viz-graphs.html#ggraph"><i class="fa fa-check"></i><b>3.1.3</b> Static plotting with <code>ggraph</code></a></li>
+<li class="chapter" data-level="3.1.4" data-path="viz-graphs.html"><a href="viz-graphs.html#interactive-graph-visualization-using-visnetwork"><i class="fa fa-check"></i><b>3.1.4</b> Interactive graph visualization using <code>visNetwork</code></a></li>
+<li class="chapter" data-level="3.1.5" data-path="viz-graphs.html"><a href="viz-graphs.html#interactive-graph-visualization-using-networkd3"><i class="fa fa-check"></i><b>3.1.5</b> Interactive graph visualization using <code>networkD3</code></a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="viz-graphs.html"><a href="viz-graphs.html#visualizing-graphs-in-python"><i class="fa fa-check"></i><b>3.2</b> Visualizing graphs in Python</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="viz-graphs.html"><a href="viz-graphs.html#static-plotting-using-networkx-and-matplotlib"><i class="fa fa-check"></i><b>3.2.1</b> Static plotting using <code>networkx</code> and <code>matplotlib</code></a></li>
+<li class="chapter" data-level="3.2.2" data-path="viz-graphs.html"><a href="viz-graphs.html#interactive-visualization-using-networkx-and-pyvis"><i class="fa fa-check"></i><b>3.2.2</b> Interactive visualization using <code>networkx</code> and <code>pyvis</code></a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="viz-graphs.html"><a href="viz-graphs.html#learning-exercises-2"><i class="fa fa-check"></i><b>3.3</b> Learning exercises</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="viz-graphs.html"><a href="viz-graphs.html#discussion-questions-2"><i class="fa fa-check"></i><b>3.3.1</b> Discussion questions</a></li>
+<li class="chapter" data-level="3.3.2" data-path="viz-graphs.html"><a href="viz-graphs.html#data-exercises-2"><i class="fa fa-check"></i><b>3.3.2</b> Data exercises</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="restructuring-data.html"><a href="restructuring-data.html"><i class="fa fa-check"></i><b>4</b> Restructuring Data for Use in Graphs</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="restructuring-data.html"><a href="restructuring-data.html#transforming-data-in-rectangular-tables-for-use-in-graphs"><i class="fa fa-check"></i><b>4.1</b> Transforming data in rectangular tables for use in graphs</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="restructuring-data.html"><a href="restructuring-data.html#creating-a-simple-graph-of-a-management-hierarchy"><i class="fa fa-check"></i><b>4.1.1</b> Creating a simple graph of a management hierarchy</a></li>
+<li class="chapter" data-level="4.1.2" data-path="restructuring-data.html"><a href="restructuring-data.html#connecting-customers-through-sales-reps"><i class="fa fa-check"></i><b>4.1.2</b> Connecting customers through sales reps</a></li>
+<li class="chapter" data-level="4.1.3" data-path="restructuring-data.html"><a href="restructuring-data.html#common-purchases"><i class="fa fa-check"></i><b>4.1.3</b> Connecting customers through common purchases</a></li>
+<li class="chapter" data-level="4.1.4" data-path="restructuring-data.html"><a href="restructuring-data.html#approaches-using-python"><i class="fa fa-check"></i><b>4.1.4</b> Approaches using Python</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="restructuring-data.html"><a href="restructuring-data.html#doc-transform"><i class="fa fa-check"></i><b>4.2</b> Transforming data from documents for use in graphs</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="restructuring-data.html"><a href="restructuring-data.html#scraping-data-from-semi-structured-documents"><i class="fa fa-check"></i><b>4.2.1</b> Scraping data from semi-structured documents</a></li>
+<li class="chapter" data-level="4.2.2" data-path="restructuring-data.html"><a href="restructuring-data.html#creating-an-edgelist-from-the-scraped-data"><i class="fa fa-check"></i><b>4.2.2</b> Creating an edgelist from the scraped data</a></li>
+<li class="chapter" data-level="4.2.3" data-path="restructuring-data.html"><a href="restructuring-data.html#approaches-in-python"><i class="fa fa-check"></i><b>4.2.3</b> Approaches in Python</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="restructuring-data.html"><a href="restructuring-data.html#learning-exercises-3"><i class="fa fa-check"></i><b>4.3</b> Learning exercises</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="restructuring-data.html"><a href="restructuring-data.html#discussion-questions-3"><i class="fa fa-check"></i><b>4.3.1</b> Discussion questions</a></li>
+<li class="chapter" data-level="4.3.2" data-path="restructuring-data.html"><a href="restructuring-data.html#data-exercises-3"><i class="fa fa-check"></i><b>4.3.2</b> Data exercises</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="paths-distance.html"><a href="paths-distance.html"><i class="fa fa-check"></i><b>5</b> Paths and Distance</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="paths-distance.html"><a href="paths-distance.html#theory-of-graph-traversal-paths-and-distance"><i class="fa fa-check"></i><b>5.1</b> Theory of graph traversal, paths and distance</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="paths-distance.html"><a href="paths-distance.html#traversal"><i class="fa fa-check"></i><b>5.1.1</b> Paths and graph traversal</a></li>
+<li class="chapter" data-level="5.1.2" data-path="paths-distance.html"><a href="paths-distance.html#path-length-and-distance"><i class="fa fa-check"></i><b>5.1.2</b> Path length and distance</a></li>
+<li class="chapter" data-level="5.1.3" data-path="paths-distance.html"><a href="paths-distance.html#shortest-path-algorithms"><i class="fa fa-check"></i><b>5.1.3</b> Shortest path algorithms</a></li>
+<li class="chapter" data-level="5.1.4" data-path="paths-distance.html"><a href="paths-distance.html#graph-diameter-and-density"><i class="fa fa-check"></i><b>5.1.4</b> Graph diameter and density</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="paths-distance.html"><a href="paths-distance.html#calculating-paths-distance-diameter-and-density"><i class="fa fa-check"></i><b>5.2</b> Calculating paths, distance, diameter and density</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="paths-distance.html"><a href="paths-distance.html#calculating-in-r"><i class="fa fa-check"></i><b>5.2.1</b> Calculating in R</a></li>
+<li class="chapter" data-level="5.2.2" data-path="paths-distance.html"><a href="paths-distance.html#calculating-in-python"><i class="fa fa-check"></i><b>5.2.2</b> Calculating in Python</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="paths-distance.html"><a href="paths-distance.html#illustrative-6"><i class="fa fa-check"></i><b>5.3</b> Examples of uses</a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="paths-distance.html"><a href="paths-distance.html#facilitating-introductions-in-a-workplace"><i class="fa fa-check"></i><b>5.3.1</b> Facilitating introductions in a workplace</a></li>
+<li class="chapter" data-level="5.3.2" data-path="paths-distance.html"><a href="paths-distance.html#workplace-distance"><i class="fa fa-check"></i><b>5.3.2</b> Finding distant colleagues in a workplace</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="paths-distance.html"><a href="paths-distance.html#learning-exercises-4"><i class="fa fa-check"></i><b>5.4</b> Learning exercises</a>
+<ul>
+<li class="chapter" data-level="5.4.1" data-path="paths-distance.html"><a href="paths-distance.html#discussion-questions-4"><i class="fa fa-check"></i><b>5.4.1</b> Discussion questions</a></li>
+<li class="chapter" data-level="5.4.2" data-path="paths-distance.html"><a href="paths-distance.html#data-exercises-4"><i class="fa fa-check"></i><b>5.4.2</b> Data exercises</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="vertex-importance.html"><a href="vertex-importance.html"><i class="fa fa-check"></i><b>6</b> Vertex Importance and Centrality</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="vertex-importance.html"><a href="vertex-importance.html#vertex-centrality-measures-in-graphs"><i class="fa fa-check"></i><b>6.1</b> Vertex centrality measures in graphs</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="vertex-importance.html"><a href="vertex-importance.html#degree-centrality"><i class="fa fa-check"></i><b>6.1.1</b> Degree centrality</a></li>
+<li class="chapter" data-level="6.1.2" data-path="vertex-importance.html"><a href="vertex-importance.html#closeness-centrality"><i class="fa fa-check"></i><b>6.1.2</b> Closeness centrality</a></li>
+<li class="chapter" data-level="6.1.3" data-path="vertex-importance.html"><a href="vertex-importance.html#betweenness-centrality"><i class="fa fa-check"></i><b>6.1.3</b> Betweenness centrality</a></li>
+<li class="chapter" data-level="6.1.4" data-path="vertex-importance.html"><a href="vertex-importance.html#eigenvector-centrality"><i class="fa fa-check"></i><b>6.1.4</b> Eigenvector centrality</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="vertex-importance.html"><a href="vertex-importance.html#calculating-and-illustrating-vertex-centrality"><i class="fa fa-check"></i><b>6.2</b> Calculating and illustrating vertex centrality</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="vertex-importance.html"><a href="vertex-importance.html#calculating-in-r-1"><i class="fa fa-check"></i><b>6.2.1</b> Calculating in R</a></li>
+<li class="chapter" data-level="6.2.2" data-path="vertex-importance.html"><a href="vertex-importance.html#calculating-in-python-1"><i class="fa fa-check"></i><b>6.2.2</b> Calculating in Python</a></li>
+<li class="chapter" data-level="6.2.3" data-path="vertex-importance.html"><a href="vertex-importance.html#illustrating-centrality-in-graph-visualizations"><i class="fa fa-check"></i><b>6.2.3</b> Illustrating centrality in graph visualizations</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="vertex-importance.html"><a href="vertex-importance.html#illustrative-7"><i class="fa fa-check"></i><b>6.3</b> Examples of uses</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="vertex-importance.html"><a href="vertex-importance.html#finding-superconnectors"><i class="fa fa-check"></i><b>6.3.1</b> Finding ‘superconnectors’</a></li>
+<li class="chapter" data-level="6.3.2" data-path="vertex-importance.html"><a href="vertex-importance.html#identifying-influential-employees"><i class="fa fa-check"></i><b>6.3.2</b> Identifying influential employees</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="vertex-importance.html"><a href="vertex-importance.html#learning-exercises-5"><i class="fa fa-check"></i><b>6.4</b> Learning exercises</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="vertex-importance.html"><a href="vertex-importance.html#discussion-questions-5"><i class="fa fa-check"></i><b>6.4.1</b> Discussion questions</a></li>
+<li class="chapter" data-level="6.4.2" data-path="vertex-importance.html"><a href="vertex-importance.html#data-exercises-5"><i class="fa fa-check"></i><b>6.4.2</b> Data exercises</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="community.html"><a href="community.html"><i class="fa fa-check"></i><b>7</b> Components, Communities and Cliques</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="community.html"><a href="community.html#theory-of-components-partitions-and-clusters"><i class="fa fa-check"></i><b>7.1</b> Theory of components, partitions and clusters</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="community.html"><a href="community.html#connected-components-of-graphs"><i class="fa fa-check"></i><b>7.1.1</b> Connected components of graphs</a></li>
+<li class="chapter" data-level="7.1.2" data-path="community.html"><a href="community.html#vertex-partitioning"><i class="fa fa-check"></i><b>7.1.2</b> Vertex partitioning</a></li>
+<li class="chapter" data-level="7.1.3" data-path="community.html"><a href="community.html#vertex-clustering-and-community-detection"><i class="fa fa-check"></i><b>7.1.3</b> Vertex clustering and community detection</a></li>
+<li class="chapter" data-level="7.1.4" data-path="community.html"><a href="community.html#cliques"><i class="fa fa-check"></i><b>7.1.4</b> Cliques</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="community.html"><a href="community.html#finding-components-communities-and-cliques-using-r"><i class="fa fa-check"></i><b>7.2</b> Finding components, communities and cliques using R</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="community.html"><a href="community.html#finding-connected-components-of-disconnected-graphs"><i class="fa fa-check"></i><b>7.2.1</b> Finding connected components of disconnected graphs</a></li>
+<li class="chapter" data-level="7.2.2" data-path="community.html"><a href="community.html#partitioning-and-community-detection-in-r"><i class="fa fa-check"></i><b>7.2.2</b> Partitioning and community detection in R</a></li>
+<li class="chapter" data-level="7.2.3" data-path="community.html"><a href="community.html#finding-cliques-in-r"><i class="fa fa-check"></i><b>7.2.3</b> Finding cliques in R</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="community.html"><a href="community.html#finding-components-communities-and-cliques-using-python"><i class="fa fa-check"></i><b>7.3</b> Finding components, communities and cliques using Python</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="community.html"><a href="community.html#finding-connected-components-using-python"><i class="fa fa-check"></i><b>7.3.1</b> Finding connected components using Python</a></li>
+<li class="chapter" data-level="7.3.2" data-path="community.html"><a href="community.html#partitioning-and-community-detection-using-python"><i class="fa fa-check"></i><b>7.3.2</b> Partitioning and community detection using Python</a></li>
+<li class="chapter" data-level="7.3.3" data-path="community.html"><a href="community.html#finding-cliques-in-python"><i class="fa fa-check"></i><b>7.3.3</b> Finding cliques in Python</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="community.html"><a href="community.html#examples-of-uses"><i class="fa fa-check"></i><b>7.4</b> Examples of uses</a>
+<ul>
+<li class="chapter" data-level="7.4.1" data-path="community.html"><a href="community.html#schoolfriend-community"><i class="fa fa-check"></i><b>7.4.1</b> Detecting communities and cliques among Facebook friends</a></li>
+<li class="chapter" data-level="7.4.2" data-path="community.html"><a href="community.html#detecting-politically-aligned-communities-on-twitter"><i class="fa fa-check"></i><b>7.4.2</b> Detecting politically aligned communities on Twitter</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="community.html"><a href="community.html#learning-exercises-6"><i class="fa fa-check"></i><b>7.5</b> Learning exercises</a>
+<ul>
+<li class="chapter" data-level="7.5.1" data-path="community.html"><a href="community.html#discussion-questions-6"><i class="fa fa-check"></i><b>7.5.1</b> Discussion questions</a></li>
+<li class="chapter" data-level="7.5.2" data-path="community.html"><a href="community.html#data-exercises-6"><i class="fa fa-check"></i><b>7.5.2</b> Data exercises</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="similarity.html"><a href="similarity.html"><i class="fa fa-check"></i><b>8</b> Assortativity and Similarity</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="similarity.html"><a href="similarity.html#assortativity-in-networks"><i class="fa fa-check"></i><b>8.1</b> Assortativity in networks</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="similarity.html"><a href="similarity.html#categorical-or-nominal-assortativity"><i class="fa fa-check"></i><b>8.1.1</b> Categorical or nominal assortativity</a></li>
+<li class="chapter" data-level="8.1.2" data-path="similarity.html"><a href="similarity.html#degree-assortativity"><i class="fa fa-check"></i><b>8.1.2</b> Degree assortativity</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="similarity.html"><a href="similarity.html#vertex-similarity"><i class="fa fa-check"></i><b>8.2</b> Vertex similarity</a></li>
+<li class="chapter" data-level="8.3" data-path="similarity.html"><a href="similarity.html#graph-similarity"><i class="fa fa-check"></i><b>8.3</b> Graph similarity</a></li>
+<li class="chapter" data-level="8.4" data-path="similarity.html"><a href="similarity.html#calculating-assortativity-and-similarity-in-python"><i class="fa fa-check"></i><b>8.4</b> Calculating assortativity and similarity in Python</a></li>
+<li class="chapter" data-level="8.5" data-path="similarity.html"><a href="similarity.html#learning-exercises-7"><i class="fa fa-check"></i><b>8.5</b> Learning exercises</a>
+<ul>
+<li class="chapter" data-level="8.5.1" data-path="similarity.html"><a href="similarity.html#discussion-questions-7"><i class="fa fa-check"></i><b>8.5.1</b> Discussion questions</a></li>
+<li class="chapter" data-level="8.5.2" data-path="similarity.html"><a href="similarity.html#data-exercises-7"><i class="fa fa-check"></i><b>8.5.2</b> Data exercises</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="databases.html"><a href="databases.html"><i class="fa fa-check"></i><b>9</b> Graphs as Databases</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="databases.html"><a href="databases.html#graph-database-technology"><i class="fa fa-check"></i><b>9.1</b> Graph database technology</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="databases.html"><a href="databases.html#labelled-property-graphs"><i class="fa fa-check"></i><b>9.1.1</b> Labelled-property graphs</a></li>
+<li class="chapter" data-level="9.1.2" data-path="databases.html"><a href="databases.html#resource-description-frameworks"><i class="fa fa-check"></i><b>9.1.2</b> Resource description frameworks</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="databases.html"><a href="databases.html#example-how-to-work-with-a-neo4j-graph-database"><i class="fa fa-check"></i><b>9.2</b> Example: how to work with a Neo4J graph database</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="databases.html"><a href="databases.html#neo4j-browser"><i class="fa fa-check"></i><b>9.2.1</b> Using the browser interface</a></li>
+<li class="chapter" data-level="9.2.2" data-path="databases.html"><a href="databases.html#working-with-neo4j-using-r"><i class="fa fa-check"></i><b>9.2.2</b> Working with Neo4J using R</a></li>
+<li class="chapter" data-level="9.2.3" data-path="databases.html"><a href="databases.html#working-with-neo4j-using-python"><i class="fa fa-check"></i><b>9.2.3</b> Working with Neo4J using Python</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="databases.html"><a href="databases.html#moving-to-persistent-graph-data-in-organizations"><i class="fa fa-check"></i><b>9.3</b> Moving to persistent graph data in organizations</a></li>
+<li class="chapter" data-level="9.4" data-path="databases.html"><a href="databases.html#learning-exercises-8"><i class="fa fa-check"></i><b>9.4</b> Learning exercises</a>
+<ul>
+<li class="chapter" data-level="9.4.1" data-path="databases.html"><a href="databases.html#discussion-questions-8"><i class="fa fa-check"></i><b>9.4.1</b> Discussion questions</a></li>
+<li class="chapter" data-level="9.4.2" data-path="databases.html"><a href="databases.html#data-exercises-8"><i class="fa fa-check"></i><b>9.4.2</b> Data exercises</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="using-twitter.html"><a href="using-twitter.html"><i class="fa fa-check"></i><b>10</b> Bonus Chapter: Using Twitter for Network Analysis</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="using-twitter.html"><a href="using-twitter.html#accessing-the-twitter-api"><i class="fa fa-check"></i><b>10.1</b> Accessing the Twitter API</a>
+<ul>
+<li class="chapter" data-level="10.1.1" data-path="using-twitter.html"><a href="using-twitter.html#accessing-using-r"><i class="fa fa-check"></i><b>10.1.1</b> Accessing using R</a></li>
+<li class="chapter" data-level="10.1.2" data-path="using-twitter.html"><a href="using-twitter.html#accessing-using-python"><i class="fa fa-check"></i><b>10.1.2</b> Accessing using Python</a></li>
+<li class="chapter" data-level="10.1.3" data-path="using-twitter.html"><a href="using-twitter.html#twitter-rate-limits"><i class="fa fa-check"></i><b>10.1.3</b> Twitter rate limits</a></li>
+</ul></li>
+<li class="chapter" data-level="10.2" data-path="using-twitter.html"><a href="using-twitter.html#example-british-members-of-parliament-mp-twitter-network"><i class="fa fa-check"></i><b>10.2</b> Example: British Members of Parliament (MP) Twitter network</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="using-twitter.html"><a href="using-twitter.html#creating-the-graph-from-twitter-data"><i class="fa fa-check"></i><b>10.2.1</b> Creating the graph from Twitter data</a></li>
+<li class="chapter" data-level="10.2.2" data-path="using-twitter.html"><a href="using-twitter.html#analyzing-the-mp-twitter-network"><i class="fa fa-check"></i><b>10.2.2</b> Analyzing the MP Twitter network</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Handbook of Graphs and Networks in People Analytics</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="using-twitter" class="section level1 hasAnchor" number="10">
+<h1><span class="header-section-number">10</span> Bonus Chapter: Using Twitter for Network Analysis<a href="using-twitter.html#using-twitter" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Social media engines are by their very nature rich sources of data for modeling networks of friends, acquaintences, colleagues and other relationships. In Chapter <a href="community.html#community">7</a> for example, we used data extracted from Twitter to study a network of Canadian politicians. Such data is not always easy to extract, as different social media companies have different philosophies about data access, and some make it very difficult for user data to be extracted.</p>
+<p>However, Twitter is one of the more open platforms, and anyone who wants to can extract a certain amount of data from Twitter provided the user accounts they are interested in are public accounts. In this chapter we will go through how to extract data from Twitter and how to turn that data into a graph object for further study. As an example, we will extract data on the recent tweets of British politicians sitting in the House of Commons as at mid-2022 and we will use it to detect influential politicians, political party groupings and factions.</p>
+<div id="accessing-the-twitter-api" class="section level2 hasAnchor" number="10.1">
+<h2><span class="header-section-number">10.1</span> Accessing the Twitter API<a href="using-twitter.html#accessing-the-twitter-api" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The Twitter Application Programming Interface (API) allows an individual to access the database underlying Twitter and extract certain data from it. As of the time of writing, there are two versions of the API in operation - version 1.1 and the newer version 2. Here we will use version 1.1 of the API, as this is more established and will allow us to use helpful packages which have been written to make access easier.</p>
+<p>In order to access the Twitter API, you need to have your own Twitter account and you need to use this account to sign up for a Twitter developer account at the <a href="https://developer.twitter.com/en">Twitter Developer Platform</a>. When you sign up for a developer account, you can set up a project and an application. Once you have done this, you can generate a series of access codes. For v1.1 of the API, you will need the <em>API Key and Secret</em> and the <em>Access Token and Secret</em>. Note that you will only be able to see and copy these once, so make sure you do so after they are generated and store them in a safe and secure place.</p>
+<div id="accessing-using-r" class="section level3 hasAnchor" number="10.1.1">
+<h3><span class="header-section-number">10.1.1</span> Accessing using R<a href="using-twitter.html#accessing-using-r" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The Twitter v1.1 API can be accessed easily using the <code>rtweet</code> package. When you first use this package, you will need to authenticate by creating a token using the access codes that you generated for your app on the Twitter Developer Platform. You can do this as follows, replacing the placeholders appropriately:</p>
+<div class="sourceCode" id="cb558"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb558-1"><a href="using-twitter.html#cb558-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rtweet)</span>
+<span id="cb558-2"><a href="using-twitter.html#cb558-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb558-3"><a href="using-twitter.html#cb558-3" aria-hidden="true" tabindex="-1"></a>token <span class="ot">&lt;-</span> <span class="fu">create_token</span>(</span>
+<span id="cb558-4"><a href="using-twitter.html#cb558-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">app =</span> <span class="st">&quot;YOUR_APP_NAME&quot;</span>,</span>
+<span id="cb558-5"><a href="using-twitter.html#cb558-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">consumer_key =</span> <span class="st">&quot;YOUR_API_KEY&quot;</span>,</span>
+<span id="cb558-6"><a href="using-twitter.html#cb558-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">consumer_secret =</span> <span class="st">&quot;YOUR_API_KEY_SECRET&quot;</span>,</span>
+<span id="cb558-7"><a href="using-twitter.html#cb558-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">access_token =</span> <span class="st">&quot;YOUR_ACCESS_TOKEN&quot;</span>,</span>
+<span id="cb558-8"><a href="using-twitter.html#cb558-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">access_secret =</span> <span class="st">&quot;YOUR_ACCESS_TOKEN_SECRET&quot;</span></span>
+<span id="cb558-9"><a href="using-twitter.html#cb558-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>This is a one-off authentication, and once you have completed it, your access credentials will be stored in a hidden file in your R session and will be permanently available for future use.</p>
+<p>You can now test some simple functions in the <code>rtweet</code> package to see if you are accessing the API successfully. For example, you can use the <code>get_followers()</code> function to get the Twitter IDs of 10 of my followers:</p>
+<div class="sourceCode" id="cb559"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb559-1"><a href="using-twitter.html#cb559-1" aria-hidden="true" tabindex="-1"></a>(keith_followers <span class="ot">&lt;-</span> rtweet<span class="sc">::</span><span class="fu">get_followers</span>(<span class="st">&quot;dr_keithmcnulty&quot;</span>, <span class="dv">10</span>))</span></code></pre></div>
+<pre><code>## # A tibble: 10 × 1
+##    user_id            
+##    &lt;chr&gt;              
+##  1 1518892476966313985
+##  2 1503538180783435776
+##  3 80138065           
+##  4 4531587435         
+##  5 2589097676         
+##  6 1227199012899438592
+##  7 1345708681749401601
+##  8 34060868           
+##  9 38427292           
+## 10 1282840960058171392</code></pre>
+<p>This has returned a data frame with a set of Twitter user IDs in the <code>user_id</code> column. You can use the <code>lookup_users()</code> function to find out more about each of these IDs. This will return quite a lot of information on each user as long as their account is public. You can explore the full set of information, but below we simply show the screen name of each user.</p>
+<div class="sourceCode" id="cb561"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb561-1"><a href="using-twitter.html#cb561-1" aria-hidden="true" tabindex="-1"></a>user_data <span class="ot">&lt;-</span> rtweet<span class="sc">::</span><span class="fu">lookup_users</span>(keith_followers<span class="sc">$</span>user_id)</span>
+<span id="cb561-2"><a href="using-twitter.html#cb561-2" aria-hidden="true" tabindex="-1"></a>user_data<span class="sc">$</span>screen_name</span></code></pre></div>
+<pre><code>##  [1] &quot;amina_jarso&quot;    &quot;AlertMitchell&quot;  &quot;matt_chennells&quot; &quot;arthuttifrutti&quot; &quot;ashutosh21293&quot;  &quot;sounix000&quot;     
+##  [7] &quot;foammail&quot;       &quot;jgcopple&quot;       &quot;nsmith_piano&quot;   &quot;brianmahayie&quot;</code></pre>
+</div>
+<div id="accessing-using-python" class="section level3 hasAnchor" number="10.1.2">
+<h3><span class="header-section-number">10.1.2</span> Accessing using Python<a href="using-twitter.html#accessing-using-python" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>To access the Twitter API in Python, use the <code>tweepy</code> package. You can authenticate using your keys and secrets that you saved when you set up your application on the Twitter Developer Platform.</p>
+<div class="sourceCode" id="cb563"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb563-1"><a href="using-twitter.html#cb563-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> tweepy</span>
+<span id="cb563-2"><a href="using-twitter.html#cb563-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb563-3"><a href="using-twitter.html#cb563-3" aria-hidden="true" tabindex="-1"></a>auth <span class="op">=</span> tweepy.OAuth1UserHandler(</span>
+<span id="cb563-4"><a href="using-twitter.html#cb563-4" aria-hidden="true" tabindex="-1"></a>   <span class="st">&quot;YOUR_API_KEY&quot;</span>, </span>
+<span id="cb563-5"><a href="using-twitter.html#cb563-5" aria-hidden="true" tabindex="-1"></a>   <span class="st">&quot;YOUR_API_KEY_SECRET&quot;</span>, </span>
+<span id="cb563-6"><a href="using-twitter.html#cb563-6" aria-hidden="true" tabindex="-1"></a>   <span class="st">&quot;YOUR_ACCESS_TOKEN&quot;</span>, </span>
+<span id="cb563-7"><a href="using-twitter.html#cb563-7" aria-hidden="true" tabindex="-1"></a>   <span class="st">&quot;YOUR_ACCESS_TOKEN_SECRET&quot;</span></span>
+<span id="cb563-8"><a href="using-twitter.html#cb563-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb563-9"><a href="using-twitter.html#cb563-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb563-10"><a href="using-twitter.html#cb563-10" aria-hidden="true" tabindex="-1"></a>api <span class="op">=</span> tweepy.API(auth)</span></code></pre></div>
+<p>You can now test some simple functions to check whether your are successfully accessing the Twitter API. To get the Twitter IDs of ten of my followers, use the <code>get_follower_ids()</code> function:</p>
+<div class="sourceCode" id="cb564"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb564-1"><a href="using-twitter.html#cb564-1" aria-hidden="true" tabindex="-1"></a>keith_followers <span class="op">=</span> api.get_follower_ids(screen_name <span class="op">=</span> <span class="st">&quot;dr_keithmcnulty&quot;</span>)</span>
+<span id="cb564-2"><a href="using-twitter.html#cb564-2" aria-hidden="true" tabindex="-1"></a>ten_followers <span class="op">=</span> keith_followers[<span class="dv">0</span>:<span class="dv">9</span>]</span>
+<span id="cb564-3"><a href="using-twitter.html#cb564-3" aria-hidden="true" tabindex="-1"></a>ten_followers</span></code></pre></div>
+<pre><code>## [1518892476966313985, 1503538180783435776, 80138065, 4531587435, 2589097676, 1227199012899438592, 1345708681749401601, 34060868, 38427292]</code></pre>
+<p>To find further details of these followers, including their screen names:</p>
+<div class="sourceCode" id="cb566"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb566-1"><a href="using-twitter.html#cb566-1" aria-hidden="true" tabindex="-1"></a>ten_follower_details <span class="op">=</span> api.lookup_users(user_id <span class="op">=</span> ten_followers)</span>
+<span id="cb566-2"><a href="using-twitter.html#cb566-2" aria-hidden="true" tabindex="-1"></a>[follower.screen_name <span class="cf">for</span> follower <span class="kw">in</span> ten_follower_details]</span></code></pre></div>
+<pre><code>## [&#39;amina_jarso&#39;, &#39;AlertMitchell&#39;, &#39;matt_chennells&#39;, &#39;arthuttifrutti&#39;, &#39;ashutosh21293&#39;, &#39;sounix000&#39;, &#39;foammail&#39;, &#39;jgcopple&#39;, &#39;nsmith_piano&#39;]</code></pre>
+</div>
+<div id="twitter-rate-limits" class="section level3 hasAnchor" number="10.1.3">
+<h3><span class="header-section-number">10.1.3</span> Twitter rate limits<a href="using-twitter.html#twitter-rate-limits" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>With potentially millions of developers querying the Twitter API on a regular basis, Twitter imposes rate limits to ensure that no one developer can overload the API. Rate limits usually operate over a 15 minute period, which practically means that when you hit a rate limit, you’ll need to wait at least 15 minutes before you retry. The size of the limit depends on the specific elements of the API that you are querying. For example, if you are downloading the Twitter timelines of users, you can query a total of 180 users before you hit a rate limit. You can see full details on rate limits <a href="https://developer.twitter.com/en/docs/twitter-api/rate-limits">here</a>. There are also limits to the total number of queries you can make in a day or in a month before you need to purchase enterprise API access. If you are an academic, you can apply for greater free access for research purposes.</p>
+<p>You can obtain information on your current rate limit status by using the <code>rate_limit()</code> function in <code>rtweet</code>:</p>
+<div class="sourceCode" id="cb568"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb568-1"><a href="using-twitter.html#cb568-1" aria-hidden="true" tabindex="-1"></a>rtweet<span class="sc">::</span><span class="fu">rate_limit</span>(<span class="at">query =</span> <span class="st">&quot;get_followers&quot;</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 1 × 7
+##   query         limit remaining reset         reset_at            timestamp           app          
+##   &lt;chr&gt;         &lt;int&gt;     &lt;int&gt; &lt;drtn&gt;        &lt;dttm&gt;              &lt;dttm&gt;              &lt;chr&gt;        
+## 1 followers/ids    15        14 14.90159 mins 2022-06-03 19:36:56 2022-06-03 19:22:02 Keith McNulty</code></pre>
+<p>In <code>tweepy</code> you can use the <code>rate_limit_status()</code> function. Here is how you can determine your rate limit status on querying follower IDs:</p>
+<div class="sourceCode" id="cb570"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb570-1"><a href="using-twitter.html#cb570-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb570-2"><a href="using-twitter.html#cb570-2" aria-hidden="true" tabindex="-1"></a>limits <span class="op">=</span> api.rate_limit_status(resources <span class="op">=</span> <span class="st">&quot;followers&quot;</span>)</span>
+<span id="cb570-3"><a href="using-twitter.html#cb570-3" aria-hidden="true" tabindex="-1"></a>limits.get(<span class="st">&#39;resources&#39;</span>).get(<span class="st">&#39;followers&#39;</span>).get(<span class="st">&#39;/followers/ids&#39;</span>)</span></code></pre></div>
+<pre><code>## {&#39;limit&#39;: 15, &#39;remaining&#39;: 14, &#39;reset&#39;: 1654285020}</code></pre>
+<p>Practically, when you hit a rate limit you will receive a message back indicating so. You can then try again from where you left off after 15 minutes. Packages like <code>rtweet</code> and <code>tweepy</code> also have options to retry automatically after 15 minutes. For example, in many <code>rtweet</code> functions you can use the argument <code>retryonratelimit = TRUE</code>, while in <code>tweepy</code>, you can specify this behavior on initial authentication using:</p>
+<div class="sourceCode" id="cb572"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb572-1"><a href="using-twitter.html#cb572-1" aria-hidden="true" tabindex="-1"></a>api <span class="op">=</span> tweepy.API(auth, wait_on_rate_limit <span class="op">=</span> <span class="va">True</span>)</span></code></pre></div>
+</div>
+</div>
+<div id="example-british-members-of-parliament-mp-twitter-network" class="section level2 hasAnchor" number="10.2">
+<h2><span class="header-section-number">10.2</span> Example: British Members of Parliament (MP) Twitter network<a href="using-twitter.html#example-british-members-of-parliament-mp-twitter-network" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The House of Commons is the lower house of the British Parliament, and consists of 650 elected members (MPs) across numerous political parties. Most of these MPs have public Twitter accounts, and the details can be downloaded from the <em>Politics Social</em> website.</p>
+<div class="sourceCode" id="cb573"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb573-1"><a href="using-twitter.html#cb573-1" aria-hidden="true" tabindex="-1"></a><span class="co"># download MP list from Politics Social</span></span>
+<span id="cb573-2"><a href="using-twitter.html#cb573-2" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">&quot;https://www.politics-social.com/api/list/csv/party&quot;</span></span>
+<span id="cb573-3"><a href="using-twitter.html#cb573-3" aria-hidden="true" tabindex="-1"></a>mp_list <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(url)</span>
+<span id="cb573-4"><a href="using-twitter.html#cb573-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mp_list)</span></code></pre></div>
+<pre><code>##              Name      Screen.name                              Party     Constituency Followers
+## 1   Lindsay Hoyle @LindsayHoyle_MP                            Speaker          Chorley     41553
+## 2    Claire Hanna     @ClaireHanna Social Democratic and Labour Party    Belfast South     41827
+## 3  Colum Eastwood   @columeastwood Social Democratic and Labour Party            Foyle     47452
+## 4   Mickey Brady    @MickeyBradySF                          Sinn Féin Newry and Armagh      5364
+## 5    Paul Maskey     @PaulMaskeyMP                          Sinn Féin     Belfast West     20287
+## 6 Francie Molloy    @FrancieMolloy                          Sinn Féin       Mid Ulster      9097
+##   New.followers.in.last.24.hours
+## 1                             -8
+## 2                             31
+## 3                             59
+## 4                             -2
+## 5                              5
+## 6                             65</code></pre>
+<p>There appear to be 590 active MPs on Twitter, although this may have changed since this list was compiled, so some of these users may return no data if their accounts have been disabled or deleted. In this example, we will study the interactions of these MPs. An interaction can be considered as a reply to, a mention of, a retweet of, or a quote tweet of another MP. We will use the number of interactions as an indication of the strength of the connection between two MPs. We will construct a graph from this data and then use the methods learned earlier in this book to perform interesting analyses, such as searching for influential members, or identifying Twitter communities or Twitter cliques of MPs.</p>
+<div id="creating-the-graph-from-twitter-data" class="section level3 hasAnchor" number="10.2.1">
+<h3><span class="header-section-number">10.2.1</span> Creating the graph from Twitter data<a href="using-twitter.html#creating-the-graph-from-twitter-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>We can use <code>rtweet</code>’s <code>get_timeline()</code> function to download a large amount of information about the most recent tweets of a given user. Twitter’s API allows a maximum of 3,200 most recent tweets to be downloaded, but downloading a large amount of tweets for a large number of users would take several hours at least, so in our case we will aim to download the 500 most recent tweets per user in order to keep the download manageable (though it will still take the better part of an hour at least to get this information for all MPs). As an example, and so as not to run up against rate limits, let’s download the Twitter timelines of the first 180 of the MPs in our list.</p>
+<div class="sourceCode" id="cb575"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb575-1"><a href="using-twitter.html#cb575-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get the 500 most recent tweets of the first 180 MPs to avoid rate limit</span></span>
+<span id="cb575-2"><a href="using-twitter.html#cb575-2" aria-hidden="true" tabindex="-1"></a><span class="co"># this may take a while</span></span>
+<span id="cb575-3"><a href="using-twitter.html#cb575-3" aria-hidden="true" tabindex="-1"></a>results1 <span class="ot">&lt;-</span> rtweet<span class="sc">::</span><span class="fu">get_timeline</span>(</span>
+<span id="cb575-4"><a href="using-twitter.html#cb575-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">user =</span> mp_list<span class="sc">$</span>Screen.name[<span class="dv">1</span><span class="sc">:</span><span class="dv">180</span>],</span>
+<span id="cb575-5"><a href="using-twitter.html#cb575-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> <span class="fu">rep</span>(<span class="dv">500</span>, <span class="dv">180</span>)</span>
+<span id="cb575-6"><a href="using-twitter.html#cb575-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>Let’s take a look at the dimensions of this data:</p>
+<div class="sourceCode" id="cb576"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb576-1"><a href="using-twitter.html#cb576-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(results1)</span></code></pre></div>
+<pre><code>## [1] 107456     90</code></pre>
+<p>This is a large data set with 107456 rows and 90 columns. It will help to see what the column names are:</p>
+<div class="sourceCode" id="cb578"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb578-1"><a href="using-twitter.html#cb578-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(results1)</span></code></pre></div>
+<pre><code>##  [1] &quot;user_id&quot;                 &quot;status_id&quot;               &quot;created_at&quot;              &quot;screen_name&quot;            
+##  [5] &quot;text&quot;                    &quot;source&quot;                  &quot;display_text_width&quot;      &quot;reply_to_status_id&quot;     
+##  [9] &quot;reply_to_user_id&quot;        &quot;reply_to_screen_name&quot;    &quot;is_quote&quot;                &quot;is_retweet&quot;             
+## [13] &quot;favorite_count&quot;          &quot;retweet_count&quot;           &quot;quote_count&quot;             &quot;reply_count&quot;            
+## [17] &quot;hashtags&quot;                &quot;symbols&quot;                 &quot;urls_url&quot;                &quot;urls_t.co&quot;              
+## [21] &quot;urls_expanded_url&quot;       &quot;media_url&quot;               &quot;media_t.co&quot;              &quot;media_expanded_url&quot;     
+## [25] &quot;media_type&quot;              &quot;ext_media_url&quot;           &quot;ext_media_t.co&quot;          &quot;ext_media_expanded_url&quot; 
+## [29] &quot;ext_media_type&quot;          &quot;mentions_user_id&quot;        &quot;mentions_screen_name&quot;    &quot;lang&quot;                   
+## [33] &quot;quoted_status_id&quot;        &quot;quoted_text&quot;             &quot;quoted_created_at&quot;       &quot;quoted_source&quot;          
+## [37] &quot;quoted_favorite_count&quot;   &quot;quoted_retweet_count&quot;    &quot;quoted_user_id&quot;          &quot;quoted_screen_name&quot;     
+## [41] &quot;quoted_name&quot;             &quot;quoted_followers_count&quot;  &quot;quoted_friends_count&quot;    &quot;quoted_statuses_count&quot;  
+## [45] &quot;quoted_location&quot;         &quot;quoted_description&quot;      &quot;quoted_verified&quot;         &quot;retweet_status_id&quot;      
+## [49] &quot;retweet_text&quot;            &quot;retweet_created_at&quot;      &quot;retweet_source&quot;          &quot;retweet_favorite_count&quot; 
+## [53] &quot;retweet_retweet_count&quot;   &quot;retweet_user_id&quot;         &quot;retweet_screen_name&quot;     &quot;retweet_name&quot;           
+## [57] &quot;retweet_followers_count&quot; &quot;retweet_friends_count&quot;   &quot;retweet_statuses_count&quot;  &quot;retweet_location&quot;       
+## [61] &quot;retweet_description&quot;     &quot;retweet_verified&quot;        &quot;place_url&quot;               &quot;place_name&quot;             
+## [65] &quot;place_full_name&quot;         &quot;place_type&quot;              &quot;country&quot;                 &quot;country_code&quot;           
+## [69] &quot;geo_coords&quot;              &quot;coords_coords&quot;           &quot;bbox_coords&quot;             &quot;status_url&quot;             
+## [73] &quot;name&quot;                    &quot;location&quot;                &quot;description&quot;             &quot;url&quot;                    
+## [77] &quot;protected&quot;               &quot;followers_count&quot;         &quot;friends_count&quot;           &quot;listed_count&quot;           
+## [81] &quot;statuses_count&quot;          &quot;favourites_count&quot;        &quot;account_created_at&quot;      &quot;verified&quot;               
+## [85] &quot;profile_url&quot;             &quot;profile_expanded_url&quot;    &quot;account_lang&quot;            &quot;profile_banner_url&quot;     
+## [89] &quot;profile_background_url&quot;  &quot;profile_image_url&quot;</code></pre>
+<p>We can see some fields that are of interest for our analysis, particularly fields that end in <code>screen_name</code> as these will give information on users that were interacted with in the tweet. Let’s take a look at these:</p>
+<div class="sourceCode" id="cb580"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb580-1"><a href="using-twitter.html#cb580-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb580-2"><a href="using-twitter.html#cb580-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb580-3"><a href="using-twitter.html#cb580-3" aria-hidden="true" tabindex="-1"></a>results1 <span class="sc">|&gt;</span> </span>
+<span id="cb580-4"><a href="using-twitter.html#cb580-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="fu">ends_with</span>(<span class="st">&quot;screen_name&quot;</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb580-5"><a href="using-twitter.html#cb580-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 5
+##   screen_name     reply_to_screen_name mentions_screen_name quoted_screen_name retweet_screen_name
+##   &lt;chr&gt;           &lt;chr&gt;                &lt;list&gt;               &lt;chr&gt;              &lt;chr&gt;              
+## 1 LindsayHoyle_MP &lt;NA&gt;                 &lt;chr [1]&gt;            &lt;NA&gt;               ChorleyCouncil     
+## 2 LindsayHoyle_MP &lt;NA&gt;                 &lt;chr [1]&gt;            &lt;NA&gt;               janeyellene        
+## 3 LindsayHoyle_MP &lt;NA&gt;                 &lt;chr [1]&gt;            IPhillips79        &lt;NA&gt;               
+## 4 LindsayHoyle_MP &lt;NA&gt;                 &lt;chr [1]&gt;            &lt;NA&gt;               FirstFalklands     
+## 5 LindsayHoyle_MP &lt;NA&gt;                 &lt;chr [1]&gt;            &lt;NA&gt;               stae_elephants     
+## 6 LindsayHoyle_MP &lt;NA&gt;                 &lt;chr [1]&gt;            &lt;NA&gt;               janeyellene</code></pre>
+<p>It looks like <code>screen_name</code> is the user’s Twitter handle, <code>reply_to_screen_name</code> likely gives the Twitter handle the user was replying to if it was a reply, <code>mentions_screen_name</code> is a vector containing the handles of anyone mentioned in the tweet, <code>quoted_screen_name</code> gives the handle of who is being quote tweeted and <code>retweet_screen_name</code> gives the handle of who is being retweeted. Later on, we may also wish to grab a couple of these fields for further information or for visualization purposes, such as the URL of the MPs Twitter image (<code>profile_image_url</code>) or their follower count (<code>followers_count</code>).</p>
+<p>Before we start extracting all these, we will need to download the remainder of the MPs timelines. This will need to be done in four attempts so as to avoid rate limits. Each attempt will need to be spaced by at least 15 minutes.</p>
+<div class="sourceCode" id="cb582"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb582-1"><a href="using-twitter.html#cb582-1" aria-hidden="true" tabindex="-1"></a><span class="co"># second batch (at least 15 mins since first batch)</span></span>
+<span id="cb582-2"><a href="using-twitter.html#cb582-2" aria-hidden="true" tabindex="-1"></a>results2 <span class="ot">&lt;-</span> rtweet<span class="sc">::</span><span class="fu">get_timeline</span>(</span>
+<span id="cb582-3"><a href="using-twitter.html#cb582-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">user =</span> mp_list<span class="sc">$</span>Screen.name[<span class="dv">181</span><span class="sc">:</span><span class="dv">360</span>],</span>
+<span id="cb582-4"><a href="using-twitter.html#cb582-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> <span class="fu">rep</span>(<span class="dv">500</span>, <span class="dv">180</span>)</span>
+<span id="cb582-5"><a href="using-twitter.html#cb582-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb582-6"><a href="using-twitter.html#cb582-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb582-7"><a href="using-twitter.html#cb582-7" aria-hidden="true" tabindex="-1"></a><span class="co"># third batch (at least 15 mins since second batch)</span></span>
+<span id="cb582-8"><a href="using-twitter.html#cb582-8" aria-hidden="true" tabindex="-1"></a>results3 <span class="ot">&lt;-</span> rtweet<span class="sc">::</span><span class="fu">get_timeline</span>(</span>
+<span id="cb582-9"><a href="using-twitter.html#cb582-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">user =</span> mp_list<span class="sc">$</span>Screen.name[<span class="dv">361</span><span class="sc">:</span><span class="dv">540</span>],</span>
+<span id="cb582-10"><a href="using-twitter.html#cb582-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> <span class="fu">rep</span>(<span class="dv">500</span>, <span class="dv">180</span>)</span>
+<span id="cb582-11"><a href="using-twitter.html#cb582-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb582-12"><a href="using-twitter.html#cb582-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb582-13"><a href="using-twitter.html#cb582-13" aria-hidden="true" tabindex="-1"></a><span class="co"># fourth batch (at least 15 mins since third batch)</span></span>
+<span id="cb582-14"><a href="using-twitter.html#cb582-14" aria-hidden="true" tabindex="-1"></a>results4 <span class="ot">&lt;-</span> rtweet<span class="sc">::</span><span class="fu">get_timeline</span>(</span>
+<span id="cb582-15"><a href="using-twitter.html#cb582-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">user =</span> mp_list<span class="sc">$</span>Screen.name[<span class="dv">541</span><span class="sc">:</span><span class="fu">length</span>(mp_list<span class="sc">$</span>Screen.name)],</span>
+<span id="cb582-16"><a href="using-twitter.html#cb582-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">n =</span> <span class="fu">rep</span>(<span class="dv">500</span>, <span class="fu">length</span>(mp_list<span class="sc">$</span>Screen.name) <span class="sc">-</span> <span class="dv">540</span>)</span>
+<span id="cb582-17"><a href="using-twitter.html#cb582-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb582-18"><a href="using-twitter.html#cb582-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb582-19"><a href="using-twitter.html#cb582-19" aria-hidden="true" tabindex="-1"></a><span class="co"># combine all results</span></span>
+<span id="cb582-20"><a href="using-twitter.html#cb582-20" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">rbind</span>(results1, results2, results3, results4)</span></code></pre></div>
+<p>Now we can write some functions to count the interactions that each MP has with other MPs:</p>
+<div class="sourceCode" id="cb583"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb583-1"><a href="using-twitter.html#cb583-1" aria-hidden="true" tabindex="-1"></a><span class="co"># function to create edgelist for single MP</span></span>
+<span id="cb583-2"><a href="using-twitter.html#cb583-2" aria-hidden="true" tabindex="-1"></a>count_and_group <span class="ot">&lt;-</span> <span class="cf">function</span> (df) {</span>
+<span id="cb583-3"><a href="using-twitter.html#cb583-3" aria-hidden="true" tabindex="-1"></a>  df <span class="sc">|&gt;</span> </span>
+<span id="cb583-4"><a href="using-twitter.html#cb583-4" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="fu">ends_with</span>(<span class="st">&quot;screen_name&quot;</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb583-5"><a href="using-twitter.html#cb583-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">unlist</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb583-6"><a href="using-twitter.html#cb583-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tibble</span>(<span class="at">interacted_with =</span> _) <span class="sc">|&gt;</span> </span>
+<span id="cb583-7"><a href="using-twitter.html#cb583-7" aria-hidden="true" tabindex="-1"></a>    tidyr<span class="sc">::</span><span class="fu">drop_na</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb583-8"><a href="using-twitter.html#cb583-8" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">group_by</span>(interacted_with) <span class="sc">|&gt;</span> </span>
+<span id="cb583-9"><a href="using-twitter.html#cb583-9" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="at">weight =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb583-10"><a href="using-twitter.html#cb583-10" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(</span>
+<span id="cb583-11"><a href="using-twitter.html#cb583-11" aria-hidden="true" tabindex="-1"></a>      <span class="co"># ensures that only MP interactions are returned</span></span>
+<span id="cb583-12"><a href="using-twitter.html#cb583-12" aria-hidden="true" tabindex="-1"></a>      interacted_with <span class="sc">%in%</span> <span class="fu">substr</span>(mp_list<span class="sc">$</span>Screen.name, <span class="dv">2</span>, <span class="fu">nchar</span>(mp_list<span class="sc">$</span>Screen.name))</span>
+<span id="cb583-13"><a href="using-twitter.html#cb583-13" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb583-14"><a href="using-twitter.html#cb583-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb583-15"><a href="using-twitter.html#cb583-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb583-16"><a href="using-twitter.html#cb583-16" aria-hidden="true" tabindex="-1"></a><span class="co"># function to generate edgelist across all MPs</span></span>
+<span id="cb583-17"><a href="using-twitter.html#cb583-17" aria-hidden="true" tabindex="-1"></a>create_edgelist <span class="ot">&lt;-</span> <span class="cf">function</span>(tweet_df) {</span>
+<span id="cb583-18"><a href="using-twitter.html#cb583-18" aria-hidden="true" tabindex="-1"></a>  tweet_df <span class="sc">|&gt;</span> </span>
+<span id="cb583-19"><a href="using-twitter.html#cb583-19" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">nest_by</span>(screen_name) <span class="sc">|&gt;</span> </span>
+<span id="cb583-20"><a href="using-twitter.html#cb583-20" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="fu">count_and_group</span>(data)) <span class="sc">|&gt;</span> </span>
+<span id="cb583-21"><a href="using-twitter.html#cb583-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ignore interactions with self</span></span>
+<span id="cb583-22"><a href="using-twitter.html#cb583-22" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(screen_name <span class="sc">!=</span> interacted_with) <span class="sc">|&gt;</span> </span>
+<span id="cb583-23"><a href="using-twitter.html#cb583-23" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="at">from =</span> screen_name, <span class="at">to =</span> interacted_with)</span>
+<span id="cb583-24"><a href="using-twitter.html#cb583-24" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb583-25"><a href="using-twitter.html#cb583-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb583-26"><a href="using-twitter.html#cb583-26" aria-hidden="true" tabindex="-1"></a><span class="co"># create final edgelist</span></span>
+<span id="cb583-27"><a href="using-twitter.html#cb583-27" aria-hidden="true" tabindex="-1"></a>mp_edgelist <span class="ot">&lt;-</span> <span class="fu">create_edgelist</span>(results)</span></code></pre></div>
+<p>Let’s take a quick look to check that worked:</p>
+<div class="sourceCode" id="cb584"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb584-1"><a href="using-twitter.html#cb584-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mp_edgelist)</span></code></pre></div>
+<pre><code>##           from              to weight
+## 1 _OliviaBlake    Afzal4Gorton      2
+## 2 _OliviaBlake alanwhiteheadmp      4
+## 3 _OliviaBlake   Alex_Stafford      4
+## 4 _OliviaBlake       alexsobel      4
+## 5 _OliviaBlake  AlokSharma_RDG      1
+## 6 _OliviaBlake  AndyMcDonaldMP      2</code></pre>
+<p>Looks good. Now let’s generate a vertex dataframe with some information on each MP. We can include their name, Twitter handle, profile image URL, follower count, political party and the constituency they represent.</p>
+<div class="sourceCode" id="cb586"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb586-1"><a href="using-twitter.html#cb586-1" aria-hidden="true" tabindex="-1"></a>mp_vertices <span class="ot">&lt;-</span> results <span class="sc">%&gt;%</span></span>
+<span id="cb586-2"><a href="using-twitter.html#cb586-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(screen_name, profile_image_url, followers_count) <span class="sc">%&gt;%</span></span>
+<span id="cb586-3"><a href="using-twitter.html#cb586-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb586-4"><a href="using-twitter.html#cb586-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(</span>
+<span id="cb586-5"><a href="using-twitter.html#cb586-5" aria-hidden="true" tabindex="-1"></a>    mp_list <span class="sc">|&gt;</span> </span>
+<span id="cb586-6"><a href="using-twitter.html#cb586-6" aria-hidden="true" tabindex="-1"></a>      dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb586-7"><a href="using-twitter.html#cb586-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">screen_name =</span> <span class="fu">substr</span>(Screen.name, <span class="dv">2</span>, <span class="fu">nchar</span>(Screen.name))</span>
+<span id="cb586-8"><a href="using-twitter.html#cb586-8" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">|&gt;</span> </span>
+<span id="cb586-9"><a href="using-twitter.html#cb586-9" aria-hidden="true" tabindex="-1"></a>      dplyr<span class="sc">::</span><span class="fu">select</span>(</span>
+<span id="cb586-10"><a href="using-twitter.html#cb586-10" aria-hidden="true" tabindex="-1"></a>        screen_name,</span>
+<span id="cb586-11"><a href="using-twitter.html#cb586-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">constituency =</span> Constituency,</span>
+<span id="cb586-12"><a href="using-twitter.html#cb586-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">party =</span> Party,</span>
+<span id="cb586-13"><a href="using-twitter.html#cb586-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">name =</span> Name</span>
+<span id="cb586-14"><a href="using-twitter.html#cb586-14" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb586-15"><a href="using-twitter.html#cb586-15" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<p>Let’s also attach some official party colors for later use in visualization.</p>
+<div class="sourceCode" id="cb587"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb587-1"><a href="using-twitter.html#cb587-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add party colours from politics social</span></span>
+<span id="cb587-2"><a href="using-twitter.html#cb587-2" aria-hidden="true" tabindex="-1"></a>parties <span class="ot">&lt;-</span> mp_vertices<span class="sc">$</span>party <span class="sc">|&gt;</span> <span class="fu">unique</span>()</span>
+<span id="cb587-3"><a href="using-twitter.html#cb587-3" aria-hidden="true" tabindex="-1"></a>party_colours <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;#000000&quot;</span>, <span class="st">&quot;#216a4d&quot;</span>, <span class="st">&quot;#008a49&quot;</span>,</span>
+<span id="cb587-4"><a href="using-twitter.html#cb587-4" aria-hidden="true" tabindex="-1"></a>                   <span class="st">&quot;#d3c200&quot;</span>, <span class="st">&quot;#3d8028&quot;</span>, <span class="st">&quot;#f5b52e&quot;</span>,</span>
+<span id="cb587-5"><a href="using-twitter.html#cb587-5" aria-hidden="true" tabindex="-1"></a>                   <span class="st">&quot;#dd0339&quot;</span>, <span class="st">&quot;#cccccc&quot;</span>, <span class="st">&quot;#66ab21&quot;</span>,</span>
+<span id="cb587-6"><a href="using-twitter.html#cb587-6" aria-hidden="true" tabindex="-1"></a>                   <span class="st">&quot;#c2282a&quot;</span>, <span class="st">&quot;#018fda&quot;</span>, <span class="st">&quot;#eec52e&quot;</span>)</span>
+<span id="cb587-7"><a href="using-twitter.html#cb587-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb587-8"><a href="using-twitter.html#cb587-8" aria-hidden="true" tabindex="-1"></a>color_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb587-9"><a href="using-twitter.html#cb587-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">party =</span> parties,</span>
+<span id="cb587-10"><a href="using-twitter.html#cb587-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">colour =</span> party_colours</span>
+<span id="cb587-11"><a href="using-twitter.html#cb587-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb587-12"><a href="using-twitter.html#cb587-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb587-13"><a href="using-twitter.html#cb587-13" aria-hidden="true" tabindex="-1"></a>mp_vertices <span class="ot">&lt;-</span> mp_vertices <span class="sc">|&gt;</span> </span>
+<span id="cb587-14"><a href="using-twitter.html#cb587-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(color_df)</span></code></pre></div>
+<p>Let’s take a quick look to see if our vertex dataframe looks good:</p>
+<div class="sourceCode" id="cb588"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb588-1"><a href="using-twitter.html#cb588-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mp_vertices)</span></code></pre></div>
+<pre><code>##       screen_name                                                                           profile_image_url
+## 1 LindsayHoyle_MP                 http://pbs.twimg.com/profile_images/1219208145471516672/d5uiK99E_normal.jpg
+## 2     ClaireHanna                 http://pbs.twimg.com/profile_images/1229882927082803200/cd9N4yaE_normal.jpg
+## 3   columeastwood                 http://pbs.twimg.com/profile_images/1503856507229777921/vtRXBZyB_normal.jpg
+## 4   MickeyBradySF                 http://pbs.twimg.com/profile_images/1240647475171676163/HO8w04kr_normal.jpg
+## 5    PaulMaskeyMP                 http://pbs.twimg.com/profile_images/1394647673203040256/3pHc3qER_normal.jpg
+## 6   FrancieMolloy http://pbs.twimg.com/profile_images/2966488222/0e09c703ed91b0f3f7b48ebddf6bb2eb_normal.jpeg
+##   followers_count     constituency                              party            name  colour
+## 1           41560          Chorley                            Speaker   Lindsay Hoyle #000000
+## 2           41802    Belfast South Social Democratic and Labour Party    Claire Hanna #216a4d
+## 3           47402            Foyle Social Democratic and Labour Party  Colum Eastwood #216a4d
+## 4            5366 Newry and Armagh                          Sinn Féin   Mickey Brady  #008a49
+## 5           20281     Belfast West                          Sinn Féin    Paul Maskey  #008a49
+## 6            9035       Mid Ulster                          Sinn Féin Francie Molloy  #008a49</code></pre>
+<p>Looks good. As a final step, let’s just make sure that any past interactions that occurred with Twitter accounts which are no longer active are removed from the edgelist, as this could cause problems.</p>
+<div class="sourceCode" id="cb590"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb590-1"><a href="using-twitter.html#cb590-1" aria-hidden="true" tabindex="-1"></a>mp_edgelist <span class="ot">&lt;-</span> mp_edgelist <span class="sc">|&gt;</span> </span>
+<span id="cb590-2"><a href="using-twitter.html#cb590-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(to <span class="sc">%in%</span> mp_vertices<span class="sc">$</span>screen_name)</span></code></pre></div>
+<p>So it looks like we now have a rich edgelist and a vertex dataframe and we are ready to proceed to our visualization and analysis of the MP Twitter network.</p>
+</div>
+<div id="analyzing-the-mp-twitter-network" class="section level3 hasAnchor" number="10.2.2">
+<h3><span class="header-section-number">10.2.2</span> Analyzing the MP Twitter network<a href="using-twitter.html#analyzing-the-mp-twitter-network" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>If you don’t have the time or computational capacity to follow the steps in the previous section, the final dataframes I created can be downloaded at <a href="https://ona-book.org/data/mp_edgelist.csv" class="uri">https://ona-book.org/data/mp_edgelist.csv</a> and <a href="https://ona-book.org/data/mp_vertices.csv" class="uri">https://ona-book.org/data/mp_vertices.csv</a>. These dataframes are correct as at the end of May 2022. It is recommended that you work from these downloaded dataframes if you wish to precisely replicate the remainder of this chapter. The results from the following sections will be different if you use more recently generated data.</p>
+<div class="sourceCode" id="cb591"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb591-1"><a href="using-twitter.html#cb591-1" aria-hidden="true" tabindex="-1"></a><span class="co"># if needed, download the results of the previous section as at May 2022 </span></span>
+<span id="cb591-2"><a href="using-twitter.html#cb591-2" aria-hidden="true" tabindex="-1"></a>mp_edgelist <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://ona-book.org/data/mp_edgelist.csv&quot;</span>)</span>
+<span id="cb591-3"><a href="using-twitter.html#cb591-3" aria-hidden="true" tabindex="-1"></a>mp_vertices <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://ona-book.org/data/mp_vertices.csv&quot;</span>)</span></code></pre></div>
+<p>Let’s create two weighted graphs - one directed and one undirected - for the rest of our analysis.</p>
+<div class="sourceCode" id="cb592"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb592-1"><a href="using-twitter.html#cb592-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(igraph)</span>
+<span id="cb592-2"><a href="using-twitter.html#cb592-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb592-3"><a href="using-twitter.html#cb592-3" aria-hidden="true" tabindex="-1"></a>mp_graph_directed <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(</span>
+<span id="cb592-4"><a href="using-twitter.html#cb592-4" aria-hidden="true" tabindex="-1"></a>  mp_edgelist, </span>
+<span id="cb592-5"><a href="using-twitter.html#cb592-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">vertices =</span> mp_vertices</span>
+<span id="cb592-6"><a href="using-twitter.html#cb592-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb592-7"><a href="using-twitter.html#cb592-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb592-8"><a href="using-twitter.html#cb592-8" aria-hidden="true" tabindex="-1"></a>mp_graph_undirected <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(</span>
+<span id="cb592-9"><a href="using-twitter.html#cb592-9" aria-hidden="true" tabindex="-1"></a>  mp_edgelist, </span>
+<span id="cb592-10"><a href="using-twitter.html#cb592-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">vertices =</span> mp_vertices,</span>
+<span id="cb592-11"><a href="using-twitter.html#cb592-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">directed =</span> <span class="cn">FALSE</span></span>
+<span id="cb592-12"><a href="using-twitter.html#cb592-12" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>Let’s start by looking for some communities based on Twitter interactions. We will use the Leiden community detection algorithm to find maximum modularity communities on the weighted graph. Recall that community detection must be performed on undirected graphs.</p>
+<div class="sourceCode" id="cb593"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb593-1"><a href="using-twitter.html#cb593-1" aria-hidden="true" tabindex="-1"></a><span class="co"># run clustering algorithm</span></span>
+<span id="cb593-2"><a href="using-twitter.html#cb593-2" aria-hidden="true" tabindex="-1"></a>leiden_clusters <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">cluster_leiden</span>(</span>
+<span id="cb593-3"><a href="using-twitter.html#cb593-3" aria-hidden="true" tabindex="-1"></a>  mp_graph_undirected,</span>
+<span id="cb593-4"><a href="using-twitter.html#cb593-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">objective_function =</span> <span class="st">&quot;modularity&quot;</span>,</span>
+<span id="cb593-5"><a href="using-twitter.html#cb593-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">weights =</span> <span class="fu">E</span>(mp_graph_undirected)<span class="sc">$</span>weight</span>
+<span id="cb593-6"><a href="using-twitter.html#cb593-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb593-7"><a href="using-twitter.html#cb593-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb593-8"><a href="using-twitter.html#cb593-8" aria-hidden="true" tabindex="-1"></a><span class="co"># assign each vertex to a cluster</span></span>
+<span id="cb593-9"><a href="using-twitter.html#cb593-9" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(mp_graph_undirected)<span class="sc">$</span>cluster <span class="ot">&lt;-</span> <span class="fu">membership</span>(leiden_clusters)</span></code></pre></div>
+<p>Let’s determine the modularity of our clustering and the number of clusters determined.</p>
+<div class="sourceCode" id="cb594"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb594-1"><a href="using-twitter.html#cb594-1" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">modularity</span>(</span>
+<span id="cb594-2"><a href="using-twitter.html#cb594-2" aria-hidden="true" tabindex="-1"></a>  mp_graph_undirected,</span>
+<span id="cb594-3"><a href="using-twitter.html#cb594-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">membership =</span> <span class="fu">V</span>(mp_graph_undirected)<span class="sc">$</span>cluster,</span>
+<span id="cb594-4"><a href="using-twitter.html#cb594-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">weights =</span> <span class="fu">E</span>(mp_graph_undirected)<span class="sc">$</span>weight</span>
+<span id="cb594-5"><a href="using-twitter.html#cb594-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## [1] 0.4699543</code></pre>
+<div class="sourceCode" id="cb596"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb596-1"><a href="using-twitter.html#cb596-1" aria-hidden="true" tabindex="-1"></a><span class="fu">max</span>(<span class="fu">V</span>(mp_graph_undirected)<span class="sc">$</span>cluster)</span></code></pre></div>
+<pre><code>## [1] 6</code></pre>
+<p>Now let’s visualize our six communities graph in Figure <a href="using-twitter.html#fig:leiden-comms">10.1</a>:</p>
+<div class="sourceCode" id="cb598"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb598-1"><a href="using-twitter.html#cb598-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggraph)</span>
+<span id="cb598-2"><a href="using-twitter.html#cb598-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb598-3"><a href="using-twitter.html#cb598-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb598-4"><a href="using-twitter.html#cb598-4" aria-hidden="true" tabindex="-1"></a>(g1 <span class="ot">&lt;-</span> <span class="fu">ggraph</span>(mp_graph_undirected, <span class="at">layout =</span> <span class="st">&quot;fr&quot;</span>) <span class="sc">+</span></span>
+<span id="cb598-5"><a href="using-twitter.html#cb598-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span> </span>
+<span id="cb598-6"><a href="using-twitter.html#cb598-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> <span class="fu">factor</span>(cluster)), <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb598-7"><a href="using-twitter.html#cb598-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="st">&quot;Leiden community&quot;</span>) <span class="sc">+</span></span>
+<span id="cb598-8"><a href="using-twitter.html#cb598-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>())</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:leiden-comms"></span>
+<img src="www/using_twitter/leiden-comms.png" alt="Twitter communities of British MPs as detected by the Leiden algorithm" width="90%" />
+<p class="caption">
+Figure 10.1: Twitter communities of British MPs as detected by the Leiden algorithm
+</p>
+</div>
+<p>To help characterize each community, we can identify the most important individual in each in terms of degree centrality.</p>
+<div class="sourceCode" id="cb599"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb599-1"><a href="using-twitter.html#cb599-1" aria-hidden="true" tabindex="-1"></a>(highest_degree <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">community =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">max</span>(<span class="fu">V</span>(mp_graph_undirected)<span class="sc">$</span>cluster)) <span class="sc">|&gt;</span> </span>
+<span id="cb599-2"><a href="using-twitter.html#cb599-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">rowwise</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb599-3"><a href="using-twitter.html#cb599-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb599-4"><a href="using-twitter.html#cb599-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">highest_degree =</span> <span class="fu">induced_subgraph</span>(</span>
+<span id="cb599-5"><a href="using-twitter.html#cb599-5" aria-hidden="true" tabindex="-1"></a>      mp_graph_undirected,</span>
+<span id="cb599-6"><a href="using-twitter.html#cb599-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">vids =</span> <span class="fu">V</span>(mp_graph_undirected)[<span class="fu">V</span>(mp_graph_undirected)<span class="sc">$</span>cluster <span class="sc">==</span> community]) <span class="sc">|&gt;</span> </span>
+<span id="cb599-7"><a href="using-twitter.html#cb599-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">degree</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb599-8"><a href="using-twitter.html#cb599-8" aria-hidden="true" tabindex="-1"></a>      <span class="fu">which.max</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb599-9"><a href="using-twitter.html#cb599-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">names</span>(),</span>
+<span id="cb599-10"><a href="using-twitter.html#cb599-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">community_size =</span> <span class="fu">V</span>(mp_graph_undirected)[<span class="fu">V</span>(mp_graph_undirected)<span class="sc">$</span>cluster <span class="sc">==</span> community] <span class="sc">|&gt;</span> </span>
+<span id="cb599-11"><a href="using-twitter.html#cb599-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">length</span>()</span>
+<span id="cb599-12"><a href="using-twitter.html#cb599-12" aria-hidden="true" tabindex="-1"></a>  ))</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 3
+## # Rowwise: 
+##   community highest_degree    community_size
+##       &lt;int&gt; &lt;chr&gt;                      &lt;int&gt;
+## 1         1 &quot;Keir Starmer &quot;              163
+## 2         2 &quot;Layla Moran&quot;                 29
+## 3         3 &quot;Philip Davies &quot;               2
+## 4         4 &quot;Ian Blackford &quot;              55
+## 5         5 &quot;John McDonnell &quot;             35
+## 6         6 &quot;Boris Johnson &quot;             301</code></pre>
+<p>Those with a knowledge of current British politics will be able to identify that the four largest political parties are represented here:</p>
+<ul>
+<li>Boris Johnson at the time of writing is the current Prime Minister and leader of the largest party - The Conservative and Unionist Party</li>
+<li>Sir Keir Starmer is the current leader of the Labour Party</li>
+<li>Ian Blackford is the current parliamentary leader of the Scottish National Party</li>
+<li>Layla Moran is a prominent MP in the Liberal Democratic Party</li>
+</ul>
+<p>The other two figures appear to represent clusters which are not well aligned with current party groupings:</p>
+<ul>
+<li>John McDonnell is the former Shadow Chancellor and a member of a leftist faction within the Labour Party. Examination of community 4 will reveal several other members of this leftist faction, such as Jeremy Corbyn and Diane Abbott.</li>
+<li>Philip Davies is a member of the Conservative and Unionist Party, but is currently known as one of the most rebellious MPs in parliament, having voted against his party over 250 times in his career. The other member of this small community of two is his wife Esther McVey, also an MP.</li>
+</ul>
+<p>Given that this suggests some alignment of our communities with political party groupings, let’s examine the modularity of the political party communities:</p>
+<div class="sourceCode" id="cb601"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb601-1"><a href="using-twitter.html#cb601-1" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">modularity</span>(</span>
+<span id="cb601-2"><a href="using-twitter.html#cb601-2" aria-hidden="true" tabindex="-1"></a>  mp_graph_undirected,</span>
+<span id="cb601-3"><a href="using-twitter.html#cb601-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">membership =</span> <span class="fu">as.factor</span>(<span class="fu">V</span>(mp_graph_undirected)<span class="sc">$</span>party)</span>
+<span id="cb601-4"><a href="using-twitter.html#cb601-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## [1] 0.3560839</code></pre>
+<p>We can see that the modularity of the political party communities is inferior to our Leiden communities, but the modularities are not dissimilar, suggesting significant overlap. The best way to compare is to visualize the two sets of communities side-by-side, as in Figure <a href="using-twitter.html#fig:leiden-comms-v-party">10.2</a> with the Leiden communities on the left and the ground truth political party communities on the right:</p>
+<div class="sourceCode" id="cb603"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb603-1"><a href="using-twitter.html#cb603-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb603-2"><a href="using-twitter.html#cb603-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb603-3"><a href="using-twitter.html#cb603-3" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize Leiden communities</span></span>
+<span id="cb603-4"><a href="using-twitter.html#cb603-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb603-5"><a href="using-twitter.html#cb603-5" aria-hidden="true" tabindex="-1"></a>g1 <span class="ot">&lt;-</span> <span class="fu">ggraph</span>(mp_graph_undirected, <span class="at">layout =</span> <span class="st">&quot;fr&quot;</span>) <span class="sc">+</span></span>
+<span id="cb603-6"><a href="using-twitter.html#cb603-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span> </span>
+<span id="cb603-7"><a href="using-twitter.html#cb603-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> <span class="fu">factor</span>(cluster)), <span class="at">size =</span> <span class="dv">1</span>, <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb603-8"><a href="using-twitter.html#cb603-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span>
+<span id="cb603-9"><a href="using-twitter.html#cb603-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb603-10"><a href="using-twitter.html#cb603-10" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize ground truth political party communities</span></span>
+<span id="cb603-11"><a href="using-twitter.html#cb603-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb603-12"><a href="using-twitter.html#cb603-12" aria-hidden="true" tabindex="-1"></a>party_colours <span class="ot">&lt;-</span> mp_vertices <span class="sc">|&gt;</span> </span>
+<span id="cb603-13"><a href="using-twitter.html#cb603-13" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(party, colour) <span class="sc">|&gt;</span> </span>
+<span id="cb603-14"><a href="using-twitter.html#cb603-14" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">distinct</span>()</span>
+<span id="cb603-15"><a href="using-twitter.html#cb603-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb603-16"><a href="using-twitter.html#cb603-16" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb603-17"><a href="using-twitter.html#cb603-17" aria-hidden="true" tabindex="-1"></a>g2 <span class="ot">&lt;-</span> <span class="fu">ggraph</span>(mp_graph_undirected, <span class="at">layout =</span> <span class="st">&quot;fr&quot;</span>) <span class="sc">+</span></span>
+<span id="cb603-18"><a href="using-twitter.html#cb603-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span> </span>
+<span id="cb603-19"><a href="using-twitter.html#cb603-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> <span class="fu">factor</span>(party)), <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb603-20"><a href="using-twitter.html#cb603-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span> </span>
+<span id="cb603-21"><a href="using-twitter.html#cb603-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(<span class="at">limits =</span> party_colours<span class="sc">$</span>party, </span>
+<span id="cb603-22"><a href="using-twitter.html#cb603-22" aria-hidden="true" tabindex="-1"></a>                      <span class="at">values =</span> party_colours<span class="sc">$</span>colour, <span class="at">name =</span> <span class="st">&quot;Party (Right Hand Graph)&quot;</span>) </span>
+<span id="cb603-23"><a href="using-twitter.html#cb603-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb603-24"><a href="using-twitter.html#cb603-24" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize side by side</span></span>
+<span id="cb603-25"><a href="using-twitter.html#cb603-25" aria-hidden="true" tabindex="-1"></a>g1 <span class="sc">+</span> g2</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:leiden-comms-v-party"></span>
+<img src="www/using_twitter/leiden-comms-v-party.png" alt="Comparison of Leiden communities with ground truth political party communities" width="90%" />
+<p class="caption">
+Figure 10.2: Comparison of Leiden communities with ground truth political party communities
+</p>
+</div>
+<p>It may also be interesting to identify some large cliques in the graph:</p>
+<div class="sourceCode" id="cb604"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb604-1"><a href="using-twitter.html#cb604-1" aria-hidden="true" tabindex="-1"></a>(largest_cliques <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">largest_cliques</span>(mp_graph_undirected))</span></code></pre></div>
+<pre><code>## [[1]]
+## + 21/585 vertices, named, from e777c98:
+##  [1] Emily Thornberry     Keir Starmer         Angela Rayner        Boris Johnson        Anneliese Dodds     
+##  [6] Yvette Cooper        Louise Haigh         Lisa Nandy           David Lammy          Jonathan Ashworth   
+## [11] Bridget Phillipson   Kate Green           Sharon Hodgson       Nick Thomas-Symonds  Edward Miliband     
+## [16] Jonathan Reynolds    Peter Kyle           Lucy Powell          Vicky Foxcroft       Jo Stevens          
+## [21] Mary Glindon        
+## 
+## [[2]]
+## + 21/585 vertices, named, from e777c98:
+##  [1] Emily Thornberry     Keir Starmer         Angela Rayner        Rachel Reeves        Anneliese Dodds     
+##  [6] Yvette Cooper        David Lammy          Louise Haigh         Lisa Nandy           Jonathan Ashworth   
+## [11] Bridget Phillipson   Sharon Hodgson       Lucy Powell          Mary Glindon         Kate Green          
+## [16] Jonathan Reynolds    Jo Stevens           Peter Kyle           Nick Thomas-Symonds  Edward Miliband     
+## [21] Vicky Foxcroft      
+## 
+## [[3]]
+## + 21/585 vertices, named, from e777c98:
+##  [1] Emily Thornberry     Keir Starmer         Angela Rayner        Rachel Reeves        Anneliese Dodds     
+##  [6] Yvette Cooper        David Lammy          Louise Haigh         Lisa Nandy           Jonathan Ashworth   
+## [11] Bridget Phillipson   Sharon Hodgson       Lucy Powell          Tulip Siddiq         Peter Kyle          
+## [16] Kate Green           Jo Stevens           Jonathan Reynolds    Nick Thomas-Symonds  Vicky Foxcroft      
+## [21] Edward Miliband     
+## 
+## [[4]]
+## + 21/585 vertices, named, from e777c98:
+##  [1] Emily Thornberry     Keir Starmer         Angela Rayner        Rachel Reeves        Anneliese Dodds     
+##  [6] Yvette Cooper        David Lammy          Louise Haigh         Lisa Nandy           Jonathan Ashworth   
+## [11] Bridget Phillipson   Sharon Hodgson       Lucy Powell          Tulip Siddiq         Peter Kyle          
+## [16] Kate Green           Gill Furniss         Nick Thomas-Symonds  Jonathan Reynolds    Vicky Foxcroft      
+## [21] Edward Miliband</code></pre>
+<p>These cliques are mostly comprised of members of Labour’s current shadow cabinet. We can also search for the largest Conservative Party clique:</p>
+<div class="sourceCode" id="cb606"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb606-1"><a href="using-twitter.html#cb606-1" aria-hidden="true" tabindex="-1"></a>conservative_graph <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">induced_subgraph</span>(</span>
+<span id="cb606-2"><a href="using-twitter.html#cb606-2" aria-hidden="true" tabindex="-1"></a>  mp_graph_undirected,</span>
+<span id="cb606-3"><a href="using-twitter.html#cb606-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">vids =</span> <span class="fu">V</span>(mp_graph_undirected)[<span class="fu">V</span>(mp_graph_undirected)<span class="sc">$</span>party <span class="sc">==</span> <span class="st">&quot;Conservative&quot;</span>]</span>
+<span id="cb606-4"><a href="using-twitter.html#cb606-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb606-5"><a href="using-twitter.html#cb606-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb606-6"><a href="using-twitter.html#cb606-6" aria-hidden="true" tabindex="-1"></a>(largest_conservative_cliques <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">largest_cliques</span>(conservative_graph))</span></code></pre></div>
+<pre><code>## [[1]]
+## + 19/308 vertices, named, from ae4932f:
+##  [1] Stephen Barclay       Rishi Sunak           Boris Johnson         Nadhim Zahawi         Elizabeth Truss      
+##  [6] Sajid Javid           Priti Patel           Kwasi Kwarteng        Oliver Dowden         Nadine Dorries       
+## [11] Anne-Marie Trevelyan  Michael Gove          Richard Holden        Simon Clarke          Michelle Donelan     
+## [16] Suzanne Webb          Brendan Clarke-Smith  Eddie Hughes          Rachel Maclean</code></pre>
+<p>This clique also appears to be mostly consisting of cabinet members. Finally, we can visualize the Labour and Conservative cliques inside the larger graph, as in Figure <a href="using-twitter.html#fig:mp-cliques">10.3</a>, with their central positioning suggesting that these cliques are indeed highly influential, as would be expected given their mostly cabinet membership.</p>
+<div class="sourceCode" id="cb608"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb608-1"><a href="using-twitter.html#cb608-1" aria-hidden="true" tabindex="-1"></a><span class="co"># assign vertices to cliques</span></span>
+<span id="cb608-2"><a href="using-twitter.html#cb608-2" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(mp_graph_undirected)<span class="sc">$</span>clique <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(</span>
+<span id="cb608-3"><a href="using-twitter.html#cb608-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">V</span>(mp_graph_undirected)<span class="sc">$</span>name <span class="sc">%in%</span> largest_cliques[[<span class="dv">1</span>]]<span class="sc">$</span>name,</span>
+<span id="cb608-4"><a href="using-twitter.html#cb608-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Largest Labour clique&quot;</span>,</span>
+<span id="cb608-5"><a href="using-twitter.html#cb608-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ifelse</span>(</span>
+<span id="cb608-6"><a href="using-twitter.html#cb608-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">V</span>(mp_graph_undirected)<span class="sc">$</span>name <span class="sc">%in%</span> largest_conservative_cliques[[<span class="dv">1</span>]]<span class="sc">$</span>name,</span>
+<span id="cb608-7"><a href="using-twitter.html#cb608-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Largest Conservative clique&quot;</span>,</span>
+<span id="cb608-8"><a href="using-twitter.html#cb608-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Other&quot;</span></span>
+<span id="cb608-9"><a href="using-twitter.html#cb608-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb608-10"><a href="using-twitter.html#cb608-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb608-11"><a href="using-twitter.html#cb608-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb608-12"><a href="using-twitter.html#cb608-12" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize</span></span>
+<span id="cb608-13"><a href="using-twitter.html#cb608-13" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb608-14"><a href="using-twitter.html#cb608-14" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(mp_graph_undirected, <span class="at">layout =</span> <span class="st">&quot;fr&quot;</span>) <span class="sc">+</span></span>
+<span id="cb608-15"><a href="using-twitter.html#cb608-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span> </span>
+<span id="cb608-16"><a href="using-twitter.html#cb608-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> <span class="fu">factor</span>(clique)), <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb608-17"><a href="using-twitter.html#cb608-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span> </span>
+<span id="cb608-18"><a href="using-twitter.html#cb608-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="st">&quot;Largest cliques&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:mp-cliques"></span>
+<img src="www/using_twitter/mp-cliques.png" alt="Largest Conservative and Labour cliques" width="90%" />
+<p class="caption">
+Figure 10.3: Largest Conservative and Labour cliques
+</p>
+</div>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="databases.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": true,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

@@ -7,7 +7,7 @@
 <title>7 Components, Communities and Cliques | Handbook of Graphs and Networks in People Analytics</title>
 <meta name="author" content="Keith McNulty">
 <meta name="description" content="The study of group dynamics would be pretty ineffective if we were not able to identify and study important subgroups. Networks of people are often made up of subsets that interact more intensely...">
-<meta name="generator" content="bookdown 0.22.15 with bs4_book()">
+<meta name="generator" content="bookdown 0.26 with bs4_book()">
 <meta property="og:title" content="7 Components, Communities and Cliques | Handbook of Graphs and Networks in People Analytics">
 <meta property="og:type" content="book">
 <meta property="og:url" content="https://ona-book.org/community.html">
@@ -18,22 +18,48 @@
 <meta name="twitter:site" content="@dr_keithmcnulty">
 <meta name="twitter:description" content="The study of group dynamics would be pretty ineffective if we were not able to identify and study important subgroups. Networks of people are often made up of subsets that interact more intensely...">
 <meta name="twitter:image" content="https://ona-book.org/www/cover/cover-ona.png">
-<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.12/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
-<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.5.1/tabs.js"></script><script src="libs/bs3compat-0.2.5.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
 <script src="libs/bs4_book-1.0.0/bs4_book.js"></script><meta name="citation_title" content="7 Components, Communities and Cliques | Handbook of Graphs and Networks in People Analytics: With Examples in R and Python">
 <meta name="citation_author" content="Keith McNulty">
 <meta name="citation_publication_date" content="2022">
 <meta name="citation_isbn" content="9781032204970">
-<script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script><link href="libs/vis-4.20.1/vis.css" rel="stylesheet">
-<script src="libs/vis-4.20.1/vis.min.js"></script><script src="libs/visNetwork-binding-2.0.9/visNetwork.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script><link href="libs/vis-9.1.0/vis-network.min.css" rel="stylesheet">
+<script src="libs/vis-9.1.0/vis-network.min.js"></script><script src="libs/visNetwork-binding-2.1.0/visNetwork.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 <script src="libs/d3-4.5.0/d3.min.js"></script><script src="libs/forceNetwork-binding-0.4/forceNetwork.js"></script><script src="libs/sankey-1/sankey.js"></script><script src="libs/sankeyNetwork-binding-0.4/sankeyNetwork.js"></script><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-400FPN6D44"></script><script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
       gtag('config', 'G-400FPN6D44');
-    </script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><link rel="stylesheet" href="css/style.css">
+    </script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<style type="text/css">
+    /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+        }
+    .hanging div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }
+  </style>
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body data-spy="scroll" data-target="#toc">
 
@@ -69,6 +95,7 @@
 <li><a class="active" href="community.html"><span class="header-section-number">7</span> Components, Communities and Cliques</a></li>
 <li><a class="" href="similarity.html"><span class="header-section-number">8</span> Assortativity and Similarity</a></li>
 <li><a class="" href="databases.html"><span class="header-section-number">9</span> Graphs as Databases</a></li>
+<li><a class="" href="using-twitter.html"><span class="header-section-number">10</span> Bonus Chapter: Using Twitter for Network Analysis</a></li>
 <li><a class="" href="references.html">References</a></li>
 </ul>
 
@@ -125,7 +152,7 @@ Figure 7.3: Cuts are defined by edges that split the vertices of a graph into di
 </p>
 </div>
 <p>A partition of a graph <span class="math inline">\(G\)</span> is obtained through a series of cuts. For example, if we make a cut using e3, e5 and e7 in Figure <a href="community.html#fig:cutex">7.3</a>, we split the graph into two disjoint connected graphs. If we then make a further cut using e1, we split the graph into three disjoint sets: two disjoint connected sets and an isolate.</p>
-<p>In directed graphs, cuts can be defined according to the direction of edges, and in weighted graphs, minimum cuts can be determined through the weights of edges. The most popular algorithm for determining the minimum cut of a graph is the Stoer-Wagner algorithm (<span class="citation"><a href="references.html#ref-stoer" role="doc-biblioref">Stoer &amp; Wagner</a> (<a href="references.html#ref-stoer" role="doc-biblioref">1997</a>)</span>).</p>
+<p>In directed graphs, cuts can be defined according to the direction of edges, and in weighted graphs, minimum cuts can be determined through the weights of edges. The most popular algorithm for determining the minimum cut of a graph is the Stoer-Wagner algorithm (<span class="citation">Stoer &amp; Wagner (<a href="references.html#ref-stoer" role="doc-biblioref">1997</a>)</span>).</p>
 </div>
 <div id="vertex-clustering-and-community-detection" class="section level3" number="7.1.3">
 <h3>
@@ -141,7 +168,7 @@ Figure 7.3: Cuts are defined by edges that split the vertices of a graph into di
 <li>The first and second phases are repeated until modularity cannot be further improved.</li>
 </ol>
 <p>A more recently developed community detection algorithm which improves on the Louvain algorithm is the Leiden algorithm. The Leiden algorithm operates similarly to Louvain, but has an additional refinement process at the end of the first phase which helps increase the options for improved modularity in the second phase. The Leiden algorithm will always achieve results as good as the Louvain algorithm, and in many cases may detect communities which are better connected than those detected by Louvain.</p>
-<p>Both the Louvain and Leiden algorithms are good options for performing community detection in an organizational context. However, there are numerous other options, many of which are available in common data science packages. For example, the Girvan-Newman algorithm operates in a very different way by starting with an entire graph and progressively removing important edges to potentially reveal high modularity subgroups. For a more detailed reference on the Louvain and Leiden algorithms, see <span class="citation"><a href="references.html#ref-traag" role="doc-biblioref">Traag et al.</a> (<a href="references.html#ref-traag" role="doc-biblioref">2019</a>)</span> and for more general insight into a broader range of community detection algorithms, see <span class="citation"><a href="references.html#ref-yang" role="doc-biblioref">Yang et al.</a> (<a href="references.html#ref-yang" role="doc-biblioref">2016</a>)</span>.</p>
+<p>Both the Louvain and Leiden algorithms are good options for performing community detection in an organizational context. However, there are numerous other options, many of which are available in common data science packages. For example, the Girvan-Newman algorithm operates in a very different way by starting with an entire graph and progressively removing important edges to potentially reveal high modularity subgroups. For a more detailed reference on the Louvain and Leiden algorithms, see <span class="citation">Traag et al. (<a href="references.html#ref-traag" role="doc-biblioref">2019</a>)</span> and for more general insight into a broader range of community detection algorithms, see <span class="citation">Yang et al. (<a href="references.html#ref-yang" role="doc-biblioref">2016</a>)</span>.</p>
 <p>One important aspect of community detection which is often not understood is that community detection algorithms classify vertices into subgroups, but offer no direct insight into the <em>nature</em> of those subgroups. Further analytic techniques need to be applied to help describe the subgroups in a meaningful way. For example, the subgroups could be compared to known ‘ground truth’ characteristics of the network (such as department in the <code>workfrance</code> graph or class in the <code>schoolfriends</code> graph). We will examine this using an example later in this chapter.</p>
 </div>
 <div id="cliques" class="section level3" number="7.1.4">
@@ -253,7 +280,7 @@ Figure 7.5: The reported <code>schoolfriends</code> graph color coded by its (we
 
 <span class="co"># color John A and Mr Hi differently</span>
 <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span><span class="op">$</span><span class="va">leader</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span><span class="op">$</span><span class="va">name</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Mr Hi"</span>, <span class="st">"John A"</span><span class="op">)</span>, <span class="fl">1</span>, <span class="fl">0</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span><span class="op">$</span><span class="va">name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Mr Hi"</span>, <span class="st">"John A"</span><span class="op">)</span>, <span class="fl">1</span>, <span class="fl">0</span>
 <span class="op">)</span>
 
 <span class="co"># visualize</span>
@@ -276,18 +303,18 @@ Figure 7.6: Zachary’s Karate Club graph with Mr Hi and John A indicated with l
 ## [1] 1
 ## 
 ## $cut
-## + 1/78 edge from 4cdb69b (vertex names):
+## + 1/78 edge from f9c0f35 (vertex names):
 ## [1] Mr Hi--Actor 12
 ## 
 ## $partition1
-## + 1/34 vertex, named, from 4cdb69b:
+## + 1/34 vertex, named, from f9c0f35:
 ## [1] Actor 12
 ## 
 ## $partition2
-## + 33/34 vertices, named, from 4cdb69b:
-##  [1] Mr Hi    Actor 2  Actor 3  Actor 4  Actor 5  Actor 6  Actor 7  Actor 9  Actor 10 Actor 14 Actor 15 Actor 16 Actor 19
-## [14] Actor 20 Actor 21 Actor 23 Actor 24 Actor 25 Actor 26 Actor 27 Actor 28 Actor 29 Actor 30 Actor 31 Actor 32 Actor 33
-## [27] Actor 8  Actor 11 Actor 13 Actor 18 Actor 22 Actor 17 John A</code></pre>
+## + 33/34 vertices, named, from f9c0f35:
+##  [1] Mr Hi    Actor 2  Actor 3  Actor 4  Actor 5  Actor 6  Actor 7  Actor 9  Actor 10 Actor 14 Actor 15 Actor 16
+## [13] Actor 19 Actor 20 Actor 21 Actor 23 Actor 24 Actor 25 Actor 26 Actor 27 Actor 28 Actor 29 Actor 30 Actor 31
+## [25] Actor 32 Actor 33 Actor 8  Actor 11 Actor 13 Actor 18 Actor 22 Actor 17 John A</code></pre>
 <p>We see that a minimum cut exists of size 1 between Mr Hi and Actor 12.</p>
 <p>The Louvain community detection algorithm can be run using the <code><a href="https://rdrr.io/pkg/igraph/man/cluster_louvain.html">cluster_louvain()</a></code> function. <code>weights</code> can be added as an argument, or will be used by default if the graph has a <code>weight</code> edge attribute (set <code>weight = NA</code> to avoid this). This will produce a list of community groups. The best way to record the resulting community membership is to assign it as a vertex property using the <code><a href="https://rdrr.io/pkg/igraph/man/communities.html">membership()</a></code> function.</p>
 <div class="sourceCode" id="cb440"><pre class="downlit sourceCode r">
@@ -301,7 +328,7 @@ Figure 7.6: Zachary’s Karate Club graph with Mr Hi and John A indicated with l
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/communities.html">sizes</a></span><span class="op">(</span><span class="va">communities</span><span class="op">)</span></code></pre></div>
 <pre><code>## Community sizes
 ##  1  2  3  4 
-##  6 12 11  5</code></pre>
+## 11  6 11  6</code></pre>
 <p>We have four detected communities of varying sizes. As before, we can color code to visualize these, as in Figure <a href="community.html#fig:karate-communities">7.7</a>.</p>
 <div class="sourceCode" id="cb443"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
@@ -329,22 +356,22 @@ Figure 7.7: Communities of Zachary’s Karate Club as detected by the Louvain al
 <div class="sourceCode" id="cb444"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/cliques.html">max_cliques</a></span><span class="op">(</span><span class="va">karate</span>, min <span class="op">=</span> <span class="fl">5</span>, max <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 5/34 vertices, named, from 4cdb69b:
+## + 5/34 vertices, named, from f9c0f35:
 ## [1] Actor 2  Mr Hi    Actor 4  Actor 3  Actor 14
 ## 
 ## [[2]]
-## + 5/34 vertices, named, from 4cdb69b:
+## + 5/34 vertices, named, from f9c0f35:
 ## [1] Actor 2 Mr Hi   Actor 4 Actor 3 Actor 8</code></pre>
 <p>The <code><a href="https://rdrr.io/pkg/igraph/man/cliques.html">largest_cliques()</a></code> function finds all largest cliques in a graph.</p>
 <div class="sourceCode" id="cb446"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/cliques.html">largest_cliques</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 5/34 vertices, named, from 4cdb69b:
-## [1] Actor 8 Mr Hi   Actor 2 Actor 3 Actor 4
+## + 5/34 vertices, named, from f9c0f35:
+## [1] Actor 2  Mr Hi    Actor 4  Actor 3  Actor 14
 ## 
 ## [[2]]
-## + 5/34 vertices, named, from 4cdb69b:
-## [1] Actor 4  Mr Hi    Actor 2  Actor 3  Actor 14</code></pre>
+## + 5/34 vertices, named, from f9c0f35:
+## [1] Actor 2 Mr Hi   Actor 4 Actor 3 Actor 8</code></pre>
 <p>We see that the maximal cliques of size 5 that we identified are also the largest cliques in the <code>karate graph</code>, and they have 4 out of 5 vertices in common. The function <code><a href="https://rdrr.io/pkg/igraph/man/cliques.html">clique_num()</a></code> returns the size of the largest clique.</p>
 <div class="sourceCode" id="cb448"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/cliques.html">clique_num</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span></code></pre></div>
@@ -426,25 +453,25 @@ Figure 7.7: Communities of Zachary’s Karate Club as detected by the Louvain al
 <span id="cb460-7"><a href="community.html#cb460-7" aria-hidden="true" tabindex="-1"></a><span class="co"># view communities from first edge removal</span></span>
 <span id="cb460-8"><a href="community.html#cb460-8" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(communities[<span class="dv">0</span>]).transpose()</span></code></pre></div>
 <pre><code>##            0         1
-## 0    Actor 7   Actor 9
-## 1    Actor 8  Actor 21
-## 2    Actor 2  Actor 28
-## 3    Actor 4  Actor 15
-## 4   Actor 14  Actor 10
-## 5   Actor 18  Actor 30
-## 6   Actor 12  Actor 26
-## 7      Mr Hi  Actor 32
-## 8   Actor 17  Actor 27
-## 9   Actor 13  Actor 33
-## 10   Actor 5  Actor 23
-## 11  Actor 20   Actor 3
-## 12  Actor 22  Actor 16
-## 13   Actor 6  Actor 19
-## 14  Actor 11  Actor 25
+## 0   Actor 11  Actor 32
+## 1    Actor 4  Actor 28
+## 2   Actor 17  Actor 27
+## 3   Actor 14  Actor 16
+## 4    Actor 6    John A
+## 5   Actor 18  Actor 19
+## 6      Mr Hi  Actor 10
+## 7   Actor 20  Actor 26
+## 8   Actor 12  Actor 23
+## 9    Actor 7  Actor 25
+## 10   Actor 8  Actor 33
+## 11  Actor 13  Actor 24
+## 12   Actor 2   Actor 3
+## 13   Actor 5  Actor 15
+## 14  Actor 22   Actor 9
 ## 15      None  Actor 29
-## 16      None    John A
-## 17      None  Actor 31
-## 18      None  Actor 24</code></pre>
+## 16      None  Actor 30
+## 17      None  Actor 21
+## 18      None  Actor 31</code></pre>
 <p>We see that the first split leads to two communities, one around John A and the other around Mr Hi.</p>
 <p>The <code>cdlib</code> package in Python contains a very wide range of community detection algorithms that work with the <code>networkx</code> package, including the Louvain and Leiden algorithms as well as many others. In this example, we create a Louvain partition of the <code>karate</code> graph using <code>cdlib</code>.</p>
 <div class="sourceCode" id="cb462"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb462-1"><a href="community.html#cb462-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> cdlib <span class="im">import</span> algorithms</span>
@@ -518,7 +545,7 @@ Figure 7.8: Best Louvain partition of Zachary’s Karate Club graph
 <pre><code>## 36</code></pre>
 <div class="sourceCode" id="cb470"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb470-1"><a href="community.html#cb470-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get largest clique</span></span>
 <span id="cb470-2"><a href="community.html#cb470-2" aria-hidden="true" tabindex="-1"></a>maximal_cliques[<span class="bu">len</span>(maximal_cliques) <span class="op">-</span> <span class="dv">1</span>]</span></code></pre></div>
-<pre><code>## ['Actor 2', 'Mr Hi', 'Actor 14', 'Actor 3', 'Actor 4']</code></pre>
+<pre><code>## ['Actor 4', 'Mr Hi', 'Actor 3', 'Actor 2', 'Actor 14']</code></pre>
 <p>Alternatively, there are functions that can calculate the number of cliques, the size of the largest clique, and can extract the graph of the largest clique.</p>
 <div class="sourceCode" id="cb472"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb472-1"><a href="community.html#cb472-1" aria-hidden="true" tabindex="-1"></a>nx.graph_number_of_cliques(karate)</span></code></pre></div>
 <pre><code>## 36</code></pre>
@@ -563,28 +590,28 @@ Figure 7.8: Best Louvain partition of Zachary’s Karate Club graph
 <div class="sourceCode" id="cb477"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">(</span><span class="va">cliques</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/cliques.html">largest_cliques</a></span><span class="op">(</span><span class="va">schoolfriends_fb</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 14/156 vertices, named, from 6b9f4e7:
-##  [1] 525  797  466  376  638  841  1423 1218 769  440  125  325  694  245 
+## + 14/156 vertices, named, from 6419aa6:
+##  [1] 1218 440  245  694  325  125  1423 841  376  466  624  1067 638  1237
 ## 
 ## [[2]]
-## + 14/156 vertices, named, from 6b9f4e7:
-##  [1] 245  564  1218 440  466  376  841  1237 1423 769  624  125  325  694 
+## + 14/156 vertices, named, from 6419aa6:
+##  [1] 1218 440  245  694  325  125  1423 841  376  466  624  1067 638  797 
 ## 
 ## [[3]]
-## + 14/156 vertices, named, from 6b9f4e7:
-##  [1] 245  797  466  376  841  1423 1218 624  440  125  638  325  694  769 
+## + 14/156 vertices, named, from 6419aa6:
+##  [1] 1218 440  245  694  325  125  1423 841  376  466  624  769  1237 638 
 ## 
 ## [[4]]
-## + 14/156 vertices, named, from 6b9f4e7:
-##  [1] 245  797  466  376  841  1423 1218 624  440  125  638  325  694  1067
+## + 14/156 vertices, named, from 6419aa6:
+##  [1] 1218 440  245  694  325  125  1423 841  376  466  624  769  1237 564 
 ## 
 ## [[5]]
-## + 14/156 vertices, named, from 6b9f4e7:
-##  [1] 245  1067 466  376  841  1237 1423 1218 624  440  125  638  325  694 
+## + 14/156 vertices, named, from 6419aa6:
+##  [1] 1218 440  245  694  325  125  1423 841  376  466  624  769  797  638 
 ## 
 ## [[6]]
-## + 14/156 vertices, named, from 6b9f4e7:
-##  [1] 245  638  466  376  841  1237 1423 1218 769  624  440  125  325  694</code></pre>
+## + 14/156 vertices, named, from 6419aa6:
+##  [1] 1218 440  245  694  325  125  1423 841  376  466  525  769  797  638</code></pre>
 <p>We see 6 cliques of 14 individuals, all of which have considerable overlap. We can take a look at the class and gender of one of these cliques.</p>
 <div class="sourceCode" id="cb479"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># subgraph for clique 6</span>
@@ -601,21 +628,21 @@ Figure 7.8: Best Louvain partition of Zachary’s Karate Club graph
 ## 2   376  MP*1      M
 ## 3   638  MP*1      M
 ## 4   841  MP*1      M
-## 5  1237  MP*2      M
-## 6  1423  MP*2      M
-## 7  1218  MP*2      M
-## 8   769  PSI*      M
-## 9   624  PSI*      M
-## 10  440  PSI*      F
-## 11  125  PSI*      F
-## 12  325  PSI*      M
-## 13  694    MP      F
-## 14  245    MP      F</code></pre>
+## 5  1423  MP*2      M
+## 6  1218  MP*2      M
+## 7   769  PSI*      M
+## 8   797  PSI*      F
+## 9   440  PSI*      F
+## 10  125  PSI*      F
+## 11  325  PSI*      M
+## 12  694    MP      F
+## 13  245    MP      F
+## 14  525    MP      F</code></pre>
 <p>We see that this clique is distributed over four classes and is mostly male. Let’s visualize where this clique sits in the full network, as in Figure <a href="community.html#fig:schoolfriends-clique">7.9</a>.</p>
 <div class="sourceCode" id="cb481"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># create clique property</span>
 <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">schoolfriends_fb</span><span class="op">)</span><span class="op">$</span><span class="va">clique6</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">schoolfriends_fb</span><span class="op">)</span> <span class="op">%in%</span> <span class="va">cliques</span><span class="op">[[</span><span class="fl">6</span><span class="op">]</span><span class="op">]</span>, <span class="fl">1</span>, <span class="fl">0</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">schoolfriends_fb</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">cliques</span><span class="op">[[</span><span class="fl">6</span><span class="op">]</span><span class="op">]</span>, <span class="fl">1</span>, <span class="fl">0</span>
 <span class="op">)</span>
 
 <span class="co"># visualize</span>
@@ -646,7 +673,7 @@ Figure 7.9: Facebook schoolfriends network with one of the largest cliques indic
 <div class="sourceCode" id="cb484"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># modularity of louvain</span>
 <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/modularity.igraph.html">modularity</a></span><span class="op">(</span><span class="va">schoolfriends_fb</span>, <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">schoolfriends_fb</span><span class="op">)</span><span class="op">$</span><span class="va">community</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 0.5284791</code></pre>
+<pre><code>## [1] 0.5290014</code></pre>
 <div class="sourceCode" id="cb486"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># modularity of class structure</span>
 <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/modularity.igraph.html">modularity</a></span><span class="op">(</span><span class="va">schoolfriends_fb</span>, 
@@ -708,17 +735,17 @@ Figure 7.10: Optimal Louvain communities in the Facebook schoolfriends graph (le
   vertices <span class="op">=</span> <span class="va">ontariopol_vertices</span>, 
   directed <span class="op">=</span> <span class="cn">FALSE</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH 0d1c2d0 UNW- 108 6095 -- 
+<pre><code>## IGRAPH 1a64599 UNW- 108 6095 -- 
 ## + attr: name (v/c), screen_name (v/c), party (v/c), weight (e/n)
-## + edges from 0d1c2d0 (vertex names):
-##  [1] Deepak Anand--Doug Ford               Deepak Anand--Victor Fedeli           Deepak Anand--Deepak Anand           
-##  [4] Deepak Anand--Monte McNaughton        Deepak Anand--Christine Elliott       Deepak Anand--Stephen Lecce          
-##  [7] Deepak Anand--Rod Phillips            Deepak Anand--Lisa MacLeod            Deepak Anand--Michael Tibollo        
-## [10] Deepak Anand--Peter Bethlenfalvy      Deepak Anand--Raymond Sung Joon Cho   Deepak Anand--Rudy Cuzzetto          
-## [13] Deepak Anand--Caroline Mulroney       Deepak Anand--Sheref Sabawy           Deepak Anand--Nina Tangri            
-## [16] Deepak Anand--Jill Dunlop             Deepak Anand--Todd Smith              Deepak Anand--Kinga Surma            
-## [19] Deepak Anand--Lisa Thompson           Deepak Anand--Kaleed Rasheed          Deepak Anand--Steve Clark            
-## [22] Deepak Anand--Ernie Hardeman          Deepak Anand--Natalia Kusendova       Deepak Anand--Prabmeet Singh Sarkaria
+## + edges from 1a64599 (vertex names):
+##  [1] Deepak Anand--Doug Ford             Deepak Anand--Victor Fedeli         Deepak Anand--Deepak Anand         
+##  [4] Deepak Anand--Monte McNaughton      Deepak Anand--Christine Elliott     Deepak Anand--Stephen Lecce        
+##  [7] Deepak Anand--Rod Phillips          Deepak Anand--Lisa MacLeod          Deepak Anand--Michael Tibollo      
+## [10] Deepak Anand--Peter Bethlenfalvy    Deepak Anand--Raymond Sung Joon Cho Deepak Anand--Rudy Cuzzetto        
+## [13] Deepak Anand--Caroline Mulroney     Deepak Anand--Sheref Sabawy         Deepak Anand--Nina Tangri          
+## [16] Deepak Anand--Jill Dunlop           Deepak Anand--Todd Smith            Deepak Anand--Kinga Surma          
+## [19] Deepak Anand--Lisa Thompson         Deepak Anand--Kaleed Rasheed        Deepak Anand--Steve Clark          
+## [22] Deepak Anand--Ernie Hardeman        Deepak Anand--Natalia Kusendova    
 ## + ... omitted several edges</code></pre>
 <p>We have an undirected, weighted graph, with <code>screen_name</code> and <code>party</code> vertex properties. First, we check if our graph is connected:</p>
 <div class="sourceCode" id="cb493"><pre class="downlit sourceCode r">
@@ -734,14 +761,14 @@ Figure 7.10: Optimal Louvain communities in the Facebook schoolfriends graph (le
 
 <span class="co"># how many communities</span>
 <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">ontariopol</span><span class="op">)</span><span class="op">$</span><span class="va">community</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 6</code></pre>
+<pre><code>## [1] 5</code></pre>
 <p>We see six commmunities. Let’s compare the modularity of this community structure to the ground truth political party structure.</p>
 <div class="sourceCode" id="cb497"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># louvain modularity</span>
 <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/modularity.igraph.html">modularity</a></span><span class="op">(</span><span class="va">ontariopol</span>, 
            membership <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">ontariopol</span><span class="op">)</span><span class="op">$</span><span class="va">community</span>, 
            weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/E.html">E</a></span><span class="op">(</span><span class="va">ontariopol</span><span class="op">)</span><span class="op">$</span><span class="va">weight</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 0.3904751</code></pre>
+<pre><code>## [1] 0.3882044</code></pre>
 <div class="sourceCode" id="cb499"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># political party modularity</span>
 <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/modularity.igraph.html">modularity</a></span><span class="op">(</span><span class="va">ontariopol</span>, 
@@ -782,7 +809,7 @@ Figure 7.11: Twitter interaction of Ontario politicians segmented by their Louva
 <span class="co"># there are 24 cliques of size 48 - choose one and visualize</span>
 <span class="co"># create clique property</span>
 <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">ontariopol</span><span class="op">)</span><span class="op">$</span><span class="va">clique24</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">ontariopol</span><span class="op">)</span> <span class="op">%in%</span> <span class="va">cliques</span><span class="op">[[</span><span class="fl">24</span><span class="op">]</span><span class="op">]</span>, <span class="fl">1</span>, <span class="fl">0</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">ontariopol</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">cliques</span><span class="op">[[</span><span class="fl">24</span><span class="op">]</span><span class="op">]</span>, <span class="fl">1</span>, <span class="fl">0</span>
 <span class="op">)</span>
 
 <span class="co"># visualize clique</span>
