@@ -6,17 +6,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>10 Bonus Chapter: Using Twitter for Network Analysis | Handbook of Graphs and Networks in People Analytics</title>
 <meta name="author" content="Keith McNulty">
-<meta name="description" content="Social media engines are by their very nature rich sources of data for modeling networks of friends, acquaintences, colleagues and other relationships. In Chapter 7 for example, we used data...">
+<meta name="description" content="Social media engines are by their very nature rich sources of data for modeling networks of friends, colleagues and other relationships. In Chapter 7 for example, we used data extracted from...">
 <meta name="generator" content="bookdown 0.26 with bs4_book()">
 <meta property="og:title" content="10 Bonus Chapter: Using Twitter for Network Analysis | Handbook of Graphs and Networks in People Analytics">
 <meta property="og:type" content="book">
 <meta property="og:url" content="https://ona-book.org/using-twitter.html">
 <meta property="og:image" content="https://ona-book.org/www/cover/cover-ona.png">
-<meta property="og:description" content="Social media engines are by their very nature rich sources of data for modeling networks of friends, acquaintences, colleagues and other relationships. In Chapter 7 for example, we used data...">
+<meta property="og:description" content="Social media engines are by their very nature rich sources of data for modeling networks of friends, colleagues and other relationships. In Chapter 7 for example, we used data extracted from...">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="10 Bonus Chapter: Using Twitter for Network Analysis | Handbook of Graphs and Networks in People Analytics">
 <meta name="twitter:site" content="@dr_keithmcnulty">
-<meta name="twitter:description" content="Social media engines are by their very nature rich sources of data for modeling networks of friends, acquaintences, colleagues and other relationships. In Chapter 7 for example, we used data...">
+<meta name="twitter:description" content="Social media engines are by their very nature rich sources of data for modeling networks of friends, colleagues and other relationships. In Chapter 7 for example, we used data extracted from...">
 <meta name="twitter:image" content="https://ona-book.org/www/cover/cover-ona.png">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
@@ -108,7 +108,7 @@
 <h1>
 <span class="header-section-number">10</span> Bonus Chapter: Using Twitter for Network Analysis<a class="anchor" aria-label="anchor" href="#using-twitter"><i class="fas fa-link"></i></a>
 </h1>
-<p>Social media engines are by their very nature rich sources of data for modeling networks of friends, acquaintences, colleagues and other relationships. In Chapter <a href="community.html#community">7</a> for example, we used data extracted from Twitter to study a network of Canadian politicians. Such data is not always easy to extract, as different social media companies have different philosophies about data access, and some make it very difficult for user data to be extracted.</p>
+<p>Social media engines are by their very nature rich sources of data for modeling networks of friends, colleagues and other relationships. In Chapter <a href="community.html#community">7</a> for example, we used data extracted from Twitter to study a network of Canadian politicians. Such data is not always easy to extract, as different social media companies have different philosophies about data access, and some make it very difficult for user data to be extracted.</p>
 <p>However, Twitter is one of the more open platforms, and anyone who wants to can extract a certain amount of data from Twitter provided the user accounts they are interested in are public accounts. In this chapter we will go through how to extract data from Twitter and how to turn that data into a graph object for further study. As an example, we will extract data on the recent tweets of British politicians sitting in the House of Commons as at mid-2022 and we will use it to detect influential politicians, political party groupings and factions.</p>
 <div id="accessing-the-twitter-api" class="section level2" number="10.1">
 <h2>
@@ -191,12 +191,12 @@
 <pre><code>## # A tibble: 1 × 7
 ##   query         limit remaining reset        reset_at            timestamp           app          
 ##   &lt;chr&gt;         &lt;int&gt;     &lt;int&gt; &lt;drtn&gt;       &lt;dttm&gt;              &lt;dttm&gt;              &lt;chr&gt;        
-## 1 followers/ids    15        13 0.34005 mins 2022-06-03 19:15:35 2022-06-03 19:15:15 Keith McNulty</code></pre>
+## 1 followers/ids    15        14 14.9187 mins 2022-06-03 20:01:50 2022-06-03 19:46:55 Keith McNulty</code></pre>
 <p>In <code>tweepy</code> you can use the <code>rate_limit_status()</code> function. Here is how you can determine your rate limit status on querying follower IDs:</p>
 <div class="sourceCode" id="cb570"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb570-1"><a href="using-twitter.html#cb570-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb570-2"><a href="using-twitter.html#cb570-2" aria-hidden="true" tabindex="-1"></a>limits <span class="op">=</span> api.rate_limit_status(resources <span class="op">=</span> <span class="st">"followers"</span>)</span>
 <span id="cb570-3"><a href="using-twitter.html#cb570-3" aria-hidden="true" tabindex="-1"></a>limits.get(<span class="st">'resources'</span>).get(<span class="st">'followers'</span>).get(<span class="st">'/followers/ids'</span>)</span></code></pre></div>
-<pre><code>## {'limit': 15, 'remaining': 13, 'reset': 1654283739}</code></pre>
+<pre><code>## {'limit': 15, 'remaining': 14, 'reset': 1654286513}</code></pre>
 <p>Practically, when you hit a rate limit you will receive a message back indicating so. You can then try again from where you left off after 15 minutes. Packages like <code>rtweet</code> and <code>tweepy</code> also have options to retry automatically after 15 minutes. For example, in many <code>rtweet</code> functions you can use the argument <code>retryonratelimit = TRUE</code>, while in <code>tweepy</code>, you can specify this behavior on initial authentication using:</p>
 <div class="sourceCode" id="cb572"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb572-1"><a href="using-twitter.html#cb572-1" aria-hidden="true" tabindex="-1"></a>api <span class="op">=</span> tweepy.API(auth, wait_on_rate_limit <span class="op">=</span> <span class="va">True</span>)</span></code></pre></div>
 </div>
@@ -543,7 +543,7 @@ Figure 10.2: Comparison of Leiden communities with ground truth political party 
 <div class="sourceCode" id="cb604"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">(</span><span class="va">largest_cliques</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/cliques.html">largest_cliques</a></span><span class="op">(</span><span class="va">mp_graph_undirected</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 21/585 vertices, named, from 96a9b8a:
+## + 21/585 vertices, named, from d0e7c31:
 ##  [1] Emily Thornberry     Keir Starmer         Angela Rayner        Boris Johnson        Anneliese Dodds     
 ##  [6] Yvette Cooper        Louise Haigh         Lisa Nandy           David Lammy          Jonathan Ashworth   
 ## [11] Bridget Phillipson   Kate Green           Sharon Hodgson       Nick Thomas-Symonds  Edward Miliband     
@@ -551,7 +551,7 @@ Figure 10.2: Comparison of Leiden communities with ground truth political party 
 ## [21] Mary Glindon        
 ## 
 ## [[2]]
-## + 21/585 vertices, named, from 96a9b8a:
+## + 21/585 vertices, named, from d0e7c31:
 ##  [1] Emily Thornberry     Keir Starmer         Angela Rayner        Rachel Reeves        Anneliese Dodds     
 ##  [6] Yvette Cooper        David Lammy          Louise Haigh         Lisa Nandy           Jonathan Ashworth   
 ## [11] Bridget Phillipson   Sharon Hodgson       Lucy Powell          Mary Glindon         Kate Green          
@@ -559,7 +559,7 @@ Figure 10.2: Comparison of Leiden communities with ground truth political party 
 ## [21] Vicky Foxcroft      
 ## 
 ## [[3]]
-## + 21/585 vertices, named, from 96a9b8a:
+## + 21/585 vertices, named, from d0e7c31:
 ##  [1] Emily Thornberry     Keir Starmer         Angela Rayner        Rachel Reeves        Anneliese Dodds     
 ##  [6] Yvette Cooper        David Lammy          Louise Haigh         Lisa Nandy           Jonathan Ashworth   
 ## [11] Bridget Phillipson   Sharon Hodgson       Lucy Powell          Tulip Siddiq         Peter Kyle          
@@ -567,7 +567,7 @@ Figure 10.2: Comparison of Leiden communities with ground truth political party 
 ## [21] Edward Miliband     
 ## 
 ## [[4]]
-## + 21/585 vertices, named, from 96a9b8a:
+## + 21/585 vertices, named, from d0e7c31:
 ##  [1] Emily Thornberry     Keir Starmer         Angela Rayner        Rachel Reeves        Anneliese Dodds     
 ##  [6] Yvette Cooper        David Lammy          Louise Haigh         Lisa Nandy           Jonathan Ashworth   
 ## [11] Bridget Phillipson   Sharon Hodgson       Lucy Powell          Tulip Siddiq         Peter Kyle          
@@ -582,7 +582,7 @@ Figure 10.2: Comparison of Leiden communities with ground truth political party 
 
 <span class="op">(</span><span class="va">largest_conservative_cliques</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/cliques.html">largest_cliques</a></span><span class="op">(</span><span class="va">conservative_graph</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 19/308 vertices, named, from fa469d9:
+## + 19/308 vertices, named, from 38aef58:
 ##  [1] Stephen Barclay       Rishi Sunak           Boris Johnson         Nadhim Zahawi         Elizabeth Truss      
 ##  [6] Sajid Javid           Priti Patel           Kwasi Kwarteng        Oliver Dowden         Nadine Dorries       
 ## [11] Anne-Marie Trevelyan  Michael Gove          Richard Holden        Simon Clarke          Michelle Donelan     
