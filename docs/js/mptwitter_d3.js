@@ -6,7 +6,7 @@ var svg = d3.select("svg"),
 var search = d3.select("body").append('center').append('form').attr('onsubmit', 'return false;');
 
 // A slider that removes nodes below the input threshold.
-var slider = d3.select('body').append('p').append('center').text('Minimum value for connection: ').style('font-size', '75%');
+var slider = d3.select('body').append('p').append('center').text('Minimum Twitter interactions for connection: ').style('font-size', '75%');
 
 
 // Call zoom for svg container.
