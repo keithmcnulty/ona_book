@@ -23,7 +23,7 @@ class: left, middle, r-logo
 
 ## Notes
 
-This document is coded in R.  The code for this document is [here](https://github.com/keithmcnulty/peopleanalytics-regression-book/tree/master/presentations/multinom_tidymodels.Rmd).  
+This document is coded in R.  The code for this document is [here](https://github.com/keithmcnulty/ona_book/blob/main/docs/presentations/using_twitter.Rmd).  
 
 Full explanations and resources for learning network analysis methods can be found at https://ona-book.org.
 
@@ -452,10 +452,10 @@ library(igraph)
 ```
 
 ```
-## IGRAPH 4642fb8 UNW- 585 26833 -- 
+## IGRAPH 37af40d UNW- 585 26833 -- 
 ## + attr: name (v/c), profile_image_url (v/c), followers_count (v/n), constituency (v/c), party (v/c),
 ## | colour (v/c), weight (e/n)
-## + edges from 4642fb8 (vertex names):
+## + edges from 37af40d (vertex names):
 ##  [1] Olivia Frances Blake--Afzal Khan           Olivia Frances Blake--Dr Alan Whitehead   
 ##  [3] Olivia Frances Blake--Alexander Stafford   Olivia Frances Blake--Alex Sobel          
 ##  [5] Olivia Frances Blake--Alok Sharma          Andy McDonald       --Olivia Frances Blake
@@ -551,14 +551,14 @@ tibble(community = 1:max(V(mp_graph_undirected)$cluster)) |&gt;
 ```
 ## # A tibble: 6 × 4
 ## # Rowwise: 
-##   community highest_degree    community_size party                  
-##       &lt;int&gt; &lt;chr&gt;                      &lt;int&gt; &lt;chr&gt;                  
-## 1         1 "Keir Starmer "              162 Labour                 
-## 2         2 "Layla Moran"                 30 Liberal Democrat       
-## 3         3 "Ian Blackford "              55 Scottish National Party
-## 4         4 "John McDonnell "             35 Labour                 
-## 5         5 "Boris Johnson "             301 Conservative           
-## 6         6 "Philip Davies "               2 Conservative
+##   community highest_degree   community_size party                  
+##       &lt;int&gt; &lt;chr&gt;                     &lt;int&gt; &lt;chr&gt;                  
+## 1         1 "Keir Starmer "             176 Labour                 
+## 2         2 "Layla Moran"                30 Liberal Democrat       
+## 3         3 "Ian Blackford "             55 Scottish National Party
+## 4         4 "Ian Byrne"                  20 Labour                 
+## 5         5 "Boris Johnson "            302 Conservative           
+## 6         6 "Philip Davies "              2 Conservative
 ```
 
 ---
@@ -592,7 +592,7 @@ length(intersection)/length(union)
 ```
 
 ```
-## [1] 0.9772802
+## [1] 0.9795935
 ```
 
 ---
@@ -616,7 +616,7 @@ Cliques are complete subgraphs of a graph, that is, where everyone is connected 
 
 ```
 ## [[1]]
-## + 19/308 vertices, named, from 0fb3f09:
+## + 19/308 vertices, named, from 3f934a7:
 ##  [1] Stephen Barclay       Rishi Sunak           Boris Johnson         Nadhim Zahawi         Elizabeth Truss      
 ##  [6] Sajid Javid           Priti Patel           Kwasi Kwarteng        Oliver Dowden         Nadine Dorries       
 ## [11] Anne-Marie Trevelyan  Michael Gove          Richard Holden        Simon Clarke          Michelle Donelan     
