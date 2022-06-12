@@ -1,1 +1,106 @@
-# Advanced Network Visualization {#advanced-viz}
+# Bonus Chapter: Advanced Network Visualization using D3 {#advanced-viz}
+
+In Chapter \@ref(viz-graphs), we reviewed a very wide range of options for visualizing network graphs in both R and Python, ranging from static visualizations through to interactive visualizations using Javascript data visualization libraries such as `D3.js` and `vis.js`.  In these chapters we built our interactive graphs through using helpful packages that translate between R or Python and Javascript, so that users did not need to have knowledge of Javascript to take advantage of them.  
+
+However, to have the widest range of flexibility to develop and customize interactive and compelling network visualizations, there are many advantages to be able to code these visualizations natively and directly in Javascript.  In this chapter we will outline a a couple of examples of this using the Data Driven Documents (D3) library.  D3 is an extemely popular and flexible library for designing data visualizations, and contains useful functions for different graph layouts.  We will start by converting our graph data into a JSON format for use in Javascript using R.  We will then move to Javascript and use some standard D3 functions for network visualization, customizing them to achieve a desired look.  Finally we will embed this in a webpage that allows users to interact with the visualization, and show examples of how additional interactive features such as sliding scales can be added to the standard visualization.
+
+We will use the example of the British MP Twitter network from Bonus Chapter \@ref(using-twitter) as an illustrative example in this chapter.  
+
+## Writing graph data in JSON form for use in Javascript
+
+To write graph data into JSON form, our first step is to create an `igraph` object which has all the properties we intend to use in the visualization.  We start by loading the British MP Twitter network data that was created in Bonus Chapter \@ref(using-twitter).
+
+```{r}
+mp_edgelist <- read.csv("https://ona-book.org/data/mp_edgelist.csv")
+mp_vertices <- read.csv("https://ona-book.org/data/mp_vertices.csv")
+```
+
+Recall the contents of these dataframes.  The `mp_edgelist` dataframe contains the edges of the network with `from` and `to` columns containing MP Twitter handles and a `weight` property which indicates the strength of the Twitter connection between the two MPs.
+
+```{r}
+head(mp_edgelist)
+```
+
+The `mp_vertices` contains a set of information about each MP, which will be used as vertex properties in the network.
+
+```{r}
+head(mp_vertices)
+```
+
+We will now proceed to create a graph from this data using `igraph` in R.  For our purposes in this chapter we will create an undirected graph.
+
+```{r}
+library(igraph)
+
+# create undirected graph
+(mp_graph <- igraph::graph_from_data_frame(
+  mp_edgelist,
+  vertices = mp_vertices,
+  directed = FALSE
+))
+```
+
+We can see that our graph contains all the data from our dataframes as vertex and edge properties.  
+
+Next we will add the degree centrality of each vertex as a vertex property to allow us to use this to control vertex size in our visualizations.
+
+```{r}
+V(mp_graph)$degree <- igraph::degree(mp_graph)
+```
+
+Now we will use the `networkD3` package in R to convert our `igraph` object into a list format that can be understood by `D3.js` network functions.  We will need to let this function know how to group the vertices for the purposes of visualization - in this case we choose to group by party.
+
+```{r}
+library(networkD3)
+D3data <- networkD3::igraph_to_networkD3(
+  mp_graph, 
+  group =V(mp_graph)$party
+)
+```
+
+This creates a list containing two objects: `links`, which the edgelist of the network, and `nodes` which are the vertices:
+
+```{r}
+head(D3data$links)
+head(D3data$nodes)
+```
+
+We will now add some other vertex properties to the `nodes` object, and we will create a new property which is a URL link to the Twitter profile of the MP:
+
+```{r}
+D3data$nodes$followers <- V(mp_graph)$followers_count
+D3data$nodes$url <- V(mp_graph)$profile_image_url
+D3data$nodes$colour <- V(mp_graph)$colour
+D3data$nodes$constituency <- V(mp_graph)$constituency
+D3data$nodes$degree <- V(mp_graph)$degree
+```
+
+Finally, we will use the  `jsonlite` package write this data to a JSON file ready for use in Javascript:
+
+```{r, eval = FALSE}
+library(jsonlite)
+jsonlite::write_json(D3data, "D3data.json")
+```
+
+This will write the data into a JSON file in your local R session.  I have made this JSON file available as a download for convenience. You can see the contents by navigating to https://ona-book.org/data/D3data.json.  It is a long set of key-value pairs which contain all of the information we loaded into our graph above.  You may need to scroll a long way down to see the full set of node data.
+
+
+## Generating the MP Twitter graph in `D3.js`
+
+In this section we will write the code to display a simple force-directed network for the MP graph colored by party.  We start be defining some variables which set up an SVG object and also set up a search bar to help search for individual nodes in the network, and a sliding bar to help us filter the network by strength of the connection.  
+
+We will do this in small pieces and then wrap it all into a script at the end.  This code uses v4 of the D3 library at https://d3js.org/d3.v4.min.js.
+
+```{js, eval = FALSE}
+// start svg
+var svg = d3.select("svg"),
+    width = +svg.attr("width"),
+    height = +svg.attr("height");
+
+// Create form for search (see function below).
+var search = d3.select("body").append('center').append('form').attr('onsubmit', 'return false;');
+
+// A slider that removes nodes below the input threshold.
+var slider = d3.select('body').append('p').append('center').text('Minimum number of scenes for connection: ').style('font-size', '75%');
+
+```

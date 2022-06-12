@@ -24,7 +24,7 @@ var dataPath = "https://ona-book.org/data/D3data.json"
 var box = search.append('input')
   .attr('type', 'text')
   .attr('id', 'searchTerm')
-  .attr('placeholder', 'Type to search...');
+  .attr('placeholder', 'Type MP name to search...');
 
 var button = search.append('input')
   .attr('type', 'button')
@@ -157,7 +157,7 @@ var toggle = 0;
         // Data join with only those new links.
         link = link.data(newData, function(d) {return d.source + ', ' + d.target;});
         link.exit().remove();
-        var linkEnter = link.enter().append('line').attr('class', 'link').style('stroke', '#808080');
+        var linkEnter = link.enter().append('line').attr('class', 'link').style('stroke', '#CDCDCD');
         link = linkEnter.merge(link);
 
         node = node.data(graph.nodes);
