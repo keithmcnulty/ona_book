@@ -20,7 +20,6 @@
 <meta name="twitter:image" content="https://ona-book.org/www/cover/cover-ona.png">
 <!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
 <script src="libs/bs4_book-1.0.0/bs4_book.js"></script><meta name="citation_title" content="Welcome | Handbook of Graphs and Networks in People Analytics: With Examples in R and Python">
 <meta name="citation_author" content="Keith McNulty">
@@ -61,9 +60,11 @@
     }
   </style>
 <link rel="stylesheet" href="css/style.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
 </head>
 <body data-spy="scroll" data-target="#toc">
-  <div class="banner">
+<div class="banner">
   <div class="banner__content">
     <div class="banner__text">
       <strong>Note for print/ebook owners:</strong> Please see details regarding print errors in Figures 2.3 and 2.10 <a href="https://github.com/keithmcnulty/ona_book/issues/12">here</a>
@@ -113,6 +114,7 @@
 <li><a class="" href="similarity.html"><span class="header-section-number">8</span> Assortativity and Similarity</a></li>
 <li><a class="" href="databases.html"><span class="header-section-number">9</span> Graphs as Databases</a></li>
 <li><a class="" href="using-twitter.html"><span class="header-section-number">10</span> Bonus Chapter: Using Twitter for Network Analysis</a></li>
+<li><a class="" href="advanced-viz.html"><span class="header-section-number">11</span> Bonus Chapter: Advanced Network Visualization using D3</a></li>
 <li><a class="" href="references.html">References</a></li>
 </ul>
 
@@ -121,7 +123,7 @@
         </div>
       </nav>
 </div>
-  </header>  <main class="col-sm-12 col-md-9 col-lg-7" id="content"><!--bookdown:title:end--><!--bookdown:title:start--><div id="welcome" class="section level1 unnumbered">
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><!--bookdown:title:end--><!--bookdown:title:start--><div id="welcome" class="section level1 unnumbered">
 <h1>Welcome<a class="anchor" aria-label="anchor" href="#welcome"><i class="fas fa-link"></i></a>
 </h1>
 <p>Welcome to the website of the book <em>Handbook of Graphs and Networks in People Analytics</em> by <a href="https://www.linkedin.com/in/keith-mcnulty/">Keith McNulty</a>. This is the second volume in a series of technical textbooks for professionals working in analytics. To view or order a print copy of the first volume, please go to its website: <a href="https://peopleanalytics-regression-book.org">Handbook of Regression Modeling in People Analytics</a>.</p>
@@ -137,7 +139,7 @@
 </h2>
 <p>For R and Python users, each of the data sets used in this book can be downloaded individually by following the code in each chapter. Alternatively, if you intend to work through all the chapters, all data sets can be downloaded in advance by installing the <code>onadata</code> package.</p>
 <p>For R users, this can be installed as follows:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># install onadata package</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"onadata"</span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ona-book.org">onadata</a></span><span class="op">)</span>
@@ -148,25 +150,25 @@
 <span class="co"># find out more about a specific data set ('karate' example)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/help.html">help</a></span><span class="op">(</span><span class="va">karate</span><span class="op">)</span></code></pre></div>
 <p>For Python users, use <code>pip install onadata</code> to install the package into your environment. Then, to use the package:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="index.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># import onadata package</span></span>
-<span id="cb3-2"><a href="index.html#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> onadata <span class="im">as</span> ona</span>
-<span id="cb3-3"><a href="index.html#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb3-4"><a href="index.html#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="index.html#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># see a list of data sets</span></span>
-<span id="cb3-6"><a href="index.html#cb3-6" aria-hidden="true" tabindex="-1"></a>ona.list_sets()</span>
-<span id="cb3-7"><a href="index.html#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="index.html#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># load data into a dataframe</span></span>
-<span id="cb3-9"><a href="index.html#cb3-9" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> ona.karate()</span>
-<span id="cb3-10"><a href="index.html#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="index.html#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># find out more about a specific data set ('karate' example)</span></span>
-<span id="cb3-12"><a href="index.html#cb3-12" aria-hidden="true" tabindex="-1"></a>ona.karate().info()</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="index.html#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># import onadata package</span></span>
+<span id="cb2-2"><a href="index.html#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> onadata <span class="im">as</span> ona</span>
+<span id="cb2-3"><a href="index.html#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-4"><a href="index.html#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="index.html#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># see a list of data sets</span></span>
+<span id="cb2-6"><a href="index.html#cb2-6" aria-hidden="true" tabindex="-1"></a>ona.list_sets()</span>
+<span id="cb2-7"><a href="index.html#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="index.html#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># load data into a dataframe</span></span>
+<span id="cb2-9"><a href="index.html#cb2-9" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> ona.karate()</span>
+<span id="cb2-10"><a href="index.html#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="index.html#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># find out more about a specific data set ('karate' example)</span></span>
+<span id="cb2-12"><a href="index.html#cb2-12" aria-hidden="true" tabindex="-1"></a>ona.karate().info()</span></code></pre></div>
 </div>
 <div id="technical-note-for-r-users" class="section level2 unnumbered">
 <h2>Technical note for R users<a class="anchor" aria-label="anchor" href="#technical-note-for-r-users"><i class="fas fa-link"></i></a>
 </h2>
 <p>This book uses the new native pipe operator <code>|&gt;</code> which was introduced in R version 4.1.0. Users using an older version of R, or who wish to use the alternative pipe operator <code>%&gt;%</code> can simply replace this in all code. However, an appropriate library containing <code>%&gt;%</code> will need to be loaded, such as <code>magrittr</code>, <code>dplyr</code> or <code>tidyverse</code>.</p>
 <p>Many thanks!</p>
-<p><em>Last updated: 12 June 2022</em></p>
+<p><em>Last updated: 17 June 2022</em></p>
 
 </div>
 </div>

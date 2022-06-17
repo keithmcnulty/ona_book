@@ -4,25 +4,62 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>11 Advanced Network Visualization | Handbook of Graphs and Networks in People Analytics</title>
+<title>11 Bonus Chapter: Advanced Network Visualization using D3 | Handbook of Graphs and Networks in People Analytics</title>
 <meta name="author" content="Keith McNulty">
-<meta name="description" content="A technical manual of graphs, networks and their applications in the people and social sciences">
-<meta name="generator" content="bookdown 0.22.15 with bs4_book()">
-<meta property="og:title" content="11 Advanced Network Visualization | Handbook of Graphs and Networks in People Analytics">
+<meta name="description" content="In Chapter 3, we reviewed a very wide range of options for visualizing network graphs in both R and Python, ranging from static visualizations through to interactive visualizations using...">
+<meta name="generator" content="bookdown 0.26 with bs4_book()">
+<meta property="og:title" content="11 Bonus Chapter: Advanced Network Visualization using D3 | Handbook of Graphs and Networks in People Analytics">
 <meta property="og:type" content="book">
 <meta property="og:url" content="https://ona-book.org/advanced-viz.html">
 <meta property="og:image" content="https://ona-book.org/www/cover/cover-ona.png">
-<meta property="og:description" content="A technical manual of graphs, networks and their applications in the people and social sciences">
+<meta property="og:description" content="In Chapter 3, we reviewed a very wide range of options for visualizing network graphs in both R and Python, ranging from static visualizations through to interactive visualizations using...">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="11 Advanced Network Visualization | Handbook of Graphs and Networks in People Analytics">
+<meta name="twitter:title" content="11 Bonus Chapter: Advanced Network Visualization using D3 | Handbook of Graphs and Networks in People Analytics">
 <meta name="twitter:site" content="@dr_keithmcnulty">
-<meta name="twitter:description" content="A technical manual of graphs, networks and their applications in the people and social sciences">
+<meta name="twitter:description" content="In Chapter 3, we reviewed a very wide range of options for visualizing network graphs in both R and Python, ranging from static visualizations through to interactive visualizations using...">
 <meta name="twitter:image" content="https://ona-book.org/www/cover/cover-ona.png">
-<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/header-attrs-2.9.5/header-attrs.js"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
-<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.2.5.1/tabs.js"></script><script src="libs/bs3compat-0.2.5.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
-<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script><link href="libs/vis-4.20.1/vis.css" rel="stylesheet">
-<script src="libs/vis-4.20.1/vis.min.js"></script><script src="libs/visNetwork-binding-2.0.9/visNetwork.js"></script><script src="libs/d3-4.5.0/d3.min.js"></script><script src="libs/forceNetwork-binding-0.4/forceNetwork.js"></script><script src="libs/sankey-1/sankey.js"></script><script src="libs/sankeyNetwork-binding-0.4/sankeyNetwork.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><link rel="stylesheet" href="css/style.css">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><meta name="citation_title" content="11 Bonus Chapter: Advanced Network Visualization using D3 | Handbook of Graphs and Networks in People Analytics: With Examples in R and Python">
+<meta name="citation_author" content="Keith McNulty">
+<meta name="citation_publication_date" content="2022">
+<meta name="citation_isbn" content="9781032204970">
+<script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script><link href="libs/vis-9.1.0/vis-network.min.css" rel="stylesheet">
+<script src="libs/vis-9.1.0/vis-network.min.js"></script><script src="libs/visNetwork-binding-2.1.0/visNetwork.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<script src="libs/d3-4.5.0/d3.min.js"></script><script src="libs/forceNetwork-binding-0.4/forceNetwork.js"></script><script src="libs/sankey-1/sankey.js"></script><script src="libs/sankeyNetwork-binding-0.4/sankeyNetwork.js"></script><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-400FPN6D44"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-400FPN6D44');
+    </script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<style type="text/css">
+    /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+        }
+    .hanging div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }
+  </style>
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body data-spy="scroll" data-target="#toc">
 
@@ -46,18 +83,20 @@
       <nav aria-label="Table of contents"><h2>Table of contents</h2>
         <ul class="book-toc list-unstyled">
 <li><a class="" href="index.html">Welcome</a></li>
+<li><a class="" href="foreword-by-professor-jeff-polzer.html">Foreword by Professor Jeff Polzer</a></li>
 <li><a class="" href="introduction.html">Introduction</a></li>
-<li><a class="" href="everywhere.html"><span class="header-section-number">1</span> Graphs everywhere!</a></li>
-<li><a class="" href="r-intro.html"><span class="header-section-number">2</span> The Basics of the R Programming Language</a></li>
-<li><a class="" href="working.html"><span class="header-section-number">3</span> Working With Graphs</a></li>
-<li><a class="" href="viz-graphs.html"><span class="header-section-number">4</span> Visualizing Graphs</a></li>
-<li><a class="" href="restructuring-data.html"><span class="header-section-number">5</span> Restructuring Data For Use in Graphs</a></li>
-<li><a class="" href="paths-distance.html"><span class="header-section-number">6</span> Paths and Distance</a></li>
-<li><a class="" href="vertex-importance.html"><span class="header-section-number">7</span> Vertex Importance and Centrality</a></li>
-<li><a class="" href="community.html"><span class="header-section-number">8</span> Components, Communities and Cliques</a></li>
-<li><a class="" href="similarity.html"><span class="header-section-number">9</span> Assortativity and Similarity of Networks</a></li>
-<li><a class="" href="databases.html"><span class="header-section-number">10</span> Graphs as Databases</a></li>
-<li><a class="active" href="advanced-viz.html"><span class="header-section-number">11</span> Advanced Network Visualization</a></li>
+<li><a class="" href="the-basics-of-the-r-programming-language.html">The Basics of the R Programming Language</a></li>
+<li><a class="" href="everywhere.html"><span class="header-section-number">1</span> Graphs Everywhere!</a></li>
+<li><a class="" href="working.html"><span class="header-section-number">2</span> Working with Graphs</a></li>
+<li><a class="" href="viz-graphs.html"><span class="header-section-number">3</span> Visualizing Graphs</a></li>
+<li><a class="" href="restructuring-data.html"><span class="header-section-number">4</span> Restructuring Data for Use in Graphs</a></li>
+<li><a class="" href="paths-distance.html"><span class="header-section-number">5</span> Paths and Distance</a></li>
+<li><a class="" href="vertex-importance.html"><span class="header-section-number">6</span> Vertex Importance and Centrality</a></li>
+<li><a class="" href="community.html"><span class="header-section-number">7</span> Components, Communities and Cliques</a></li>
+<li><a class="" href="similarity.html"><span class="header-section-number">8</span> Assortativity and Similarity</a></li>
+<li><a class="" href="databases.html"><span class="header-section-number">9</span> Graphs as Databases</a></li>
+<li><a class="" href="using-twitter.html"><span class="header-section-number">10</span> Bonus Chapter: Using Twitter for Network Analysis</a></li>
+<li><a class="active" href="advanced-viz.html"><span class="header-section-number">11</span> Bonus Chapter: Advanced Network Visualization using D3</a></li>
 <li><a class="" href="references.html">References</a></li>
 </ul>
 
@@ -68,21 +107,509 @@
 </div>
   </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="advanced-viz" class="section level1" number="11">
 <h1>
-<span class="header-section-number">11</span> Advanced Network Visualization<a class="anchor" aria-label="anchor" href="#advanced-viz"><i class="fas fa-link"></i></a>
+<span class="header-section-number">11</span> Bonus Chapter: Advanced Network Visualization using D3<a class="anchor" aria-label="anchor" href="#advanced-viz"><i class="fas fa-link"></i></a>
 </h1>
+<p>In Chapter <a href="viz-graphs.html#viz-graphs">3</a>, we reviewed a very wide range of options for visualizing network graphs in both R and Python, ranging from static visualizations through to interactive visualizations using Javascript data visualization libraries such as <code>D3.js</code> and <code>vis.js</code>. In these chapters we built our interactive graphs through using helpful packages that translate between R or Python and Javascript, so that users did not need to have knowledge of Javascript to take advantage of them.</p>
+<p>However, to have the widest range of flexibility to develop and customize interactive and compelling network visualizations, there are many advantages to be able to code these visualizations natively and directly in Javascript. In this chapter we will outline a a couple of examples of this using the Data Driven Documents (D3) library. D3 is an extemely popular and flexible library for designing data visualizations, and contains useful functions for different graph layouts. We will start by converting our graph data into a JSON format for use in Javascript using R. We will then move to Javascript and use some standard D3 functions for network visualization, customizing them to achieve a desired look. Finally we will embed this in a webpage that allows users to interact with the visualization, and show examples of how additional interactive features such as sliding scales can be added to the standard visualization.</p>
+<p>We will use the example of the British MP Twitter network from Bonus Chapter <a href="using-twitter.html#using-twitter">10</a> as an illustrative example in this chapter.</p>
+<div id="writing-graph-data-in-json-form-for-use-in-javascript" class="section level2" number="11.1">
+<h2>
+<span class="header-section-number">11.1</span> Writing graph data in JSON form for use in Javascript<a class="anchor" aria-label="anchor" href="#writing-graph-data-in-json-form-for-use-in-javascript"><i class="fas fa-link"></i></a>
+</h2>
+<p>To write graph data into JSON form, our first step is to create an <code>igraph</code> object which has all the properties we intend to use in the visualization. We start by loading the British MP Twitter network data that was created in Bonus Chapter <a href="using-twitter.html#using-twitter">10</a>.</p>
+<div class="sourceCode" id="cb609"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">mp_edgelist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"https://ona-book.org/data/mp_edgelist.csv"</span><span class="op">)</span>
+<span class="va">mp_vertices</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"https://ona-book.org/data/mp_vertices.csv"</span><span class="op">)</span></code></pre></div>
+<p>Recall the contents of these dataframes. The <code>mp_edgelist</code> dataframe contains the edges of the network with <code>from</code> and <code>to</code> columns containing MP Twitter handles and a <code>weight</code> property which indicates the strength of the Twitter connection between the two MPs.</p>
+<div class="sourceCode" id="cb610"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">mp_edgelist</span><span class="op">)</span></code></pre></div>
+<pre><code>##           from              to weight
+## 1 _OliviaBlake    Afzal4Gorton      2
+## 2 _OliviaBlake alanwhiteheadmp      4
+## 3 _OliviaBlake   Alex_Stafford      4
+## 4 _OliviaBlake       alexsobel      4
+## 5 _OliviaBlake  AlokSharma_RDG      1
+## 6 _OliviaBlake  AndyMcDonaldMP      2</code></pre>
+<p>The <code>mp_vertices</code> contains a set of information about each MP, which will be used as vertex properties in the network.</p>
+<div class="sourceCode" id="cb612"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">mp_vertices</span><span class="op">)</span></code></pre></div>
+<pre><code>##       screen_name                                                                           profile_image_url
+## 1 LindsayHoyle_MP                 http://pbs.twimg.com/profile_images/1219208145471516672/d5uiK99E_normal.jpg
+## 2     ClaireHanna                 http://pbs.twimg.com/profile_images/1229882927082803200/cd9N4yaE_normal.jpg
+## 3   columeastwood                 http://pbs.twimg.com/profile_images/1503856507229777921/vtRXBZyB_normal.jpg
+## 4   MickeyBradySF                 http://pbs.twimg.com/profile_images/1240647475171676163/HO8w04kr_normal.jpg
+## 5    PaulMaskeyMP                 http://pbs.twimg.com/profile_images/1394647673203040256/3pHc3qER_normal.jpg
+## 6   FrancieMolloy http://pbs.twimg.com/profile_images/2966488222/0e09c703ed91b0f3f7b48ebddf6bb2eb_normal.jpeg
+##   followers_count     constituency                              party            name  colour
+## 1           41560          Chorley                            Speaker   Lindsay Hoyle #000000
+## 2           41802    Belfast South Social Democratic and Labour Party    Claire Hanna #216a4d
+## 3           47402            Foyle Social Democratic and Labour Party  Colum Eastwood #216a4d
+## 4            5366 Newry and Armagh                          Sinn Féin   Mickey Brady  #008a49
+## 5           20281     Belfast West                          Sinn Féin    Paul Maskey  #008a49
+## 6            9035       Mid Ulster                          Sinn Féin Francie Molloy  #008a49</code></pre>
+<p>We will now proceed to create a graph from this data using <code>igraph</code> in R. For our purposes in this chapter we will create an undirected graph.</p>
+<div class="sourceCode" id="cb614"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://igraph.org">igraph</a></span><span class="op">)</span>
+
+<span class="co"># create undirected graph</span>
+<span class="op">(</span><span class="va">mp_graph</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span>
+  <span class="va">mp_edgelist</span>,
+  vertices <span class="op">=</span> <span class="va">mp_vertices</span>,
+  directed <span class="op">=</span> <span class="cn">FALSE</span>
+<span class="op">)</span><span class="op">)</span></code></pre></div>
+<pre><code>## IGRAPH 369514f UNW- 585 26833 -- 
+## + attr: name (v/c), profile_image_url (v/c), followers_count (v/n), constituency (v/c), party (v/c),
+## | colour (v/c), weight (e/n)
+## + edges from 369514f (vertex names):
+##  [1] Olivia Frances Blake--Afzal Khan           Olivia Frances Blake--Dr Alan Whitehead   
+##  [3] Olivia Frances Blake--Alexander Stafford   Olivia Frances Blake--Alex Sobel          
+##  [5] Olivia Frances Blake--Alok Sharma          Andy McDonald       --Olivia Frances Blake
+##  [7] Angela Crawley      --Olivia Frances Blake Olivia Frances Blake--Angela Rayner       
+##  [9] Olivia Frances Blake--Anna McMorrin        Olivia Frances Blake--Anneliese Dodds     
+## [11] Olivia Frances Blake--Apsana Begum         Olivia Frances Blake--Bambos Charalambous 
+## [13] Olivia Frances Blake--Boris Johnson        Olivia Frances Blake--Bridget Phillipson  
+## + ... omitted several edges</code></pre>
+<p>We can see that our graph contains all the data from our dataframes as vertex and edge properties.</p>
+<p>Next we will add the degree centrality of each vertex as a vertex property to allow us to use this to control vertex size in our visualizations.</p>
+<div class="sourceCode" id="cb616"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">mp_graph</span><span class="op">)</span><span class="op">$</span><span class="va">degree</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/degree.html">degree</a></span><span class="op">(</span><span class="va">mp_graph</span><span class="op">)</span></code></pre></div>
+<p>Now we will use the <code>networkD3</code> package in R to convert our <code>igraph</code> object into a list format that can be understood by <code>D3.js</code> network functions. We will need to let this function know how to group the vertices for the purposes of visualization - in this case we choose to group by party.</p>
+<div class="sourceCode" id="cb617"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://CRAN.R-project.org/package=networkD3">networkD3</a></span><span class="op">)</span>
+<span class="va">D3data</span> <span class="op">&lt;-</span> <span class="fu">networkD3</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/networkD3/man/igraph_to_networkD3.html">igraph_to_networkD3</a></span><span class="op">(</span>
+  <span class="va">mp_graph</span>, 
+  group <span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">mp_graph</span><span class="op">)</span><span class="op">$</span><span class="va">party</span>
+<span class="op">)</span></code></pre></div>
+<p>This creates a list containing two objects: <code>links</code>, which the edgelist of the network, and <code>nodes</code> which are the vertices:</p>
+<div class="sourceCode" id="cb618"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">D3data</span><span class="op">$</span><span class="va">links</span><span class="op">)</span></code></pre></div>
+<pre><code>##   source target value
+## 1      1    392     2
+## 2    332    392     1
+## 3    295    392     1
+## 4    319    392     3
+## 5    364    392     4
+## 6     73    392     2</code></pre>
+<div class="sourceCode" id="cb620"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">D3data</span><span class="op">$</span><span class="va">nodes</span><span class="op">)</span></code></pre></div>
+<pre><code>##              name                              group
+## 1   Lindsay Hoyle                            Speaker
+## 2    Claire Hanna Social Democratic and Labour Party
+## 3  Colum Eastwood Social Democratic and Labour Party
+## 4   Mickey Brady                           Sinn Féin
+## 5    Paul Maskey                           Sinn Féin
+## 6 Francie Molloy                           Sinn Féin</code></pre>
+<p>We will now add some other vertex properties to the <code>nodes</code> object, and we will create a new property which is a URL link to the Twitter profile of the MP:</p>
+<div class="sourceCode" id="cb622"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">D3data</span><span class="op">$</span><span class="va">nodes</span><span class="op">$</span><span class="va">followers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">mp_graph</span><span class="op">)</span><span class="op">$</span><span class="va">followers_count</span>
+<span class="va">D3data</span><span class="op">$</span><span class="va">nodes</span><span class="op">$</span><span class="va">url</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">mp_graph</span><span class="op">)</span><span class="op">$</span><span class="va">profile_image_url</span>
+<span class="va">D3data</span><span class="op">$</span><span class="va">nodes</span><span class="op">$</span><span class="va">colour</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">mp_graph</span><span class="op">)</span><span class="op">$</span><span class="va">colour</span>
+<span class="va">D3data</span><span class="op">$</span><span class="va">nodes</span><span class="op">$</span><span class="va">constituency</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">mp_graph</span><span class="op">)</span><span class="op">$</span><span class="va">constituency</span>
+<span class="va">D3data</span><span class="op">$</span><span class="va">nodes</span><span class="op">$</span><span class="va">degree</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">mp_graph</span><span class="op">)</span><span class="op">$</span><span class="va">degree</span></code></pre></div>
+<p>Finally, we will use the <code>jsonlite</code> package write this data to a JSON file ready for use in Javascript:</p>
+<div class="sourceCode" id="cb623"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://arxiv.org/abs/1403.2805">jsonlite</a></span><span class="op">)</span>
+<span class="fu">jsonlite</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/jsonlite/man/read_json.html">write_json</a></span><span class="op">(</span><span class="va">D3data</span>, <span class="st">"D3data.json"</span><span class="op">)</span></code></pre></div>
+<p>This will write the data into a JSON file in your local R session. I have made this JSON file available as a download for convenience. You can see the contents by navigating to <a href="https://ona-book.org/data/D3data.json" class="uri">https://ona-book.org/data/D3data.json</a>. It is a long set of key-value pairs which contain all of the information we loaded into our graph above. You may need to scroll a long way down to see the full set of node data.</p>
+</div>
+<div id="generating-the-basic-mp-twitter-graph-in-d3.js" class="section level2" number="11.2">
+<h2>
+<span class="header-section-number">11.2</span> Generating the basic MP Twitter graph in <code>D3.js</code><a class="anchor" aria-label="anchor" href="#generating-the-basic-mp-twitter-graph-in-d3.js"><i class="fas fa-link"></i></a>
+</h2>
+<p>In this section we will write the code to display a simple force-directed network for the MP graph colored by party. We will start with just the basic graph and then progressively add more interesting features to the visualization. This code uses v4 of the D3 library at <a href="https://d3js.org/d3.v4.min.js" class="uri">https://d3js.org/d3.v4.min.js</a>.</p>
+<p>First we define the svg container which we will build our visualization in and give it width and height attributes.</p>
+<div class="sourceCode" id="cb624"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb624-1"><a href="advanced-viz.html#cb624-1" aria-hidden="true" tabindex="-1"></a><span class="co">// start svg</span></span>
+<span id="cb624-2"><a href="advanced-viz.html#cb624-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> svg <span class="op">=</span> d3<span class="op">.</span><span class="fu">select</span>(<span class="st">"svg"</span>)<span class="op">,</span></span>
+<span id="cb624-3"><a href="advanced-viz.html#cb624-3" aria-hidden="true" tabindex="-1"></a>    width <span class="op">=</span> <span class="op">+</span>svg<span class="op">.</span><span class="fu">attr</span>(<span class="st">"width"</span>)<span class="op">,</span></span>
+<span id="cb624-4"><a href="advanced-viz.html#cb624-4" aria-hidden="true" tabindex="-1"></a>    height <span class="op">=</span> <span class="op">+</span>svg<span class="op">.</span><span class="fu">attr</span>(<span class="st">"height"</span>)<span class="op">;</span></span></code></pre></div>
+<p>We will create a zooming function to allow users to zoom in and out of the visualization in the svg container.</p>
+<div class="sourceCode" id="cb625"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb625-1"><a href="advanced-viz.html#cb625-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Zooming function translates the size of the svg container.</span></span>
+<span id="cb625-2"><a href="advanced-viz.html#cb625-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">zoomed</span>() {</span>
+<span id="cb625-3"><a href="advanced-viz.html#cb625-3" aria-hidden="true" tabindex="-1"></a>    container<span class="op">.</span><span class="fu">attr</span>(</span>
+<span id="cb625-4"><a href="advanced-viz.html#cb625-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"transform"</span><span class="op">,</span> </span>
+<span id="cb625-5"><a href="advanced-viz.html#cb625-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"translate("</span> <span class="op">+</span> d3<span class="op">.</span><span class="at">event</span><span class="op">.</span><span class="at">transform</span><span class="op">.</span><span class="at">x</span> <span class="op">+</span> <span class="st">", "</span> <span class="op">+</span> d3<span class="op">.</span><span class="at">event</span><span class="op">.</span><span class="at">transform</span><span class="op">.</span><span class="at">y</span> <span class="op">+</span> <span class="st">") scale("</span> <span class="op">+</span> d3<span class="op">.</span><span class="at">event</span><span class="op">.</span><span class="at">transform</span><span class="op">.</span><span class="at">k</span> <span class="op">+</span> <span class="st">")"</span></span>
+<span id="cb625-6"><a href="advanced-viz.html#cb625-6" aria-hidden="true" tabindex="-1"></a>  )<span class="op">;</span></span>
+<span id="cb625-7"><a href="advanced-viz.html#cb625-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb625-8"><a href="advanced-viz.html#cb625-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb625-9"><a href="advanced-viz.html#cb625-9" aria-hidden="true" tabindex="-1"></a><span class="co">// Call zoom for svg container.</span></span>
+<span id="cb625-10"><a href="advanced-viz.html#cb625-10" aria-hidden="true" tabindex="-1"></a>svg<span class="op">.</span><span class="fu">call</span>(d3<span class="op">.</span><span class="fu">zoom</span>()<span class="op">.</span><span class="fu">on</span>(<span class="st">'zoom'</span><span class="op">,</span> zoomed))<span class="op">;</span></span></code></pre></div>
+<p>We now create a D3 simulation object with various parameters, an SVG element group which will make up our network graph and a path to where we will get our data from, which is the JSON we created earlier.</p>
+<div class="sourceCode" id="cb626"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb626-1"><a href="advanced-viz.html#cb626-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> simulation <span class="op">=</span> d3<span class="op">.</span><span class="fu">forceSimulation</span>()</span>
+<span id="cb626-2"><a href="advanced-viz.html#cb626-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">force</span>(<span class="st">"link"</span><span class="op">,</span> d3<span class="op">.</span><span class="fu">forceLink</span>())</span>
+<span id="cb626-3"><a href="advanced-viz.html#cb626-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">force</span>(<span class="st">"charge"</span><span class="op">,</span> d3<span class="op">.</span><span class="fu">forceManyBody</span>()<span class="op">.</span><span class="fu">strength</span>([<span class="op">-</span><span class="dv">120</span>])<span class="op">.</span><span class="fu">distanceMax</span>([<span class="dv">500</span>]))</span>
+<span id="cb626-4"><a href="advanced-viz.html#cb626-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">force</span>(<span class="st">"center"</span><span class="op">,</span> d3<span class="op">.</span><span class="fu">forceCenter</span>(width <span class="op">/</span> <span class="dv">2</span><span class="op">,</span> height <span class="op">/</span> <span class="dv">2</span>))<span class="op">;</span></span>
+<span id="cb626-5"><a href="advanced-viz.html#cb626-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb626-6"><a href="advanced-viz.html#cb626-6" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> container <span class="op">=</span> svg<span class="op">.</span><span class="fu">append</span>(<span class="st">'g'</span>)<span class="op">;</span></span>
+<span id="cb626-7"><a href="advanced-viz.html#cb626-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb626-8"><a href="advanced-viz.html#cb626-8" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> dataPath <span class="op">=</span> <span class="st">"https://ona-book.org/data/D3data.json"</span><span class="op">;</span></span></code></pre></div>
+<p>Now we will write master function to generate the graph. The following code for the rest of this section will sit inside a function <code>function(error, graph)</code> to be applied to a JSON dataset via <code>d3.json()</code>. First we will need to instruct the function to throw an error if there is a problem with the dataset.</p>
+<div class="sourceCode" id="cb627"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb627-1"><a href="advanced-viz.html#cb627-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (error) <span class="cf">throw</span> error<span class="op">;</span></span></code></pre></div>
+<p>Now we create a function to scale the radius of the nodes to correspond to the degree centrality measure in the JSON, so that more connected individuals get larger nodes, and we set a minimum radius of 8 pixels and a maximum of 25 pixels. We will also use this scaling to control collision detection in the force-directed network.</p>
+<div class="sourceCode" id="cb628"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb628-1"><a href="advanced-viz.html#cb628-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Linear scale for degree centrality.</span></span>
+<span id="cb628-2"><a href="advanced-viz.html#cb628-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> degreeSize <span class="op">=</span> d3<span class="op">.</span><span class="fu">scaleLinear</span>()</span>
+<span id="cb628-3"><a href="advanced-viz.html#cb628-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">domain</span>(</span>
+<span id="cb628-4"><a href="advanced-viz.html#cb628-4" aria-hidden="true" tabindex="-1"></a>    [d3<span class="op">.</span><span class="fu">min</span>(graph<span class="op">.</span><span class="at">nodes</span><span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">degree</span>)<span class="op">,</span></span>
+<span id="cb628-5"><a href="advanced-viz.html#cb628-5" aria-hidden="true" tabindex="-1"></a>     d3<span class="op">.</span><span class="fu">max</span>(graph<span class="op">.</span><span class="at">nodes</span><span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">degree</span>)</span>
+<span id="cb628-6"><a href="advanced-viz.html#cb628-6" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb628-7"><a href="advanced-viz.html#cb628-7" aria-hidden="true" tabindex="-1"></a>   )</span>
+<span id="cb628-8"><a href="advanced-viz.html#cb628-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">range</span>([<span class="dv">8</span><span class="op">,</span><span class="dv">25</span>])<span class="op">;</span></span>
+<span id="cb628-9"><a href="advanced-viz.html#cb628-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb628-10"><a href="advanced-viz.html#cb628-10" aria-hidden="true" tabindex="-1"></a><span class="co">// Collision detection based on degree centrality.</span></span>
+<span id="cb628-11"><a href="advanced-viz.html#cb628-11" aria-hidden="true" tabindex="-1"></a>simulation<span class="op">.</span><span class="fu">force</span>(<span class="st">"collide"</span><span class="op">,</span> d3<span class="op">.</span><span class="fu">forceCollide</span>()<span class="op">.</span><span class="fu">radius</span>(d <span class="kw">=&gt;</span> <span class="fu">degreeSize</span>(d<span class="op">.</span><span class="at">degree</span>)))<span class="op">;</span></span></code></pre></div>
+<p>Now we create the node and the edge objects. We will just color the edges a light grey here.</p>
+<div class="sourceCode" id="cb629"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb629-1"><a href="advanced-viz.html#cb629-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> link <span class="op">=</span> container<span class="op">.</span><span class="fu">append</span>(<span class="st">"g"</span>)</span>
+<span id="cb629-2"><a href="advanced-viz.html#cb629-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">"class"</span><span class="op">,</span> <span class="st">"links"</span>)</span>
+<span id="cb629-3"><a href="advanced-viz.html#cb629-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">selectAll</span>(<span class="st">"line"</span>)</span>
+<span id="cb629-4"><a href="advanced-viz.html#cb629-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">data</span>(graph<span class="op">.</span><span class="at">links</span><span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">source</span> <span class="op">+</span> <span class="st">", "</span> <span class="op">+</span> d<span class="op">.</span><span class="at">target</span>)</span>
+<span id="cb629-5"><a href="advanced-viz.html#cb629-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">enter</span>()<span class="op">.</span><span class="fu">append</span>(<span class="st">"line"</span>)</span>
+<span id="cb629-6"><a href="advanced-viz.html#cb629-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">'class'</span><span class="op">,</span> <span class="st">'link'</span>)</span>
+<span id="cb629-7"><a href="advanced-viz.html#cb629-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">style</span>(<span class="st">'stroke'</span><span class="op">,</span> <span class="st">'#808080'</span>)<span class="op">;</span></span>
+<span id="cb629-8"><a href="advanced-viz.html#cb629-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb629-9"><a href="advanced-viz.html#cb629-9" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> node <span class="op">=</span> container<span class="op">.</span><span class="fu">selectAll</span>(<span class="st">".node"</span>)</span>
+<span id="cb629-10"><a href="advanced-viz.html#cb629-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">data</span>(graph<span class="op">.</span><span class="at">nodes</span>)</span>
+<span id="cb629-11"><a href="advanced-viz.html#cb629-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">enter</span>()</span>
+<span id="cb629-12"><a href="advanced-viz.html#cb629-12" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">append</span>(<span class="st">"g"</span>)</span>
+<span id="cb629-13"><a href="advanced-viz.html#cb629-13" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">"class"</span><span class="op">,</span> <span class="st">"node"</span>)<span class="op">;</span></span></code></pre></div>
+<p>Now we will give the nodes a circle appearance with a radius according to our previous <code>degreeSize</code> function, and a colour according to the political party color in the JSON.</p>
+<div class="sourceCode" id="cb630"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb630-1"><a href="advanced-viz.html#cb630-1" aria-hidden="true" tabindex="-1"></a>node<span class="op">.</span><span class="fu">append</span>(<span class="st">"circle"</span>)</span>
+<span id="cb630-2"><a href="advanced-viz.html#cb630-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Scale based on degree centrality </span></span>
+<span id="cb630-3"><a href="advanced-viz.html#cb630-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">'r'</span><span class="op">,</span> d <span class="kw">=&gt;</span> <span class="fu">degreeSize</span>(d<span class="op">.</span><span class="at">degree</span>))</span>
+<span id="cb630-4"><a href="advanced-viz.html#cb630-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">'cx'</span><span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">x</span>)</span>
+<span id="cb630-5"><a href="advanced-viz.html#cb630-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">'cy'</span><span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">y</span>)</span>
+<span id="cb630-6"><a href="advanced-viz.html#cb630-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Color by group (political party)</span></span>
+<span id="cb630-7"><a href="advanced-viz.html#cb630-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">"fill"</span><span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">colour</span>)</span>
+<span id="cb630-8"><a href="advanced-viz.html#cb630-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">'class'</span><span class="op">,</span> <span class="st">'node'</span>)</span></code></pre></div>
+<p>Now we will add informative tooltips to the nodes containing information on each of them, including the MPs party, constituency and followers count.</p>
+<div class="sourceCode" id="cb631"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb631-1"><a href="advanced-viz.html#cb631-1" aria-hidden="true" tabindex="-1"></a>node<span class="op">.</span><span class="fu">append</span>(<span class="st">"title"</span>)</span>
+<span id="cb631-2"><a href="advanced-viz.html#cb631-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">text</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">name</span> <span class="op">+</span> <span class="st">'</span><span class="sc">\n</span><span class="st">Party: '</span> <span class="op">+</span> d<span class="op">.</span><span class="at">group</span> <span class="op">+</span> <span class="st">'</span><span class="sc">\n</span><span class="st">Constituency: '</span> <span class="op">+</span> d<span class="op">.</span><span class="at">constituency</span> <span class="op">+</span> <span class="st">'</span><span class="sc">\n</span><span class="st">Followers: '</span> <span class="op">+</span> d<span class="op">.</span><span class="at">followers</span><span class="op">.</span><span class="fu">toString</span>())<span class="op">;</span></span></code></pre></div>
+<p>Now, as the force directed graph loads, the nodes will be moving for a period of time as the algorithm tries to find an equilibrium. We will want to see this in action, so we will need to write a function to ensure node and edge positioning updates on each tick as the algorithm progresses. Then we apply this to the nodes and edges.</p>
+<div class="sourceCode" id="cb632"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb632-1"><a href="advanced-viz.html#cb632-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">ticked</span>() {</span>
+<span id="cb632-2"><a href="advanced-viz.html#cb632-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// update edge coords</span></span>
+<span id="cb632-3"><a href="advanced-viz.html#cb632-3" aria-hidden="true" tabindex="-1"></a>  link</span>
+<span id="cb632-4"><a href="advanced-viz.html#cb632-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"x1"</span><span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">source</span><span class="op">.</span><span class="at">x</span>)</span>
+<span id="cb632-5"><a href="advanced-viz.html#cb632-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"y1"</span><span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">source</span><span class="op">.</span><span class="at">y</span>)</span>
+<span id="cb632-6"><a href="advanced-viz.html#cb632-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"x2"</span><span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">target</span><span class="op">.</span><span class="at">x</span>)</span>
+<span id="cb632-7"><a href="advanced-viz.html#cb632-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"y2"</span><span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">target</span><span class="op">.</span><span class="at">y</span>)<span class="op">;</span></span>
+<span id="cb632-8"><a href="advanced-viz.html#cb632-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb632-9"><a href="advanced-viz.html#cb632-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">// update node coords</span></span>
+<span id="cb632-10"><a href="advanced-viz.html#cb632-10" aria-hidden="true" tabindex="-1"></a>  node</span>
+<span id="cb632-11"><a href="advanced-viz.html#cb632-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"transform"</span><span class="op">,</span> d <span class="kw">=&gt;</span> <span class="st">"translate("</span> <span class="op">+</span> d<span class="op">.</span><span class="at">x</span> <span class="op">+</span> <span class="st">","</span> <span class="op">+</span> d<span class="op">.</span><span class="at">y</span> <span class="op">+</span> <span class="st">")"</span>)<span class="op">;</span></span>
+<span id="cb632-12"><a href="advanced-viz.html#cb632-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb632-13"><a href="advanced-viz.html#cb632-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb632-14"><a href="advanced-viz.html#cb632-14" aria-hidden="true" tabindex="-1"></a><span class="co">// run ticked function and move nodes on every tick</span></span>
+<span id="cb632-15"><a href="advanced-viz.html#cb632-15" aria-hidden="true" tabindex="-1"></a>simulation</span>
+<span id="cb632-16"><a href="advanced-viz.html#cb632-16" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">nodes</span>(graph<span class="op">.</span><span class="at">nodes</span>)</span>
+<span id="cb632-17"><a href="advanced-viz.html#cb632-17" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">on</span>(<span class="st">"tick"</span><span class="op">,</span> ticked)<span class="op">;</span></span>
+<span id="cb632-18"><a href="advanced-viz.html#cb632-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb632-19"><a href="advanced-viz.html#cb632-19" aria-hidden="true" tabindex="-1"></a><span class="co">// update edges immediately</span></span>
+<span id="cb632-20"><a href="advanced-viz.html#cb632-20" aria-hidden="true" tabindex="-1"></a>simulation<span class="op">.</span><span class="fu">force</span>(<span class="st">"link"</span>)</span>
+<span id="cb632-21"><a href="advanced-viz.html#cb632-21" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">links</span>(graph<span class="op">.</span><span class="at">links</span>)<span class="op">;</span></span></code></pre></div>
+<p>This is all we need for our simple version of the graph. Now we will save this as <code>mptwitter_d3_simple.js</code> in a <code>js</code> folder, and then we can create a simple HTML file called <code>mp_twitter_simple.html</code> to call in this visualization.</p>
+<div class="sourceCode" id="cb633"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb633-1"><a href="advanced-viz.html#cb633-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;!DOCTYPE </span>html<span class="dt">&gt;</span></span>
+<span id="cb633-2"><a href="advanced-viz.html#cb633-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;meta</span> <span class="er">charset</span><span class="ot">=</span><span class="st">"utf-8"</span><span class="kw">&gt;</span></span>
+<span id="cb633-3"><a href="advanced-viz.html#cb633-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;body&gt;</span></span>
+<span id="cb633-4"><a href="advanced-viz.html#cb633-4" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;div</span> <span class="er">class</span><span class="ot">=</span><span class="st">"row"</span><span class="kw">&gt;</span></span>
+<span id="cb633-5"><a href="advanced-viz.html#cb633-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;center&gt;</span></span>
+<span id="cb633-6"><a href="advanced-viz.html#cb633-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;svg</span> <span class="er">width</span><span class="ot">=</span><span class="st">"2000"</span> <span class="er">height</span><span class="ot">=</span><span class="st">"800"</span><span class="kw">&gt;&lt;/svg&gt;</span></span>
+<span id="cb633-7"><a href="advanced-viz.html#cb633-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;/center&gt;</span></span>
+<span id="cb633-8"><a href="advanced-viz.html#cb633-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;script</span> <span class="er">src</span><span class="ot">=</span><span class="st">"https://d3js.org/d3.v4.min.js"</span><span class="kw">&gt;&lt;/script&gt;</span></span>
+<span id="cb633-9"><a href="advanced-viz.html#cb633-9" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;script</span> <span class="er">src</span><span class="ot">=</span><span class="st">"js/mptwitter_d3_simple.js"</span><span class="kw">&gt;&lt;/script&gt;</span></span>
+<span id="cb633-10"><a href="advanced-viz.html#cb633-10" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/div&gt;</span></span>
+<span id="cb633-11"><a href="advanced-viz.html#cb633-11" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/body&gt;</span></span></code></pre></div>
+<p>You can see the full Javascript code for this <a href="https://github.com/keithmcnulty/ona_book/blob/main/docs/js/mptwitter_d3_simple.js">here</a>. This should produce a visualization such as that which is statically rendered in Figure <a href="advanced-viz.html#fig:basic-d3">11.1</a>, which will gradually move and settle into an equilibrium. You can visit the end product graph and play with it <a href="https://ona-book.org/mp_twitter_simple.html">here</a>. Note that hovering over nodes will reveal the tooltip information.</p>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:basic-d3"></span>
+<img src="www/advanced-viz/basic-d3.png" alt="Static rendering of the basic MP Twitter network in D3" width="90%"><p class="caption">
+Figure 11.1: Static rendering of the basic MP Twitter network in D3
+</p>
+</div>
+</div>
+<div id="adding-advanced-features-to-the-mp-twitter-graph" class="section level2" number="11.3">
+<h2>
+<span class="header-section-number">11.3</span> Adding advanced features to the MP Twitter graph<a class="anchor" aria-label="anchor" href="#adding-advanced-features-to-the-mp-twitter-graph"><i class="fas fa-link"></i></a>
+</h2>
+<p>The beauty of working in Javascript is the seemingly endless flexibility for adding user interaction features. In this section we will illustrate ways to enhance the graph we created in the previous section with a variety of compelling and fun interactive features.</p>
+<div id="adding-mp-photos-to-the-nodes" class="section level3" number="11.3.1">
+<h3>
+<span class="header-section-number">11.3.1</span> Adding MP photos to the nodes<a class="anchor" aria-label="anchor" href="#adding-mp-photos-to-the-nodes"><i class="fas fa-link"></i></a>
+</h3>
+<p>To help users better recognize an MP in the visualization, we could add the MP’s Twitter profile image onto the respective node. Since we have included the URL of the image in our JSON data, this should not be too challenging to do.</p>
+<p>First we create a pattern for each node, and give it an ID which we will associate with the URL of the profile image for the node. We give the pattern a specific positioning, height and width and then we append the profile image with the same height and width.</p>
+<div class="sourceCode" id="cb634"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb634-1"><a href="advanced-viz.html#cb634-1" aria-hidden="true" tabindex="-1"></a>node</span>
+<span id="cb634-2"><a href="advanced-viz.html#cb634-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">append</span>(<span class="st">"defs"</span>)</span>
+<span id="cb634-3"><a href="advanced-viz.html#cb634-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">append</span>(<span class="st">"pattern"</span>)</span>
+<span id="cb634-4"><a href="advanced-viz.html#cb634-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">'id'</span><span class="op">,</span> d <span class="kw">=&gt;</span> <span class="st">'image-'</span> <span class="op">+</span> d<span class="op">.</span><span class="at">name</span><span class="op">.</span><span class="fu">split</span>(<span class="st">" "</span>)<span class="op">.</span><span class="fu">join</span>(<span class="st">""</span>))</span>
+<span id="cb634-5"><a href="advanced-viz.html#cb634-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">'patternUnits'</span><span class="op">,</span> <span class="st">'userSpaceOnUse'</span>)</span>
+<span id="cb634-6"><a href="advanced-viz.html#cb634-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">'x'</span><span class="op">,</span> d <span class="kw">=&gt;</span> <span class="op">-</span><span class="fu">degreeSize</span>(d<span class="op">.</span><span class="at">degree</span>))</span>
+<span id="cb634-7"><a href="advanced-viz.html#cb634-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">'y'</span><span class="op">,</span> d <span class="kw">=&gt;</span> <span class="op">-</span><span class="fu">degreeSize</span>(d<span class="op">.</span><span class="at">degree</span>))</span>
+<span id="cb634-8"><a href="advanced-viz.html#cb634-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">'height'</span><span class="op">,</span> d <span class="kw">=&gt;</span> <span class="fu">degreeSize</span>(d<span class="op">.</span><span class="at">degree</span>) <span class="op">*</span> <span class="dv">2</span>)</span>
+<span id="cb634-9"><a href="advanced-viz.html#cb634-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">'width'</span><span class="op">,</span> d <span class="kw">=&gt;</span> <span class="fu">degreeSize</span>(d<span class="op">.</span><span class="at">degree</span>) <span class="op">*</span> <span class="dv">2</span>)</span>
+<span id="cb634-10"><a href="advanced-viz.html#cb634-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">append</span>(<span class="st">"image"</span>)</span>
+<span id="cb634-11"><a href="advanced-viz.html#cb634-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">'height'</span><span class="op">,</span> d <span class="kw">=&gt;</span> <span class="fu">degreeSize</span>(d<span class="op">.</span><span class="at">degree</span>) <span class="op">*</span> <span class="dv">2</span>)</span>
+<span id="cb634-12"><a href="advanced-viz.html#cb634-12" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">'width'</span><span class="op">,</span> d <span class="kw">=&gt;</span> <span class="fu">degreeSize</span>(d<span class="op">.</span><span class="at">degree</span>) <span class="op">*</span> <span class="dv">2</span>)</span>
+<span id="cb634-13"><a href="advanced-viz.html#cb634-13" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">'xlink:href'</span><span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">url</span>)<span class="op">;</span></span></code></pre></div>
+<p>We then append another circle on each node and fill this circle almost completely with the associated pattern we created. We don’t fill the entire circle as we want to keep the party colour as a border on the node around the Twitter profile image.</p>
+<div class="sourceCode" id="cb635"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb635-1"><a href="advanced-viz.html#cb635-1" aria-hidden="true" tabindex="-1"></a>node</span>
+<span id="cb635-2"><a href="advanced-viz.html#cb635-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">append</span>(<span class="st">"circle"</span>)</span>
+<span id="cb635-3"><a href="advanced-viz.html#cb635-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">'r'</span><span class="op">,</span> d <span class="kw">=&gt;</span> <span class="fl">0.9</span> <span class="op">*</span> <span class="fu">degreeSize</span>(d<span class="op">.</span><span class="at">degree</span>))</span>
+<span id="cb635-4"><a href="advanced-viz.html#cb635-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">'fill'</span><span class="op">,</span> d <span class="kw">=&gt;</span> <span class="st">'url(#image-'</span> <span class="op">+</span> d<span class="op">.</span><span class="at">name</span><span class="op">.</span><span class="fu">split</span>(<span class="st">" "</span>)<span class="op">.</span><span class="fu">join</span>(<span class="st">""</span>) <span class="op">+</span> <span class="st">')'</span>)<span class="op">;</span></span></code></pre></div>
+<p>If we insert this towards the end of our <code>d3.json()</code> master function, this will work nicely.</p>
+</div>
+<div id="visualize-the-neighbours-of-an-mp-on-click" class="section level3" number="11.3.2">
+<h3>
+<span class="header-section-number">11.3.2</span> Visualize the neighbours of an MP on click<a class="anchor" aria-label="anchor" href="#visualize-the-neighbours-of-an-mp-on-click"><i class="fas fa-link"></i></a>
+</h3>
+<p>Given the full graph is so complex, it might be nice to click on a specific MP and see just their network of neighbours. To do this we will want to toggle a function that reduces the opacity of all those links and nodes which are not in that MPs network. So first we set a toggle variable early in our code and set it to zero.</p>
+<div class="sourceCode" id="cb636"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb636-1"><a href="advanced-viz.html#cb636-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> toggle <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span></code></pre></div>
+<p>We also create a list of neighbouring nodes from our JSON, and write a function which searches that list to determine if two nodes are neighbours. This code will need to be placed early in the <code>d3.json()</code> master function.</p>
+<div class="sourceCode" id="cb637"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb637-1"><a href="advanced-viz.html#cb637-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Make object of all neighboring nodes.</span></span>
+<span id="cb637-2"><a href="advanced-viz.html#cb637-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> linkedByIndex <span class="op">=</span> {}<span class="op">;</span></span>
+<span id="cb637-3"><a href="advanced-viz.html#cb637-3" aria-hidden="true" tabindex="-1"></a>graph<span class="op">.</span><span class="at">links</span><span class="op">.</span><span class="fu">forEach</span>(<span class="kw">function</span>(d) {</span>
+<span id="cb637-4"><a href="advanced-viz.html#cb637-4" aria-hidden="true" tabindex="-1"></a>  linkedByIndex[d<span class="op">.</span><span class="at">source</span> <span class="op">+</span> <span class="st">','</span> <span class="op">+</span> d<span class="op">.</span><span class="at">target</span>] <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb637-5"><a href="advanced-viz.html#cb637-5" aria-hidden="true" tabindex="-1"></a>  linkedByIndex[d<span class="op">.</span><span class="at">target</span> <span class="op">+</span> <span class="st">','</span> <span class="op">+</span> d<span class="op">.</span><span class="at">source</span>] <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb637-6"><a href="advanced-viz.html#cb637-6" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb637-7"><a href="advanced-viz.html#cb637-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb637-8"><a href="advanced-viz.html#cb637-8" aria-hidden="true" tabindex="-1"></a><span class="co">// A function to test if two nodes are neighbours.</span></span>
+<span id="cb637-9"><a href="advanced-viz.html#cb637-9" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">neighboring</span>(a<span class="op">,</span> b) {</span>
+<span id="cb637-10"><a href="advanced-viz.html#cb637-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> linkedByIndex[a<span class="op">.</span><span class="at">index</span> <span class="op">+</span> <span class="st">','</span> <span class="op">+</span> b<span class="op">.</span><span class="at">index</span>]<span class="op">;</span></span>
+<span id="cb637-11"><a href="advanced-viz.html#cb637-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Next we append some new conditional opacity attributes to the circles containing the Twitter profile images, and to the edges connecting to the neighbours. If the toggle is off, we set these opacity attributes to highlight the neighbours, and if it is on, we set the opacity attributes to unhighlight them. We do this using ternary operators.</p>
+<div class="sourceCode" id="cb638"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb638-1"><a href="advanced-viz.html#cb638-1" aria-hidden="true" tabindex="-1"></a><span class="co">// adding on click functionality to the circles containing the Twitter images</span></span>
+<span id="cb638-2"><a href="advanced-viz.html#cb638-2" aria-hidden="true" tabindex="-1"></a>node</span>
+<span id="cb638-3"><a href="advanced-viz.html#cb638-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">append</span>(<span class="st">"circle"</span>)</span>
+<span id="cb638-4"><a href="advanced-viz.html#cb638-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">'r'</span><span class="op">,</span> d <span class="kw">=&gt;</span> <span class="fl">0.9</span> <span class="op">*</span> <span class="fu">degreeSize</span>(d<span class="op">.</span><span class="at">degree</span>))</span>
+<span id="cb638-5"><a href="advanced-viz.html#cb638-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">'fill'</span><span class="op">,</span> d <span class="kw">=&gt;</span> <span class="st">'url(#image-'</span> <span class="op">+</span> d<span class="op">.</span><span class="at">name</span><span class="op">.</span><span class="fu">split</span>(<span class="st">" "</span>)<span class="op">.</span><span class="fu">join</span>(<span class="st">""</span>) <span class="op">+</span> <span class="st">')'</span>)<span class="op">;</span></span>
+<span id="cb638-6"><a href="advanced-viz.html#cb638-6" aria-hidden="true" tabindex="-1"></a><span class="co">// On click, toggle ego networks for the selected node </span></span>
+<span id="cb638-7"><a href="advanced-viz.html#cb638-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">on</span>(<span class="st">'click'</span><span class="op">,</span> <span class="kw">function</span>(d) {</span>
+<span id="cb638-8"><a href="advanced-viz.html#cb638-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (toggle <span class="op">==</span> <span class="dv">0</span>) {</span>
+<span id="cb638-9"><a href="advanced-viz.html#cb638-9" aria-hidden="true" tabindex="-1"></a>      <span class="co">// Ternary operator restyles links and nodes if they are adjacent.</span></span>
+<span id="cb638-10"><a href="advanced-viz.html#cb638-10" aria-hidden="true" tabindex="-1"></a>      d3<span class="op">.</span><span class="fu">selectAll</span>(<span class="st">'.link'</span>)<span class="op">.</span><span class="fu">style</span>(<span class="st">'stroke-opacity'</span><span class="op">,</span> <span class="kw">function</span> (l) {</span>
+<span id="cb638-11"><a href="advanced-viz.html#cb638-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> l<span class="op">.</span><span class="at">target</span> <span class="op">==</span> d <span class="op">||</span> l<span class="op">.</span><span class="at">source</span> <span class="op">==</span> d <span class="op">?</span> <span class="dv">1</span> <span class="op">:</span> <span class="fl">0.1</span><span class="op">;</span></span>
+<span id="cb638-12"><a href="advanced-viz.html#cb638-12" aria-hidden="true" tabindex="-1"></a>      })<span class="op">;</span></span>
+<span id="cb638-13"><a href="advanced-viz.html#cb638-13" aria-hidden="true" tabindex="-1"></a>      d3<span class="op">.</span><span class="fu">selectAll</span>(<span class="st">'.node'</span>)<span class="op">.</span><span class="fu">style</span>(<span class="st">'opacity'</span><span class="op">,</span> <span class="kw">function</span> (n) {</span>
+<span id="cb638-14"><a href="advanced-viz.html#cb638-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="fu">neighboring</span>(d<span class="op">,</span> n) <span class="op">?</span> <span class="dv">1</span> <span class="op">:</span> <span class="fl">0.1</span><span class="op">;</span></span>
+<span id="cb638-15"><a href="advanced-viz.html#cb638-15" aria-hidden="true" tabindex="-1"></a>      })<span class="op">;</span></span>
+<span id="cb638-16"><a href="advanced-viz.html#cb638-16" aria-hidden="true" tabindex="-1"></a>      toggle <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb638-17"><a href="advanced-viz.html#cb638-17" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb638-18"><a href="advanced-viz.html#cb638-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span> {</span>
+<span id="cb638-19"><a href="advanced-viz.html#cb638-19" aria-hidden="true" tabindex="-1"></a>      <span class="co">// Restore nodes and links to normal opacity.</span></span>
+<span id="cb638-20"><a href="advanced-viz.html#cb638-20" aria-hidden="true" tabindex="-1"></a>      d3<span class="op">.</span><span class="fu">selectAll</span>(<span class="st">'.link'</span>)<span class="op">.</span><span class="fu">style</span>(<span class="st">'stroke-opacity'</span><span class="op">,</span> <span class="st">'0.6'</span>)<span class="op">;</span></span>
+<span id="cb638-21"><a href="advanced-viz.html#cb638-21" aria-hidden="true" tabindex="-1"></a>      d3<span class="op">.</span><span class="fu">selectAll</span>(<span class="st">'.node'</span>)<span class="op">.</span><span class="fu">style</span>(<span class="st">'opacity'</span><span class="op">,</span> <span class="st">'1'</span>)<span class="op">;</span></span>
+<span id="cb638-22"><a href="advanced-viz.html#cb638-22" aria-hidden="true" tabindex="-1"></a>      toggle <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb638-23"><a href="advanced-viz.html#cb638-23" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb638-24"><a href="advanced-viz.html#cb638-24" aria-hidden="true" tabindex="-1"></a>  })</span></code></pre></div>
+</div>
+<div id="allowing-users-to-drag-nodes-and-reposition-them" class="section level3" number="11.3.3">
+<h3>
+<span class="header-section-number">11.3.3</span> Allowing users to drag nodes and reposition them<a class="anchor" aria-label="anchor" href="#allowing-users-to-drag-nodes-and-reposition-them"><i class="fas fa-link"></i></a>
+</h3>
+<p>Users sometimes like to play with nodes and reposition them in the network to see how the force-directed algorithm adjusts to this new position of the node. To do this, we just need to define some drag functions that we can apply to our circles containing the Twitter profile images.</p>
+<div class="sourceCode" id="cb639"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb639-1"><a href="advanced-viz.html#cb639-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">dragstarted</span>(d) {</span>
+<span id="cb639-2"><a href="advanced-viz.html#cb639-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="op">!</span>d3<span class="op">.</span><span class="at">event</span><span class="op">.</span><span class="at">active</span>) simulation<span class="op">.</span><span class="fu">alphaTarget</span>(<span class="fl">0.3</span>)<span class="op">.</span><span class="fu">restart</span>()<span class="op">;</span></span>
+<span id="cb639-3"><a href="advanced-viz.html#cb639-3" aria-hidden="true" tabindex="-1"></a>  d<span class="op">.</span><span class="at">fx</span> <span class="op">=</span> d<span class="op">.</span><span class="at">x</span><span class="op">;</span></span>
+<span id="cb639-4"><a href="advanced-viz.html#cb639-4" aria-hidden="true" tabindex="-1"></a>  d<span class="op">.</span><span class="at">fy</span> <span class="op">=</span> d<span class="op">.</span><span class="at">y</span><span class="op">;</span></span>
+<span id="cb639-5"><a href="advanced-viz.html#cb639-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb639-6"><a href="advanced-viz.html#cb639-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb639-7"><a href="advanced-viz.html#cb639-7" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">dragged</span>(d) {</span>
+<span id="cb639-8"><a href="advanced-viz.html#cb639-8" aria-hidden="true" tabindex="-1"></a>  d<span class="op">.</span><span class="at">fx</span> <span class="op">=</span> d3<span class="op">.</span><span class="at">event</span><span class="op">.</span><span class="at">x</span><span class="op">;</span></span>
+<span id="cb639-9"><a href="advanced-viz.html#cb639-9" aria-hidden="true" tabindex="-1"></a>  d<span class="op">.</span><span class="at">fy</span> <span class="op">=</span> d3<span class="op">.</span><span class="at">event</span><span class="op">.</span><span class="at">y</span><span class="op">;</span></span>
+<span id="cb639-10"><a href="advanced-viz.html#cb639-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb639-11"><a href="advanced-viz.html#cb639-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb639-12"><a href="advanced-viz.html#cb639-12" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">dragended</span>(d) {</span>
+<span id="cb639-13"><a href="advanced-viz.html#cb639-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="op">!</span>d3<span class="op">.</span><span class="at">event</span><span class="op">.</span><span class="at">active</span>) simulation<span class="op">.</span><span class="fu">alphaTarget</span>(<span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb639-14"><a href="advanced-viz.html#cb639-14" aria-hidden="true" tabindex="-1"></a>  d<span class="op">.</span><span class="at">fx</span> <span class="op">=</span> <span class="kw">null</span><span class="op">;</span></span>
+<span id="cb639-15"><a href="advanced-viz.html#cb639-15" aria-hidden="true" tabindex="-1"></a>  d<span class="op">.</span><span class="at">fy</span> <span class="op">=</span> <span class="kw">null</span><span class="op">;</span></span>
+<span id="cb639-16"><a href="advanced-viz.html#cb639-16" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>We can then apply these functions to D3’s drag gestures by calling them on the circles containing the Twitter profile images.</p>
+<div class="sourceCode" id="cb640"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb640-1"><a href="advanced-viz.html#cb640-1" aria-hidden="true" tabindex="-1"></a><span class="co">// to be added to the Twitter image circles after the neighbour opacity code </span></span>
+<span id="cb640-2"><a href="advanced-viz.html#cb640-2" aria-hidden="true" tabindex="-1"></a><span class="op">.</span><span class="fu">call</span>(d3<span class="op">.</span><span class="fu">drag</span>()</span>
+<span id="cb640-3"><a href="advanced-viz.html#cb640-3" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">on</span>(<span class="st">"start"</span><span class="op">,</span> dragstarted)</span>
+<span id="cb640-4"><a href="advanced-viz.html#cb640-4" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">on</span>(<span class="st">"drag"</span><span class="op">,</span> dragged)</span>
+<span id="cb640-5"><a href="advanced-viz.html#cb640-5" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">on</span>(<span class="st">"end"</span><span class="op">,</span> dragended))<span class="op">;</span></span></code></pre></div>
+</div>
+<div id="adding-a-search-box-to-search-and-highlight-a-specific-mp-name" class="section level3" number="11.3.4">
+<h3>
+<span class="header-section-number">11.3.4</span> Adding a search box to search and highlight a specific MP name<a class="anchor" aria-label="anchor" href="#adding-a-search-box-to-search-and-highlight-a-specific-mp-name"><i class="fas fa-link"></i></a>
+</h3>
+<p>With nearly 600 MPs in the network, it’s hard to find a specific MP, and so an ability to search by name would be extremely useful. For this we will need to add a form containing a text box and a search button to the body of our web page, so these variables will need to be added to the early code.</p>
+<div class="sourceCode" id="cb641"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb641-1"><a href="advanced-viz.html#cb641-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Create form for search.</span></span>
+<span id="cb641-2"><a href="advanced-viz.html#cb641-2" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> search <span class="op">=</span> d3<span class="op">.</span><span class="fu">select</span>(<span class="st">"body"</span>)</span>
+<span id="cb641-3"><a href="advanced-viz.html#cb641-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">append</span>(<span class="st">'center'</span>)</span>
+<span id="cb641-4"><a href="advanced-viz.html#cb641-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">append</span>(<span class="st">'form'</span>)</span>
+<span id="cb641-5"><a href="advanced-viz.html#cb641-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">'onsubmit'</span><span class="op">,</span> <span class="st">'return false;'</span>)<span class="op">;</span></span>
+<span id="cb641-6"><a href="advanced-viz.html#cb641-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb641-7"><a href="advanced-viz.html#cb641-7" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> box <span class="op">=</span> search<span class="op">.</span><span class="fu">append</span>(<span class="st">'input'</span>)</span>
+<span id="cb641-8"><a href="advanced-viz.html#cb641-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">'type'</span><span class="op">,</span> <span class="st">'text'</span>)</span>
+<span id="cb641-9"><a href="advanced-viz.html#cb641-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">'id'</span><span class="op">,</span> <span class="st">'searchTerm'</span>)</span>
+<span id="cb641-10"><a href="advanced-viz.html#cb641-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">'placeholder'</span><span class="op">,</span> <span class="st">'Type MP name to search...'</span>)<span class="op">;</span></span>
+<span id="cb641-11"><a href="advanced-viz.html#cb641-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb641-12"><a href="advanced-viz.html#cb641-12" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> button <span class="op">=</span> search<span class="op">.</span><span class="fu">append</span>(<span class="st">'input'</span>)</span>
+<span id="cb641-13"><a href="advanced-viz.html#cb641-13" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">'type'</span><span class="op">,</span> <span class="st">'button'</span>)</span>
+<span id="cb641-14"><a href="advanced-viz.html#cb641-14" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">'value'</span><span class="op">,</span> <span class="st">'Search'</span>)</span>
+<span id="cb641-15"><a href="advanced-viz.html#cb641-15" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">on</span>(<span class="st">'click'</span><span class="op">,</span> () <span class="kw">=&gt;</span> <span class="fu">searchNodes</span>())<span class="op">;</span></span></code></pre></div>
+<p>Our button calls a function called <code>searchNodes()</code>, but we haven’t written it yet. Let’s write this function so that it makes everything except the nodes that match the search term disappear for 5 seconds and then return.</p>
+<div class="sourceCode" id="cb642"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb642-1"><a href="advanced-viz.html#cb642-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Make all non-matching nodes and all edges disappear for 5 seconds.</span></span>
+<span id="cb642-2"><a href="advanced-viz.html#cb642-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">searchNodes</span>() {</span>
+<span id="cb642-3"><a href="advanced-viz.html#cb642-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> term <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(<span class="st">'searchTerm'</span>)<span class="op">.</span><span class="at">value</span><span class="op">;</span></span>
+<span id="cb642-4"><a href="advanced-viz.html#cb642-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> selected <span class="op">=</span> container<span class="op">.</span><span class="fu">selectAll</span>(<span class="st">'.node'</span>)<span class="op">.</span><span class="fu">filter</span>(<span class="kw">function</span> (d) {</span>
+<span id="cb642-5"><a href="advanced-viz.html#cb642-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> d<span class="op">.</span><span class="at">name</span><span class="op">.</span><span class="fu">toLowerCase</span>()<span class="op">.</span><span class="fu">search</span>(term<span class="op">.</span><span class="fu">toLowerCase</span>()) <span class="op">==</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span></span>
+<span id="cb642-6"><a href="advanced-viz.html#cb642-6" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb642-7"><a href="advanced-viz.html#cb642-7" aria-hidden="true" tabindex="-1"></a>  selected<span class="op">.</span><span class="fu">style</span>(<span class="st">'opacity'</span><span class="op">,</span> <span class="st">'0'</span>)<span class="op">;</span></span>
+<span id="cb642-8"><a href="advanced-viz.html#cb642-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">var</span> link <span class="op">=</span> container<span class="op">.</span><span class="fu">selectAll</span>(<span class="st">'.link'</span>)<span class="op">;</span></span>
+<span id="cb642-9"><a href="advanced-viz.html#cb642-9" aria-hidden="true" tabindex="-1"></a>  link<span class="op">.</span><span class="fu">style</span>(<span class="st">'stroke-opacity'</span><span class="op">,</span> <span class="st">'0'</span>)<span class="op">;</span></span>
+<span id="cb642-10"><a href="advanced-viz.html#cb642-10" aria-hidden="true" tabindex="-1"></a>  d3<span class="op">.</span><span class="fu">selectAll</span>(<span class="st">'.node'</span>)</span>
+<span id="cb642-11"><a href="advanced-viz.html#cb642-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">transition</span>()</span>
+<span id="cb642-12"><a href="advanced-viz.html#cb642-12" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">duration</span>(<span class="dv">5000</span>)</span>
+<span id="cb642-13"><a href="advanced-viz.html#cb642-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">style</span>(<span class="st">'opacity'</span><span class="op">,</span> <span class="st">'1'</span>)<span class="op">;</span></span>
+<span id="cb642-14"><a href="advanced-viz.html#cb642-14" aria-hidden="true" tabindex="-1"></a>  d3<span class="op">.</span><span class="fu">selectAll</span>(<span class="st">'.link'</span>)</span>
+<span id="cb642-15"><a href="advanced-viz.html#cb642-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">transition</span>()</span>
+<span id="cb642-16"><a href="advanced-viz.html#cb642-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">duration</span>(<span class="dv">5000</span>)</span>
+<span id="cb642-17"><a href="advanced-viz.html#cb642-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">style</span>(<span class="st">'stroke-opacity'</span><span class="op">,</span> <span class="st">'0.6'</span>)<span class="op">;</span></span>
+<span id="cb642-18"><a href="advanced-viz.html#cb642-18" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Now we have a nice feature where the nodes that match the search appear temporarily by themselves so the user can see where they are in the network.</p>
+</div>
+<div id="adjusting-the-criteria-for-nodes-to-be-adjacentconnected" class="section level3" number="11.3.5">
+<h3>
+<span class="header-section-number">11.3.5</span> Adjusting the criteria for nodes to be adjacent/connected<a class="anchor" aria-label="anchor" href="#adjusting-the-criteria-for-nodes-to-be-adjacentconnected"><i class="fas fa-link"></i></a>
+</h3>
+<p>Recall that our JSON links contain a <code>value</code> key, which is the weight of the edge between the two MPs. Recall that this represents a measure of the strength of the connection of the two MPs based on the number of Twitter interactions between them. Given that our initial graph is complex and contains tens of thousands of edges, users may wish to apply a higher criteria to the number of interactions that define a link between two MPs.</p>
+<p>To do this, we can create a slider in the body of our web page, and give the slider a range of values from 1 to, say, half the maximum value in the JSON. We can then use the slider value to recalculate the edges of the graph using this value as a threshold.</p>
+<p>First, let’s create the slider.</p>
+<div class="sourceCode" id="cb643"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb643-1"><a href="advanced-viz.html#cb643-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> slider <span class="op">=</span> d3<span class="op">.</span><span class="fu">select</span>(<span class="st">'body'</span>)</span>
+<span id="cb643-2"><a href="advanced-viz.html#cb643-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">append</span>(<span class="st">'p'</span>)</span>
+<span id="cb643-3"><a href="advanced-viz.html#cb643-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">append</span>(<span class="st">'center'</span>)</span>
+<span id="cb643-4"><a href="advanced-viz.html#cb643-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">text</span>(<span class="st">'Minimum Twitter interactions for connection: '</span>)</span>
+<span id="cb643-5"><a href="advanced-viz.html#cb643-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">style</span>(<span class="st">'font-size'</span><span class="op">,</span> <span class="st">'75%'</span>)<span class="op">;</span></span></code></pre></div>
+<p>Then, towards the end of our master function, we can create the conversation between the slider and the graph. We can give the slider an initial threshold label of 1. We can give it an input range from 1 up to half or the maximum value of the edges.</p>
+<p>Upon a change of input from the slider, we run a function which takes the new threshold value, pushes a new set of edges based on that threshold. We keep all the nodes in the visualization but we now only connect edges which have the required threshold. We then refresh the graph and restart the force directed similation.</p>
+<div class="sourceCode" id="cb644"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb644-1"><a href="advanced-viz.html#cb644-1" aria-hidden="true" tabindex="-1"></a>slider<span class="op">.</span><span class="fu">append</span>(<span class="st">'label'</span>)</span>
+<span id="cb644-2"><a href="advanced-viz.html#cb644-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">'for'</span><span class="op">,</span> <span class="st">'threshold'</span>)</span>
+<span id="cb644-3"><a href="advanced-viz.html#cb644-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">text</span>(<span class="st">'1'</span>)<span class="op">.</span><span class="fu">style</span>(<span class="st">'font-value'</span><span class="op">,</span> <span class="st">'bold'</span>)</span>
+<span id="cb644-4"><a href="advanced-viz.html#cb644-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">style</span>(<span class="st">'font-size'</span><span class="op">,</span> <span class="st">'120%'</span>)<span class="op">;</span></span>
+<span id="cb644-5"><a href="advanced-viz.html#cb644-5" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb644-6"><a href="advanced-viz.html#cb644-6" aria-hidden="true" tabindex="-1"></a>slider<span class="op">.</span><span class="fu">append</span>(<span class="st">'input'</span>)</span>
+<span id="cb644-7"><a href="advanced-viz.html#cb644-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">'type'</span><span class="op">,</span> <span class="st">'range'</span>)</span>
+<span id="cb644-8"><a href="advanced-viz.html#cb644-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">'min'</span><span class="op">,</span> <span class="dv">1</span>)</span>
+<span id="cb644-9"><a href="advanced-viz.html#cb644-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">'max'</span><span class="op">,</span> d3<span class="op">.</span><span class="fu">max</span>(graph<span class="op">.</span><span class="at">links</span><span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">value</span><span class="op">/</span><span class="dv">2</span>)</span>
+<span id="cb644-10"><a href="advanced-viz.html#cb644-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">'value'</span><span class="op">,</span> <span class="dv">1</span>)</span>
+<span id="cb644-11"><a href="advanced-viz.html#cb644-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">'id'</span><span class="op">,</span> <span class="st">'threshold'</span>)</span>
+<span id="cb644-12"><a href="advanced-viz.html#cb644-12" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">style</span>(<span class="st">'width'</span><span class="op">,</span> <span class="st">'50%'</span>)</span>
+<span id="cb644-13"><a href="advanced-viz.html#cb644-13" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">style</span>(<span class="st">'display'</span><span class="op">,</span> <span class="st">'block'</span>)</span>
+<span id="cb644-14"><a href="advanced-viz.html#cb644-14" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">on</span>(<span class="st">'input'</span><span class="op">,</span> <span class="kw">function</span> () { </span>
+<span id="cb644-15"><a href="advanced-viz.html#cb644-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> threshold <span class="op">=</span> <span class="kw">this</span><span class="op">.</span><span class="at">value</span><span class="op">;</span></span>
+<span id="cb644-16"><a href="advanced-viz.html#cb644-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb644-17"><a href="advanced-viz.html#cb644-17" aria-hidden="true" tabindex="-1"></a>    d3<span class="op">.</span><span class="fu">select</span>(<span class="st">'label'</span>)<span class="op">.</span><span class="fu">text</span>(threshold)<span class="op">;</span></span>
+<span id="cb644-18"><a href="advanced-viz.html#cb644-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb644-19"><a href="advanced-viz.html#cb644-19" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Find the links that are at or above the threshold.</span></span>
+<span id="cb644-20"><a href="advanced-viz.html#cb644-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> newData <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb644-21"><a href="advanced-viz.html#cb644-21" aria-hidden="true" tabindex="-1"></a>    graph<span class="op">.</span><span class="at">links</span><span class="op">.</span><span class="fu">forEach</span>( <span class="kw">function</span> (d) {</span>
+<span id="cb644-22"><a href="advanced-viz.html#cb644-22" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (d<span class="op">.</span><span class="at">value</span> <span class="op">&gt;=</span> threshold) {newData<span class="op">.</span><span class="fu">push</span>(d)<span class="op">;</span> }<span class="op">;</span></span>
+<span id="cb644-23"><a href="advanced-viz.html#cb644-23" aria-hidden="true" tabindex="-1"></a>    })<span class="op">;</span></span>
+<span id="cb644-24"><a href="advanced-viz.html#cb644-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb644-25"><a href="advanced-viz.html#cb644-25" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Data join with only those new links.</span></span>
+<span id="cb644-26"><a href="advanced-viz.html#cb644-26" aria-hidden="true" tabindex="-1"></a>    link <span class="op">=</span> link<span class="op">.</span><span class="fu">data</span>(newData<span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">source</span> <span class="op">+</span> <span class="st">', '</span> <span class="op">+</span> d<span class="op">.</span><span class="at">target</span>)<span class="op">;</span></span>
+<span id="cb644-27"><a href="advanced-viz.html#cb644-27" aria-hidden="true" tabindex="-1"></a>    link<span class="op">.</span><span class="fu">exit</span>()<span class="op">.</span><span class="fu">remove</span>()<span class="op">;</span></span>
+<span id="cb644-28"><a href="advanced-viz.html#cb644-28" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> linkEnter <span class="op">=</span> link<span class="op">.</span><span class="fu">enter</span>()<span class="op">.</span><span class="fu">append</span>(<span class="st">'line'</span>)<span class="op">.</span><span class="fu">attr</span>(<span class="st">'class'</span><span class="op">,</span> <span class="st">'link'</span>)<span class="op">.</span><span class="fu">style</span>(<span class="st">'stroke'</span><span class="op">,</span> <span class="st">'#808080'</span>)<span class="op">;</span></span>
+<span id="cb644-29"><a href="advanced-viz.html#cb644-29" aria-hidden="true" tabindex="-1"></a>    link <span class="op">=</span> linkEnter<span class="op">.</span><span class="fu">merge</span>(link)<span class="op">;</span></span>
+<span id="cb644-30"><a href="advanced-viz.html#cb644-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb644-31"><a href="advanced-viz.html#cb644-31" aria-hidden="true" tabindex="-1"></a>    node <span class="op">=</span> node<span class="op">.</span><span class="fu">data</span>(graph<span class="op">.</span><span class="at">nodes</span>)<span class="op">;</span></span>
+<span id="cb644-32"><a href="advanced-viz.html#cb644-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb644-33"><a href="advanced-viz.html#cb644-33" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Restart simulation with new link data.</span></span>
+<span id="cb644-34"><a href="advanced-viz.html#cb644-34" aria-hidden="true" tabindex="-1"></a>    simulation</span>
+<span id="cb644-35"><a href="advanced-viz.html#cb644-35" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">nodes</span>(graph<span class="op">.</span><span class="at">nodes</span>)<span class="op">.</span><span class="fu">on</span>(<span class="st">'tick'</span><span class="op">,</span> ticked)</span>
+<span id="cb644-36"><a href="advanced-viz.html#cb644-36" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">force</span>(<span class="st">"link"</span>)<span class="op">.</span><span class="fu">links</span>(newData)<span class="op">;</span></span>
+<span id="cb644-37"><a href="advanced-viz.html#cb644-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb644-38"><a href="advanced-viz.html#cb644-38" aria-hidden="true" tabindex="-1"></a>    simulation<span class="op">.</span><span class="fu">alphaTarget</span>(<span class="fl">0.1</span>)<span class="op">.</span><span class="fu">restart</span>()<span class="op">;</span></span>
+<span id="cb644-39"><a href="advanced-viz.html#cb644-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb644-40"><a href="advanced-viz.html#cb644-40" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<p>This leads to a fun feature where the disconnected nodes (isolates) float off into space and we are left with simpler and smaller connected components.</p>
+</div>
+<div id="wrapping-the-graph-in-a-more-stylish-web-design" class="section level3" number="11.3.6">
+<h3>
+<span class="header-section-number">11.3.6</span> Wrapping the graph in a more stylish web design<a class="anchor" aria-label="anchor" href="#wrapping-the-graph-in-a-more-stylish-web-design"><i class="fas fa-link"></i></a>
+</h3>
+<p>Given the effort we have put into creating all these cool features, it would be a shame not to make some finishing touches to the styling of the webpage that we will embed it in. Once we save our Javascript code in the <code>js</code> folder using the filename <code>mptwitter_d3.js</code>, there are a few simple tweaks we can make to the HTML code to really improve the overall look and feel.</p>
+<p>By consulting the <a href="https://www.parliament.uk/globalassets/documents/foi/181321bg.pdf">brand guide</a> for the UK Parliament, we can find the colour associated with the House of Commons, and we can also choose a free Google typeface as close as possible to the one recommended - in this case I will use Cinzel serif for the various text elements of the web page. Below is some enhanced HTML code to include this styling, which I will save as <code>mp_twitter.html</code>.</p>
+<div class="sourceCode" id="cb645"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb645-1"><a href="advanced-viz.html#cb645-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;!DOCTYPE </span>html<span class="dt">&gt;</span></span>
+<span id="cb645-2"><a href="advanced-viz.html#cb645-2" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;meta</span> <span class="er">charset</span><span class="ot">=</span><span class="st">"utf-8"</span><span class="kw">&gt;</span></span>
+<span id="cb645-3"><a href="advanced-viz.html#cb645-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;link</span> <span class="er">rel</span><span class="ot">=</span><span class="st">"preconnect"</span> <span class="er">href</span><span class="ot">=</span><span class="st">"https://fonts.googleapis.com"</span><span class="kw">&gt;</span></span>
+<span id="cb645-4"><a href="advanced-viz.html#cb645-4" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;link</span> <span class="er">rel</span><span class="ot">=</span><span class="st">"preconnect"</span> <span class="er">href</span><span class="ot">=</span><span class="st">"https://fonts.gstatic.com"</span> <span class="er">crossorigin</span><span class="kw">&gt;</span></span>
+<span id="cb645-5"><a href="advanced-viz.html#cb645-5" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;link</span> <span class="er">href</span><span class="ot">=</span><span class="st">"https://fonts.googleapis.com/css2?family=Cinzel</span><span class="er">&amp;</span><span class="st">family=Source+Sans+Pro:wght@300;600</span><span class="er">&amp;</span><span class="st">display=swap"</span> <span class="er">rel</span><span class="ot">=</span><span class="st">"stylesheet"</span><span class="kw">&gt;</span></span>
+<span id="cb645-6"><a href="advanced-viz.html#cb645-6" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;style&gt;</span></span>
+<span id="cb645-7"><a href="advanced-viz.html#cb645-7" aria-hidden="true" tabindex="-1"></a>body {</span>
+<span id="cb645-8"><a href="advanced-viz.html#cb645-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">font-family</span>: <span class="st">'Cinzel'</span><span class="op">,</span> <span class="dv">serif</span><span class="op">;</span></span>
+<span id="cb645-9"><a href="advanced-viz.html#cb645-9" aria-hidden="true" tabindex="-1"></a>  <span class="kw">color</span>: <span class="cn">#4A7729</span><span class="op">;</span></span>
+<span id="cb645-10"><a href="advanced-viz.html#cb645-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">background-color</span>: <span class="cn">#ffffff</span><span class="op">;</span></span>
+<span id="cb645-11"><a href="advanced-viz.html#cb645-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb645-12"><a href="advanced-viz.html#cb645-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb645-13"><a href="advanced-viz.html#cb645-13" aria-hidden="true" tabindex="-1"></a><span class="fu">.links</span> line {</span>
+<span id="cb645-14"><a href="advanced-viz.html#cb645-14" aria-hidden="true" tabindex="-1"></a>  stroke: <span class="cn">#999</span><span class="op">;</span></span>
+<span id="cb645-15"><a href="advanced-viz.html#cb645-15" aria-hidden="true" tabindex="-1"></a>  stroke-opacity: <span class="dv">0.6</span><span class="op">;</span></span>
+<span id="cb645-16"><a href="advanced-viz.html#cb645-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb645-17"><a href="advanced-viz.html#cb645-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb645-18"><a href="advanced-viz.html#cb645-18" aria-hidden="true" tabindex="-1"></a><span class="fu">.nodes</span> circle {</span>
+<span id="cb645-19"><a href="advanced-viz.html#cb645-19" aria-hidden="true" tabindex="-1"></a>  stroke: <span class="cn">#fff</span><span class="op">;</span></span>
+<span id="cb645-20"><a href="advanced-viz.html#cb645-20" aria-hidden="true" tabindex="-1"></a>  stroke-width: <span class="dv">1.5</span><span class="dt">px</span><span class="op">;</span></span>
+<span id="cb645-21"><a href="advanced-viz.html#cb645-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb645-22"><a href="advanced-viz.html#cb645-22" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/style&gt;</span></span>
+<span id="cb645-23"><a href="advanced-viz.html#cb645-23" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;body&gt;</span></span>
+<span id="cb645-24"><a href="advanced-viz.html#cb645-24" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;div</span> <span class="er">class</span><span class="ot">=</span><span class="st">"row"</span><span class="kw">&gt;</span></span>
+<span id="cb645-25"><a href="advanced-viz.html#cb645-25" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;center&gt;</span></span>
+<span id="cb645-26"><a href="advanced-viz.html#cb645-26" aria-hidden="true" tabindex="-1"></a>      <span class="kw">&lt;h1&gt;</span></span>
+<span id="cb645-27"><a href="advanced-viz.html#cb645-27" aria-hidden="true" tabindex="-1"></a>        House of Commons MP Twitter Network</span>
+<span id="cb645-28"><a href="advanced-viz.html#cb645-28" aria-hidden="true" tabindex="-1"></a>      <span class="kw">&lt;/h1&gt;</span></span>
+<span id="cb645-29"><a href="advanced-viz.html#cb645-29" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;/center&gt;</span></span>
+<span id="cb645-30"><a href="advanced-viz.html#cb645-30" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;/div&gt;</span></span>
+<span id="cb645-31"><a href="advanced-viz.html#cb645-31" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;div</span> <span class="er">class</span><span class="ot">=</span><span class="st">"row"</span><span class="kw">&gt;</span></span>
+<span id="cb645-32"><a href="advanced-viz.html#cb645-32" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;center&gt;</span></span>
+<span id="cb645-33"><a href="advanced-viz.html#cb645-33" aria-hidden="true" tabindex="-1"></a>    <span class="kw">&lt;svg</span> <span class="er">width</span><span class="ot">=</span><span class="st">"2000"</span> <span class="er">height</span><span class="ot">=</span><span class="st">"800"</span><span class="kw">&gt;&lt;/svg&gt;</span></span>
+<span id="cb645-34"><a href="advanced-viz.html#cb645-34" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;/center&gt;</span></span>
+<span id="cb645-35"><a href="advanced-viz.html#cb645-35" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;script</span> <span class="er">src</span><span class="ot">=</span><span class="st">"https://d3js.org/d3.v4.min.js"</span><span class="kw">&gt;&lt;/script&gt;</span></span>
+<span id="cb645-36"><a href="advanced-viz.html#cb645-36" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;script</span> <span class="er">src</span><span class="ot">=</span><span class="st">"js/mptwitter_d3.js"</span><span class="kw">&gt;&lt;/script&gt;</span></span>
+<span id="cb645-37"><a href="advanced-viz.html#cb645-37" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/div&gt;</span></span>
+<span id="cb645-38"><a href="advanced-viz.html#cb645-38" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/body&gt;</span></span></code></pre></div>
+<p>You can see the full Javascript code including all the enhancements to the graph <a href="https://github.com/keithmcnulty/ona_book/blob/main/docs/js/mptwitter_d3.js">here</a>. The resulting graph fully styled looks like the static image in Figure <a href="advanced-viz.html#fig:full-d3">11.2</a>, while Figure <a href="advanced-viz.html#fig:threshold-d3">11.3</a> shows the graph when then slider has been used to raise the connection threshold to 56 Twitter interactions. You can play with the final product <a href="https://ona-book.org/mp_twitter.html">here</a>.</p>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:full-d3"></span>
+<img src="www/advanced-viz/full-d3.png" alt="Fully styled MP Twitter network in D3" width="90%"><p class="caption">
+Figure 11.2: Fully styled MP Twitter network in D3
+</p>
+</div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:threshold-d3"></span>
+<img src="www/advanced-viz/threshold-d3.png" alt="MP Twitter network in D3 with connection threshold raised to 56 Twitter interactions" width="90%"><p class="caption">
+Figure 11.3: MP Twitter network in D3 with connection threshold raised to 56 Twitter interactions
+</p>
+</div>
 
 </div>
+</div>
+</div>
   <div class="chapter-nav">
-<div class="prev"><a href="databases.html"><span class="header-section-number">10</span> Graphs as Databases</a></div>
+<div class="prev"><a href="using-twitter.html"><span class="header-section-number">10</span> Bonus Chapter: Using Twitter for Network Analysis</a></div>
 <div class="next"><a href="references.html">References</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
-      <ul class="nav navbar-nav"><li><a class="nav-link" href="#advanced-viz"><span class="header-section-number">11</span> Advanced Network Visualization</a></li></ul>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#advanced-viz"><span class="header-section-number">11</span> Bonus Chapter: Advanced Network Visualization using D3</a></li>
+<li><a class="nav-link" href="#writing-graph-data-in-json-form-for-use-in-javascript"><span class="header-section-number">11.1</span> Writing graph data in JSON form for use in Javascript</a></li>
+<li><a class="nav-link" href="#generating-the-basic-mp-twitter-graph-in-d3.js"><span class="header-section-number">11.2</span> Generating the basic MP Twitter graph in D3.js</a></li>
+<li>
+<a class="nav-link" href="#adding-advanced-features-to-the-mp-twitter-graph"><span class="header-section-number">11.3</span> Adding advanced features to the MP Twitter graph</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#adding-mp-photos-to-the-nodes"><span class="header-section-number">11.3.1</span> Adding MP photos to the nodes</a></li>
+<li><a class="nav-link" href="#visualize-the-neighbours-of-an-mp-on-click"><span class="header-section-number">11.3.2</span> Visualize the neighbours of an MP on click</a></li>
+<li><a class="nav-link" href="#allowing-users-to-drag-nodes-and-reposition-them"><span class="header-section-number">11.3.3</span> Allowing users to drag nodes and reposition them</a></li>
+<li><a class="nav-link" href="#adding-a-search-box-to-search-and-highlight-a-specific-mp-name"><span class="header-section-number">11.3.4</span> Adding a search box to search and highlight a specific MP name</a></li>
+<li><a class="nav-link" href="#adjusting-the-criteria-for-nodes-to-be-adjacentconnected"><span class="header-section-number">11.3.5</span> Adjusting the criteria for nodes to be adjacent/connected</a></li>
+<li><a class="nav-link" href="#wrapping-the-graph-in-a-more-stylish-web-design"><span class="header-section-number">11.3.6</span> Wrapping the graph in a more stylish web design</a></li>
+</ul>
+</li>
+</ul>
 
       <div class="book-extra">
         <ul class="list-unstyled">
-<li><a id="book-source" href="https://github.com/keithmcnulty/ona_book/blob/master/r/11-advanced_visualization.Rmd">View source <i class="fab fa-github"></i></a></li>
-          <li><a id="book-edit" href="https://github.com/keithmcnulty/ona_book/edit/master/r/11-advanced_visualization.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+<li><a id="book-source" href="https://github.com/keithmcnulty/ona_book/blob/master/r/12-advanced_viz.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/keithmcnulty/ona_book/edit/master/r/12-advanced_viz.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
         </ul>
 </div>
     </nav>

@@ -85,22 +85,451 @@ jsonlite::write_json(D3data, "D3data.json")
 This will write the data into a JSON file in your local R session.  I have made this JSON file available as a download for convenience. You can see the contents by navigating to https://ona-book.org/data/D3data.json.  It is a long set of key-value pairs which contain all of the information we loaded into our graph above.  You may need to scroll a long way down to see the full set of node data.
 
 
-## Generating the MP Twitter graph in `D3.js`
+## Generating the basic MP Twitter graph in `D3.js`
 
-In this section we will write the code to display a simple force-directed network for the MP graph colored by party.  We start be defining some variables which set up an SVG object and also set up a search bar to help search for individual nodes in the network, and a sliding bar to help us filter the network by strength of the connection.  
+In this section we will write the code to display a simple force-directed network for the MP graph colored by party.  We will start with just the basic graph and then progressively add more interesting features to the visualization.  This code uses v4 of the D3 library at https://d3js.org/d3.v4.min.js.
 
-We will do this in small pieces and then wrap it all into a script at the end.  This code uses v4 of the D3 library at https://d3js.org/d3.v4.min.js.
+First we define the svg container which we will build our visualization in and give it width and height attributes.
 
 ```{js, eval = FALSE}
 // start svg
 var svg = d3.select("svg"),
     width = +svg.attr("width"),
     height = +svg.attr("height");
+```
 
-// Create form for search (see function below).
-var search = d3.select("body").append('center').append('form').attr('onsubmit', 'return false;');
+We will create a zooming function to allow users to zoom in and out of the visualization in the svg container.
 
-// A slider that removes nodes below the input threshold.
-var slider = d3.select('body').append('p').append('center').text('Minimum number of scenes for connection: ').style('font-size', '75%');
+```{js, eval = FALSE}
+// Zooming function translates the size of the svg container.
+function zoomed() {
+    container.attr(
+    "transform", 
+    "translate(" + d3.event.transform.x + ", " + d3.event.transform.y + ") scale(" + d3.event.transform.k + ")"
+  );
+}
+
+// Call zoom for svg container.
+svg.call(d3.zoom().on('zoom', zoomed));
+```
+
+We now create a D3 simulation object with various parameters, an SVG element group which will make up our network graph and a path to where we will get our data from, which is the JSON we created earlier. 
+
+```{js, eval = FALSE}
+var simulation = d3.forceSimulation()
+    .force("link", d3.forceLink())
+    .force("charge", d3.forceManyBody().strength([-120]).distanceMax([500]))
+    .force("center", d3.forceCenter(width / 2, height / 2));
+
+var container = svg.append('g');
+
+var dataPath = "https://ona-book.org/data/D3data.json";
+```
+
+
+Now we will write master function to generate the graph.  The following code for the rest of this section will sit inside a function `function(error, graph)` to be applied to a JSON dataset via `d3.json()`. First we will need to instruct the function to throw an error if there is a problem with the dataset.  
+
+```{js, eval = FALSE}
+if (error) throw error;
+```
+
+Now we create a function to scale the radius of the nodes to correspond to the degree centrality measure in the JSON, so that more connected individuals get larger nodes, and we set a minimum radius of 8 pixels and a maximum of 25 pixels.  We will also use this scaling to control collision detection in the force-directed network.
+
+```{js, eval = FALSE}
+// Linear scale for degree centrality.
+var degreeSize = d3.scaleLinear()
+  .domain(
+    [d3.min(graph.nodes, d => d.degree),
+     d3.max(graph.nodes, d => d.degree)
+    ]
+   )
+  .range([8,25]);
+
+// Collision detection based on degree centrality.
+simulation.force("collide", d3.forceCollide().radius(d => degreeSize(d.degree)));
+```
+
+Now we create the node and the edge objects.  We will just color the edges a light grey here.
+
+```{js, eval = FALSE}
+var link = container.append("g")
+  .attr("class", "links")
+  .selectAll("line")
+  .data(graph.links, d => d.source + ", " + d.target)
+  .enter().append("line")
+  .attr('class', 'link')
+  .style('stroke', '#808080');
+
+var node = container.selectAll(".node")
+  .data(graph.nodes)
+  .enter()
+  .append("g")
+  .attr("class", "node");
+```
+
+Now we will give the nodes a circle appearance with a radius according to our previous `degreeSize` function, and a colour according to the political party color in the JSON.  
+
+```{js, eval = FALSE}
+node.append("circle")
+  // Scale based on degree centrality 
+  .attr('r', d => degreeSize(d.degree))
+  .attr('cx', d => d.x)
+  .attr('cy', d => d.y)
+  // Color by group (political party)
+  .attr("fill", d => d.colour)
+  .attr('class', 'node')
+```
+
+Now we will add informative tooltips to the nodes containing information on each of them, including the MPs party, constituency and followers count.  
+
+```{js, eval = FALSE}
+node.append("title")
+  .text(d => d.name + '\nParty: ' + d.group + '\nConstituency: ' + d.constituency + '\nFollowers: ' + d.followers.toString());
+```
+
+Now, as the force directed graph loads, the nodes will be moving for a period of time as the algorithm tries to find an equilibrium.  We will want to see this in action, so we will need to write a function to ensure node and edge positioning updates on each tick as the algorithm progresses.  Then we apply this to the nodes and edges.
+
+```{js, eval = FALSE}
+function ticked() {
+  // update edge coords
+  link
+    .attr("x1", d => d.source.x)
+    .attr("y1", d => d.source.y)
+    .attr("x2", d => d.target.x)
+    .attr("y2", d => d.target.y);
+  
+  // update node coords
+  node
+    .attr("transform", d => "translate(" + d.x + "," + d.y + ")");
+}
+
+// run ticked function and move nodes on every tick
+simulation
+  .nodes(graph.nodes)
+  .on("tick", ticked);
+
+// update edges immediately
+simulation.force("link")
+  .links(graph.links);
+```
+
+
+This is all we need for our simple version of the graph.  Now we will save this as `mptwitter_d3_simple.js` in a `js` folder, and then we can create a simple HTML file called `mp_twitter_simple.html` to call in this visualization.
+
+```{html, eval = FALSE}
+<!DOCTYPE html>
+<meta charset="utf-8">
+<body>
+<div class="row">
+  <center>
+    <svg width="2000" height="800"></svg>
+  </center>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="js/mptwitter_d3_simple.js"></script>
+</div>
+</body>
+```
+
+You can see the full Javascript code for this [here](https://github.com/keithmcnulty/ona_book/blob/main/docs/js/mptwitter_d3_simple.js).  This should produce a visualization such as that which is statically rendered in Figure \@ref(fig:basic-d3), which will gradually move and settle into an equilibrium.  You can visit the end product graph and play with it [here](https://ona-book.org/mp_twitter_simple.html).  Note that hovering over nodes will reveal the tooltip information.
+
+```{r basic-d3, echo= FALSE, fig.align = "center", fig.cap = "Static rendering of the basic MP Twitter network in D3"}
+knitr::include_graphics("www/advanced-viz/basic-d3.png")
+```
+
+
+## Adding advanced features to the MP Twitter graph
+
+The beauty of working in Javascript is the seemingly endless flexibility for adding user interaction features.  In this section we will illustrate ways to enhance the graph we created in the previous section with a variety of compelling and fun interactive features.
+
+### Adding MP photos to the nodes
+
+To help users better recognize an MP in the visualization, we could add the MP's Twitter profile image onto the respective node.  Since we have included the URL of the image in our JSON data, this should not be too challenging to do.
+
+First we create a pattern for each node, and give it an ID which we will associate with the URL of the profile image for the node.  We give the pattern a specific positioning, height and width and then we append the profile image with the same height and width.
+
+```{js, eval = FALSE}
+node
+  .append("defs")
+  .append("pattern")
+  .attr('id', d => 'image-' + d.name.split(" ").join(""))
+  .attr('patternUnits', 'userSpaceOnUse')
+  .attr('x', d => -degreeSize(d.degree))
+  .attr('y', d => -degreeSize(d.degree))
+  .attr('height', d => degreeSize(d.degree) * 2)
+  .attr('width', d => degreeSize(d.degree) * 2)
+  .append("image")
+  .attr('height', d => degreeSize(d.degree) * 2)
+  .attr('width', d => degreeSize(d.degree) * 2)
+  .attr('xlink:href', d => d.url);
+```
+
+We then append another circle on each node and fill this circle almost completely with the associated pattern we created.  We don't fill the entire circle as we want to keep the party colour as a border on the node around the Twitter profile image.
+
+```{js, eval = FALSE}
+node
+  .append("circle")
+  .attr('r', d => 0.9 * degreeSize(d.degree))
+  .attr('fill', d => 'url(#image-' + d.name.split(" ").join("") + ')');
+```
+
+If we insert this towards the end of our `d3.json()` master function, this will work nicely.  
+
+### Visualize the neighbours of an MP on click
+
+Given the full graph is so complex, it might be nice to click on a specific MP and see just their network of neighbours.  To do this we will want to toggle a function that reduces the opacity of all those links and nodes which are not in that MPs network.  So first we set a toggle variable early in our code and set it to zero.  
+
+```{js, eval = FALSE}
+var toggle = 0;
+```
+
+We also create a list of neighbouring nodes from our JSON, and write a function which searches that list to determine if two nodes are neighbours.  This code will need to be placed early in the `d3.json()` master function.
+
+```{js, eval = FALSE}
+// Make object of all neighboring nodes.
+var linkedByIndex = {};
+graph.links.forEach(function(d) {
+  linkedByIndex[d.source + ',' + d.target] = 1;
+  linkedByIndex[d.target + ',' + d.source] = 1;
+});
+
+// A function to test if two nodes are neighbours.
+function neighboring(a, b) {
+  return linkedByIndex[a.index + ',' + b.index];
+}
 
 ```
+
+Next we append some new conditional opacity attributes to the circles containing the Twitter profile images, and to the edges connecting to the neighbours.  If the toggle is off, we set these opacity attributes to highlight the neighbours, and if it is on, we set the opacity attributes to unhighlight them.  We do this using ternary operators.
+
+```{js, eval = FALSE}
+// adding on click functionality to the circles containing the Twitter images
+node
+  .append("circle")
+  .attr('r', d => 0.9 * degreeSize(d.degree))
+  .attr('fill', d => 'url(#image-' + d.name.split(" ").join("") + ')');
+// On click, toggle ego networks for the selected node 
+  .on('click', function(d) {
+    if (toggle == 0) {
+      // Ternary operator restyles links and nodes if they are adjacent.
+      d3.selectAll('.link').style('stroke-opacity', function (l) {
+        return l.target == d || l.source == d ? 1 : 0.1;
+      });
+      d3.selectAll('.node').style('opacity', function (n) {
+        return neighboring(d, n) ? 1 : 0.1;
+      });
+      toggle = 1;
+    }
+    else {
+      // Restore nodes and links to normal opacity.
+      d3.selectAll('.link').style('stroke-opacity', '0.6');
+      d3.selectAll('.node').style('opacity', '1');
+      toggle = 0;
+    }
+  })
+```
+
+### Allowing users to drag nodes and reposition them
+
+Users sometimes like to play with nodes and reposition them in the network to see how the force-directed algorithm adjusts to this new position of the node.  To do this, we just need to define some drag functions that we can apply to our circles containing the Twitter profile images.
+
+```{js, eval = FALSE}
+function dragstarted(d) {
+  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+  d.fx = d.x;
+  d.fy = d.y;
+}
+
+function dragged(d) {
+  d.fx = d3.event.x;
+  d.fy = d3.event.y;
+}
+
+function dragended(d) {
+  if (!d3.event.active) simulation.alphaTarget(0);
+  d.fx = null;
+  d.fy = null;
+}
+```
+
+We can then apply these functions to D3's drag gestures by calling them on the circles containing the Twitter profile images. 
+
+```{js, eval = FALSE}
+// to be added to the Twitter image circles after the neighbour opacity code 
+.call(d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended));
+```
+
+### Adding a search box to search and highlight a specific MP name
+
+With nearly 600 MPs in the network, it's hard to find a specific MP, and so an ability to search by name would be extremely useful.  For this we will need to add a form containing a text box and a search button to the body of our web page, so these variables will need to be added to the early code.
+
+```{js, eval = FALSE}
+// Create form for search.
+var search = d3.select("body")
+  .append('center')
+  .append('form')
+  .attr('onsubmit', 'return false;');
+
+var box = search.append('input')
+  .attr('type', 'text')
+  .attr('id', 'searchTerm')
+  .attr('placeholder', 'Type MP name to search...');
+
+var button = search.append('input')
+  .attr('type', 'button')
+  .attr('value', 'Search')
+  .on('click', () => searchNodes());
+```
+
+Our button calls a function called `searchNodes()`, but we haven't written it yet.  Let's write this function so that it makes everything except the nodes that match the search term disappear for 5 seconds and then return. 
+
+```{js, eval = FALSE}
+// Make all non-matching nodes and all edges disappear for 5 seconds.
+function searchNodes() {
+  var term = document.getElementById('searchTerm').value;
+  var selected = container.selectAll('.node').filter(function (d) {
+    return d.name.toLowerCase().search(term.toLowerCase()) == -1;
+  });
+  selected.style('opacity', '0');
+  var link = container.selectAll('.link');
+  link.style('stroke-opacity', '0');
+  d3.selectAll('.node')
+    .transition()
+    .duration(5000)
+    .style('opacity', '1');
+  d3.selectAll('.link')
+    .transition()
+    .duration(5000)
+    .style('stroke-opacity', '0.6');
+}
+```
+
+Now we have a nice feature where the nodes that match the search appear temporarily by themselves so the user can see where they are in the network.
+
+### Adjusting the criteria for nodes to be adjacent/connected
+
+Recall that our JSON links contain a `value` key, which is the weight of the edge between the two MPs.  Recall that this represents a measure of the strength of the connection of the two MPs based on the number of Twitter interactions between them.  Given that our initial graph is complex and contains tens of thousands of edges, users may wish to apply a higher criteria to the number of interactions that define a link between two MPs.
+
+To do this, we can create a slider in the body of our web page, and give the slider a range of values from 1 to, say, half the maximum value in the JSON.  We can then use the slider value to recalculate the edges of the graph using this value as a threshold.
+
+First, let's create the slider.
+
+```{js, eval = FALSE}
+var slider = d3.select('body')
+  .append('p')
+  .append('center')
+  .text('Minimum Twitter interactions for connection: ')
+  .style('font-size', '75%');
+```
+
+Then, towards the end of our master function, we can create the conversation between the slider and the graph.  We can give the slider an initial threshold label of 1.  We can give it an input range from 1 up to half or the maximum value of the edges.
+
+Upon a change of input from the slider, we run a function which takes the new threshold value, pushes a new set of edges based on that threshold.  We keep all the nodes in the visualization but we now only connect edges which have the required threshold.  We then refresh the graph and restart the force directed similation.
+
+
+```{js, eval = FALSE}
+slider.append('label')
+  .attr('for', 'threshold')
+  .text('1').style('font-value', 'bold')
+  .style('font-size', '120%');
+      
+slider.append('input')
+  .attr('type', 'range')
+  .attr('min', 1)
+  .attr('max', d3.max(graph.links, d => d.value/2)
+  .attr('value', 1)
+  .attr('id', 'threshold')
+  .style('width', '50%')
+  .style('display', 'block')
+  .on('input', function () { 
+    var threshold = this.value;
+
+    d3.select('label').text(threshold);
+
+    // Find the links that are at or above the threshold.
+    var newData = [];
+    graph.links.forEach( function (d) {
+      if (d.value >= threshold) {newData.push(d); };
+    });
+
+    // Data join with only those new links.
+    link = link.data(newData, d => d.source + ', ' + d.target);
+    link.exit().remove();
+    var linkEnter = link.enter().append('line').attr('class', 'link').style('stroke', '#808080');
+    link = linkEnter.merge(link);
+
+    node = node.data(graph.nodes);
+
+    // Restart simulation with new link data.
+    simulation
+      .nodes(graph.nodes).on('tick', ticked)
+      .force("link").links(newData);
+
+    simulation.alphaTarget(0.1).restart();
+
+  });
+```
+
+This leads to a fun feature where the disconnected nodes (isolates) float off into space and we are left with simpler and smaller connected components.
+
+### Wrapping the graph in a more stylish web design
+
+Given the effort we have put into creating all these cool features, it would be a shame not to make some finishing touches to the styling of the webpage that we will embed it in.  Once we save our Javascript code in the `js` folder using the filename `mptwitter_d3.js`, there are a few simple tweaks we can make to the HTML code to really improve the overall look and feel.
+
+By consulting the [brand guide](https://www.parliament.uk/globalassets/documents/foi/181321bg.pdf) for the UK Parliament, we can find the colour associated with the House of Commons, and we can also choose a free Google typeface as close as possible to the one recommended - in this case I will use Cinzel serif for the various text elements of the web page.  Below is some enhanced HTML code to include this styling, which I will save as `mp_twitter.html`.
+
+```{html, eval = FALSE}
+<!DOCTYPE html>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel&family=Source+Sans+Pro:wght@300;600&display=swap" rel="stylesheet">
+<style>
+body {
+  font-family: 'Cinzel', serif;
+  color: #4A7729;
+  background-color: #ffffff;
+}
+
+.links line {
+  stroke: #999;
+  stroke-opacity: 0.6;
+}
+
+.nodes circle {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+</style>
+<body>
+  <div class="row">
+    <center>
+      <h1>
+        House of Commons MP Twitter Network
+      </h1>
+    </center>
+  </div>
+<div class="row">
+  <center>
+    <svg width="2000" height="800"></svg>
+  </center>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="js/mptwitter_d3.js"></script>
+</div>
+</body>
+
+```
+
+You can see the full Javascript code including all the enhancements to the graph [here](https://github.com/keithmcnulty/ona_book/blob/main/docs/js/mptwitter_d3.js).  The resulting graph fully styled looks like the static image in Figure \@ref(fig:full-d3), while Figure \@ref(fig:threshold-d3) shows the graph when then slider has been used to raise the connection threshold to 56 Twitter interactions.  You can play with the final product [here](https://ona-book.org/mp_twitter.html).
+
+```{r full-d3, fig.align = "center", echo = FALSE, fig.cap="Fully styled MP Twitter network in D3"}
+knitr::include_graphics("www/advanced-viz/full-d3.png")
+```
+
+
+```{r threshold-d3, fig.align = "center", echo = FALSE, fig.cap="MP Twitter network in D3 with connection threshold raised to 56 Twitter interactions"}
+knitr::include_graphics("www/advanced-viz/threshold-d3.png")
+```
+
