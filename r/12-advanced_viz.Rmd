@@ -98,6 +98,20 @@ var svg = d3.select("svg"),
     height = +svg.attr("height");
 ```
 
+
+We now create a D3 simulation object with various parameters, an SVG element group which will make up our network graph and a path to where we will get our data from, which is the JSON we created earlier. 
+
+```{js, eval = FALSE}
+var simulation = d3.forceSimulation()
+    .force("link", d3.forceLink())
+    .force("charge", d3.forceManyBody().strength([-120]).distanceMax([500]))
+    .force("center", d3.forceCenter(width / 2, height / 2));
+
+var container = svg.append('g');
+
+var dataPath = "https://ona-book.org/data/D3data.json";
+```
+
 We will create a zooming function to allow users to zoom in and out of the visualization in the svg container.
 
 ```{js, eval = FALSE}
@@ -113,21 +127,7 @@ function zoomed() {
 svg.call(d3.zoom().on('zoom', zoomed));
 ```
 
-We now create a D3 simulation object with various parameters, an SVG element group which will make up our network graph and a path to where we will get our data from, which is the JSON we created earlier. 
-
-```{js, eval = FALSE}
-var simulation = d3.forceSimulation()
-    .force("link", d3.forceLink())
-    .force("charge", d3.forceManyBody().strength([-120]).distanceMax([500]))
-    .force("center", d3.forceCenter(width / 2, height / 2));
-
-var container = svg.append('g');
-
-var dataPath = "https://ona-book.org/data/D3data.json";
-```
-
-
-Now we will write master function to generate the graph.  The following code for the rest of this section will sit inside a function `function(error, graph)` to be applied to a JSON dataset via `d3.json()`. First we will need to instruct the function to throw an error if there is a problem with the dataset.  
+Now we will write a master function to generate the graph.  The following code for the rest of this section will sit inside a function `function(error, graph)` to be applied to a JSON dataset via `d3.json()`. First we will need to instruct the function to throw an error if there is a problem with the dataset.  
 
 ```{js, eval = FALSE}
 if (error) throw error;

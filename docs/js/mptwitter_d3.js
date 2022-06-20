@@ -3,6 +3,15 @@ var svg = d3.select("svg"),
     width = +svg.attr("width"),
     height = +svg.attr("height");
     
+var simulation = d3.forceSimulation()
+    .force("link", d3.forceLink())
+    .force("charge", d3.forceManyBody().strength([-120]).distanceMax([500]))
+    .force("center", d3.forceCenter(width / 2, height / 2));
+
+var container = svg.append('g');
+
+var dataPath = "https://ona-book.org/data/D3data.json";
+
 // Zooming function translates the size of the svg container.
 function zoomed() {
     container.attr(
@@ -10,6 +19,9 @@ function zoomed() {
     "translate(" + d3.event.transform.x + ", " + d3.event.transform.y + ") scale(" + d3.event.transform.k + ")"
   );
 }
+
+// Call zoom for svg container.
+svg.call(d3.zoom().on('zoom', zoomed));
 
 // functions for dragging nodes on D3 drag events
 function dragstarted(d) {
@@ -28,18 +40,6 @@ function dragended(d) {
   d.fx = null;
   d.fy = null;
 }
-
-// Call zoom for svg container.
-svg.call(d3.zoom().on('zoom', zoomed));
-
-var simulation = d3.forceSimulation()
-    .force("link", d3.forceLink())
-    .force("charge", d3.forceManyBody().strength([-120]).distanceMax([500]))
-    .force("center", d3.forceCenter(width / 2, height / 2));
-
-var container = svg.append('g');
-
-var dataPath = "https://ona-book.org/data/D3data.json";
 
 // toggle to switch on and off neighbour view
 var toggle = 0;
