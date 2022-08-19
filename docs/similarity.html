@@ -243,7 +243,7 @@ Figure 8.1: It’s our old friend <span class="math inline">\(G_{14}\)</span> ag
 
 <span class="co"># rows and cols should be labelled by vertex name before extracting</span>
 <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">invsim</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">g14</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>
-<span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html">rownames</a></span><span class="op">(</span><span class="va">invsim</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">g14</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">invsim</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">g14</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>
 
 <span class="co"># extract value for vertices 7 and 8</span>
 <span class="va">invsim</span><span class="op">[</span><span class="st">"7"</span>, <span class="st">"8"</span><span class="op">]</span></code></pre></div>
@@ -328,7 +328,7 @@ Figure 8.1: It’s our old friend <span class="math inline">\(G_{14}\)</span> ag
 <span id="cb521-38"><a href="similarity.html#cb521-38" aria-hidden="true" tabindex="-1"></a>values <span class="op">=</span> class_attr)</span></code></pre></div>
 <p>The following functions can be used to calculate categorical assortativity and degree assortativity, respectively.</p>
 <div class="sourceCode" id="cb522"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb522-1"><a href="similarity.html#cb522-1" aria-hidden="true" tabindex="-1"></a>nx.attribute_assortativity_coefficient(schoolfriends_fb, <span class="st">"class"</span>)</span></code></pre></div>
-<pre><code>## 0.3833666875368264</code></pre>
+<pre><code>## 0.3833666875368265</code></pre>
 <div class="sourceCode" id="cb524"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb524-1"><a href="similarity.html#cb524-1" aria-hidden="true" tabindex="-1"></a>nx.attribute_assortativity_coefficient(schoolfriends_rp, <span class="st">"class"</span>)</span></code></pre></div>
 <pre><code>## 0.7188918572576617</code></pre>
 <div class="sourceCode" id="cb526"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb526-1"><a href="similarity.html#cb526-1" aria-hidden="true" tabindex="-1"></a>nx.degree_assortativity_coefficient(schoolfriends_fb)</span></code></pre></div>

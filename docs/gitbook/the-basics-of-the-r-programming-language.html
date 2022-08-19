@@ -972,15 +972,15 @@ Figure 0.8: Simple boxplot of <code>Ozone</code> against <code>Month</code> in t
 <p>An important element of many processes in mathematics and statistics is randomization. Being able to generate random numbers is an important part of sampling or initiating processes or algorithms. We will also see later in this book that randomization is an important element of many graph algorithms, including visualization layout algorithms. In the following code we randomly sample 3 rows from the <code>airquality</code> data set using the <code>sample()</code> function.</p>
 <div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="the-basics-of-the-r-programming-language.html#cb108-1" aria-hidden="true" tabindex="-1"></a>airquality[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(airquality), <span class="dv">3</span>), ]</span></code></pre></div>
 <pre><code>##     Ozone Solar.R Wind Temp Month Day
-## 137     9      24 10.9   71     9  14
-## 73     10     264 14.3   73     7  12
-## 111    31     244 10.9   78     8  19</code></pre>
+## 116    45     212  9.7   79     8  24
+## 111    31     244 10.9   78     8  19
+## 136    28     238  6.3   77     9  13</code></pre>
 <p>We do this a second time and note a different output because the sampling is random.</p>
 <div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="the-basics-of-the-r-programming-language.html#cb110-1" aria-hidden="true" tabindex="-1"></a>airquality[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(airquality), <span class="dv">3</span>), ]</span></code></pre></div>
 <pre><code>##     Ozone Solar.R Wind Temp Month Day
-## 153    20     223 11.5   68     9  30
-## 12     16     256  9.7   69     5  12
-## 19     30     322 11.5   68     5  19</code></pre>
+## 143    16     201  8.0   82     9  20
+## 97     35      NA  7.4   85     8   5
+## 21      1       8  9.7   59     5  21</code></pre>
 <p>Random number generation can be problematic when you want to precisely replicate work done previously by yourself or others. If the previous work depended on random number generation, then your output will probably not match the previous output and it will be difficult to tell if this is because of an error you made or simply because of different random numbers.</p>
 <p>You can control random number generation by manually setting a random seed. In fact, random number generation in statistical software is rarely truly random, and is actually <em>pseudorandom</em>. Pseudorandomization is a simulated process that is ‘seeded’ using a vector of values. By default this vector is generated from the precise system time at a given moment, but its generation can also be controlled manually by a user. A given seed will always produce the same results from randomization, and so manually setting a seed can be an effective way to ensure precise reproducibility of work.</p>
 <p>Again, let’s generate three random rows from our <code>airquality</code> data set, but this time we manually set the same seed before each sampling process. You can use any number of your choice to manually set a seed.</p>
@@ -988,16 +988,16 @@ Figure 0.8: Simple boxplot of <code>Ozone</code> against <code>Month</code> in t
 <span id="cb112-2"><a href="the-basics-of-the-r-programming-language.html#cb112-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
 <span id="cb112-3"><a href="the-basics-of-the-r-programming-language.html#cb112-3" aria-hidden="true" tabindex="-1"></a>airquality[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(airquality), <span class="dv">3</span>), ]</span></code></pre></div>
 <pre><code>##     Ozone Solar.R Wind Temp Month Day
-## 49     20      37  9.2   65     6  18
-## 120    76     203  9.7   97     8  28
-## 82     16       7  6.9   74     7  21</code></pre>
+## 14     14     274 10.9   68     5  14
+## 50     12     120 11.5   73     6  19
+## 118    73     215  8.0   86     8  26</code></pre>
 <div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="the-basics-of-the-r-programming-language.html#cb114-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sample 2</span></span>
 <span id="cb114-2"><a href="the-basics-of-the-r-programming-language.html#cb114-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
 <span id="cb114-3"><a href="the-basics-of-the-r-programming-language.html#cb114-3" aria-hidden="true" tabindex="-1"></a>airquality[<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(airquality), <span class="dv">3</span>), ]</span></code></pre></div>
 <pre><code>##     Ozone Solar.R Wind Temp Month Day
-## 49     20      37  9.2   65     6  18
-## 120    76     203  9.7   97     8  28
-## 82     16       7  6.9   74     7  21</code></pre>
+## 14     14     274 10.9   68     5  14
+## 50     12     120 11.5   73     6  19
+## 118    73     215  8.0   86     8  26</code></pre>
 <p>Note that a random seed resets after every call that requires randomization<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>. Therefore it is important to set a random seed before every random process to ensure full reproducibility.</p>
 </div>
 <div id="documenting-your-work-using-r-markdown" class="section level2 hasAnchor" number="0.9">

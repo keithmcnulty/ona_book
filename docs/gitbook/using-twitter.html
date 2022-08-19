@@ -500,21 +500,21 @@ div.csl-indent {
 <pre><code>## # A tibble: 10 × 1
 ##    user_id            
 ##    &lt;chr&gt;              
-##  1 1468835259529588737
-##  2 364486529          
-##  3 84653539           
-##  4 1482331979118956548
-##  5 912021688765861889 
-##  6 3059596536         
-##  7 302311172          
-##  8 4114199697         
-##  9 949201616313270272 
-## 10 512561387</code></pre>
+##  1 2355442201         
+##  2 1002303563677208577
+##  3 1505223643256832001
+##  4 149649322          
+##  5 1148242738745245698
+##  6 1517077000913096704
+##  7 1040618954         
+##  8 1555511295562207234
+##  9 21734068           
+## 10 3196172121</code></pre>
 <p>This has returned a data frame with a set of Twitter user IDs in the <code>user_id</code> column. You can use the <code>lookup_users()</code> function to find out more about each of these IDs. This will return quite a lot of information on each user as long as their account is public. You can explore the full set of information, but below we simply show the screen name of each user.</p>
 <div class="sourceCode" id="cb561"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb561-1"><a href="using-twitter.html#cb561-1" aria-hidden="true" tabindex="-1"></a>user_data <span class="ot">&lt;-</span> rtweet<span class="sc">::</span><span class="fu">lookup_users</span>(keith_followers<span class="sc">$</span>user_id)</span>
 <span id="cb561-2"><a href="using-twitter.html#cb561-2" aria-hidden="true" tabindex="-1"></a>user_data<span class="sc">$</span>screen_name</span></code></pre></div>
-<pre><code>##  [1] &quot;episilia_1&quot;      &quot;IgorBraga131&quot;    &quot;republicofmath&quot;  &quot;KatlegoMoutcher&quot; &quot;cIaidavis&quot;       &quot;luthfian_to&quot;    
-##  [7] &quot;joannytan&quot;       &quot;mirceacomsa&quot;     &quot;osakajay1&quot;       &quot;Jhonmart3&quot;</code></pre>
+<pre><code>##  [1] &quot;VanessaFa1&quot;      &quot;nuuuritas&quot;       &quot;siahgeyik&quot;       &quot;ardaoctober&quot;     &quot;ChrisWritesData&quot; &quot;KOnagha&quot;        
+##  [7] &quot;MedeaTabatadze&quot;  &quot;trevorfitzpat20&quot; &quot;chantrellen&quot;     &quot;GeoClive&quot;</code></pre>
 </div>
 <div id="accessing-using-python" class="section level3 hasAnchor" number="10.1.2">
 <h3><span class="header-section-number">10.1.2</span> Accessing using Python<a href="using-twitter.html#accessing-using-python" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -533,11 +533,11 @@ div.csl-indent {
 <div class="sourceCode" id="cb564"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb564-1"><a href="using-twitter.html#cb564-1" aria-hidden="true" tabindex="-1"></a>keith_followers <span class="op">=</span> api.get_follower_ids(screen_name <span class="op">=</span> <span class="st">&quot;dr_keithmcnulty&quot;</span>)</span>
 <span id="cb564-2"><a href="using-twitter.html#cb564-2" aria-hidden="true" tabindex="-1"></a>ten_followers <span class="op">=</span> keith_followers[<span class="dv">0</span>:<span class="dv">9</span>]</span>
 <span id="cb564-3"><a href="using-twitter.html#cb564-3" aria-hidden="true" tabindex="-1"></a>ten_followers</span></code></pre></div>
-<pre><code>## [1468835259529588737, 364486529, 84653539, 1482331979118956548, 912021688765861889, 3059596536, 302311172, 4114199697, 949201616313270272]</code></pre>
+<pre><code>## [2355442201, 1002303563677208577, 1505223643256832001, 149649322, 1148242738745245698, 1517077000913096704, 1040618954, 1555511295562207234, 21734068]</code></pre>
 <p>To find further details of these followers, including their screen names:</p>
 <div class="sourceCode" id="cb566"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb566-1"><a href="using-twitter.html#cb566-1" aria-hidden="true" tabindex="-1"></a>ten_follower_details <span class="op">=</span> api.lookup_users(user_id <span class="op">=</span> ten_followers)</span>
 <span id="cb566-2"><a href="using-twitter.html#cb566-2" aria-hidden="true" tabindex="-1"></a>[follower.screen_name <span class="cf">for</span> follower <span class="kw">in</span> ten_follower_details]</span></code></pre></div>
-<pre><code>## [&#39;episilia_1&#39;, &#39;IgorBraga131&#39;, &#39;republicofmath&#39;, &#39;KatlegoMoutcher&#39;, &#39;cIaidavis&#39;, &#39;luthfian_to&#39;, &#39;joannytan&#39;, &#39;mirceacomsa&#39;, &#39;osakajay1&#39;]</code></pre>
+<pre><code>## [&#39;VanessaFa1&#39;, &#39;nuuuritas&#39;, &#39;siahgeyik&#39;, &#39;ardaoctober&#39;, &#39;ChrisWritesData&#39;, &#39;KOnagha&#39;, &#39;MedeaTabatadze&#39;, &#39;trevorfitzpat20&#39;, &#39;chantrellen&#39;]</code></pre>
 </div>
 <div id="twitter-rate-limits" class="section level3 hasAnchor" number="10.1.3">
 <h3><span class="header-section-number">10.1.3</span> Twitter rate limits<a href="using-twitter.html#twitter-rate-limits" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -547,12 +547,12 @@ div.csl-indent {
 <pre><code>## # A tibble: 1 × 7
 ##   query         limit remaining reset         reset_at            timestamp           app          
 ##   &lt;chr&gt;         &lt;int&gt;     &lt;int&gt; &lt;drtn&gt;        &lt;dttm&gt;              &lt;dttm&gt;              &lt;chr&gt;        
-## 1 followers/ids    15        14 14.92065 mins 2022-06-20 12:55:59 2022-06-20 12:41:04 Keith McNulty</code></pre>
+## 1 followers/ids    15        13 1.605831 mins 2022-08-19 12:40:45 2022-08-19 12:39:09 Keith McNulty</code></pre>
 <p>In <code>tweepy</code> you can use the <code>rate_limit_status()</code> function. Here is how you can determine your rate limit status on querying follower IDs:</p>
 <div class="sourceCode" id="cb570"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb570-1"><a href="using-twitter.html#cb570-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb570-2"><a href="using-twitter.html#cb570-2" aria-hidden="true" tabindex="-1"></a>limits <span class="op">=</span> api.rate_limit_status(resources <span class="op">=</span> <span class="st">&quot;followers&quot;</span>)</span>
 <span id="cb570-3"><a href="using-twitter.html#cb570-3" aria-hidden="true" tabindex="-1"></a>limits.get(<span class="st">&#39;resources&#39;</span>).get(<span class="st">&#39;followers&#39;</span>).get(<span class="st">&#39;/followers/ids&#39;</span>)</span></code></pre></div>
-<pre><code>## {&#39;limit&#39;: 15, &#39;remaining&#39;: 14, &#39;reset&#39;: 1655729762}</code></pre>
+<pre><code>## {&#39;limit&#39;: 15, &#39;remaining&#39;: 13, &#39;reset&#39;: 1660912849}</code></pre>
 <p>Practically, when you hit a rate limit you will receive a message back indicating so. You can then try again from where you left off after 15 minutes. Packages like <code>rtweet</code> and <code>tweepy</code> also have options to retry automatically after 15 minutes. For example, in many <code>rtweet</code> functions you can use the argument <code>retryonratelimit = TRUE</code>, while in <code>tweepy</code>, you can specify this behavior on initial authentication using:</p>
 <div class="sourceCode" id="cb572"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb572-1"><a href="using-twitter.html#cb572-1" aria-hidden="true" tabindex="-1"></a>api <span class="op">=</span> tweepy.API(auth, wait_on_rate_limit <span class="op">=</span> <span class="va">True</span>)</span></code></pre></div>
 </div>
@@ -565,19 +565,19 @@ div.csl-indent {
 <span id="cb573-3"><a href="using-twitter.html#cb573-3" aria-hidden="true" tabindex="-1"></a>mp_list <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(url)</span>
 <span id="cb573-4"><a href="using-twitter.html#cb573-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mp_list)</span></code></pre></div>
 <pre><code>##              Name      Screen.name                              Party     Constituency Followers
-## 1   Lindsay Hoyle @LindsayHoyle_MP                            Speaker          Chorley     41563
-## 2    Claire Hanna     @ClaireHanna Social Democratic and Labour Party    Belfast South     42057
-## 3  Colum Eastwood   @columeastwood Social Democratic and Labour Party            Foyle     47997
-## 4   Mickey Brady    @MickeyBradySF                          Sinn Féin Newry and Armagh      5387
-## 5    Paul Maskey     @PaulMaskeyMP                          Sinn Féin     Belfast West     20343
-## 6 Francie Molloy    @FrancieMolloy                          Sinn Féin       Mid Ulster     10993
+## 1   Lindsay Hoyle @LindsayHoyle_MP                            Speaker          Chorley     41760
+## 2    Claire Hanna     @ClaireHanna Social Democratic and Labour Party    Belfast South     43136
+## 3  Colum Eastwood   @columeastwood Social Democratic and Labour Party            Foyle     49334
+## 4   Mickey Brady    @MickeyBradySF                          Sinn Féin Newry and Armagh      5439
+## 5    Paul Maskey     @PaulMaskeyMP                          Sinn Féin     Belfast West     20442
+## 6 Francie Molloy    @FrancieMolloy                          Sinn Féin       Mid Ulster     12786
 ##   New.followers.in.last.24.hours
-## 1                              1
-## 2                              9
-## 3                             20
-## 4                              6
-## 5                             -1
-## 6                              9</code></pre>
+## 1                             -7
+## 2                              2
+## 3                             15
+## 4                              0
+## 5                              0
+## 6                              3</code></pre>
 <p>There appear to be 590 active MPs on Twitter, although this may have changed since this list was compiled, so some of these users may return no data if their accounts have been disabled or deleted. In this example, we will study the interactions of these MPs. An interaction can be considered as a reply to, a mention of, a retweet of, or a quote tweet of another MP. We will use the number of interactions as an indication of the strength of the connection between two MPs. We will construct a graph from this data and then use the methods learned earlier in this book to perform interesting analyses, such as searching for influential members, or identifying Twitter communities or Twitter cliques of MPs.</p>
 <div id="creating-the-graph-from-twitter-data" class="section level3 hasAnchor" number="10.2.1">
 <h3><span class="header-section-number">10.2.1</span> Creating the graph from Twitter data<a href="using-twitter.html#creating-the-graph-from-twitter-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -871,7 +871,7 @@ Figure 10.2: Comparison of Leiden communities with ground truth political party 
 <p>It may also be interesting to identify some large cliques in the graph:</p>
 <div class="sourceCode" id="cb604"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb604-1"><a href="using-twitter.html#cb604-1" aria-hidden="true" tabindex="-1"></a>(largest_cliques <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">largest_cliques</span>(mp_graph_undirected))</span></code></pre></div>
 <pre><code>## [[1]]
-## + 21/585 vertices, named, from 51bc3b6:
+## + 21/585 vertices, named, from e6f0e2d:
 ##  [1] Emily Thornberry     Keir Starmer         Angela Rayner        Boris Johnson        Anneliese Dodds     
 ##  [6] Yvette Cooper        Louise Haigh         Lisa Nandy           David Lammy          Jonathan Ashworth   
 ## [11] Bridget Phillipson   Kate Green           Sharon Hodgson       Nick Thomas-Symonds  Edward Miliband     
@@ -879,7 +879,7 @@ Figure 10.2: Comparison of Leiden communities with ground truth political party 
 ## [21] Mary Glindon        
 ## 
 ## [[2]]
-## + 21/585 vertices, named, from 51bc3b6:
+## + 21/585 vertices, named, from e6f0e2d:
 ##  [1] Emily Thornberry     Keir Starmer         Angela Rayner        Rachel Reeves        Anneliese Dodds     
 ##  [6] Yvette Cooper        David Lammy          Louise Haigh         Lisa Nandy           Jonathan Ashworth   
 ## [11] Bridget Phillipson   Sharon Hodgson       Lucy Powell          Mary Glindon         Kate Green          
@@ -887,7 +887,7 @@ Figure 10.2: Comparison of Leiden communities with ground truth political party 
 ## [21] Vicky Foxcroft      
 ## 
 ## [[3]]
-## + 21/585 vertices, named, from 51bc3b6:
+## + 21/585 vertices, named, from e6f0e2d:
 ##  [1] Emily Thornberry     Keir Starmer         Angela Rayner        Rachel Reeves        Anneliese Dodds     
 ##  [6] Yvette Cooper        David Lammy          Louise Haigh         Lisa Nandy           Jonathan Ashworth   
 ## [11] Bridget Phillipson   Sharon Hodgson       Lucy Powell          Tulip Siddiq         Peter Kyle          
@@ -895,7 +895,7 @@ Figure 10.2: Comparison of Leiden communities with ground truth political party 
 ## [21] Edward Miliband     
 ## 
 ## [[4]]
-## + 21/585 vertices, named, from 51bc3b6:
+## + 21/585 vertices, named, from e6f0e2d:
 ##  [1] Emily Thornberry     Keir Starmer         Angela Rayner        Rachel Reeves        Anneliese Dodds     
 ##  [6] Yvette Cooper        David Lammy          Louise Haigh         Lisa Nandy           Jonathan Ashworth   
 ## [11] Bridget Phillipson   Sharon Hodgson       Lucy Powell          Tulip Siddiq         Peter Kyle          
@@ -909,7 +909,7 @@ Figure 10.2: Comparison of Leiden communities with ground truth political party 
 <span id="cb606-5"><a href="using-twitter.html#cb606-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb606-6"><a href="using-twitter.html#cb606-6" aria-hidden="true" tabindex="-1"></a>(largest_conservative_cliques <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">largest_cliques</span>(conservative_graph))</span></code></pre></div>
 <pre><code>## [[1]]
-## + 19/308 vertices, named, from 2bd686c:
+## + 19/308 vertices, named, from 0908b9e:
 ##  [1] Stephen Barclay       Rishi Sunak           Boris Johnson         Nadhim Zahawi         Elizabeth Truss      
 ##  [6] Sajid Javid           Priti Patel           Kwasi Kwarteng        Oliver Dowden         Nadine Dorries       
 ## [11] Anne-Marie Trevelyan  Michael Gove          Richard Holden        Simon Clarke          Michelle Donelan     

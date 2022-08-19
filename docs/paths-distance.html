@@ -271,36 +271,36 @@ Figure 5.4: Two graphs illustrating how closeness can be measured in different w
 <div class="sourceCode" id="cb309"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># create weighted graph</span>
 <span class="op">(</span><span class="va">g14w</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span><span class="va">g14_edgelist</span>, directed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH 24d370d UNW- 14 18 -- 
+<pre><code>## IGRAPH 8f58578 UNW- 14 18 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from 24d370d (vertex names):
+## + edges from 8f58578 (vertex names):
 ##  [1] 9 --10 10--11 11--12 10--12 9 --13 13--14 9 --8  9 --7  8 --7  4 --6  4 --7  8 --4  6 --7  4 --1  4 --2  4 --3 
 ## [17] 4 --5  1 --2</code></pre>
 <p>The <code><a href="https://rdrr.io/pkg/igraph/man/all_simple_paths.html">all_simple_paths()</a></code> function in <code>igraph</code> returns all paths from a specified vertex, and expects at least an <code>igraph</code> object and a vertex name for the <code>from</code> vertex as arguments. If the <code>to</code> argument specifies a vertex, then the function will return only paths between the <code>from</code> and <code>to</code> vertices. Otherwise, it will return a list containing all paths from the specified vertex to all other vertices. Note that these functions expect the vertex name as a character string.</p>
 <div class="sourceCode" id="cb311"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/all_simple_paths.html">all_simple_paths</a></span><span class="op">(</span><span class="va">g14w</span>, from <span class="op">=</span> <span class="st">"9"</span>, to <span class="op">=</span> <span class="st">"4"</span><span class="op">)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 3/14 vertices, named, from 24d370d:
+## + 3/14 vertices, named, from 8f58578:
 ## [1] 9 8 4
 ## 
 ## [[2]]
-## + 4/14 vertices, named, from 24d370d:
+## + 4/14 vertices, named, from 8f58578:
 ## [1] 9 8 7 4
 ## 
 ## [[3]]
-## + 5/14 vertices, named, from 24d370d:
+## + 5/14 vertices, named, from 8f58578:
 ## [1] 9 8 7 6 4
 ## 
 ## [[4]]
-## + 4/14 vertices, named, from 24d370d:
+## + 4/14 vertices, named, from 8f58578:
 ## [1] 9 7 8 4
 ## 
 ## [[5]]
-## + 3/14 vertices, named, from 24d370d:
+## + 3/14 vertices, named, from 8f58578:
 ## [1] 9 7 4
 ## 
 ## [[6]]
-## + 4/14 vertices, named, from 24d370d:
+## + 4/14 vertices, named, from 8f58578:
 ## [1] 9 7 6 4</code></pre>
 <p>We see that this agrees with our manual calculations in Section <a href="paths-distance.html#traversal">5.1.1</a> and is the same whether or not the edges are weighted. This function is easy to use in the case of undirected graphs. When using with digraphs, there is an additional argument called <code>mode</code>, specifying the direction of the paths you are seeking. <code>out</code>, <code>in</code>, <code>all</code> or <code>total</code> are the accepted values for this argument.</p>
 <p>The <code><a href="https://rdrr.io/pkg/igraph/man/distances.html">all_shortest_paths()</a></code> function performs the same task as the previous function but restricts the output to paths of the shortest length. This function returns a list of objects, but the paths can be found in the <code>res</code> element of the list.</p>
@@ -308,15 +308,15 @@ Figure 5.4: Two graphs illustrating how closeness can be measured in different w
 <code class="sourceCode R"><span class="va">shortest_9to4</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/distances.html">all_shortest_paths</a></span><span class="op">(</span><span class="va">g14w</span>, from <span class="op">=</span> <span class="st">"9"</span>, to <span class="op">=</span> <span class="st">"4"</span><span class="op">)</span>
 <span class="va">shortest_9to4</span><span class="op">$</span><span class="va">res</span></code></pre></div>
 <pre><code>## [[1]]
-## + 3/14 vertices, named, from 24d370d:
+## + 3/14 vertices, named, from 8f58578:
 ## [1] 9 8 4
 ## 
 ## [[2]]
-## + 3/14 vertices, named, from 24d370d:
+## + 3/14 vertices, named, from 8f58578:
 ## [1] 9 7 4
 ## 
 ## [[3]]
-## + 4/14 vertices, named, from 24d370d:
+## + 4/14 vertices, named, from 8f58578:
 ## [1] 9 8 7 4</code></pre>
 <p>Note that the function has returned the shortest path according to edge weights. To ignore edge weights, simply set <code>weights = NA</code>. This is equivalent to calculating shortest paths in our unweighted <span class="math inline">\(G_{14}\)</span> graph.</p>
 <div class="sourceCode" id="cb315"><pre class="downlit sourceCode r">
@@ -325,11 +325,11 @@ Figure 5.4: Two graphs illustrating how closeness can be measured in different w
                                                weights <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span>
 <span class="va">shortest_9to4_uw</span><span class="op">$</span><span class="va">res</span></code></pre></div>
 <pre><code>## [[1]]
-## + 3/14 vertices, named, from 24d370d:
+## + 3/14 vertices, named, from 8f58578:
 ## [1] 9 7 4
 ## 
 ## [[2]]
-## + 3/14 vertices, named, from 24d370d:
+## + 3/14 vertices, named, from 8f58578:
 ## [1] 9 8 4</code></pre>
 <p>The <code><a href="https://rdrr.io/pkg/igraph/man/distances.html">distances()</a></code> function calculates distance in a graph. By default, it calculates the distance between all pairs of vertices and returns the results as a distance matrix.</p>
 <div class="sourceCode" id="cb317"><pre class="downlit sourceCode r">
@@ -376,14 +376,14 @@ Figure 5.4: Two graphs illustrating how closeness can be measured in different w
 <div class="sourceCode" id="cb327"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/diameter.html">farthest_vertices</a></span><span class="op">(</span><span class="va">g14w</span>, weights <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></code></pre></div>
 <pre><code>## $vertices
-## + 2/14 vertices, named, from 24d370d:
+## + 2/14 vertices, named, from 8f58578:
 ## [1] 11 1 
 ## 
 ## $distance
 ## [1] 5</code></pre>
 <div class="sourceCode" id="cb329"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/diameter.html">get_diameter</a></span><span class="op">(</span><span class="va">g14w</span>, weights <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></code></pre></div>
-<pre><code>## + 6/14 vertices, named, from 24d370d:
+<pre><code>## + 6/14 vertices, named, from 8f58578:
 ## [1] 11 10 9  8  4  1</code></pre>
 <p>Finally, the <code><a href="https://rdrr.io/pkg/igraph/man/edge_density.html">edge_density()</a></code> function will calculate the density of the graph. You can find the formula for edge density in an earlier footnote in this chapter and, if you like, you can verify this manually for our <span class="math inline">\(G_{14W}\)</span> graph.</p>
 <div class="sourceCode" id="cb331"><pre class="downlit sourceCode r">
@@ -469,17 +469,17 @@ Figure 5.4: Two graphs illustrating how closeness can be measured in different w
     vertices <span class="op">=</span> <span class="va">workfrance_vertices</span>,
     directed <span class="op">=</span> <span class="cn">FALSE</span>
 <span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## IGRAPH 2375949 UN-- 211 932 -- 
+<pre><code>## IGRAPH 9a19dde UN-- 211 932 -- 
 ## + attr: name (v/c), dept (v/c), mins (e/n)
-## + edges from 2375949 (vertex names):
-##  [1] 3  --159  253--3    3  --447  3  --498  3  --694  3  --751  3  --859  3  --908  14 --18   99 --14   14 --441 
-## [12] 520--14   14 --544  14 --653  14 --998  15 --120  15 --160  15 --162  15 --178  15 --259  15 --261  15 --295 
-## [23] 15 --353  15 --372  15 --464  15 --491  15 --498  15 --909  15 --1090 39 --18   99 --18   429--18   488--18  
-## [34] 527--18   18 --621  18 --650  753--18   18 --797  18 --845  99 --27   160--27   259--27   295--27   27 --346 
-## [45] 27 --1392 34 --156  34 --250  34 --259  34 --489  34 --615  34 --694  34 --884  34 --959  219--38   38 --435 
-## [56] 39 --71   39 --72   39 --99   118--39   39 --219  39 --339  39 --407  39 --468  39 --871  39 --939  43 --285 
-## [67] 43 --339  43 --809  43 --866  43 --985  118--47   47 --366  47 --691  54 --74   54 --134  54 --158  54 --236 
-## [78] 55 --110  55 --164  447--55   634--55   55 --985 
+## + edges from 9a19dde (vertex names):
+##  [1] 3   --159  253 --3    3   --447  3   --498  3   --694  3   --751  3   --859  3   --908  14  --18   99  --14  
+## [11] 14  --441  520 --14   14  --544  14  --653  14  --998  15  --120  15  --160  15  --162  15  --178  15  --259 
+## [21] 15  --261  15  --295  15  --353  15  --372  15  --464  15  --491  15  --498  15  --909  15  --1090 39  --18  
+## [31] 99  --18   429 --18   488 --18   527 --18   18  --621  18  --650  753 --18   18  --797  18  --845  99  --27  
+## [41] 160 --27   259 --27   295 --27   27  --346  27  --1392 34  --156  34  --250  34  --259  34  --489  34  --615 
+## [51] 34  --694  34  --884  34  --959  219 --38   38  --435  39  --71   39  --72   39  --99   118 --39   39  --219 
+## [61] 39  --339  39  --407  39  --468  39  --871  39  --939  43  --285  43  --339  43  --809  43  --866  43  --985 
+## [71] 118 --47   47  --366  47  --691  54  --74   54  --134  54  --158  54  --236  55  --110  55  --164  447 --55  
 ## + ... omitted several edges</code></pre>
 <p>We have built a graph with 211 vertices and 932 edges. The vertices have a <code>dept</code> property which indicates the department the person works in, and the edges have a <code>mins</code> property which indicates the number of minutes spent together in the same place. The <code>mins</code> property could be considered a measure of how strong the connection between two individuals is, so let’s make it a weight in the graph.</p>
 <div class="sourceCode" id="cb354"><pre class="downlit sourceCode r">
@@ -501,18 +501,18 @@ Figure 5.4: Two graphs illustrating how closeness can be measured in different w
 <div class="sourceCode" id="cb359"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/distances.html">all_shortest_paths</a></span><span class="op">(</span><span class="va">workfrance</span>, from <span class="op">=</span> <span class="st">"3"</span>, to <span class="op">=</span> <span class="st">"55"</span>, weight <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span><span class="op">$</span><span class="va">res</span> </code></pre></div>
 <pre><code>## [[1]]
-## + 3/211 vertices, named, from 2375949:
+## + 3/211 vertices, named, from 9a19dde:
 ## [1] 3   447 55</code></pre>
 <p>There is one common intermediary: employee 447. Therefore, if employees 3 and 55 do not know each other, employee 447 may be able to introduce them. Note that there may be more than one suggestion for intermediaries. For example:</p>
 <div class="sourceCode" id="cb361"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">(</span><span class="va">paths</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/distances.html">all_shortest_paths</a></span><span class="op">(</span><span class="va">workfrance</span>, from <span class="op">=</span> <span class="st">"3"</span>, to <span class="op">=</span> <span class="st">"290"</span>, 
                              weight <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span><span class="op">$</span><span class="va">res</span><span class="op">)</span></code></pre></div>
 <pre><code>## [[1]]
-## + 3/211 vertices, named, from 2375949:
+## + 3/211 vertices, named, from 9a19dde:
 ## [1] 3   859 290
 ## 
 ## [[2]]
-## + 3/211 vertices, named, from 2375949:
+## + 3/211 vertices, named, from 9a19dde:
 ## [1] 3   694 290</code></pre>
 <p>In this case, we could consider using the edge weights to rank the intermediary options, on the basis that higher weights may indicate stronger connections. Let’s visualize these two options by looking at the subgraph with edge weights in Figure <a href="paths-distance.html#fig:intermediary">5.5</a>.</p>
 <div class="sourceCode" id="cb363"><pre class="downlit sourceCode r">
@@ -574,7 +574,7 @@ Figure 5.5: Selecting an intermediary according to higher edge weights
 <code class="sourceCode R"><span class="va">edges603</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/E.html">E</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">[</span><span class="fu">inc</span><span class="op">(</span><span class="st">"603"</span><span class="op">)</span><span class="op">]</span>
 <span class="va">sort603_mins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span><span class="op">(</span><span class="va">edges603</span><span class="op">$</span><span class="va">mins</span>, decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="op">(</span><span class="va">top_edges603</span> <span class="op">&lt;-</span> <span class="va">edges603</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html">order</a></span><span class="op">(</span><span class="va">sort603_mins</span><span class="op">)</span><span class="op">]</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">20</span><span class="op">]</span><span class="op">)</span></code></pre></div>
-<pre><code>## + 20/932 edges from 2375949 (vertex names):
+<pre><code>## + 20/932 edges from 9a19dde (vertex names):
 ##  [1] 603--1392 603--1323 603--1362 859--603  603--954  603--1245 603--779  603--649  691--603  694--603  706--603 
 ## [12] 603--725  487--603  420--603  428--603  387--603  401--603  603--272  290--603  346--603</code></pre>
 <p>Now we have the ‘closest’ 20 people to employee 603. Let’s create an edge subgraph and extract the vertices.</p>
@@ -591,36 +591,36 @@ Figure 5.5: Selecting an intermediary according to higher edge weights
 <p>We see some considerable department similarity, which makes sense. Now that we have found the first person for each table, we will want to try to make sure that we sit that person with nine other people who have some distance from them, and to minimize neighbors sitting at the same table. Let’s start with our first employee 603, and call this Table 1. Because there are only 21 tables but employee 603 has 28 neighbors, we might be willing to allow one neighbor to sit at Table 1. Let’s sit them with the neighbor with whom they spent the least minutes.</p>
 <div class="sourceCode" id="cb378"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">edges603</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.min.html">which.min</a></span><span class="op">(</span><span class="va">edges603</span><span class="op">$</span><span class="va">mins</span><span class="op">)</span><span class="op">]</span></code></pre></div>
-<pre><code>## + 1/932 edge from 2375949 (vertex names):
+<pre><code>## + 1/932 edge from 9a19dde (vertex names):
 ## [1] 77--603</code></pre>
 <p>So we will sit employee 603 with employee 77. Now we can select a third individual who has a reasonable distance in the network from both employee 603 and employee 77. Let’s look at all these distances.</p>
 <div class="sourceCode" id="cb380"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="op">(</span><span class="va">distance603_77</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/distances.html">distances</a></span><span class="op">(</span><span class="va">workfrance</span>, v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"603"</span>, <span class="st">"77"</span><span class="op">)</span>, 
                              weights <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>##     89 97 118 220 378 656 720 741 886 1204 1209 1492 290 502 47 119 198 213 253 267 270 343 366 420 428 445 478 520
-## 603  3  2   2   2   3   3   3   2   3    2    3    4   1   4  2   2   2   2   2   1   2   2   2   1   1   2   2   2
-## 77   2  1   2   1   2   2   2   2   2    1    2    3   2   4  3   3   3   3   3   2   3   3   3   2   2   3   3   3
-##     525 660 691 836 39 43 59 63 72 80 122 211 219 246 257 285 339 407 466 468 533 702 706 753 784 790 793 809 866
-## 603   2   2   1   2  2  3  3  3  2  2   2   3   3   2   2   3   2   2   3   2   4   3   1   2   2   3   3   3   3
-## 77    2   3   2   3  3  3  3  2  2  3   1   3   3   3   3   3   3   2   3   3   3   4   2   2   3   3   3   3   3
-##     871 889 894 923 939 3 15 34 54 74 79 99 120 131 134 141 156 158 159 160 162 165 178 183 193 205 236 242 250 259
-## 603   3   2   2   2   3 2  3  2  3  2  3  1   2   3   3   2   2   3   2   2   2   4   3   2   3   3   2   4   3   2
-## 77    3   2   3   3   2 2  2  2  2  1  2  2   2   3   3   2   2   2   1   2   1   3   3   2   2   3   3   3   2   1
-##     261 295 333 353 372 425 447 453 460 464 489 491 498 574 615 642 677 694 751 763 859 880 884 909 959 1067 1090
-## 603   2   2   2   3   2   4   3   2   3   3   3   3   3   3   3   3   3   1   3   3   1   3   3   2   3    2    3
-## 77    2   2   2   2   2   3   3   2   3   2   2   2   2   2   2   2   4   2   2   2   2   2   2   3   2    2    3
-##     1164 1238 1342 38 172 184 210 222 248 252 269 275 322 374 424 465 477 486 504 510 513 527 577 634 638 674 743
-## 603    2    3    2  4   3   3   1   3   3   2   3   2   3   3   2   3   3   3   3   3   3   3   3   2   3   3   2
-## 77     3    2    1  3   4   4   2   4   4   3   4   3   3   4   3   4   4   3   4   4   4   3   4   3   4   4   3
-##     771 867 882 893 908 921 1485 27 71 77 147 215 346 387 401 426 429 487 488 580 582 603 649 725 779 954 1245 1323
-## 603   3   3   2   3   2   3    2  2  1  1   1   1   1   1   1   2   2   1   2   2   2   0   1   1   1   1    1    1
-## 77    4   4   3   4   3   3    3  2  2  0   2   1   1   2   2   2   1   2   2   2   2   1   1   2   2   2    2    2
-##     1362 1392 14 181 441 544 778 998 1260 106 245 435 440 117 197 200 413 432 461 475 496 626 653 874 977 1414 18
-## 603    1    1  2   2   3   3   3   3    3   3   3   3   2   1   3   2   2   3   2   2   3   3   2   2   3    2  2
-## 77     2    2  3   3   4   4   3   4    4   3   3   2   2   2   3   3   3   3   3   3   4   4   2   3   4    3  2
-##     232 272 531 621 650 744 797 845 55 110 164 173 628 970 985
-## 603   2   1   2   3   2   2   2   2  2   3   3   3   2   4   3
-## 77    3   2   3   3   3   3   3   3  3   4   3   3   2   4   2</code></pre>
+<pre><code>##     89 97 118 220 378 656 720 741 886 1204 1209 1492 290 502 47 119 198 213 253 267 270 343 366 420 428 445 478 520 525
+## 603  3  2   2   2   3   3   3   2   3    2    3    4   1   4  2   2   2   2   2   1   2   2   2   1   1   2   2   2   2
+## 77   2  1   2   1   2   2   2   2   2    1    2    3   2   4  3   3   3   3   3   2   3   3   3   2   2   3   3   3   2
+##     660 691 836 39 43 59 63 72 80 122 211 219 246 257 285 339 407 466 468 533 702 706 753 784 790 793 809 866 871 889
+## 603   2   1   2  2  3  3  3  2  2   2   3   3   2   2   3   2   2   3   2   4   3   1   2   2   3   3   3   3   3   2
+## 77    3   2   3  3  3  3  2  2  3   1   3   3   3   3   3   3   2   3   3   3   4   2   2   3   3   3   3   3   3   2
+##     894 923 939 3 15 34 54 74 79 99 120 131 134 141 156 158 159 160 162 165 178 183 193 205 236 242 250 259 261 295 333
+## 603   2   2   3 2  3  2  3  2  3  1   2   3   3   2   2   3   2   2   2   4   3   2   3   3   2   4   3   2   2   2   2
+## 77    3   3   2 2  2  2  2  1  2  2   2   3   3   2   2   2   1   2   1   3   3   2   2   3   3   3   2   1   2   2   2
+##     353 372 425 447 453 460 464 489 491 498 574 615 642 677 694 751 763 859 880 884 909 959 1067 1090 1164 1238 1342 38
+## 603   3   2   4   3   2   3   3   3   3   3   3   3   3   3   1   3   3   1   3   3   2   3    2    3    2    3    2  4
+## 77    2   2   3   3   2   3   2   2   2   2   2   2   2   4   2   2   2   2   2   2   3   2    2    3    3    2    1  3
+##     172 184 210 222 248 252 269 275 322 374 424 465 477 486 504 510 513 527 577 634 638 674 743 771 867 882 893 908 921
+## 603   3   3   1   3   3   2   3   2   3   3   2   3   3   3   3   3   3   3   3   2   3   3   2   3   3   2   3   2   3
+## 77    4   4   2   4   4   3   4   3   3   4   3   4   4   3   4   4   4   3   4   3   4   4   3   4   4   3   4   3   3
+##     1485 27 71 77 147 215 346 387 401 426 429 487 488 580 582 603 649 725 779 954 1245 1323 1362 1392 14 181 441 544
+## 603    2  2  1  1   1   1   1   1   1   2   2   1   2   2   2   0   1   1   1   1    1    1    1    1  2   2   3   3
+## 77     3  2  2  0   2   1   1   2   2   2   1   2   2   2   2   1   1   2   2   2    2    2    2    2  3   3   4   4
+##     778 998 1260 106 245 435 440 117 197 200 413 432 461 475 496 626 653 874 977 1414 18 232 272 531 621 650 744 797
+## 603   3   3    3   3   3   3   2   1   3   2   2   3   2   2   3   3   2   2   3    2  2   2   1   2   3   2   2   2
+## 77    3   4    4   3   3   2   2   2   3   3   3   3   3   3   4   4   2   3   4    3  2   3   2   3   3   3   3   3
+##     845 55 110 164 173 628 970 985
+## 603   2  2   3   3   3   2   4   3
+## 77    3  3   4   3   3   2   4   2</code></pre>
 <p>We could use the mean of the distances to decide on the person with the furthest distance from those already selected.</p>
 <div class="sourceCode" id="cb382"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/which.min.html">which.max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colMeans</a></span><span class="op">(</span><span class="va">distance603_77</span><span class="op">)</span><span class="op">)</span></code></pre></div>
