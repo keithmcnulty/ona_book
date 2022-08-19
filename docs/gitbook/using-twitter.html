@@ -547,12 +547,12 @@ div.csl-indent {
 <pre><code>## # A tibble: 1 × 7
 ##   query         limit remaining reset         reset_at            timestamp           app          
 ##   &lt;chr&gt;         &lt;int&gt;     &lt;int&gt; &lt;drtn&gt;        &lt;dttm&gt;              &lt;dttm&gt;              &lt;chr&gt;        
-## 1 followers/ids    15        13 1.605831 mins 2022-08-19 12:40:45 2022-08-19 12:39:09 Keith McNulty</code></pre>
+## 1 followers/ids    15        13 4.480609 mins 2022-08-19 13:23:36 2022-08-19 13:19:08 Keith McNulty</code></pre>
 <p>In <code>tweepy</code> you can use the <code>rate_limit_status()</code> function. Here is how you can determine your rate limit status on querying follower IDs:</p>
 <div class="sourceCode" id="cb570"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb570-1"><a href="using-twitter.html#cb570-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb570-2"><a href="using-twitter.html#cb570-2" aria-hidden="true" tabindex="-1"></a>limits <span class="op">=</span> api.rate_limit_status(resources <span class="op">=</span> <span class="st">&quot;followers&quot;</span>)</span>
 <span id="cb570-3"><a href="using-twitter.html#cb570-3" aria-hidden="true" tabindex="-1"></a>limits.get(<span class="st">&#39;resources&#39;</span>).get(<span class="st">&#39;followers&#39;</span>).get(<span class="st">&#39;/followers/ids&#39;</span>)</span></code></pre></div>
-<pre><code>## {&#39;limit&#39;: 15, &#39;remaining&#39;: 13, &#39;reset&#39;: 1660912849}</code></pre>
+<pre><code>## {&#39;limit&#39;: 15, &#39;remaining&#39;: 14, &#39;reset&#39;: 1660916045}</code></pre>
 <p>Practically, when you hit a rate limit you will receive a message back indicating so. You can then try again from where you left off after 15 minutes. Packages like <code>rtweet</code> and <code>tweepy</code> also have options to retry automatically after 15 minutes. For example, in many <code>rtweet</code> functions you can use the argument <code>retryonratelimit = TRUE</code>, while in <code>tweepy</code>, you can specify this behavior on initial authentication using:</p>
 <div class="sourceCode" id="cb572"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb572-1"><a href="using-twitter.html#cb572-1" aria-hidden="true" tabindex="-1"></a>api <span class="op">=</span> tweepy.API(auth, wait_on_rate_limit <span class="op">=</span> <span class="va">True</span>)</span></code></pre></div>
 </div>
@@ -871,7 +871,7 @@ Figure 10.2: Comparison of Leiden communities with ground truth political party 
 <p>It may also be interesting to identify some large cliques in the graph:</p>
 <div class="sourceCode" id="cb604"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb604-1"><a href="using-twitter.html#cb604-1" aria-hidden="true" tabindex="-1"></a>(largest_cliques <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">largest_cliques</span>(mp_graph_undirected))</span></code></pre></div>
 <pre><code>## [[1]]
-## + 21/585 vertices, named, from e6f0e2d:
+## + 21/585 vertices, named, from 3f95b04:
 ##  [1] Emily Thornberry     Keir Starmer         Angela Rayner        Boris Johnson        Anneliese Dodds     
 ##  [6] Yvette Cooper        Louise Haigh         Lisa Nandy           David Lammy          Jonathan Ashworth   
 ## [11] Bridget Phillipson   Kate Green           Sharon Hodgson       Nick Thomas-Symonds  Edward Miliband     
@@ -879,7 +879,7 @@ Figure 10.2: Comparison of Leiden communities with ground truth political party 
 ## [21] Mary Glindon        
 ## 
 ## [[2]]
-## + 21/585 vertices, named, from e6f0e2d:
+## + 21/585 vertices, named, from 3f95b04:
 ##  [1] Emily Thornberry     Keir Starmer         Angela Rayner        Rachel Reeves        Anneliese Dodds     
 ##  [6] Yvette Cooper        David Lammy          Louise Haigh         Lisa Nandy           Jonathan Ashworth   
 ## [11] Bridget Phillipson   Sharon Hodgson       Lucy Powell          Mary Glindon         Kate Green          
@@ -887,7 +887,7 @@ Figure 10.2: Comparison of Leiden communities with ground truth political party 
 ## [21] Vicky Foxcroft      
 ## 
 ## [[3]]
-## + 21/585 vertices, named, from e6f0e2d:
+## + 21/585 vertices, named, from 3f95b04:
 ##  [1] Emily Thornberry     Keir Starmer         Angela Rayner        Rachel Reeves        Anneliese Dodds     
 ##  [6] Yvette Cooper        David Lammy          Louise Haigh         Lisa Nandy           Jonathan Ashworth   
 ## [11] Bridget Phillipson   Sharon Hodgson       Lucy Powell          Tulip Siddiq         Peter Kyle          
@@ -895,7 +895,7 @@ Figure 10.2: Comparison of Leiden communities with ground truth political party 
 ## [21] Edward Miliband     
 ## 
 ## [[4]]
-## + 21/585 vertices, named, from e6f0e2d:
+## + 21/585 vertices, named, from 3f95b04:
 ##  [1] Emily Thornberry     Keir Starmer         Angela Rayner        Rachel Reeves        Anneliese Dodds     
 ##  [6] Yvette Cooper        David Lammy          Louise Haigh         Lisa Nandy           Jonathan Ashworth   
 ## [11] Bridget Phillipson   Sharon Hodgson       Lucy Powell          Tulip Siddiq         Peter Kyle          
@@ -909,7 +909,7 @@ Figure 10.2: Comparison of Leiden communities with ground truth political party 
 <span id="cb606-5"><a href="using-twitter.html#cb606-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb606-6"><a href="using-twitter.html#cb606-6" aria-hidden="true" tabindex="-1"></a>(largest_conservative_cliques <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">largest_cliques</span>(conservative_graph))</span></code></pre></div>
 <pre><code>## [[1]]
-## + 19/308 vertices, named, from 0908b9e:
+## + 19/308 vertices, named, from 0aff225:
 ##  [1] Stephen Barclay       Rishi Sunak           Boris Johnson         Nadhim Zahawi         Elizabeth Truss      
 ##  [6] Sajid Javid           Priti Patel           Kwasi Kwarteng        Oliver Dowden         Nadine Dorries       
 ## [11] Anne-Marie Trevelyan  Michael Gove          Richard Holden        Simon Clarke          Michelle Donelan     
