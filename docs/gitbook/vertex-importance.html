@@ -1,503 +1,140 @@
 <!DOCTYPE html>
-<html lang="" xml:lang="">
+<html lang="en">
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>6 Vertex Importance and Centrality | Handbook of Graphs and Networks in People Analytics</title>
+<meta name="author" content="Keith McNulty">
+<meta name="description" content="It follows from much of the earlier work we have been doing in this book that the vertices of a graph can provide rich information about a network, its structure and its dynamics. In sociology and...">
+<meta name="generator" content="bookdown 0.39 with bs4_book()">
+<meta property="og:title" content="6 Vertex Importance and Centrality | Handbook of Graphs and Networks in People Analytics">
+<meta property="og:type" content="book">
+<meta property="og:url" content="https://ona-book.org/vertex-importance.html">
+<meta property="og:image" content="https://ona-book.org/www/cover/cover-ona.png">
+<meta property="og:description" content="It follows from much of the earlier work we have been doing in this book that the vertices of a graph can provide rich information about a network, its structure and its dynamics. In sociology and...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="6 Vertex Importance and Centrality | Handbook of Graphs and Networks in People Analytics">
+<meta name="twitter:site" content="@dr_keithmcnulty">
+<meta name="twitter:description" content="It follows from much of the earlier work we have been doing in this book that the vertices of a graph can provide rich information about a network, its structure and its dynamics. In sociology and...">
+<meta name="twitter:image" content="https://ona-book.org/www/cover/cover-ona.png">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.3.1/transition.js"></script><script src="libs/bs3compat-0.3.1/tabs.js"></script><script src="libs/bs3compat-0.3.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><meta name="citation_title" content="6 Vertex Importance and Centrality | Handbook of Graphs and Networks in People Analytics: With Examples in R and Python">
+<meta name="citation_author" content="Keith McNulty">
+<meta name="citation_publication_date" content="2022">
+<meta name="citation_isbn" content="9781032204970">
+<script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script><link href="libs/vis-9.1.0/vis-network.min.css" rel="stylesheet">
+<script src="libs/vis-9.1.0/vis-network.min.js"></script><script src="libs/visNetwork-binding-2.1.0/visNetwork.js"></script><script src="libs/kePrint-0.0.1/kePrint.js"></script><link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<script src="libs/d3-4.5.0/d3.min.js"></script><script src="libs/forceNetwork-binding-0.4/forceNetwork.js"></script><script src="libs/sankey-1/sankey.js"></script><script src="libs/sankeyNetwork-binding-0.4/sankeyNetwork.js"></script><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-400FPN6D44"></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>6 Vertex Importance and Centrality | Handbook of Graphs and Networks in People Analytics</title>
-  <meta name="description" content="A technical manual of graphs, networks and their applications in the people and social sciences" />
-  <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
-
-  <meta property="og:title" content="6 Vertex Importance and Centrality | Handbook of Graphs and Networks in People Analytics" />
-  <meta property="og:type" content="book" />
-  <meta property="og:image" content="https://ona-book.org/www/cover/cover-ona.png" />
-  <meta property="og:description" content="A technical manual of graphs, networks and their applications in the people and social sciences" />
-  <meta name="github-repo" content="keithmcnulty/ona_book" />
-
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="6 Vertex Importance and Centrality | Handbook of Graphs and Networks in People Analytics" />
-  <meta name="twitter:site" content="@dr_keithmcnulty" />
-  <meta name="twitter:description" content="A technical manual of graphs, networks and their applications in the people and social sciences" />
-  <meta name="twitter:image" content="https://ona-book.org/www/cover/cover-ona.png" />
-
-<meta name="author" content="Keith McNulty" />
-
-
-
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  
-  
-<link rel="prev" href="paths-distance.html"/>
-<link rel="next" href="community.html"/>
-<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
-<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
-
-
-
-
-
-
-
-
-<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
-<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
-<meta name="citation_title" content="6 Vertex Importance and Centrality | Handbook of Graphs and Networks in People Analytics: With Examples in R and Python"/>
-<meta name="citation_author" content="Keith McNulty"/>
-<meta name="citation_publication_date" content="2022"/>
-<meta name="citation_isbn" content="9781032204970"/>
-<script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
-<link href="libs/vis-9.1.0/vis-network.min.css" rel="stylesheet" />
-<script src="libs/vis-9.1.0/vis-network.min.js"></script>
-<script src="libs/visNetwork-binding-2.1.0/visNetwork.js"></script>
-<script src="libs/kePrint-0.0.1/kePrint.js"></script>
-<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
-<script src="libs/d3-4.5.0/d3.min.js"></script>
-<script src="libs/forceNetwork-binding-0.4/forceNetwork.js"></script>
-<script src="libs/sankey-1/sankey.js"></script>
-<script src="libs/sankeyNetwork-binding-0.4/sankeyNetwork.js"></script>
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-400FPN6D44"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-400FPN6D44');
-</script>
-
-
+      gtag('config', 'G-400FPN6D44');
+    </script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
 <style type="text/css">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-</style>
-
-<style type="text/css">
-/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}
-</style>
-
-<link rel="stylesheet" href="css/style.css" type="text/css" />
+    /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+        }
+    .hanging div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }
+  </style>
+<link rel="stylesheet" href="css/style.css">
 </head>
+<body data-spy="scroll" data-target="#toc">
 
-<body>
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
 
-
-
-  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
-
-    <div class="book-summary">
-      <nav role="navigation">
-
-<ul class="summary">
-<li><a href="./">Handbook of Graphs and Networks in People Analytics</a></li>
-
-<li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a>
-<ul>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#notes-on-data-used-in-this-book"><i class="fa fa-check"></i>Notes on data used in this book</a></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html#technical-note-for-r-users"><i class="fa fa-check"></i>Technical note for R users</a></li>
-</ul></li>
-<li class="chapter" data-level="" data-path="foreword-by-professor-jeff-polzer.html"><a href="foreword-by-professor-jeff-polzer.html"><i class="fa fa-check"></i>Foreword by Professor Jeff Polzer</a></li>
-<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i>Introduction</a></li>
-<li class="chapter" data-level="" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html"><i class="fa fa-check"></i>The Basics of the R Programming Language</a>
-<ul>
-<li class="chapter" data-level="0.1" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#what-is-r"><i class="fa fa-check"></i><b>0.1</b> What is R?</a></li>
-<li class="chapter" data-level="0.2" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#how-to-start-using-r"><i class="fa fa-check"></i><b>0.2</b> How to start using R</a></li>
-<li class="chapter" data-level="0.3" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#data-in-r"><i class="fa fa-check"></i><b>0.3</b> Data in R</a>
-<ul>
-<li class="chapter" data-level="0.3.1" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#data-types"><i class="fa fa-check"></i><b>0.3.1</b> Data types</a></li>
-<li class="chapter" data-level="0.3.2" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#homogeneous-data-structures"><i class="fa fa-check"></i><b>0.3.2</b> Homogeneous data structures</a></li>
-<li class="chapter" data-level="0.3.3" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#heterogeneous-data-structures"><i class="fa fa-check"></i><b>0.3.3</b> Heterogeneous data structures</a></li>
-</ul></li>
-<li class="chapter" data-level="0.4" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#working-with-dataframes"><i class="fa fa-check"></i><b>0.4</b> Working with dataframes</a>
-<ul>
-<li class="chapter" data-level="0.4.1" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#loading-and-tidying-data-in-dataframes"><i class="fa fa-check"></i><b>0.4.1</b> Loading and tidying data in dataframes</a></li>
-<li class="chapter" data-level="0.4.2" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#manipulating-dataframes"><i class="fa fa-check"></i><b>0.4.2</b> Manipulating dataframes</a></li>
-</ul></li>
-<li class="chapter" data-level="0.5" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#functions-packages-and-libraries"><i class="fa fa-check"></i><b>0.5</b> Functions, packages and libraries</a>
-<ul>
-<li class="chapter" data-level="0.5.1" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#using-functions"><i class="fa fa-check"></i><b>0.5.1</b> Using functions</a></li>
-<li class="chapter" data-level="0.5.2" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#help-with-functions"><i class="fa fa-check"></i><b>0.5.2</b> Help with functions</a></li>
-<li class="chapter" data-level="0.5.3" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#writing-your-own-functions"><i class="fa fa-check"></i><b>0.5.3</b> Writing your own functions</a></li>
-<li class="chapter" data-level="0.5.4" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#installing-packages"><i class="fa fa-check"></i><b>0.5.4</b> Installing packages</a></li>
-<li class="chapter" data-level="0.5.5" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#using-packages"><i class="fa fa-check"></i><b>0.5.5</b> Using packages</a></li>
-<li class="chapter" data-level="0.5.6" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#the-pipe-operator"><i class="fa fa-check"></i><b>0.5.6</b> The pipe operator</a></li>
-</ul></li>
-<li class="chapter" data-level="0.6" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#errors-warnings-and-messages"><i class="fa fa-check"></i><b>0.6</b> Errors, warnings and messages</a></li>
-<li class="chapter" data-level="0.7" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#plotting-and-graphing"><i class="fa fa-check"></i><b>0.7</b> Plotting and graphing</a>
-<ul>
-<li class="chapter" data-level="0.7.1" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#plotting-in-base-r"><i class="fa fa-check"></i><b>0.7.1</b> Plotting in base R</a></li>
-<li class="chapter" data-level="0.7.2" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#specialist-plotting-and-graphing-packages"><i class="fa fa-check"></i><b>0.7.2</b> Specialist plotting and graphing packages</a></li>
-</ul></li>
-<li class="chapter" data-level="0.8" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#randomization-in-r"><i class="fa fa-check"></i><b>0.8</b> Randomization in R</a></li>
-<li class="chapter" data-level="0.9" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#documenting-your-work-using-r-markdown"><i class="fa fa-check"></i><b>0.9</b> Documenting your work using R Markdown</a></li>
-<li class="chapter" data-level="0.10" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#learning-exercises"><i class="fa fa-check"></i><b>0.10</b> Learning exercises</a>
-<ul>
-<li class="chapter" data-level="0.10.1" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#discussion-questions"><i class="fa fa-check"></i><b>0.10.1</b> Discussion questions</a></li>
-<li class="chapter" data-level="0.10.2" data-path="the-basics-of-the-r-programming-language.html"><a href="the-basics-of-the-r-programming-language.html#data-exercises"><i class="fa fa-check"></i><b>0.10.2</b> Data exercises</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="1" data-path="everywhere.html"><a href="everywhere.html"><i class="fa fa-check"></i><b>1</b> Graphs Everywhere!</a>
-<ul>
-<li class="chapter" data-level="1.1" data-path="everywhere.html"><a href="everywhere.html#the-seven-bridges-of-königsberg"><i class="fa fa-check"></i><b>1.1</b> The Seven Bridges of Königsberg</a></li>
-<li class="chapter" data-level="1.2" data-path="everywhere.html"><a href="everywhere.html#graphs-as-mathematical-models"><i class="fa fa-check"></i><b>1.2</b> Graphs as mathematical models</a></li>
-<li class="chapter" data-level="1.3" data-path="everywhere.html"><a href="everywhere.html#graph-theory-in-the-analysis-of-people-and-groups"><i class="fa fa-check"></i><b>1.3</b> Graph theory in the analysis of people and groups</a>
-<ul>
-<li class="chapter" data-level="1.3.1" data-path="everywhere.html"><a href="everywhere.html#the-study-of-connection"><i class="fa fa-check"></i><b>1.3.1</b> The study of connection</a></li>
-<li class="chapter" data-level="1.3.2" data-path="everywhere.html"><a href="everywhere.html#the-study-of-information-flow"><i class="fa fa-check"></i><b>1.3.2</b> The study of information flow</a></li>
-<li class="chapter" data-level="1.3.3" data-path="everywhere.html"><a href="everywhere.html#the-study-of-community-diversity-and-familiarity"><i class="fa fa-check"></i><b>1.3.3</b> The study of community, diversity and familiarity</a></li>
-<li class="chapter" data-level="1.3.4" data-path="everywhere.html"><a href="everywhere.html#study-importance"><i class="fa fa-check"></i><b>1.3.4</b> The study of importance, influence and attachment</a></li>
-<li class="chapter" data-level="1.3.5" data-path="everywhere.html"><a href="everywhere.html#graphs-as-data-sources"><i class="fa fa-check"></i><b>1.3.5</b> Graphs as data sources</a></li>
-</ul></li>
-<li class="chapter" data-level="1.4" data-path="everywhere.html"><a href="everywhere.html#purpose-structure-and-organization-of-this-book"><i class="fa fa-check"></i><b>1.4</b> Purpose, structure and organization of this book</a></li>
-</ul></li>
-<li class="chapter" data-level="2" data-path="working.html"><a href="working.html"><i class="fa fa-check"></i><b>2</b> Working with Graphs</a>
-<ul>
-<li class="chapter" data-level="2.1" data-path="working.html"><a href="working.html#elementary-graph-theory"><i class="fa fa-check"></i><b>2.1</b> Elementary graph theory</a>
-<ul>
-<li class="chapter" data-level="2.1.1" data-path="working.html"><a href="working.html#graph-def"><i class="fa fa-check"></i><b>2.1.1</b> General definition of a graph</a></li>
-<li class="chapter" data-level="2.1.2" data-path="working.html"><a href="working.html#graph-types"><i class="fa fa-check"></i><b>2.1.2</b> Types of graphs</a></li>
-<li class="chapter" data-level="2.1.3" data-path="working.html"><a href="working.html#vertex-edge-prop"><i class="fa fa-check"></i><b>2.1.3</b> Vertex and edge properties</a></li>
-<li class="chapter" data-level="2.1.4" data-path="working.html"><a href="working.html#rep-graphs"><i class="fa fa-check"></i><b>2.1.4</b> Representations of graphs</a></li>
-</ul></li>
-<li class="chapter" data-level="2.2" data-path="working.html"><a href="working.html#creating-graphs-in-r"><i class="fa fa-check"></i><b>2.2</b> Creating graphs in R</a>
-<ul>
-<li class="chapter" data-level="2.2.1" data-path="working.html"><a href="working.html#creating-a-graph-from-an-edgelist"><i class="fa fa-check"></i><b>2.2.1</b> Creating a graph from an edgelist</a></li>
-<li class="chapter" data-level="2.2.2" data-path="working.html"><a href="working.html#creating-a-graph-from-an-adjacency-matrix"><i class="fa fa-check"></i><b>2.2.2</b> Creating a graph from an adjacency matrix</a></li>
-<li class="chapter" data-level="2.2.3" data-path="working.html"><a href="working.html#creating-a-graph-from-a-dataframe"><i class="fa fa-check"></i><b>2.2.3</b> Creating a graph from a dataframe</a></li>
-<li class="chapter" data-level="2.2.4" data-path="working.html"><a href="working.html#adding-properties-to-the-vertices-and-edges"><i class="fa fa-check"></i><b>2.2.4</b> Adding properties to the vertices and edges</a></li>
-</ul></li>
-<li class="chapter" data-level="2.3" data-path="working.html"><a href="working.html#creating-graphs-in-python"><i class="fa fa-check"></i><b>2.3</b> Creating graphs in Python</a>
-<ul>
-<li class="chapter" data-level="2.3.1" data-path="working.html"><a href="working.html#creating-a-graph-from-an-edgelist-1"><i class="fa fa-check"></i><b>2.3.1</b> Creating a graph from an edgelist</a></li>
-<li class="chapter" data-level="2.3.2" data-path="working.html"><a href="working.html#python-graph-from-adjacency"><i class="fa fa-check"></i><b>2.3.2</b> Creating a graph from an adjacency matrix</a></li>
-<li class="chapter" data-level="2.3.3" data-path="working.html"><a href="working.html#adding-vertex-and-edge-properties-to-a-graph"><i class="fa fa-check"></i><b>2.3.3</b> Adding vertex and edge properties to a graph</a></li>
-</ul></li>
-<li class="chapter" data-level="2.4" data-path="working.html"><a href="working.html#learning-exercises-1"><i class="fa fa-check"></i><b>2.4</b> Learning exercises</a>
-<ul>
-<li class="chapter" data-level="2.4.1" data-path="working.html"><a href="working.html#discussion-questions-1"><i class="fa fa-check"></i><b>2.4.1</b> Discussion questions</a></li>
-<li class="chapter" data-level="2.4.2" data-path="working.html"><a href="working.html#data-exercises-1"><i class="fa fa-check"></i><b>2.4.2</b> Data exercises</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="3" data-path="viz-graphs.html"><a href="viz-graphs.html"><i class="fa fa-check"></i><b>3</b> Visualizing Graphs</a>
-<ul>
-<li class="chapter" data-level="3.1" data-path="viz-graphs.html"><a href="viz-graphs.html#visualizing-graphs-in-r"><i class="fa fa-check"></i><b>3.1</b> Visualizing graphs in R</a>
-<ul>
-<li class="chapter" data-level="3.1.1" data-path="viz-graphs.html"><a href="viz-graphs.html#native-plotting-igraph"><i class="fa fa-check"></i><b>3.1.1</b> Native plotting in <code>igraph</code></a></li>
-<li class="chapter" data-level="3.1.2" data-path="viz-graphs.html"><a href="viz-graphs.html#layouts"><i class="fa fa-check"></i><b>3.1.2</b> Graph layouts</a></li>
-<li class="chapter" data-level="3.1.3" data-path="viz-graphs.html"><a href="viz-graphs.html#ggraph"><i class="fa fa-check"></i><b>3.1.3</b> Static plotting with <code>ggraph</code></a></li>
-<li class="chapter" data-level="3.1.4" data-path="viz-graphs.html"><a href="viz-graphs.html#interactive-graph-visualization-using-visnetwork"><i class="fa fa-check"></i><b>3.1.4</b> Interactive graph visualization using <code>visNetwork</code></a></li>
-<li class="chapter" data-level="3.1.5" data-path="viz-graphs.html"><a href="viz-graphs.html#interactive-graph-visualization-using-networkd3"><i class="fa fa-check"></i><b>3.1.5</b> Interactive graph visualization using <code>networkD3</code></a></li>
-</ul></li>
-<li class="chapter" data-level="3.2" data-path="viz-graphs.html"><a href="viz-graphs.html#visualizing-graphs-in-python"><i class="fa fa-check"></i><b>3.2</b> Visualizing graphs in Python</a>
-<ul>
-<li class="chapter" data-level="3.2.1" data-path="viz-graphs.html"><a href="viz-graphs.html#static-plotting-using-networkx-and-matplotlib"><i class="fa fa-check"></i><b>3.2.1</b> Static plotting using <code>networkx</code> and <code>matplotlib</code></a></li>
-<li class="chapter" data-level="3.2.2" data-path="viz-graphs.html"><a href="viz-graphs.html#interactive-visualization-using-networkx-and-pyvis"><i class="fa fa-check"></i><b>3.2.2</b> Interactive visualization using <code>networkx</code> and <code>pyvis</code></a></li>
-</ul></li>
-<li class="chapter" data-level="3.3" data-path="viz-graphs.html"><a href="viz-graphs.html#learning-exercises-2"><i class="fa fa-check"></i><b>3.3</b> Learning exercises</a>
-<ul>
-<li class="chapter" data-level="3.3.1" data-path="viz-graphs.html"><a href="viz-graphs.html#discussion-questions-2"><i class="fa fa-check"></i><b>3.3.1</b> Discussion questions</a></li>
-<li class="chapter" data-level="3.3.2" data-path="viz-graphs.html"><a href="viz-graphs.html#data-exercises-2"><i class="fa fa-check"></i><b>3.3.2</b> Data exercises</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="4" data-path="restructuring-data.html"><a href="restructuring-data.html"><i class="fa fa-check"></i><b>4</b> Restructuring Data for Use in Graphs</a>
-<ul>
-<li class="chapter" data-level="4.1" data-path="restructuring-data.html"><a href="restructuring-data.html#transforming-data-in-rectangular-tables-for-use-in-graphs"><i class="fa fa-check"></i><b>4.1</b> Transforming data in rectangular tables for use in graphs</a>
-<ul>
-<li class="chapter" data-level="4.1.1" data-path="restructuring-data.html"><a href="restructuring-data.html#creating-a-simple-graph-of-a-management-hierarchy"><i class="fa fa-check"></i><b>4.1.1</b> Creating a simple graph of a management hierarchy</a></li>
-<li class="chapter" data-level="4.1.2" data-path="restructuring-data.html"><a href="restructuring-data.html#connecting-customers-through-sales-reps"><i class="fa fa-check"></i><b>4.1.2</b> Connecting customers through sales reps</a></li>
-<li class="chapter" data-level="4.1.3" data-path="restructuring-data.html"><a href="restructuring-data.html#common-purchases"><i class="fa fa-check"></i><b>4.1.3</b> Connecting customers through common purchases</a></li>
-<li class="chapter" data-level="4.1.4" data-path="restructuring-data.html"><a href="restructuring-data.html#approaches-using-python"><i class="fa fa-check"></i><b>4.1.4</b> Approaches using Python</a></li>
-</ul></li>
-<li class="chapter" data-level="4.2" data-path="restructuring-data.html"><a href="restructuring-data.html#doc-transform"><i class="fa fa-check"></i><b>4.2</b> Transforming data from documents for use in graphs</a>
-<ul>
-<li class="chapter" data-level="4.2.1" data-path="restructuring-data.html"><a href="restructuring-data.html#scraping-data-from-semi-structured-documents"><i class="fa fa-check"></i><b>4.2.1</b> Scraping data from semi-structured documents</a></li>
-<li class="chapter" data-level="4.2.2" data-path="restructuring-data.html"><a href="restructuring-data.html#creating-an-edgelist-from-the-scraped-data"><i class="fa fa-check"></i><b>4.2.2</b> Creating an edgelist from the scraped data</a></li>
-<li class="chapter" data-level="4.2.3" data-path="restructuring-data.html"><a href="restructuring-data.html#approaches-in-python"><i class="fa fa-check"></i><b>4.2.3</b> Approaches in Python</a></li>
-</ul></li>
-<li class="chapter" data-level="4.3" data-path="restructuring-data.html"><a href="restructuring-data.html#learning-exercises-3"><i class="fa fa-check"></i><b>4.3</b> Learning exercises</a>
-<ul>
-<li class="chapter" data-level="4.3.1" data-path="restructuring-data.html"><a href="restructuring-data.html#discussion-questions-3"><i class="fa fa-check"></i><b>4.3.1</b> Discussion questions</a></li>
-<li class="chapter" data-level="4.3.2" data-path="restructuring-data.html"><a href="restructuring-data.html#data-exercises-3"><i class="fa fa-check"></i><b>4.3.2</b> Data exercises</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="5" data-path="paths-distance.html"><a href="paths-distance.html"><i class="fa fa-check"></i><b>5</b> Paths and Distance</a>
-<ul>
-<li class="chapter" data-level="5.1" data-path="paths-distance.html"><a href="paths-distance.html#theory-of-graph-traversal-paths-and-distance"><i class="fa fa-check"></i><b>5.1</b> Theory of graph traversal, paths and distance</a>
-<ul>
-<li class="chapter" data-level="5.1.1" data-path="paths-distance.html"><a href="paths-distance.html#traversal"><i class="fa fa-check"></i><b>5.1.1</b> Paths and graph traversal</a></li>
-<li class="chapter" data-level="5.1.2" data-path="paths-distance.html"><a href="paths-distance.html#path-length-and-distance"><i class="fa fa-check"></i><b>5.1.2</b> Path length and distance</a></li>
-<li class="chapter" data-level="5.1.3" data-path="paths-distance.html"><a href="paths-distance.html#shortest-path-algorithms"><i class="fa fa-check"></i><b>5.1.3</b> Shortest path algorithms</a></li>
-<li class="chapter" data-level="5.1.4" data-path="paths-distance.html"><a href="paths-distance.html#graph-diameter-and-density"><i class="fa fa-check"></i><b>5.1.4</b> Graph diameter and density</a></li>
-</ul></li>
-<li class="chapter" data-level="5.2" data-path="paths-distance.html"><a href="paths-distance.html#calculating-paths-distance-diameter-and-density"><i class="fa fa-check"></i><b>5.2</b> Calculating paths, distance, diameter and density</a>
-<ul>
-<li class="chapter" data-level="5.2.1" data-path="paths-distance.html"><a href="paths-distance.html#calculating-in-r"><i class="fa fa-check"></i><b>5.2.1</b> Calculating in R</a></li>
-<li class="chapter" data-level="5.2.2" data-path="paths-distance.html"><a href="paths-distance.html#calculating-in-python"><i class="fa fa-check"></i><b>5.2.2</b> Calculating in Python</a></li>
-</ul></li>
-<li class="chapter" data-level="5.3" data-path="paths-distance.html"><a href="paths-distance.html#illustrative-6"><i class="fa fa-check"></i><b>5.3</b> Examples of uses</a>
-<ul>
-<li class="chapter" data-level="5.3.1" data-path="paths-distance.html"><a href="paths-distance.html#facilitating-introductions-in-a-workplace"><i class="fa fa-check"></i><b>5.3.1</b> Facilitating introductions in a workplace</a></li>
-<li class="chapter" data-level="5.3.2" data-path="paths-distance.html"><a href="paths-distance.html#workplace-distance"><i class="fa fa-check"></i><b>5.3.2</b> Finding distant colleagues in a workplace</a></li>
-</ul></li>
-<li class="chapter" data-level="5.4" data-path="paths-distance.html"><a href="paths-distance.html#learning-exercises-4"><i class="fa fa-check"></i><b>5.4</b> Learning exercises</a>
-<ul>
-<li class="chapter" data-level="5.4.1" data-path="paths-distance.html"><a href="paths-distance.html#discussion-questions-4"><i class="fa fa-check"></i><b>5.4.1</b> Discussion questions</a></li>
-<li class="chapter" data-level="5.4.2" data-path="paths-distance.html"><a href="paths-distance.html#data-exercises-4"><i class="fa fa-check"></i><b>5.4.2</b> Data exercises</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="6" data-path="vertex-importance.html"><a href="vertex-importance.html"><i class="fa fa-check"></i><b>6</b> Vertex Importance and Centrality</a>
-<ul>
-<li class="chapter" data-level="6.1" data-path="vertex-importance.html"><a href="vertex-importance.html#vertex-centrality-measures-in-graphs"><i class="fa fa-check"></i><b>6.1</b> Vertex centrality measures in graphs</a>
-<ul>
-<li class="chapter" data-level="6.1.1" data-path="vertex-importance.html"><a href="vertex-importance.html#degree-centrality"><i class="fa fa-check"></i><b>6.1.1</b> Degree centrality</a></li>
-<li class="chapter" data-level="6.1.2" data-path="vertex-importance.html"><a href="vertex-importance.html#closeness-centrality"><i class="fa fa-check"></i><b>6.1.2</b> Closeness centrality</a></li>
-<li class="chapter" data-level="6.1.3" data-path="vertex-importance.html"><a href="vertex-importance.html#betweenness-centrality"><i class="fa fa-check"></i><b>6.1.3</b> Betweenness centrality</a></li>
-<li class="chapter" data-level="6.1.4" data-path="vertex-importance.html"><a href="vertex-importance.html#eigenvector-centrality"><i class="fa fa-check"></i><b>6.1.4</b> Eigenvector centrality</a></li>
-</ul></li>
-<li class="chapter" data-level="6.2" data-path="vertex-importance.html"><a href="vertex-importance.html#calculating-and-illustrating-vertex-centrality"><i class="fa fa-check"></i><b>6.2</b> Calculating and illustrating vertex centrality</a>
-<ul>
-<li class="chapter" data-level="6.2.1" data-path="vertex-importance.html"><a href="vertex-importance.html#calculating-in-r-1"><i class="fa fa-check"></i><b>6.2.1</b> Calculating in R</a></li>
-<li class="chapter" data-level="6.2.2" data-path="vertex-importance.html"><a href="vertex-importance.html#calculating-in-python-1"><i class="fa fa-check"></i><b>6.2.2</b> Calculating in Python</a></li>
-<li class="chapter" data-level="6.2.3" data-path="vertex-importance.html"><a href="vertex-importance.html#illustrating-centrality-in-graph-visualizations"><i class="fa fa-check"></i><b>6.2.3</b> Illustrating centrality in graph visualizations</a></li>
-</ul></li>
-<li class="chapter" data-level="6.3" data-path="vertex-importance.html"><a href="vertex-importance.html#illustrative-7"><i class="fa fa-check"></i><b>6.3</b> Examples of uses</a>
-<ul>
-<li class="chapter" data-level="6.3.1" data-path="vertex-importance.html"><a href="vertex-importance.html#finding-superconnectors"><i class="fa fa-check"></i><b>6.3.1</b> Finding ‘superconnectors’</a></li>
-<li class="chapter" data-level="6.3.2" data-path="vertex-importance.html"><a href="vertex-importance.html#identifying-influential-employees"><i class="fa fa-check"></i><b>6.3.2</b> Identifying influential employees</a></li>
-</ul></li>
-<li class="chapter" data-level="6.4" data-path="vertex-importance.html"><a href="vertex-importance.html#learning-exercises-5"><i class="fa fa-check"></i><b>6.4</b> Learning exercises</a>
-<ul>
-<li class="chapter" data-level="6.4.1" data-path="vertex-importance.html"><a href="vertex-importance.html#discussion-questions-5"><i class="fa fa-check"></i><b>6.4.1</b> Discussion questions</a></li>
-<li class="chapter" data-level="6.4.2" data-path="vertex-importance.html"><a href="vertex-importance.html#data-exercises-5"><i class="fa fa-check"></i><b>6.4.2</b> Data exercises</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="7" data-path="community.html"><a href="community.html"><i class="fa fa-check"></i><b>7</b> Components, Communities and Cliques</a>
-<ul>
-<li class="chapter" data-level="7.1" data-path="community.html"><a href="community.html#theory-of-components-partitions-and-clusters"><i class="fa fa-check"></i><b>7.1</b> Theory of components, partitions and clusters</a>
-<ul>
-<li class="chapter" data-level="7.1.1" data-path="community.html"><a href="community.html#connected-components-of-graphs"><i class="fa fa-check"></i><b>7.1.1</b> Connected components of graphs</a></li>
-<li class="chapter" data-level="7.1.2" data-path="community.html"><a href="community.html#vertex-partitioning"><i class="fa fa-check"></i><b>7.1.2</b> Vertex partitioning</a></li>
-<li class="chapter" data-level="7.1.3" data-path="community.html"><a href="community.html#vertex-clustering-and-community-detection"><i class="fa fa-check"></i><b>7.1.3</b> Vertex clustering and community detection</a></li>
-<li class="chapter" data-level="7.1.4" data-path="community.html"><a href="community.html#cliques"><i class="fa fa-check"></i><b>7.1.4</b> Cliques</a></li>
-</ul></li>
-<li class="chapter" data-level="7.2" data-path="community.html"><a href="community.html#finding-components-communities-and-cliques-using-r"><i class="fa fa-check"></i><b>7.2</b> Finding components, communities and cliques using R</a>
-<ul>
-<li class="chapter" data-level="7.2.1" data-path="community.html"><a href="community.html#finding-connected-components-of-disconnected-graphs"><i class="fa fa-check"></i><b>7.2.1</b> Finding connected components of disconnected graphs</a></li>
-<li class="chapter" data-level="7.2.2" data-path="community.html"><a href="community.html#partitioning-and-community-detection-in-r"><i class="fa fa-check"></i><b>7.2.2</b> Partitioning and community detection in R</a></li>
-<li class="chapter" data-level="7.2.3" data-path="community.html"><a href="community.html#finding-cliques-in-r"><i class="fa fa-check"></i><b>7.2.3</b> Finding cliques in R</a></li>
-</ul></li>
-<li class="chapter" data-level="7.3" data-path="community.html"><a href="community.html#finding-components-communities-and-cliques-using-python"><i class="fa fa-check"></i><b>7.3</b> Finding components, communities and cliques using Python</a>
-<ul>
-<li class="chapter" data-level="7.3.1" data-path="community.html"><a href="community.html#finding-connected-components-using-python"><i class="fa fa-check"></i><b>7.3.1</b> Finding connected components using Python</a></li>
-<li class="chapter" data-level="7.3.2" data-path="community.html"><a href="community.html#partitioning-and-community-detection-using-python"><i class="fa fa-check"></i><b>7.3.2</b> Partitioning and community detection using Python</a></li>
-<li class="chapter" data-level="7.3.3" data-path="community.html"><a href="community.html#finding-cliques-in-python"><i class="fa fa-check"></i><b>7.3.3</b> Finding cliques in Python</a></li>
-</ul></li>
-<li class="chapter" data-level="7.4" data-path="community.html"><a href="community.html#examples-of-uses"><i class="fa fa-check"></i><b>7.4</b> Examples of uses</a>
-<ul>
-<li class="chapter" data-level="7.4.1" data-path="community.html"><a href="community.html#schoolfriend-community"><i class="fa fa-check"></i><b>7.4.1</b> Detecting communities and cliques among Facebook friends</a></li>
-<li class="chapter" data-level="7.4.2" data-path="community.html"><a href="community.html#detecting-politically-aligned-communities-on-twitter"><i class="fa fa-check"></i><b>7.4.2</b> Detecting politically aligned communities on Twitter</a></li>
-</ul></li>
-<li class="chapter" data-level="7.5" data-path="community.html"><a href="community.html#learning-exercises-6"><i class="fa fa-check"></i><b>7.5</b> Learning exercises</a>
-<ul>
-<li class="chapter" data-level="7.5.1" data-path="community.html"><a href="community.html#discussion-questions-6"><i class="fa fa-check"></i><b>7.5.1</b> Discussion questions</a></li>
-<li class="chapter" data-level="7.5.2" data-path="community.html"><a href="community.html#data-exercises-6"><i class="fa fa-check"></i><b>7.5.2</b> Data exercises</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="8" data-path="similarity.html"><a href="similarity.html"><i class="fa fa-check"></i><b>8</b> Assortativity and Similarity</a>
-<ul>
-<li class="chapter" data-level="8.1" data-path="similarity.html"><a href="similarity.html#assortativity-in-networks"><i class="fa fa-check"></i><b>8.1</b> Assortativity in networks</a>
-<ul>
-<li class="chapter" data-level="8.1.1" data-path="similarity.html"><a href="similarity.html#categorical-or-nominal-assortativity"><i class="fa fa-check"></i><b>8.1.1</b> Categorical or nominal assortativity</a></li>
-<li class="chapter" data-level="8.1.2" data-path="similarity.html"><a href="similarity.html#degree-assortativity"><i class="fa fa-check"></i><b>8.1.2</b> Degree assortativity</a></li>
-</ul></li>
-<li class="chapter" data-level="8.2" data-path="similarity.html"><a href="similarity.html#vertex-similarity"><i class="fa fa-check"></i><b>8.2</b> Vertex similarity</a></li>
-<li class="chapter" data-level="8.3" data-path="similarity.html"><a href="similarity.html#graph-similarity"><i class="fa fa-check"></i><b>8.3</b> Graph similarity</a></li>
-<li class="chapter" data-level="8.4" data-path="similarity.html"><a href="similarity.html#calculating-assortativity-and-similarity-in-python"><i class="fa fa-check"></i><b>8.4</b> Calculating assortativity and similarity in Python</a></li>
-<li class="chapter" data-level="8.5" data-path="similarity.html"><a href="similarity.html#learning-exercises-7"><i class="fa fa-check"></i><b>8.5</b> Learning exercises</a>
-<ul>
-<li class="chapter" data-level="8.5.1" data-path="similarity.html"><a href="similarity.html#discussion-questions-7"><i class="fa fa-check"></i><b>8.5.1</b> Discussion questions</a></li>
-<li class="chapter" data-level="8.5.2" data-path="similarity.html"><a href="similarity.html#data-exercises-7"><i class="fa fa-check"></i><b>8.5.2</b> Data exercises</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="9" data-path="databases.html"><a href="databases.html"><i class="fa fa-check"></i><b>9</b> Graphs as Databases</a>
-<ul>
-<li class="chapter" data-level="9.1" data-path="databases.html"><a href="databases.html#graph-database-technology"><i class="fa fa-check"></i><b>9.1</b> Graph database technology</a>
-<ul>
-<li class="chapter" data-level="9.1.1" data-path="databases.html"><a href="databases.html#labelled-property-graphs"><i class="fa fa-check"></i><b>9.1.1</b> Labelled-property graphs</a></li>
-<li class="chapter" data-level="9.1.2" data-path="databases.html"><a href="databases.html#resource-description-frameworks"><i class="fa fa-check"></i><b>9.1.2</b> Resource description frameworks</a></li>
-</ul></li>
-<li class="chapter" data-level="9.2" data-path="databases.html"><a href="databases.html#example-how-to-work-with-a-neo4j-graph-database"><i class="fa fa-check"></i><b>9.2</b> Example: how to work with a Neo4J graph database</a>
-<ul>
-<li class="chapter" data-level="9.2.1" data-path="databases.html"><a href="databases.html#neo4j-browser"><i class="fa fa-check"></i><b>9.2.1</b> Using the browser interface</a></li>
-<li class="chapter" data-level="9.2.2" data-path="databases.html"><a href="databases.html#working-with-neo4j-using-r"><i class="fa fa-check"></i><b>9.2.2</b> Working with Neo4J using R</a></li>
-<li class="chapter" data-level="9.2.3" data-path="databases.html"><a href="databases.html#working-with-neo4j-using-python"><i class="fa fa-check"></i><b>9.2.3</b> Working with Neo4J using Python</a></li>
-</ul></li>
-<li class="chapter" data-level="9.3" data-path="databases.html"><a href="databases.html#moving-to-persistent-graph-data-in-organizations"><i class="fa fa-check"></i><b>9.3</b> Moving to persistent graph data in organizations</a></li>
-<li class="chapter" data-level="9.4" data-path="databases.html"><a href="databases.html#learning-exercises-8"><i class="fa fa-check"></i><b>9.4</b> Learning exercises</a>
-<ul>
-<li class="chapter" data-level="9.4.1" data-path="databases.html"><a href="databases.html#discussion-questions-8"><i class="fa fa-check"></i><b>9.4.1</b> Discussion questions</a></li>
-<li class="chapter" data-level="9.4.2" data-path="databases.html"><a href="databases.html#data-exercises-8"><i class="fa fa-check"></i><b>9.4.2</b> Data exercises</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="10" data-path="using-twitter.html"><a href="using-twitter.html"><i class="fa fa-check"></i><b>10</b> Bonus Chapter: Using Twitter for Network Analysis</a>
-<ul>
-<li class="chapter" data-level="10.1" data-path="using-twitter.html"><a href="using-twitter.html#accessing-the-twitter-api"><i class="fa fa-check"></i><b>10.1</b> Accessing the Twitter API</a>
-<ul>
-<li class="chapter" data-level="10.1.1" data-path="using-twitter.html"><a href="using-twitter.html#accessing-using-r"><i class="fa fa-check"></i><b>10.1.1</b> Accessing using R</a></li>
-<li class="chapter" data-level="10.1.2" data-path="using-twitter.html"><a href="using-twitter.html#accessing-using-python"><i class="fa fa-check"></i><b>10.1.2</b> Accessing using Python</a></li>
-<li class="chapter" data-level="10.1.3" data-path="using-twitter.html"><a href="using-twitter.html#twitter-rate-limits"><i class="fa fa-check"></i><b>10.1.3</b> Twitter rate limits</a></li>
-</ul></li>
-<li class="chapter" data-level="10.2" data-path="using-twitter.html"><a href="using-twitter.html#example-british-members-of-parliament-mp-twitter-network"><i class="fa fa-check"></i><b>10.2</b> Example: British Members of Parliament (MP) Twitter network</a>
-<ul>
-<li class="chapter" data-level="10.2.1" data-path="using-twitter.html"><a href="using-twitter.html#creating-the-graph-from-twitter-data"><i class="fa fa-check"></i><b>10.2.1</b> Creating the graph from Twitter data</a></li>
-<li class="chapter" data-level="10.2.2" data-path="using-twitter.html"><a href="using-twitter.html#analyzing-the-mp-twitter-network"><i class="fa fa-check"></i><b>10.2.2</b> Analyzing the MP Twitter network</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="11" data-path="advanced-viz.html"><a href="advanced-viz.html"><i class="fa fa-check"></i><b>11</b> Bonus Chapter: Advanced Network Visualization using D3</a>
-<ul>
-<li class="chapter" data-level="11.1" data-path="advanced-viz.html"><a href="advanced-viz.html#writing-graph-data-in-json-form-for-use-in-javascript"><i class="fa fa-check"></i><b>11.1</b> Writing graph data in JSON form for use in Javascript</a></li>
-<li class="chapter" data-level="11.2" data-path="advanced-viz.html"><a href="advanced-viz.html#generating-the-basic-mp-twitter-graph-in-d3.js"><i class="fa fa-check"></i><b>11.2</b> Generating the basic MP Twitter graph in <code>D3.js</code></a></li>
-<li class="chapter" data-level="11.3" data-path="advanced-viz.html"><a href="advanced-viz.html#adding-advanced-features-to-the-mp-twitter-graph"><i class="fa fa-check"></i><b>11.3</b> Adding advanced features to the MP Twitter graph</a>
-<ul>
-<li class="chapter" data-level="11.3.1" data-path="advanced-viz.html"><a href="advanced-viz.html#adding-mp-photos-to-the-nodes"><i class="fa fa-check"></i><b>11.3.1</b> Adding MP photos to the nodes</a></li>
-<li class="chapter" data-level="11.3.2" data-path="advanced-viz.html"><a href="advanced-viz.html#visualize-the-neighbours-of-an-mp-on-click"><i class="fa fa-check"></i><b>11.3.2</b> Visualize the neighbours of an MP on click</a></li>
-<li class="chapter" data-level="11.3.3" data-path="advanced-viz.html"><a href="advanced-viz.html#allowing-users-to-drag-nodes-and-reposition-them"><i class="fa fa-check"></i><b>11.3.3</b> Allowing users to drag nodes and reposition them</a></li>
-<li class="chapter" data-level="11.3.4" data-path="advanced-viz.html"><a href="advanced-viz.html#adding-a-search-box-to-search-and-highlight-a-specific-mp-name"><i class="fa fa-check"></i><b>11.3.4</b> Adding a search box to search and highlight a specific MP name</a></li>
-<li class="chapter" data-level="11.3.5" data-path="advanced-viz.html"><a href="advanced-viz.html#adjusting-the-criteria-for-nodes-to-be-adjacentconnected"><i class="fa fa-check"></i><b>11.3.5</b> Adjusting the criteria for nodes to be adjacent/connected</a></li>
-<li class="chapter" data-level="11.3.6" data-path="advanced-viz.html"><a href="advanced-viz.html#wrapping-the-graph-in-a-more-stylish-web-design"><i class="fa fa-check"></i><b>11.3.6</b> Wrapping the graph in a more stylish web design</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
-</ul>
-
-      </nav>
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="With Examples in R and Python">Handbook of Graphs and Networks in People Analytics</a>:
+        <small class="text-muted">With Examples in R and Python</small>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
     </div>
 
-    <div class="book-body">
-      <div class="body-inner">
-        <div class="book-header" role="navigation">
-          <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Handbook of Graphs and Networks in People Analytics</a>
-          </h1>
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">Welcome</a></li>
+<li><a class="" href="foreword-by-professor-jeff-polzer.html">Foreword by Professor Jeff Polzer</a></li>
+<li><a class="" href="introduction.html">Introduction</a></li>
+<li><a class="" href="the-basics-of-the-r-programming-language.html">The Basics of the R Programming Language</a></li>
+<li><a class="" href="everywhere.html"><span class="header-section-number">1</span> Graphs Everywhere!</a></li>
+<li><a class="" href="working.html"><span class="header-section-number">2</span> Working with Graphs</a></li>
+<li><a class="" href="viz-graphs.html"><span class="header-section-number">3</span> Visualizing Graphs</a></li>
+<li><a class="" href="restructuring-data.html"><span class="header-section-number">4</span> Restructuring Data for Use in Graphs</a></li>
+<li><a class="" href="paths-distance.html"><span class="header-section-number">5</span> Paths and Distance</a></li>
+<li><a class="active" href="vertex-importance.html"><span class="header-section-number">6</span> Vertex Importance and Centrality</a></li>
+<li><a class="" href="community.html"><span class="header-section-number">7</span> Components, Communities and Cliques</a></li>
+<li><a class="" href="similarity.html"><span class="header-section-number">8</span> Assortativity and Similarity</a></li>
+<li><a class="" href="databases.html"><span class="header-section-number">9</span> Graphs as Databases</a></li>
+<li><a class="" href="references.html">References</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/keithmcnulty/ona_book">View book source <i class="fab fa-github"></i></a></p>
         </div>
-
-        <div class="page-wrapper" tabindex="-1" role="main">
-          <div class="page-inner">
-
-            <section class="normal" id="section-">
-<div id="vertex-importance" class="section level1 hasAnchor" number="6">
-<h1><span class="header-section-number">6</span> Vertex Importance and Centrality<a href="vertex-importance.html#vertex-importance" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="vertex-importance" class="section level1" number="6">
+<h1>
+<span class="header-section-number">6</span> Vertex Importance and Centrality<a class="anchor" aria-label="anchor" href="#vertex-importance"><i class="fas fa-link"></i></a>
+</h1>
 <p>It follows from much of the earlier work we have been doing in this book that the vertices of a graph can provide rich information about a network, its structure and its dynamics. In sociology and psychology contexts, this is particularly true, because more often than not vertices represent people. The fact that people play different roles and have different influences inside groups and communities has motivated centuries of sociological and psychological research, so it is unsurprising that the concept of vertex importance and influence is of great interest in the study of people or organizational networks.</p>
-<p>But importance and influence are not precisely defined concepts, and to make them real within the context of graphs and networks we need to find some sort of mathematical definition for them. In many visual graph layouts, more important or influential vertices that have stronger roles in overall connectivity will usually be positioned toward the center of a group of other vertices<a href="#fn53" class="footnote-ref" id="fnref53"><sup>53</sup></a>. Intuitively therefore, we use the term ‘centrality’ to describe the importance or influence of a vertex in the connected structure of a graph.</p>
+<p>But importance and influence are not precisely defined concepts, and to make them real within the context of graphs and networks we need to find some sort of mathematical definition for them. In many visual graph layouts, more important or influential vertices that have stronger roles in overall connectivity will usually be positioned toward the center of a group of other vertices<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;If you want to see an earlier example of this, take a look at Figure &lt;a href="viz-graphs.html#fig:fr-karate"&gt;3.8&lt;/a&gt; for Zachary’s Karate Club network and note the positions of the influential actors, Mr Hi and John A.&lt;/p&gt;'><sup>53</sup></a>. Intuitively therefore, we use the term ‘centrality’ to describe the importance or influence of a vertex in the connected structure of a graph.</p>
 <p>In this chapter we will go through the most common types of centrality that can be measured for vertices in graphs, and discuss how they can be interpreted in the context of people or organizational networks. We will show how to calculate different types of centrality in R or Python and how to illustrate centrality in graph visualizations. We will then reprise our example of the French office building network from the previous chapter to illustrate the utility of centrality in network analysis.</p>
 <p>In this chapter we will use the <span class="math inline">\(G_{14}\)</span> graph which we introduced in the previous chapter, which is an undirected and unweighted graph. Most centrality measures are valid and easily calculated for directed graphs, and will depend on defining the direction of the edges to consider. Figure <a href="vertex-importance.html#fig:g14-colored">6.1</a> shows the <span class="math inline">\(G_{14}\)</span> graph with four vertices of interest colored differently from other vertices.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:g14-colored"></span>
-<img src="_main_files/figure-html/g14-colored-1.png" alt="The $G_{14}$ graph with four vertices of interest colored differently" width="90%" />
-<p class="caption">
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:g14-colored"></span>
+<img src="_main_files/figure-html/g14-colored-1.png" alt="The $G_{14}$ graph with four vertices of interest colored differently" width="90%"><p class="caption">
 Figure 6.1: The <span class="math inline">\(G_{14}\)</span> graph with four vertices of interest colored differently
 </p>
 </div>
-<div id="vertex-centrality-measures-in-graphs" class="section level2 hasAnchor" number="6.1">
-<h2><span class="header-section-number">6.1</span> Vertex centrality measures in graphs<a href="vertex-importance.html#vertex-centrality-measures-in-graphs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>As we look at the <span class="math inline">\(G_{14}\)</span> graph in Figure <a href="vertex-importance.html#fig:g14-colored">6.1</a>, we see that the colored nodes seem to occupy prominent roles in the connective structure of the graph. If we removed Vertex 9, for example, we would split our graph into three disconnected components. Vertex 4 seems to be connected to a lot of immediate neighbors, and we would also split the graph if we removed it, leaving behind some isolates<a href="#fn54" class="footnote-ref" id="fnref54"><sup>54</sup></a>. Vertex 7 seems to occupy a stealthy position from which to efficiently reach other vertices, while Vertex 8 seems to sit in between those other three and probably can’t be ignored for that reason alone.</p>
+<div id="vertex-centrality-measures-in-graphs" class="section level2" number="6.1">
+<h2>
+<span class="header-section-number">6.1</span> Vertex centrality measures in graphs<a class="anchor" aria-label="anchor" href="#vertex-centrality-measures-in-graphs"><i class="fas fa-link"></i></a>
+</h2>
+<p>As we look at the <span class="math inline">\(G_{14}\)</span> graph in Figure <a href="vertex-importance.html#fig:g14-colored">6.1</a>, we see that the colored nodes seem to occupy prominent roles in the connective structure of the graph. If we removed Vertex 9, for example, we would split our graph into three disconnected components. Vertex 4 seems to be connected to a lot of immediate neighbors, and we would also split the graph if we removed it, leaving behind some isolates<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;Recall that isolates are vertices that are not connected to any other vertices.&lt;/p&gt;"><sup>54</sup></a>. Vertex 7 seems to occupy a stealthy position from which to efficiently reach other vertices, while Vertex 8 seems to sit in between those other three and probably can’t be ignored for that reason alone.</p>
 <p>What if these vertices represented people in an organization? Would the departure of Vertex 4 mean that Vertices 1, 2, 3 and 5 lose their entire connection to the remainder of the organization? Would the departure of Vertex 9 split the organization in terms of the flow of work? If we wanted to distribute important information across the organization by means of these connections, which vertex would be a good place to start? By understanding centrality we can start to appreciate the possible impact of changes to the network, or identify important or influential actors in the network.</p>
-<div id="degree-centrality" class="section level3 hasAnchor" number="6.1.1">
-<h3><span class="header-section-number">6.1.1</span> Degree centrality<a href="vertex-importance.html#degree-centrality" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="degree-centrality" class="section level3" number="6.1.1">
+<h3>
+<span class="header-section-number">6.1.1</span> Degree centrality<a class="anchor" aria-label="anchor" href="#degree-centrality"><i class="fas fa-link"></i></a>
+</h3>
 <p>The <strong>degree centrality</strong> or <strong>valence</strong> of a vertex <span class="math inline">\(v\)</span> is the number of edges connected to <span class="math inline">\(v\)</span>. Alternatively stated, in an unweighted and undirected graph it is simply the number of neighbors of <span class="math inline">\(v\)</span> or the number of vertices of distance 1 from <span class="math inline">\(v\)</span>. For example, the degree centrality of Vertex 8 in <span class="math inline">\(G_{14}\)</span> is 3, and for Vertex 4 it is 7. It should not be difficult to see that Vertex 4 has the highest degree centrality in <span class="math inline">\(G_{14}\)</span>.</p>
 <p>Degree centrality is a measure of immediate connection in a network. It could be interpreted as immediate reach in a social network. Its precise interpretation depends strongly on the nature of the connection. In a network of academic co-authoring, someone with high degree centrality has collaborated directly with a larger number of other academics. In our French office building network from Section <a href="paths-distance.html#illustrative-6">5.3</a>, someone of high degree centrality is likely to be well-known socially to a greater number of colleagues.</p>
 <p>Related to degree centrality is <em>ego size</em>. The <span class="math inline">\(n\)</span>-th order ego network of a given vertex <span class="math inline">\(v\)</span> is a set including <span class="math inline">\(v\)</span> itself and all vertices of distance at most <span class="math inline">\(n\)</span> from <span class="math inline">\(v\)</span>. The <span class="math inline">\(n\)</span>-th order ego size is the number of vertices in the <span class="math inline">\(n\)</span>-th order ego network. In <span class="math inline">\(G_{14}\)</span>, Vertex 8 has a 1st order ego size of 4, a 2nd order ego size of 11, and a third order ego size of 14 (the entire graph). It easily follows that the 1st order ego size of a vertex is one greater than the degree centrality of the vertex.</p>
 </div>
-<div id="closeness-centrality" class="section level3 hasAnchor" number="6.1.2">
-<h3><span class="header-section-number">6.1.2</span> Closeness centrality<a href="vertex-importance.html#closeness-centrality" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="closeness-centrality" class="section level3" number="6.1.2">
+<h3>
+<span class="header-section-number">6.1.2</span> Closeness centrality<a class="anchor" aria-label="anchor" href="#closeness-centrality"><i class="fas fa-link"></i></a>
+</h3>
 <p>The <strong>closeness centrality</strong> of a vertex <span class="math inline">\(v\)</span> in a connected graph is the inverse of the sum of the distances from <span class="math inline">\(v\)</span> to all other vertices. Let’s take a moment to understand this better by looking at an example. We will calculate the closeness centrality of Vertex 8 from <span class="math inline">\(G_{14}\)</span>. Vertex 8 has the following distances to other vertices:</p>
 <ul>
 <li>Distance 1 to vertices 4, 7 and 9</li>
@@ -507,8 +144,10 @@ Figure 6.1: The <span class="math inline">\(G_{14}\)</span> graph with four vert
 <p>The sum of these distances is 26, and the inverse of 26 is 0.038. Inverting this distance means that lower total distances will generate higher closeness centrality. Therefore, the vertex with the highest closeness centrality will be the most efficient in reaching all the other vertices in the graph. While Vertex 8 has one of the highest closeness centralities in <span class="math inline">\(G_{14}\)</span>, Vertex 7 has a slightly higher closeness centrality, because its additional direct edge to Vertex 6 gives it a slightly lower total distance of 25 to the other vertices, and therefore a slightly higher closeness centrality of 0.04.</p>
 <p>Closeness centrality is a measure of how efficiently the entire graph can be traversed from a given vertex. This is particularly valuable in the study of information flow. In social networks, information shared by those with high closeness centrality will likely reach the entire network more efficiently. In our French office building network from Section <a href="paths-distance.html#illustrative-6">5.3</a>, those with high closeness centrality may be better choices for efficiently spreading a message through social interactions or word-of-mouth.</p>
 </div>
-<div id="betweenness-centrality" class="section level3 hasAnchor" number="6.1.3">
-<h3><span class="header-section-number">6.1.3</span> Betweenness centrality<a href="vertex-importance.html#betweenness-centrality" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="betweenness-centrality" class="section level3" number="6.1.3">
+<h3>
+<span class="header-section-number">6.1.3</span> Betweenness centrality<a class="anchor" aria-label="anchor" href="#betweenness-centrality"><i class="fas fa-link"></i></a>
+</h3>
 <p>The <strong>betweenness centrality</strong> of a vertex <span class="math inline">\(v\)</span> is calculated by taking each pair of other vertices <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, calculating the number of shortest paths between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> that go through <span class="math inline">\(v\)</span>, dividing by the total number of shortest paths between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, then summing over all such pairs of vertices in the graph. We can use the following process to manually calculate this for Vertex 8 in <span class="math inline">\(G_{14}\)</span>:</p>
 <ul>
 <li>If we look at all pairs of Vertices 9 through 14, we conclude that Vertex 8 is not on any shortest paths between these vertices (betweenness centrality: 0).</li>
@@ -524,8 +163,10 @@ Figure 6.1: The <span class="math inline">\(G_{14}\)</span> graph with four vert
 <p><strong>Playing around:</strong> It’s worth thinking about some of the things we did in the previous chapter based on our new understanding of degree, closeness and betweenness centrality. For example, how do certain types of central vertices influence the overall ‘closeness’ of a network? What would happen to average distance or edge density if we remove certain central vertices? Try playing around with removing Vertices 4 (highest degree centrality), 7 (highest closeness centrality) and 9 (highest betweenness centrality) from <span class="math inline">\(G_{14}\)</span> and determining the impact of these removals on diameter, mean distance and density.</p>
 </div>
 </div>
-<div id="eigenvector-centrality" class="section level3 hasAnchor" number="6.1.4">
-<h3><span class="header-section-number">6.1.4</span> Eigenvector centrality<a href="vertex-importance.html#eigenvector-centrality" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="eigenvector-centrality" class="section level3" number="6.1.4">
+<h3>
+<span class="header-section-number">6.1.4</span> Eigenvector centrality<a class="anchor" aria-label="anchor" href="#eigenvector-centrality"><i class="fas fa-link"></i></a>
+</h3>
 <p>The <strong>Eigenvector centrality</strong> or <strong>relative centrality</strong> or <strong>prestige</strong> of a vertex is a measure of how connected the vertex is to other influential vertices. It is impossible to define this without a little linear algebra.</p>
 <p>Recall from Section <a href="working.html#rep-graphs">2.1.4</a> that the adjacency matrix <span class="math inline">\(A = (a_{ij})\)</span> for an unweighted graph <span class="math inline">\(G\)</span> containing <span class="math inline">\(p\)</span> vertices is defined as <span class="math inline">\(a_{ij} = 1\)</span> if <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> are adjacent vertices in <span class="math inline">\(G\)</span> and 0 otherwise. A vector <span class="math inline">\(x = (x_1, x_2, ...,x_p)\)</span> and scalar value <span class="math inline">\(\lambda\)</span> are considered an eigenvector and eigenvalue of <span class="math inline">\(A\)</span> if they satisfy the equation</p>
 <p><span class="math display">\[
@@ -542,133 +183,150 @@ If we require that <span class="math inline">\(x\)</span> can only have positive
 </div>
 </div>
 </div>
-<div id="calculating-and-illustrating-vertex-centrality" class="section level2 hasAnchor" number="6.2">
-<h2><span class="header-section-number">6.2</span> Calculating and illustrating vertex centrality<a href="vertex-importance.html#calculating-and-illustrating-vertex-centrality" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="calculating-in-r-1" class="section level3 hasAnchor" number="6.2.1">
-<h3><span class="header-section-number">6.2.1</span> Calculating in R<a href="vertex-importance.html#calculating-in-r-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Degree centrality can be calculated for a specific set of vertices using the <code>degree()</code> function in <code>igraph</code>. By default, the degree centrality will be calculated for all vertices. Let’s load up our <span class="math inline">\(G_{14}\)</span> graph to demonstrate as we did in the previous chapter.</p>
-<div class="sourceCode" id="cb391"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb391-1"><a href="vertex-importance.html#cb391-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(igraph)</span>
-<span id="cb391-2"><a href="vertex-importance.html#cb391-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb391-3"><a href="vertex-importance.html#cb391-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb391-4"><a href="vertex-importance.html#cb391-4" aria-hidden="true" tabindex="-1"></a><span class="co"># get g14 edgelist and ignore weights</span></span>
-<span id="cb391-5"><a href="vertex-importance.html#cb391-5" aria-hidden="true" tabindex="-1"></a>g14_edgelist <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;https://ona-book.org/data/g14_edgelist.csv&quot;</span>)</span>
-<span id="cb391-6"><a href="vertex-importance.html#cb391-6" aria-hidden="true" tabindex="-1"></a>g14_unweighted <span class="ot">&lt;-</span> g14_edgelist <span class="sc">|&gt;</span> </span>
-<span id="cb391-7"><a href="vertex-importance.html#cb391-7" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>weight)</span>
-<span id="cb391-8"><a href="vertex-importance.html#cb391-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb391-9"><a href="vertex-importance.html#cb391-9" aria-hidden="true" tabindex="-1"></a><span class="co"># create g14 graph</span></span>
-<span id="cb391-10"><a href="vertex-importance.html#cb391-10" aria-hidden="true" tabindex="-1"></a>g14 <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(g14_unweighted, <span class="at">directed =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb391-11"><a href="vertex-importance.html#cb391-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb391-12"><a href="vertex-importance.html#cb391-12" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate degree centrality for all vertices</span></span>
-<span id="cb391-13"><a href="vertex-importance.html#cb391-13" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">degree</span>(g14)</span></code></pre></div>
+<div id="calculating-and-illustrating-vertex-centrality" class="section level2" number="6.2">
+<h2>
+<span class="header-section-number">6.2</span> Calculating and illustrating vertex centrality<a class="anchor" aria-label="anchor" href="#calculating-and-illustrating-vertex-centrality"><i class="fas fa-link"></i></a>
+</h2>
+<div id="calculating-in-r-1" class="section level3" number="6.2.1">
+<h3>
+<span class="header-section-number">6.2.1</span> Calculating in R<a class="anchor" aria-label="anchor" href="#calculating-in-r-1"><i class="fas fa-link"></i></a>
+</h3>
+<p>Degree centrality can be calculated for a specific set of vertices using the <code><a href="https://rdrr.io/pkg/igraph/man/degree.html">degree()</a></code> function in <code>igraph</code>. By default, the degree centrality will be calculated for all vertices. Let’s load up our <span class="math inline">\(G_{14}\)</span> graph to demonstrate as we did in the previous chapter.</p>
+<div class="sourceCode" id="cb391"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://igraph.org">igraph</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># get g14 edgelist and ignore weights</span></span>
+<span><span class="va">g14_edgelist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="st">"https://ona-book.org/data/g14_edgelist.csv"</span><span class="op">)</span></span>
+<span><span class="va">g14_unweighted</span> <span class="op">&lt;-</span> <span class="va">g14_edgelist</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">weight</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># create g14 graph</span></span>
+<span><span class="va">g14</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span><span class="va">g14_unweighted</span>, directed <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># calculate degree centrality for all vertices</span></span>
+<span><span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/degree.html">degree</a></span><span class="op">(</span><span class="va">g14</span><span class="op">)</span></span></code></pre></div>
 <pre><code>##  9 10 11 13  8  4  6  1 12 14  7  2  3  5 
 ##  4  3  2  2  3  7  2  2  2  1  4  2  1  1</code></pre>
-<p>We can see that Vertex 4 has a degree centrality of 7, which agrees with our earlier manual calculations. Ego networks and ego sizes can be determined using the <code>ego()</code> and <code>ego_size()</code> functions.</p>
-<div class="sourceCode" id="cb393"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb393-1"><a href="vertex-importance.html#cb393-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2nd order ego network of Vertex 4</span></span>
-<span id="cb393-2"><a href="vertex-importance.html#cb393-2" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">ego</span>(g14, <span class="at">order =</span> <span class="dv">2</span>, <span class="at">nodes =</span> <span class="st">&quot;4&quot;</span>)</span></code></pre></div>
+<p>We can see that Vertex 4 has a degree centrality of 7, which agrees with our earlier manual calculations. Ego networks and ego sizes can be determined using the <code><a href="https://rdrr.io/pkg/igraph/man/ego.html">ego()</a></code> and <code><a href="https://rdrr.io/pkg/igraph/man/ego.html">ego_size()</a></code> functions.</p>
+<div class="sourceCode" id="cb393"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># 2nd order ego network of Vertex 4</span></span>
+<span><span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/ego.html">ego</a></span><span class="op">(</span><span class="va">g14</span>, order <span class="op">=</span> <span class="fl">2</span>, nodes <span class="op">=</span> <span class="st">"4"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [[1]]
-## + 9/14 vertices, named, from 2856c0f:
+## + 9/14 vertices, named, from 2369b4b:
 ## [1] 4 8 6 1 7 2 3 5 9</code></pre>
-<div class="sourceCode" id="cb395"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb395-1"><a href="vertex-importance.html#cb395-1" aria-hidden="true" tabindex="-1"></a><span class="co"># size of ego network</span></span>
-<span id="cb395-2"><a href="vertex-importance.html#cb395-2" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">ego_size</span>(g14, <span class="at">order =</span> <span class="dv">2</span>, <span class="at">nodes =</span> <span class="st">&quot;4&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb395"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># size of ego network</span></span>
+<span><span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/ego.html">ego_size</a></span><span class="op">(</span><span class="va">g14</span>, order <span class="op">=</span> <span class="fl">2</span>, nodes <span class="op">=</span> <span class="st">"4"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## [1] 9</code></pre>
-<p>Closeness centrality is calculated using the <code>closeness()</code> function for all or a subset of vertices. Let’s verify that this function returns the same results for Vertices 7 and 8 that we manually calculated earlier.</p>
-<div class="sourceCode" id="cb397"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb397-1"><a href="vertex-importance.html#cb397-1" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">closeness</span>(g14, <span class="at">vids =</span> <span class="fu">c</span>(<span class="st">&quot;7&quot;</span>, <span class="st">&quot;8&quot;</span>))</span></code></pre></div>
+<p>Closeness centrality is calculated using the <code><a href="https://rdrr.io/pkg/igraph/man/closeness.html">closeness()</a></code> function for all or a subset of vertices. Let’s verify that this function returns the same results for Vertices 7 and 8 that we manually calculated earlier.</p>
+<div class="sourceCode" id="cb397"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/closeness.html">closeness</a></span><span class="op">(</span><span class="va">g14</span>, vids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"7"</span>, <span class="st">"8"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code>##          7          8 
 ## 0.04000000 0.03846154</code></pre>
-<p>Betweenness centrality is calculated using the <code>betweenness()</code> function in a similar way. Let’s verify our previous manual calculations for Vertices 8 and 9.</p>
-<div class="sourceCode" id="cb399"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb399-1"><a href="vertex-importance.html#cb399-1" aria-hidden="true" tabindex="-1"></a>igraph<span class="sc">::</span><span class="fu">betweenness</span>(g14, <span class="at">v =</span> <span class="fu">c</span>(<span class="st">&quot;8&quot;</span>, <span class="st">&quot;9&quot;</span>))</span></code></pre></div>
+<p>Betweenness centrality is calculated using the <code><a href="https://rdrr.io/pkg/igraph/man/betweenness.html">betweenness()</a></code> function in a similar way. Let’s verify our previous manual calculations for Vertices 8 and 9.</p>
+<div class="sourceCode" id="cb399"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/betweenness.html">betweenness</a></span><span class="op">(</span><span class="va">g14</span>, v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"8"</span>, <span class="st">"9"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code>##  8  9 
 ## 15 46</code></pre>
-<p>Finally, eigenvector centrality can be calculated using the <code>eigen_centrality()</code> function. Note that this returns a list including various details about the computation<a href="#fn55" class="footnote-ref" id="fnref55"><sup>55</sup></a>. To see the actual centralities, you should call the <code>vector</code> element of the output list. Note also that this function scales the values by default so that the maximum eigenvector centrality is 1. To avoid this, set <code>scale = FALSE</code>.</p>
-<div class="sourceCode" id="cb401"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb401-1"><a href="vertex-importance.html#cb401-1" aria-hidden="true" tabindex="-1"></a>eigens <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">eigen_centrality</span>(g14, <span class="at">scale =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb401-2"><a href="vertex-importance.html#cb401-2" aria-hidden="true" tabindex="-1"></a>eigens<span class="sc">$</span>vector</span></code></pre></div>
+<p>Finally, eigenvector centrality can be calculated using the <code><a href="https://rdrr.io/pkg/igraph/man/eigen_centrality.html">eigen_centrality()</a></code> function. Note that this returns a list including various details about the computation<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;For example, if you are curious to know the eigenvalue, you can look at the &lt;code&gt;value&lt;/code&gt; element of the list&lt;/p&gt;"><sup>55</sup></a>. To see the actual centralities, you should call the <code>vector</code> element of the output list. Note also that this function scales the values by default so that the maximum eigenvector centrality is 1. To avoid this, set <code>scale = FALSE</code>.</p>
+<div class="sourceCode" id="cb401"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">eigens</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/eigen_centrality.html">eigen_centrality</a></span><span class="op">(</span><span class="va">g14</span>, scale <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="va">eigens</span><span class="op">$</span><span class="va">vector</span></span></code></pre></div>
 <pre><code>##          9         10         11         13          8          4          6          1         12         14 
 ## 0.30157876 0.11585270 0.04773223 0.09618665 0.37800315 0.55038069 0.29000589 0.22676118 0.04773223 0.02806617 
 ##          7          2          3          5 
 ## 0.44350955 0.22676118 0.16059484 0.16059484</code></pre>
 <p>We can see confirmation here that Vertex 4 has the highest eigenvector centrality.</p>
 <div class="thinkahead">
-<p><strong>Playing around:</strong> There are a few other centrality-like measures available in <code>igraph</code> which you could explore and try to understand. Examples include <code>page_rank()</code> for Google’s measure of importance of a webpage, and <code>hub_score()</code> and <code>authority_score()</code> for directed networks. Consider testing these out on some data sets, like the <code>wikivote</code> data set from the <code>onadata</code> package or downloaded from the internet<a href="#fn56" class="footnote-ref" id="fnref56"><sup>56</sup></a>.</p>
+<p><strong>Playing around:</strong> There are a few other centrality-like measures available in <code>igraph</code> which you could explore and try to understand. Examples include <code><a href="https://rdrr.io/pkg/igraph/man/page_rank.html">page_rank()</a></code> for Google’s measure of importance of a webpage, and <code><a href="https://rdrr.io/pkg/igraph/man/hub_score.html">hub_score()</a></code> and <code><a href="https://rdrr.io/pkg/igraph/man/authority_score.html">authority_score()</a></code> for directed networks. Consider testing these out on some data sets, like the <code>wikivote</code> data set from the <code>onadata</code> package or downloaded from the internet<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://ona-book.org/data/wikivote.csv" class="uri"&gt;https://ona-book.org/data/wikivote.csv&lt;/a&gt;&lt;/p&gt;'><sup>56</sup></a>.</p>
 </div>
 </div>
-<div id="calculating-in-python-1" class="section level3 hasAnchor" number="6.2.2">
-<h3><span class="header-section-number">6.2.2</span> Calculating in Python<a href="vertex-importance.html#calculating-in-python-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Again, as in the work in the previous chapter, centrality functions in <code>networkx</code> are very similar to those in <code>igraph</code>. The <code>degree()</code> function calculates degree centrality for all vertices by default, or you can specify a list of vertices.</p>
-<div class="sourceCode" id="cb403"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb403-1"><a href="vertex-importance.html#cb403-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
-<span id="cb403-2"><a href="vertex-importance.html#cb403-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb403-3"><a href="vertex-importance.html#cb403-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb403-4"><a href="vertex-importance.html#cb403-4" aria-hidden="true" tabindex="-1"></a><span class="co"># download edgelist and remove weights</span></span>
-<span id="cb403-5"><a href="vertex-importance.html#cb403-5" aria-hidden="true" tabindex="-1"></a>g14_edgelist <span class="op">=</span> pd.read_csv(</span>
-<span id="cb403-6"><a href="vertex-importance.html#cb403-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;https://ona-book.org/data/g14_edgelist.csv&quot;</span></span>
-<span id="cb403-7"><a href="vertex-importance.html#cb403-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb403-8"><a href="vertex-importance.html#cb403-8" aria-hidden="true" tabindex="-1"></a>g14_undirected <span class="op">=</span> g14_edgelist.drop(<span class="st">&#39;weight&#39;</span>, axis <span class="op">=</span> <span class="dv">1</span>)</span>
-<span id="cb403-9"><a href="vertex-importance.html#cb403-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb403-10"><a href="vertex-importance.html#cb403-10" aria-hidden="true" tabindex="-1"></a><span class="co"># create undirected g14 graph</span></span>
-<span id="cb403-11"><a href="vertex-importance.html#cb403-11" aria-hidden="true" tabindex="-1"></a>g14 <span class="op">=</span> nx.from_pandas_edgelist(g14_undirected, source <span class="op">=</span> <span class="st">&#39;from&#39;</span>, </span>
-<span id="cb403-12"><a href="vertex-importance.html#cb403-12" aria-hidden="true" tabindex="-1"></a>target <span class="op">=</span> <span class="st">&#39;to&#39;</span>)</span>
-<span id="cb403-13"><a href="vertex-importance.html#cb403-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb403-14"><a href="vertex-importance.html#cb403-14" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate degree centrality of Vertices 4 and 9</span></span>
-<span id="cb403-15"><a href="vertex-importance.html#cb403-15" aria-hidden="true" tabindex="-1"></a>nx.degree(g14, [<span class="dv">4</span>, <span class="dv">9</span>])</span></code></pre></div>
+<div id="calculating-in-python-1" class="section level3" number="6.2.2">
+<h3>
+<span class="header-section-number">6.2.2</span> Calculating in Python<a class="anchor" aria-label="anchor" href="#calculating-in-python-1"><i class="fas fa-link"></i></a>
+</h3>
+<p>Again, as in the work in the previous chapter, centrality functions in <code>networkx</code> are very similar to those in <code>igraph</code>. The <code><a href="https://rdrr.io/pkg/igraph/man/degree.html">degree()</a></code> function calculates degree centrality for all vertices by default, or you can specify a list of vertices.</p>
+<div class="sourceCode" id="cb403"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb403-1"><a href="vertex-importance.html#cb403-1" tabindex="-1"></a><span class="im">import</span> networkx <span class="im">as</span> nx</span>
+<span id="cb403-2"><a href="vertex-importance.html#cb403-2" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb403-3"><a href="vertex-importance.html#cb403-3" tabindex="-1"></a></span>
+<span id="cb403-4"><a href="vertex-importance.html#cb403-4" tabindex="-1"></a><span class="co"># download edgelist and remove weights</span></span>
+<span id="cb403-5"><a href="vertex-importance.html#cb403-5" tabindex="-1"></a>g14_edgelist <span class="op">=</span> pd.read_csv(</span>
+<span id="cb403-6"><a href="vertex-importance.html#cb403-6" tabindex="-1"></a>  <span class="st">"https://ona-book.org/data/g14_edgelist.csv"</span></span>
+<span id="cb403-7"><a href="vertex-importance.html#cb403-7" tabindex="-1"></a>)</span>
+<span id="cb403-8"><a href="vertex-importance.html#cb403-8" tabindex="-1"></a>g14_undirected <span class="op">=</span> g14_edgelist.drop(<span class="st">'weight'</span>, axis <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb403-9"><a href="vertex-importance.html#cb403-9" tabindex="-1"></a></span>
+<span id="cb403-10"><a href="vertex-importance.html#cb403-10" tabindex="-1"></a><span class="co"># create undirected g14 graph</span></span>
+<span id="cb403-11"><a href="vertex-importance.html#cb403-11" tabindex="-1"></a>g14 <span class="op">=</span> nx.from_pandas_edgelist(g14_undirected, source <span class="op">=</span> <span class="st">'from'</span>, </span>
+<span id="cb403-12"><a href="vertex-importance.html#cb403-12" tabindex="-1"></a>target <span class="op">=</span> <span class="st">'to'</span>)</span>
+<span id="cb403-13"><a href="vertex-importance.html#cb403-13" tabindex="-1"></a></span>
+<span id="cb403-14"><a href="vertex-importance.html#cb403-14" tabindex="-1"></a><span class="co"># calculate degree centrality of Vertices 4 and 9</span></span>
+<span id="cb403-15"><a href="vertex-importance.html#cb403-15" tabindex="-1"></a>nx.degree(g14, [<span class="dv">4</span>, <span class="dv">9</span>])</span></code></pre></div>
 <pre><code>## DegreeView({4: 7, 9: 4})</code></pre>
-<p>There are also methods called <code>degree()</code> for a <code>Graph()</code> object as well as <code>in_degree()</code> and <code>out_degree()</code> for <code>DiGraph()</code> objects in <code>networkx</code>.</p>
-<div class="sourceCode" id="cb405"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb405-1"><a href="vertex-importance.html#cb405-1" aria-hidden="true" tabindex="-1"></a>g14.degree(<span class="dv">4</span>)</span></code></pre></div>
+<p>There are also methods called <code><a href="https://rdrr.io/pkg/igraph/man/degree.html">degree()</a></code> for a <code>Graph()</code> object as well as <code>in_degree()</code> and <code>out_degree()</code> for <code>DiGraph()</code> objects in <code>networkx</code>.</p>
+<div class="sourceCode" id="cb405"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb405-1"><a href="vertex-importance.html#cb405-1" tabindex="-1"></a>g14.degree(<span class="dv">4</span>)</span></code></pre></div>
 <pre><code>## 7</code></pre>
 <p>The ego network of a vertex can be obtained using the <code>ego_graph()</code> function. To obtain the 2nd order ego network of Node 4:</p>
-<div class="sourceCode" id="cb407"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb407-1"><a href="vertex-importance.html#cb407-1" aria-hidden="true" tabindex="-1"></a>ego_4_2 <span class="op">=</span> nx.ego_graph(g14, n <span class="op">=</span> <span class="dv">4</span>, radius <span class="op">=</span> <span class="dv">2</span>)</span>
-<span id="cb407-2"><a href="vertex-importance.html#cb407-2" aria-hidden="true" tabindex="-1"></a>ego_4_2.nodes</span></code></pre></div>
+<div class="sourceCode" id="cb407"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb407-1"><a href="vertex-importance.html#cb407-1" tabindex="-1"></a>ego_4_2 <span class="op">=</span> nx.ego_graph(g14, n <span class="op">=</span> <span class="dv">4</span>, radius <span class="op">=</span> <span class="dv">2</span>)</span>
+<span id="cb407-2"><a href="vertex-importance.html#cb407-2" tabindex="-1"></a>ego_4_2.nodes</span></code></pre></div>
 <pre><code>## NodeView((9, 8, 7, 4, 6, 1, 2, 3, 5))</code></pre>
-<p>Closeness centrality is calculated using the <code>closeness_centrality()</code> function. However, in <code>networkx</code> this is normalized by multiplying the result by <span class="math inline">\(n - 1\)</span> where <span class="math inline">\(n\)</span> is the number of vertices in the graph. To obtain non-normalized closeness centrality, it will be necessary to divide the output of this function by <span class="math inline">\(n - 1\)</span>.<a href="#fn57" class="footnote-ref" id="fnref57"><sup>57</sup></a></p>
-<div class="sourceCode" id="cb409"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb409-1"><a href="vertex-importance.html#cb409-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get non-normalized closeness centrality for Vertex 7</span></span>
-<span id="cb409-2"><a href="vertex-importance.html#cb409-2" aria-hidden="true" tabindex="-1"></a>norm_closeness <span class="op">=</span> nx.closeness_centrality(g14, <span class="dv">7</span>)</span>
-<span id="cb409-3"><a href="vertex-importance.html#cb409-3" aria-hidden="true" tabindex="-1"></a>norm_closeness<span class="op">/</span>(<span class="bu">len</span>(g14.nodes) <span class="op">-</span> <span class="dv">1</span>)</span></code></pre></div>
+<p>Closeness centrality is calculated using the <code>closeness_centrality()</code> function. However, in <code>networkx</code> this is normalized by multiplying the result by <span class="math inline">\(n - 1\)</span> where <span class="math inline">\(n\)</span> is the number of vertices in the graph. To obtain non-normalized closeness centrality, it will be necessary to divide the output of this function by <span class="math inline">\(n - 1\)</span>.<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;You may wonder why &lt;span class="math inline"&gt;\(n - 1\)&lt;/span&gt;? This is simply the total number of other vertices that we are calculating the paths to. Strangely, there is no option to non-normalize in the arguments of this function as of recent versions of &lt;code&gt;networkx&lt;/code&gt;. In any case, for the purposes of comparing vertices, it doesn’t matter a great deal whether you normalize or not.&lt;/p&gt;'><sup>57</sup></a></p>
+<div class="sourceCode" id="cb409"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb409-1"><a href="vertex-importance.html#cb409-1" tabindex="-1"></a><span class="co"># get non-normalized closeness centrality for Vertex 7</span></span>
+<span id="cb409-2"><a href="vertex-importance.html#cb409-2" tabindex="-1"></a>norm_closeness <span class="op">=</span> nx.closeness_centrality(g14, <span class="dv">7</span>)</span>
+<span id="cb409-3"><a href="vertex-importance.html#cb409-3" tabindex="-1"></a>norm_closeness<span class="op">/</span>(<span class="bu">len</span>(g14.nodes) <span class="op">-</span> <span class="dv">1</span>)</span></code></pre></div>
 <pre><code>## 0.04</code></pre>
-<p>Betweenness centrality is calculated using the <code>betweenness_centrality()</code> function. Again this is normalized by default but this can be set to <code>False</code> in the arguments<a href="#fn58" class="footnote-ref" id="fnref58"><sup>58</sup></a>. This function calculates values for all nodes and returns them in a dict.</p>
-<div class="sourceCode" id="cb411"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb411-1"><a href="vertex-importance.html#cb411-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get non-normalized betweenness centrality for Vertex 9</span></span>
-<span id="cb411-2"><a href="vertex-importance.html#cb411-2" aria-hidden="true" tabindex="-1"></a>between <span class="op">=</span> nx.betweenness_centrality(g14, normalized <span class="op">=</span> <span class="va">False</span>)</span>
-<span id="cb411-3"><a href="vertex-importance.html#cb411-3" aria-hidden="true" tabindex="-1"></a>between.get(<span class="dv">9</span>)</span></code></pre></div>
+<p>Betweenness centrality is calculated using the <code>betweenness_centrality()</code> function. Again this is normalized by default but this can be set to <code>False</code> in the arguments<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;The normalization here divides the result by the number of vertex pairs in a graph with &lt;span class="math inline"&gt;\(n-1\)&lt;/span&gt; vertices, which is &lt;span class="math inline"&gt;\((n - 1)(n - 2)\)&lt;/span&gt; for directed graphs and &lt;span class="math inline"&gt;\(\frac{(n - 1)(n - 2)}{2}\)&lt;/span&gt; for undirected graphs.&lt;/p&gt;'><sup>58</sup></a>. This function calculates values for all nodes and returns them in a dict.</p>
+<div class="sourceCode" id="cb411"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb411-1"><a href="vertex-importance.html#cb411-1" tabindex="-1"></a><span class="co"># get non-normalized betweenness centrality for Vertex 9</span></span>
+<span id="cb411-2"><a href="vertex-importance.html#cb411-2" tabindex="-1"></a>between <span class="op">=</span> nx.betweenness_centrality(g14, normalized <span class="op">=</span> <span class="va">False</span>)</span>
+<span id="cb411-3"><a href="vertex-importance.html#cb411-3" tabindex="-1"></a>between.get(<span class="dv">9</span>)</span></code></pre></div>
 <pre><code>## 46.0</code></pre>
 <p>Finally, eigenvector centrality is calculated using the <code>eigenvector_centrality()</code> function, with a dict returned similar to <code>betweenness_centrality()</code>.</p>
-<div class="sourceCode" id="cb413"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb413-1"><a href="vertex-importance.html#cb413-1" aria-hidden="true" tabindex="-1"></a>eigen <span class="op">=</span> nx.eigenvector_centrality(g14)</span>
-<span id="cb413-2"><a href="vertex-importance.html#cb413-2" aria-hidden="true" tabindex="-1"></a>eigen.get(<span class="dv">4</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb413"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb413-1"><a href="vertex-importance.html#cb413-1" tabindex="-1"></a>eigen <span class="op">=</span> nx.eigenvector_centrality(g14)</span>
+<span id="cb413-2"><a href="vertex-importance.html#cb413-2" tabindex="-1"></a>eigen.get(<span class="dv">4</span>)</span></code></pre></div>
 <pre><code>## 0.5503779695532801</code></pre>
 <p>Closeness, betweenness and eigenvector centrality are calculated using <em>incoming</em> edges in <code>networkx</code> digraphs. To calculate the outgoing equivalent, simply use the <code>reverse()</code> method on the digraph to make all outgoing edges incoming and vice versa.</p>
 <div class="thinkahead">
-<p><strong>Playing around</strong>: <code>networkx</code> has a very wide range of centrality measures available. Visit the Centrality section of its documentation<a href="#fn59" class="footnote-ref" id="fnref59"><sup>59</sup></a> and have a look at the options. Many of these are very specific to graph use cases in different industries and disciplines, but see if you can understand them and even give them a try with a data set.</p>
+<p><strong>Playing around</strong>: <code>networkx</code> has a very wide range of centrality measures available. Visit the Centrality section of its documentation<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://networkx.org" class="uri"&gt;https://networkx.org&lt;/a&gt;&lt;/p&gt;'><sup>59</sup></a> and have a look at the options. Many of these are very specific to graph use cases in different industries and disciplines, but see if you can understand them and even give them a try with a data set.</p>
 </div>
 </div>
-<div id="illustrating-centrality-in-graph-visualizations" class="section level3 hasAnchor" number="6.2.3">
-<h3><span class="header-section-number">6.2.3</span> Illustrating centrality in graph visualizations<a href="vertex-importance.html#illustrating-centrality-in-graph-visualizations" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="illustrating-centrality-in-graph-visualizations" class="section level3" number="6.2.3">
+<h3>
+<span class="header-section-number">6.2.3</span> Illustrating centrality in graph visualizations<a class="anchor" aria-label="anchor" href="#illustrating-centrality-in-graph-visualizations"><i class="fas fa-link"></i></a>
+</h3>
 <p>As we reviewed in Chapter <a href="viz-graphs.html#viz-graphs">3</a>, we will often make adjustments when visualizing graphs to illustrate certain aspects of the graph’s structure. For example, we highlight certain vertices with color or adjust the thickness of certain edges. When we want to visually illustrate the importance or influence of vertices in graphs, we will often do so using centrality measures. The two most common methods are to adjust vertex size according to centrality or to use a centrality-related color scale. We will illustrate a couple of examples using <code>ggraph</code> in R to show some of the options available.</p>
 <p>For greatest efficiency, it’s always a good idea to add centralities as vertex properties in graphs. Let’s add a few of these now in our <span class="math inline">\(G_{14}\)</span> graph.</p>
-<div class="sourceCode" id="cb415"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb415-1"><a href="vertex-importance.html#cb415-1" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g14)<span class="sc">$</span>degree <span class="ot">&lt;-</span> <span class="fu">degree</span>(g14)</span>
-<span id="cb415-2"><a href="vertex-importance.html#cb415-2" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g14)<span class="sc">$</span>betweenness <span class="ot">&lt;-</span> <span class="fu">betweenness</span>(g14)</span>
-<span id="cb415-3"><a href="vertex-importance.html#cb415-3" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(g14)<span class="sc">$</span>eigen <span class="ot">&lt;-</span> <span class="fu">eigen_centrality</span>(g14)<span class="sc">$</span>vector</span></code></pre></div>
-<p>Now we can create a visualization where we map the size of vertices to the <code>degree</code> vertex property, as in Figure <a href="vertex-importance.html#fig:g14-degree">6.2</a>. Note the <code>scale_size()</code> function which is useful for setting a scale to suit your visualization.</p>
-<div class="sourceCode" id="cb416"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb416-1"><a href="vertex-importance.html#cb416-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb416-2"><a href="vertex-importance.html#cb416-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(g14, <span class="at">layout =</span> <span class="st">&quot;lgl&quot;</span>) <span class="sc">+</span></span>
-<span id="cb416-3"><a href="vertex-importance.html#cb416-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb416-4"><a href="vertex-importance.html#cb416-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">size =</span> degree), <span class="at">color =</span> <span class="st">&quot;lightblue&quot;</span>,</span>
-<span id="cb416-5"><a href="vertex-importance.html#cb416-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb416-6"><a href="vertex-importance.html#cb416-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">15</span>)) <span class="sc">+</span></span>
-<span id="cb416-7"><a href="vertex-importance.html#cb416-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> name)) <span class="sc">+</span></span>
-<span id="cb416-8"><a href="vertex-importance.html#cb416-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:g14-degree"></span>
-<img src="_main_files/figure-html/g14-degree-1.png" alt="$G_{14}$ with vertex size scaled according to degree centrality" width="90%" />
-<p class="caption">
+<div class="sourceCode" id="cb415"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">g14</span><span class="op">)</span><span class="op">$</span><span class="va">degree</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/degree.html">degree</a></span><span class="op">(</span><span class="va">g14</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">g14</span><span class="op">)</span><span class="op">$</span><span class="va">betweenness</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/betweenness.html">betweenness</a></span><span class="op">(</span><span class="va">g14</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">g14</span><span class="op">)</span><span class="op">$</span><span class="va">eigen</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/eigen_centrality.html">eigen_centrality</a></span><span class="op">(</span><span class="va">g14</span><span class="op">)</span><span class="op">$</span><span class="va">vector</span></span></code></pre></div>
+<p>Now we can create a visualization where we map the size of vertices to the <code>degree</code> vertex property, as in Figure <a href="vertex-importance.html#fig:g14-degree">6.2</a>. Note the <code><a href="https://ggplot2.tidyverse.org/reference/scale_size.html">scale_size()</a></code> function which is useful for setting a scale to suit your visualization.</p>
+<div class="sourceCode" id="cb416"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggraph.data-imaginist.com/reference/ggraph.html">ggraph</a></span><span class="op">(</span><span class="va">g14</span>, layout <span class="op">=</span> <span class="st">"lgl"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_edge_link.html">geom_edge_link</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"grey"</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_point.html">geom_node_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>size <span class="op">=</span> <span class="va">degree</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"lightblue"</span>,</span>
+<span>                  show.legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_size.html">scale_size</a></span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>,<span class="fl">15</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_text.html">geom_node_text</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:g14-degree"></span>
+<img src="_main_files/figure-html/g14-degree-1.png" alt="$G_{14}$ with vertex size scaled according to degree centrality" width="90%"><p class="caption">
 Figure 6.2: <span class="math inline">\(G_{14}\)</span> with vertex size scaled according to degree centrality
 </p>
 </div>
 <p>Alternatively, Figure <a href="vertex-importance.html#fig:g14-eigen">6.3</a> shows the same graph with the vertex colors scaled according to normalized eigenvector centrality. This helps us see that the vertices to the left of Vertex 9 in <span class="math inline">\(G_{14}\)</span> do not have particularly influential connections compared to those to the right.</p>
-<div class="sourceCode" id="cb417"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb417-1"><a href="vertex-importance.html#cb417-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb417-2"><a href="vertex-importance.html#cb417-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(g14, <span class="at">layout =</span> <span class="st">&quot;lgl&quot;</span>) <span class="sc">+</span></span>
-<span id="cb417-3"><a href="vertex-importance.html#cb417-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb417-4"><a href="vertex-importance.html#cb417-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">6</span>, <span class="fu">aes</span>(<span class="at">color =</span> eigen)) <span class="sc">+</span></span>
-<span id="cb417-5"><a href="vertex-importance.html#cb417-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_gradient</span>(<span class="at">low =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="at">high =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
-<span id="cb417-6"><a href="vertex-importance.html#cb417-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> name)) <span class="sc">+</span></span>
-<span id="cb417-7"><a href="vertex-importance.html#cb417-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:g14-eigen"></span>
-<img src="_main_files/figure-html/g14-eigen-1.png" alt="$G_{14}$ with vertex size scaled according to normalized eigenvector centrality" width="90%" />
-<p class="caption">
+<div class="sourceCode" id="cb417"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggraph.data-imaginist.com/reference/ggraph.html">ggraph</a></span><span class="op">(</span><span class="va">g14</span>, layout <span class="op">=</span> <span class="st">"lgl"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_edge_link.html">geom_edge_link</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"grey"</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_point.html">geom_node_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">6</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="va">eigen</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_gradient.html">scale_color_gradient</a></span><span class="op">(</span>low <span class="op">=</span> <span class="st">"lightblue"</span>, high <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_text.html">geom_node_text</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">name</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:g14-eigen"></span>
+<img src="_main_files/figure-html/g14-eigen-1.png" alt="$G_{14}$ with vertex size scaled according to normalized eigenvector centrality" width="90%"><p class="caption">
 Figure 6.3: <span class="math inline">\(G_{14}\)</span> with vertex size scaled according to normalized eigenvector centrality
 </p>
 </div>
@@ -677,169 +335,188 @@ Figure 6.3: <span class="math inline">\(G_{14}\)</span> with vertex size scaled 
 </div>
 </div>
 </div>
-<div id="illustrative-7" class="section level2 hasAnchor" number="6.3">
-<h2><span class="header-section-number">6.3</span> Examples of uses<a href="vertex-importance.html#illustrative-7" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="illustrative-7" class="section level2" number="6.3">
+<h2>
+<span class="header-section-number">6.3</span> Examples of uses<a class="anchor" aria-label="anchor" href="#illustrative-7"><i class="fas fa-link"></i></a>
+</h2>
 <p>In this section we will reprise the <code>workfrance</code> unweighted graph from the previous chapter and will use it to illustrate some common uses for centrality measures. First, we will look at how to find network-wide and department level ‘superconnectors’, then we will look at how to find potential socially influential actors in a network. Let’s load up the <code>workfrance</code> graph again.</p>
-<div class="sourceCode" id="cb418"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb418-1"><a href="vertex-importance.html#cb418-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb418-2"><a href="vertex-importance.html#cb418-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb418-3"><a href="vertex-importance.html#cb418-3" aria-hidden="true" tabindex="-1"></a><span class="co"># download workfrance data sets</span></span>
-<span id="cb418-4"><a href="vertex-importance.html#cb418-4" aria-hidden="true" tabindex="-1"></a>workfrance_edges <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(</span>
-<span id="cb418-5"><a href="vertex-importance.html#cb418-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;https://ona-book.org/data/workfrance_edgelist.csv&quot;</span></span>
-<span id="cb418-6"><a href="vertex-importance.html#cb418-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb418-7"><a href="vertex-importance.html#cb418-7" aria-hidden="true" tabindex="-1"></a>workfrance_vertices <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(</span>
-<span id="cb418-8"><a href="vertex-importance.html#cb418-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;https://ona-book.org/data/workfrance_vertices.csv&quot;</span></span>
-<span id="cb418-9"><a href="vertex-importance.html#cb418-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb418-10"><a href="vertex-importance.html#cb418-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb418-11"><a href="vertex-importance.html#cb418-11" aria-hidden="true" tabindex="-1"></a><span class="co"># create graph</span></span>
-<span id="cb418-12"><a href="vertex-importance.html#cb418-12" aria-hidden="true" tabindex="-1"></a>workfrance <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">graph_from_data_frame</span>(</span>
-<span id="cb418-13"><a href="vertex-importance.html#cb418-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">d =</span> workfrance_edges,</span>
-<span id="cb418-14"><a href="vertex-importance.html#cb418-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">vertices =</span> workfrance_vertices,</span>
-<span id="cb418-15"><a href="vertex-importance.html#cb418-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">directed =</span> <span class="cn">FALSE</span></span>
-<span id="cb418-16"><a href="vertex-importance.html#cb418-16" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
-<div id="finding-superconnectors" class="section level3 hasAnchor" number="6.3.1">
-<h3><span class="header-section-number">6.3.1</span> Finding ‘superconnectors’<a href="vertex-importance.html#finding-superconnectors" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb418"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># download workfrance data sets</span></span>
+<span><span class="va">workfrance_edges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span></span>
+<span>  <span class="st">"https://ona-book.org/data/workfrance_edgelist.csv"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">workfrance_vertices</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span></span>
+<span>  <span class="st">"https://ona-book.org/data/workfrance_vertices.csv"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># create graph</span></span>
+<span><span class="va">workfrance</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/graph_from_data_frame.html">graph_from_data_frame</a></span><span class="op">(</span></span>
+<span>    d <span class="op">=</span> <span class="va">workfrance_edges</span>,</span>
+<span>    vertices <span class="op">=</span> <span class="va">workfrance_vertices</span>,</span>
+<span>    directed <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div id="finding-superconnectors" class="section level3" number="6.3.1">
+<h3>
+<span class="header-section-number">6.3.1</span> Finding ‘superconnectors’<a class="anchor" aria-label="anchor" href="#finding-superconnectors"><i class="fas fa-link"></i></a>
+</h3>
 <p>Individuals with high betweenness centrality in people networks could be regarded as ‘superconnectors’. Superconnectors can play very valuable roles in the social integration of new entrants to the network, and they can also present greater risk of connective disruption if they leave the network. Imagine a new hire is about to join the DMI department in our <code>workfrance</code> network. We want to assign two ‘buddies’ to this individual to help them socially integrate into the workplace more effectively. Given that it is important for the individual to assimilate into their own department and into the workplace as a whole, we want to select the best two current employees to assist with both goals. Let’s start with the DMI department first.</p>
 <p>In order to study the DMI department as a self-contained network, we will create an induced subgraph which contains only those in that department and the connections between them, and visualize this network, labeling the employee IDs, as in Figure <a href="vertex-importance.html#fig:dmi-workfrance">6.4</a>.</p>
-<div class="sourceCode" id="cb419"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb419-1"><a href="vertex-importance.html#cb419-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create DMI subgraph</span></span>
-<span id="cb419-2"><a href="vertex-importance.html#cb419-2" aria-hidden="true" tabindex="-1"></a>DMI_vertices <span class="ot">&lt;-</span> <span class="fu">V</span>(workfrance)[<span class="fu">V</span>(workfrance)<span class="sc">$</span>dept <span class="sc">==</span> <span class="st">&quot;DMI&quot;</span>]</span>
-<span id="cb419-3"><a href="vertex-importance.html#cb419-3" aria-hidden="true" tabindex="-1"></a>DMI_graph <span class="ot">&lt;-</span> igraph<span class="sc">::</span><span class="fu">induced.subgraph</span>(workfrance, <span class="at">vids =</span> DMI_vertices)</span>
-<span id="cb419-4"><a href="vertex-importance.html#cb419-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb419-5"><a href="vertex-importance.html#cb419-5" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize</span></span>
-<span id="cb419-6"><a href="vertex-importance.html#cb419-6" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb419-7"><a href="vertex-importance.html#cb419-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(DMI_graph) <span class="sc">+</span></span>
-<span id="cb419-8"><a href="vertex-importance.html#cb419-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb419-9"><a href="vertex-importance.html#cb419-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="at">color =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
-<span id="cb419-10"><a href="vertex-importance.html#cb419-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> name), <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span> </span>
-<span id="cb419-11"><a href="vertex-importance.html#cb419-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:dmi-workfrance"></span>
-<img src="_main_files/figure-html/dmi-workfrance-1.png" alt="The induced subgraph of the DMI department in our French workplace" width="90%" />
-<p class="caption">
+<div class="sourceCode" id="cb419"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># create DMI subgraph</span></span>
+<span><span class="va">DMI_vertices</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">$</span><span class="va">dept</span> <span class="op">==</span> <span class="st">"DMI"</span><span class="op">]</span></span>
+<span><span class="va">DMI_graph</span> <span class="op">&lt;-</span> <span class="fu">igraph</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/subgraph.html">induced.subgraph</a></span><span class="op">(</span><span class="va">workfrance</span>, vids <span class="op">=</span> <span class="va">DMI_vertices</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># visualize</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggraph.data-imaginist.com/reference/ggraph.html">ggraph</a></span><span class="op">(</span><span class="va">DMI_graph</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_edge_link.html">geom_edge_link</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"grey"</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_point.html">geom_node_point</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"lightblue"</span>, size <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_text.html">geom_node_text</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">name</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:dmi-workfrance"></span>
+<img src="_main_files/figure-html/dmi-workfrance-1.png" alt="The induced subgraph of the DMI department in our French workplace" width="90%"><p class="caption">
 Figure 6.4: The induced subgraph of the DMI department in our French workplace
 </p>
 </div>
 <p>Now we are interested in those who have the strongest role in connecting others in this network. Let’s find the top three individuals in terms of betweenness centrality.</p>
-<div class="sourceCode" id="cb420"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb420-1"><a href="vertex-importance.html#cb420-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get IDs of top 3 betweenness centralities</span></span>
-<span id="cb420-2"><a href="vertex-importance.html#cb420-2" aria-hidden="true" tabindex="-1"></a>ranked_betweenness_DMI <span class="ot">&lt;-</span> DMI_graph <span class="sc">|&gt;</span> </span>
-<span id="cb420-3"><a href="vertex-importance.html#cb420-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">betweenness</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb420-4"><a href="vertex-importance.html#cb420-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span>(<span class="at">decreasing =</span> <span class="cn">TRUE</span>) </span>
-<span id="cb420-5"><a href="vertex-importance.html#cb420-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb420-6"><a href="vertex-importance.html#cb420-6" aria-hidden="true" tabindex="-1"></a>(top3_DMI <span class="ot">&lt;-</span> <span class="fu">names</span>(ranked_betweenness_DMI[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]))</span></code></pre></div>
-<pre><code>## [1] &quot;156&quot; &quot;74&quot;  &quot;884&quot;</code></pre>
+<div class="sourceCode" id="cb420"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># get IDs of top 3 betweenness centralities</span></span>
+<span><span class="va">ranked_betweenness_DMI</span> <span class="op">&lt;-</span> <span class="va">DMI_graph</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/betweenness.html">betweenness</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span><span class="op">(</span>decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="op">(</span><span class="va">top3_DMI</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">ranked_betweenness_DMI</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## [1] "156" "74"  "884"</code></pre>
 <p>These are the IDs of the top three superconnectors in the DMI department. Now we can visualize the graph again, but let’s adjust vertex size by betweenness and color the top 3 superconnectors, as in Figure <a href="vertex-importance.html#fig:dmi-superconnectors">6.5</a>.</p>
-<div class="sourceCode" id="cb422"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb422-1"><a href="vertex-importance.html#cb422-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add betweenness vertex property</span></span>
-<span id="cb422-2"><a href="vertex-importance.html#cb422-2" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(DMI_graph)<span class="sc">$</span>betweenness <span class="ot">&lt;-</span> <span class="fu">betweenness</span>(DMI_graph)</span>
-<span id="cb422-3"><a href="vertex-importance.html#cb422-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb422-4"><a href="vertex-importance.html#cb422-4" aria-hidden="true" tabindex="-1"></a><span class="co"># add top three superconnectors property</span></span>
-<span id="cb422-5"><a href="vertex-importance.html#cb422-5" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(DMI_graph)<span class="sc">$</span>top3 <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">V</span>(DMI_graph)<span class="sc">$</span>name <span class="sc">%in%</span> top3_DMI, <span class="dv">1</span>, <span class="dv">0</span>)</span>
-<span id="cb422-6"><a href="vertex-importance.html#cb422-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb422-7"><a href="vertex-importance.html#cb422-7" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize</span></span>
-<span id="cb422-8"><a href="vertex-importance.html#cb422-8" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb422-9"><a href="vertex-importance.html#cb422-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(DMI_graph) <span class="sc">+</span></span>
-<span id="cb422-10"><a href="vertex-importance.html#cb422-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb422-11"><a href="vertex-importance.html#cb422-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> <span class="fu">as.factor</span>(top3), <span class="at">size =</span> betweenness),</span>
-<span id="cb422-12"><a href="vertex-importance.html#cb422-12" aria-hidden="true" tabindex="-1"></a>                  <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb422-13"><a href="vertex-importance.html#cb422-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;lightblue&quot;</span>, <span class="st">&quot;pink&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb422-14"><a href="vertex-importance.html#cb422-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> name), <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span> </span>
-<span id="cb422-15"><a href="vertex-importance.html#cb422-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:dmi-superconnectors"></span>
-<img src="_main_files/figure-html/dmi-superconnectors-1.png" alt="DMI subgraph with the top three superconnectors identified" width="90%" />
-<p class="caption">
+<div class="sourceCode" id="cb422"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># add betweenness vertex property</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">DMI_graph</span><span class="op">)</span><span class="op">$</span><span class="va">betweenness</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/betweenness.html">betweenness</a></span><span class="op">(</span><span class="va">DMI_graph</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># add top three superconnectors property</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">DMI_graph</span><span class="op">)</span><span class="op">$</span><span class="va">top3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">DMI_graph</span><span class="op">)</span><span class="op">$</span><span class="va">name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">top3_DMI</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># visualize</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggraph.data-imaginist.com/reference/ggraph.html">ggraph</a></span><span class="op">(</span><span class="va">DMI_graph</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_edge_link.html">geom_edge_link</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"grey"</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_point.html">geom_node_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">top3</span><span class="op">)</span>, size <span class="op">=</span> <span class="va">betweenness</span><span class="op">)</span>,</span>
+<span>                  show.legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"lightblue"</span>, <span class="st">"pink"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_text.html">geom_node_text</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">name</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:dmi-superconnectors"></span>
+<img src="_main_files/figure-html/dmi-superconnectors-1.png" alt="DMI subgraph with the top three superconnectors identified" width="90%"><p class="caption">
 Figure 6.5: DMI subgraph with the top three superconnectors identified
 </p>
 </div>
 <p>In a similar way, we can find the superconnectors of the overall <code>workfrance</code> network.</p>
-<div class="sourceCode" id="cb423"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb423-1"><a href="vertex-importance.html#cb423-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get IDs of top 3 betweenness centralities</span></span>
-<span id="cb423-2"><a href="vertex-importance.html#cb423-2" aria-hidden="true" tabindex="-1"></a>ranked_betweenness_workfrance <span class="ot">&lt;-</span> workfrance <span class="sc">|&gt;</span> </span>
-<span id="cb423-3"><a href="vertex-importance.html#cb423-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">betweenness</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb423-4"><a href="vertex-importance.html#cb423-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span>(<span class="at">decreasing =</span> <span class="cn">TRUE</span>) </span>
-<span id="cb423-5"><a href="vertex-importance.html#cb423-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb423-6"><a href="vertex-importance.html#cb423-6" aria-hidden="true" tabindex="-1"></a><span class="co">#get top 3</span></span>
-<span id="cb423-7"><a href="vertex-importance.html#cb423-7" aria-hidden="true" tabindex="-1"></a>(top3_workfrance <span class="ot">&lt;-</span> <span class="fu">names</span>(ranked_betweenness_workfrance[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]))</span></code></pre></div>
-<pre><code>## [1] &quot;603&quot; &quot;99&quot;  &quot;322&quot;</code></pre>
+<div class="sourceCode" id="cb423"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># get IDs of top 3 betweenness centralities</span></span>
+<span><span class="va">ranked_betweenness_workfrance</span> <span class="op">&lt;-</span> <span class="va">workfrance</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/betweenness.html">betweenness</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span><span class="op">(</span>decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="co">#get top 3</span></span>
+<span><span class="op">(</span><span class="va">top3_workfrance</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">ranked_betweenness_workfrance</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## [1] "603" "99"  "322"</code></pre>
 <p>In Figure <a href="vertex-importance.html#fig:workfrance-superconnectors">6.6</a>, we create a graph of the <code>workfrance</code> network with vertex size scaled by betweenness centrality. We color by department so we can easily see which departments our superconnectors are in.</p>
-<div class="sourceCode" id="cb425"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb425-1"><a href="vertex-importance.html#cb425-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add betweenness property</span></span>
-<span id="cb425-2"><a href="vertex-importance.html#cb425-2" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(workfrance)<span class="sc">$</span>betweenness <span class="ot">&lt;-</span> <span class="fu">betweenness</span>(workfrance)</span>
-<span id="cb425-3"><a href="vertex-importance.html#cb425-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb425-4"><a href="vertex-importance.html#cb425-4" aria-hidden="true" tabindex="-1"></a><span class="co"># label only if a top 3 superconnector</span></span>
-<span id="cb425-5"><a href="vertex-importance.html#cb425-5" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(workfrance)<span class="sc">$</span>btwn_label <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(</span>
-<span id="cb425-6"><a href="vertex-importance.html#cb425-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">V</span>(workfrance)<span class="sc">$</span>name <span class="sc">%in%</span> top3_workfrance,</span>
-<span id="cb425-7"><a href="vertex-importance.html#cb425-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">V</span>(workfrance)<span class="sc">$</span>name, </span>
-<span id="cb425-8"><a href="vertex-importance.html#cb425-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;&quot;</span></span>
-<span id="cb425-9"><a href="vertex-importance.html#cb425-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb425-10"><a href="vertex-importance.html#cb425-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb425-11"><a href="vertex-importance.html#cb425-11" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize</span></span>
-<span id="cb425-12"><a href="vertex-importance.html#cb425-12" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb425-13"><a href="vertex-importance.html#cb425-13" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(workfrance) <span class="sc">+</span></span>
-<span id="cb425-14"><a href="vertex-importance.html#cb425-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb425-15"><a href="vertex-importance.html#cb425-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> dept, <span class="at">size =</span> betweenness),</span>
-<span id="cb425-16"><a href="vertex-importance.html#cb425-16" aria-hidden="true" tabindex="-1"></a>                  <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb425-17"><a href="vertex-importance.html#cb425-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> btwn_label), <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span> </span>
-<span id="cb425-18"><a href="vertex-importance.html#cb425-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:workfrance-superconnectors"></span>
-<img src="_main_files/figure-html/workfrance-superconnectors-1.png" alt="French workplace graph with the top 3 superconnectors identified" width="90%" />
-<p class="caption">
+<div class="sourceCode" id="cb425"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># add betweenness property</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">$</span><span class="va">betweenness</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/betweenness.html">betweenness</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># label only if a top 3 superconnector</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">$</span><span class="va">btwn_label</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">$</span><span class="va">name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">top3_workfrance</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, </span>
+<span>  <span class="st">""</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># visualize</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggraph.data-imaginist.com/reference/ggraph.html">ggraph</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_edge_link.html">geom_edge_link</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"grey"</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_point.html">geom_node_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="va">dept</span>, size <span class="op">=</span> <span class="va">betweenness</span><span class="op">)</span>,</span>
+<span>                  show.legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_text.html">geom_node_text</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">btwn_label</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:workfrance-superconnectors"></span>
+<img src="_main_files/figure-html/workfrance-superconnectors-1.png" alt="French workplace graph with the top 3 superconnectors identified" width="90%"><p class="caption">
 Figure 6.6: French workplace graph with the top 3 superconnectors identified
 </p>
 </div>
 <p>We can see upon examination that our top 3 organization-wide superconnectors are all in different departments. Putting all this together, it would seem that a good choice of buddies for the new hire would be employee 156 for departmental integration and employee 603 for office-wide integration, although any combination of the six individuals identified through this analysis would probably be decent choices.</p>
 </div>
-<div id="identifying-influential-employees" class="section level3 hasAnchor" number="6.3.2">
-<h3><span class="header-section-number">6.3.2</span> Identifying influential employees<a href="vertex-importance.html#identifying-influential-employees" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="identifying-influential-employees" class="section level3" number="6.3.2">
+<h3>
+<span class="header-section-number">6.3.2</span> Identifying influential employees<a class="anchor" aria-label="anchor" href="#identifying-influential-employees"><i class="fas fa-link"></i></a>
+</h3>
 <p>Influential actors in a network can be very useful to identify. In organizational contexts, working with more influential employees can make a difference to how certain initiatives or changes can be perceived by other employees. Influential employees can also be useful in efficiently tapping into prevalent opinions across the entire employee population. Imagine that we want to identify individuals from across the organization to participate in important workshops to problem solve some critical operational initiatives. These initiatives will affect employees at both an overall and a department level; therefore, it would be ideal to have individuals who are influential within each department as well as across the entire organization.</p>
 <p>Again, let’s look at a single department—the DMI department—as an example. Because we are interested in overall influence, this could mean we are equally interested in employees with a lot of connections or employees who are ‘stealthily’ influential in being connected to a smaller number of other highly connected employees. The best measure for this is eigenvector centrality.</p>
 <p>First we identify the top three most influential individuals in the DMI department as measured by eigenvector centrality by working on the DMI subgraph.</p>
-<div class="sourceCode" id="cb426"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb426-1"><a href="vertex-importance.html#cb426-1" aria-hidden="true" tabindex="-1"></a><span class="co"># working with lists so use purrr package</span></span>
-<span id="cb426-2"><a href="vertex-importance.html#cb426-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
-<span id="cb426-3"><a href="vertex-importance.html#cb426-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb426-4"><a href="vertex-importance.html#cb426-4" aria-hidden="true" tabindex="-1"></a><span class="co"># get IDs of top 3 eigen centrality</span></span>
-<span id="cb426-5"><a href="vertex-importance.html#cb426-5" aria-hidden="true" tabindex="-1"></a>ranked_eigen_DMI <span class="ot">&lt;-</span> DMI_graph <span class="sc">|&gt;</span> </span>
-<span id="cb426-6"><a href="vertex-importance.html#cb426-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">eigen_centrality</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb426-7"><a href="vertex-importance.html#cb426-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pluck</span>(<span class="st">&quot;vector&quot;</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb426-8"><a href="vertex-importance.html#cb426-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span>(<span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb426-9"><a href="vertex-importance.html#cb426-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb426-10"><a href="vertex-importance.html#cb426-10" aria-hidden="true" tabindex="-1"></a><span class="co">#get top 3</span></span>
-<span id="cb426-11"><a href="vertex-importance.html#cb426-11" aria-hidden="true" tabindex="-1"></a>(top3_DMI_eigen <span class="ot">&lt;-</span> <span class="fu">names</span>(ranked_eigen_DMI[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>])) </span></code></pre></div>
-<pre><code>## [1] &quot;884&quot; &quot;156&quot; &quot;642&quot;</code></pre>
+<div class="sourceCode" id="cb426"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># working with lists so use purrr package</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://purrr.tidyverse.org">purrr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># get IDs of top 3 eigen centrality</span></span>
+<span><span class="va">ranked_eigen_DMI</span> <span class="op">&lt;-</span> <span class="va">DMI_graph</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/eigen_centrality.html">eigen_centrality</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/pluck.html">pluck</a></span><span class="op">(</span><span class="st">"vector"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span><span class="op">(</span>decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#get top 3</span></span>
+<span><span class="op">(</span><span class="va">top3_DMI_eigen</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">ranked_eigen_DMI</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> </span></code></pre></div>
+<pre><code>## [1] "884" "156" "642"</code></pre>
 <p>We see two employee IDs that are in common with our top 3 superconnectors. We can also identify the top 3 most influential individuals across the <code>workfrance</code> graph according to their eigenvector centrality.</p>
-<div class="sourceCode" id="cb428"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb428-1"><a href="vertex-importance.html#cb428-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get IDs of top 3 eigen centrality</span></span>
-<span id="cb428-2"><a href="vertex-importance.html#cb428-2" aria-hidden="true" tabindex="-1"></a>ranked_eigen_workfrance <span class="ot">&lt;-</span> workfrance <span class="sc">|&gt;</span> </span>
-<span id="cb428-3"><a href="vertex-importance.html#cb428-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">eigen_centrality</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb428-4"><a href="vertex-importance.html#cb428-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pluck</span>(<span class="st">&quot;vector&quot;</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb428-5"><a href="vertex-importance.html#cb428-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sort</span>(<span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb428-6"><a href="vertex-importance.html#cb428-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb428-7"><a href="vertex-importance.html#cb428-7" aria-hidden="true" tabindex="-1"></a><span class="co">#get top 3</span></span>
-<span id="cb428-8"><a href="vertex-importance.html#cb428-8" aria-hidden="true" tabindex="-1"></a>(top3_workfrance_eigen <span class="ot">&lt;-</span> <span class="fu">names</span>(ranked_eigen_workfrance[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>])) </span></code></pre></div>
-<pre><code>## [1] &quot;603&quot; &quot;649&quot; &quot;147&quot;</code></pre>
+<div class="sourceCode" id="cb428"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># get IDs of top 3 eigen centrality</span></span>
+<span><span class="va">ranked_eigen_workfrance</span> <span class="op">&lt;-</span> <span class="va">workfrance</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/eigen_centrality.html">eigen_centrality</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/pluck.html">pluck</a></span><span class="op">(</span><span class="st">"vector"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span><span class="op">(</span>decreasing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#get top 3</span></span>
+<span><span class="op">(</span><span class="va">top3_workfrance_eigen</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">ranked_eigen_workfrance</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> </span></code></pre></div>
+<pre><code>## [1] "603" "649" "147"</code></pre>
 <p>We see one individual in common with our top 3 superconnectors. Let’s visualize this network so we can identify the department mix of our top 3 most influential individuals, as in Figure <a href="vertex-importance.html#fig:eigen-workfrance">6.7</a>.</p>
-<div class="sourceCode" id="cb430"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb430-1"><a href="vertex-importance.html#cb430-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add betweenness property</span></span>
-<span id="cb430-2"><a href="vertex-importance.html#cb430-2" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(workfrance)<span class="sc">$</span>eigen <span class="ot">&lt;-</span> <span class="fu">eigen_centrality</span>(workfrance)<span class="sc">$</span>vector</span>
-<span id="cb430-3"><a href="vertex-importance.html#cb430-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb430-4"><a href="vertex-importance.html#cb430-4" aria-hidden="true" tabindex="-1"></a><span class="co"># label only if a top3 superconnector</span></span>
-<span id="cb430-5"><a href="vertex-importance.html#cb430-5" aria-hidden="true" tabindex="-1"></a><span class="fu">V</span>(workfrance)<span class="sc">$</span>eigen_label <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(</span>
-<span id="cb430-6"><a href="vertex-importance.html#cb430-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">V</span>(workfrance)<span class="sc">$</span>name <span class="sc">%in%</span> top3_workfrance_eigen,</span>
-<span id="cb430-7"><a href="vertex-importance.html#cb430-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">V</span>(workfrance)<span class="sc">$</span>name, <span class="st">&quot;&quot;</span></span>
-<span id="cb430-8"><a href="vertex-importance.html#cb430-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb430-9"><a href="vertex-importance.html#cb430-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb430-10"><a href="vertex-importance.html#cb430-10" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize</span></span>
-<span id="cb430-11"><a href="vertex-importance.html#cb430-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(workfrance) <span class="sc">+</span></span>
-<span id="cb430-12"><a href="vertex-importance.html#cb430-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">color =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
-<span id="cb430-13"><a href="vertex-importance.html#cb430-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> dept, <span class="at">size =</span> eigen),</span>
-<span id="cb430-14"><a href="vertex-importance.html#cb430-14" aria-hidden="true" tabindex="-1"></a>                  <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb430-15"><a href="vertex-importance.html#cb430-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> eigen_label), <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span> </span>
-<span id="cb430-16"><a href="vertex-importance.html#cb430-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>()</span></code></pre></div>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:eigen-workfrance"></span>
-<img src="_main_files/figure-html/eigen-workfrance-1.png" alt="French workplace graph with the top 3 most influential vertices  identified" width="90%" />
-<p class="caption">
+<div class="sourceCode" id="cb430"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># add betweenness property</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">$</span><span class="va">eigen</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/eigen_centrality.html">eigen_centrality</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">$</span><span class="va">vector</span></span>
+<span></span>
+<span><span class="co"># label only if a top3 superconnector</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">$</span><span class="va">eigen_label</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">$</span><span class="va">name</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">top3_workfrance_eigen</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/igraph/man/V.html">V</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span><span class="op">$</span><span class="va">name</span>, <span class="st">""</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># visualize</span></span>
+<span><span class="fu"><a href="https://ggraph.data-imaginist.com/reference/ggraph.html">ggraph</a></span><span class="op">(</span><span class="va">workfrance</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_edge_link.html">geom_edge_link</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"grey"</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_point.html">geom_node_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="va">dept</span>, size <span class="op">=</span> <span class="va">eigen</span><span class="op">)</span>,</span>
+<span>                  show.legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_text.html">geom_node_text</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">eigen_label</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_void</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="figure" style="text-align: center">
+<span style="display:block;" id="fig:eigen-workfrance"></span>
+<img src="_main_files/figure-html/eigen-workfrance-1.png" alt="French workplace graph with the top 3 most influential vertices  identified" width="90%"><p class="caption">
 Figure 6.7: French workplace graph with the top 3 most influential vertices identified
 </p>
 </div>
 <p>This time we see that our three most influential individuals are all in the same department, suggesting that this department may be a strategically important one to involve in any planned change initiatives.</p>
 </div>
 </div>
-<div id="learning-exercises-5" class="section level2 hasAnchor" number="6.4">
-<h2><span class="header-section-number">6.4</span> Learning exercises<a href="vertex-importance.html#learning-exercises-5" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="discussion-questions-5" class="section level3 hasAnchor" number="6.4.1">
-<h3><span class="header-section-number">6.4.1</span> Discussion questions<a href="vertex-importance.html#discussion-questions-5" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="learning-exercises-5" class="section level2" number="6.4">
+<h2>
+<span class="header-section-number">6.4</span> Learning exercises<a class="anchor" aria-label="anchor" href="#learning-exercises-5"><i class="fas fa-link"></i></a>
+</h2>
+<div id="discussion-questions-5" class="section level3" number="6.4.1">
+<h3>
+<span class="header-section-number">6.4.1</span> Discussion questions<a class="anchor" aria-label="anchor" href="#discussion-questions-5"><i class="fas fa-link"></i></a>
+</h3>
 <ol style="list-style-type: decimal">
 <li>Describe the general concept of vertex centrality in networks and why it is important.</li>
 <li>Define the degree centrality of a vertex <span class="math inline">\(v\)</span> in an undirected graph <span class="math inline">\(G\)</span> in at least two different ways. How would you interpret the degree centrality of <span class="math inline">\(v\)</span> in an organizational network? Manually calculate the degree centrality of Vertices 9, 10 and 11 in <span class="math inline">\(G_{14}\)</span>.</li>
@@ -853,8 +530,10 @@ Figure 6.7: French workplace graph with the top 3 most influential vertices iden
 <li>Describe some additional considerations in the calculation of vertex centrality in the case of directed graphs and in the case of weighted graphs.</li>
 </ol>
 </div>
-<div id="data-exercises-5" class="section level3 hasAnchor" number="6.4.2">
-<h3><span class="header-section-number">6.4.2</span> Data exercises<a href="vertex-importance.html#data-exercises-5" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="data-exercises-5" class="section level3" number="6.4.2">
+<h3>
+<span class="header-section-number">6.4.2</span> Data exercises<a class="anchor" aria-label="anchor" href="#data-exercises-5"><i class="fas fa-link"></i></a>
+</h3>
 <ol style="list-style-type: decimal">
 <li>Use an appropriate function to calculate the degree centrality of Vertices 9, 10 and 11 in <span class="math inline">\(G_{14}\)</span> and verify that the output matches your manual calculations from the earlier questions.</li>
 <li>Create and visualize the 2nd order ego network of Vertex 8 in <span class="math inline">\(G_{14}\)</span>.</li>
@@ -863,7 +542,7 @@ Figure 6.7: French workplace graph with the top 3 most influential vertices iden
 <li>Find the mean eigenvector centrality of all vertices in <span class="math inline">\(G_{14}\)</span>. Do this twice, raw and normalized.</li>
 <li>Visualize <span class="math inline">\(G_{14}\)</span> with the size of the vertices scaled to their eigenvector centrality and the color scaled to their closeness centrality.</li>
 </ol>
-<p>For questions 6 to 10, create an undirected graph from the Facebook friendships in the <code>schoolfriends_edgelist</code> and <code>schoolfriends_vertices</code> data sets in the <code>onadata</code> package or downloaded from the internet<a href="#fn60" class="footnote-ref" id="fnref60"><sup>60</sup></a>. Recall from the exercises in Chapter <a href="viz-graphs.html#viz-graphs">3</a> that this data contains information on friendships between students in a French high school. Make sure not to include the reported friendships in this graph. There are a lot of isolates in this graph because it only represents ‘known’ Facebook friendships, and you should remove isolates before proceeding<a href="#fn61" class="footnote-ref" id="fnref61"><sup>61</sup></a>.</p>
+<p>For questions 6 to 10, create an undirected graph from the Facebook friendships in the <code>schoolfriends_edgelist</code> and <code>schoolfriends_vertices</code> data sets in the <code>onadata</code> package or downloaded from the internet<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content='&lt;p&gt;&lt;a href="https://ona-book.org/data/schoolfriends_edgelist.csv" class="uri"&gt;https://ona-book.org/data/schoolfriends_edgelist.csv&lt;/a&gt; and &lt;a href="https://ona-book.org/data/schoolfriends_vertices.csv" class="uri"&gt;https://ona-book.org/data/schoolfriends_vertices.csv&lt;/a&gt;&lt;/p&gt;'><sup>60</sup></a>. Recall from the exercises in Chapter <a href="viz-graphs.html#viz-graphs">3</a> that this data contains information on friendships between students in a French high school. Make sure not to include the reported friendships in this graph. There are a lot of isolates in this graph because it only represents ‘known’ Facebook friendships, and you should remove isolates before proceeding<a class="footnote-ref" tabindex="0" data-toggle="popover" data-content="&lt;p&gt;One easy way to identify isolates in a graph object &lt;code&gt;G&lt;/code&gt; in R is to identify them using &lt;code&gt;isolates &amp;lt;- which(degree(G) == 0)&lt;/code&gt;, and then remove them using &lt;code&gt;G_new &amp;lt;- remove.vertices(G, isolates)&lt;/code&gt;.&lt;/p&gt;"><sup>61</sup></a>.</p>
 <ol start="6" style="list-style-type: decimal">
 <li>Identify the top 3 individuals with the most Facebook connections.</li>
 <li>Determine 1st order and 2nd order ego sizes of the individual with the most Facebook connections. What proportion of the total connected population is included in these ego networks?</li>
@@ -877,98 +556,97 @@ Figure 6.7: French workplace graph with the top 3 most influential vertices iden
 <li>Calculate the hub scores and authority scores of the vertices. How would you interpret these?</li>
 <li>Determine the 1st order ego network of the individual with the highest authority score. Visualize this as a <em>directed</em> network with vertices color coded by class. Do the same for the individual with the highest hub score. Can you use these visualizations to describe why these individuals have high authority/hub scores?</li>
 </ol>
+</div>
+</div>
+</div>
+
+  <div class="chapter-nav">
+<div class="prev"><a href="paths-distance.html"><span class="header-section-number">5</span> Paths and Distance</a></div>
+<div class="next"><a href="community.html"><span class="header-section-number">7</span> Components, Communities and Cliques</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#vertex-importance"><span class="header-section-number">6</span> Vertex Importance and Centrality</a></li>
+<li>
+<a class="nav-link" href="#vertex-centrality-measures-in-graphs"><span class="header-section-number">6.1</span> Vertex centrality measures in graphs</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#degree-centrality"><span class="header-section-number">6.1.1</span> Degree centrality</a></li>
+<li><a class="nav-link" href="#closeness-centrality"><span class="header-section-number">6.1.2</span> Closeness centrality</a></li>
+<li><a class="nav-link" href="#betweenness-centrality"><span class="header-section-number">6.1.3</span> Betweenness centrality</a></li>
+<li><a class="nav-link" href="#eigenvector-centrality"><span class="header-section-number">6.1.4</span> Eigenvector centrality</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#calculating-and-illustrating-vertex-centrality"><span class="header-section-number">6.2</span> Calculating and illustrating vertex centrality</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#calculating-in-r-1"><span class="header-section-number">6.2.1</span> Calculating in R</a></li>
+<li><a class="nav-link" href="#calculating-in-python-1"><span class="header-section-number">6.2.2</span> Calculating in Python</a></li>
+<li><a class="nav-link" href="#illustrating-centrality-in-graph-visualizations"><span class="header-section-number">6.2.3</span> Illustrating centrality in graph visualizations</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#illustrative-7"><span class="header-section-number">6.3</span> Examples of uses</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#finding-superconnectors"><span class="header-section-number">6.3.1</span> Finding ‘superconnectors’</a></li>
+<li><a class="nav-link" href="#identifying-influential-employees"><span class="header-section-number">6.3.2</span> Identifying influential employees</a></li>
+</ul>
+</li>
+<li>
+<a class="nav-link" href="#learning-exercises-5"><span class="header-section-number">6.4</span> Learning exercises</a><ul class="nav navbar-nav">
+<li><a class="nav-link" href="#discussion-questions-5"><span class="header-section-number">6.4.1</span> Discussion questions</a></li>
+<li><a class="nav-link" href="#data-exercises-5"><span class="header-section-number">6.4.2</span> Data exercises</a></li>
+</ul>
+</li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/keithmcnulty/ona_book/blob/master/r/07-vertex_importance.Rmd">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/keithmcnulty/ona_book/edit/master/r/07-vertex_importance.Rmd">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
 
 </div>
-</div>
-</div>
-<div class="footnotes">
-<hr />
-<ol start="53">
-<li id="fn53"><p>If you want to see an earlier example of this, take a look at Figure <a href="viz-graphs.html#fig:fr-karate">3.8</a> for Zachary’s Karate Club network and note the positions of the influential actors, Mr Hi and John A.<a href="vertex-importance.html#fnref53" class="footnote-back">↩︎</a></p></li>
-<li id="fn54"><p>Recall that isolates are vertices that are not connected to any other vertices.<a href="vertex-importance.html#fnref54" class="footnote-back">↩︎</a></p></li>
-<li id="fn55"><p>For example, if you are curious to know the eigenvalue, you can look at the <code>value</code> element of the list<a href="vertex-importance.html#fnref55" class="footnote-back">↩︎</a></p></li>
-<li id="fn56"><p><a href="https://ona-book.org/data/wikivote.csv" class="uri">https://ona-book.org/data/wikivote.csv</a><a href="vertex-importance.html#fnref56" class="footnote-back">↩︎</a></p></li>
-<li id="fn57"><p>You may wonder why <span class="math inline">\(n - 1\)</span>? This is simply the total number of other vertices that we are calculating the paths to. Strangely, there is no option to non-normalize in the arguments of this function as of recent versions of <code>networkx</code>. In any case, for the purposes of comparing vertices, it doesn’t matter a great deal whether you normalize or not.<a href="vertex-importance.html#fnref57" class="footnote-back">↩︎</a></p></li>
-<li id="fn58"><p>The normalization here divides the result by the number of vertex pairs in a graph with <span class="math inline">\(n-1\)</span> vertices, which is <span class="math inline">\((n - 1)(n - 2)\)</span> for directed graphs and <span class="math inline">\(\frac{(n - 1)(n - 2)}{2}\)</span> for undirected graphs.<a href="vertex-importance.html#fnref58" class="footnote-back">↩︎</a></p></li>
-<li id="fn59"><p><a href="https://networkx.org" class="uri">https://networkx.org</a><a href="vertex-importance.html#fnref59" class="footnote-back">↩︎</a></p></li>
-<li id="fn60"><p><a href="https://ona-book.org/data/schoolfriends_edgelist.csv" class="uri">https://ona-book.org/data/schoolfriends_edgelist.csv</a> and <a href="https://ona-book.org/data/schoolfriends_vertices.csv" class="uri">https://ona-book.org/data/schoolfriends_vertices.csv</a><a href="vertex-importance.html#fnref60" class="footnote-back">↩︎</a></p></li>
-<li id="fn61"><p>One easy way to identify isolates in a graph object <code>G</code> in R is to identify them using <code>isolates &lt;- which(degree(G) == 0)</code>, and then remove them using <code>G_new &lt;- remove.vertices(G, isolates)</code>.<a href="vertex-importance.html#fnref61" class="footnote-back">↩︎</a></p></li>
-</ol>
-</div>
-            </section>
+</div> <!-- .container -->
 
-          </div>
-        </div>
-      </div>
-<a href="paths-distance.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="community.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
-    </div>
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Handbook of Graphs and Networks in People Analytics</strong>: With Examples in R and Python" was written by Keith McNulty. </p>
   </div>
-<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
-<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
-<script>
-gitbook.require(["gitbook"], function(gitbook) {
-gitbook.start({
-"sharing": {
-"github": false,
-"facebook": true,
-"twitter": true,
-"linkedin": true,
-"weibo": false,
-"instapaper": false,
-"vk": false,
-"whatsapp": false,
-"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
-},
-"fontsettings": {
-"theme": "white",
-"family": "sans",
-"size": 2
-},
-"edit": {
-"link": null,
-"text": null
-},
-"history": {
-"link": null,
-"text": null
-},
-"view": {
-"link": null,
-"text": null
-},
-"download": null,
-"search": {
-"engine": "fuse",
-"options": null
-},
-"toc": {
-"collapse": "section"
-}
-});
-});
-</script>
 
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
     var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:")
       if (/^https?:/.test(src))
         src = src.replace(/^https?:/, '');
     script.src = src;
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
 </script>
 </body>
-
 </html>

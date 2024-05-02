@@ -478,7 +478,9 @@ library(ggmap)
 londonmap <- get_map(location = "London, UK", source = "google")
 
 # visualize using geolocation
-ggmap(londonmap, base_layer = ggraph(tubegraph)) +
+ggraph(tubegraph) +
+  geom_blank() +
+  inset_ggmap(londonmap) +
   geom_node_point(aes(x = longitude, y = latitude), 
                   color = "black", size = 1) +
   geom_edge_link(aes(x = lon_from, y = lat_from,
@@ -486,6 +488,7 @@ ggmap(londonmap, base_layer = ggraph(tubegraph)) +
                      color = line), width = 1) +
   scale_edge_color_manual(name = "Line",
                           values = lines$linecolor)
+        
 ```
 
 In Figure \@ref(fig:geo-accurate-tube), it looks like everything is in the right place.  This kind of graphical layering can be extremely important when there is an inherent coordinate system lying behind the vertices of your graph and where none of the existing layout algorithms can recreate that coordinate system.

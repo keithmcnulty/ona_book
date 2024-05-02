@@ -125,7 +125,9 @@ subairports <- induced_subgraph(USairports, c("TUS", "SFO", "PHL"))
 
 
 airports <- V(subairports) |> names()
-coords <- geocode(airports)
+airports_adj <- airports
+airports_adj[airports_adj == "TUS"] <- "Tucson"
+coords <- geocode(airports_adj)
 airports <- data.frame(airport=airports, coords)
 edgelist <- as_edgelist(subairports, names = TRUE) |> as.data.frame()
 colnames(edgelist) = c("From", "To")
@@ -412,7 +414,9 @@ subairports <- induced_subgraph(USairports, c("TUS", "SFO", "PHL"))
 
 
 airports <- V(subairports) |> names()
-coords <- geocode(airports)
+airpprts_adj <- airports
+airports_adj[airports_adj == "TUS"] <- "Tucson"
+coords <- geocode(airports_adj)
 airports <- data.frame(airport=airports, coords)
 edgelist <- as_edgelist(subairports, names = TRUE) |> as.data.frame()
 colnames(edgelist) = c("From", "To")

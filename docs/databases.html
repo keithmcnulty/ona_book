@@ -7,7 +7,7 @@
 <title>9 Graphs as Databases | Handbook of Graphs and Networks in People Analytics</title>
 <meta name="author" content="Keith McNulty">
 <meta name="description" content="Over the course of the early chapters of this book, we established a certain workflow for doing graph analysis, as follows: If necessary, transform existing transactional data into a graph-like...">
-<meta name="generator" content="bookdown 0.26 with bs4_book()">
+<meta name="generator" content="bookdown 0.39 with bs4_book()">
 <meta property="og:title" content="9 Graphs as Databases | Handbook of Graphs and Networks in People Analytics">
 <meta property="og:type" content="book">
 <meta property="og:url" content="https://ona-book.org/databases.html">
@@ -95,8 +95,6 @@
 <li><a class="" href="community.html"><span class="header-section-number">7</span> Components, Communities and Cliques</a></li>
 <li><a class="" href="similarity.html"><span class="header-section-number">8</span> Assortativity and Similarity</a></li>
 <li><a class="active" href="databases.html"><span class="header-section-number">9</span> Graphs as Databases</a></li>
-<li><a class="" href="using-twitter.html"><span class="header-section-number">10</span> Bonus Chapter: Using Twitter for Network Analysis</a></li>
-<li><a class="" href="advanced-viz.html"><span class="header-section-number">11</span> Bonus Chapter: Advanced Network Visualization using D3</a></li>
 <li><a class="" href="references.html">References</a></li>
 </ul>
 
@@ -277,41 +275,41 @@ RETURN p1.name AS LIB_name, p2.name AS IND_name;</code></pre>
 <p>For the <code>neo4j_query()</code> query function to work most smoothly, you should ensure the directory containing the <code>cypher-shell</code> executable is in your system <code>PATH</code> environment variable. Otherwise, you will need to constantly quote the full path to the <code>cypher-shell</code> executable in the <code>shell_path</code> argument of the function.</p>
 <p>Assuming you have configured <code>cypher-shell</code> on your system, it is very easy to submit queries to your Neo4J instance and retrieve the results as a dataframe. The first step is to configure your Neo4J connection as a list in R.</p>
 <div class="sourceCode" id="cb548"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">neo4j_conn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>
-  address <span class="op">=</span> <span class="st">"your_URI"</span>,
-  uid <span class="op">=</span> <span class="st">"your_username"</span>,
-  pwd <span class="op">=</span> <span class="st">"your_password"</span>
-<span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">neo4j_conn</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>  address <span class="op">=</span> <span class="st">"your_URI"</span>,</span>
+<span>  uid <span class="op">=</span> <span class="st">"your_username"</span>,</span>
+<span>  pwd <span class="op">=</span> <span class="st">"your_password"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>In the examples below, we assume that the data has already been loaded to the database using the queries in Section <a href="databases.html#neo4j-browser">9.2.1</a>. If not, you can load the data from R by submitting the same queries using the <code>neo4j_query()</code> function. Assuming the data has already been loaded, we can submit a query to the database and retrieve the results as a dataframe. Let’s submit a query to find out the first degree incoming network of all IND party politicians.</p>
 <div class="sourceCode" id="cb549"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># write cypher query</span>
-<span class="va">query</span> <span class="op">&lt;-</span> <span class="st">"
-MATCH (p:Person)-[:INTERACTED_WITH]-&gt;({party: 'IND'})
-RETURN DISTINCT p.name AS name, p.party as party;
-"</span>
-
-<span class="co"># submit to server and retrieve results as dataframe</span>
-<span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">neo4jshell</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/neo4jshell/man/neo4j_query.html">neo4j_query</a></span><span class="op">(</span>con <span class="op">=</span> <span class="va">neo4j_conn</span>, qry <span class="op">=</span> <span class="va">query</span><span class="op">)</span>
-
-<span class="co"># view first few results</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></code></pre></div>
-<pre><code>##               name party
-## 1   Ernie Hardeman   PCP
-## 2      Kinga Surma   PCP
-## 3 Randy Pettapiece   PCP
-## 4      Gila Martow   PCP
-## 5       Sara Singh   NDP
-## 6     Robin Martin   PCP</code></pre>
+<code class="sourceCode R"><span><span class="co"># write cypher query</span></span>
+<span><span class="va">query</span> <span class="op">&lt;-</span> <span class="st">"</span></span>
+<span><span class="st">MATCH (p:Person)-[:INTERACTED_WITH]-&gt;({party: 'IND'})</span></span>
+<span><span class="st">RETURN DISTINCT p.name AS name, p.party as party;</span></span>
+<span><span class="st">"</span></span>
+<span></span>
+<span><span class="co"># submit to server and retrieve results as dataframe</span></span>
+<span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">neo4jshell</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/neo4jshell/man/neo4j_query.html">neo4j_query</a></span><span class="op">(</span>con <span class="op">=</span> <span class="va">neo4j_conn</span>, qry <span class="op">=</span> <span class="va">query</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># view first few results</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span></code></pre></div>
+<pre><code>##                 name party
+## 1        Roman Baber   IND
+## 2       Deepak Anand   PCP
+## 3      Aris Babikian   PCP
+## 4       Toby Barrett   PCP
+## 5 Peter Bethlenfalvy   PCP
+## 6         Will Bouma   PCP</code></pre>
 <p>In a similar way we can submit an APOC procedure to obtain statistics about the graph. This query gets statistics on the out-degree of the nodes of the graph.</p>
 <div class="sourceCode" id="cb551"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># get out-degree stats</span>
-<span class="va">stats</span> <span class="op">&lt;-</span> <span class="fu">neo4jshell</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/neo4jshell/man/neo4j_query.html">neo4j_query</a></span><span class="op">(</span>
-  con <span class="op">=</span> <span class="va">neo4j_conn</span>, 
-  qry <span class="op">=</span> <span class="st">"CALL apoc.stats.degrees('&gt;');"</span>
-<span class="op">)</span>
-
-<span class="co"># extract max, min and mean</span>
-<span class="va">stats</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"min"</span>, <span class="st">"max"</span>, <span class="st">"mean"</span><span class="op">)</span>, <span class="op">]</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># get out-degree stats</span></span>
+<span><span class="va">stats</span> <span class="op">&lt;-</span> <span class="fu">neo4jshell</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/neo4jshell/man/neo4j_query.html">neo4j_query</a></span><span class="op">(</span></span>
+<span>  con <span class="op">=</span> <span class="va">neo4j_conn</span>, </span>
+<span>  qry <span class="op">=</span> <span class="st">"CALL apoc.stats.degrees('&gt;');"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># extract max, min and mean</span></span>
+<span><span class="va">stats</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"min"</span>, <span class="st">"max"</span>, <span class="st">"mean"</span><span class="op">)</span>, <span class="op">]</span></span></code></pre></div>
 <pre><code>## [1] "7"                 "80"                "56.43518518518518"</code></pre>
 </div>
 <div id="working-with-neo4j-using-python" class="section level3" number="9.2.3">
@@ -319,40 +317,40 @@ RETURN DISTINCT p.name AS name, p.party as party;
 <span class="header-section-number">9.2.3</span> Working with Neo4J using Python<a class="anchor" aria-label="anchor" href="#working-with-neo4j-using-python"><i class="fas fa-link"></i></a>
 </h3>
 <p>The <code>py2neo</code> package allows interaction with Neo4J servers from Python. No preconfiguration is required. Connection is established by means of a <code>Graph()</code> object.</p>
-<div class="sourceCode" id="cb553"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb553-1"><a href="databases.html#cb553-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb553-2"><a href="databases.html#cb553-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> py2neo <span class="im">import</span> Graph</span>
-<span id="cb553-3"><a href="databases.html#cb553-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
-<span id="cb553-4"><a href="databases.html#cb553-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb553-5"><a href="databases.html#cb553-5" aria-hidden="true" tabindex="-1"></a><span class="co"># create  connection</span></span>
-<span id="cb553-6"><a href="databases.html#cb553-6" aria-hidden="true" tabindex="-1"></a>neo4j_conn <span class="op">=</span> Graph(</span>
-<span id="cb553-7"><a href="databases.html#cb553-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"your_URI"</span>, </span>
-<span id="cb553-8"><a href="databases.html#cb553-8" aria-hidden="true" tabindex="-1"></a>    auth <span class="op">=</span> (<span class="st">"your_username"</span>, <span class="st">"your_password"</span>)</span>
-<span id="cb553-9"><a href="databases.html#cb553-9" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb553"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb553-1"><a href="databases.html#cb553-1" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb553-2"><a href="databases.html#cb553-2" tabindex="-1"></a><span class="im">from</span> py2neo <span class="im">import</span> Graph</span>
+<span id="cb553-3"><a href="databases.html#cb553-3" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb553-4"><a href="databases.html#cb553-4" tabindex="-1"></a></span>
+<span id="cb553-5"><a href="databases.html#cb553-5" tabindex="-1"></a><span class="co"># create  connection</span></span>
+<span id="cb553-6"><a href="databases.html#cb553-6" tabindex="-1"></a>neo4j_conn <span class="op">=</span> Graph(</span>
+<span id="cb553-7"><a href="databases.html#cb553-7" tabindex="-1"></a>    <span class="st">"your_URI"</span>, </span>
+<span id="cb553-8"><a href="databases.html#cb553-8" tabindex="-1"></a>    auth <span class="op">=</span> (<span class="st">"your_username"</span>, <span class="st">"your_password"</span>)</span>
+<span id="cb553-9"><a href="databases.html#cb553-9" tabindex="-1"></a>)</span></code></pre></div>
 <p>Again, we assume that data has already been loaded to the graph. If this is not the case, submit the data load queries from Section <a href="databases.html#neo4j-browser">9.2.1</a> in the same way as the following examples.</p>
 <p>Results from queries will be returned as a list of dicts, which can be converted into the required format.</p>
-<div class="sourceCode" id="cb554"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb554-1"><a href="databases.html#cb554-1" aria-hidden="true" tabindex="-1"></a><span class="co"># write cypher query</span></span>
-<span id="cb554-2"><a href="databases.html#cb554-2" aria-hidden="true" tabindex="-1"></a>query <span class="op">=</span> <span class="st">"""</span></span>
-<span id="cb554-3"><a href="databases.html#cb554-3" aria-hidden="true" tabindex="-1"></a><span class="st">MATCH (p:Person)-[:INTERACTED_WITH]-&gt;({party: 'IND'})</span></span>
-<span id="cb554-4"><a href="databases.html#cb554-4" aria-hidden="true" tabindex="-1"></a><span class="st">RETURN DISTINCT p.name AS name, p.party as party;</span></span>
-<span id="cb554-5"><a href="databases.html#cb554-5" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
-<span id="cb554-6"><a href="databases.html#cb554-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb554-7"><a href="databases.html#cb554-7" aria-hidden="true" tabindex="-1"></a><span class="co"># submit to server and retrieve results as list of dicts</span></span>
-<span id="cb554-8"><a href="databases.html#cb554-8" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> neo4j_conn.run(query).data()</span>
-<span id="cb554-9"><a href="databases.html#cb554-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb554-10"><a href="databases.html#cb554-10" aria-hidden="true" tabindex="-1"></a><span class="co"># convert results to pandas DataFrame and view first few rows</span></span>
-<span id="cb554-11"><a href="databases.html#cb554-11" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(results).head()</span></code></pre></div>
-<pre><code>##                name party
-## 0    Ernie Hardeman   PCP
-## 1       Kinga Surma   PCP
-## 2  Randy Pettapiece   PCP
-## 3       Gila Martow   PCP
-## 4        Sara Singh   NDP</code></pre>
+<div class="sourceCode" id="cb554"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb554-1"><a href="databases.html#cb554-1" tabindex="-1"></a><span class="co"># write cypher query</span></span>
+<span id="cb554-2"><a href="databases.html#cb554-2" tabindex="-1"></a>query <span class="op">=</span> <span class="st">"""</span></span>
+<span id="cb554-3"><a href="databases.html#cb554-3" tabindex="-1"></a><span class="st">MATCH (p:Person)-[:INTERACTED_WITH]-&gt;({party: 'IND'})</span></span>
+<span id="cb554-4"><a href="databases.html#cb554-4" tabindex="-1"></a><span class="st">RETURN DISTINCT p.name AS name, p.party as party;</span></span>
+<span id="cb554-5"><a href="databases.html#cb554-5" tabindex="-1"></a><span class="st">"""</span></span>
+<span id="cb554-6"><a href="databases.html#cb554-6" tabindex="-1"></a></span>
+<span id="cb554-7"><a href="databases.html#cb554-7" tabindex="-1"></a><span class="co"># submit to server and retrieve results as list of dicts</span></span>
+<span id="cb554-8"><a href="databases.html#cb554-8" tabindex="-1"></a>results <span class="op">=</span> neo4j_conn.run(query).data()</span>
+<span id="cb554-9"><a href="databases.html#cb554-9" tabindex="-1"></a></span>
+<span id="cb554-10"><a href="databases.html#cb554-10" tabindex="-1"></a><span class="co"># convert results to pandas DataFrame and view first few rows</span></span>
+<span id="cb554-11"><a href="databases.html#cb554-11" tabindex="-1"></a>pd.DataFrame(results).head()</span></code></pre></div>
+<pre><code>##                  name party
+## 0         Roman Baber   IND
+## 1        Deepak Anand   PCP
+## 2       Aris Babikian   PCP
+## 3        Toby Barrett   PCP
+## 4  Peter Bethlenfalvy   PCP</code></pre>
 <p>To run APOC procedures:</p>
-<div class="sourceCode" id="cb556"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb556-1"><a href="databases.html#cb556-1" aria-hidden="true" tabindex="-1"></a><span class="co"># submit APOC procedure</span></span>
-<span id="cb556-2"><a href="databases.html#cb556-2" aria-hidden="true" tabindex="-1"></a>stats <span class="op">=</span> neo4j_conn.run(<span class="st">"CALL apoc.stats.degrees('&gt;');"</span>).data()</span>
-<span id="cb556-3"><a href="databases.html#cb556-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb556-4"><a href="databases.html#cb556-4" aria-hidden="true" tabindex="-1"></a><span class="co"># convert results to pandas DataFrame</span></span>
-<span id="cb556-5"><a href="databases.html#cb556-5" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(stats)</span></code></pre></div>
+<div class="sourceCode" id="cb556"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb556-1"><a href="databases.html#cb556-1" tabindex="-1"></a><span class="co"># submit APOC procedure</span></span>
+<span id="cb556-2"><a href="databases.html#cb556-2" tabindex="-1"></a>stats <span class="op">=</span> neo4j_conn.run(<span class="st">"CALL apoc.stats.degrees('&gt;');"</span>).data()</span>
+<span id="cb556-3"><a href="databases.html#cb556-3" tabindex="-1"></a></span>
+<span id="cb556-4"><a href="databases.html#cb556-4" tabindex="-1"></a><span class="co"># convert results to pandas DataFrame</span></span>
+<span id="cb556-5"><a href="databases.html#cb556-5" tabindex="-1"></a>pd.DataFrame(stats)</span></code></pre></div>
 <pre><code>##    type direction  total  p50  p75  p90  p95  p99  p999  max  min       mean
 ## 0  None  OUTGOING   6095   59   63   70   71   77    80   80    7  56.435185</code></pre>
 </div>
@@ -401,7 +399,7 @@ RETURN DISTINCT p.name AS name, p.party as party;
 
   <div class="chapter-nav">
 <div class="prev"><a href="similarity.html"><span class="header-section-number">8</span> Assortativity and Similarity</a></div>
-<div class="next"><a href="using-twitter.html"><span class="header-section-number">10</span> Bonus Chapter: Using Twitter for Network Analysis</a></div>
+<div class="next"><a href="references.html">References</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
       <ul class="nav navbar-nav">
@@ -456,7 +454,7 @@ RETURN DISTINCT p.name AS name, p.party as party;
     var script = document.createElement("script");
     script.type = "text/javascript";
     var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:")
       if (/^https?:/.test(src))
         src = src.replace(/^https?:/, '');
